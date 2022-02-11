@@ -1,0 +1,19 @@
+Package: kitems
+Title: Manage Files and Dataframe Items
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Kangaroo",
+           family = "AI",
+           role = c("aut", "cre"),
+           email = "kangaroo.ai@kangaroo-ai.fr",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: Set of standard functions to manage create, load and save of dataframes into csv file.
+License: GPL (>=3)
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
