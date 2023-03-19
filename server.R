@@ -9,6 +9,8 @@ path <- list(project = "./",
              data = "./data")
 
 
+# *****************************************************************************
+# DELETE !!!
 # -- Source scripts
 cat("Source code from:", path$script, " \n")
 for (nm in list.files(path$script, full.names = TRUE, recursive = TRUE, include.dirs = FALSE))
@@ -16,13 +18,13 @@ for (nm in list.files(path$script, full.names = TRUE, recursive = TRUE, include.
   source(nm, encoding = 'UTF-8')
 }
 rm(nm)
-
+# *****************************************************************************
 
 
 shinyServer(function(input, output, session) {
 
 
-  # Create the object with no values
+  # -- Create the object with no values
   r <- reactiveValues()
 
 
@@ -33,7 +35,7 @@ shinyServer(function(input, output, session) {
   # -- check
   observeEvent(r$data_items(), {
 
-    cat("Data has just been updated \n")
+    cat("Main server observer: data has just been updated \n")
 
   })
 
