@@ -26,7 +26,7 @@ admin_ui <- function(id){
 
              column(width = 10,
                     p("Raw Table"),
-                    DTOutput(ns("raw_item_table"))))),
+                    DT::DTOutput(ns("raw_item_table"))))),
 
   wellPanel(
 
@@ -39,7 +39,7 @@ admin_ui <- function(id){
 
              column(width = 10,
                     p("Filtered Table"),
-                    DTOutput(ns("view_item_table"))))),
+                    DT::DTOutput(ns("view_item_table"))))),
 
 
 
