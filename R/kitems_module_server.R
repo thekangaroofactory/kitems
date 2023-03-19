@@ -11,7 +11,7 @@
 # ------------------------------------------------------------------------------
 
 # -- function definition
-kitemsManager_Server <- function(id, r, file, path, col.classes = NULL, filter.cols = NULL, create = TRUE) {
+kitemsManager_Server <- function(id, r, file, path, col.classes = NULL, filter.cols = NULL, create = TRUE, autosave = TRUE) {
   moduleServer(id, function(input, output, session) {
 
     # --------------------------------------------------------------------------
@@ -44,6 +44,7 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NULL, filter.c
 
     # -- Build triggers names from module id (to access outside module)
     trigger_add <- paste0(id, "_trigger_new")
+    trigger_save <- paste0(id, "_trigger_save")
     # trigger_update
     # trigger_delete
 
@@ -133,8 +134,26 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NULL, filter.c
     # Auto save the data:
     # --------------------------------------------------------------------------
 
-    # -- Save items
-    observeEvent(r[[r_items]](), {
+    # -- Auto save items (check parameter)
+    if(autosave)
+      observeEvent(r[[r_items]](), {
+
+        # -- Write
+        kfiles::write_data(data = r[[r_items]](),
+                           file = file,
+                           path = path$data)
+
+        # -- Notify
+        cat(MODULE, "[EVENT] Item list has been (auto) saved \n")
+
+      }, ignoreInit = TRUE)
+
+
+    # -- Declare trigger: save items
+    r[[trigger_save]] <- reactiveVal(0)
+
+    # -- Observe trigger
+    observeEvent(r[[trigger_save]](), {
 
       # -- Write
       kfiles::write_data(data = r[[r_items]](),
@@ -142,15 +161,9 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NULL, filter.c
                          path = path$data)
 
       # -- Notify
-      cat(MODULE, "[Auto] item list saved \n")
+      cat(MODULE, "[TRIGGER] Item list has been saved \n")
 
     }, ignoreInit = TRUE)
-
-
-
-
-
-
 
 
     # ****************************************************************************
@@ -199,13 +212,13 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NULL, filter.c
     # Raw view for admin
     output$raw_item_table <- DT::renderDT(r[[r_items]](),
                                           rownames = FALSE,
-                                          options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "ltp"),
+                                          options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
                                           selection = list(mode = 'single', target = "row", selected = NULL))
 
     # Masked view for admin
     output$view_item_table <- DT::renderDT(view_items(),
                                            rownames = FALSE,
-                                           options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "ltp"),
+                                           options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
                                            selection = list(mode = 'single', target = "row", selected = NULL))
 
 
