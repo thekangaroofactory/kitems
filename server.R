@@ -1,44 +1,83 @@
 
+
+# --------------------------------------------------------------------------------
+# This is the server logic of the Shiny web application
+# --------------------------------------------------------------------------------
+
+# -- Library
 library(shiny)
+library(DT)
 
 
-# -- Declare path
-path <- list(project = "./",
-             script = "./R",
-             resource = "./resource",
-             data = "./data")
+# -- init env
+source("./environment.R")
+#source("./config.R")
 
 
-# *****************************************************************************
-# DELETE !!!
 # -- Source scripts
-cat("Source code from:", path$script, " \n")
-for (nm in list.files(path$script, full.names = TRUE, recursive = TRUE, include.dirs = FALSE))
+cat("Source code from:", path_list$script, " \n")
+for (nm in list.files(path_list$script, full.names = TRUE, recursive = TRUE, include.dirs = FALSE))
 {
   source(nm, encoding = 'UTF-8')
 }
 rm(nm)
-# *****************************************************************************
 
 
-shinyServer(function(input, output, session) {
+# -- Define server logic
+shinyServer(
+  function(input, output, session){
+
+    # *******************************************************************************************************
+    # DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG
+    # *******************************************************************************************************
+
+    DEBUG <<- TRUE
+
+    if(DEBUG){
+
+      cat("Source code from:", path_list$script, " \n")
+      for (nm in list.files(path_list$script, full.names = TRUE, recursive = TRUE, include.dirs = FALSE))
+      {
+        source(nm, encoding = 'UTF-8')
+      }
+      rm(nm)
+
+    }
+
+    # *******************************************************************************************************
+    # DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG
+    # *******************************************************************************************************
+
+    # -------------------------------------
+    # Communication objects
+    # -------------------------------------
+
+    # -- declare r communication object
+    r <- reactiveValues()
 
 
-  # -- Create the object with no values
-  r <- reactiveValues()
+    # -------------------------------------
+    # Launch module servers
+    # -------------------------------------
+
+    # -- start module server
+    kitemsManager_Server(id = "data",
+                         r = r,
+                         path = path_list,
+                         file = "my_data.csv",
+                         col.classes = NULL,
+                         create = TRUE,
+                         autosave = TRUE)
 
 
-  # -- start module server
-  kitemsManager_Server("data", r, path, file = "my_data.csv", col.classes = NULL)
+    # -------------------------------------
+    # -- check
+    observeEvent(r$data_items(), {
 
+      cat("Main server observer: data has just been updated \n")
 
-  # -- check
-  observeEvent(r$data_items(), {
+    })
 
-    cat("Main server observer: data has just been updated \n")
-
-  })
-
-
-})
+  }
+)
 
