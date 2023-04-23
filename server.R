@@ -61,13 +61,8 @@ shinyServer(
     # -------------------------------------
 
     # -- start module server
-    kitemsManager_Server(id = "data",
-                         r = r,
-                         path = path_list,
-                         file = "my_data.csv",
-                         col.classes = NULL,
-                         create = TRUE,
-                         autosave = TRUE)
+    kitemsManager_Server(id = "data", r = r, path = path_list, file = "my_data.csv", col.classes = NA, create = TRUE, autosave = TRUE)
+    kitemsManager_Server(id = "data_2", r = r, path = path_list, file = "my_data_2.csv", col.classes = NA, create = TRUE, autosave = TRUE)
 
 
     # -------------------------------------

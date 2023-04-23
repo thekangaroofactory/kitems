@@ -1,16 +1,28 @@
 
 
-# *****************************************
-# - add user notifications when Shiny session
-# *****************************************
+# -- function definition
+#' Title
+#'
+#' @param id
+#' @param r
+#' @param file
+#' @param path
+#' @param col.classes
+#' @param filter.cols
+#' @param create
+#' @param autosave
+#'
+#' @return
+#' @export
+#'
+#' @examples
 
 
 # ------------------------------------------------------------------------------
 # Shiny module server logic
 # ------------------------------------------------------------------------------
 
-# -- function definition
-kitemsManager_Server <- function(id, r, file, path, col.classes = NULL, filter.cols = NULL, create = TRUE, autosave = TRUE) {
+kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.cols = NULL, create = TRUE, autosave = TRUE) {
   moduleServer(id, function(input, output, session) {
 
     # --------------------------------------------------------------------------
@@ -69,11 +81,6 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NULL, filter.c
     # --------------------------------------------------------------------------
     # Load Resources:
     # --------------------------------------------------------------------------
-
-    # *************************************
-    # check that again:
-    # what happens if not given as argument
-    # **************************************
 
     # -- colClasses
     target_url <- file.path(path$resource, paste0(id, "_colClasses.rds"))
@@ -163,9 +170,9 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NULL, filter.c
     }, ignoreInit = TRUE)
 
 
-    # ****************************************************************************
+    # **************************************************************************
     # *** CODE REVIEW : END done
-    # ****************************************************************************
+    # **************************************************************************
 
 
 
