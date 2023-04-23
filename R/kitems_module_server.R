@@ -1,17 +1,28 @@
 
 
-# *****************************************
-# - add user notifications when Shiny session
-# - add parameter to trun autosave off (default ON) : just add if(TRUE) devant observerEvent
-# *****************************************
+# -- function definition
+#' Title
+#'
+#' @param id
+#' @param r
+#' @param file
+#' @param path
+#' @param col.classes
+#' @param filter.cols
+#' @param create
+#' @param autosave
+#'
+#' @return
+#' @export
+#'
+#' @examples
 
 
 # ------------------------------------------------------------------------------
 # Shiny module server logic
 # ------------------------------------------------------------------------------
 
-# -- function definition
-kitemsManager_Server <- function(id, r, file, path, col.classes = NULL, filter.cols = NULL, create = TRUE, autosave = TRUE) {
+kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.cols = NULL, create = TRUE, autosave = TRUE) {
   moduleServer(id, function(input, output, session) {
 
     # --------------------------------------------------------------------------
@@ -22,9 +33,19 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NULL, filter.c
     MODULE <- paste0("[", id, "]")
 
     # -- Object types
-    LIST_OBJECT_TYPES <- c("NA", "NULL",
-                           "numeric", "integer", "complex", "logical", "character", "raw",
-                           "double", "factor", "Date", "POSIXct", "POSIXlt")
+    OBJECT_CLASS <- c("NA", "NULL",
+                      "numeric", "integer", "complex", "logical", "character", "raw",
+                      "double", "factor", "Date", "POSIXct", "POSIXlt")
+
+    # -- Column name / type  template
+    TEMPLATE_COLS <- data.frame(name = c("date",
+                                         "name", "title", "description", "comment", "note", "status", "detail",
+                                         "debit", "credit", "amount", "total", "balance",
+                                         "quantity", "progress"),
+                                type = c("Date",
+                                         rep("character", 7),
+                                         rep("double", 5),
+                                         rep("integer", 2)))
 
 
     # --------------------------------------------------------------------------
@@ -57,26 +78,9 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NULL, filter.c
     r[[trigger_add]] <- reactiveVal(NULL)
 
 
-    # **************************************************************************
-    # -- Sample data, export it somewhere!
-    # **************************************************************************
-    TEMPLATE_COLS <- data.frame(name = c("date", "target.date",
-                                         "name", "title", "description", "comment", "status",
-                                         "debit", "credit", "total", "balance", "progress"),
-                                type = c("Date", "POSIXct",
-                                         rep("character", 5),
-                                         rep("double", 4), "integer"))
-    # **************************************************************************
-
-
     # --------------------------------------------------------------------------
     # Load Resources:
     # --------------------------------------------------------------------------
-
-    # *************************************
-    # check that again:
-    # what happens if not given as argument
-    # **************************************
 
     # -- colClasses
     target_url <- file.path(path$resource, paste0(id, "_colClasses.rds"))
@@ -123,8 +127,12 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NULL, filter.c
                                colClasses = col.classes,
                                create = create)
 
+    # -- check output size (will trigger showing the create data btn)
+    if(all(dim(items) == c(0,0)))
+      items <- NULL
+
     # -- Notify
-    cat(MODULE, "Item list loaded \n")
+    cat(MODULE, "Read data done \n")
 
     # -- Store into communication objects
     r[[r_items]] <- reactiveVal(items)
@@ -166,9 +174,9 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NULL, filter.c
     }, ignoreInit = TRUE)
 
 
-    # ****************************************************************************
+    # **************************************************************************
     # *** CODE REVIEW : END done
-    # ****************************************************************************
+    # **************************************************************************
 
 
 
@@ -260,7 +268,7 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NULL, filter.c
           # add column type
           selectizeInput(inputId = ns("add_col_type"),
                          label = "Type",
-                         choices = LIST_OBJECT_TYPES,
+                         choices = OBJECT_CLASS,
                          selected = NULL,
                          options = list(create = FALSE,
                                         placeholder = 'Type or select an option below',
@@ -287,10 +295,13 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NULL, filter.c
     # -- update add_col_type given add_col_name
     observeEvent(input$add_col_name, {
 
-      updateSelectizeInput(session = session,
-                           inputId = "add_col_type",
-                           choices = LIST_OBJECT_TYPES,
-                           selected = TEMPLATE_COLS[TEMPLATE_COLS$name == input$add_col_name, ]$type)})
+      # -- check if input in template
+      if(tolower(input$add_col_name) %in% TEMPLATE_COLS$name)
+
+        updateSelectizeInput(session = session,
+                             inputId = "add_col_type",
+                             choices = OBJECT_CLASS,
+                             selected = TEMPLATE_COLS[TEMPLATE_COLS$name == input$add_col_name, ]$type)})
 
 
 

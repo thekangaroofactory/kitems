@@ -51,8 +51,7 @@ body <- dashboardBody(
             fluidRow(
               column(width = 12,
 
-                     admin_ui("data"),
-                     new_item_btn("data")))),
+                     admin_ui("data")))),
 
 
     # -- tabItem
@@ -60,10 +59,10 @@ body <- dashboardBody(
 
             # -- something
             fluidRow(
-
               column(width = 12,
-                     h3("Item"),
-                     p("Something cool goes here"))))
+
+                     admin_ui("data_2"))))
+
 
   ) # end tabItems
 ) # end dashboardBody

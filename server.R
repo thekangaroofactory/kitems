@@ -61,20 +61,21 @@ shinyServer(
     # -------------------------------------
 
     # -- start module server
-    kitemsManager_Server(id = "data",
-                         r = r,
-                         path = path_list,
-                         file = "my_data.csv",
-                         col.classes = NULL,
-                         create = TRUE,
-                         autosave = TRUE)
+    kitemsManager_Server(id = "data", r = r, path = path_list, file = "my_data.csv", col.classes = NA, create = TRUE, autosave = TRUE)
+    kitemsManager_Server(id = "data_2", r = r, path = path_list, file = "my_data_2.csv", col.classes = NA, create = TRUE, autosave = TRUE)
 
 
     # -------------------------------------
     # -- check
     observeEvent(r$data_items(), {
 
-      cat("Main server observer: data has just been updated \n")
+      cat("Main server observer: data_items() has just been updated \n")
+
+    })
+
+    observeEvent(r$data_2_items(), {
+
+      cat("Main server observer: data2_items() has just been updated \n")
 
     })
 

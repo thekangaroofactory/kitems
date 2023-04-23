@@ -1,6 +1,6 @@
 
 
-#' Title
+#' Data model admin page
 #'
 #' @param id
 #'
