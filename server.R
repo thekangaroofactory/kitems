@@ -69,7 +69,13 @@ shinyServer(
     # -- check
     observeEvent(r$data_items(), {
 
-      cat("Main server observer: data has just been updated \n")
+      cat("Main server observer: data_items() has just been updated \n")
+
+    })
+
+    observeEvent(r$data_2_items(), {
+
+      cat("Main server observer: data2_items() has just been updated \n")
 
     })
 

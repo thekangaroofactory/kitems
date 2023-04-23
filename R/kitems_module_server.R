@@ -127,8 +127,12 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
                                colClasses = col.classes,
                                create = create)
 
+    # -- check output size (will trigger showing the create data btn)
+    if(all(dim(items) == c(0,0)))
+      items <- NULL
+
     # -- Notify
-    cat(MODULE, "Item list loaded \n")
+    cat(MODULE, "Read data done \n")
 
     # -- Store into communication objects
     r[[r_items]] <- reactiveVal(items)
