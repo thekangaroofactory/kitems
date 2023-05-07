@@ -1,45 +1,59 @@
 
 
-getModalDialog <- function(item = NULL, update = FALSE, colClasses){
+getModalDialog <- function(ns, item = NULL, update = FALSE, colClasses){
+
+  cat("[getModalDialog] Building modal dialog \n")
 
   # helper function
   add_input <- function(x, colClasses){
 
-    cat("Dealing with attribute #", x, "\n")
+    cat("  - Dealing with attribute", x, "type =", colClasses[[x]], "\n")
 
-    if(colClasses[[x]] == "numeric") print("")
+    # -- character
+    if(colClasses[[x]] == "character")
+      input <- textInput(inputId = ns(names(colClasses[x])),
+                         label = names(colClasses[x]),
+                         value = "character",
+                         width = NULL,
+                         placeholder = NULL)
 
-    # numeric, integer, double
-    numericInput(
-      inputId,
-      label,
-      value,
-      min = NA,
-      max = NA,
-      step = NA,
-      width = NULL)
+    # -- numeric, integer, double
+    if(colClasses[[x]] %in% c("numeric", "integer", "double"))
+      input <- numericInput(
+        inputId = ns(names(colClasses[x])),
+        label = "num",
+        value = 0,
+        min = NA,
+        max = NA,
+        step = NA,
+        width = NULL)
 
-    # date, POSIXct
-    dateInput(
-      inputId,
-      label,
-      value = NULL,
-      min = NULL,
-      max = NULL,
-      format = "yyyy-mm-dd",
-      startview = "month",
-      weekstart = 0,
-      language = "en",
-      width = NULL,
-      autoclose = TRUE,
-      datesdisabled = NULL,
-      daysofweekdisabled = NULL)
+    # -- date, POSIXct
+    if(colClasses[[x]] %in% c("Date", "POSIXct"))
+      input <- dateInput(
+        inputId = ns(names(colClasses[x])),
+        label = "Date",
+        value = NULL,
+        min = NULL,
+        max = NULL,
+        format = "yyyy-mm-dd",
+        startview = "month",
+        weekstart = 0,
+        language = "en",
+        width = NULL,
+        autoclose = TRUE,
+        datesdisabled = NULL,
+        daysofweekdisabled = NULL)
 
-    # character
-    textInput(inputId, label, value = "", width = NULL, placeholder = NULL)
+    # -- logical
+    if(colClasses[[x]] == "logical")
+      input <- checkboxInput(inputId = ns(names(colClasses[x])),
+                             label = "logical",
+                             value = FALSE,
+                             width = NULL)
 
-    # logical
-    checkboxInput(inputId, label, value = FALSE, width = NULL)
+    # -- return
+    input
 
   }
 
@@ -47,6 +61,8 @@ getModalDialog <- function(item = NULL, update = FALSE, colClasses){
   colClasses <- colClasses[!names(colClasses) %in% "id"]
 
   # apply helper
-  lapply(1:length(colClasses), function(x) add_input(x, colClasses))
+  feedback <- lapply(1:length(colClasses), function(x) add_input(x, colClasses))
+
+  tagList(feedback)
 
 }

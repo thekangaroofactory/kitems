@@ -401,13 +401,31 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
 
 
     # -------------------------------------
-    # User UI:
+    # Create item:
     # -------------------------------------
 
-    # new item
-    observeEvent(input$btn_new_item, {
+    # -- action btn
+    output$new_item_btn <- renderUI(actionButton(inputId = ns("new_item_btn"),
+                                                 label = "New item"))
 
-      showModal(getModalDialog(item = NULL, update = FALSE, colClasses = colClasses()))
+    # -- new item
+    observeEvent(input$new_item_btn, {
+
+      showModal(modalDialog(getModalDialog(ns, item = NULL, update = FALSE, colClasses = colClasses()),
+                            title = "Create",
+                            footer = tagList(
+                              modalButton("Cancel"),
+                              actionButton(ns("ok"), "OK"))))
+
+    })
+
+    # -- new item
+    observeEvent(input$ok, {
+
+      helper <- function(tagname){
+        cat(tagname, "=", input[[tagname]], "\n")}
+
+      lapply(names(colClasses()), function(x) helper(x))
 
     })
 
