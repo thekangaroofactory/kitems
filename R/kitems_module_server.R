@@ -415,17 +415,30 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
                             title = "Create",
                             footer = tagList(
                               modalButton("Cancel"),
-                              actionButton(ns("ok"), "OK"))))
+                              actionButton(ns("create_item"), "Create"))))
 
     })
 
     # -- new item
-    observeEvent(input$ok, {
+    observeEvent(input$create_item, {
 
-      helper <- function(tagname){
-        cat(tagname, "=", input[[tagname]], "\n")}
+      # -- close modal
+      removeModal()
 
-      lapply(names(colClasses()), function(x) helper(x))
+      # -- build list of input values & name it
+      input_values <- lapply(names(colClasses()), function(x) input[[x]])
+      names(input_values) <- names(colClasses())
+
+      # -- create item based on input list
+      item <- create_item(input_values, colClasses(), default.val, default.fun)
+
+      # -- add item to item list
+      #tmp_xxx <- add_item(item, xxx) # r[[r_items]]()
+      item_list <- rbind(r[[r_items]](), item)
+      r[[r_items]](item_list)
+
+      # -- store new item list
+
 
     })
 
