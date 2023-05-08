@@ -1,6 +1,6 @@
 
 
-getModalDialog <- function(ns, item = NULL, update = FALSE, colClasses){
+inputList <- function(ns, item = NULL, update = FALSE, colClasses){
 
   cat("[getModalDialog] Building modal dialog \n")
 

@@ -411,7 +411,7 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
     # -- new item
     observeEvent(input$new_item_btn, {
 
-      showModal(modalDialog(getModalDialog(ns, item = NULL, update = FALSE, colClasses = colClasses()),
+      showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, colClasses = colClasses()),
                             title = "Create",
                             footer = tagList(
                               modalButton("Cancel"),
