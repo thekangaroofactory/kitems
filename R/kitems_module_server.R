@@ -404,11 +404,11 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
     # Create item:
     # -------------------------------------
 
-    # -- action btn
+    # -- btn: new item
     output$new_item_btn <- renderUI(actionButton(inputId = ns("new_item_btn"),
                                                  label = "New item"))
 
-    # -- new item
+    # -- new_item_btn
     observeEvent(input$new_item_btn, {
 
       showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, colClasses = colClasses()),
