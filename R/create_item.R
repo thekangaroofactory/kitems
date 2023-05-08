@@ -1,36 +1,20 @@
 
 
-# ------------------------------------------------------------------------------
-# Q: how to manage rules? like defaults to auto input values?
-# ------------------------------------------------------------------------------
-values <- list(id = NULL,
-               date = 19485,
-               name = NULL,
-               total = 2,
-               comment = "dfsfj")
-
-colClasses <- c("id" = "double",
-                "name" = "character",
-                "total" = "numeric",
-                "date" = "Date",
-                "comment" = "character")
-
-default.val <- c(name = "myname",
-                 total = 0)
-
-default.fun <- c(id = getTimestamp)
+#' Create a new item
+#'
+#' @param values a list of values, most likely output values coming from UI inputs
+#' @param colClasses a named vector of classes, defining the data model
+#' @param default.val a named list, providing default values for given attributes
+#' @param default.fun a named list, providing default functions to compute the default values for given
+#' attributes
+#'
+#' @return a data.frame of the new item, coerced to match with colClasses
+#'
+#' @examples
 
 
 # -- function definition
 create_item <- function(values, colClasses, default.val, default.fun){
-
-  # -- define list of as. functions
-  CLASS_FUNCTIONS <- list("numeric" = as.numeric,
-                          "integer" = as.integer,
-                          "double" = as.double,
-                          "character" = as.character,
-                          "Date" = .Date)
-
 
   # -- fill in missing inputs with defaults
   # ----------------------------------------------------------------------------
