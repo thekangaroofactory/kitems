@@ -14,7 +14,7 @@
 get_input_values <- function(input, colClasses){
 
   # -- get values from input object
-  values <- lapply(names(colClasses, function(x) input[[x]]))
+  values <- lapply(names(colClasses), function(x) input[[x]])
 
   # -- name the list
   names(values) <- names(colClasses)
