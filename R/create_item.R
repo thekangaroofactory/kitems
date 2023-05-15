@@ -16,10 +16,12 @@
 # -- function definition
 create_item <- function(values, colClasses, default.val, default.fun){
 
+  cat("Create item: \n")
+
   # -- fill in missing inputs with defaults
   # ----------------------------------------------------------------------------
 
-  cat("Computing default values... \n")
+  cat("- Computing default values... \n")
 
   # -- helper
   helper <- function(name){
@@ -48,14 +50,10 @@ create_item <- function(values, colClasses, default.val, default.fun){
   # -- replace NULL with computed values
   values[names(unlist(new_values))] <- unlist(new_values)
 
-  str(values)
-
   # -- Coerce input values to match with colClasses
   # ----------------------------------------------------------------------------
 
-  cat("Coerce values to colClasses \n")
-
-  str(colClasses)
+  cat("- Coerce values to colClasses \n")
 
   # -- helper
   helper <- function(value, class){
