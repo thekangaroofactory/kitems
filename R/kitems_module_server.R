@@ -51,8 +51,12 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
     CLASS_FUNCTIONS <<- list("numeric" = as.numeric,
                             "integer" = as.integer,
                             "double" = as.double,
+                            "logical" = as.logical,
                             "character" = as.character,
-                            "Date" = .Date)
+                            "factor" = as.factor,
+                            "Date" = .Date,
+                            "POSIXct" = as.POSIXct,
+                            "POSIXlt" = as.POSIXlt)
 
 
     # --------------------------------------------------------------------------
