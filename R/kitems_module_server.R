@@ -47,6 +47,13 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
                                          rep("double", 5),
                                          rep("integer", 2)))
 
+    # -- Define lis of as functions
+    CLASS_FUNCTIONS <<- list("numeric" = as.numeric,
+                            "integer" = as.integer,
+                            "double" = as.double,
+                            "character" = as.character,
+                            "Date" = .Date)
+
 
     # --------------------------------------------------------------------------
     # Init:
@@ -422,23 +429,35 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
     # -- new item
     observeEvent(input$create_item, {
 
+      cat(MODULE, "[EVENT] Create item \n")
+
       # -- close modal
       removeModal()
 
-      # -- build list of input values & name it
-      input_values <- lapply(names(colClasses()), function(x) input[[x]])
-      names(input_values) <- names(colClasses())
+      # -- get list of input values & name it
+      cat("--  Get lits of input values \n")
+      input_values <- get_input_values(input, colClasses())
+
+
+      # ******************************************
+      # HACK TO BE REPLACED
+
+      cat("[***] --- HACK TO BE REMOVED --- [***] \n")
+
+      default.val <- c("name" = "test")
+      default.fun <- c("id" = ktools::getTimestamp)
+
+      # -- end HACK
+      # ******************************************
 
       # -- create item based on input list
+      cat("--  Create item \n")
       item <- create_item(input_values, colClasses(), default.val, default.fun)
 
-      # -- add item to item list
-      #tmp_xxx <- add_item(item, xxx) # r[[r_items]]()
-      item_list <- rbind(r[[r_items]](), item)
+      # -- add item to list & store
+      cat("--  Add item to list \n")
+      item_list <- item_add(r[[r_items]](), item)
       r[[r_items]](item_list)
-
-      # -- store new item list
-
 
     })
 
