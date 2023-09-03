@@ -7,6 +7,11 @@
 #'
 #' @return a list of values
 #'
+#' @details the output list will contain as many entries as the colClasses named vector.
+#' In case some names have no corresponding item in the input parameter, they will get NULL as value
+#' in the output list.
+#'
+#'
 #' @examples
 
 

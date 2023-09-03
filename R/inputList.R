@@ -1,10 +1,10 @@
 
 
-inputList <- function(ns, item = NULL, update = FALSE, colClasses){
+inputList <- function(ns, item = NULL, update = FALSE, colClasses, skip = NULL){
 
   cat("[getModalDialog] Building modal dialog \n")
 
-  # helper function
+  # -- helper function
   add_input <- function(x, colClasses){
 
     cat("  - Dealing with attribute", x, "type =", colClasses[[x]], "\n")
@@ -57,12 +57,15 @@ inputList <- function(ns, item = NULL, update = FALSE, colClasses){
 
   }
 
-  # skip attribute id (auto)
-  colClasses <- colClasses[!names(colClasses) %in% "id"]
 
-  # apply helper
+  # -- Filter out attributes in skip param
+  cat("  - Filter out attributes to skip:", skip, "\n")
+  colClasses <- colClasses[!names(colClasses) %in% skip]
+
+  # -- apply helper
   feedback <- lapply(1:length(colClasses), function(x) add_input(x, colClasses))
 
+  # -- output
   tagList(feedback)
 
 }

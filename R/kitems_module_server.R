@@ -85,6 +85,9 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
     colClasses <- reactiveVal(NULL)
     filter_cols <- reactiveVal(NULL)
 
+    # -- Params
+    skip <- c("id")
+
     # -- Declare reactive objects (for external use)
     r[[trigger_add]] <- reactiveVal(NULL)
 
@@ -241,11 +244,16 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
                                            selection = list(mode = 'single', target = "row", selected = NULL))
 
 
+    # -- colClasses
+    output$dm_colClasses <- DT::renderDT(data.frame(as.list(colClasses())),
+                                         rownames = FALSE,
+                                         options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
+                                         selection = list(mode = 'single', target = "row", selected = NULL))
+
+
+
     # Masked view for user
     # TODO: add user view (add function params for renderDT...)
-
-
-
 
 
 
@@ -422,7 +430,7 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
     # -- new_item_btn
     observeEvent(input$new_item_btn, {
 
-      showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, colClasses = colClasses()),
+      showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, colClasses = colClasses(), skip = skip),
                             title = "Create",
                             footer = tagList(
                               modalButton("Cancel"),
@@ -439,7 +447,7 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
       removeModal()
 
       # -- get list of input values & name it
-      cat("--  Get lits of input values \n")
+      cat("--  Get list of input values \n")
       input_values <- get_input_values(input, colClasses())
 
 
