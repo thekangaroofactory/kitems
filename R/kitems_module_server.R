@@ -471,7 +471,7 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
 
       # -- create item based on input list
       cat("--  Create item \n")
-      item <- create_item(input_values, colClasses(), default.val, default.fun)
+      item <- item_create(input_values, colClasses(), default.val, default.fun)
 
       # -- add item to list & store
       cat("--  Add item to list \n")

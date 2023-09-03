@@ -14,7 +14,7 @@
 
 
 # -- function definition
-create_item <- function(values, colClasses, default.val, default.fun){
+item_create <- function(values, colClasses, default.val, default.fun){
 
   cat("Create item: \n")
 
