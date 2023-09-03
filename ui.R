@@ -61,7 +61,13 @@ body <- dashboardBody(
             fluidRow(
               column(width = 12,
 
-                     admin_ui("data_2"))))
+                     admin_ui("data_2"))),
+
+            fluidRow(
+              column(width = 12,
+
+                     new_item_BTN("data_2"))
+            ))
 
 
   ) # end tabItems

@@ -33,6 +33,7 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
     MODULE <- paste0("[", id, "]")
 
     # -- Object types
+    # note: need to cleanup unused types? or maybe keep as they do exist as types
     OBJECT_CLASS <- c("NA", "NULL",
                       "numeric", "integer", "complex", "logical", "character", "raw",
                       "double", "factor", "Date", "POSIXct", "POSIXlt")
@@ -46,6 +47,18 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
                                          rep("character", 7),
                                          rep("double", 5),
                                          rep("integer", 2)))
+
+    # -- Define lis of as functions
+    # note: factor is not implemented in inputList.R... clean it?
+    CLASS_FUNCTIONS <- list("numeric" = as.numeric,
+                            "integer" = as.integer,
+                            "double" = as.double,
+                            "logical" = as.logical,
+                            "character" = as.character,
+                            "factor" = as.factor,
+                            "Date" = .Date,
+                            "POSIXct" = as.POSIXct,
+                            "POSIXlt" = as.POSIXlt)
 
 
     # --------------------------------------------------------------------------
@@ -74,8 +87,28 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
     colClasses <- reactiveVal(NULL)
     filter_cols <- reactiveVal(NULL)
 
+
     # -- Declare reactive objects (for external use)
     r[[trigger_add]] <- reactiveVal(NULL)
+
+
+
+
+    # ******************************************
+    # HACK TO BE REPLACED
+
+    cat("[***] --- HACK TO BE REMOVED --- [***] \n")
+
+    # -- skip mechanism: implement it in data model definition
+    skip <- c("id")
+
+    # -- default values/functions mechanism: implement it in data model definition
+    default.val <- c("name" = "test")
+    default.fun <- c("id" = ktools::getTimestamp)
+
+    # -- end HACK
+    # ******************************************
+
 
 
     # --------------------------------------------------------------------------
@@ -230,11 +263,16 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
                                            selection = list(mode = 'single', target = "row", selected = NULL))
 
 
+    # -- colClasses
+    output$dm_colClasses <- DT::renderDT(data.frame(as.list(colClasses())),
+                                         rownames = FALSE,
+                                         options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
+                                         selection = list(mode = 'single', target = "row", selected = NULL))
+
+
+
     # Masked view for user
     # TODO: add user view (add function params for renderDT...)
-
-
-
 
 
 
@@ -401,13 +439,44 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
 
 
     # -------------------------------------
-    # User UI:
+    # Create item:
     # -------------------------------------
 
-    # new item
-    observeEvent(input$btn_new_item, {
+    # -- btn: new item
+    output$new_item_btn <- renderUI(actionButton(inputId = ns("new_item_btn"),
+                                                 label = "New item"))
 
-      showModal(getModalDialog(item = NULL, update = FALSE, colClasses = colClasses()))
+    # -- new_item_btn
+    observeEvent(input$new_item_btn, {
+
+      showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, colClasses = colClasses(), skip = skip),
+                            title = "Create",
+                            footer = tagList(
+                              modalButton("Cancel"),
+                              actionButton(ns("create_item"), "Create"))))
+
+    })
+
+    # -- new item
+    observeEvent(input$create_item, {
+
+      cat(MODULE, "[EVENT] Create item \n")
+
+      # -- close modal
+      removeModal()
+
+      # -- get list of input values & name it
+      cat("--  Get list of input values \n")
+      input_values <- get_input_values(input, colClasses())
+
+      # -- create item based on input list
+      cat("--  Create item \n")
+      item <- item_create(input_values, colClasses(), default.val, default.fun, coerce_functions = CLASS_FUNCTIONS)
+
+      # -- add item to list & store
+      cat("--  Add item to list \n")
+      item_list <- item_add(r[[r_items]](), item)
+      r[[r_items]](item_list)
 
     })
 
