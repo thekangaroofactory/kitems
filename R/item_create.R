@@ -5,8 +5,9 @@
 #' @param values a list of values, most likely output values coming from UI inputs
 #' @param colClasses a named vector of classes, defining the data model
 #' @param default.val a named list, providing default values for given attributes
-#' @param default.fun a named list, providing default functions to compute the default values for given
-#' attributes
+#' @param default.fun a named list, providing default functions to compute the default values for given attributes
+#' @param coerce_functions a named list, providing the as function for each supported type
+#'
 #'
 #' @return a data.frame of the new item, coerced to match with colClasses
 #'
@@ -14,7 +15,7 @@
 
 
 # -- function definition
-item_create <- function(values, colClasses, default.val, default.fun){
+item_create <- function(values, colClasses, default.val, default.fun, coerce_functions){
 
   cat("Create item: \n")
 
@@ -59,7 +60,7 @@ item_create <- function(values, colClasses, default.val, default.fun){
   helper <- function(value, class){
     cat("value =", value, "\n")
     cat("class =", class, "\n")
-    CLASS_FUNCTIONS[[class]](value)}
+    coerce_functions[[class]](value)}
 
   # -- apply helper on list of values & rename output
   item <- lapply(names(values), function(x) helper(values[[x]], colClasses[[x]]))
