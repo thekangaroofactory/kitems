@@ -33,6 +33,7 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
     MODULE <- paste0("[", id, "]")
 
     # -- Object types
+    # note: need to cleanup unused types? or maybe keep as they do exist as types
     OBJECT_CLASS <- c("NA", "NULL",
                       "numeric", "integer", "complex", "logical", "character", "raw",
                       "double", "factor", "Date", "POSIXct", "POSIXlt")
@@ -48,6 +49,7 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
                                          rep("integer", 2)))
 
     # -- Define lis of as functions
+    # note: factor is not implemented in inputList.R... clean it?
     CLASS_FUNCTIONS <<- list("numeric" = as.numeric,
                             "integer" = as.integer,
                             "double" = as.double,

@@ -29,7 +29,7 @@ inputList <- function(ns, item = NULL, update = FALSE, colClasses, skip = NULL){
         width = NULL)
 
     # -- date, POSIXct
-    if(colClasses[[x]] %in% c("Date", "POSIXct"))
+    if(colClasses[[x]] %in% c("Date", "POSIXct", "POSIXlt"))
       input <- dateInput(
         inputId = ns(names(colClasses[x])),
         label = "Date",
