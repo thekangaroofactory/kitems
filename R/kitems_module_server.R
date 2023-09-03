@@ -85,11 +85,28 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
     colClasses <- reactiveVal(NULL)
     filter_cols <- reactiveVal(NULL)
 
-    # -- Params
-    skip <- c("id")
 
     # -- Declare reactive objects (for external use)
     r[[trigger_add]] <- reactiveVal(NULL)
+
+
+
+
+    # ******************************************
+    # HACK TO BE REPLACED
+
+    cat("[***] --- HACK TO BE REMOVED --- [***] \n")
+
+    # -- skip mechanism: implement it in data model definition
+    skip <- c("id")
+
+    # -- default values/functions mechanism: implement it in data model definition
+    default.val <- c("name" = "test")
+    default.fun <- c("id" = ktools::getTimestamp)
+
+    # -- end HACK
+    # ******************************************
+
 
 
     # --------------------------------------------------------------------------
@@ -449,18 +466,6 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
       # -- get list of input values & name it
       cat("--  Get list of input values \n")
       input_values <- get_input_values(input, colClasses())
-
-
-      # ******************************************
-      # HACK TO BE REPLACED
-
-      cat("[***] --- HACK TO BE REMOVED --- [***] \n")
-
-      default.val <- c("name" = "test")
-      default.fun <- c("id" = ktools::getTimestamp)
-
-      # -- end HACK
-      # ******************************************
 
       # -- create item based on input list
       cat("--  Create item \n")
