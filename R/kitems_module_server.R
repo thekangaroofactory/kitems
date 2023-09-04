@@ -72,6 +72,7 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
 
 
     # -- Build object names from module id (to access outside module)
+    r_data_model <- paste0(id, "data_model")
     r_items <- paste0(id, "_items")
     #r_raw_table <- paste0(id, "_raw_table")
     #r_table <- paste0(id, "_table")
@@ -167,8 +168,12 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
     # -- Notify
     cat(MODULE, "Read data done \n")
 
-    # -- Store into communication objects
+    # -- Store into communication object
     r[[r_items]] <- reactiveVal(items)
+
+    # -- Store data model into communication object
+    r[[r_data_model]] <- reactive(data_model(colClasses(), default.val, default.fun))
+
 
 
     # --------------------------------------------------------------------------
@@ -259,15 +264,20 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
     # Masked view for admin
     output$view_item_table <- DT::renderDT(view_items(),
                                            rownames = FALSE,
-                                           options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
                                            selection = list(mode = 'single', target = "row", selected = NULL))
 
 
     # -- colClasses
-    output$dm_colClasses <- DT::renderDT(data.frame(as.list(colClasses())),
-                                         rownames = FALSE,
-                                         options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
-                                         selection = list(mode = 'single', target = "row", selected = NULL))
+    # output$data_model <- DT::renderDT(data.frame(as.list(colClasses())),
+    #                                   rownames = FALSE,
+    #                                   options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
+    #                                   selection = list(mode = 'single', target = "row", selected = NULL))
+
+    # -- colClasses
+    output$data_model <- DT::renderDT(r[[r_data_model]](),
+                                      rownames = TRUE,
+                                      options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
+                                      selection = list(mode = 'single', target = "row", selected = NULL))
 
 
 

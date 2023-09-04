@@ -24,7 +24,7 @@ admin_ui <- function(id){
       fluidRow(column(width = 12,
 
                       p(paste("Data model name:", id)),
-                      DT::DTOutput(ns("dm_colClasses"))))),
+                      DT::DTOutput(ns("data_model"))))),
 
 
     wellPanel(
