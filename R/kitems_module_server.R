@@ -94,15 +94,13 @@ kitemsManager_Server <- function(id, r, file, path,
 
     # -- Declare reactive objects (for internal use)
     colClasses <- reactiveVal(NULL)
-    filter_cols <- reactiveVal(NULL)
-
     default_val <- reactiveVal(NULL)
+    default_fun <- reactiveVal(NULL)
+    filter_cols <- reactiveVal(NULL)
 
 
     # -- Declare reactive objects (for external use)
     r[[trigger_add]] <- reactiveVal(NULL)
-
-
 
 
     # ******************************************
@@ -112,12 +110,6 @@ kitemsManager_Server <- function(id, r, file, path,
 
     # -- skip mechanism: implement it in data model definition
     skip <- c("id")
-
-    # -- default values/functions mechanism: implement it in data model definition
-    if(is.null(default.val))
-      default.val <- c("name" = "test")
-    if(is.null(default.fun))
-      default.fun <- c("id" = ktools::getTimestamp)
 
     # -- end HACK
     # ******************************************
@@ -181,6 +173,24 @@ kitemsManager_Server <- function(id, r, file, path,
     }, ignoreInit = TRUE, ignoreNULL = FALSE)
 
 
+    # -- Default functions
+    target_url <- file.path(path$resource, paste0(id, "_defaultFun.rds"))
+    if(file.exists(target_url))
+      default.fun <- readRDS(target_url)
+
+    default_fun(default.fun)
+
+
+    # save default_val
+    observeEvent(default_fun(), {
+
+      # -- Write & notify
+      saveRDS(default_fun(), file = file.path(path$resource, paste0(id, "_defaultFun.rds")))
+      cat(MODULE, "default_fun saved \n")
+
+    }, ignoreInit = TRUE, ignoreNULL = FALSE)
+
+
     # --------------------------------------------------------------------------
     # Load the data:
     # --------------------------------------------------------------------------
@@ -202,7 +212,7 @@ kitemsManager_Server <- function(id, r, file, path,
     r[[r_items]] <- reactiveVal(items)
 
     # -- Store data model into communication object
-    r[[r_data_model]] <- reactive(data_model(colClasses(), default_val(), default.fun))
+    r[[r_data_model]] <- reactive(data_model(colClasses(), default_val(), default_fun()))
 
 
 
@@ -511,7 +521,7 @@ kitemsManager_Server <- function(id, r, file, path,
 
       # -- create item based on input list
       cat("--  Create item \n")
-      item <- item_create(input_values, colClasses(), default_val(), default.fun, coerce_functions = CLASS_FUNCTIONS)
+      item <- item_create(input_values, colClasses(), default_val(), default_fun(), coerce_functions = CLASS_FUNCTIONS)
 
       # -- add item to list & store
       cat("--  Add item to list \n")
