@@ -60,9 +60,21 @@ shinyServer(
     # Launch module servers
     # -------------------------------------
 
-    # -- start module server
-    kitemsManager_Server(id = "data", r = r, path = path_list, file = "my_data.csv", col.classes = NA, create = TRUE, autosave = TRUE)
-    kitemsManager_Server(id = "data_2", r = r, path = path_list, file = "my_data_2.csv", col.classes = NA, create = TRUE, autosave = TRUE)
+    # -- start module server: data
+    kitemsManager_Server(id = "data", r = r, path = path_list, file = "my_data.csv",
+                         col.classes = NA, default.val = NULL, default.fun = NULL, filter.cols = NULL,
+                         create = TRUE, autosave = TRUE)
+
+
+
+    # -- setup default values/functions:
+    default.val <- c("name" = "test", "total" = 2)
+
+
+    # -- start module server: data_2
+    kitemsManager_Server(id = "data_2", r = r, path = path_list, file = "my_data_2.csv",
+                         col.classes = NA, default.val = default.val, default.fun = NULL, filter.cols = NULL,
+                         create = TRUE, autosave = TRUE)
 
 
     # -------------------------------------
