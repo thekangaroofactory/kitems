@@ -1,6 +1,5 @@
 
 
-# -- function definition
 #' Title
 #'
 #' @param id
@@ -8,12 +7,19 @@
 #' @param file
 #' @param path
 #' @param col.classes
+#' @param default.val a named vector, providing default values. In case an attribute of the data model has no default value,
+#' it will be NA.
+#' @param default.fun
 #' @param filter.cols
 #' @param create
 #' @param autosave
 #'
 #' @return
 #' @export
+#'
+#' @details
+#'
+#' Resources: colClasses, default.val & default.fun are taken from the arguments by default.
 #'
 #' @examples
 
@@ -22,7 +28,9 @@
 # Shiny module server logic
 # ------------------------------------------------------------------------------
 
-kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.cols = NULL, create = TRUE, autosave = TRUE) {
+kitemsManager_Server <- function(id, r, file, path,
+                                 col.classes = NA, default.val = NULL, default.fun = NULL, filter.cols = NULL,
+                                 create = TRUE, autosave = TRUE) {
   moduleServer(id, function(input, output, session) {
 
     # --------------------------------------------------------------------------
@@ -88,6 +96,8 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
     colClasses <- reactiveVal(NULL)
     filter_cols <- reactiveVal(NULL)
 
+    default_val <- reactiveVal(NULL)
+
 
     # -- Declare reactive objects (for external use)
     r[[trigger_add]] <- reactiveVal(NULL)
@@ -104,8 +114,10 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
     skip <- c("id")
 
     # -- default values/functions mechanism: implement it in data model definition
-    default.val <- c("name" = "test")
-    default.fun <- c("id" = ktools::getTimestamp)
+    if(is.null(default.val))
+      default.val <- c("name" = "test")
+    if(is.null(default.fun))
+      default.fun <- c("id" = ktools::getTimestamp)
 
     # -- end HACK
     # ******************************************
@@ -151,6 +163,24 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
     }, ignoreInit = TRUE, ignoreNULL = FALSE)
 
 
+    # -- Default values
+    target_url <- file.path(path$resource, paste0(id, "_defaultVal.rds"))
+    if(file.exists(target_url))
+      default.val <- readRDS(target_url)
+
+    default_val(default.val)
+
+
+    # save default_val
+    observeEvent(default_val(), {
+
+      # -- Write & notify
+      saveRDS(default_val(), file = file.path(path$resource, paste0(id, "_defaultVal.rds")))
+      cat(MODULE, "default_val saved \n")
+
+    }, ignoreInit = TRUE, ignoreNULL = FALSE)
+
+
     # --------------------------------------------------------------------------
     # Load the data:
     # --------------------------------------------------------------------------
@@ -172,7 +202,7 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
     r[[r_items]] <- reactiveVal(items)
 
     # -- Store data model into communication object
-    r[[r_data_model]] <- reactive(data_model(colClasses(), default.val, default.fun))
+    r[[r_data_model]] <- reactive(data_model(colClasses(), default_val(), default.fun))
 
 
 
@@ -481,7 +511,7 @@ kitemsManager_Server <- function(id, r, file, path, col.classes = NA, filter.col
 
       # -- create item based on input list
       cat("--  Create item \n")
-      item <- item_create(input_values, colClasses(), default.val, default.fun, coerce_functions = CLASS_FUNCTIONS)
+      item <- item_create(input_values, colClasses(), default_val(), default.fun, coerce_functions = CLASS_FUNCTIONS)
 
       # -- add item to list & store
       cat("--  Add item to list \n")
