@@ -17,12 +17,10 @@ data_model <- function(colClasses, default.val, default.fun){
   dm <- data.frame("type" = colClasses)
 
   # -- add default.val (reorder input)
-  default.val <- default.val[order(row.names(dm))]
-  dm$default.val <- default.val
+  dm$default.val <- default.val[match(row.names(dm), names(default.val))]
 
   # -- add default.fun (reorder input)
-  default.fun <- default.fun[order(row.names(dm))]
-  dm$default.fun <- default.fun
+  dm$default.fun <- default.fun[match(row.names(dm), names(default.fun))]
 
   # -- return
   dm
