@@ -16,14 +16,15 @@ admin_ui <- function(id){
 
   # UI
   tagList(
-    h3("Admin view"),
+    h3("Administration console"),
 
     # -- data model details
     wellPanel(
 
       fluidRow(column(width = 12,
 
-                      p(paste("Data model name:", id)),
+                      h3(paste("Name: ", id)),
+                      p("Data model summary."),
                       DT::DTOutput(ns("data_model"))))),
 
 
