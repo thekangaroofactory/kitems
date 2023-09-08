@@ -398,11 +398,21 @@ kitemsManager_Server <- function(id, r, file, path,
 
       cat("[BTN] Create data \n")
 
-      # create items
+      # -- init colClasses
       tmp_colClasses <- c("id" = "numeric")
-      items <- createItems(path$data, file, tmp_colClasses)
 
-      # store items and colClasses
+      # -- init empty df
+      #df <- data.frame(matrix(ncol = 0, nrow = 0))
+
+      # -- init items
+      #items <- attribute_add(df, name = names(tmp_colClasses), type = tmp_colClasses, fill = NA)
+
+      items <- kfiles::read_data(file = file,
+                        path = path$data,
+                        colClasses = tmp_colClasses,
+                        create = TRUE)
+
+      # -- store items and colClasses
       r[[r_items]](items)
       colClasses(tmp_colClasses)
 
@@ -419,7 +429,7 @@ kitemsManager_Server <- function(id, r, file, path,
       cat("[BTN] Add column \n")
 
       # create and store
-      items <- addColumn(r[[r_items]](), name = input$add_col_name, type = input$add_col_type, colClasses = colClasses(), fill = NA)
+      items <- attribute_add(r[[r_items]](), name = input$add_col_name, type = input$add_col_type, fill = NA)
       r[[r_items]](items)
 
       # update & store colClasses
