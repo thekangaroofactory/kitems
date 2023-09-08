@@ -1,7 +1,7 @@
 
 
 
-addColumn <- function(x, name, type, colClasses, fill = NA){
+attribute_add <- function(x, name, type, fill = NA){
 
   # check dim
   if(dim(x)[1] == 0){
