@@ -345,6 +345,50 @@ kitemsManager_Server <- function(id, r, file, path,
     # Action buttons:
     # -------------------------------------
 
+    # -- danger zone
+    output$danger_zone <- renderUI({
+
+      tagList(
+
+        # -- select column name
+        selectizeInput(inputId = ns("dz_col_name"),
+                       label = "Name",
+                       choices = colnames(r[[r_items]]()),
+                       selected = NULL,
+                       options = list(create = FALSE,
+                                      placeholder = 'Type or select an option below',
+                                      onInitialize = I('function() { this.setValue(""); }'))),
+
+        # -- delete
+        actionButton(ns("dz_delete_col"), label = "Delete"))
+
+    })
+
+    # -- delete column
+    observeEvent(input$dz_delete_col, {
+
+      # -- check
+      req(input$dz_col_name)
+
+      # -- drop column! & store
+      items <- r[[r_items]]()
+      items[input$dz_col_name] <- NULL
+      r[[r_items]](items)
+
+      # -- update colClasses & store
+      tmp_colClasses <- colClasses()
+      tmp_colClasses <- tmp_colClasses[!names(tmp_colClasses) %in% input$dz_col_name]
+      colClasses(tmp_colClasses)
+
+      # -- update default_val & store
+      tmp_default_val <- default_val()
+      tmp_default_val <- tmp_default_val[!names(tmp_default_val) %in% input$dz_col_name]
+      default_val(tmp_default_val)
+
+
+    })
+
+
     # -- define inputs
     output$action_buttons <- renderUI({
 

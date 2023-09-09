@@ -13,6 +13,8 @@
 
 data_model <- function(colClasses, default.val, default.fun){
 
+  cat("[data_model] Update data model \n")
+
   # -- build data.frame from colClasses (named vector)
   dm <- data.frame("type" = colClasses)
 

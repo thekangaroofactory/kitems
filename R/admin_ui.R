@@ -25,7 +25,8 @@ admin_ui <- function(id){
 
                       h3(paste("Name: ", id)),
                       p("Data model summary."),
-                      DT::DTOutput(ns("data_model"))))),
+                      DT::DTOutput(ns("data_model")),
+                      uiOutput(ns("danger_zone"))))),
 
 
     wellPanel(
