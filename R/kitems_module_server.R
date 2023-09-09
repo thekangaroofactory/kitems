@@ -41,10 +41,13 @@ kitemsManager_Server <- function(id, r, file, path,
     MODULE <- paste0("[", id, "]")
 
     # -- Object types
-    # note: need to cleanup unused types? or maybe keep as they do exist as types
-    OBJECT_CLASS <- c("NA", "NULL",
-                      "numeric", "integer", "complex", "logical", "character", "raw",
-                      "double", "factor", "Date", "POSIXct", "POSIXlt")
+    # note: cleaned unsupported types --
+    # OBJECT_CLASS <- c("NA", "NULL",
+    #                   "numeric", "integer", "complex", "logical", "character", "raw",
+    #                   "double", "factor", "Date", "POSIXct", "POSIXlt")
+    OBJECT_CLASS <- c("numeric", "integer", "double",
+                      "logical", "character", "factor",
+                      "Date", "POSIXct", "POSIXlt")
 
     # -- Default values
     DEFAULT_VALUES <- list("numeric" = c(NA, 0),
