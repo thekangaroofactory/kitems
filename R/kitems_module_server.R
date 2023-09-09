@@ -46,6 +46,17 @@ kitemsManager_Server <- function(id, r, file, path,
                       "numeric", "integer", "complex", "logical", "character", "raw",
                       "double", "factor", "Date", "POSIXct", "POSIXlt")
 
+    # -- Default values
+    DEFAULT_VALUES <- list("numeric" = c(NA, 0),
+                           "integer" = c(NA, 0),
+                           "logical" = c(NA, FALSE, TRUE),
+                           "character" = c(NA, ""),
+                           "double" = c(NA, 0),
+                           "factor" = c(NA),
+                           "Date" = c(NA),
+                           "POSIXct" = c(NA),
+                           "POSIXlt" = c(NA))
+
     # -- Column name / type  template
     TEMPLATE_COLS <- data.frame(name = c("date",
                                          "name", "title", "description", "comment", "note", "status", "detail",
@@ -316,7 +327,7 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- colClasses
     output$data_model <- DT::renderDT(r[[r_data_model]](),
                                       rownames = TRUE,
-                                      options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
+                                      options = list(lengthMenu = c(5, 10, 15), pageLength = 10, dom = "t", scrollX = TRUE),
                                       selection = list(mode = 'single', target = "row", selected = NULL))
 
 
@@ -362,6 +373,15 @@ kitemsManager_Server <- function(id, r, file, path,
                                         placeholder = 'Type or select an option below',
                                         onInitialize = I('function() { this.setValue(""); }'))),
 
+          # add column default.val
+          selectizeInput(inputId = ns("add_col_default_val"),
+                         label = "Default value",
+                         choices = NULL,
+                         selected = NULL,
+                         options = list(create = TRUE,
+                                        placeholder = 'Type or select an option below',
+                                        onInitialize = I('function() { this.setValue(""); }'))),
+
           # add column button
           actionButton(ns("add_col"), label = "Add column"),
 
@@ -392,6 +412,16 @@ kitemsManager_Server <- function(id, r, file, path,
                              selected = TEMPLATE_COLS[TEMPLATE_COLS$name == input$add_col_name, ]$type)})
 
 
+    # -- update add_col_type given add_col_name
+    observeEvent(input$add_col_type, {
+
+      # -- check if input in template
+      updateSelectizeInput(session = session,
+                           inputId = "add_col_default_val",
+                           choices = DEFAULT_VALUES[[input$add_col_type]],
+                           selected = NULL)})
+
+
 
     # -- BTN create_data
     observeEvent(input$create_data, {
@@ -403,9 +433,9 @@ kitemsManager_Server <- function(id, r, file, path,
 
       # -- init items
       items <- kfiles::read_data(file = file,
-                        path = path$data,
-                        colClasses = tmp_colClasses,
-                        create = TRUE)
+                                 path = path$data,
+                                 colClasses = tmp_colClasses,
+                                 create = TRUE)
 
       # -- store items and colClasses
       r[[r_items]](items)
@@ -431,6 +461,12 @@ kitemsManager_Server <- function(id, r, file, path,
       tmp_colClasses <- colClasses()
       tmp_colClasses[input$add_col_name] <- input$add_col_type
       colClasses(tmp_colClasses)
+
+      # -- update & store default_val (if not NULL)
+      if(input$add_col_default_val != ""){
+        tmp_default_val <- default_val()
+        tmp_default_val[input$add_col_name] <- input$add_col_default_val
+        default_val(tmp_default_val)}
 
     })
 
