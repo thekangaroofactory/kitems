@@ -222,6 +222,17 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- Notify
     cat(MODULE, "Read data done \n")
 
+    # -- Check data model integrity
+    # note: updating reactiveVal with same value won't hurt ;)
+    cat(MODULE, "Data model integrity checker \n")
+    colClasses(check_classes(items, col.classes))
+    default_val(check_resource(items, default.val))
+    default_fun(check_resource(items, default.fun))
+    filter_cols(check_resource(items, filter.cols))
+    # *****
+    # todo: resource is not saved after an update with NULL !?
+    # *****
+
     # -- Store into communication object
     r[[r_items]] <- reactiveVal(items)
 
