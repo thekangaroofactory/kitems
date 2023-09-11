@@ -21,6 +21,8 @@
 #'
 #' Resources: colClasses, default.val & default.fun are taken from the arguments by default.
 #'
+#' Defaults: if both default.val and default.fun are provided for the same attribute, default.fun will get the priority (default.val will be ignored).
+#'
 #' @examples
 
 
@@ -59,6 +61,17 @@ kitemsManager_Server <- function(id, r, file, path,
                            "Date" = c(NA),
                            "POSIXct" = c(NA),
                            "POSIXlt" = c(NA))
+
+    # -- Default values
+    DEFAULT_FUNCTIONS <- list("numeric" = c(NA),
+                              "integer" = c(NA),
+                              "logical" = c(NA),
+                              "character" = c(NA),
+                              "double" = c(NA),
+                              "factor" = c(NA),
+                              "Date" = c("Sys.Date"),
+                              "POSIXct" = c("Sys.Date"),
+                              "POSIXlt" = c("Sys.Date"))
 
     # -- Column name / type  template
     TEMPLATE_COLS <- data.frame(name = c("date",
@@ -440,6 +453,15 @@ kitemsManager_Server <- function(id, r, file, path,
                                         placeholder = 'Type or select an option below',
                                         onInitialize = I('function() { this.setValue(""); }'))),
 
+          # add column default.fun
+          selectizeInput(inputId = ns("add_col_default_fun"),
+                         label = "Default function",
+                         choices = NULL,
+                         selected = NULL,
+                         options = list(create = TRUE,
+                                        placeholder = 'Type or select an option below',
+                                        onInitialize = I('function() { this.setValue(""); }'))),
+
           # add column button
           actionButton(ns("add_col"), label = "Add column"),
 
@@ -477,8 +499,15 @@ kitemsManager_Server <- function(id, r, file, path,
       updateSelectizeInput(session = session,
                            inputId = "add_col_default_val",
                            choices = DEFAULT_VALUES[[input$add_col_type]],
-                           selected = NULL)})
+                           selected = NULL)
 
+      # -- check if input in template
+      updateSelectizeInput(session = session,
+                           inputId = "add_col_default_fun",
+                           choices = DEFAULT_FUNCTIONS[[input$add_col_type]],
+                           selected = NULL)
+
+      })
 
 
     # -- BTN create_data
@@ -486,8 +515,9 @@ kitemsManager_Server <- function(id, r, file, path,
 
       cat("[BTN] Create data \n")
 
-      # -- init colClasses
+      # -- init parameters (id)
       tmp_colClasses <- c("id" = "numeric")
+      tmp_default_fun <- c("id" = "ktools::getTimestamp")
 
       # -- init items
       items <- kfiles::read_data(file = file,
@@ -495,9 +525,10 @@ kitemsManager_Server <- function(id, r, file, path,
                                  colClasses = tmp_colClasses,
                                  create = TRUE)
 
-      # -- store items and colClasses
+      # -- store items and resources
       r[[r_items]](items)
       colClasses(tmp_colClasses)
+      default_fun(tmp_default_fun)
 
     })
 
@@ -525,6 +556,12 @@ kitemsManager_Server <- function(id, r, file, path,
         tmp_default_val <- default_val()
         tmp_default_val[input$add_col_name] <- input$add_col_default_val
         default_val(tmp_default_val)}
+
+      # -- update & store default_fun (if not NULL)
+      if(input$add_col_default_fun != ""){
+        tmp_default_fun <- default_fun()
+        tmp_default_fun[input$add_col_name] <- input$add_col_default_fun
+        default_fun(tmp_default_fun)}
 
     })
 

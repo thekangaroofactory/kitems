@@ -68,7 +68,7 @@ shinyServer(
 
     # -- setup default values/functions:
     default.val <- c("name" = "test", "total" = 2)
-    default.fun <- c("id" = ktools::getTimestamp)
+    default.fun <- c("id" = "ktools::getTimestamp")
 
 
     # -- start module server: data_2
