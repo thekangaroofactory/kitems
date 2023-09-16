@@ -31,7 +31,7 @@
 # ------------------------------------------------------------------------------
 
 kitemsManager_Server <- function(id, r, file, path,
-                                 col.classes = NA, default.val = NULL, default.fun = NULL, filter.cols = NULL,
+                                 col.classes = NA, default.val = NULL, default.fun = NULL, filter.cols = NULL, skip = NULL,
                                  create = TRUE, autosave = TRUE) {
   moduleServer(id, function(input, output, session) {
 
@@ -124,23 +124,11 @@ kitemsManager_Server <- function(id, r, file, path,
     default_val <- reactiveVal(NULL)
     default_fun <- reactiveVal(NULL)
     filter_cols <- reactiveVal(NULL)
+    skip_cols <- reactiveVal(NULL)
 
 
     # -- Declare reactive objects (for external use)
     r[[trigger_add]] <- reactiveVal(NULL)
-
-
-    # ******************************************
-    # HACK TO BE REPLACED
-
-    cat("[***] --- HACK TO BE REMOVED --- [***] \n")
-
-    # -- skip mechanism: implement it in data model definition
-    skip <- c("id")
-
-    # -- end HACK
-    # ******************************************
-
 
 
     # --------------------------------------------------------------------------
@@ -214,6 +202,24 @@ kitemsManager_Server <- function(id, r, file, path,
       # -- Write & notify
       saveRDS(default_fun(), file = file.path(path$resource, paste0(id, "_defaultFun.rds")))
       cat(MODULE, "default_fun saved \n")
+
+    }, ignoreInit = TRUE, ignoreNULL = FALSE)
+
+
+    # -- Default functions
+    target_url <- file.path(path$resource, paste0(id, "_skip.rds"))
+    if(file.exists(target_url))
+      skip <- readRDS(target_url)
+
+    skip_cols(skip)
+
+
+    # save default_val
+    observeEvent(skip_cols(), {
+
+      # -- Write & notify
+      saveRDS(skip_cols(), file = file.path(path$resource, paste0(id, "_skip.rds")))
+      cat(MODULE, "skip_cols saved \n")
 
     }, ignoreInit = TRUE, ignoreNULL = FALSE)
 
@@ -462,6 +468,11 @@ kitemsManager_Server <- function(id, r, file, path,
                                         placeholder = 'Type or select an option below',
                                         onInitialize = I('function() { this.setValue(""); }'))),
 
+          # add skip
+          checkboxInput(inputId = ns("add_col_skip"),
+                        label = "Skip (input form)",
+                        value = FALSE),
+
           # add column button
           actionButton(ns("add_col"), label = "Add column"),
 
@@ -507,7 +518,7 @@ kitemsManager_Server <- function(id, r, file, path,
                            choices = DEFAULT_FUNCTIONS[[input$add_col_type]],
                            selected = NULL)
 
-      })
+    })
 
 
     # -- BTN create_data
@@ -562,6 +573,12 @@ kitemsManager_Server <- function(id, r, file, path,
         tmp_default_fun <- default_fun()
         tmp_default_fun[input$add_col_name] <- input$add_col_default_fun
         default_fun(tmp_default_fun)}
+
+      # -- update & store skip (if TRUE)
+      if(input$add_col_skip){
+        tmp_skip <- skip_cols()
+        tmp_skip <- append(tmp_skip,input$add_col_name)
+        skip_cols(tmp_skip)}
 
     })
 
@@ -635,7 +652,7 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- new_item_btn
     observeEvent(input$new_item_btn, {
 
-      showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, colClasses = colClasses(), skip = skip),
+      showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, colClasses = colClasses(), skip = skip_cols()),
                             title = "Create",
                             footer = tagList(
                               modalButton("Cancel"),

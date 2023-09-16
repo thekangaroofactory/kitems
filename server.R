@@ -62,18 +62,19 @@ shinyServer(
 
     # -- start module server: data
     kitemsManager_Server(id = "data", r = r, path = path_list, file = "my_data.csv",
-                         col.classes = NA, default.val = NULL, default.fun = NULL, filter.cols = NULL,
+                         col.classes = NA, default.val = NULL, default.fun = NULL, filter.cols = NULL, skip = NULL,
                          create = TRUE, autosave = TRUE)
 
 
     # -- setup default values/functions:
     default.val <- c("name" = "test", "total" = 2)
     default.fun <- c("id" = "ktools::getTimestamp")
+    skip <- c("id")
 
 
     # -- start module server: data_2
     kitemsManager_Server(id = "data_2", r = r, path = path_list, file = "my_data_2.csv",
-                         col.classes = NA, default.val = default.val, default.fun = default.fun, filter.cols = NULL,
+                         col.classes = NA, default.val = default.val, default.fun = default.fun, filter.cols = NULL, skip = skip,
                          create = TRUE, autosave = TRUE)
 
 
