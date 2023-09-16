@@ -20,6 +20,7 @@ item_create <- function(values, colClasses, default.val, default.fun, coerce){
   # note: evolution = use of do.call("fun", args) with a named list as args
   # to support use of default.fun with arguments insteaf of just ()
 
+
   # ***********************************************************
   # *** this trick to solve the use of :: for package functions
   # >> should be exported to ktools package for reuse
@@ -36,8 +37,6 @@ item_create <- function(values, colClasses, default.val, default.fun, coerce){
 
   # -- helper function (takes single values)
   helper <- function(key, value, class, default.val, default.fun, coerce){
-
-    str(value)
 
     # -- coerce value
     cat("Helper function: \n")
@@ -74,8 +73,6 @@ item_create <- function(values, colClasses, default.val, default.fun, coerce){
 
     # -- coerce value
     cat("Coerce value to given class \n")
-    cat("Input: \n")
-    str(value)
     value <- eval(call(coerce[[class]], value))
     cat("Output: \n")
     str(value)
@@ -85,7 +82,8 @@ item_create <- function(values, colClasses, default.val, default.fun, coerce){
 
   }
 
-  # -- apply helper values
+
+  # -- apply helper values & rename output
   item <- lapply(names(values), function(x) helper(key = x,
                                                    values[[x]],
                                                    colClasses[[x]],
