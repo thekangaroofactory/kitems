@@ -85,15 +85,15 @@ kitemsManager_Server <- function(id, r, file, path,
 
     # -- Define lis of as functions
     # note: factor is not implemented in inputList.R... clean it?
-    CLASS_FUNCTIONS <- list("numeric" = as.numeric,
-                            "integer" = as.integer,
-                            "double" = as.double,
-                            "logical" = as.logical,
-                            "character" = as.character,
-                            "factor" = as.factor,
-                            "Date" = .Date,
-                            "POSIXct" = as.POSIXct,
-                            "POSIXlt" = as.POSIXlt)
+    CLASS_FUNCTIONS <- list("numeric" = "as.numeric",
+                            "integer" = "as.integer",
+                            "double" = "as.double",
+                            "logical" = "as.logical",
+                            "character" = "as.character",
+                            "factor" = "as.factor",
+                            "Date" = ".Date",
+                            "POSIXct" = "as.POSIXct",
+                            "POSIXlt" = "as.POSIXlt")
 
 
     # --------------------------------------------------------------------------
@@ -657,7 +657,7 @@ kitemsManager_Server <- function(id, r, file, path,
 
       # -- create item based on input list
       cat("--  Create item \n")
-      item <- item_create(input_values, colClasses(), default_val(), default_fun(), coerce_functions = CLASS_FUNCTIONS)
+      item <- item_create(input_values, colClasses(), default_val(), default_fun(), coerce = CLASS_FUNCTIONS)
 
       # -- add item to list & store
       cat("--  Add item to list \n")

@@ -15,60 +15,95 @@
 
 
 # -- function definition
-item_create <- function(values, colClasses, default.val, default.fun, coerce_functions){
+item_create <- function(values, colClasses, default.val, default.fun, coerce){
 
-  cat("Create item: \n")
+  # note: evolution = use of do.call("fun", args) with a named list as args
+  # to support use of default.fun with arguments insteaf of just ()
 
-  # -- fill in missing inputs with defaults
-  # ----------------------------------------------------------------------------
+  # -- steps:
+  # 2. skipped attributes (no user input, must be added from default)
+  # 1. input validation (user input + fill skipped values)
+  # 3. coerce value to colClasses
+  #
 
-  cat("- Computing default values... \n")
+  # ***********************************************************
+  # *** this trick to solve the use of :: for package functions
+  # >> should be exported to ktools package for reuse
+  getfun <- function(x) {
+    if(length(grep("::", x)) > 0) {
+      parts <- strsplit(x, "::")[[1]]
+      getExportedValue(parts[1], parts[2])
+    } else {
+      x
+    }
+  }
+  # ***********************************************************
 
-  # -- helper
-  helper <- function(name){
 
-    # -- init (if no default value or fun has been submitted)
-    value <- NA
+  # -- helper function (takes single values)
+  helper <- function(key, value, class, default.val, default.fun, coerce){
 
-    # -- check default values
-    if(name %in% names(default.val))
-      value <- default.val[[name]]
+    str(value)
 
-    # -- check default functions
-    if(name %in% names(default.fun))
-      value <- default.fun[[name]]()
+    # -- coerce value
+    cat("Helper function: \n")
+    cat("  - key =", key, "\n")
+    cat("  - value =", value, "\n")
+    cat("  - class =", class, "\n")
+    cat("  - default.val =", default.val, "\n")
+    cat("  - default.fun =", default.fun, "\n")
 
-    # -- name & return
-    names(value) <- name
-    cat("--", name, "=", value, "\n")
-    value
+    # -- test: isTruthy(FALSE) >> FALSE so need to skip for logicals // but include NA (is.logical(NA) >> TRUE)
+    if(!is.logical(value) | is.na(NA))
+
+      if(!shiny::isTruthy(value)){
+
+        cat("Input not Truthy / Setting up default value \n")
+
+        # -- P1: default function
+        if(!is.null(default.fun)){
+          cat("- strategy: applying default function \n")
+          value <- eval(do.call(getfun(default.fun), args = list()))}
+
+        # -- P2: then default value
+        else if(!is.null(default.val)){
+          cat("- strategy: applying default value \n")
+          value <- default.val}
+
+        # -- default: NA
+        else{
+          cat("- strategy: setting as NA \n")
+          value <- NA}
+
+      } else
+        cat("Input is Truthy, nothing to do \n")
+
+    # -- coerce value
+    cat("Coerce value to given class \n")
+    cat("Input: \n")
+    str(value)
+    value <- eval(call(coerce[[class]], value))
+    cat("Output: \n")
+    str(value)
+
+    # -- return
+    c(key = value)
 
   }
 
-  # -- apply helper on NULL values
-  new_values <- lapply(names(values[sapply(values, is.null)]), function(x) helper(x))
+  # -- apply helper values & rename output
+  print("DEBUG-----")
 
-  # -- replace NULL with computed values
-  values[names(unlist(new_values))] <- unlist(new_values)
 
-  # -- Coerce input values to match with colClasses
-  # ----------------------------------------------------------------------------
-
-  cat("- Coerce values to colClasses \n")
-
-  # -- helper
-  helper <- function(value, class){
-    cat("value =", value, "\n")
-    cat("class =", class, "\n")
-    coerce_functions[[class]](value)}
-
-  # -- apply helper on list of values & rename output
-  item <- lapply(names(values), function(x) helper(values[[x]], colClasses[[x]]))
+  item <- lapply(names(values), function(x) helper(key = x,
+                                                   values[[x]],
+                                                   colClasses[[x]],
+                                                   if(x %in% names(default.val)) default.val[[x]] else NULL,
+                                                   if(x %in% names(default.fun)) default.fun[[x]] else NULL,
+                                                   coerce))
   names(item) <- names(values)
 
-
   # -- return a df
-  # ----------------------------------------------------------------------------
   item <- as.data.frame(item)
 
 }
