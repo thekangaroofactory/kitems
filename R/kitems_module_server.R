@@ -110,17 +110,11 @@ kitemsManager_Server <- function(id, r, file, path,
     # trigger_update
     # trigger_delete
 
-
-    # -- Declare reactive objects (for internal use)
-    colClasses <- reactiveVal(NULL)
-    default_val <- reactiveVal(NULL)
-    default_fun <- reactiveVal(NULL)
-    filter_cols <- reactiveVal(NULL)
-    skip_cols <- reactiveVal(NULL)
-
-
     # -- Declare reactive objects (for external use)
     r[[trigger_add]] <- reactiveVal(NULL)
+
+    r[[r_data_model]] <- reactiveVal(NULL)
+    r[[r_items]] <- reactiveVal(NULL)
 
 
     # --------------------------------------------------------------------------
@@ -245,10 +239,10 @@ kitemsManager_Server <- function(id, r, file, path,
     # *****
 
     # -- Store into communication object
-    r[[r_items]] <- reactiveVal(items)
+    r[[r_items]](items)
 
     # -- Store data model into communication object
-    r[[r_data_model]] <- reactive(data.model)
+    r[[r_data_model]](data.model)
 
 
     # --------------------------------------------------------------------------
