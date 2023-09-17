@@ -6,11 +6,7 @@
 #' @param r
 #' @param file
 #' @param path
-#' @param col.classes
-#' @param default.val a named vector, providing default values. In case an attribute of the data model has no default value,
-#' it will be NA.
-#' @param default.fun
-#' @param filter.cols
+#' @param data.model
 #' @param create
 #' @param autosave
 #'
@@ -31,7 +27,7 @@
 # ------------------------------------------------------------------------------
 
 kitemsManager_Server <- function(id, r, file, path,
-                                 col.classes = NA, default.val = NULL, default.fun = NULL, filter.cols = NULL, skip = NULL,
+                                 data.model = NULL,
                                  create = TRUE, autosave = TRUE) {
   moduleServer(id, function(input, output, session) {
 
