@@ -10,14 +10,10 @@
 #' @param create
 #' @param autosave
 #'
-#' @return
 #' @export
 #'
 #' @details
 #'
-#' Resources: colClasses, default.val & default.fun are taken from the arguments by default.
-#'
-#' Defaults: if both default.val and default.fun are provided for the same attribute, default.fun will get the priority (default.val will be ignored).
 #'
 #' @examples
 
@@ -252,8 +248,7 @@ kitemsManager_Server <- function(id, r, file, path,
     r[[r_items]] <- reactiveVal(items)
 
     # -- Store data model into communication object
-    r[[r_data_model]] <- reactive(data_model(colClasses(), default_val(), default_fun()))
-
+    r[[r_data_model]] <- reactive(data.model)
 
 
     # --------------------------------------------------------------------------
