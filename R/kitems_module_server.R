@@ -128,8 +128,9 @@ kitemsManager_Server <- function(id, r, file, path,
     if(file.exists(dm_url))
       data.model <- readRDS(dm_url)
 
-    # -- Store (either content of the RDS or the server function input)
+    # -- Store (either content of the RDS or the server function input) & notify
     r[[r_data_model]](data.model)
+    cat(MODULE, "Read data model done \n")
 
     # -- Write data model (auto save)
     observeEvent(r[[r_data_model]](), {
@@ -145,6 +146,9 @@ kitemsManager_Server <- function(id, r, file, path,
     # Load the data:
     # --------------------------------------------------------------------------
 
+    # -- Extract colClasses from data model
+    col.classes <- dm_colClasses(r[[r_data_model]]())
+
     # -- Try load (see read_data for details about returns)
     items <- kfiles::read_data(file = file,
                                path = path$data,
@@ -155,8 +159,10 @@ kitemsManager_Server <- function(id, r, file, path,
     if(all(dim(items) == c(0,0)))
       items <- NULL
 
-    # -- Notify
+    # -- Store into communication object & notify
+    r[[r_items]](items)
     cat(MODULE, "Read data done \n")
+
 
     # -- Check data model integrity
     # note: updating reactiveVal with same value won't hurt ;)
@@ -168,9 +174,6 @@ kitemsManager_Server <- function(id, r, file, path,
     # *****
     # todo: resource is not saved after an update with NULL !?
     # *****
-
-    # -- Store into communication object
-    r[[r_items]](items)
 
 
     # --------------------------------------------------------------------------
