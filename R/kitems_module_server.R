@@ -104,6 +104,9 @@ kitemsManager_Server <- function(id, r, file, path,
     #r_raw_table <- paste0(id, "_raw_table")
     #r_table <- paste0(id, "_table")
 
+    # -- Build filenames from module id
+    dm_url <- file.path(path$resource, paste0(id, "_data_model.rds"))
+
     # -- Build triggers names from module id (to access outside module)
     trigger_add <- paste0(id, "_trigger_new")
     trigger_save <- paste0(id, "_trigger_save")
@@ -118,96 +121,24 @@ kitemsManager_Server <- function(id, r, file, path,
 
 
     # --------------------------------------------------------------------------
-    # Load Resources:
+    # Read/Write Resources (data model)
     # --------------------------------------------------------------------------
 
-    # -- colClasses
-    target_url <- file.path(path$resource, paste0(id, "_colClasses.rds"))
-    if(file.exists(target_url))
-      col.classes <- readRDS(target_url)
+    # -- Read data model
+    if(file.exists(dm_url))
+      data.model <- readRDS(dm_url)
 
-    colClasses(col.classes)
+    # -- Store (either content of the RDS or the server function input)
+    r[[r_data_model]](data.model)
 
-    # save colClasses
-    observeEvent(colClasses(), {
+    # -- Write data model (auto save)
+    observeEvent(r[[r_data_model]](), {
 
       # -- Write & notify
-      saveRDS(colClasses(), file = file.path(path$resource, paste0(id, "_colClasses.rds")))
-      cat(MODULE, "colClasses saved \n")
+      saveRDS(r[[r_data_model]](), file = dm_url)
+      cat(MODULE, "Data model saved \n")
 
     }, ignoreInit = TRUE)
-
-
-    # -- Filters
-    target_url <- file.path(path$resource, paste0(id, "_filterCols.rds"))
-    if(file.exists(target_url))
-      filter.cols <- readRDS(target_url)
-
-    filter_cols(filter.cols)
-
-
-    # save filter_cols
-    observeEvent(filter_cols(), {
-
-      # -- Write & notify
-      saveRDS(filter_cols(), file = file.path(path$resource, paste0(id, "_filterCols.rds")))
-      cat(MODULE, "filter_cols saved \n")
-
-    }, ignoreInit = TRUE, ignoreNULL = FALSE)
-
-
-    # -- Default values
-    target_url <- file.path(path$resource, paste0(id, "_defaultVal.rds"))
-    if(file.exists(target_url))
-      default.val <- readRDS(target_url)
-
-    default_val(default.val)
-
-
-    # save default_val
-    observeEvent(default_val(), {
-
-      # -- Write & notify
-      saveRDS(default_val(), file = file.path(path$resource, paste0(id, "_defaultVal.rds")))
-      cat(MODULE, "default_val saved \n")
-
-    }, ignoreInit = TRUE, ignoreNULL = FALSE)
-
-
-    # -- Default functions
-    target_url <- file.path(path$resource, paste0(id, "_defaultFun.rds"))
-    if(file.exists(target_url))
-      default.fun <- readRDS(target_url)
-
-    default_fun(default.fun)
-
-
-    # save default_val
-    observeEvent(default_fun(), {
-
-      # -- Write & notify
-      saveRDS(default_fun(), file = file.path(path$resource, paste0(id, "_defaultFun.rds")))
-      cat(MODULE, "default_fun saved \n")
-
-    }, ignoreInit = TRUE, ignoreNULL = FALSE)
-
-
-    # -- Default functions
-    target_url <- file.path(path$resource, paste0(id, "_skip.rds"))
-    if(file.exists(target_url))
-      skip <- readRDS(target_url)
-
-    skip_cols(skip)
-
-
-    # save default_val
-    observeEvent(skip_cols(), {
-
-      # -- Write & notify
-      saveRDS(skip_cols(), file = file.path(path$resource, paste0(id, "_skip.rds")))
-      cat(MODULE, "skip_cols saved \n")
-
-    }, ignoreInit = TRUE, ignoreNULL = FALSE)
 
 
     # --------------------------------------------------------------------------
@@ -240,9 +171,6 @@ kitemsManager_Server <- function(id, r, file, path,
 
     # -- Store into communication object
     r[[r_items]](items)
-
-    # -- Store data model into communication object
-    r[[r_data_model]](data.model)
 
 
     # --------------------------------------------------------------------------
