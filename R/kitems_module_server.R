@@ -210,30 +210,33 @@ kitemsManager_Server <- function(id, r, file, path,
     # Views:
     # -------------------------------------
 
-    # item table display view
+    # -- item table view
     view_items <- reactive({
 
       if(!is.null(r[[r_items]]())){
 
-        # apply column filter
-        value <- if(is.null(filter_cols())){
+        # -- get filter from data model
+        filter_cols <- dm_filter(r[[r_data_model]]())
+
+        # -- apply filter
+        value <- if(is.null(filter_cols)){
 
           r[[r_items]]()
 
         } else {
 
-          r[[r_items]]()[-which(names(r[[r_items]]()) %in% filter_cols())]
+          r[[r_items]]()[-which(names(r[[r_items]]()) %in% filter_cols)]
 
         }
 
-        # apply column name mask
+        # -- apply column name mask
         colnames(value) <- gsub(".", " ", colnames(value), fixed = TRUE)
         colnames(value) <- gsub("_", " ", colnames(value), fixed = TRUE)
         colnames(value) <- stringr::str_to_title(colnames(value))
 
       } else value <- NULL
 
-      # return
+      # -- return
       value
 
     })
