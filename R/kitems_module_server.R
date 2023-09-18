@@ -145,8 +145,8 @@ kitemsManager_Server <- function(id, r, file, path,
     # Load the data:
     # --------------------------------------------------------------------------
 
-    # -- Extract colClasses from data model
-    col.classes <- dm_colClasses(r[[r_data_model]]())
+    # -- Extract colClasses from data model (can't use the reactiveVal without wrapper)
+    col.classes <- dm_colClasses(data.model)
 
     # -- Try load (see read_data for details about returns)
     items <- kfiles::read_data(file = file,
