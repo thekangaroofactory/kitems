@@ -458,32 +458,20 @@ kitemsManager_Server <- function(id, r, file, path,
 
       cat("[BTN] Add column \n")
 
-      # create and store
+      # Add attribute to the data model & store
+      dm <- r[[r_data_model]]
+      dm <- dm_add_attribute(data.model = dm,
+                             name = input$add_col_name,
+                             type = input$add_col_type,
+                             default.val = input$add_col_default_val,
+                             default.fun = input$add_col_default_fun,
+                             skip = input$add_col_skip,
+                             filter = input$add_col_filter)
+      r[[r_data_model]](dm)
+
+      # Add column to items & store
       items <- attribute_add(r[[r_items]](), name = input$add_col_name, type = input$add_col_type, fill = NA)
       r[[r_items]](items)
-
-      # update & store colClasses
-      tmp_colClasses <- colClasses()
-      tmp_colClasses[input$add_col_name] <- input$add_col_type
-      colClasses(tmp_colClasses)
-
-      # -- update & store default_val (if not NULL)
-      if(input$add_col_default_val != ""){
-        tmp_default_val <- default_val()
-        tmp_default_val[input$add_col_name] <- input$add_col_default_val
-        default_val(tmp_default_val)}
-
-      # -- update & store default_fun (if not NULL)
-      if(input$add_col_default_fun != ""){
-        tmp_default_fun <- default_fun()
-        tmp_default_fun[input$add_col_name] <- input$add_col_default_fun
-        default_fun(tmp_default_fun)}
-
-      # -- update & store skip (if TRUE)
-      if(input$add_col_skip){
-        tmp_skip <- skip_cols()
-        tmp_skip <- append(tmp_skip,input$add_col_name)
-        skip_cols(tmp_skip)}
 
     })
 
