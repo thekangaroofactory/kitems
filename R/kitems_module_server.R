@@ -522,7 +522,9 @@ kitemsManager_Server <- function(id, r, file, path,
     observeEvent(input$filter_col, {
 
       cat("Filter columns:", input$filter_col, "\n")
-      filter_cols(input$filter_col)
+      dm <- r[[r_data_model]]
+      dm <- dm_filter_set(data.model = dm, filter = input$filter_col)
+      r[[r_data_model]](dm)
 
     }, ignoreInit = TRUE, ignoreNULL = FALSE)
 
