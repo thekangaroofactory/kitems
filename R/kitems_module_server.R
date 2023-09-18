@@ -10,7 +10,6 @@
 #' @param create
 #' @param autosave
 #'
-#' @export
 #'
 #' @details
 #'
@@ -129,7 +128,7 @@ kitemsManager_Server <- function(id, r, file, path,
       data.model <- readRDS(dm_url)
 
     # -- Store (either content of the RDS or the server function input) & notify
-    r[[r_data_model]](data.model)
+    r[[r_data_model]] <- reactiveVal(data.model)
     cat(MODULE, "Read data model done \n")
 
     # -- Write data model (auto save)
