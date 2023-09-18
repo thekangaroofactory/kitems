@@ -479,16 +479,18 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- BTN sort_col
     observeEvent(input$sort_col, {
 
-      # check
+      # -- Check
       req(length(input$order_cols) == dim(r[[r_items]]())[2])
 
       cat("[BTN] Reorder column \n")
 
-      # reorder items and store
+      # -- Reorder items & store
       r[[r_items]](r[[r_items]]()[input$order_cols])
 
-      # reorder colClasses & store
-      colClasses(colClasses()[input$order_cols])
+      # -- Reorder data model & store
+      dm <- r[[r_data_model]]
+      dm <- dm[match(input$order_cols, dm$name), ]
+      r[[r_data_model]](dm)
 
     })
 
