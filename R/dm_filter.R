@@ -10,9 +10,12 @@
 #' @examples
 
 
-dm_filter <- function(data.model = NULL){
+dm_filter <- function(data.model){
 
-  # -- get names where filter TRUE
-  filter <- data.model[!data.model$filter]$name
+  # -- Check NULL & get names where filter TRUE
+  if(!is.null(data.model))
+    data.model[!data.model$filter, ]$name
+  else
+    NULL
 
 }
