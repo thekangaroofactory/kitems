@@ -312,16 +312,10 @@ kitemsManager_Server <- function(id, r, file, path,
       items[input$dz_col_name] <- NULL
       r[[r_items]](items)
 
-      # -- update colClasses & store
-      tmp_colClasses <- colClasses()
-      tmp_colClasses <- tmp_colClasses[!names(tmp_colClasses) %in% input$dz_col_name]
-      colClasses(tmp_colClasses)
-
-      # -- update default_val & store
-      tmp_default_val <- default_val()
-      tmp_default_val <- tmp_default_val[!names(tmp_default_val) %in% input$dz_col_name]
-      default_val(tmp_default_val)
-
+      # -- update data model & store
+      dm <- data_model()
+      dm <- dm[dm$name != "input$dz_col_name", ]
+      data_model(dm)
 
     })
 
