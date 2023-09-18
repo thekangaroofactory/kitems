@@ -313,9 +313,9 @@ kitemsManager_Server <- function(id, r, file, path,
       r[[r_items]](items)
 
       # -- update data model & store
-      dm <- data_model()
+      dm <- r[[r_data_model]]
       dm <- dm[dm$name != "input$dz_col_name", ]
-      data_model(dm)
+      r[[r_data_model]](dm)
 
     })
 
@@ -428,19 +428,23 @@ kitemsManager_Server <- function(id, r, file, path,
       cat("[BTN] Create data \n")
 
       # -- init parameters (id)
-      tmp_colClasses <- c("id" = "numeric")
-      tmp_default_fun <- c("id" = "ktools::getTimestamp")
+      colClasses <- c("id" = "numeric")
+      default_fun <- c("id" = "ktools::getTimestamp")
+      filter <- c("id")
+      skip <- c("id")
+
+      # -- init data model & store
+      dm <- data_model(colClasses, default.val = NULL, default.fun = default_fun, filter = filter, skip = skip)
+      r[[r_data_model]](dm)
 
       # -- init items
       items <- kfiles::read_data(file = file,
                                  path = path$data,
-                                 colClasses = tmp_colClasses,
+                                 colClasses = colClasses,
                                  create = TRUE)
 
-      # -- store items and resources
+      # -- store items
       r[[r_items]](items)
-      colClasses(tmp_colClasses)
-      default_fun(tmp_default_fun)
 
     })
 
