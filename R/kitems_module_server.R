@@ -145,22 +145,31 @@ kitemsManager_Server <- function(id, r, file, path,
     # Load the data:
     # --------------------------------------------------------------------------
 
-    # -- Extract colClasses from data model (can't use the reactiveVal without wrapper)
-    col.classes <- dm_colClasses(data.model)
+    # -- Init
+    items <- NULL
 
-    # -- Try load (see read_data for details about returns)
-    items <- kfiles::read_data(file = file,
-                               path = path$data,
-                               colClasses = col.classes,
-                               create = create)
+    # -- Check for NULL data model (then no reason to try loading)
+    if(!is.null(data.model)){
 
-    # -- check output size (will trigger showing the create data btn)
-    if(all(dim(items) == c(0,0)))
-      items <- NULL
+      # -- Extract colClasses from data model (can't use the reactiveVal without wrapper)
+      col.classes <- dm_colClasses(data.model)
+
+      # -- Try load (see read_data for details about returns)
+      items <- kfiles::read_data(file = file,
+                                 path = path$data,
+                                 colClasses = col.classes,
+                                 create = create)
+
+      # -- check output size (will trigger showing the create data btn)
+      if(all(dim(items) == c(0,0)))
+        items <- NULL
+
+      cat(MODULE, "Read data done \n")
+
+    }
 
     # -- Store into communication object & notify
-    r[[r_items]](items)
-    cat(MODULE, "Read data done \n")
+    r[[r_items]]<- reactiveVal(items)
 
 
     # --------------------------------------------------------------------------
