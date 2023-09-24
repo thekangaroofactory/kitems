@@ -115,7 +115,7 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- Declare reactive objects (for external use)
     r[[trigger_add]] <- reactiveVal(NULL)
 
-    r[[r_data_model]] <- reactiveVal(NULL)
+    #r[[r_data_model]] <- reactiveVal(NULL)
     r[[r_items]] <- reactiveVal(NULL)
 
 
@@ -124,12 +124,16 @@ kitemsManager_Server <- function(id, r, file, path,
     # --------------------------------------------------------------------------
 
     # -- Read data model
-    if(file.exists(dm_url))
+    if(file.exists(dm_url)){
+
       data.model <- readRDS(dm_url)
+      cat(MODULE, "Read data model done \n")
+
+    }
 
     # -- Store (either content of the RDS or the server function input) & notify
     r[[r_data_model]] <- reactiveVal(data.model)
-    cat(MODULE, "Read data model done \n")
+
 
     # -- Write data model (auto save)
     observeEvent(r[[r_data_model]](), {
@@ -533,12 +537,15 @@ kitemsManager_Server <- function(id, r, file, path,
     # observe filter input
     observeEvent(input$filter_col, {
 
-      cat("Filter columns:", input$filter_col, "\n")
-      dm <- r[[r_data_model]]()
-      dm <- dm_filter_set(data.model = dm, filter = input$filter_col)
-      r[[r_data_model]](dm)
+      # -- check if input is different from dm (to avoid loop issue #71)
+      if(!identical(input$filter_col, dm_filter(r[[r_data_model]]()))){
 
-    }, ignoreInit = TRUE, ignoreNULL = FALSE)
+        cat("Filter columns:", input$filter_col, "\n")
+        dm <- r[[r_data_model]]()
+        dm <- dm_filter_set(data.model = dm, filter = input$filter_col)
+        r[[r_data_model]](dm)}
+
+    }, ignoreInit = TRUE, ignoreNULL = TRUE)
 
 
 
