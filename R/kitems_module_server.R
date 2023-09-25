@@ -352,7 +352,7 @@ kitemsManager_Server <- function(id, r, file, path,
 
       # -- update data model & store
       dm <- r[[r_data_model]]()
-      dm <- dm[dm$name != "input$dz_col_name", ]
+      dm <- dm[dm$name != input$dz_col_name, ]
       r[[r_data_model]](dm)
 
     })
