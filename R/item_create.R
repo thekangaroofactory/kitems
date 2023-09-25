@@ -20,21 +20,6 @@ item_create <- function(values, data.model, coerce){
   default.val <- dm_default_val(data.model)
   default.fun <- dm_default_fun(data.model)
 
-
-  # ***********************************************************
-  # *** this trick to solve the use of :: for package functions
-  # >> should be exported to ktools package for reuse
-  getfun <- function(x) {
-    if(length(grep("::", x)) > 0) {
-      parts <- strsplit(x, "::")[[1]]
-      getExportedValue(parts[1], parts[2])
-    } else {
-      x
-    }
-  }
-  # ***********************************************************
-
-
   # -- helper function (takes single values)
   helper <- function(key, value, class, default.val, default.fun, coerce){
 
@@ -52,21 +37,22 @@ item_create <- function(values, data.model, coerce){
       if(!shiny::isTruthy(value)){
 
         cat("Input not Truthy / Setting up default value \n")
+        value <- dm_get_default(data.model, key)
 
-        # -- P1: default function
-        if(!is.null(default.fun)){
-          cat("- strategy: applying default function \n")
-          value <- eval(do.call(getfun(default.fun), args = list()))}
-
-        # -- P2: then default value
-        else if(!is.null(default.val)){
-          cat("- strategy: applying default value \n")
-          value <- default.val}
-
-        # -- default: NA
-        else{
-          cat("- strategy: setting as NA \n")
-          value <- NA}
+        # # -- P1: default function
+        # if(!is.null(default.fun)){
+        #   cat("- strategy: applying default function \n")
+        #   value <- eval(do.call(getfun(default.fun), args = list()))}
+        #
+        # # -- P2: then default value
+        # else if(!is.null(default.val)){
+        #   cat("- strategy: applying default value \n")
+        #   value <- default.val}
+        #
+        # # -- default: NA
+        # else{
+        #   cat("- strategy: setting as NA \n")
+        #   value <- NA}
 
       } else
         cat("Input is Truthy, nothing to do \n")

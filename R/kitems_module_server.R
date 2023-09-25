@@ -471,7 +471,7 @@ kitemsManager_Server <- function(id, r, file, path,
       cat("[BTN] Add column \n")
 
       # Add attribute to the data model & store
-      dm <- r[[r_data_model]]
+      dm <- r[[r_data_model]]()
       dm <- dm_add_attribute(data.model = dm,
                              name = input$add_col_name,
                              type = input$add_col_type,
@@ -481,8 +481,11 @@ kitemsManager_Server <- function(id, r, file, path,
                              filter = input$add_col_filter)
       r[[r_data_model]](dm)
 
+      # -- get default value
+      value <- dm_get_default(data.model = dm, name = input$add_col_name)
+
       # Add column to items & store
-      items <- attribute_add(r[[r_items]](), name = input$add_col_name, type = input$add_col_type, fill = NA)
+      items <- attribute_add(r[[r_items]](), name = input$add_col_name, type = input$add_col_type, fill = value)
       r[[r_items]](items)
 
     })
