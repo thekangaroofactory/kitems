@@ -131,10 +131,6 @@ kitemsManager_Server <- function(id, r, file, path,
 
     }
 
-    # -- Store (either content of the RDS or the server function input) & notify
-    r[[r_data_model]] <- reactiveVal(data.model)
-
-
     # -- Write data model (auto save)
     observeEvent(r[[r_data_model]](), {
 
@@ -210,6 +206,34 @@ kitemsManager_Server <- function(id, r, file, path,
       cat(MODULE, "[TRIGGER] Item list has been saved \n")
 
     }, ignoreInit = TRUE)
+
+
+    # --------------------------------------------------------------------------
+    # Check data model integrity:
+    # --------------------------------------------------------------------------
+    # Code cleanup note: sequence should be load data.mode, load data, check integrity
+    # then only store into reactive values
+    # Declare observers after that init sequence
+
+    # -- Check for NULL data mode + data.frame
+    if(!is.null(data.model) & !is.null(items)){
+
+      result <- dm_check_integrity(data.model, items)
+
+      # -- Check feedback (otherwise value is TRUE)
+      if(is.data.frame(result)){
+
+        cat("[Warning] Data model not synchronized with items data.frame! \n")
+
+        # -- Update data model & save
+        data.model <- result
+        saveRDS(data.model, file = dm_url)
+        cat(MODULE, "Data model saved \n")
+
+      }}
+
+    # -- Store (either content of the RDS or the server function input) & notify
+    r[[r_data_model]] <- reactiveVal(data.model)
 
 
     # **************************************************************************
@@ -319,13 +343,15 @@ kitemsManager_Server <- function(id, r, file, path,
       # -- check
       req(input$dz_col_name)
 
+      cat("[BTN] Delete column:", input$dz_col_name, "\n")
+
       # -- drop column! & store
       items <- r[[r_items]]()
       items[input$dz_col_name] <- NULL
       r[[r_items]](items)
 
       # -- update data model & store
-      dm <- r[[r_data_model]]
+      dm <- r[[r_data_model]]()
       dm <- dm[dm$name != "input$dz_col_name", ]
       r[[r_data_model]](dm)
 
