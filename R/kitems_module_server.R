@@ -545,6 +545,8 @@ kitemsManager_Server <- function(id, r, file, path,
 
       # -- init params
       filter_cols <- dm_filter(r[[r_data_model]]())
+      cat(">> update filter button \n")
+      str(filter_cols)
 
       onInitialize <- if(is.null(filter_cols))
         I('function() { this.setValue(""); }')
@@ -567,14 +569,19 @@ kitemsManager_Server <- function(id, r, file, path,
     observeEvent(input$filter_col, {
 
       # -- check if input is different from dm (to avoid loop issue #71)
-      if(!identical(input$filter_col, dm_filter(r[[r_data_model]]()))){
+      #if(!identical(input$filter_col, dm_filter(r[[r_data_model]]()))){
 
-        cat("Filter columns:", input$filter_col, "\n")
-        dm <- r[[r_data_model]]()
+      cat("[BTN] Filter columns:", input$filter_col, "\n")
+
+      dm <- r[[r_data_model]]()
+      if(!is.null(dm)){
         dm <- dm_filter_set(data.model = dm, filter = input$filter_col)
+        str(dm)
         r[[r_data_model]](dm)}
 
-    }, ignoreInit = TRUE, ignoreNULL = TRUE)
+        #}
+
+    }, ignoreInit = TRUE, ignoreNULL = FALSE)
 
 
 
