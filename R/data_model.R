@@ -33,22 +33,22 @@ data_model <- function(colClasses, default.val = NULL, default.fun = NULL, filte
 
   cat("[data_model] Building data model \n")
 
-  # -- build data.frame from colClasses (named vector)
+  # -- Build data.frame from colClasses (named vector)
   dm <- data.frame("name" = names(colClasses), "type" = unname(colClasses))
 
-  # -- add default.val (match input with names)
+  # -- Add default.val (match input with names)
   dm$default.val <- default.val[match(dm$name, names(default.val))]
 
-  # -- add default.fun (match input with names)
+  # -- Add default.fun (match input with names)
   dm$default.fun <- default.fun[match(dm$name, names(default.fun))]
 
-  # -- add filter (match input with names)
+  # -- Add filter (match input with names)
   dm$filter <- dm$name %in% filter
 
-  # -- add skip (match input with names)
+  # -- Add skip (match input with names)
   dm$skip <- dm$name %in% skip
 
-  # -- return
+  # -- Return
   dm
 
 }

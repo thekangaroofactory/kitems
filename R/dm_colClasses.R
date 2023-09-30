@@ -12,11 +12,11 @@
 
 dm_colClasses <- function(data.model = NULL){
 
-  # -- extract classes
+  # -- Extract classes
   colClasses <- data.model$type
   names(colClasses) <- data.model$name
 
-  # -- return
+  # -- Return
   colClasses
 
 }

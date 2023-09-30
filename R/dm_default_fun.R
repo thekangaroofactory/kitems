@@ -12,7 +12,7 @@
 
 dm_default_fun <- function(data.model){
 
-  # -- extract
+  # -- Extract
   data.model[!is.na(data.model$default_fun)]$default_fun
 
 }

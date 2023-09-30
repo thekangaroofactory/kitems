@@ -10,22 +10,8 @@
 #'
 #' @examples
 
+
 dm_get_default <- function(data.model, name){
-
-
-  # ***********************************************************
-  # *** this trick to solve the use of :: for package functions
-  # >> should be exported to ktools package for reuse
-  getfun <- function(x) {
-    if(length(grep("::", x)) > 0) {
-      parts <- strsplit(x, "::")[[1]]
-      getExportedValue(parts[1], parts[2])
-    } else {
-      x
-    }
-  }
-  # ***********************************************************
-
 
   # -- get defaults from data model
   default_fun <- data.model[data.model$name == name, ]$default.fun

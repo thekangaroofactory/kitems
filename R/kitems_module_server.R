@@ -507,7 +507,7 @@ kitemsManager_Server <- function(id, r, file, path,
       value <- dm_get_default(data.model = dm, name = input$add_att_name)
 
       # Add column to items & store
-      items <- attribute_add(r[[r_items]](), name = input$add_att_name, type = input$add_att_type, fill = value, coerce = CLASS_FUNCTIONS)
+      items <- item_add_attribute(r[[r_items]](), name = input$add_att_name, type = input$add_att_type, fill = value, coerce = CLASS_FUNCTIONS)
       r[[r_items]](items)
 
     })

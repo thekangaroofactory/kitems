@@ -1,5 +1,14 @@
 
 
+#' Title
+#'
+#' @param data.model
+#' @param items
+#'
+#' @return
+#' @export
+#'
+#' @examples
 
 dm_check_integrity <- function(data.model, items){
 
@@ -19,19 +28,19 @@ dm_check_integrity <- function(data.model, items){
 
   }
 
-  # -- check for missing columns (attribute in data model not in item data.frame)
+  # -- Check for missing columns (attribute in data model not in item data.frame)
   extra_att <- data.model$name[!data.model$name %in% colnames(items)]
   if(!identical(extra_att, character(0))){
 
     cat("[Warning] Extra attribute in data model:", extra_att, "\n")
     integrity <- FALSE
 
-    # -- drop extra rows
+    # -- Drop extra rows
     data.model <- data.model[!data.model$name %in% extra_att, ]
 
   }
 
-  # -- return
+  # -- Return
   if(!integrity)
     data.model
   else
