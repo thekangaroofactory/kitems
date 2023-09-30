@@ -1,7 +1,19 @@
 
 
+#' Title
+#'
+#' @param x
+#' @param name
+#' @param type
+#' @param fill
+#' @param coerce
+#'
+#' @return
+#' @export
+#'
+#' @examples
 
-attribute_add <- function(x, name, type, fill = NA){
+attribute_add <- function(x, name, type, fill = NA, coerce){
 
   # check dim
   if(dim(x)[1] == 0){
@@ -17,11 +29,17 @@ attribute_add <- function(x, name, type, fill = NA){
   } else {
 
     # coerce to type (NA is logical by default)
-    if(type == "double") value <- as.double(fill)
-    if(type == "integer") value <- as.integer(fill)
-    if(type == "character") value <- as.character(fill)
-    if(type == "date") value <- as.Date(fill)
-    if(type == "POSIXct") value <- as.POSIXct(fill, origin = "1970-01-01")
+    # if(type == "double") value <- as.double(fill)
+    # if(type == "integer") value <- as.integer(fill)
+    # if(type == "character") value <- as.character(fill)
+    # if(type == "Date") value <- as.Date(fill)
+    # if(type == "POSIXct") value <- as.POSIXct(fill, origin = "1970-01-01")
+
+    # -- coerce value
+    cat("Coerce value to given class \n")
+    value <- eval(call(coerce[[type]], fill))
+    cat("Output: \n")
+    str(value)
 
     # add col
     x[name] <- value
