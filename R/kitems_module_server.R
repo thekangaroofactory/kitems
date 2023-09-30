@@ -64,15 +64,15 @@ kitemsManager_Server <- function(id, r, file, path,
                               "POSIXct" = c("Sys.Date"),
                               "POSIXlt" = c("Sys.Date"))
 
-    # -- Column name / type  template
-    TEMPLATE_COLS <- data.frame(name = c("date",
-                                         "name", "title", "description", "comment", "note", "status", "detail",
-                                         "debit", "credit", "amount", "total", "balance",
-                                         "quantity", "progress"),
-                                type = c("Date",
-                                         rep("character", 7),
-                                         rep("double", 5),
-                                         rep("integer", 2)))
+    # -- Data model template
+    TEMPLATE_DATA_MODEL <- data.frame(name = c("date",
+                                               "name", "title", "description", "comment", "note", "status", "detail",
+                                               "debit", "credit", "amount", "total", "balance",
+                                               "quantity", "progress"),
+                                      type = c("Date",
+                                               rep("character", 7),
+                                               rep("double", 5),
+                                               rep("integer", 2)))
 
     # -- Define lis of as functions
     # note: factor is not implemented in inputList.R... clean it?
@@ -323,8 +323,8 @@ kitemsManager_Server <- function(id, r, file, path,
 
       tagList(
 
-        # -- select column name
-        selectizeInput(inputId = ns("dz_col_name"),
+        # -- select attribute name
+        selectizeInput(inputId = ns("dz_att_name"),
                        label = "Name",
                        choices = colnames(r[[r_items]]()),
                        selected = NULL,
@@ -333,26 +333,26 @@ kitemsManager_Server <- function(id, r, file, path,
                                       onInitialize = I('function() { this.setValue(""); }'))),
 
         # -- delete
-        actionButton(ns("dz_delete_col"), label = "Delete"))
+        actionButton(ns("dz_delete_att"), label = "Delete"))
 
     })
 
-    # -- delete column
-    observeEvent(input$dz_delete_col, {
+    # -- delete attribute
+    observeEvent(input$dz_delete_att, {
 
       # -- check
-      req(input$dz_col_name)
+      req(input$dz_att_name)
 
-      cat("[BTN] Delete column:", input$dz_col_name, "\n")
+      cat("[BTN] Delete attribute:", input$dz_att_name, "\n")
 
       # -- drop column! & store
       items <- r[[r_items]]()
-      items[input$dz_col_name] <- NULL
+      items[input$dz_att_name] <- NULL
       r[[r_items]](items)
 
       # -- update data model & store
       dm <- r[[r_data_model]]()
-      dm <- dm[dm$name != input$dz_col_name, ]
+      dm <- dm[dm$name != input$dz_att_name, ]
       r[[r_data_model]](dm)
 
     })
@@ -371,17 +371,17 @@ kitemsManager_Server <- function(id, r, file, path,
 
         tagList(
 
-          # add column name
-          selectizeInput(inputId = ns("add_col_name"),
+          # attribute name
+          selectizeInput(inputId = ns("add_att_name"),
                          label = "Name",
-                         choices = TEMPLATE_COLS$name[!TEMPLATE_COLS$name %in% colnames(r[[r_items]]())],
+                         choices = TEMPLATE_DATA_MODEL$name[!TEMPLATE_DATA_MODEL$name %in% colnames(r[[r_items]]())],
                          selected = NULL,
                          options = list(create = TRUE,
                                         placeholder = 'Type or select an option below',
                                         onInitialize = I('function() { this.setValue(""); }'))),
 
-          # add column type
-          selectizeInput(inputId = ns("add_col_type"),
+          # attribute type
+          selectizeInput(inputId = ns("add_att_type"),
                          label = "Type",
                          choices = OBJECT_CLASS,
                          selected = NULL,
@@ -389,8 +389,8 @@ kitemsManager_Server <- function(id, r, file, path,
                                         placeholder = 'Type or select an option below',
                                         onInitialize = I('function() { this.setValue(""); }'))),
 
-          # add column default.val
-          selectizeInput(inputId = ns("add_col_default_val"),
+          # attribute default.val
+          selectizeInput(inputId = ns("add_att_default_val"),
                          label = "Default value",
                          choices = NULL,
                          selected = NULL,
@@ -398,8 +398,8 @@ kitemsManager_Server <- function(id, r, file, path,
                                         placeholder = 'Type or select an option below',
                                         onInitialize = I('function() { this.setValue(""); }'))),
 
-          # add column default.fun
-          selectizeInput(inputId = ns("add_col_default_fun"),
+          # attribute default.fun
+          selectizeInput(inputId = ns("add_att_default_fun"),
                          label = "Default function",
                          choices = NULL,
                          selected = NULL,
@@ -407,22 +407,22 @@ kitemsManager_Server <- function(id, r, file, path,
                                         placeholder = 'Type or select an option below',
                                         onInitialize = I('function() { this.setValue(""); }'))),
 
-          # add skip
-          checkboxInput(inputId = ns("add_col_skip"),
+          # skip
+          checkboxInput(inputId = ns("add_att_skip"),
                         label = "Skip (input form)",
                         value = FALSE),
 
-          # add column button
-          actionButton(ns("add_col"), label = "Add column"),
+          # add attribute button
+          actionButton(ns("add_att"), label = "Add attribute"),
 
-          # order column name
+          # order attribute name
           selectizeInput(inputId = ns("order_cols"),
                          label = "Select cols order",
                          choices = colnames(r[[r_items]]()),
                          selected = colnames(r[[r_items]]()),
                          multiple = TRUE),
 
-          # order column button
+          # order attribute button
           actionButton(ns("sort_col"), label = "Reorder")
 
         ) # end tagList
@@ -430,31 +430,31 @@ kitemsManager_Server <- function(id, r, file, path,
       }})
 
 
-    # -- update add_col_type given add_col_name
-    observeEvent(input$add_col_name, {
+    # -- update add_att_type given add_att_name
+    observeEvent(input$add_att_name, {
 
       # -- check if input in template
-      if(tolower(input$add_col_name) %in% TEMPLATE_COLS$name)
+      if(tolower(input$add_att_name) %in% TEMPLATE_DATA_MODEL$name)
 
         updateSelectizeInput(session = session,
-                             inputId = "add_col_type",
+                             inputId = "add_att_type",
                              choices = OBJECT_CLASS,
-                             selected = TEMPLATE_COLS[TEMPLATE_COLS$name == input$add_col_name, ]$type)})
+                             selected = TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == input$add_att_name, ]$type)})
 
 
-    # -- update add_col_type given add_col_name
-    observeEvent(input$add_col_type, {
+    # -- update add_att_type given add_att_name
+    observeEvent(input$add_att_type, {
 
       # -- check if input in template
       updateSelectizeInput(session = session,
-                           inputId = "add_col_default_val",
-                           choices = DEFAULT_VALUES[[input$add_col_type]],
+                           inputId = "add_att_default_val",
+                           choices = DEFAULT_VALUES[[input$add_att_type]],
                            selected = NULL)
 
       # -- check if input in template
       updateSelectizeInput(session = session,
-                           inputId = "add_col_default_fun",
-                           choices = DEFAULT_FUNCTIONS[[input$add_col_type]],
+                           inputId = "add_att_default_fun",
+                           choices = DEFAULT_FUNCTIONS[[input$add_att_type]],
                            selected = NULL)
 
     })
@@ -487,31 +487,31 @@ kitemsManager_Server <- function(id, r, file, path,
     })
 
 
-    # -- BTN add_col
-    observeEvent(input$add_col, {
+    # -- BTN add_att
+    observeEvent(input$add_att, {
 
       # check
-      req(input$add_col_name,
-          input$add_col_type)
+      req(input$add_att_name,
+          input$add_att_type)
 
       cat("[BTN] Add column \n")
 
       # Add attribute to the data model & store
       dm <- r[[r_data_model]]()
       dm <- dm_add_attribute(data.model = dm,
-                             name = input$add_col_name,
-                             type = input$add_col_type,
-                             default.val = input$add_col_default_val,
-                             default.fun = input$add_col_default_fun,
-                             skip = input$add_col_skip,
-                             filter = input$add_col_filter)
+                             name = input$add_att_name,
+                             type = input$add_att_type,
+                             default.val = input$add_att_default_val,
+                             default.fun = input$add_att_default_fun,
+                             skip = input$add_att_skip,
+                             filter = FALSE)
       r[[r_data_model]](dm)
 
       # -- get default value
-      value <- dm_get_default(data.model = dm, name = input$add_col_name)
+      value <- dm_get_default(data.model = dm, name = input$add_att_name)
 
       # Add column to items & store
-      items <- attribute_add(r[[r_items]](), name = input$add_col_name, type = input$add_col_type, fill = value, coerce = CLASS_FUNCTIONS)
+      items <- attribute_add(r[[r_items]](), name = input$add_att_name, type = input$add_att_type, fill = value, coerce = CLASS_FUNCTIONS)
       r[[r_items]](items)
 
     })
