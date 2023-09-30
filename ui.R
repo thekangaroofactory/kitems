@@ -10,20 +10,6 @@ library(shinydashboard)
 library(DT)
 
 
-# -- init env
-source("./environment.R")
-#source("./config.R")
-
-
-# -- source scripts
-cat("Source code from:", path_list$script, " \n")
-for (nm in list.files(path_list$script, full.names = TRUE, recursive = TRUE, include.dirs = FALSE))
-{
-  source(nm, encoding = 'UTF-8')
-}
-rm(nm)
-
-
 # --------------------------------------------------------------------------------
 # Define Sidebar UI
 # --------------------------------------------------------------------------------
@@ -47,7 +33,7 @@ body <- dashboardBody(
     # -- tabItem
     tabItem(tabName = "template",
 
-            # -- something
+            # -- Admin
             fluidRow(
               column(width = 12,
 
@@ -57,7 +43,7 @@ body <- dashboardBody(
     # -- tabItem
     tabItem(tabName = "try",
 
-            # -- something
+            # -- Admin
             fluidRow(
               column(width = 12,
 
@@ -77,7 +63,7 @@ body <- dashboardBody(
 # --------------------------------------------------------------------------------
 # Put them together into a dashboard
 # --------------------------------------------------------------------------------
-#
+
 dashboardPage(
 
   dashboardHeader(title = "kitems Demo App"),
