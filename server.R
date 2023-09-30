@@ -4,14 +4,9 @@
 # This is the server logic of the Shiny web application
 # --------------------------------------------------------------------------------
 
-# -- Library
+# -- Load packages
 library(shiny)
 library(DT)
-
-
-# -- init env
-source("./environment.R")
-#source("./config.R")
 
 
 # -- Source scripts
