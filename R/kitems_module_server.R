@@ -529,7 +529,7 @@ kitemsManager_Server <- function(id, r, file, path,
       r[[r_items]](r[[r_items]]()[input$order_cols])
 
       # -- Reorder data model & store
-      dm <- r[[r_data_model]]
+      dm <- r[[r_data_model]]()
       dm <- dm[match(input$order_cols, dm$name), ]
       r[[r_data_model]](dm)
 
@@ -615,11 +615,11 @@ kitemsManager_Server <- function(id, r, file, path,
 
       # -- get list of input values & name it
       cat("--  Get list of input values \n")
-      input_values <- get_input_values(input, dm_colClasses(r[[r_data_model]]))
+      input_values <- get_input_values(input, dm_colClasses(r[[r_data_model]]()))
 
       # -- create item based on input list
       cat("--  Create item \n")
-      item <- item_create(values = input_values, data.model = r[[r_data_model]], coerce = CLASS_FUNCTIONS)
+      item <- item_create(values = input_values, data.model = r[[r_data_model]](), coerce = CLASS_FUNCTIONS)
 
       # -- add item to list & store
       cat("--  Add item to list \n")
