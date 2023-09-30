@@ -597,7 +597,7 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- new_item_btn
     observeEvent(input$new_item_btn, {
 
-      showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, colClasses = dm_colClasses(r[[r_data_model]]), skip = skip_cols()),
+      showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, colClasses = dm_colClasses(r[[r_data_model]]()), skip = dm_skip(r[[r_data_model]]())),
                             title = "Create",
                             footer = tagList(
                               modalButton("Cancel"),
