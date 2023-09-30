@@ -3,10 +3,8 @@
 #' Create a new item
 #'
 #' @param values a list of values, most likely output values coming from UI inputs
-#' @param colClasses a named vector of classes, defining the data model
-#' @param default.val a named list, providing default values for given attributes
-#' @param default.fun a named list, providing default functions to compute the default values for given attributes
-#' @param coerce_functions a named list, providing the as function for each supported type
+#' @param data.model a data.frame, defining the data model
+#' @param coerce a named list, providing the as function for each supported type
 #'
 #'
 #' @return a data.frame of the new item, coerced to match with colClasses
@@ -15,25 +13,12 @@
 
 
 # -- function definition
-item_create <- function(values, colClasses, default.val, default.fun, coerce){
+item_create <- function(values, data.model, coerce){
 
-  # note: evolution = use of do.call("fun", args) with a named list as args
-  # to support use of default.fun with arguments insteaf of just ()
-
-
-  # ***********************************************************
-  # *** this trick to solve the use of :: for package functions
-  # >> should be exported to ktools package for reuse
-  getfun <- function(x) {
-    if(length(grep("::", x)) > 0) {
-      parts <- strsplit(x, "::")[[1]]
-      getExportedValue(parts[1], parts[2])
-    } else {
-      x
-    }
-  }
-  # ***********************************************************
-
+  # -- init params from data.model
+  colClasses <- dm_colClasses(data.model)
+  default.val <- dm_default_val(data.model)
+  default.fun <- dm_default_fun(data.model)
 
   # -- helper function (takes single values)
   helper <- function(key, value, class, default.val, default.fun, coerce){
@@ -52,21 +37,22 @@ item_create <- function(values, colClasses, default.val, default.fun, coerce){
       if(!shiny::isTruthy(value)){
 
         cat("Input not Truthy / Setting up default value \n")
+        value <- dm_get_default(data.model, key)
 
-        # -- P1: default function
-        if(!is.null(default.fun)){
-          cat("- strategy: applying default function \n")
-          value <- eval(do.call(getfun(default.fun), args = list()))}
-
-        # -- P2: then default value
-        else if(!is.null(default.val)){
-          cat("- strategy: applying default value \n")
-          value <- default.val}
-
-        # -- default: NA
-        else{
-          cat("- strategy: setting as NA \n")
-          value <- NA}
+        # # -- P1: default function
+        # if(!is.null(default.fun)){
+        #   cat("- strategy: applying default function \n")
+        #   value <- eval(do.call(getfun(default.fun), args = list()))}
+        #
+        # # -- P2: then default value
+        # else if(!is.null(default.val)){
+        #   cat("- strategy: applying default value \n")
+        #   value <- default.val}
+        #
+        # # -- default: NA
+        # else{
+        #   cat("- strategy: setting as NA \n")
+        #   value <- NA}
 
       } else
         cat("Input is Truthy, nothing to do \n")
@@ -85,11 +71,11 @@ item_create <- function(values, colClasses, default.val, default.fun, coerce){
 
   # -- apply helper values & rename output
   item <- lapply(names(values), function(x) helper(key = x,
-                                                   values[[x]],
-                                                   colClasses[[x]],
-                                                   if(x %in% names(default.val)) default.val[[x]] else NULL,
-                                                   if(x %in% names(default.fun)) default.fun[[x]] else NULL,
-                                                   coerce))
+                                                   value = values[[x]],
+                                                   class = colClasses[[x]],
+                                                   default.val = if(x %in% names(default.val)) default.val[[x]] else NULL,
+                                                   default.fun = if(x %in% names(default.fun)) default.fun[[x]] else NULL,
+                                                   coerce = coerce))
 
   # -- rename & return as df
   names(item) <- names(values)

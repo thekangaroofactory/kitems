@@ -6,22 +6,13 @@
 #' @param r
 #' @param file
 #' @param path
-#' @param col.classes
-#' @param default.val a named vector, providing default values. In case an attribute of the data model has no default value,
-#' it will be NA.
-#' @param default.fun
-#' @param filter.cols
+#' @param data.model
 #' @param create
 #' @param autosave
 #'
-#' @return
-#' @export
 #'
 #' @details
 #'
-#' Resources: colClasses, default.val & default.fun are taken from the arguments by default.
-#'
-#' Defaults: if both default.val and default.fun are provided for the same attribute, default.fun will get the priority (default.val will be ignored).
 #'
 #' @examples
 
@@ -31,7 +22,7 @@
 # ------------------------------------------------------------------------------
 
 kitemsManager_Server <- function(id, r, file, path,
-                                 col.classes = NA, default.val = NULL, default.fun = NULL, filter.cols = NULL, skip = NULL,
+                                 data.model = NULL,
                                  create = TRUE, autosave = TRUE) {
   moduleServer(id, function(input, output, session) {
 
@@ -112,152 +103,73 @@ kitemsManager_Server <- function(id, r, file, path,
     #r_raw_table <- paste0(id, "_raw_table")
     #r_table <- paste0(id, "_table")
 
+    # -- Build filenames from module id
+    dm_url <- file.path(path$resource, paste0(id, "_data_model.rds"))
+
     # -- Build triggers names from module id (to access outside module)
     trigger_add <- paste0(id, "_trigger_new")
     trigger_save <- paste0(id, "_trigger_save")
     # trigger_update
     # trigger_delete
 
-
-    # -- Declare reactive objects (for internal use)
-    colClasses <- reactiveVal(NULL)
-    default_val <- reactiveVal(NULL)
-    default_fun <- reactiveVal(NULL)
-    filter_cols <- reactiveVal(NULL)
-    skip_cols <- reactiveVal(NULL)
-
-
     # -- Declare reactive objects (for external use)
     r[[trigger_add]] <- reactiveVal(NULL)
 
+    #r[[r_data_model]] <- reactiveVal(NULL)
+    r[[r_items]] <- reactiveVal(NULL)
+
 
     # --------------------------------------------------------------------------
-    # Load Resources:
+    # Read/Write Resources (data model)
     # --------------------------------------------------------------------------
 
-    # -- colClasses
-    target_url <- file.path(path$resource, paste0(id, "_colClasses.rds"))
-    if(file.exists(target_url))
-      col.classes <- readRDS(target_url)
+    # -- Read data model
+    if(file.exists(dm_url)){
 
-    colClasses(col.classes)
+      data.model <- readRDS(dm_url)
+      cat(MODULE, "Read data model done \n")
 
-    # save colClasses
-    observeEvent(colClasses(), {
+    }
+
+    # -- Write data model (auto save)
+    observeEvent(r[[r_data_model]](), {
 
       # -- Write & notify
-      saveRDS(colClasses(), file = file.path(path$resource, paste0(id, "_colClasses.rds")))
-      cat(MODULE, "colClasses saved \n")
+      saveRDS(r[[r_data_model]](), file = dm_url)
+      cat(MODULE, "Data model saved \n")
 
     }, ignoreInit = TRUE)
-
-
-    # -- Filters
-    target_url <- file.path(path$resource, paste0(id, "_filterCols.rds"))
-    if(file.exists(target_url))
-      filter.cols <- readRDS(target_url)
-
-    filter_cols(filter.cols)
-
-
-    # save filter_cols
-    observeEvent(filter_cols(), {
-
-      # -- Write & notify
-      saveRDS(filter_cols(), file = file.path(path$resource, paste0(id, "_filterCols.rds")))
-      cat(MODULE, "filter_cols saved \n")
-
-    }, ignoreInit = TRUE, ignoreNULL = FALSE)
-
-
-    # -- Default values
-    target_url <- file.path(path$resource, paste0(id, "_defaultVal.rds"))
-    if(file.exists(target_url))
-      default.val <- readRDS(target_url)
-
-    default_val(default.val)
-
-
-    # save default_val
-    observeEvent(default_val(), {
-
-      # -- Write & notify
-      saveRDS(default_val(), file = file.path(path$resource, paste0(id, "_defaultVal.rds")))
-      cat(MODULE, "default_val saved \n")
-
-    }, ignoreInit = TRUE, ignoreNULL = FALSE)
-
-
-    # -- Default functions
-    target_url <- file.path(path$resource, paste0(id, "_defaultFun.rds"))
-    if(file.exists(target_url))
-      default.fun <- readRDS(target_url)
-
-    default_fun(default.fun)
-
-
-    # save default_val
-    observeEvent(default_fun(), {
-
-      # -- Write & notify
-      saveRDS(default_fun(), file = file.path(path$resource, paste0(id, "_defaultFun.rds")))
-      cat(MODULE, "default_fun saved \n")
-
-    }, ignoreInit = TRUE, ignoreNULL = FALSE)
-
-
-    # -- Default functions
-    target_url <- file.path(path$resource, paste0(id, "_skip.rds"))
-    if(file.exists(target_url))
-      skip <- readRDS(target_url)
-
-    skip_cols(skip)
-
-
-    # save default_val
-    observeEvent(skip_cols(), {
-
-      # -- Write & notify
-      saveRDS(skip_cols(), file = file.path(path$resource, paste0(id, "_skip.rds")))
-      cat(MODULE, "skip_cols saved \n")
-
-    }, ignoreInit = TRUE, ignoreNULL = FALSE)
 
 
     # --------------------------------------------------------------------------
     # Load the data:
     # --------------------------------------------------------------------------
 
-    # -- Try load (see read_data for details about returns)
-    items <- kfiles::read_data(file = file,
-                               path = path$data,
-                               colClasses = col.classes,
-                               create = create)
+    # -- Init
+    items <- NULL
 
-    # -- check output size (will trigger showing the create data btn)
-    if(all(dim(items) == c(0,0)))
-      items <- NULL
+    # -- Check for NULL data model (then no reason to try loading)
+    if(!is.null(data.model)){
 
-    # -- Notify
-    cat(MODULE, "Read data done \n")
+      # -- Extract colClasses from data model (can't use the reactiveVal without wrapper)
+      col.classes <- dm_colClasses(data.model)
 
-    # -- Check data model integrity
-    # note: updating reactiveVal with same value won't hurt ;)
-    cat(MODULE, "Data model integrity checker \n")
-    colClasses(check_classes(items, col.classes))
-    default_val(check_resource(items, default.val))
-    default_fun(check_resource(items, default.fun))
-    filter_cols(check_resource(items, filter.cols))
-    # *****
-    # todo: resource is not saved after an update with NULL !?
-    # *****
+      # -- Try load (see read_data for details about returns)
+      items <- kfiles::read_data(file = file,
+                                 path = path$data,
+                                 colClasses = col.classes,
+                                 create = create)
 
-    # -- Store into communication object
-    r[[r_items]] <- reactiveVal(items)
+      # -- check output size (will trigger showing the create data btn)
+      if(all(dim(items) == c(0,0)))
+        items <- NULL
 
-    # -- Store data model into communication object
-    r[[r_data_model]] <- reactive(data_model(colClasses(), default_val(), default_fun()))
+      cat(MODULE, "Read data done \n")
 
+    }
+
+    # -- Store into communication object & notify
+    r[[r_items]]<- reactiveVal(items)
 
 
     # --------------------------------------------------------------------------
@@ -296,6 +208,34 @@ kitemsManager_Server <- function(id, r, file, path,
     }, ignoreInit = TRUE)
 
 
+    # --------------------------------------------------------------------------
+    # Check data model integrity:
+    # --------------------------------------------------------------------------
+    # Code cleanup note: sequence should be load data.mode, load data, check integrity
+    # then only store into reactive values
+    # Declare observers after that init sequence
+
+    # -- Check for NULL data mode + data.frame
+    if(!is.null(data.model) & !is.null(items)){
+
+      result <- dm_check_integrity(data.model, items)
+
+      # -- Check feedback (otherwise value is TRUE)
+      if(is.data.frame(result)){
+
+        cat("[Warning] Data model not synchronized with items data.frame! \n")
+
+        # -- Update data model & save
+        data.model <- result
+        saveRDS(data.model, file = dm_url)
+        cat(MODULE, "Data model saved \n")
+
+      }}
+
+    # -- Store (either content of the RDS or the server function input) & notify
+    r[[r_data_model]] <- reactiveVal(data.model)
+
+
     # **************************************************************************
     # *** CODE REVIEW : END done
     # **************************************************************************
@@ -306,30 +246,33 @@ kitemsManager_Server <- function(id, r, file, path,
     # Views:
     # -------------------------------------
 
-    # item table display view
+    # -- item table view
     view_items <- reactive({
 
       if(!is.null(r[[r_items]]())){
 
-        # apply column filter
-        value <- if(is.null(filter_cols())){
+        # -- get filter from data model
+        filter_cols <- dm_filter(r[[r_data_model]]())
+
+        # -- apply filter
+        value <- if(is.null(filter_cols)){
 
           r[[r_items]]()
 
         } else {
 
-          r[[r_items]]()[-which(names(r[[r_items]]()) %in% filter_cols())]
+          r[[r_items]]()[-which(names(r[[r_items]]()) %in% filter_cols)]
 
         }
 
-        # apply column name mask
+        # -- apply column name mask
         colnames(value) <- gsub(".", " ", colnames(value), fixed = TRUE)
         colnames(value) <- gsub("_", " ", colnames(value), fixed = TRUE)
         colnames(value) <- stringr::str_to_title(colnames(value))
 
       } else value <- NULL
 
-      # return
+      # -- return
       value
 
     })
@@ -400,21 +343,17 @@ kitemsManager_Server <- function(id, r, file, path,
       # -- check
       req(input$dz_col_name)
 
+      cat("[BTN] Delete column:", input$dz_col_name, "\n")
+
       # -- drop column! & store
       items <- r[[r_items]]()
       items[input$dz_col_name] <- NULL
       r[[r_items]](items)
 
-      # -- update colClasses & store
-      tmp_colClasses <- colClasses()
-      tmp_colClasses <- tmp_colClasses[!names(tmp_colClasses) %in% input$dz_col_name]
-      colClasses(tmp_colClasses)
-
-      # -- update default_val & store
-      tmp_default_val <- default_val()
-      tmp_default_val <- tmp_default_val[!names(tmp_default_val) %in% input$dz_col_name]
-      default_val(tmp_default_val)
-
+      # -- update data model & store
+      dm <- r[[r_data_model]]()
+      dm <- dm[dm$name != input$dz_col_name, ]
+      r[[r_data_model]](dm)
 
     })
 
@@ -527,19 +466,23 @@ kitemsManager_Server <- function(id, r, file, path,
       cat("[BTN] Create data \n")
 
       # -- init parameters (id)
-      tmp_colClasses <- c("id" = "numeric")
-      tmp_default_fun <- c("id" = "ktools::getTimestamp")
+      colClasses <- c("id" = "numeric")
+      default_fun <- c("id" = "ktools::getTimestamp")
+      filter <- c("id")
+      skip <- c("id")
+
+      # -- init data model & store
+      dm <- data_model(colClasses, default.val = NULL, default.fun = default_fun, filter = filter, skip = skip)
+      r[[r_data_model]](dm)
 
       # -- init items
       items <- kfiles::read_data(file = file,
                                  path = path$data,
-                                 colClasses = tmp_colClasses,
+                                 colClasses = colClasses,
                                  create = TRUE)
 
-      # -- store items and resources
+      # -- store items
       r[[r_items]](items)
-      colClasses(tmp_colClasses)
-      default_fun(tmp_default_fun)
 
     })
 
@@ -553,32 +496,23 @@ kitemsManager_Server <- function(id, r, file, path,
 
       cat("[BTN] Add column \n")
 
-      # create and store
-      items <- attribute_add(r[[r_items]](), name = input$add_col_name, type = input$add_col_type, fill = NA)
+      # Add attribute to the data model & store
+      dm <- r[[r_data_model]]()
+      dm <- dm_add_attribute(data.model = dm,
+                             name = input$add_col_name,
+                             type = input$add_col_type,
+                             default.val = input$add_col_default_val,
+                             default.fun = input$add_col_default_fun,
+                             skip = input$add_col_skip,
+                             filter = input$add_col_filter)
+      r[[r_data_model]](dm)
+
+      # -- get default value
+      value <- dm_get_default(data.model = dm, name = input$add_col_name)
+
+      # Add column to items & store
+      items <- attribute_add(r[[r_items]](), name = input$add_col_name, type = input$add_col_type, fill = value, coerce = CLASS_FUNCTIONS)
       r[[r_items]](items)
-
-      # update & store colClasses
-      tmp_colClasses <- colClasses()
-      tmp_colClasses[input$add_col_name] <- input$add_col_type
-      colClasses(tmp_colClasses)
-
-      # -- update & store default_val (if not NULL)
-      if(input$add_col_default_val != ""){
-        tmp_default_val <- default_val()
-        tmp_default_val[input$add_col_name] <- input$add_col_default_val
-        default_val(tmp_default_val)}
-
-      # -- update & store default_fun (if not NULL)
-      if(input$add_col_default_fun != ""){
-        tmp_default_fun <- default_fun()
-        tmp_default_fun[input$add_col_name] <- input$add_col_default_fun
-        default_fun(tmp_default_fun)}
-
-      # -- update & store skip (if TRUE)
-      if(input$add_col_skip){
-        tmp_skip <- skip_cols()
-        tmp_skip <- append(tmp_skip,input$add_col_name)
-        skip_cols(tmp_skip)}
 
     })
 
@@ -586,16 +520,18 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- BTN sort_col
     observeEvent(input$sort_col, {
 
-      # check
+      # -- Check
       req(length(input$order_cols) == dim(r[[r_items]]())[2])
 
       cat("[BTN] Reorder column \n")
 
-      # reorder items and store
+      # -- Reorder items & store
       r[[r_items]](r[[r_items]]()[input$order_cols])
 
-      # reorder colClasses & store
-      colClasses(colClasses()[input$order_cols])
+      # -- Reorder data model & store
+      dm <- r[[r_data_model]]()
+      dm <- dm[match(input$order_cols, dm$name), ]
+      r[[r_data_model]](dm)
 
     })
 
@@ -607,15 +543,19 @@ kitemsManager_Server <- function(id, r, file, path,
     # inputs
     output$filter_buttons <- renderUI({
 
-      onInitialize <- if(is.null(filter_cols()))
+      # -- init params
+      filter_cols <- dm_filter(r[[r_data_model]]())
+
+      onInitialize <- if(is.null(filter_cols))
         I('function() { this.setValue(""); }')
       else
         NULL
 
+      # -- define input
       selectizeInput(inputId = ns("filter_col"),
                      label = "Filter columns",
                      choices = colnames(r[[r_items]]()),
-                     selected = filter_cols(),
+                     selected = filter_cols,
                      multiple = TRUE,
                      options = list(create = FALSE,
                                     placeholder = 'Type or select an option below',
@@ -626,8 +566,13 @@ kitemsManager_Server <- function(id, r, file, path,
     # observe filter input
     observeEvent(input$filter_col, {
 
-      cat("Filter columns:", input$filter_col, "\n")
-      filter_cols(input$filter_col)
+      cat("[BTN] Filter columns:", input$filter_col, "\n")
+      dm <- r[[r_data_model]]()
+
+      # -- Check NULL data model
+      if(!is.null(dm)){
+        dm <- dm_filter_set(data.model = dm, filter = input$filter_col)
+        r[[r_data_model]](dm)}
 
     }, ignoreInit = TRUE, ignoreNULL = FALSE)
 
@@ -652,7 +597,7 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- new_item_btn
     observeEvent(input$new_item_btn, {
 
-      showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, colClasses = colClasses(), skip = skip_cols()),
+      showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, colClasses = dm_colClasses(r[[r_data_model]]()), skip = dm_skip(r[[r_data_model]]())),
                             title = "Create",
                             footer = tagList(
                               modalButton("Cancel"),
@@ -670,11 +615,11 @@ kitemsManager_Server <- function(id, r, file, path,
 
       # -- get list of input values & name it
       cat("--  Get list of input values \n")
-      input_values <- get_input_values(input, colClasses())
+      input_values <- get_input_values(input, dm_colClasses(r[[r_data_model]]()))
 
       # -- create item based on input list
       cat("--  Create item \n")
-      item <- item_create(input_values, colClasses(), default_val(), default_fun(), coerce = CLASS_FUNCTIONS)
+      item <- item_create(values = input_values, data.model = r[[r_data_model]](), coerce = CLASS_FUNCTIONS)
 
       # -- add item to list & store
       cat("--  Add item to list \n")
