@@ -20,7 +20,7 @@ dm_filter_set <- function(data.model, filter){
   if(!is.null(filter))
     data.model[match(filter, data.model$name), ]$filter <- TRUE
 
-  # -- return
+  # -- Return
   data.model
 
 }

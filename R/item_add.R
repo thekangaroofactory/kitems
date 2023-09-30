@@ -1,7 +1,15 @@
 
 
+#' Title
+#'
+#' @param item
+#' @param items
+#'
+#' @return
+#' @export
+#'
+#' @examples
 
-# -- function definition
 item_add <- function(item, items){
 
   # -- rbind

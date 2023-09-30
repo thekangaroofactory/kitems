@@ -4,49 +4,15 @@
 # This is the server logic of the Shiny web application
 # --------------------------------------------------------------------------------
 
-# -- Library
+# -- Load packages
 library(shiny)
 library(DT)
-
-
-# -- init env
-source("./environment.R")
-#source("./config.R")
-
-
-# -- Source scripts
-cat("Source code from:", path_list$script, " \n")
-for (nm in list.files(path_list$script, full.names = TRUE, recursive = TRUE, include.dirs = FALSE))
-{
-  source(nm, encoding = 'UTF-8')
-}
-rm(nm)
 
 
 # -- Define server logic
 shinyServer(
   function(input, output, session){
 
-    # *******************************************************************************************************
-    # DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG
-    # *******************************************************************************************************
-
-    DEBUG <<- TRUE
-
-    if(DEBUG){
-
-      cat("Source code from:", path_list$script, " \n")
-      for (nm in list.files(path_list$script, full.names = TRUE, recursive = TRUE, include.dirs = FALSE))
-      {
-        source(nm, encoding = 'UTF-8')
-      }
-      rm(nm)
-
-    }
-
-    # *******************************************************************************************************
-    # DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG
-    # *******************************************************************************************************
 
     # -------------------------------------
     # Communication objects
@@ -66,7 +32,6 @@ shinyServer(
                          create = TRUE, autosave = TRUE)
 
 
-    # -------------------------------------
     # -- setup default values/functions:
     colClasses <- c("id" = "double", "name" = "character", "total" = "numeric")
     default.val <- c("name" = "test", "total" = 2)

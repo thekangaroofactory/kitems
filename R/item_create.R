@@ -39,21 +39,6 @@ item_create <- function(values, data.model, coerce){
         cat("Input not Truthy / Setting up default value \n")
         value <- dm_get_default(data.model, key)
 
-        # # -- P1: default function
-        # if(!is.null(default.fun)){
-        #   cat("- strategy: applying default function \n")
-        #   value <- eval(do.call(getfun(default.fun), args = list()))}
-        #
-        # # -- P2: then default value
-        # else if(!is.null(default.val)){
-        #   cat("- strategy: applying default value \n")
-        #   value <- default.val}
-        #
-        # # -- default: NA
-        # else{
-        #   cat("- strategy: setting as NA \n")
-        #   value <- NA}
-
       } else
         cat("Input is Truthy, nothing to do \n")
 

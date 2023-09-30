@@ -33,21 +33,23 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- Build log pattern
     MODULE <- paste0("[", id, "]")
 
-    # -- Object types
-    # note: cleaned unsupported types --
-    # OBJECT_CLASS <- c("NA", "NULL",
-    #                   "numeric", "integer", "complex", "logical", "character", "raw",
-    #                   "double", "factor", "Date", "POSIXct", "POSIXlt")
-    OBJECT_CLASS <- c("numeric", "integer", "double",
-                      "logical", "character", "factor",
-                      "Date", "POSIXct", "POSIXlt")
+    # -- Object types (supported)
+    OBJECT_CLASS <- c("numeric",
+                      "integer",
+                      "double",
+                      "logical",
+                      "character",
+                      "factor",
+                      "Date",
+                      "POSIXct",
+                      "POSIXlt")
 
     # -- Default values
     DEFAULT_VALUES <- list("numeric" = c(NA, 0),
                            "integer" = c(NA, 0),
+                           "double" = c(NA, 0),
                            "logical" = c(NA, FALSE, TRUE),
                            "character" = c(NA, ""),
-                           "double" = c(NA, 0),
                            "factor" = c(NA),
                            "Date" = c(NA),
                            "POSIXct" = c(NA),
@@ -56,26 +58,15 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- Default values
     DEFAULT_FUNCTIONS <- list("numeric" = c(NA),
                               "integer" = c(NA),
+                              "double" = c(NA),
                               "logical" = c(NA),
                               "character" = c(NA),
-                              "double" = c(NA),
                               "factor" = c(NA),
                               "Date" = c("Sys.Date"),
                               "POSIXct" = c("Sys.Date"),
                               "POSIXlt" = c("Sys.Date"))
 
-    # -- Data model template
-    TEMPLATE_DATA_MODEL <- data.frame(name = c("date",
-                                               "name", "title", "description", "comment", "note", "status", "detail",
-                                               "debit", "credit", "amount", "total", "balance",
-                                               "quantity", "progress"),
-                                      type = c("Date",
-                                               rep("character", 7),
-                                               rep("double", 5),
-                                               rep("integer", 2)))
-
     # -- Define lis of as functions
-    # note: factor is not implemented in inputList.R... clean it?
     CLASS_FUNCTIONS <- list("numeric" = "as.numeric",
                             "integer" = "as.integer",
                             "double" = "as.double",
@@ -88,6 +79,21 @@ kitemsManager_Server <- function(id, r, file, path,
 
 
     # --------------------------------------------------------------------------
+    # Declare templates:
+    # --------------------------------------------------------------------------
+
+    # -- Data model template
+    TEMPLATE_DATA_MODEL <- data.frame(name = c("date",
+                                               "name", "title", "description", "comment", "note", "status", "detail",
+                                               "debit", "credit", "amount", "total", "balance",
+                                               "quantity", "progress"),
+                                      type = c("Date",
+                                               rep("character", 7),
+                                               rep("double", 5),
+                                               rep("integer", 2)))
+
+
+    # --------------------------------------------------------------------------
     # Init:
     # --------------------------------------------------------------------------
 
@@ -97,52 +103,40 @@ kitemsManager_Server <- function(id, r, file, path,
     ns <- session$ns
 
 
+    # -- Build filename from module id
+    dm_url <- file.path(path$resource, paste0(id, "_data_model.rds"))
+
+
     # -- Build object names from module id (to access outside module)
     r_data_model <- paste0(id, "data_model")
     r_items <- paste0(id, "_items")
-    #r_raw_table <- paste0(id, "_raw_table")
-    #r_table <- paste0(id, "_table")
 
-    # -- Build filenames from module id
-    dm_url <- file.path(path$resource, paste0(id, "_data_model.rds"))
+    # -- Declare reactive objects (for external use)
+    r[[r_items]] <- reactiveVal(NULL)
+
 
     # -- Build triggers names from module id (to access outside module)
     trigger_add <- paste0(id, "_trigger_new")
     trigger_save <- paste0(id, "_trigger_save")
-    # trigger_update
-    # trigger_delete
 
     # -- Declare reactive objects (for external use)
     r[[trigger_add]] <- reactiveVal(NULL)
-
-    #r[[r_data_model]] <- reactiveVal(NULL)
-    r[[r_items]] <- reactiveVal(NULL)
+    r[[trigger_save]] <- reactiveVal(0)
 
 
     # --------------------------------------------------------------------------
-    # Read/Write Resources (data model)
+    # Read data model:
     # --------------------------------------------------------------------------
 
-    # -- Read data model
+    # -- Check url
     if(file.exists(dm_url)){
 
       data.model <- readRDS(dm_url)
-      cat(MODULE, "Read data model done \n")
-
-    }
-
-    # -- Write data model (auto save)
-    observeEvent(r[[r_data_model]](), {
-
-      # -- Write & notify
-      saveRDS(r[[r_data_model]](), file = dm_url)
-      cat(MODULE, "Data model saved \n")
-
-    }, ignoreInit = TRUE)
+      cat(MODULE, "Read data model done \n")}
 
 
     # --------------------------------------------------------------------------
-    # Load the data:
+    # Read the data (items):
     # --------------------------------------------------------------------------
 
     # -- Init
@@ -168,52 +162,10 @@ kitemsManager_Server <- function(id, r, file, path,
 
     }
 
-    # -- Store into communication object & notify
-    r[[r_items]]<- reactiveVal(items)
-
-
-    # --------------------------------------------------------------------------
-    # Auto save the data:
-    # --------------------------------------------------------------------------
-
-    # -- Auto save items (check parameter)
-    if(autosave)
-      observeEvent(r[[r_items]](), {
-
-        # -- Write
-        kfiles::write_data(data = r[[r_items]](),
-                           file = file,
-                           path = path$data)
-
-        # -- Notify
-        cat(MODULE, "[EVENT] Item list has been (auto) saved \n")
-
-      }, ignoreInit = TRUE)
-
-
-    # -- Declare trigger: save items
-    r[[trigger_save]] <- reactiveVal(0)
-
-    # -- Observe trigger
-    observeEvent(r[[trigger_save]](), {
-
-      # -- Write
-      kfiles::write_data(data = r[[r_items]](),
-                         file = file,
-                         path = path$data)
-
-      # -- Notify
-      cat(MODULE, "[TRIGGER] Item list has been saved \n")
-
-    }, ignoreInit = TRUE)
-
 
     # --------------------------------------------------------------------------
     # Check data model integrity:
     # --------------------------------------------------------------------------
-    # Code cleanup note: sequence should be load data.mode, load data, check integrity
-    # then only store into reactive values
-    # Declare observers after that init sequence
 
     # -- Check for NULL data mode + data.frame
     if(!is.null(data.model) & !is.null(items)){
@@ -232,29 +184,82 @@ kitemsManager_Server <- function(id, r, file, path,
 
       }}
 
-    # -- Store (either content of the RDS or the server function input) & notify
+
+    # --------------------------------------------------------------------------
+    # Store into reactive values:
+    # --------------------------------------------------------------------------
+
+    # -- Store data model (either content of the RDS or the server function input)
     r[[r_data_model]] <- reactiveVal(data.model)
 
-
-    # **************************************************************************
-    # *** CODE REVIEW : END done
-    # **************************************************************************
+    # -- Store items
+    r[[r_items]]<- reactiveVal(items)
 
 
+    # --------------------------------------------------------------------------
+    # Auto save the data model:
+    # --------------------------------------------------------------------------
 
-    # -------------------------------------
-    # Views:
-    # -------------------------------------
+    # -- Observe data model
+    observeEvent(r[[r_data_model]](), {
 
-    # -- item table view
+      # -- Write & notify
+      saveRDS(r[[r_data_model]](), file = dm_url)
+      cat(MODULE, "Data model saved \n")
+
+    }, ignoreInit = TRUE)
+
+
+    # --------------------------------------------------------------------------
+    # Auto save the data:
+    # --------------------------------------------------------------------------
+
+    # -- Check parameter & observe items
+    if(autosave)
+      observeEvent(r[[r_items]](), {
+
+        # -- Write
+        kfiles::write_data(data = r[[r_items]](),
+                           file = file,
+                           path = path$data)
+
+        # -- Notify
+        cat(MODULE, "[EVENT] Item list has been (auto) saved \n")
+
+      }, ignoreInit = TRUE)
+
+
+    # --------------------------------------------------------------------------
+    # Declare triggers:
+    # --------------------------------------------------------------------------
+
+    # -- Save (items)
+    observeEvent(r[[trigger_save]](), {
+
+      # -- Write
+      kfiles::write_data(data = r[[r_items]](),
+                         file = file,
+                         path = path$data)
+
+      # -- Notify
+      cat(MODULE, "[TRIGGER] Item list has been saved \n")
+
+    }, ignoreInit = TRUE)
+
+
+    # --------------------------------------------------------------------------
+    # Declare views:
+    # --------------------------------------------------------------------------
+
+    # -- Item table view
     view_items <- reactive({
 
       if(!is.null(r[[r_items]]())){
 
-        # -- get filter from data model
+        # -- Get filter from data model
         filter_cols <- dm_filter(r[[r_data_model]]())
 
-        # -- apply filter
+        # -- Apply filter
         value <- if(is.null(filter_cols)){
 
           r[[r_items]]()
@@ -265,40 +270,33 @@ kitemsManager_Server <- function(id, r, file, path,
 
         }
 
-        # -- apply column name mask
+        # -- Apply attribute/column name mask
         colnames(value) <- gsub(".", " ", colnames(value), fixed = TRUE)
         colnames(value) <- gsub("_", " ", colnames(value), fixed = TRUE)
         colnames(value) <- stringr::str_to_title(colnames(value))
 
       } else value <- NULL
 
-      # -- return
+      # -- Return
       value
 
     })
 
 
-    # -------------------------------------
-    # Outputs:
-    # -------------------------------------
+    # --------------------------------------------------------------------------
+    # Declare outputs:
+    # --------------------------------------------------------------------------
 
-    # Raw view for admin
+    # -- Raw view for admin
     output$raw_item_table <- DT::renderDT(r[[r_items]](),
                                           rownames = FALSE,
                                           options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
                                           selection = list(mode = 'single', target = "row", selected = NULL))
 
-    # Masked view for admin
+    # -- Masked view for admin
     output$view_item_table <- DT::renderDT(view_items(),
                                            rownames = FALSE,
                                            selection = list(mode = 'single', target = "row", selected = NULL))
-
-
-    # -- colClasses
-    # output$data_model <- DT::renderDT(data.frame(as.list(colClasses())),
-    #                                   rownames = FALSE,
-    #                                   options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
-    #                                   selection = list(mode = 'single', target = "row", selected = NULL))
 
     # -- colClasses
     output$data_model <- DT::renderDT(r[[r_data_model]](),
@@ -307,18 +305,11 @@ kitemsManager_Server <- function(id, r, file, path,
                                       selection = list(mode = 'single', target = "row", selected = NULL))
 
 
+    # --------------------------------------------------------------------------
+    # Declare danger zone:
+    # --------------------------------------------------------------------------
 
-    # Masked view for user
-    # TODO: add user view (add function params for renderDT...)
-
-
-
-
-    # -------------------------------------
-    # Action buttons:
-    # -------------------------------------
-
-    # -- danger zone
+    # -- Define output
     output$danger_zone <- renderUI({
 
       tagList(
@@ -337,7 +328,8 @@ kitemsManager_Server <- function(id, r, file, path,
 
     })
 
-    # -- delete attribute
+
+    # -- Observe button: delete attribute
     observeEvent(input$dz_delete_att, {
 
       # -- check
@@ -357,6 +349,10 @@ kitemsManager_Server <- function(id, r, file, path,
 
     })
 
+
+    # --------------------------------------------------------------------------
+    # Create data / add attribute:
+    # --------------------------------------------------------------------------
 
     # -- define inputs
     output$action_buttons <- renderUI({
@@ -511,11 +507,15 @@ kitemsManager_Server <- function(id, r, file, path,
       value <- dm_get_default(data.model = dm, name = input$add_att_name)
 
       # Add column to items & store
-      items <- attribute_add(r[[r_items]](), name = input$add_att_name, type = input$add_att_type, fill = value, coerce = CLASS_FUNCTIONS)
+      items <- item_add_attribute(r[[r_items]](), name = input$add_att_name, type = input$add_att_type, fill = value, coerce = CLASS_FUNCTIONS)
       r[[r_items]](items)
 
     })
 
+
+    # --------------------------------------------------------------------------
+    # Sort attributes / columns:
+    # --------------------------------------------------------------------------
 
     # -- BTN sort_col
     observeEvent(input$sort_col, {
@@ -536,9 +536,9 @@ kitemsManager_Server <- function(id, r, file, path,
     })
 
 
-    # -------------------------------------
+    # --------------------------------------------------------------------------
     # Filter view:
-    # -------------------------------------
+    # --------------------------------------------------------------------------
 
     # inputs
     output$filter_buttons <- renderUI({
@@ -578,17 +578,17 @@ kitemsManager_Server <- function(id, r, file, path,
 
 
 
-    # -------------------------------------
+    # --------------------------------------------------------------------------
     # Triggers:
-    # -------------------------------------
+    # --------------------------------------------------------------------------
 
     # add
     #r[[trigger_add]]
 
 
-    # -------------------------------------
+    # --------------------------------------------------------------------------
     # Create item:
-    # -------------------------------------
+    # --------------------------------------------------------------------------
 
     # -- btn: new item
     output$new_item_btn <- renderUI(actionButton(inputId = ns("new_item_btn"),

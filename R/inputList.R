@@ -1,5 +1,18 @@
 
 
+#' Title
+#'
+#' @param ns
+#' @param item
+#' @param update
+#' @param colClasses
+#' @param skip
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
 inputList <- function(ns, item = NULL, update = FALSE, colClasses, skip = NULL){
 
   cat("[getModalDialog] Building modal dialog \n")
@@ -56,7 +69,6 @@ inputList <- function(ns, item = NULL, update = FALSE, colClasses, skip = NULL){
     input
 
   }
-
 
   # -- Filter out attributes in skip param
   cat("  - Filter out attributes to skip:", skip, "\n")

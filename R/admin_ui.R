@@ -11,14 +11,14 @@
 
 admin_ui <- function(id){
 
-  # namespace
+  # -- Get namespace
   ns <- NS(id)
 
-  # UI
+  # -- Define UI & return
   tagList(
     h3("Administration console"),
 
-    # -- data model details
+    # -- Data model details
     wellPanel(
 
       fluidRow(column(width = 12,
@@ -29,6 +29,7 @@ admin_ui <- function(id){
                       uiOutput(ns("danger_zone"))))),
 
 
+    # -- Raw table
     wellPanel(
 
       #
@@ -40,6 +41,7 @@ admin_ui <- function(id){
                       p("Raw Table"),
                       DT::DTOutput(ns("raw_item_table"))))),
 
+    # -- View table
     wellPanel(
 
       fluidRow(column(width = 2,
@@ -51,10 +53,9 @@ admin_ui <- function(id){
 
                column(width = 10,
                       p("Filtered Table"),
-                      DT::DTOutput(ns("view_item_table"))))),
+                      DT::DTOutput(ns("view_item_table")))))
 
 
-
-  )
+  ) #tagList
 
 }
