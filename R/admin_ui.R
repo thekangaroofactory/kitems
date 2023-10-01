@@ -16,46 +16,47 @@ admin_ui <- function(id){
 
   # -- Define UI & return
   tagList(
-    h3("Administration console"),
 
-    # -- Data model details
-    wellPanel(
+    # --
+    navlistPanel(
 
-      fluidRow(column(width = 12,
+      # -- Title
+      "Administration console",
+      widths = c(2, 10),
 
-                      h3(paste("Name: ", id)),
-                      p("Data model summary."),
-                      DT::DTOutput(ns("data_model")),
-                      uiOutput(ns("danger_zone"))))),
+      # -- Data model
+      tabPanel(title = "Data model",
 
+               wellPanel(fluidRow(column(width = 12,
 
-    # -- Raw table
-    wellPanel(
+                                         h3(paste("Name: ", id)),
+                                         p("Data model summary."),
+                                         DT::DTOutput(ns("data_model")),
+                                         uiOutput(ns("danger_zone")))))),
 
-      #
-      fluidRow(column(width = 2,
-                      p("Actions"),
-                      uiOutput(ns("action_buttons"))),
+      # -- Raw table
+      tabPanel(title = "Raw table",
 
-               column(width = 10,
-                      p("Raw Table"),
-                      DT::DTOutput(ns("raw_item_table"))))),
+               wellPanel(fluidRow(column(width = 2,
+                                         p("Actions"),
+                                         uiOutput(ns("action_buttons"))),
 
-    # -- View table
-    wellPanel(
+                                  column(width = 10,
+                                         p("Raw Table"),
+                                         DT::DTOutput(ns("raw_item_table")))))),
 
-      fluidRow(column(width = 2,
-                      p("Actions"),
-                      uiOutput(ns("filter_buttons")),
-                      p("Column name mask applied by default:",br(),
-                        "- replace dot, underscore with space",br(),
-                        "- capitalize first letters")),
+      # --View table
+      tabPanel(title = "View",
 
-               column(width = 10,
-                      p("Filtered Table"),
-                      DT::DTOutput(ns("view_item_table")))))
+               wellPanel(fluidRow(column(width = 2,
+                                         p("Actions"),
+                                         uiOutput(ns("filter_buttons")),
+                                         p("Column name mask applied by default:",br(),
+                                           "- replace dot, underscore with space",br(),
+                                           "- capitalize first letters")),
 
-
-  ) #tagList
+                                  column(width = 10,
+                                         p("Filtered Table"),
+                                         DT::DTOutput(ns("view_item_table"))))))))
 
 }
