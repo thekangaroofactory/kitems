@@ -312,19 +312,27 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- Define output
     output$danger_zone <- renderUI({
 
-      tagList(
+      # check for null data model
+      if(is.null(r[[r_data_model]]()))
 
-        # -- select attribute name
-        selectizeInput(inputId = ns("dz_att_name"),
-                       label = "Name",
-                       choices = colnames(r[[r_items]]()),
-                       selected = NULL,
-                       options = list(create = FALSE,
-                                      placeholder = 'Type or select an option below',
-                                      onInitialize = I('function() { this.setValue(""); }'))),
+        # create data
+        actionButton(ns("create_data"), label = "Create")
 
-        # -- delete
-        actionButton(ns("dz_delete_att"), label = "Delete"))
+      else {
+        tagList(
+
+          # -- select attribute name
+          selectizeInput(inputId = ns("dz_att_name"),
+                         label = "Name",
+                         choices = colnames(r[[r_items]]()),
+                         selected = NULL,
+                         options = list(create = FALSE,
+                                        placeholder = 'Type or select an option below',
+                                        onInitialize = I('function() { this.setValue(""); }'))),
+
+          # -- delete
+          actionButton(ns("dz_delete_att"), label = "Delete"))
+      }
 
     })
 
@@ -358,12 +366,10 @@ kitemsManager_Server <- function(id, r, file, path,
     output$action_buttons <- renderUI({
 
       # check
-      if(is.null(r[[r_items]]())){
+      if(is.null(r[[r_items]]()))
+        NULL
 
-        # create data
-        actionButton(ns("create_data"), label = "Create")
-
-      } else {
+      else {
 
         tagList(
 
