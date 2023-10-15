@@ -306,6 +306,22 @@ kitemsManager_Server <- function(id, r, file, path,
 
 
     # --------------------------------------------------------------------------
+    # Declare data model:
+    # --------------------------------------------------------------------------
+
+    output$hasDataModel <- reactive({
+
+      if(is.null(r[[r_data_model]]()))
+        FALSE
+      else
+        TRUE
+
+    })
+
+    outputOptions(output, "hasDataModel", suspendWhenHidden = FALSE)
+
+
+    # --------------------------------------------------------------------------
     # Create data model:
     # --------------------------------------------------------------------------
 
