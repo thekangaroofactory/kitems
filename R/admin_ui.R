@@ -28,10 +28,16 @@ admin_ui <- function(id){
       tabPanel(title = "Data model",
 
                wellPanel(fluidRow(column(width = 12,
-
                                          h3(paste("Name: ", id)),
                                          p("Data model summary."),
-                                         DT::DTOutput(ns("data_model")),
+                                         uiOutput(ns("create_zone")))),
+
+                         fluidRow(column(width = 12,
+                                         DT::DTOutput(ns("data_model")))),
+
+                         fluidRow(column(width = 12,
+                                         br(),
+                                         uiOutput(ns("danger_btn")),
                                          uiOutput(ns("danger_zone")))))),
 
       # -- Raw table

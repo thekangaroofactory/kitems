@@ -306,35 +306,53 @@ kitemsManager_Server <- function(id, r, file, path,
 
 
     # --------------------------------------------------------------------------
-    # Declare danger zone:
+    # Create data model:
     # --------------------------------------------------------------------------
 
-    # -- Define output
-    output$danger_zone <- renderUI({
+    output$create_zone <- renderUI(
 
       # check for null data model
       if(is.null(r[[r_data_model]]()))
+        actionButton(ns("create_data"), label = "Create"))
 
-        # create data
-        actionButton(ns("create_data"), label = "Create")
 
-      else {
-        tagList(
+    # --------------------------------------------------------------------------
+    # Declare danger zone:
+    # --------------------------------------------------------------------------
 
-          # -- select attribute name
-          selectizeInput(inputId = ns("dz_att_name"),
-                         label = "Name",
-                         choices = colnames(r[[r_items]]()),
-                         selected = NULL,
-                         options = list(create = FALSE,
-                                        placeholder = 'Type or select an option below',
-                                        onInitialize = I('function() { this.setValue(""); }'))),
+    # -- Toggle btn
+    output$danger_btn <- renderUI(
 
-          # -- delete
-          actionButton(ns("dz_delete_att"), label = "Delete"))
-      }
+      # -- Check for NULL data model
+      if(!is.null(r[[r_data_model]]()))
+        shinyWidgets::materialSwitch(inputId = ns("dz_toggle"),
+                                     label = "Danger zone",
+                                     value = FALSE,
+                                     status = "danger"))
 
-    })
+
+    # -- Observe Toggle btn
+    observeEvent(input$dz_toggle,
+
+                 # -- Define output
+                 output$danger_zone <- renderUI(
+
+                   if(input$dz_toggle)
+                     shinydashboard::box(title = "Delete attribute", status = "danger", width = 4,
+
+                                         tagList(
+
+                                           # -- select attribute name
+                                           selectizeInput(inputId = ns("dz_att_name"),
+                                                          label = "Name",
+                                                          choices = colnames(r[[r_items]]()),
+                                                          selected = NULL,
+                                                          options = list(create = FALSE,
+                                                                         placeholder = 'Type or select an option below',
+                                                                         onInitialize = I('function() { this.setValue(""); }'))),
+
+                                           # -- delete
+                                           actionButton(ns("dz_delete_att"), label = "Delete")))))
 
 
     # -- Observe button: delete attribute
