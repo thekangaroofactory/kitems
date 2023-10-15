@@ -433,17 +433,7 @@ kitemsManager_Server <- function(id, r, file, path,
                         value = FALSE),
 
           # add attribute button
-          actionButton(ns("add_att"), label = "Add attribute"),
-
-          # order attribute name
-          selectizeInput(inputId = ns("order_cols"),
-                         label = "Select cols order",
-                         choices = colnames(r[[r_items]]()),
-                         selected = colnames(r[[r_items]]()),
-                         multiple = TRUE),
-
-          # order attribute button
-          actionButton(ns("sort_col"), label = "Reorder")
+          actionButton(ns("add_att"), label = "Add attribute")
 
         ) # end tagList
 
@@ -540,6 +530,28 @@ kitemsManager_Server <- function(id, r, file, path,
     # --------------------------------------------------------------------------
     # Sort attributes / columns:
     # --------------------------------------------------------------------------
+
+    # -- define inputs
+    output$sort_buttons <- renderUI(
+
+      # -- check NULL data model
+      if(is.null(r[[r_items]]()))
+        NULL
+
+      else {
+
+        tagList(
+
+          # order attribute name
+          selectizeInput(inputId = ns("order_cols"),
+                         label = "Select cols order",
+                         choices = colnames(r[[r_items]]()),
+                         selected = colnames(r[[r_items]]()),
+                         multiple = TRUE),
+
+          # order attribute button
+          actionButton(ns("sort_col"), label = "Reorder"))})
+
 
     # -- BTN sort_col
     observeEvent(input$sort_col, {

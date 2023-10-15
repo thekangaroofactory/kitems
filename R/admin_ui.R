@@ -32,7 +32,12 @@ admin_ui <- function(id){
                                          p("Data model summary."),
                                          uiOutput(ns("create_zone")))),
 
-                         fluidRow(column(width = 12,
+                         fluidRow(column(width = 2,
+                                         p("Actions"),
+                                         uiOutput(ns("action_buttons"))),
+
+                                  column(width = 10,
+                                         p("Table"),
                                          DT::DTOutput(ns("data_model")))),
 
                          fluidRow(column(width = 12,
@@ -45,7 +50,7 @@ admin_ui <- function(id){
 
                wellPanel(fluidRow(column(width = 2,
                                          p("Actions"),
-                                         uiOutput(ns("action_buttons"))),
+                                         uiOutput(ns("sort_buttons"))),
 
                                   column(width = 10,
                                          p("Raw Table"),
