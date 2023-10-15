@@ -577,27 +577,32 @@ kitemsManager_Server <- function(id, r, file, path,
     # --------------------------------------------------------------------------
 
     # inputs
-    output$filter_buttons <- renderUI({
+    output$filter_buttons <- renderUI(
 
-      # -- init params
-      filter_cols <- dm_filter(r[[r_data_model]]())
-
-      onInitialize <- if(is.null(filter_cols))
-        I('function() { this.setValue(""); }')
-      else
+      # -- check NULL data model
+      if(is.null(r[[r_items]]()))
         NULL
 
-      # -- define input
-      selectizeInput(inputId = ns("filter_col"),
-                     label = "Filter columns",
-                     choices = colnames(r[[r_items]]()),
-                     selected = filter_cols,
-                     multiple = TRUE,
-                     options = list(create = FALSE,
-                                    placeholder = 'Type or select an option below',
-                                    onInitialize = onInitialize))
+      else {
 
-    })
+        # -- init params
+        filter_cols <- dm_filter(r[[r_data_model]]())
+
+        onInitialize <- if(is.null(filter_cols))
+          I('function() { this.setValue(""); }')
+        else
+          NULL
+
+        # -- define input
+        selectizeInput(inputId = ns("filter_col"),
+                       label = "Filter columns",
+                       choices = colnames(r[[r_items]]()),
+                       selected = filter_cols,
+                       multiple = TRUE,
+                       options = list(create = FALSE,
+                                      placeholder = 'Type or select an option below',
+                                      onInitialize = onInitialize))})
+
 
     # observe filter input
     observeEvent(input$filter_col, {
@@ -611,7 +616,6 @@ kitemsManager_Server <- function(id, r, file, path,
         r[[r_data_model]](dm)}
 
     }, ignoreInit = TRUE, ignoreNULL = FALSE)
-
 
 
     # --------------------------------------------------------------------------

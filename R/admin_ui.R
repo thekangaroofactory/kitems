@@ -27,9 +27,8 @@ admin_ui <- function(id){
       # -- Data model
       tabPanel(title = "Data model",
 
-               wellPanel(fluidRow(column(width = 12,
-                                         h3(paste("Name: ", id)),
-                                         p("Data model summary."),
+               wellPanel(h3(paste("Name: ", id)),
+                         fluidRow(column(width = 12,
                                          uiOutput(ns("create_zone")))),
 
                          fluidRow(column(width = 2,
@@ -48,7 +47,8 @@ admin_ui <- function(id){
       # -- Raw table
       tabPanel(title = "Raw table",
 
-               wellPanel(fluidRow(column(width = 2,
+               wellPanel(h3(paste("Name: ", id)),
+                         fluidRow(column(width = 2,
                                          p("Actions"),
                                          uiOutput(ns("sort_buttons"))),
 
@@ -59,7 +59,8 @@ admin_ui <- function(id){
       # --View table
       tabPanel(title = "View",
 
-               wellPanel(fluidRow(column(width = 2,
+               wellPanel(h3(paste("Name: ", id)),
+                         fluidRow(column(width = 2,
                                          p("Actions"),
                                          uiOutput(ns("filter_buttons")),
                                          p("Column name mask applied by default:",br(),
