@@ -493,12 +493,13 @@ kitemsManager_Server <- function(id, r, file, path,
 
       # -- init parameters (id)
       colClasses <- c("id" = "numeric")
+      default_val <- c("id" = NA)
       default_fun <- c("id" = "ktools::getTimestamp")
       filter <- c("id")
       skip <- c("id")
 
       # -- init data model & store
-      dm <- data_model(colClasses, default.val = NULL, default.fun = default_fun, filter = filter, skip = skip)
+      dm <- data_model(colClasses, default.val = default_val, default.fun = default_fun, filter = filter, skip = skip)
       r[[r_data_model]](dm)
 
       # -- init items
