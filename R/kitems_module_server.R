@@ -306,27 +306,69 @@ kitemsManager_Server <- function(id, r, file, path,
 
 
     # --------------------------------------------------------------------------
+    # Declare data model:
+    # --------------------------------------------------------------------------
+
+    output$hasDataModel <- reactive({
+
+      if(is.null(r[[r_data_model]]()))
+        FALSE
+      else
+        TRUE
+
+    })
+
+    outputOptions(output, "hasDataModel", suspendWhenHidden = FALSE)
+
+
+    # --------------------------------------------------------------------------
+    # Create data model:
+    # --------------------------------------------------------------------------
+
+    output$create_zone <- renderUI(
+
+      # check for null data model
+      if(is.null(r[[r_data_model]]()))
+        actionButton(ns("create_data"), label = "Create"))
+
+
+    # --------------------------------------------------------------------------
     # Declare danger zone:
     # --------------------------------------------------------------------------
 
-    # -- Define output
-    output$danger_zone <- renderUI({
+    # -- Toggle btn
+    output$danger_btn <- renderUI(
 
-      tagList(
+      # -- Check for NULL data model
+      if(!is.null(r[[r_data_model]]()))
+        shinyWidgets::materialSwitch(inputId = ns("dz_toggle"),
+                                     label = "Danger zone",
+                                     value = FALSE,
+                                     status = "danger"))
 
-        # -- select attribute name
-        selectizeInput(inputId = ns("dz_att_name"),
-                       label = "Name",
-                       choices = colnames(r[[r_items]]()),
-                       selected = NULL,
-                       options = list(create = FALSE,
-                                      placeholder = 'Type or select an option below',
-                                      onInitialize = I('function() { this.setValue(""); }'))),
 
-        # -- delete
-        actionButton(ns("dz_delete_att"), label = "Delete"))
+    # -- Observe Toggle btn
+    observeEvent(input$dz_toggle,
 
-    })
+                 # -- Define output
+                 output$danger_zone <- renderUI(
+
+                   if(input$dz_toggle)
+                     shinydashboard::box(title = "Delete attribute", status = "danger", width = 4,
+
+                                         tagList(
+
+                                           # -- select attribute name
+                                           selectizeInput(inputId = ns("dz_att_name"),
+                                                          label = "Name",
+                                                          choices = colnames(r[[r_items]]()),
+                                                          selected = NULL,
+                                                          options = list(create = FALSE,
+                                                                         placeholder = 'Type or select an option below',
+                                                                         onInitialize = I('function() { this.setValue(""); }'))),
+
+                                           # -- delete
+                                           actionButton(ns("dz_delete_att"), label = "Delete")))))
 
 
     # -- Observe button: delete attribute
@@ -358,12 +400,10 @@ kitemsManager_Server <- function(id, r, file, path,
     output$action_buttons <- renderUI({
 
       # check
-      if(is.null(r[[r_items]]())){
+      if(is.null(r[[r_items]]()))
+        NULL
 
-        # create data
-        actionButton(ns("create_data"), label = "Create")
-
-      } else {
+      else {
 
         tagList(
 
@@ -409,17 +449,7 @@ kitemsManager_Server <- function(id, r, file, path,
                         value = FALSE),
 
           # add attribute button
-          actionButton(ns("add_att"), label = "Add attribute"),
-
-          # order attribute name
-          selectizeInput(inputId = ns("order_cols"),
-                         label = "Select cols order",
-                         choices = colnames(r[[r_items]]()),
-                         selected = colnames(r[[r_items]]()),
-                         multiple = TRUE),
-
-          # order attribute button
-          actionButton(ns("sort_col"), label = "Reorder")
+          actionButton(ns("add_att"), label = "Add attribute")
 
         ) # end tagList
 
@@ -463,12 +493,13 @@ kitemsManager_Server <- function(id, r, file, path,
 
       # -- init parameters (id)
       colClasses <- c("id" = "numeric")
+      default_val <- c("id" = NA)
       default_fun <- c("id" = "ktools::getTimestamp")
       filter <- c("id")
       skip <- c("id")
 
       # -- init data model & store
-      dm <- data_model(colClasses, default.val = NULL, default.fun = default_fun, filter = filter, skip = skip)
+      dm <- data_model(colClasses, default.val = default_val, default.fun = default_fun, filter = filter, skip = skip)
       r[[r_data_model]](dm)
 
       # -- init items
@@ -517,6 +548,28 @@ kitemsManager_Server <- function(id, r, file, path,
     # Sort attributes / columns:
     # --------------------------------------------------------------------------
 
+    # -- define inputs
+    output$sort_buttons <- renderUI(
+
+      # -- check NULL data model
+      if(is.null(r[[r_items]]()))
+        NULL
+
+      else {
+
+        tagList(
+
+          # order attribute name
+          selectizeInput(inputId = ns("order_cols"),
+                         label = "Select cols order",
+                         choices = colnames(r[[r_items]]()),
+                         selected = colnames(r[[r_items]]()),
+                         multiple = TRUE),
+
+          # order attribute button
+          actionButton(ns("sort_col"), label = "Reorder"))})
+
+
     # -- BTN sort_col
     observeEvent(input$sort_col, {
 
@@ -541,27 +594,32 @@ kitemsManager_Server <- function(id, r, file, path,
     # --------------------------------------------------------------------------
 
     # inputs
-    output$filter_buttons <- renderUI({
+    output$filter_buttons <- renderUI(
 
-      # -- init params
-      filter_cols <- dm_filter(r[[r_data_model]]())
-
-      onInitialize <- if(is.null(filter_cols))
-        I('function() { this.setValue(""); }')
-      else
+      # -- check NULL data model
+      if(is.null(r[[r_items]]()))
         NULL
 
-      # -- define input
-      selectizeInput(inputId = ns("filter_col"),
-                     label = "Filter columns",
-                     choices = colnames(r[[r_items]]()),
-                     selected = filter_cols,
-                     multiple = TRUE,
-                     options = list(create = FALSE,
-                                    placeholder = 'Type or select an option below',
-                                    onInitialize = onInitialize))
+      else {
 
-    })
+        # -- init params
+        filter_cols <- dm_filter(r[[r_data_model]]())
+
+        onInitialize <- if(is.null(filter_cols))
+          I('function() { this.setValue(""); }')
+        else
+          NULL
+
+        # -- define input
+        selectizeInput(inputId = ns("filter_col"),
+                       label = "Filter columns",
+                       choices = colnames(r[[r_items]]()),
+                       selected = filter_cols,
+                       multiple = TRUE,
+                       options = list(create = FALSE,
+                                      placeholder = 'Type or select an option below',
+                                      onInitialize = onInitialize))})
+
 
     # observe filter input
     observeEvent(input$filter_col, {
@@ -575,7 +633,6 @@ kitemsManager_Server <- function(id, r, file, path,
         r[[r_data_model]](dm)}
 
     }, ignoreInit = TRUE, ignoreNULL = FALSE)
-
 
 
     # --------------------------------------------------------------------------

@@ -14,10 +14,21 @@ library(DT)
 # Define Sidebar UI
 # --------------------------------------------------------------------------------
 
+# sidebar <- dashboardSidebar(
+#   sidebarMenu(
+#     menuItem("Template", tabName = "template", icon = icon("dashboard"), selected = TRUE),
+#     menuItem("Try", tabName = "try", icon = icon("tasks"))),
+#   collapsed = FALSE)
+
 sidebar <- dashboardSidebar(
+
+  # -- static section
   sidebarMenu(
-    menuItem("Template", tabName = "template", icon = icon("dashboard"), selected = TRUE),
-    menuItem("Try", tabName = "try", icon = icon("tasks"))),
+    menuItem("Home", tabName = "home", icon = icon("dashboard"), selected = TRUE)),
+
+  # -- add dynamic section
+  sidebarMenu(id = "tabs", sidebarMenuOutput("menu")),
+
   collapsed = FALSE)
 
 
@@ -31,7 +42,16 @@ body <- dashboardBody(
   tabItems(
 
     # -- tabItem
-    tabItem(tabName = "template",
+    tabItem(tabName = "home",
+
+            # -- Admin
+            fluidRow(
+              column(width = 12,
+
+                     h1("Home page")))),
+
+    # -- tabItem
+    tabItem(tabName = "data",
 
             # -- Admin
             fluidRow(
@@ -39,9 +59,8 @@ body <- dashboardBody(
 
                      admin_ui("data")))),
 
-
     # -- tabItem
-    tabItem(tabName = "try",
+    tabItem(tabName = "data_2",
 
             # -- Admin
             fluidRow(
@@ -52,8 +71,7 @@ body <- dashboardBody(
             fluidRow(
               column(width = 12,
 
-                     new_item_BTN("data_2"))
-            ))
+                     new_item_BTN("data_2"))))
 
 
   ) # end tabItems
