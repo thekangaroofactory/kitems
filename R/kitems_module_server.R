@@ -108,7 +108,7 @@ kitemsManager_Server <- function(id, r, file, path,
 
 
     # -- Build object names from module id (to access outside module)
-    r_data_model <- paste0(id, "data_model")
+    r_data_model <- paste0(id, "_data_model")
     r_items <- paste0(id, "_items")
 
     # -- Declare reactive objects (for external use)
