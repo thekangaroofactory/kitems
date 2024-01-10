@@ -66,6 +66,14 @@ shinyServer(
 
     })
 
+
+    # -------------------------------------
+    # Generate dynamic sidebar
+    # -------------------------------------
+
+    output$menu <- renderMenu(dynamic_sidebar(r))
+
+
   }
 )
 
