@@ -226,19 +226,18 @@ kitemsManager_Server <- function(id, r, file, path,
     r[[trigger_add]] <- reactiveVal(NULL)
     r[[trigger_save]] <- reactiveVal(0)
 
-    # -- Add
+    # -- Observe: trigger_add
     observeEvent(r[[trigger_add]](), {
 
       # -- add item to list & store
-      cat("--  Add item to list \n")
+      cat(MODULE, "[TRIGGER] Add item to list \n")
       item_list <- item_add(r[[r_items]](), r[[trigger_add]]())
       r[[r_items]](item_list)
 
     }, ignoreInit = TRUE)
 
 
-
-    # -- Save (items)
+    # -- Observe: trigger_save (items)
     observeEvent(r[[trigger_save]](), {
 
       # -- Write
