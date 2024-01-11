@@ -13,7 +13,10 @@
 #'
 #' @examples
 
-item_add_attribute <- function(x, name, type, fill = NA, coerce){
+item_add_attribute <- function(x, name, type, fill = NA){
+
+  # -- Get supported class functions
+  coerce <- class_functions()
 
   # -- Check dim
   if(dim(x)[1] == 0){
