@@ -81,18 +81,14 @@ shinyServer(
     # id <- "data_2"
     #
     # r_data_model <- dm_name(id)
-    # trigger_update <- trigger_update_name(id)
-    #
-    # input_values <- data.frame("id" = 1704961867683,
-    #                            "name" = "tata",
-    #                            "total" = 30)
+    # trigger_delete <- trigger_delete_name(id)
     #
     # observeEvent(r$data_2_items(), {
     #
-    #   cat("*** SAND BOX: update item \n")
+    #   cat("*** SAND BOX: delete item \n")
     #
-    #   item <- item_create(values = input_values, data.model = r[[r_data_model]]())
-    #   r[[trigger_update]](item)
+    #   item <- 1704961867683
+    #   r[[trigger_delete]](item)
     #
     # })
 

@@ -55,3 +55,16 @@ input_values <- data.frame(id = 1, text = "demo update")
 item <- item_create(values = input_values, data.model = r[[r_data_model]]())
 r[[trigger_update]](item)
 
+
+## Item delete
+
+To delete an item, just pass it's id to the trigger:
+
+id <- "my_data"
+
+trigger_delete <- trigger_delete_name(id)
+
+item_id <- 1704961867683
+r[[trigger_delete]](item_id)
+
+
