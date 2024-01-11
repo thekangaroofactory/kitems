@@ -39,3 +39,19 @@ item <- item_create(values = input_values, data.model = r[[r_data_model]]())
 r[[trigger_add]](item)
 
 Note: if autosave has been turned off, r[[trigger_save]] should be used to make item changes persistent.
+
+
+## Item update
+
+It's recommended to use item_create() to create a new item to replace the one in the list:
+
+id <- "my_data"
+
+r_data_model <- dm_name(id)
+trigger_update <- trigger_update_name(id)
+
+input_values <- data.frame(id = 1, text = "demo update")
+
+item <- item_create(values = input_values, data.model = r[[r_data_model]]())
+r[[trigger_update]](item)
+

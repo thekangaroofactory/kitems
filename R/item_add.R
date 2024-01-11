@@ -10,7 +10,7 @@
 #'
 #' @examples
 
-item_add <- function(item, items){
+item_add <- function(items, item){
 
   # -- rbind
   items <- rbind(items, item)
