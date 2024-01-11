@@ -13,7 +13,10 @@
 
 
 # -- function definition
-item_create <- function(values, data.model, coerce){
+item_create <- function(values, data.model){
+
+  # -- Get supported class functions
+  coerce <- class_functions()
 
   # -- init params from data.model
   colClasses <- dm_colClasses(data.model)
