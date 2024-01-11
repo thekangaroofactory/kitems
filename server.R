@@ -74,6 +74,12 @@ shinyServer(
     output$menu <- renderMenu(dynamic_sidebar(r))
 
 
+    # -------------------------------------
+    # SAND BOX
+    # -------------------------------------
+
+
+
   }
 )
 

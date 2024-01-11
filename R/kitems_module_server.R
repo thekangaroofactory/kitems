@@ -66,17 +66,6 @@ kitemsManager_Server <- function(id, r, file, path,
                               "POSIXct" = c("Sys.Date"),
                               "POSIXlt" = c("Sys.Date"))
 
-    # -- Define lis of as functions
-    CLASS_FUNCTIONS <- list("numeric" = "as.numeric",
-                            "integer" = "as.integer",
-                            "double" = "as.double",
-                            "logical" = "as.logical",
-                            "character" = "as.character",
-                            "factor" = "as.factor",
-                            "Date" = ".Date",
-                            "POSIXct" = "as.POSIXct",
-                            "POSIXlt" = "as.POSIXlt")
-
 
     # --------------------------------------------------------------------------
     # Declare templates:
@@ -104,24 +93,18 @@ kitemsManager_Server <- function(id, r, file, path,
 
 
     # -- Build filename from module id
-    dm_url <- file.path(path$resource, paste0(id, "_data_model.rds"))
+    dm_url <- file.path(path$resource, paste0(dm_name(id), ".rds"))
 
 
     # -- Build object names from module id (to access outside module)
-    r_data_model <- paste0(id, "_data_model")
-    r_items <- paste0(id, "_items")
+    r_data_model <- dm_name(id)
+    r_items <- items_name(id)
 
     # -- Declare reactive objects (for external use)
     r[[r_items]] <- reactiveVal(NULL)
 
 
-    # -- Build triggers names from module id (to access outside module)
-    trigger_add <- paste0(id, "_trigger_new")
-    trigger_save <- paste0(id, "_trigger_save")
 
-    # -- Declare reactive objects (for external use)
-    r[[trigger_add]] <- reactiveVal(NULL)
-    r[[trigger_save]] <- reactiveVal(0)
 
 
     # --------------------------------------------------------------------------
@@ -232,6 +215,28 @@ kitemsManager_Server <- function(id, r, file, path,
     # --------------------------------------------------------------------------
     # Declare triggers:
     # --------------------------------------------------------------------------
+
+    # -- Build triggers names from module id
+    trigger_add <- trigger_add_name(id)
+    trigger_update <- trigger_update_name(id)
+    trigger_delete <- trigger_delete_name(id)
+    trigger_save <- trigger_save_name(id)
+
+    # -- Declare reactive objects (for external use)
+    r[[trigger_add]] <- reactiveVal(NULL)
+    r[[trigger_save]] <- reactiveVal(0)
+
+    # -- Add
+    observeEvent(r[[trigger_add]](), {
+
+      # -- add item to list & store
+      cat("--  Add item to list \n")
+      item_list <- item_add(r[[r_items]](), r[[trigger_add]]())
+      r[[r_items]](item_list)
+
+    }, ignoreInit = TRUE)
+
+
 
     # -- Save (items)
     observeEvent(r[[trigger_save]](), {
@@ -538,7 +543,7 @@ kitemsManager_Server <- function(id, r, file, path,
       value <- dm_get_default(data.model = dm, name = input$add_att_name)
 
       # Add column to items & store
-      items <- item_add_attribute(r[[r_items]](), name = input$add_att_name, type = input$add_att_type, fill = value, coerce = CLASS_FUNCTIONS)
+      items <- item_add_attribute(r[[r_items]](), name = input$add_att_name, type = input$add_att_type, fill = value)
       r[[r_items]](items)
 
     })
@@ -636,14 +641,6 @@ kitemsManager_Server <- function(id, r, file, path,
 
 
     # --------------------------------------------------------------------------
-    # Triggers:
-    # --------------------------------------------------------------------------
-
-    # add
-    #r[[trigger_add]]
-
-
-    # --------------------------------------------------------------------------
     # Create item:
     # --------------------------------------------------------------------------
 
@@ -676,7 +673,7 @@ kitemsManager_Server <- function(id, r, file, path,
 
       # -- create item based on input list
       cat("--  Create item \n")
-      item <- item_create(values = input_values, data.model = r[[r_data_model]](), coerce = CLASS_FUNCTIONS)
+      item <- item_create(values = input_values, data.model = r[[r_data_model]]())
 
       # -- add item to list & store
       cat("--  Add item to list \n")
