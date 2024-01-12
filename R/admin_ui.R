@@ -32,14 +32,14 @@ admin_ui <- function(id){
                          conditionalPanel(condition ="output.hasDataModel == false", ns = ns,
                                           fluidRow(column(width = 12,
                                                           p("No data model found. You need to create one to start."),
-                                                          uiOutput(ns("create_zone"))))),
+                                                          uiOutput(ns("dm_create"))))),
 
                          conditionalPanel(condition ="output.hasDataModel == true", ns = ns,
 
                                           fluidRow(column(width = 2,
 
                                                           p("Actions"),
-                                                          uiOutput(ns("action_buttons"))),
+                                                          uiOutput(ns("dm_add_att"))),
 
                                                    column(width = 10,
                                                           p("Table"),
@@ -47,8 +47,8 @@ admin_ui <- function(id){
 
                                           fluidRow(column(width = 12,
                                                           br(),
-                                                          uiOutput(ns("danger_btn")),
-                                                          uiOutput(ns("danger_zone"))))))),
+                                                          uiOutput(ns("dm_danger_btn")),
+                                                          uiOutput(ns("dm_danger_zone"))))))),
 
       # -- Raw table
       tabPanel(title = "Raw table",
@@ -60,7 +60,7 @@ admin_ui <- function(id){
 
                                           fluidRow(column(width = 2,
                                                           p("Actions"),
-                                                          uiOutput(ns("sort_buttons"))),
+                                                          uiOutput(ns("dm_sort_buttons"))),
 
                                                    column(width = 10,
                                                           p("Raw Table"),
@@ -76,7 +76,7 @@ admin_ui <- function(id){
 
                                           fluidRow(column(width = 2,
                                                           p("Actions"),
-                                                          uiOutput(ns("filter_buttons")),
+                                                          uiOutput(ns("adm_filter_buttons")),
                                                           p("Column name mask applied by default:",br(),
                                                             "- replace dot, underscore with space",br(),
                                                             "- capitalize first letters")),
