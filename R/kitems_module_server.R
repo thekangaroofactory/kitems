@@ -100,8 +100,8 @@ kitemsManager_Server <- function(id, r, file, path,
     r_data_model <- dm_name(id)
     r_items <- items_name(id)
 
-    r_view_items <- paste0(id, "_view_items")
-    r_view_filtered_items <- paste0(id, "_view_filtered_items")
+    r_view_items <- view_items_name(id)
+    r_view_filtered_items <- view_filtered_items_name(id)
 
     # -- Declare reactive objects (for external use)
     r[[r_items]] <- reactiveVal(NULL)
