@@ -100,11 +100,14 @@ kitemsManager_Server <- function(id, r, file, path,
     r_data_model <- dm_name(id)
     r_items <- items_name(id)
 
+    r_view_items <- paste0(id, "_view_items")
+    r_view_filtered_items <- paste0(id, "_view_filtered_items")
+
     # -- Declare reactive objects (for external use)
     r[[r_items]] <- reactiveVal(NULL)
 
-
-
+    r[[r_view_items]] <- reactiveVal(NULL)
+    r[[r_view_filtered_items]] <- reactiveVal(NULL)
 
 
     # --------------------------------------------------------------------------
@@ -281,39 +284,54 @@ kitemsManager_Server <- function(id, r, file, path,
     # --------------------------------------------------------------------------
 
     # -- Item table view
-    view_items <- reactive({
+    observeEvent(r[[r_items]](), {
 
-      if(!is.null(r[[r_items]]())){
+      # -- Get filter from data model
+      filter_cols <- dm_filter(r[[r_data_model]]())
 
-        # -- Get filter from data model
-        filter_cols <- dm_filter(r[[r_data_model]]())
+      # -- Apply filter
+      value <- if(is.null(filter_cols)){
 
-        # -- Apply filter
-        value <- if(is.null(filter_cols)){
+        r[[r_items]]()
 
-          r[[r_items]]()
+      } else {
 
-        } else {
+        r[[r_items]]()[-which(names(r[[r_items]]()) %in% filter_cols)]
 
-          r[[r_items]]()[-which(names(r[[r_items]]()) %in% filter_cols)]
+      }
 
-        }
+      # -- Apply attribute/column name mask
+      colnames(value) <- gsub(".", " ", colnames(value), fixed = TRUE)
+      colnames(value) <- gsub("_", " ", colnames(value), fixed = TRUE)
+      colnames(value) <- stringr::str_to_title(colnames(value))
 
-        # -- Apply attribute/column name mask
-        colnames(value) <- gsub(".", " ", colnames(value), fixed = TRUE)
-        colnames(value) <- gsub("_", " ", colnames(value), fixed = TRUE)
-        colnames(value) <- stringr::str_to_title(colnames(value))
+      # -- Store
+      r[[r_view_items]](value)
 
-      } else value <- NULL
+    }, ignoreInit = FALSE)
 
-      # -- Return
-      value
 
-    })
+    # -- Filtered item table view (based on standard view)
+    observeEvent(r[[r_view_items]](), {
+
+      # -- Get data
+      value <- r[[r_view_items]]()
+
+      # ************************************************************************
+      # -- Apply filters
+      str(value)
+      value <- value[value$Total > 2, ]
+
+      # ************************************************************************
+
+      # -- Store
+      r[[r_view_filtered_items]](value)
+
+    }, ignoreInit = FALSE)
 
 
     # --------------------------------------------------------------------------
-    # Declare outputs:
+    # Declare admin outputs:
     # --------------------------------------------------------------------------
 
     # -- Raw view for admin
@@ -322,16 +340,31 @@ kitemsManager_Server <- function(id, r, file, path,
                                           options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
                                           selection = list(mode = 'single', target = "row", selected = NULL))
 
-    # -- Masked view for admin
-    output$view_item_table <- DT::renderDT(view_items(),
+    # -- Masked view for admin (reuse of r_view_items)
+    output$view_item_table <- DT::renderDT(r[[r_view_items]](),
                                            rownames = FALSE,
                                            selection = list(mode = 'single', target = "row", selected = NULL))
 
-    # -- colClasses
+    # -- colClasses for admin
     output$data_model <- DT::renderDT(r[[r_data_model]](),
                                       rownames = TRUE,
                                       options = list(lengthMenu = c(5, 10, 15), pageLength = 10, dom = "t", scrollX = TRUE),
                                       selection = list(mode = 'single', target = "row", selected = NULL))
+
+
+    # --------------------------------------------------------------------------
+    # Declare standard outputs:
+    # --------------------------------------------------------------------------
+
+    # -- Default view (reuse of r_view_items, includes dm masks)
+    output$default_view <- DT::renderDT(r[[r_view_items]](),
+                                        rownames = FALSE,
+                                        selection = list(mode = 'single', target = "row", selected = NULL))
+
+    # -- Filtered view
+    output$filtered_view <- DT::renderDT(r[[r_view_filtered_items]](),
+                                        rownames = FALSE,
+                                        selection = list(mode = 'single', target = "row", selected = NULL))
 
 
     # --------------------------------------------------------------------------

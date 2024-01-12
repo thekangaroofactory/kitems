@@ -48,7 +48,12 @@ body <- dashboardBody(
             fluidRow(
               column(width = 12,
 
-                     h1("Home page")))),
+                     h1("Home page"),
+                     h4("Default view:"),
+                     item_default_view_DT("data_2"),
+                     h4("Filtered view:"),
+                     items_filtered_view_DT("data_2")
+              ))),
 
     # -- tabItem
     tabItem(tabName = "data",
