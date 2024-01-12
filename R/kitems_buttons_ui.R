@@ -10,3 +10,15 @@ new_item_BTN <- function(id){
   uiOutput(ns("new_item_btn"))
 
 }
+
+
+item_table_UI <- function(id){
+
+  # -- namespace
+  ns <- NS(id)
+
+  # -- the table
+  DT::DTOutput(ns("item_table"))
+
+}
+
