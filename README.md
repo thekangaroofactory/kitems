@@ -12,6 +12,18 @@ The goal of this package is to create data model management functions.
 
 
 
+--------------------------------------------------------------------------------
+
+## Reactive Values (accessible from r object)
+
+- r[[r_data_model]]
+- r[[r_items]]
+
+- r[[trigger_add]]
+- r[[trigger_update]]
+- r[[trigger_delete]]
+- r[[trigger_save]]
+
 
 ## Triggers
 
