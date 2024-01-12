@@ -32,7 +32,7 @@ admin_ui <- function(id){
                          conditionalPanel(condition ="output.hasDataModel == false", ns = ns,
                                           fluidRow(column(width = 12,
                                                           p("No data model found. You need to create one to start."),
-                                                          uiOutput(ns("dm_create"))))),
+                                                          uiOutput(ns("admin_dm_create"))))),
 
                          conditionalPanel(condition ="output.hasDataModel == true", ns = ns,
 
