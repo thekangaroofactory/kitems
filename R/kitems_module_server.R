@@ -721,23 +721,23 @@ kitemsManager_Server <- function(id, r, file, path,
     # Create item:
     # --------------------------------------------------------------------------
 
-    # -- btn: new item
-    output$new_item_btn <- renderUI(actionButton(inputId = ns("new_item_btn"),
-                                                 label = "New item"))
+    # -- Declare: create_btn
+    output$create_btn <- renderUI(actionButton(inputId = ns("create_btn"),
+                                                 label = "Create"))
 
-    # -- new_item_btn
-    observeEvent(input$new_item_btn, {
+    # -- Observe: create_btn
+    observeEvent(input$create_btn, {
 
       showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, colClasses = dm_colClasses(r[[r_data_model]]()), skip = dm_skip(r[[r_data_model]]())),
                             title = "Create",
                             footer = tagList(
                               modalButton("Cancel"),
-                              actionButton(ns("create_item"), "Create"))))
+                              actionButton(ns("confirm_create_btn"), "Create"))))
 
     })
 
-    # -- new item
-    observeEvent(input$create_item, {
+    # -- Observe: confirm_create_btn
+    observeEvent(input$confirm_create_btn, {
 
       cat(MODULE, "[EVENT] Create item \n")
 

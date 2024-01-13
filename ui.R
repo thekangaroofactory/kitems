@@ -53,6 +53,7 @@ body <- dashboardBody(
                      items_view_DT("data_2"),
                      h4("Filtered view:"),
                      date_slider_INPUT("data_2"),
+                     create_BTN("data_2"),
                      items_filtered_view_DT("data_2")
               ))),
 
@@ -72,12 +73,7 @@ body <- dashboardBody(
             fluidRow(
               column(width = 12,
 
-                     admin_ui("data_2"))),
-
-            fluidRow(
-              column(width = 12,
-
-                     new_item_BTN("data_2"))))
+                     admin_ui("data_2"))))
 
 
   ) # end tabItems
