@@ -115,6 +115,11 @@ kitemsManager_Server <- function(id, r, file, path,
     r[[r_filter_date]] <- reactiveVal(NULL)
 
 
+    # -- Declare date slider objects
+    min_date <- reactiveVal(NULL)
+    max_date <- reactiveVal(NULL)
+
+
     # --------------------------------------------------------------------------
     # Read data model:
     # --------------------------------------------------------------------------
@@ -373,8 +378,44 @@ kitemsManager_Server <- function(id, r, file, path,
     # --------------------------------------------------------------------------
 
     # -- Declare date_slider (check date attribute)
-    if(hasDate(isolate(r[[r_data_model]]())))
+    if(hasDate(isolate(r[[r_data_model]]()))){
+
+      # -- Declare output
       output$date_slider <- input_date_slider(isolate(r[[r_items]]()), ns = ns)
+
+      # -- Observe items min/max date
+      observeEvent(r[[r_items]](), {
+
+        # -- Get min/max
+        min <- min(r[[r_items]]()$date)
+        max <- max(r[[r_items]]()$date)
+
+        # -- Update if needed
+        if(min != ifelse(is.null(min_date()), 0, min_date()))
+          min_date(min)
+
+        if(max != ifelse(is.null(max_date()), 0, max_date()))
+          max_date(max)
+
+      }, ignoreInit = TRUE)
+
+      # -- Observe for date range update
+      observeEvent({
+        min_date()
+        max_date()
+      }, {
+
+        cat(MODULE, "Update sliderInput min/max \n")
+
+        # -- update input
+        updateSliderInput(session,
+                          inputId = "date_slider",
+                          min = min_date(),
+                          max = max_date())
+
+      })
+
+    }
 
     # -- Observe: date_slider
     observeEvent(input$date_slider, {
