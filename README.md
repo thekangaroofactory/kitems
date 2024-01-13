@@ -80,3 +80,17 @@ item_id <- 1704961867683
 r[[trigger_delete]](item_id)
 
 
+--------------------------------------------------------------------------------
+## Inputs
+
+### date_slider_INPUT
+
+If the data model has an attribute named 'date', a date sliderInput will be created automatically
+to enable date filtering.
+
+This sliderInput will trigger a filter on the items to be displayed in the filtered view.
+
+If not implemented in your application's UI, then no date filtered is applied by default.
+
+
+

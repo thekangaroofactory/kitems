@@ -103,11 +103,16 @@ kitemsManager_Server <- function(id, r, file, path,
     r_view_items <- view_items_name(id)
     r_view_filtered_items <- view_filtered_items_name(id)
 
+    r_filter_date <- filter_date_name(id)
+
+
     # -- Declare reactive objects (for external use)
     r[[r_items]] <- reactiveVal(NULL)
 
     r[[r_view_items]] <- reactiveVal(NULL)
     r[[r_view_filtered_items]] <- reactiveVal(NULL)
+
+    r[[r_filter_date]] <- reactiveVal(NULL)
 
 
     # --------------------------------------------------------------------------
@@ -286,46 +291,42 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- Item table view
     observeEvent(r[[r_items]](), {
 
-      # -- Get filter from data model
-      filter_cols <- dm_filter(r[[r_data_model]]())
-
-      # -- Apply filter
-      value <- if(is.null(filter_cols)){
-
-        r[[r_items]]()
-
-      } else {
-
-        r[[r_items]]()[-which(names(r[[r_items]]()) %in% filter_cols)]
-
-      }
+      # -- Apply data model mask
+      items <- dm_apply_mask(r[[r_data_model]](), r[[r_items]]())
 
       # -- Apply attribute/column name mask
-      colnames(value) <- gsub(".", " ", colnames(value), fixed = TRUE)
-      colnames(value) <- gsub("_", " ", colnames(value), fixed = TRUE)
-      colnames(value) <- stringr::str_to_title(colnames(value))
+      items <- view_apply_mask(items)
 
       # -- Store
-      r[[r_view_items]](value)
+      r[[r_view_items]](items)
 
     }, ignoreInit = FALSE)
 
 
     # -- Filtered item table view (based on standard view)
-    observeEvent(r[[r_view_items]](), {
+    observeEvent({
 
-      # -- Get data
-      value <- r[[r_view_items]]()
+      # -- Multiple conditions!
+      r[[r_view_items]]()
+      r[[r_filter_date]]()
 
-      # ************************************************************************
-      # -- Apply filters
-      str(value)
-      value <- value[value$Total > 2, ]
+    }, {
 
-      # ************************************************************************
+      cat(MODULE, "Updating filtered item view \n")
+
+      # -- Apply data model mask
+      items <- dm_apply_mask(r[[r_data_model]](), r[[r_items]]())
+
+      # -- Apply date filter
+      filter_date <- r[[r_filter_date]]()
+      if(!is.null(filter_date))
+        items <- items[items$date >= filter_date[1] & items$date <= filter_date[2], ]
+
+      # -- Apply attribute/column name mask
+      items <- view_apply_mask(items)
 
       # -- Store
-      r[[r_view_filtered_items]](value)
+      r[[r_view_filtered_items]](items)
 
     }, ignoreInit = FALSE)
 
@@ -353,7 +354,7 @@ kitemsManager_Server <- function(id, r, file, path,
 
 
     # --------------------------------------------------------------------------
-    # Declare standard outputs:
+    # Declare outputs: Data tables
     # --------------------------------------------------------------------------
 
     # -- Default view (reuse of r_view_items, includes dm masks)
@@ -365,6 +366,25 @@ kitemsManager_Server <- function(id, r, file, path,
     output$filtered_view <- DT::renderDT(r[[r_view_filtered_items]](),
                                         rownames = FALSE,
                                         selection = list(mode = 'single', target = "row", selected = NULL))
+
+
+    # --------------------------------------------------------------------------
+    # Declare outputs: Inputs
+    # --------------------------------------------------------------------------
+
+    # -- Declare date_slider (check date attribute)
+    if(hasDate(isolate(r[[r_data_model]]())))
+      output$date_slider <- input_date_slider(isolate(r[[r_items]]()), ns = ns)
+
+    # -- Observe: date_slider
+    observeEvent(input$date_slider, {
+
+      cat(MODULE, "Date sliderInput has been updated: \n")
+      cat("-- values =", input$date_slider, "\n")
+
+      r[[r_filter_date]](input$date_slider)
+
+    })
 
 
     # --------------------------------------------------------------------------

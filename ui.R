@@ -50,8 +50,9 @@ body <- dashboardBody(
 
                      h1("Home page"),
                      h4("Default view:"),
-                     item_default_view_DT("data_2"),
+                     items_view_DT("data_2"),
                      h4("Filtered view:"),
+                     date_slider_INPUT("data_2"),
                      items_filtered_view_DT("data_2")
               ))),
 
