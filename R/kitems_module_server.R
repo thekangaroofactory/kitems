@@ -100,8 +100,9 @@ kitemsManager_Server <- function(id, r, file, path,
     r_data_model <- dm_name(id)
     r_items <- items_name(id)
 
-    r_view_items <- view_items_name(id)
-    r_view_filtered_items <- view_filtered_items_name(id)
+    r_filtered_items <- filtered_items_name(id)
+
+    r_selected_items <- selected_items_name(id)
 
     r_filter_date <- filter_date_name(id)
 
@@ -109,11 +110,11 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- Declare reactive objects (for external use)
     r[[r_items]] <- reactiveVal(NULL)
 
-    r[[r_view_items]] <- reactiveVal(NULL)
-    r[[r_view_filtered_items]] <- reactiveVal(NULL)
+    r[[r_filtered_items]] <- reactiveVal(NULL)
+
+    r[[r_selected_items]] <- reactiveVal(NULL)
 
     r[[r_filter_date]] <- reactiveVal(NULL)
-
 
     # -- Declare date slider objects
     min_date <- reactiveVal(NULL)
@@ -290,48 +291,30 @@ kitemsManager_Server <- function(id, r, file, path,
 
 
     # --------------------------------------------------------------------------
-    # Declare views:
+    # Declare filtered items:
     # --------------------------------------------------------------------------
 
-    # -- Item table view
-    observeEvent(r[[r_items]](), {
-
-      # -- Apply data model mask
-      items <- dm_apply_mask(r[[r_data_model]](), r[[r_items]]())
-
-      # -- Apply attribute/column name mask
-      items <- view_apply_mask(items)
-
-      # -- Store
-      r[[r_view_items]](items)
-
-    }, ignoreInit = FALSE)
-
-
-    # -- Filtered item table view (based on standard view)
+    # -- Filtered item table view
     observeEvent({
 
       # -- Multiple conditions!
-      r[[r_view_items]]()
+      r[[r_items]]()
       r[[r_filter_date]]()
 
     }, {
 
       cat(MODULE, "Updating filtered item view \n")
 
-      # -- Apply data model mask
-      items <- dm_apply_mask(r[[r_data_model]](), r[[r_items]]())
+      # -- Get items
+      items <- r[[r_items]]()
 
       # -- Apply date filter
       filter_date <- r[[r_filter_date]]()
       if(!is.null(filter_date))
         items <- items[items$date >= filter_date[1] & items$date <= filter_date[2], ]
 
-      # -- Apply attribute/column name mask
-      items <- view_apply_mask(items)
-
       # -- Store
-      r[[r_view_filtered_items]](items)
+      r[[r_filtered_items]](items)
 
     }, ignoreInit = FALSE)
 
@@ -347,7 +330,7 @@ kitemsManager_Server <- function(id, r, file, path,
                                           selection = list(mode = 'single', target = "row", selected = NULL))
 
     # -- Masked view for admin (reuse of r_view_items)
-    output$view_item_table <- DT::renderDT(r[[r_view_items]](),
+    output$view_item_table <- DT::renderDT(view_apply_masks(r[[r_data_model]](), r[[r_items]]()),
                                            rownames = FALSE,
                                            selection = list(mode = 'single', target = "row", selected = NULL))
 
@@ -363,14 +346,47 @@ kitemsManager_Server <- function(id, r, file, path,
     # --------------------------------------------------------------------------
 
     # -- Default view (reuse of r_view_items, includes dm masks)
-    output$default_view <- DT::renderDT(r[[r_view_items]](),
+    output$default_view <- DT::renderDT(view_apply_masks(r[[r_data_model]](), r[[r_items]]()),
                                         rownames = FALSE,
-                                        selection = list(mode = 'single', target = "row", selected = NULL))
+                                        selection = list(mode = 'multiple', target = "row", selected = NULL))
 
     # -- Filtered view
-    output$filtered_view <- DT::renderDT(r[[r_view_filtered_items]](),
+    output$filtered_view <- DT::renderDT(view_apply_masks(r[[r_data_model]](), r[[r_filtered_items]]()),
                                         rownames = FALSE,
-                                        selection = list(mode = 'single', target = "row", selected = NULL))
+                                        selection = list(mode = 'multiple', target = "row", selected = NULL))
+
+
+    # --------------------------------------------------------------------------
+    # Managing in table selection
+    # --------------------------------------------------------------------------
+
+    # -- Default view
+    observeEvent(input$default_view_rows_selected, {
+
+      cat(MODULE, "Selected rows (default view) =", input$default_view_rows_selected, "\n")
+
+      # -- Get item ids from the default view
+      ids <- r[[r_items]]()[input$default_view_rows_selected, ]$id
+      cat("-- ids =", as.character(ids), "\n")
+
+      # -- Store
+      r[[r_selected_items]](ids)
+
+    })
+
+    # -- Filtered view
+    observeEvent(input$filtered_view_rows_selected, {
+
+      cat(MODULE, "Selected rows (filtered view) =", input$filtered_view_rows_selected, "\n")
+
+      # -- Get item ids from the default view
+      ids <- r[[r_filtered_items]]()[input$filtered_view_rows_selected, ]$id
+      cat("-- ids =", as.character(ids), "\n")
+
+      # -- Store
+      r[[r_selected_items]](ids)
+
+    })
 
 
     # --------------------------------------------------------------------------

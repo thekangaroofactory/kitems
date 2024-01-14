@@ -9,9 +9,11 @@ items_name <- function(id){paste0(id, "_items")}
 
 
 # -- views
-view_items_name <- function(id){paste0(id, "_view_items")}
-view_filtered_items_name <- function(id){paste0(id, "_view_filtered_items")}
+filtered_items_name <- function(id){paste0(id, "_filtered_items")}
 
+
+# -- selected items
+selected_items_name <- function(id){paste0(id, "_selected_items")}
 
 # -- filters
 filter_date_name <- function(id){paste0(id, "_filter_date")}
