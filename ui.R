@@ -57,6 +57,7 @@ body <- dashboardBody(
             fluidRow(
               column(width = 12,
                      create_BTN("data_2"),
+                     update_BTN("data_2"),
                      delete_BTN("data_2"))),
 
             br(),

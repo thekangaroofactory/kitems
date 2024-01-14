@@ -836,20 +836,75 @@ kitemsManager_Server <- function(id, r, file, path,
 
 
     # --------------------------------------------------------------------------
-    # Delete item:
+    # Update item:
+    # --------------------------------------------------------------------------
+
+    # -- Declare: update_btn
+    output$update_btn <- renderUI(
+
+      # -- check item selection + single row
+      if(is.null(r[[r_selected_items]]()) | length(r[[r_selected_items]]()) != 1)
+        NULL
+      else
+        actionButton(inputId = ns("update_btn"),
+                     label = "Update"))
+
+
+    # -- Observe: update_btn
+    observeEvent(input$update_btn, {
+
+      cat(MODULE, "[EVENT] Update item \n")
+
+      # -- Get selected item
+      item <- r[[r_items]]()[r[[r_items]]()$id == r[[r_selected_items]](), ]
+
+      # -- Dialog
+      showModal(modalDialog(inputList(ns, item = item, update = TRUE, colClasses = dm_colClasses(r[[r_data_model]]()), skip = dm_skip(r[[r_data_model]]())),
+                            title = "Update",
+                            footer = tagList(
+                              modalButton("Cancel"),
+                              actionButton(ns("confirm_update_btn"), "Update"))))
+
+    })
+
+    # -- Observe: confirm_create_btn
+    observeEvent(input$confirm_update_btn, {
+
+      cat(MODULE, "[EVENT] Confirm update item \n")
+
+      # -- close modal
+      removeModal()
+
+      # -- get list of input values & name it
+      cat("--  Get list of input values \n")
+      input_values <- get_input_values(input, dm_colClasses(r[[r_data_model]]()))
+
+      # -- create item based on input list
+      cat("--  Create item \n")
+      item <- item_create(values = input_values, data.model = r[[r_data_model]]())
+
+      # -- update item & store
+      cat("--  Update item in list \n")
+      item_list <- item_update(r[[r_items]](), item)
+      #r[[r_items]](item_list)
+
+    })
+
+
+    # --------------------------------------------------------------------------
+    # Delete item(s):
     # --------------------------------------------------------------------------
 
     # -- Declare: delete_btn
-    output$delete_btn <- renderUI({
+    output$delete_btn <- renderUI(
 
       # -- check item selection
       if(is.null(r[[r_selected_items]]()))
         NULL
       else
         actionButton(inputId = ns("delete_btn"),
-                     label = "Delete")
+                     label = "Delete"))
 
-    })
 
     # -- Observe: create_btn
     observeEvent(input$delete_btn, {
@@ -861,7 +916,7 @@ kitemsManager_Server <- function(id, r, file, path,
                             "Danger: deleting item(s) can't be undone! Do you confirm?",
                             footer = tagList(
                               modalButton("Cancel"),
-                              actionButton(ns("confirm_delete_btn"), "Create"))))
+                              actionButton(ns("confirm_delete_btn"), "Delete"))))
 
     })
 

@@ -92,5 +92,9 @@ This sliderInput will trigger a filter on the items to be displayed in the filte
 
 If not implemented in your application's UI, then no date filtered is applied by default.
 
+### Buttons
 
+create item
+update item : single selection
+delete item : support multi selection
 

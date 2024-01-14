@@ -12,6 +12,18 @@ create_BTN <- function(id){
 }
 
 
+# -- BTN: update item
+update_BTN <- function(id){
+
+  # namespace
+  ns <- NS(id)
+
+  # UI
+  uiOutput(ns("update_btn"), inline = TRUE)
+
+}
+
+
 # -- BTN: delete item
 delete_BTN <- function(id){
 
