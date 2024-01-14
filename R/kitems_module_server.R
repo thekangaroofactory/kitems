@@ -269,7 +269,8 @@ kitemsManager_Server <- function(id, r, file, path,
     observeEvent(r[[trigger_delete]](), {
 
       # -- add item to list & store
-      cat(MODULE, "[TRIGGER] Delete item \n")
+      cat(MODULE, "[TRIGGER] Delete item(s) \n")
+      cat("-- Item(s) to be deleted =", as.character(r[[trigger_delete]]()), "\n")
       item_list <- item_delete(r[[r_items]](), r[[trigger_delete]]())
       r[[r_items]](item_list)
 
@@ -813,6 +814,51 @@ kitemsManager_Server <- function(id, r, file, path,
       cat("--  Add item to list \n")
       item_list <- item_add(r[[r_items]](), item)
       r[[r_items]](item_list)
+
+    })
+
+
+    # --------------------------------------------------------------------------
+    # Delete item:
+    # --------------------------------------------------------------------------
+
+    # -- Declare: delete_btn
+    output$delete_btn <- renderUI({
+
+      # -- check item selection
+      if(is.null(r[[r_selected_items]]()))
+        NULL
+      else
+        actionButton(inputId = ns("delete_btn"),
+                     label = "Delete")
+
+    })
+
+    # -- Observe: create_btn
+    observeEvent(input$delete_btn, {
+
+      cat(MODULE, "[EVENT] Delete item(s) \n")
+
+      # -- Open dialog for confirmation
+      showModal(modalDialog(title = "Delete item(s)",
+                            "Danger: deleting item(s) can't be undone! Do you confirm?",
+                            footer = tagList(
+                              modalButton("Cancel"),
+                              actionButton(ns("confirm_delete_btn"), "Create"))))
+
+    })
+
+    # -- Observe: confirm_create_btn
+    observeEvent(input$confirm_delete_btn, {
+
+      cat(MODULE, "[EVENT] Confirm delete item(s) \n")
+
+      # -- close modal
+      removeModal()
+
+      # -- get selected items (ids) & call trigger
+      ids <- r[[r_selected_items]]()
+      r[[trigger_delete]](ids)
 
     })
 
