@@ -49,8 +49,8 @@ body <- dashboardBody(
               column(width = 12,
 
                      h1("Home page"),
-                     h4("Default view:"),
-                     items_view_DT("data_2"),
+                     #h4("Default view:"),
+                     #items_view_DT("data_2"),
                      h4("Filtered view:"),
                      date_slider_INPUT("data_2"),
                      create_BTN("data_2"),
