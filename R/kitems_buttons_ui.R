@@ -7,7 +7,7 @@ create_BTN <- function(id){
   ns <- NS(id)
 
   # UI
-  uiOutput(ns("create_btn"))
+  uiOutput(ns("create_btn"), inline = TRUE)
 
 }
 
@@ -19,6 +19,6 @@ delete_BTN <- function(id){
   ns <- NS(id)
 
   # UI
-  uiOutput(ns("delete_btn"))
+  uiOutput(ns("delete_btn"), inline = TRUE)
 
 }

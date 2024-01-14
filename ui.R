@@ -52,11 +52,19 @@ body <- dashboardBody(
                      #h4("Default view:"),
                      #items_view_DT("data_2"),
                      h4("Filtered view:"),
-                     date_slider_INPUT("data_2"),
+                     date_slider_INPUT("data_2"))),
+
+            fluidRow(
+              column(width = 12,
                      create_BTN("data_2"),
-                     delete_BTN("data_2"),
-                     items_filtered_view_DT("data_2")
-              ))),
+                     delete_BTN("data_2"))),
+
+            br(),
+
+            fluidRow(
+              column(width = 12,
+                     items_filtered_view_DT("data_2")))
+    ),
 
     # -- tabItem
     tabItem(tabName = "data",
