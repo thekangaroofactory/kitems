@@ -364,30 +364,47 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- Default view
     observeEvent(input$default_view_rows_selected, {
 
-      cat(MODULE, "Selected rows (default view) =", input$default_view_rows_selected, "\n")
+      # -- Setting ignoreNULL to FALSE + check to allow unselect all (then r_selected_items will be NULL)
+      if(is.null(input$default_view_rows_selected))
+        ids <- NULL
 
-      # -- Get item ids from the default view
-      ids <- r[[r_items]]()[input$default_view_rows_selected, ]$id
-      cat("-- ids =", as.character(ids), "\n")
+      else {
+
+        cat(MODULE, "Selected rows (default view) =", input$default_view_rows_selected, "\n")
+
+        # -- Get item ids from the default view
+        ids <- r[[r_items]]()[input$default_view_rows_selected, ]$id
+        cat("-- ids =", as.character(ids), "\n")
+
+      }
 
       # -- Store
       r[[r_selected_items]](ids)
 
-    })
+    }, ignoreNULL = FALSE)
+
 
     # -- Filtered view
     observeEvent(input$filtered_view_rows_selected, {
 
-      cat(MODULE, "Selected rows (filtered view) =", input$filtered_view_rows_selected, "\n")
+      # -- Setting ignoreNULL to FALSE + check to allow unselect all (then r_selected_items will be NULL)
+      if(is.null(input$filtered_view_rows_selected))
+        ids <- NULL
 
-      # -- Get item ids from the default view
-      ids <- r[[r_filtered_items]]()[input$filtered_view_rows_selected, ]$id
-      cat("-- ids =", as.character(ids), "\n")
+      else {
+
+        cat(MODULE, "Selected rows (filtered view) =", input$filtered_view_rows_selected, "\n")
+
+        # -- Get item ids from the default view
+        ids <- r[[r_filtered_items]]()[input$filtered_view_rows_selected, ]$id
+        cat("-- ids =", as.character(ids), "\n")
+
+      }
 
       # -- Store
       r[[r_selected_items]](ids)
 
-    })
+    }, ignoreNULL = FALSE)
 
 
     # --------------------------------------------------------------------------
