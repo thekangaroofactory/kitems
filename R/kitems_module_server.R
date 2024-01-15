@@ -867,7 +867,7 @@ kitemsManager_Server <- function(id, r, file, path,
 
     })
 
-    # -- Observe: confirm_create_btn
+    # -- Observe: confirm_update_btn
     observeEvent(input$confirm_update_btn, {
 
       cat(MODULE, "[EVENT] Confirm update item \n")
@@ -879,14 +879,16 @@ kitemsManager_Server <- function(id, r, file, path,
       cat("--  Get list of input values \n")
       input_values <- get_input_values(input, dm_colClasses(r[[r_data_model]]()))
 
+      # -- update id (to replace selected item)
+      input_values$id <- r[[r_selected_items]]()
+
       # -- create item based on input list
       cat("--  Create item \n")
       item <- item_create(values = input_values, data.model = r[[r_data_model]]())
 
       # -- update item & store
-      cat("--  Update item in list \n")
-      item_list <- item_update(r[[r_items]](), item)
-      #r[[r_items]](item_list)
+      cat("--  Call update trigger \n")
+      r[[trigger_update]](item)
 
     })
 

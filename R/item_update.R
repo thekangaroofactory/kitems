@@ -16,8 +16,10 @@ item_update <- function(items, item){
   # -- get target item id
   id <- item$id
 
-  # -- delete then add..
-  items <- item_delete(items, id)
-  items <- item_add(items, item)
+  # -- update row
+  items[items$id == id, ] <- item
+
+  # -- return
+  items
 
 }
