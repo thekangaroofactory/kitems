@@ -91,6 +91,10 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- Get namespace
     ns <- session$ns
 
+    # -- Check paths (to avoid connection problems if missing folder)
+    missing_path <- path_list[!dir.exists(unlist(path_list))]
+    result <- lapply(missing_path, dir.create)
+
 
     # -- Build filename from module id
     dm_url <- file.path(path$resource, paste0(dm_name(id), ".rds"))
@@ -140,24 +144,13 @@ kitemsManager_Server <- function(id, r, file, path,
     items <- NULL
 
     # -- Check for NULL data model (then no reason to try loading)
-    if(!is.null(data.model)){
+    if(!is.null(data.model))
 
-      # -- Extract colClasses from data model (can't use the reactiveVal without wrapper)
-      col.classes <- dm_colClasses(data.model)
-
-      # -- Try load (see read_data for details about returns)
-      items <- kfiles::read_data(file = file,
-                                 path = path$data,
-                                 colClasses = col.classes,
-                                 create = create)
-
-      # -- check output size (will trigger showing the create data btn)
-      if(all(dim(items) == c(0,0)))
-        items <- NULL
-
-      cat(MODULE, "Read data done \n")
-
-    }
+      items <- item_load(data.model = data.model,
+                         file = file,
+                         path = path,
+                         create = create,
+                         MODULE = MODULE)
 
 
     # --------------------------------------------------------------------------
@@ -172,12 +165,20 @@ kitemsManager_Server <- function(id, r, file, path,
       # -- Check feedback (otherwise value is TRUE)
       if(is.data.frame(result)){
 
-        cat("[Warning] Data model not synchronized with items data.frame! \n")
-
         # -- Update data model & save
         data.model <- result
         saveRDS(data.model, file = dm_url)
         cat(MODULE, "Data model saved \n")
+
+        # -- Reload data with updated data model
+        cat(MODULE, "[Warning] Data model not synchronized with items data.frame! \n")
+        cat(MODULE, "Reloading the item data with updated data model \n")
+
+        items <- item_load(data.model = data.model,
+                           file = file,
+                           path = path,
+                           create = create,
+                           MODULE = MODULE)
 
       }}
 
@@ -421,8 +422,17 @@ kitemsManager_Server <- function(id, r, file, path,
       observeEvent(r[[r_items]](), {
 
         # -- Get min/max
-        min <- min(r[[r_items]]()$date)
-        max <- max(r[[r_items]]()$date)
+        if(dim(r[[r_items]]())[1] != 0){
+
+          min <- min(r[[r_items]]()$date)
+          max <- max(r[[r_items]]()$date)
+
+        } else {
+
+          min <- as.Date(Sys.Date())
+          max <- min
+
+        }
 
         # -- Update if needed
         if(min != ifelse(is.null(min_date()), 0, min_date()))

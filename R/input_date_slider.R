@@ -13,16 +13,26 @@
 
 input_date_slider <- function(items, ns){
 
+  cat("Building date sliderInput \n")
+
   # -- define params
-  min <- min(items$date)
-  max <- max(items$date)
-  value <- c(min(items$date), max(items$date))
+  if(dim(items)[1] != 0){
+
+    min <- min(items$date)
+    max <- max(items$date)
+
+  } else {
+
+    min <- as.Date(Sys.Date())
+    max <- min
+
+  }
 
   # -- build & renderinput
   renderUI(sliderInput(inputId = ns("date_slider"),
                        label = "Date",
                        min = min,
                        max = max,
-                       value = value))
+                       value = c(min, max)))
 
 }
