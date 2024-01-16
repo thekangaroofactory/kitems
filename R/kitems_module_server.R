@@ -492,11 +492,45 @@ kitemsManager_Server <- function(id, r, file, path,
     # Create data model:
     # --------------------------------------------------------------------------
 
+    # -- Create from scratch
     output$admin_dm_create <- renderUI(
 
       # check for null data model
       if(is.null(r[[r_data_model]]()))
         actionButton(ns("dm_create"), label = "Create"))
+
+
+    # --------------------------------------------------------------------------
+    # Import data:
+    # --------------------------------------------------------------------------
+
+    # -- Import data
+    output$admin_import_data <- renderUI(
+
+      # check for null data model
+      if(is.null(r[[r_data_model]]()))
+        actionButton(ns("import_data"), label = "Import data"))
+
+
+    # -- Observe: import_data
+    observeEvent(input$import_data, {
+
+      cat(MODULE, "[EVENT] Import data \n")
+
+      # -- Display modal
+      showModal(modalDialog(fileInput(inputId = ns("input_file"),
+                                      label = "Select file",
+                                      multiple = FALSE,
+                                      accept = ".csv",
+                                      buttonLabel = "Browse...",
+                                      placeholder = "No file selected"),
+                            title = "Import data",
+                            footer = tagList(
+                              modalButton("Cancel"),
+                              actionButton(ns("confirm_import_btn"), "Import"))))
+
+    })
+
 
 
     # --------------------------------------------------------------------------
@@ -653,7 +687,7 @@ kitemsManager_Server <- function(id, r, file, path,
     })
 
 
-    # -- BTN create_data
+    # -- BTN dm_create
     observeEvent(input$dm_create, {
 
       cat("[BTN] Create data \n")
