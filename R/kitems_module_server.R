@@ -91,6 +91,10 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- Get namespace
     ns <- session$ns
 
+    # -- Check paths (to avoid connection problems if missing folder)
+    missing_path <- path_list[!dir.exists(unlist(path_list))]
+    result <- lapply(missing_path, dir.create)
+
 
     # -- Build filename from module id
     dm_url <- file.path(path$resource, paste0(dm_name(id), ".rds"))
