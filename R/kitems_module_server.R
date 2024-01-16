@@ -425,8 +425,17 @@ kitemsManager_Server <- function(id, r, file, path,
       observeEvent(r[[r_items]](), {
 
         # -- Get min/max
-        min <- min(r[[r_items]]()$date)
-        max <- max(r[[r_items]]()$date)
+        if(dim(r[[r_items]]())[1] != 0){
+
+          min <- min(r[[r_items]]()$date)
+          max <- max(r[[r_items]]()$date)
+
+        } else {
+
+          min <- as.Date(Sys.Date())
+          max <- min
+
+        }
 
         # -- Update if needed
         if(min != ifelse(is.null(min_date()), 0, min_date()))
