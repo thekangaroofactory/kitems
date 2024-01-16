@@ -5,18 +5,21 @@
 #' @param ns
 #' @param item
 #' @param update
-#' @param colClasses
-#' @param skip
+#' @param data.model
 #'
 #' @return
 #' @export
 #'
 #' @examples
 
-inputList <- function(ns, item = NULL, update = FALSE, colClasses, skip = NULL){
+inputList <- function(ns, item = NULL, update = FALSE, data.model){
 
   cat("[getModalDialog] Building modal dialog \n")
   cat("  - update =", update, "\n")
+
+  # -- get parameters from data model
+  colClasses <- dm_colClasses(data.model)
+  skip <- dm_skip(data.model)
 
 
   # -- helper function
@@ -85,7 +88,8 @@ inputList <- function(ns, item = NULL, update = FALSE, colClasses, skip = NULL){
 
   } else {
 
-    values <- NULL
+    values <- lapply(names(colClasses), function(x) dm_get_default(data.model, x))
+    names(values) <- names(colClasses)
 
   }
 

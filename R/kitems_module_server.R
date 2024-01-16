@@ -803,7 +803,7 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- Observe: create_btn
     observeEvent(input$create_btn, {
 
-      showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, colClasses = dm_colClasses(r[[r_data_model]]()), skip = dm_skip(r[[r_data_model]]())),
+      showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, data.model = r[[r_data_model]]()),
                             title = "Create",
                             footer = tagList(
                               modalButton("Cancel"),
@@ -859,7 +859,7 @@ kitemsManager_Server <- function(id, r, file, path,
       item <- r[[r_items]]()[r[[r_items]]()$id == r[[r_selected_items]](), ]
 
       # -- Dialog
-      showModal(modalDialog(inputList(ns, item = item, update = TRUE, colClasses = dm_colClasses(r[[r_data_model]]()), skip = dm_skip(r[[r_data_model]]())),
+      showModal(modalDialog(inputList(ns, item = item, update = TRUE, data.model = r[[r_data_model]]()),
                             title = "Update",
                             footer = tagList(
                               modalButton("Cancel"),
