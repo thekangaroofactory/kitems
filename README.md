@@ -12,6 +12,18 @@ The goal of this package is to create data model management functions.
 
 
 
+--------------------------------------------------------------------------------
+
+## Reactive Values (accessible from r object)
+
+- r[[r_data_model]]
+- r[[r_items]]
+
+- r[[trigger_add]]
+- r[[trigger_update]]
+- r[[trigger_delete]]
+- r[[trigger_save]]
+
 
 ## Triggers
 
@@ -67,4 +79,22 @@ trigger_delete <- trigger_delete_name(id)
 item_id <- 1704961867683
 r[[trigger_delete]](item_id)
 
+
+--------------------------------------------------------------------------------
+## Inputs
+
+### date_slider_INPUT
+
+If the data model has an attribute named 'date', a date sliderInput will be created automatically
+to enable date filtering.
+
+This sliderInput will trigger a filter on the items to be displayed in the filtered view.
+
+If not implemented in your application's UI, then no date filtered is applied by default.
+
+### Buttons
+
+create item
+update item : single selection
+delete item : support multi selection
 

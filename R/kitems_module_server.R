@@ -100,11 +100,25 @@ kitemsManager_Server <- function(id, r, file, path,
     r_data_model <- dm_name(id)
     r_items <- items_name(id)
 
+    r_filtered_items <- filtered_items_name(id)
+
+    r_selected_items <- selected_items_name(id)
+
+    r_filter_date <- filter_date_name(id)
+
+
     # -- Declare reactive objects (for external use)
     r[[r_items]] <- reactiveVal(NULL)
 
+    r[[r_filtered_items]] <- reactiveVal(NULL)
 
+    r[[r_selected_items]] <- reactiveVal(NULL)
 
+    r[[r_filter_date]] <- reactiveVal(NULL)
+
+    # -- Declare date slider objects
+    min_date <- reactiveVal(NULL)
+    max_date <- reactiveVal(NULL)
 
 
     # --------------------------------------------------------------------------
@@ -255,7 +269,8 @@ kitemsManager_Server <- function(id, r, file, path,
     observeEvent(r[[trigger_delete]](), {
 
       # -- add item to list & store
-      cat(MODULE, "[TRIGGER] Delete item \n")
+      cat(MODULE, "[TRIGGER] Delete item(s) \n")
+      cat("-- Item(s) to be deleted =", as.character(r[[trigger_delete]]()), "\n")
       item_list <- item_delete(r[[r_items]](), r[[trigger_delete]]())
       r[[r_items]](item_list)
 
@@ -277,43 +292,36 @@ kitemsManager_Server <- function(id, r, file, path,
 
 
     # --------------------------------------------------------------------------
-    # Declare views:
+    # Declare filtered items:
     # --------------------------------------------------------------------------
 
-    # -- Item table view
-    view_items <- reactive({
+    # -- Filtered item table view
+    observeEvent({
 
-      if(!is.null(r[[r_items]]())){
+      # -- Multiple conditions!
+      r[[r_items]]()
+      r[[r_filter_date]]()
 
-        # -- Get filter from data model
-        filter_cols <- dm_filter(r[[r_data_model]]())
+    }, {
 
-        # -- Apply filter
-        value <- if(is.null(filter_cols)){
+      cat(MODULE, "Updating filtered item view \n")
 
-          r[[r_items]]()
+      # -- Get items
+      items <- r[[r_items]]()
 
-        } else {
+      # -- Apply date filter
+      filter_date <- r[[r_filter_date]]()
+      if(!is.null(filter_date))
+        items <- items[items$date >= filter_date[1] & items$date <= filter_date[2], ]
 
-          r[[r_items]]()[-which(names(r[[r_items]]()) %in% filter_cols)]
+      # -- Store
+      r[[r_filtered_items]](items)
 
-        }
-
-        # -- Apply attribute/column name mask
-        colnames(value) <- gsub(".", " ", colnames(value), fixed = TRUE)
-        colnames(value) <- gsub("_", " ", colnames(value), fixed = TRUE)
-        colnames(value) <- stringr::str_to_title(colnames(value))
-
-      } else value <- NULL
-
-      # -- Return
-      value
-
-    })
+    }, ignoreInit = FALSE)
 
 
     # --------------------------------------------------------------------------
-    # Declare outputs:
+    # Declare admin outputs:
     # --------------------------------------------------------------------------
 
     # -- Raw view for admin
@@ -322,16 +330,136 @@ kitemsManager_Server <- function(id, r, file, path,
                                           options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
                                           selection = list(mode = 'single', target = "row", selected = NULL))
 
-    # -- Masked view for admin
-    output$view_item_table <- DT::renderDT(view_items(),
+    # -- Masked view for admin (reuse of r_view_items)
+    output$view_item_table <- DT::renderDT(view_apply_masks(r[[r_data_model]](), r[[r_items]]()),
                                            rownames = FALSE,
                                            selection = list(mode = 'single', target = "row", selected = NULL))
 
-    # -- colClasses
+    # -- colClasses for admin
     output$data_model <- DT::renderDT(r[[r_data_model]](),
                                       rownames = TRUE,
                                       options = list(lengthMenu = c(5, 10, 15), pageLength = 10, dom = "t", scrollX = TRUE),
                                       selection = list(mode = 'single', target = "row", selected = NULL))
+
+
+    # --------------------------------------------------------------------------
+    # Declare outputs: Data tables
+    # --------------------------------------------------------------------------
+
+    # -- Default view (reuse of r_view_items, includes dm masks)
+    output$default_view <- DT::renderDT(view_apply_masks(r[[r_data_model]](), r[[r_items]]()),
+                                        rownames = FALSE,
+                                        selection = list(mode = 'multiple', target = "row", selected = NULL))
+
+    # -- Filtered view
+    output$filtered_view <- DT::renderDT(view_apply_masks(r[[r_data_model]](), r[[r_filtered_items]]()),
+                                        rownames = FALSE,
+                                        selection = list(mode = 'multiple', target = "row", selected = NULL))
+
+
+    # --------------------------------------------------------------------------
+    # Managing in table selection
+    # --------------------------------------------------------------------------
+
+    # -- Default view
+    observeEvent(input$default_view_rows_selected, {
+
+      # -- Setting ignoreNULL to FALSE + check to allow unselect all (then r_selected_items will be NULL)
+      if(is.null(input$default_view_rows_selected))
+        ids <- NULL
+
+      else {
+
+        cat(MODULE, "Selected rows (default view) =", input$default_view_rows_selected, "\n")
+
+        # -- Get item ids from the default view
+        ids <- r[[r_items]]()[input$default_view_rows_selected, ]$id
+        cat("-- ids =", as.character(ids), "\n")
+
+      }
+
+      # -- Store
+      r[[r_selected_items]](ids)
+
+    }, ignoreNULL = FALSE)
+
+
+    # -- Filtered view
+    observeEvent(input$filtered_view_rows_selected, {
+
+      # -- Setting ignoreNULL to FALSE + check to allow unselect all (then r_selected_items will be NULL)
+      if(is.null(input$filtered_view_rows_selected))
+        ids <- NULL
+
+      else {
+
+        cat(MODULE, "Selected rows (filtered view) =", input$filtered_view_rows_selected, "\n")
+
+        # -- Get item ids from the default view
+        ids <- r[[r_filtered_items]]()[input$filtered_view_rows_selected, ]$id
+        cat("-- ids =", as.character(ids), "\n")
+
+      }
+
+      # -- Store
+      r[[r_selected_items]](ids)
+
+    }, ignoreNULL = FALSE)
+
+
+    # --------------------------------------------------------------------------
+    # Declare outputs: Inputs
+    # --------------------------------------------------------------------------
+
+    # -- Declare date_slider (check date attribute)
+    if(hasDate(isolate(r[[r_data_model]]()))){
+
+      # -- Declare output
+      output$date_slider <- input_date_slider(isolate(r[[r_items]]()), ns = ns)
+
+      # -- Observe items min/max date
+      observeEvent(r[[r_items]](), {
+
+        # -- Get min/max
+        min <- min(r[[r_items]]()$date)
+        max <- max(r[[r_items]]()$date)
+
+        # -- Update if needed
+        if(min != ifelse(is.null(min_date()), 0, min_date()))
+          min_date(min)
+
+        if(max != ifelse(is.null(max_date()), 0, max_date()))
+          max_date(max)
+
+      }, ignoreInit = TRUE)
+
+      # -- Observe for date range update
+      observeEvent({
+        min_date()
+        max_date()
+      }, {
+
+        cat(MODULE, "Update sliderInput min/max \n")
+
+        # -- update input
+        updateSliderInput(session,
+                          inputId = "date_slider",
+                          min = min_date(),
+                          max = max_date())
+
+      })
+
+    }
+
+    # -- Observe: date_slider
+    observeEvent(input$date_slider, {
+
+      cat(MODULE, "Date sliderInput has been updated: \n")
+      cat("-- values =", input$date_slider, "\n")
+
+      r[[r_filter_date]](input$date_slider)
+
+    })
 
 
     # --------------------------------------------------------------------------
@@ -354,11 +482,11 @@ kitemsManager_Server <- function(id, r, file, path,
     # Create data model:
     # --------------------------------------------------------------------------
 
-    output$create_zone <- renderUI(
+    output$admin_dm_create <- renderUI(
 
       # check for null data model
       if(is.null(r[[r_data_model]]()))
-        actionButton(ns("create_data"), label = "Create"))
+        actionButton(ns("dm_create"), label = "Create"))
 
 
     # --------------------------------------------------------------------------
@@ -366,29 +494,29 @@ kitemsManager_Server <- function(id, r, file, path,
     # --------------------------------------------------------------------------
 
     # -- Toggle btn
-    output$danger_btn <- renderUI(
+    output$dm_danger_btn <- renderUI(
 
       # -- Check for NULL data model
       if(!is.null(r[[r_data_model]]()))
-        shinyWidgets::materialSwitch(inputId = ns("dz_toggle"),
+        shinyWidgets::materialSwitch(inputId = ns("adm_dz_toggle"),
                                      label = "Danger zone",
                                      value = FALSE,
                                      status = "danger"))
 
 
     # -- Observe Toggle btn
-    observeEvent(input$dz_toggle,
+    observeEvent(input$adm_dz_toggle,
 
                  # -- Define output
-                 output$danger_zone <- renderUI(
+                 output$dm_danger_zone <- renderUI(
 
-                   if(input$dz_toggle)
+                   if(input$adm_dz_toggle)
                      shinydashboard::box(title = "Delete attribute", status = "danger", width = 4,
 
                                          tagList(
 
                                            # -- select attribute name
-                                           selectizeInput(inputId = ns("dz_att_name"),
+                                           selectizeInput(inputId = ns("dm_dz_att_name"),
                                                           label = "Name",
                                                           choices = colnames(r[[r_items]]()),
                                                           selected = NULL,
@@ -397,36 +525,36 @@ kitemsManager_Server <- function(id, r, file, path,
                                                                          onInitialize = I('function() { this.setValue(""); }'))),
 
                                            # -- delete
-                                           actionButton(ns("dz_delete_att"), label = "Delete")))))
+                                           actionButton(ns("dm_dz_delete_att"), label = "Delete")))))
 
 
     # -- Observe button: delete attribute
-    observeEvent(input$dz_delete_att, {
+    observeEvent(input$dm_dz_delete_att, {
 
       # -- check
-      req(input$dz_att_name)
+      req(input$dm_dz_att_name)
 
-      cat("[BTN] Delete attribute:", input$dz_att_name, "\n")
+      cat("[BTN] Delete attribute:", input$dm_dz_att_name, "\n")
 
       # -- drop column! & store
       items <- r[[r_items]]()
-      items[input$dz_att_name] <- NULL
+      items[input$dm_dz_att_name] <- NULL
       r[[r_items]](items)
 
       # -- update data model & store
       dm <- r[[r_data_model]]()
-      dm <- dm[dm$name != input$dz_att_name, ]
+      dm <- dm[dm$name != input$dm_dz_att_name, ]
       r[[r_data_model]](dm)
 
     })
 
 
     # --------------------------------------------------------------------------
-    # Create data / add attribute:
+    # Add attribute to data model:
     # --------------------------------------------------------------------------
 
     # -- define inputs
-    output$action_buttons <- renderUI({
+    output$dm_add_att <- renderUI({
 
       # check
       if(is.null(r[[r_items]]()))
@@ -516,7 +644,7 @@ kitemsManager_Server <- function(id, r, file, path,
 
 
     # -- BTN create_data
-    observeEvent(input$create_data, {
+    observeEvent(input$dm_create, {
 
       cat("[BTN] Create data \n")
 
@@ -578,7 +706,7 @@ kitemsManager_Server <- function(id, r, file, path,
     # --------------------------------------------------------------------------
 
     # -- define inputs
-    output$sort_buttons <- renderUI(
+    output$dm_sort_buttons <- renderUI(
 
       # -- check NULL data model
       if(is.null(r[[r_items]]()))
@@ -589,30 +717,30 @@ kitemsManager_Server <- function(id, r, file, path,
         tagList(
 
           # order attribute name
-          selectizeInput(inputId = ns("order_cols"),
+          selectizeInput(inputId = ns("dm_order_cols"),
                          label = "Select cols order",
                          choices = colnames(r[[r_items]]()),
                          selected = colnames(r[[r_items]]()),
                          multiple = TRUE),
 
           # order attribute button
-          actionButton(ns("sort_col"), label = "Reorder"))})
+          actionButton(ns("dm_sort_col"), label = "Reorder"))})
 
 
     # -- BTN sort_col
-    observeEvent(input$sort_col, {
+    observeEvent(input$dm_order_cols, {
 
       # -- Check
-      req(length(input$order_cols) == dim(r[[r_items]]())[2])
+      req(length(input$dm_order_cols) == dim(r[[r_items]]())[2])
 
       cat("[BTN] Reorder column \n")
 
       # -- Reorder items & store
-      r[[r_items]](r[[r_items]]()[input$order_cols])
+      r[[r_items]](r[[r_items]]()[input$dm_order_cols])
 
       # -- Reorder data model & store
       dm <- r[[r_data_model]]()
-      dm <- dm[match(input$order_cols, dm$name), ]
+      dm <- dm[match(input$dm_order_cols, dm$name), ]
       r[[r_data_model]](dm)
 
     })
@@ -623,7 +751,7 @@ kitemsManager_Server <- function(id, r, file, path,
     # --------------------------------------------------------------------------
 
     # inputs
-    output$filter_buttons <- renderUI(
+    output$adm_filter_buttons <- renderUI(
 
       # -- check NULL data model
       if(is.null(r[[r_items]]()))
@@ -640,7 +768,7 @@ kitemsManager_Server <- function(id, r, file, path,
           NULL
 
         # -- define input
-        selectizeInput(inputId = ns("filter_col"),
+        selectizeInput(inputId = ns("adm_filter_col"),
                        label = "Filter columns",
                        choices = colnames(r[[r_items]]()),
                        selected = filter_cols,
@@ -651,14 +779,14 @@ kitemsManager_Server <- function(id, r, file, path,
 
 
     # observe filter input
-    observeEvent(input$filter_col, {
+    observeEvent(input$adm_filter_col, {
 
-      cat("[BTN] Filter columns:", input$filter_col, "\n")
+      cat("[BTN] Filter columns:", input$adm_filter_col, "\n")
       dm <- r[[r_data_model]]()
 
       # -- Check NULL data model
       if(!is.null(dm)){
-        dm <- dm_filter_set(data.model = dm, filter = input$filter_col)
+        dm <- dm_filter_set(data.model = dm, filter = input$adm_filter_col)
         r[[r_data_model]](dm)}
 
     }, ignoreInit = TRUE, ignoreNULL = FALSE)
@@ -668,23 +796,23 @@ kitemsManager_Server <- function(id, r, file, path,
     # Create item:
     # --------------------------------------------------------------------------
 
-    # -- btn: new item
-    output$new_item_btn <- renderUI(actionButton(inputId = ns("new_item_btn"),
-                                                 label = "New item"))
+    # -- Declare: create_btn
+    output$create_btn <- renderUI(actionButton(inputId = ns("create_btn"),
+                                                 label = "Create"))
 
-    # -- new_item_btn
-    observeEvent(input$new_item_btn, {
+    # -- Observe: create_btn
+    observeEvent(input$create_btn, {
 
-      showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, colClasses = dm_colClasses(r[[r_data_model]]()), skip = dm_skip(r[[r_data_model]]())),
+      showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, data.model = r[[r_data_model]]()),
                             title = "Create",
                             footer = tagList(
                               modalButton("Cancel"),
-                              actionButton(ns("create_item"), "Create"))))
+                              actionButton(ns("confirm_create_btn"), "Create"))))
 
     })
 
-    # -- new item
-    observeEvent(input$create_item, {
+    # -- Observe: confirm_create_btn
+    observeEvent(input$confirm_create_btn, {
 
       cat(MODULE, "[EVENT] Create item \n")
 
@@ -705,6 +833,115 @@ kitemsManager_Server <- function(id, r, file, path,
       r[[r_items]](item_list)
 
     })
+
+
+    # --------------------------------------------------------------------------
+    # Update item:
+    # --------------------------------------------------------------------------
+
+    # -- Declare: update_btn
+    output$update_btn <- renderUI(
+
+      # -- check item selection + single row
+      if(is.null(r[[r_selected_items]]()) | length(r[[r_selected_items]]()) != 1)
+        NULL
+      else
+        actionButton(inputId = ns("update_btn"),
+                     label = "Update"))
+
+
+    # -- Observe: update_btn
+    observeEvent(input$update_btn, {
+
+      cat(MODULE, "[EVENT] Update item \n")
+
+      # -- Get selected item
+      item <- r[[r_items]]()[r[[r_items]]()$id == r[[r_selected_items]](), ]
+
+      # -- Dialog
+      showModal(modalDialog(inputList(ns, item = item, update = TRUE, data.model = r[[r_data_model]]()),
+                            title = "Update",
+                            footer = tagList(
+                              modalButton("Cancel"),
+                              actionButton(ns("confirm_update_btn"), "Update"))))
+
+    })
+
+    # -- Observe: confirm_update_btn
+    observeEvent(input$confirm_update_btn, {
+
+      cat(MODULE, "[EVENT] Confirm update item \n")
+
+      # -- close modal
+      removeModal()
+
+      # -- get list of input values & name it
+      cat("--  Get list of input values \n")
+      input_values <- get_input_values(input, dm_colClasses(r[[r_data_model]]()))
+
+      # -- update id (to replace selected item)
+      input_values$id <- r[[r_selected_items]]()
+
+      # -- create item based on input list
+      cat("--  Create item \n")
+      item <- item_create(values = input_values, data.model = r[[r_data_model]]())
+
+      # -- update item & store
+      cat("--  Call update trigger \n")
+      r[[trigger_update]](item)
+
+    })
+
+
+    # --------------------------------------------------------------------------
+    # Delete item(s):
+    # --------------------------------------------------------------------------
+
+    # -- Declare: delete_btn
+    output$delete_btn <- renderUI(
+
+      # -- check item selection
+      if(is.null(r[[r_selected_items]]()))
+        NULL
+      else
+        actionButton(inputId = ns("delete_btn"),
+                     label = "Delete"))
+
+
+    # -- Observe: create_btn
+    observeEvent(input$delete_btn, {
+
+      cat(MODULE, "[EVENT] Delete item(s) \n")
+
+      # -- Open dialog for confirmation
+      showModal(modalDialog(title = "Delete item(s)",
+                            "Danger: deleting item(s) can't be undone! Do you confirm?",
+                            footer = tagList(
+                              modalButton("Cancel"),
+                              actionButton(ns("confirm_delete_btn"), "Delete"))))
+
+    })
+
+    # -- Observe: confirm_create_btn
+    observeEvent(input$confirm_delete_btn, {
+
+      cat(MODULE, "[EVENT] Confirm delete item(s) \n")
+
+      # -- close modal
+      removeModal()
+
+      # -- get selected items (ids) & call trigger
+      ids <- r[[r_selected_items]]()
+      r[[trigger_delete]](ids)
+
+    })
+
+
+    # --------------------------------------------------------------------------
+    # Sandbox:
+    # --------------------------------------------------------------------------
+
+
 
 
   })

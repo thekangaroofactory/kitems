@@ -13,6 +13,8 @@
 
 dm_get_default <- function(data.model, name){
 
+  cat("[dm_get_default] Get default value for attribute:", name, "\n")
+
   # -- get defaults from data model
   default_fun <- data.model[data.model$name == name, ]$default.fun
   default_val <- data.model[data.model$name == name, ]$default.val

@@ -5,48 +5,53 @@
 #' @param ns
 #' @param item
 #' @param update
-#' @param colClasses
-#' @param skip
+#' @param data.model
 #'
 #' @return
 #' @export
 #'
 #' @examples
 
-inputList <- function(ns, item = NULL, update = FALSE, colClasses, skip = NULL){
+inputList <- function(ns, item = NULL, update = FALSE, data.model){
 
   cat("[getModalDialog] Building modal dialog \n")
+  cat("  - update =", update, "\n")
+
+  # -- get parameters from data model
+  colClasses <- dm_colClasses(data.model)
+  skip <- dm_skip(data.model)
+
 
   # -- helper function
-  add_input <- function(x, colClasses){
+  add_input <- function(x, colClasses, value){
 
-    cat("  - Dealing with attribute", x, "type =", colClasses[[x]], "\n")
+    cat("  - Dealing with attribute :", names(colClasses), "/ type =", colClasses, "\n")
 
     # -- character
-    if(colClasses[[x]] == "character")
-      input <- textInput(inputId = ns(names(colClasses[x])),
-                         label = names(colClasses[x]),
-                         value = "character",
+    if(colClasses == "character")
+      input <- textInput(inputId = ns(names(colClasses)),
+                         label = names(colClasses),
+                         value = value,
                          width = NULL,
                          placeholder = NULL)
 
     # -- numeric, integer, double
-    if(colClasses[[x]] %in% c("numeric", "integer", "double"))
+    if(colClasses %in% c("numeric", "integer", "double"))
       input <- numericInput(
-        inputId = ns(names(colClasses[x])),
-        label = "num",
-        value = 0,
+        inputId = ns(names(colClasses)),
+        label = names(colClasses),
+        value = value,
         min = NA,
         max = NA,
         step = NA,
         width = NULL)
 
     # -- date, POSIXct
-    if(colClasses[[x]] %in% c("Date", "POSIXct", "POSIXlt"))
+    if(colClasses %in% c("Date", "POSIXct", "POSIXlt"))
       input <- dateInput(
-        inputId = ns(names(colClasses[x])),
+        inputId = ns(names(colClasses)),
         label = "Date",
-        value = NULL,
+        value = value,
         min = NULL,
         max = NULL,
         format = "yyyy-mm-dd",
@@ -59,10 +64,10 @@ inputList <- function(ns, item = NULL, update = FALSE, colClasses, skip = NULL){
         daysofweekdisabled = NULL)
 
     # -- logical
-    if(colClasses[[x]] == "logical")
-      input <- checkboxInput(inputId = ns(names(colClasses[x])),
+    if(colClasses == "logical")
+      input <- checkboxInput(inputId = ns(names(colClasses)),
                              label = "logical",
-                             value = FALSE,
+                             value = value,
                              width = NULL)
 
     # -- return
@@ -70,12 +75,26 @@ inputList <- function(ns, item = NULL, update = FALSE, colClasses, skip = NULL){
 
   }
 
+
   # -- Filter out attributes in skip param
   cat("  - Filter out attributes to skip:", skip, "\n")
   colClasses <- colClasses[!names(colClasses) %in% skip]
 
+  # -- Define default input values
+  if(update){
+
+    # -- Apply same filter on item to update
+    values <- item[names(colClasses)]
+
+  } else {
+
+    values <- lapply(names(colClasses), function(x) dm_get_default(data.model, x))
+    names(values) <- names(colClasses)
+
+  }
+
   # -- apply helper
-  feedback <- lapply(1:length(colClasses), function(x) add_input(x, colClasses))
+  feedback <- lapply(1:length(colClasses), function(x) add_input(x, colClasses[x], values[[x]]))
 
   # -- output
   tagList(feedback)

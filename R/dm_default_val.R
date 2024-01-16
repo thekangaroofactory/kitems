@@ -13,6 +13,6 @@
 dm_default_val <- function(data.model){
 
   # -- Extract
-  data.model[!is.na(data.model$default_val)]$default_val
+  data.model[!is.na(data.model$default.val)]$default.val
 
 }

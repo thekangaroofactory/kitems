@@ -14,6 +14,6 @@
 item_delete <- function(items, id){
 
   # -- drop item
-  items[items$id != id, ]
+  items[!items$id %in% id, ]
 
 }
