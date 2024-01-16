@@ -13,6 +13,8 @@
 
 input_date_slider <- function(items, ns){
 
+  cat("Building date sliderInput \n")
+
   # -- define params
   if(dim(items)[1] != 0){
 

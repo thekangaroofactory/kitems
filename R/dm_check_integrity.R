@@ -24,6 +24,12 @@ dm_check_integrity <- function(data.model, items){
 
     # -- Get class from data.frame & add attributes
     missing_types <- sapply(items[missing_att], class)
+
+    # -- Force date attribute class to Date (otherwise it's detected as character)
+    if("date" %in% names(missing_types))
+      missing_types[["date"]] <- "Date"
+
+    # -- Add missing attributes
     data.model <- dm_add_attribute(data.model, name = missing_att, type = missing_types)
 
   }
