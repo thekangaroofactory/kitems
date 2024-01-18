@@ -13,7 +13,7 @@
 #' @examples
 
 
-item_load <- function(data.model, file, path, create, MODULE = NULL){
+item_load <- function(data.model, file, path, create){
 
   # -- Extract colClasses from data model
   col.classes <- dm_colClasses(data.model)
@@ -28,7 +28,7 @@ item_load <- function(data.model, file, path, create, MODULE = NULL){
   if(all(dim(items) == c(0,0)))
     items <- NULL
 
-  cat(MODULE, "Read data done \n")
+  cat("Read data done \n")
 
   # -- return
   items
