@@ -10,7 +10,7 @@
 #'
 #' @examples
 
-dm_check_integrity <- function(data.model, items){
+dm_check_integrity <- function(data.model, items, template = NULL){
 
   cat("Checking data model integrity \n")
   integrity <- TRUE
@@ -25,9 +25,14 @@ dm_check_integrity <- function(data.model, items){
     # -- Get class from data.frame & add attributes
     missing_types <- sapply(items[missing_att], class)
 
-    # -- Force date attribute class to Date (otherwise it's detected as character)
-    if("date" %in% names(missing_types))
-      missing_types[["date"]] <- "Date"
+    # -- Force id attribute class to double (otherwise detected as numeric)
+    if("id" %in% names(missing_types))
+      missing_types[["id"]] <- "double"
+
+    # -- Force attribute classes when part of template
+    idx <- match(names(missing_types), template$name)
+    idx <- idx[!is.na(idx)]
+    missing_types[names(missing_types) %in% template$name][] <- template[idx, ]$type
 
     # -- Add missing attributes
     data.model <- dm_add_attribute(data.model, name = missing_att, type = missing_types)
