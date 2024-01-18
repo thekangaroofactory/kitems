@@ -149,8 +149,7 @@ kitemsManager_Server <- function(id, r, file, path,
       items <- item_load(data.model = data.model,
                          file = file,
                          path = path,
-                         create = create,
-                         MODULE = MODULE)
+                         create = create)
 
 
     # --------------------------------------------------------------------------
@@ -160,7 +159,7 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- Check for NULL data mode + data.frame
     if(!is.null(data.model) & !is.null(items)){
 
-      result <- dm_check_integrity(data.model, items)
+      result <- dm_check_integrity(data.model = data.model, items = items, template = TEMPLATE_DATA_MODEL)
 
       # -- Check feedback (otherwise value is TRUE)
       if(is.data.frame(result)){
@@ -177,8 +176,7 @@ kitemsManager_Server <- function(id, r, file, path,
         items <- item_load(data.model = data.model,
                            file = file,
                            path = path,
-                           create = create,
-                           MODULE = MODULE)
+                           create = create)
 
       }}
 
@@ -492,11 +490,102 @@ kitemsManager_Server <- function(id, r, file, path,
     # Create data model:
     # --------------------------------------------------------------------------
 
+    # -- Create from scratch
     output$admin_dm_create <- renderUI(
 
       # check for null data model
       if(is.null(r[[r_data_model]]()))
         actionButton(ns("dm_create"), label = "Create"))
+
+
+    # --------------------------------------------------------------------------
+    # Import data:
+    # --------------------------------------------------------------------------
+
+    # -- Import data
+    output$admin_import_data <- renderUI(
+
+      # check for null data model
+      if(is.null(r[[r_data_model]]()))
+        actionButton(ns("import_data"), label = "Import data"))
+
+
+    # -- Observe: import_data
+    observeEvent(input$import_data, {
+
+      cat(MODULE, "[EVENT] Import data \n")
+
+      # -- Display modal
+      showModal(modalDialog(fileInput(inputId = ns("input_file"),
+                                      label = "Select file",
+                                      multiple = FALSE,
+                                      accept = ".csv",
+                                      buttonLabel = "Browse...",
+                                      placeholder = "No file selected"),
+                            title = "Import data",
+                            footer = tagList(
+                              modalButton("Cancel"),
+                              actionButton(ns("confirm_import_file"), "Next"))))
+
+    })
+
+
+    # -- Observe: confirm_import_file
+    observeEvent(input$confirm_import_file, {
+
+      # -- Check file input
+      req(input$input_file)
+
+      # -- Close modal
+      removeModal()
+
+      # -- Load the data
+      file <- input$input_file
+      items <- kfiles::read_data(file = file$datapath,
+                                 path = NULL,
+                                 colClasses = NA,
+                                 create = FALSE)
+
+      # -- Display modal
+      showModal(modalDialog(renderDT(items),
+                            title = "Import data",
+                            footer = tagList(
+                              modalButton("Cancel"),
+                              actionButton(ns("confirm_import_data"), "Next"))))
+
+      # -- Observe: confirm_import_data
+      observeEvent(input$confirm_import_data, {
+
+        # -- Close modal
+        removeModal()
+
+        # -- Get data model
+        cat("Extract data model from data \n")
+        data.model <- dm_check_integrity(data.model = NULL, items = items, template = TEMPLATE_DATA_MODEL)
+
+        # -- Display modal
+        showModal(modalDialog(p("Data model built from the data:"),
+                              renderDT(data.model),
+                              title = "Import data",
+                              footer = tagList(
+                                modalButton("Cancel"),
+                                actionButton(ns("confirm_data_model"), "Import"))))
+
+        # -- Observe: confirm_data_model
+        observeEvent(input$confirm_data_model, {
+
+          # -- Close modal
+          removeModal()
+
+          # -- Store items & data model
+          r[[r_items]](items)
+          r[[r_data_model]](data.model)
+
+        })
+
+      })
+
+    })
 
 
     # --------------------------------------------------------------------------
@@ -653,7 +742,7 @@ kitemsManager_Server <- function(id, r, file, path,
     })
 
 
-    # -- BTN create_data
+    # -- BTN dm_create
     observeEvent(input$dm_create, {
 
       cat("[BTN] Create data \n")
