@@ -9,7 +9,7 @@ runExample <- function() {
 
   # -- check
   if (appDir == "")
-    stop("Could not find example directory. Try re-installing `mypackage`.", call. = FALSE)
+    stop("Could not find example directory. Try re-installing `kitems`.", call. = FALSE)
 
   # -- run app
   shiny::runApp(appDir, display.mode = "normal")
