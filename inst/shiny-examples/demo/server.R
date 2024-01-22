@@ -14,6 +14,16 @@ shinyServer(
 
 
     # -------------------------------------
+    # Environment
+    # -------------------------------------
+
+    # -- Define path_list
+    path_list <- list(project = "./",
+                      resource = "./resource",
+                      data = "./data")
+
+
+    # -------------------------------------
     # Communication objects
     # -------------------------------------
 
@@ -72,24 +82,6 @@ shinyServer(
 
     output$menu <- renderMenu(dynamic_sidebar(r))
 
-
-    # -------------------------------------
-    # SAND BOX
-    # -------------------------------------
-
-    # id <- "data_2"
-    #
-    # r_data_model <- dm_name(id)
-    # trigger_delete <- trigger_delete_name(id)
-    #
-    # observeEvent(r$data_2_items(), {
-    #
-    #   cat("*** SAND BOX: delete item \n")
-    #
-    #   item <- 1704961867683
-    #   r[[trigger_delete]](item)
-    #
-    # })
 
   }
 )
