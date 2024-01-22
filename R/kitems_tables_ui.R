@@ -1,5 +1,13 @@
 
 
+#' Title
+#'
+#' @param id
+#'
+#' @return
+#' @export
+#'
+#' @examples
 
 items_view_DT <- function(id){
 
@@ -12,6 +20,14 @@ items_view_DT <- function(id){
 }
 
 
+#' Title
+#'
+#' @param id
+#'
+#' @return
+#' @export
+#'
+#' @examples
 
 items_filtered_view_DT <- function(id){
 

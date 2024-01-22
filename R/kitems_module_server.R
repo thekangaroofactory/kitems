@@ -10,6 +10,7 @@
 #' @param create
 #' @param autosave
 #'
+#' @export
 #'
 #' @details
 #'

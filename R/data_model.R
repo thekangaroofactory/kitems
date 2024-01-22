@@ -10,6 +10,8 @@
 #'
 #' @return a data.frame containing the data model.
 #'
+#' @export
+#'
 #' @details
 #' colClasses will be used to create the data.frame: names will define the attributes of the data model,
 #' and values will define the class (type) of the attributes.

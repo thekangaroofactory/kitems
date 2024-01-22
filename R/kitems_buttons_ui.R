@@ -1,6 +1,16 @@
 
 
 # -- BTN: create item
+
+#' Title
+#'
+#' @param id
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
 create_BTN <- function(id){
 
   # namespace
@@ -13,6 +23,16 @@ create_BTN <- function(id){
 
 
 # -- BTN: update item
+
+#' Title
+#'
+#' @param id
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
 update_BTN <- function(id){
 
   # namespace
@@ -25,6 +45,16 @@ update_BTN <- function(id){
 
 
 # -- BTN: delete item
+
+#' Title
+#'
+#' @param id
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
 delete_BTN <- function(id){
 
   # namespace
