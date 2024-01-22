@@ -6,7 +6,6 @@
 
 # -- Load packages
 library(shiny)
-library(DT)
 
 
 # -- Define server logic

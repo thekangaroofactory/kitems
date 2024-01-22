@@ -7,18 +7,11 @@
 # -- Library
 library(shiny)
 library(shinydashboard)
-library(DT)
 
 
 # --------------------------------------------------------------------------------
 # Define Sidebar UI
 # --------------------------------------------------------------------------------
-
-# sidebar <- dashboardSidebar(
-#   sidebarMenu(
-#     menuItem("Template", tabName = "template", icon = icon("dashboard"), selected = TRUE),
-#     menuItem("Try", tabName = "try", icon = icon("tasks"))),
-#   collapsed = FALSE)
 
 sidebar <- dashboardSidebar(
 
