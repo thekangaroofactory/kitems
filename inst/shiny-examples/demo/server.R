@@ -1,15 +1,11 @@
 
 
-# --------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # This is the server logic of the Shiny web application
-# --------------------------------------------------------------------------------
-
-# -- Load packages
-library(shiny)
-
+# ------------------------------------------------------------------------------
 
 # -- Define server logic
-shinyServer(
+shiny::shinyServer(
   function(input, output, session){
 
 
@@ -28,7 +24,7 @@ shinyServer(
     # -------------------------------------
 
     # -- declare r communication object
-    r <- reactiveValues()
+    r <- shiny::reactiveValues()
 
 
     # -------------------------------------
@@ -36,7 +32,7 @@ shinyServer(
     # -------------------------------------
 
     # -- start module server: data
-    kitemsManager_Server(id = "data", r = r, path = path_list, file = "my_data.csv",
+    kitems::kitemsManager_Server(id = "data", r = r, path = path_list, file = "my_data.csv",
                          data.model = NULL,
                          create = TRUE, autosave = TRUE)
 
@@ -49,10 +45,10 @@ shinyServer(
     skip <- c("id")
 
     # -- build data model
-    dm <- data_model(colClasses, default.val, default.fun, filter, skip)
+    dm <- kitems::data_model(colClasses, default.val, default.fun, filter, skip)
 
     # -- start module server: data_2
-    kitemsManager_Server(id = "data_2", r = r, path = path_list, file = "my_data_2.csv",
+    kitems::kitemsManager_Server(id = "data_2", r = r, path = path_list, file = "my_data_2.csv",
                          data.model = dm,
                          create = TRUE, autosave = TRUE)
 
@@ -62,14 +58,14 @@ shinyServer(
     # -------------------------------------
 
     # -- data
-    observeEvent(r$data_items(), {
+    shiny::observeEvent(r$data_items(), {
 
       cat("Main server observer: data_items() has just been updated \n")
 
     })
 
     # -- data_2
-    observeEvent(r$data_2_items(), {
+    shiny::observeEvent(r$data_2_items(), {
 
       cat("Main server observer: data2_items() has just been updated \n")
 
@@ -80,7 +76,7 @@ shinyServer(
     # Generate dynamic sidebar
     # -------------------------------------
 
-    output$menu <- renderMenu(dynamic_sidebar(r))
+    output$menu <- shinydashboard::renderMenu(dynamic_sidebar(r))
 
 
   }
