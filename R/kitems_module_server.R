@@ -547,7 +547,7 @@ kitemsManager_Server <- function(id, r, file, path,
                                  create = FALSE)
 
       # -- Display modal
-      showModal(modalDialog(renderDT(items),
+      showModal(modalDialog(DT::renderDT(items),
                             title = "Import data",
                             footer = tagList(
                               modalButton("Cancel"),
@@ -565,7 +565,7 @@ kitemsManager_Server <- function(id, r, file, path,
 
         # -- Display modal
         showModal(modalDialog(p("Data model built from the data:"),
-                              renderDT(data.model),
+                              DT::renderDT(data.model),
                               title = "Import data",
                               footer = tagList(
                                 modalButton("Cancel"),
