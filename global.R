@@ -15,11 +15,5 @@ path_list <- list(project = "./",
 # Source code
 # ------------------------------------------------------------------------------
 
-# -- Source scripts
-cat("Source code from:", path_list$script, " \n")
-for (nm in list.files(path_list$script, full.names = TRUE, recursive = TRUE, include.dirs = FALSE))
-{
-  source(nm, encoding = 'UTF-8')
-}
-rm(nm)
-
+# *** TO BE REMOVED ***
+pkgload::load_all()
