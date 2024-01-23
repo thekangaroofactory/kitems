@@ -9,6 +9,7 @@
 #' @export
 #'
 #' @examples
+#' item_create(values, data.model = mydatamodel)
 
 
 # -- function definition
