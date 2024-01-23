@@ -1,29 +1,33 @@
 
 
-#' Title
+#' Add attribute to existing items
 #'
-#' @param x
-#' @param name
-#' @param type
-#' @param fill
+#' @param items a data.frame of the items
+#' @param name a character string of the attribute name
+#' @param type a character string of the attribute type
+#' @param fill the value (default = NA) to be used to fill the existing rows
 #'
-#' @return
+#' @return the updated items data.frame
 #' @export
 #'
+#' @details
+#' fill will be coerced to the class name provided in type
+#'
 #' @examples
+#' item_add_attribute(items = myitems, name = "comment", type = "character", fill = "none")
 
-item_add_attribute <- function(x, name, type, fill = NA){
+item_add_attribute <- function(items, name, type, fill = NA){
 
   # -- Check dim
-  if(dim(x)[1] == 0){
+  if(dim(items)[1] == 0){
 
     # -- Get col names and add
-    cols <- colnames(x)
+    cols <- colnames(items)
     cols[length(cols) + 1] <- name
 
     # -- Build new empty df and set names
-    x <- data.frame(matrix(ncol = length(cols), nrow = 0))
-    colnames(x) <- cols
+    items <- data.frame(matrix(ncol = length(cols), nrow = 0))
+    colnames(items) <- cols
 
   } else {
 
@@ -34,11 +38,11 @@ item_add_attribute <- function(x, name, type, fill = NA){
     str(value)
 
     # -- Add col
-    x[name] <- value
+    items[name] <- value
 
   }
 
   # -- Return
-  x
+  items
 
 }
