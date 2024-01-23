@@ -1,12 +1,13 @@
 
 
-#' Title
+#' Test date attribute
 #'
-#' @param data.model
+#' @param data.model a data.frame containing the data model
 #'
-#' @return
+#' @return a logical, TRUE if data model has an attribute 'date' (exact match)
 #'
 #' @examples
+#' hasDate(data.model = mydatamodel)
 
 
 hasDate <- function(data.model){

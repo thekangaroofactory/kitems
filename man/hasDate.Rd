@@ -2,13 +2,19 @@
 % Please edit documentation in R/hasDate.R
 \name{hasDate}
 \alias{hasDate}
-\title{Title}
+\title{Test date attribute}
 \usage{
 hasDate(data.model)
 }
 \arguments{
-\item{data.model}{}
+\item{data.model}{a data.frame containing the data model}
+}
+\value{
+a logical, TRUE if data model has an attribute 'date' (exact match)
 }
 \description{
-Title
+Test date attribute
+}
+\examples{
+hasDate(data.model = mydatamodel)
 }
