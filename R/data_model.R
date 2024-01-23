@@ -26,8 +26,14 @@
 #'
 #' @examples
 #' data_model(colClasses, default.val, default.fun)
-#' order in vectors
+#'
+#' # order in vectors doesn't matter:
+#' default.val <- c("name" = "test", "total" = 2)
+#' default.val <- c("total" = 2, "name" = "test")
+#'
 #' no need to set all values
+#' colClasses <- c("id" = "double", "name" = "character", "total" = "numeric")
+#' default.val <- c("name" = "test", "total" = 2)
 #'
 
 

@@ -2,13 +2,19 @@
 % Please edit documentation in R/kitems_names.R
 \name{trigger_delete_name}
 \alias{trigger_delete_name}
-\title{Title}
+\title{Trigger delete name}
 \usage{
 trigger_delete_name(id)
 }
 \arguments{
-\item{id}{}
+\item{id}{the id of the module server instance}
+}
+\value{
+the name of the corresponding reactive value
 }
 \description{
-Title
+Trigger delete name
+}
+\examples{
+trigger_delete_name(id = "mydata")
 }

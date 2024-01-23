@@ -1,21 +1,29 @@
 
 
-#' Title
+#' Module server
 #'
-#' @param id
-#' @param r
-#' @param file
-#' @param path
-#' @param data.model
-#' @param create
-#' @param autosave
+#' @param id the id to be used for the module server instance
+#' @param r the shared reactive value communication object
+#' @param file the file name to be used for persistent data
+#' @param path a path list containing "data" and "resources" (see details)
+#' @param data.model a data.frame of the data model (default = NULL)
+#' @param create a logical whether the data file should be created or not if missing (default = TRUE)
+#' @param autosave a logical whether the item auto save should be activated or not (default = TRUE)
 #'
 #' @export
 #'
 #' @details
+#' The path list should contain "data" (where the item data.frame will be stored as a .csv file)
+#' as well as "ressources" (where the data model .rds file will be stored)
 #'
+#' If data.model is NULL, then no data model will be initialized and the create button will be
+#' available in the data model admin UI
+#'
+#' If autosave is FALSE, the save trigger should be used to make the data persistent
 #'
 #' @examples
+#' kitemsManager_Server(id = "mydata", r = r, file = "mydata.csv", path = "path/to/my/data",
+#'                      data.model = NULL, create = TRUE, autosave = TRUE)
 
 
 # ------------------------------------------------------------------------------

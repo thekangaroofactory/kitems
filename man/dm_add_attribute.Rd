@@ -2,7 +2,7 @@
 % Please edit documentation in R/dm_add_attribute.R
 \name{dm_add_attribute}
 \alias{dm_add_attribute}
-\title{Title}
+\title{Add attribute to a data model}
 \usage{
 dm_add_attribute(
   data.model,
@@ -15,8 +15,31 @@ dm_add_attribute(
 )
 }
 \arguments{
-\item{filter}{}
+\item{data.model}{a \emph{mandatory} data model, structured as an output of data_model() function}
+
+\item{name}{a \emph{mandatory} character string for the new attribute name}
+
+\item{type}{a \emph{mandatory} character string for the new attribute type}
+
+\item{default.val}{an optional default value}
+
+\item{default.fun}{an optional default function}
+
+\item{skip}{an optional logical value (default = FALSE) if the attribute should be skipped in the input form}
+
+\item{filter}{an optional logical value (default = FALSE) if the attribute should be masked in the filtered view}
+}
+\value{
+the updated data model
 }
 \description{
-Title
+Add attribute to a data model
+}
+\examples{
+
+dm_add_attribute(data.model = mydatamodel, name = "new_attribute", type = "character")
+dm_add_attribute(data.model = mydatamodel, name = "total", type = "double", default.val = 0)
+dm_add_attribute(data.model = mydatamodel, name = "date", type = "Date", default.fun = "Sys.Date")
+dm_add_attribute(data.model = mydatamodel, name = "progress", type = "integer", skip = TRUE)
+dm_add_attribute(data.model = mydatamodel, name = "internal", type = "logical", filter = TRUE)
 }

@@ -2,13 +2,19 @@
 % Please edit documentation in R/kitems_names.R
 \name{dm_name}
 \alias{dm_name}
-\title{Title}
+\title{Data model name}
 \usage{
 dm_name(id)
 }
 \arguments{
-\item{id}{}
+\item{id}{the id of the module server instance}
+}
+\value{
+the name of the corresponding reactive value
 }
 \description{
-Title
+Data model name
+}
+\examples{
+dm_name(id = "mydata")
 }

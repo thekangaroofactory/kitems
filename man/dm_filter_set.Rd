@@ -2,13 +2,21 @@
 % Please edit documentation in R/dm_filter_set.R
 \name{dm_filter_set}
 \alias{dm_filter_set}
-\title{Title}
+\title{Set data model attribute filter}
 \usage{
 dm_filter_set(data.model, filter)
 }
 \arguments{
-\item{filter}{}
+\item{data.model}{a data.frame containing the data model}
+
+\item{filter}{a character vector with the name of the attributes to be filtered}
+}
+\value{
+an updated data model
 }
 \description{
-Title
+Set data model attribute filter
+}
+\examples{
+dm_filter_set(data.model = mydatamodel, filter = c("id", "internal"))
 }

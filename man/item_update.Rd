@@ -2,13 +2,24 @@
 % Please edit documentation in R/item_update.R
 \name{item_update}
 \alias{item_update}
-\title{Title}
+\title{Update item}
 \usage{
 item_update(items, item)
 }
 \arguments{
-\item{item}{}
+\item{items}{a data.frame of the items}
+
+\item{item}{the items to be updated}
+}
+\value{
+an updated data.frame of the items
 }
 \description{
-Title
+Update item
+}
+\details{
+The item$id value will be used to replace the corresponding item in the items data.frame
+}
+\examples{
+item_update(items = myitems, item = myupdateditem)
 }

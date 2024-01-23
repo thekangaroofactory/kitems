@@ -2,13 +2,19 @@
 % Please edit documentation in R/dm_filter.R
 \name{dm_filter}
 \alias{dm_filter}
-\title{Title}
+\title{Extract filters from data model}
 \usage{
 dm_filter(data.model)
 }
 \arguments{
-\item{data.model}{}
+\item{data.model}{a data.frame containing the data model}
+}
+\value{
+a named vector of the attribute filters
 }
 \description{
-Title
+Extract filters from data model
+}
+\examples{
+dm_filter(data.model = mydatamodel)
 }

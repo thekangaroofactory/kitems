@@ -2,13 +2,19 @@
 % Please edit documentation in R/kitems_buttons_ui.R
 \name{delete_BTN}
 \alias{delete_BTN}
-\title{Title}
+\title{Delete item button}
 \usage{
 delete_BTN(id)
 }
 \arguments{
-\item{id}{}
+\item{id}{the server module id}
+}
+\value{
+a rendered actionButton
 }
 \description{
-Title
+Delete item button
+}
+\examples{
+delete_BTN(id = "mydata")
 }

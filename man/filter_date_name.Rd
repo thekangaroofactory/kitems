@@ -2,13 +2,19 @@
 % Please edit documentation in R/kitems_names.R
 \name{filter_date_name}
 \alias{filter_date_name}
-\title{Title}
+\title{Filter date name}
 \usage{
 filter_date_name(id)
 }
 \arguments{
-\item{id}{}
+\item{id}{the id of the module server instance}
+}
+\value{
+the name of the corresponding reactive value
 }
 \description{
-Title
+Filter date name
+}
+\examples{
+filter_date_name(id = "mydata")
 }

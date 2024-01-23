@@ -1,13 +1,14 @@
 
 
-#' Title
+#' Default view
 #'
-#' @param id
+#' @param id the id of the module server instance
 #'
-#' @return
+#' @return a rendered DT data table
 #' @export
 #'
 #' @examples
+#' items_view_DT(id = "mydata")
 
 items_view_DT <- function(id){
 
@@ -20,14 +21,15 @@ items_view_DT <- function(id){
 }
 
 
-#' Title
+#' Filtered view
 #'
-#' @param id
+#' @param id the id of the module server instance
 #'
-#' @return
+#' @return a rendered DT data table
 #' @export
 #'
 #' @examples
+#' items_filtered_view_DT(id = "mydata")
 
 items_filtered_view_DT <- function(id){
 

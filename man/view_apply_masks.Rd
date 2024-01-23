@@ -2,13 +2,28 @@
 % Please edit documentation in R/view_apply_masks.R
 \name{view_apply_masks}
 \alias{view_apply_masks}
-\title{Title}
+\title{Apply mask}
 \usage{
 view_apply_masks(data.model, items)
 }
 \arguments{
-\item{items}{}
+\item{data.model}{a data.frame of the data model}
+
+\item{items}{a data.frame of the items}
+}
+\value{
+a data.frame of the items with applied masks
 }
 \description{
-Title
+Apply mask
+}
+\details{
+Two masks are applied:
+\itemize{
+\item the data model masks (filter = TRUE)
+\item a default mask (replace . and _ by a space in the attribute names, plus capitalize first letter)
+}
+}
+\examples{
+view_apply_masks(data.model = "mydatamodel", items = "myitems")
 }

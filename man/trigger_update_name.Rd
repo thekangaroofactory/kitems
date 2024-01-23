@@ -2,13 +2,19 @@
 % Please edit documentation in R/kitems_names.R
 \name{trigger_update_name}
 \alias{trigger_update_name}
-\title{Title}
+\title{Trigger update name}
 \usage{
 trigger_update_name(id)
 }
 \arguments{
-\item{id}{}
+\item{id}{the id of the module server instance}
+}
+\value{
+the name of the corresponding reactive value
 }
 \description{
-Title
+Trigger update name
+}
+\examples{
+trigger_update_name(id = "mydata")
 }

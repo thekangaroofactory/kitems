@@ -2,13 +2,19 @@
 % Please edit documentation in R/dm_get_list.R
 \name{dm_get_list}
 \alias{dm_get_list}
-\title{Title}
+\title{Available data models}
 \usage{
 dm_get_list(r)
 }
 \arguments{
-\item{r}{}
+\item{r}{the shared reactive communication object}
+}
+\value{
+a vector with the names (ids) of the data models available in session
 }
 \description{
-Title
+Available data models
+}
+\examples{
+dm_get_list(r)
 }

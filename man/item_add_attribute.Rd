@@ -2,13 +2,28 @@
 % Please edit documentation in R/item_add_attribute.R
 \name{item_add_attribute}
 \alias{item_add_attribute}
-\title{Title}
+\title{Add attribute to existing items}
 \usage{
-item_add_attribute(x, name, type, fill = NA)
+item_add_attribute(items, name, type, fill = NA)
 }
 \arguments{
-\item{fill}{}
+\item{items}{a data.frame of the items}
+
+\item{name}{a character string of the attribute name}
+
+\item{type}{a character string of the attribute type}
+
+\item{fill}{the value (default = NA) to be used to fill the existing rows}
+}
+\value{
+the updated items data.frame
 }
 \description{
-Title
+Add attribute to existing items
+}
+\details{
+fill will be coerced to the class name provided in type
+}
+\examples{
+item_add_attribute(items = myitems, name = "comment", type = "character", fill = "none")
 }

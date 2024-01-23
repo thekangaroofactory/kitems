@@ -2,13 +2,19 @@
 % Please edit documentation in R/kitems_names.R
 \name{filtered_items_name}
 \alias{filtered_items_name}
-\title{Title}
+\title{Filtered items name}
 \usage{
 filtered_items_name(id)
 }
 \arguments{
-\item{id}{}
+\item{id}{the id of the module server instance}
+}
+\value{
+the name of the corresponding reactive value
 }
 \description{
-Title
+Filtered items name
+}
+\examples{
+filtered_items_name(id = "mydata")
 }

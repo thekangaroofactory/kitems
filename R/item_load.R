@@ -1,16 +1,17 @@
 
 
-#' Title
+#' Load data
 #'
-#' @param data.model
-#' @param file
-#' @param path
-#' @param create
+#' @param data.model a data.frame containing the data model
+#' @param file the file name
+#' @param path the path to the file
+#' @param create a logical to indicate if missing file should be created or not
 #'
-#' @return
+#' @return the data (items)
 #' @export
 #'
 #' @examples
+#' item_load(data.model = mydatamodel, file = "mydata.csv", path = "path/to/my/data", create = TRUE)
 
 
 item_load <- function(data.model, file, path, create){

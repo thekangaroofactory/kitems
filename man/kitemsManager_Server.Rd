@@ -2,7 +2,7 @@
 % Please edit documentation in R/kitems_module_server.R
 \name{kitemsManager_Server}
 \alias{kitemsManager_Server}
-\title{Title}
+\title{Module server}
 \usage{
 kitemsManager_Server(
   id,
@@ -15,8 +15,33 @@ kitemsManager_Server(
 )
 }
 \arguments{
-\item{autosave}{}
+\item{id}{the id to be used for the module server instance}
+
+\item{r}{the shared reactive value communication object}
+
+\item{file}{the file name to be used for persistent data}
+
+\item{path}{a path list containing "data" and "resources" (see details)}
+
+\item{data.model}{a data.frame of the data model (default = NULL)}
+
+\item{create}{a logical whether the data file should be created or not if missing (default = TRUE)}
+
+\item{autosave}{a logical whether the item auto save should be activated or not (default = TRUE)}
 }
 \description{
-Title
+Module server
+}
+\details{
+The path list should contain "data" (where the item data.frame will be stored as a .csv file)
+as well as "ressources" (where the data model .rds file will be stored)
+
+If data.model is NULL, then no data model will be initialized and the create button will be
+available in the data model admin UI
+
+If autosave is FALSE, the save trigger should be used to make the data persistent
+}
+\examples{
+kitemsManager_Server(id = "mydata", r = r, file = "mydata.csv", path = "path/to/my/data",
+                     data.model = NULL, create = TRUE, autosave = TRUE)
 }

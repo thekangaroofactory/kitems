@@ -1,13 +1,14 @@
 
 
-#' Data model admin page
+#' Data model admin UI
 #'
-#' @param id
+#' @param id the module id
 #'
-#' @return
+#' @return a tagList() object to admin the data model
 #' @export
 #'
 #' @examples
+#' admin_ui(id = "mydata")
 
 admin_ui <- function(id){
 

@@ -17,3 +17,6 @@ a data.frame of the new item, coerced to match with colClasses
 \description{
 Create a new item
 }
+\examples{
+item_create(values, data.model = mydatamodel)
+}

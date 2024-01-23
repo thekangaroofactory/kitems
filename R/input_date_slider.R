@@ -1,14 +1,18 @@
 
 
-#' Title
+#' Build date sliderInput
 #'
-#' @param items
-#' @param ns
+#' @param items a data.frame of the items
+#' @param ns the namespace function
 #'
-#' @return
+#' @return a rendered sliderInput
 #' @export
 #'
+#' @details
+#' The min and max values are set to the min() and max() of items$date
+#'
 #' @examples
+#' input_date_slider(items = myitems, ns = shiny::NS())
 
 
 input_date_slider <- function(items, ns){

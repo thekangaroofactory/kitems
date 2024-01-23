@@ -1,13 +1,14 @@
 
 
-#' Title
+#' Generate dynamic menuItem
 #'
-#' @param r
+#' @param r the reactive shared communication object
 #'
-#' @return
+#' @return a sidebarMenu menuItem object with one menuSubItem per data model
 #' @export
 #'
 #' @examples
+#' dynamic_sidebar(r)
 
 
 dynamic_sidebar <- function(r){

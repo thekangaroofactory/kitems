@@ -2,13 +2,19 @@
 % Please edit documentation in R/dm_skip.R
 \name{dm_skip}
 \alias{dm_skip}
-\title{Title}
+\title{Extract skipped attributes}
 \usage{
 dm_skip(data.model)
 }
 \arguments{
-\item{data.model}{}
+\item{data.model}{a data.frame containing the data model}
+}
+\value{
+a vector containing the names of the attributes to skip (or NULL if data.model is NULL)
 }
 \description{
-Title
+Extract skipped attributes
+}
+\examples{
+dm_skip(data.model = mydatamodel)
 }

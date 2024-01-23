@@ -2,13 +2,19 @@
 % Please edit documentation in R/kitems_buttons_ui.R
 \name{create_BTN}
 \alias{create_BTN}
-\title{Title}
+\title{Create item button}
 \usage{
 create_BTN(id)
 }
 \arguments{
-\item{id}{}
+\item{id}{the server module id}
+}
+\value{
+a rendered actionButton
 }
 \description{
-Title
+Create item button
+}
+\examples{
+create_BTN(id = "mydata")
 }

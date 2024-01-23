@@ -2,14 +2,15 @@
 
 # -- BTN: create item
 
-#' Title
+#' Create item button
 #'
-#' @param id
+#' @param id the server module id
 #'
-#' @return
+#' @return a rendered actionButton
 #' @export
 #'
 #' @examples
+#' create_BTN(id = "mydata")
 
 create_BTN <- function(id){
 
@@ -24,14 +25,15 @@ create_BTN <- function(id){
 
 # -- BTN: update item
 
-#' Title
+#' Update item button
 #'
-#' @param id
+#' @param id the server module id
 #'
-#' @return
+#' @return a rendered actionButton
 #' @export
 #'
 #' @examples
+#' update_BTN(id = "mydata")
 
 update_BTN <- function(id){
 
@@ -46,14 +48,15 @@ update_BTN <- function(id){
 
 # -- BTN: delete item
 
-#' Title
+#' Delete item button
 #'
-#' @param id
+#' @param id the server module id
 #'
-#' @return
+#' @return a rendered actionButton
 #' @export
 #'
 #' @examples
+#' delete_BTN(id = "mydata")
 
 delete_BTN <- function(id){
 

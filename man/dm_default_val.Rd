@@ -2,13 +2,19 @@
 % Please edit documentation in R/dm_default_val.R
 \name{dm_default_val}
 \alias{dm_default_val}
-\title{Title}
+\title{Extract default values from data model}
 \usage{
 dm_default_val(data.model)
 }
 \arguments{
-\item{data.model}{}
+\item{data.model}{a data.frame containing the data model}
+}
+\value{
+a named vector of the attribute default values
 }
 \description{
-Title
+Extract default values from data model
+}
+\examples{
+dm_default_val(data.model = mydatamodel)
 }

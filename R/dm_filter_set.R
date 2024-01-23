@@ -1,14 +1,15 @@
 
 
-#' Title
+#' Set data model attribute filter
 #'
-#' @param data.model
-#' @param filter
+#' @param data.model a data.frame containing the data model
+#' @param filter a character vector with the name of the attributes to be filtered
 #'
-#' @return
+#' @return an updated data model
 #' @export
 #'
 #' @examples
+#' dm_filter_set(data.model = mydatamodel, filter = c("id", "internal"))
 
 
 dm_filter_set <- function(data.model, filter){

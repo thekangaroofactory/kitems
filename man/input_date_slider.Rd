@@ -2,13 +2,24 @@
 % Please edit documentation in R/input_date_slider.R
 \name{input_date_slider}
 \alias{input_date_slider}
-\title{Title}
+\title{Build date sliderInput}
 \usage{
 input_date_slider(items, ns)
 }
 \arguments{
-\item{ns}{}
+\item{items}{a data.frame of the items}
+
+\item{ns}{the namespace function}
+}
+\value{
+a rendered sliderInput
 }
 \description{
-Title
+Build date sliderInput
+}
+\details{
+The min and max values are set to the min() and max() of items$date
+}
+\examples{
+input_date_slider(items = myitems, ns = shiny::NS())
 }

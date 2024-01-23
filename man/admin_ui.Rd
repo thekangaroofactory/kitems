@@ -2,13 +2,19 @@
 % Please edit documentation in R/kitems_admin_ui.R
 \name{admin_ui}
 \alias{admin_ui}
-\title{Data model admin page}
+\title{Data model admin UI}
 \usage{
 admin_ui(id)
 }
 \arguments{
-\item{id}{}
+\item{id}{the module id}
+}
+\value{
+a tagList() object to admin the data model
 }
 \description{
-Data model admin page
+Data model admin UI
+}
+\examples{
+admin_ui(id = "mydata")
 }

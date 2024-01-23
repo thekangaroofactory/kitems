@@ -1,14 +1,20 @@
 
 
-#' Title
+#' Apply mask
 #'
-#' @param data.model
-#' @param items
+#' @param data.model a data.frame of the data model
+#' @param items a data.frame of the items
 #'
-#' @return
+#' @return a data.frame of the items with applied masks
 #' @export
 #'
+#' @details
+#' Two masks are applied:
+#' - the data model masks (filter = TRUE)
+#' - a default mask (replace . and _ by a space in the attribute names, plus capitalize first letter)
+#'
 #' @examples
+#' view_apply_masks(data.model = "mydatamodel", items = "myitems")
 
 view_apply_masks <- function(data.model, items){
 

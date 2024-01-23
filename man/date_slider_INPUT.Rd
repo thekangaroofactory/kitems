@@ -2,13 +2,19 @@
 % Please edit documentation in R/kitems_inputs_ui.R
 \name{date_slider_INPUT}
 \alias{date_slider_INPUT}
-\title{Title}
+\title{Date sliderInput}
 \usage{
 date_slider_INPUT(id)
 }
 \arguments{
-\item{id}{}
+\item{id}{the server module id}
+}
+\value{
+a rendered sliderInput
 }
 \description{
-Title
+Date sliderInput
+}
+\examples{
+date_slider_INPUT(id = "mydata")
 }

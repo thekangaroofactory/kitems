@@ -1,108 +1,117 @@
 
 
-#' Title
+#' Data model name
 #'
-#' @param id
+#' @param id the id of the module server instance
 #'
-#' @return
+#' @return the name of the corresponding reactive value
 #' @export
 #'
 #' @examples
+#' dm_name(id = "mydata")
 
 dm_name <- function(id){paste0(id, "_data_model")}
 
 
-#' Title
+#' Items name
 #'
-#' @param id
+#' @param id the id of the module server instance
 #'
-#' @return
+#' @return the name of the corresponding reactive value
 #' @export
 #'
 #' @examples
+#' items_name(id = "mydata")
 
 items_name <- function(id){paste0(id, "_items")}
 
 
-#' Title
+#' Filtered items name
 #'
-#' @param id
+#' @param id the id of the module server instance
 #'
-#' @return
+#' @return the name of the corresponding reactive value
 #' @export
 #'
 #' @examples
+#' filtered_items_name(id = "mydata")
 
 filtered_items_name <- function(id){paste0(id, "_filtered_items")}
 
 
-#' Title
+#' Selected items name
 #'
-#' @param id
+#' @param id the id of the module server instance
 #'
-#' @return
+#' @return the name of the corresponding reactive value
 #' @export
 #'
 #' @examples
+#' selected_items_name(id = "mydata")
 
 selected_items_name <- function(id){paste0(id, "_selected_items")}
 
 
-#' Title
+#' Filter date name
 #'
-#' @param id
+#' @param id the id of the module server instance
 #'
-#' @return
+#' @return the name of the corresponding reactive value
 #' @export
 #'
 #' @examples
+#' filter_date_name(id = "mydata")
 
 filter_date_name <- function(id){paste0(id, "_filter_date")}
 
 
-#' Title
+#' Trigger add name
 #'
-#' @param id
+#' @param id the id of the module server instance
 #'
-#' @return
+#' @return the name of the corresponding reactive value
 #' @export
 #'
 #' @examples
+#' trigger_add_name(id = "mydata")
 
 trigger_add_name <- function(id){paste0(id, "_trigger_add")}
 
 
-#' Title
+#' Trigger delete name
 #'
-#' @param id
+#' @param id the id of the module server instance
 #'
-#' @return
+#' @return the name of the corresponding reactive value
 #' @export
 #'
 #' @examples
+#' trigger_delete_name(id = "mydata")
 
 trigger_delete_name <- function(id){paste0(id, "_trigger_delete")}
 
 
-#' Title
+#' Trigger save name
 #'
-#' @param id
+#' @param id the id of the module server instance
 #'
-#' @return
+#' @return the name of the corresponding reactive value
 #' @export
 #'
 #' @examples
+#' trigger_save_name(id = "mydata")
 
 trigger_save_name <- function(id){paste0(id, "_trigger_save")}
 
 
-#' Title
+#' Trigger update name
 #'
-#' @param id
+#' @param id the id of the module server instance
 #'
-#' @return
+#' @return the name of the corresponding reactive value
 #' @export
 #'
 #' @examples
+#' trigger_update_name(id = "mydata")
 
 trigger_update_name <- function(id){paste0(id, "_trigger_update")}

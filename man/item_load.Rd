@@ -2,13 +2,25 @@
 % Please edit documentation in R/item_load.R
 \name{item_load}
 \alias{item_load}
-\title{Title}
+\title{Load data}
 \usage{
 item_load(data.model, file, path, create)
 }
 \arguments{
-\item{create}{}
+\item{data.model}{a data.frame containing the data model}
+
+\item{file}{the file name}
+
+\item{path}{the path to the file}
+
+\item{create}{a logical to indicate if missing file should be created or not}
+}
+\value{
+the data (items)
 }
 \description{
-Title
+Load data
+}
+\examples{
+item_load(data.model = mydatamodel, file = "mydata.csv", path = "path/to/my/data", create = TRUE)
 }
