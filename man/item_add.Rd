@@ -2,13 +2,21 @@
 % Please edit documentation in R/item_add.R
 \name{item_add}
 \alias{item_add}
-\title{Title}
+\title{Add item}
 \usage{
 item_add(items, item)
 }
 \arguments{
-\item{items}{}
+\item{items}{the items data.frame}
+
+\item{item}{an item data.frame to be added}
+}
+\value{
+the updated items data.frame
 }
 \description{
-Title
+Add item
+}
+\examples{
+item_add(items = myitems, item = mynewitem)
 }
