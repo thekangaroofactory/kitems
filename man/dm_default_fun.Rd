@@ -2,13 +2,19 @@
 % Please edit documentation in R/dm_default_fun.R
 \name{dm_default_fun}
 \alias{dm_default_fun}
-\title{Title}
+\title{Extract default function from data model}
 \usage{
 dm_default_fun(data.model)
 }
 \arguments{
-\item{data.model}{}
+\item{data.model}{a data.frame containing the data model}
+}
+\value{
+a named vector of the attribute default functions
 }
 \description{
-Title
+Extract default function from data model
+}
+\examples{
+dm_default_fun(data.model = mydatamodel)
 }

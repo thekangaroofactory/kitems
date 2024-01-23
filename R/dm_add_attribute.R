@@ -1,19 +1,25 @@
 
 
-#' Title
+#' Add attribute to a data model
 #'
-#' @param data.model
-#' @param name
-#' @param type
-#' @param default.val
-#' @param default.fun
-#' @param skip
-#' @param filter
+#' @param data.model a \emph{mandatory} data model, structured as an output of data_model() function
+#' @param name a \emph{mandatory} character string for the new attribute name
+#' @param type a \emph{mandatory} character string for the new attribute type
+#' @param default.val an optional default value
+#' @param default.fun an optional default function
+#' @param skip an optional logical value (default = FALSE) if the attribute should be skipped in the input form
+#' @param filter an optional logical value (default = FALSE) if the attribute should be masked in the filtered view
 #'
-#' @return
+#' @return the updated data model
 #' @export
 #'
 #' @examples
+#'
+#' dm_add_attribute(data.model = mydatamodel, name = "new_attribute", type = "character")
+#' dm_add_attribute(data.model = mydatamodel, name = "total", type = "double", default.val = 0)
+#' dm_add_attribute(data.model = mydatamodel, name = "date", type = "Date", default.fun = "Sys.Date")
+#' dm_add_attribute(data.model = mydatamodel, name = "progress", type = "integer", skip = TRUE)
+#' dm_add_attribute(data.model = mydatamodel, name = "internal", type = "logical", filter = TRUE)
 
 
 dm_add_attribute <- function(data.model, name, type, default.val = NA, default.fun = NA, skip = FALSE, filter = FALSE){

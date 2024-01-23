@@ -1,14 +1,15 @@
 
 
-#' Title
+#' Default value for an attribute
 #'
-#' @param data.model
-#' @param name
+#' @param data.model a data.frame containing the data model
+#' @param name a character string with the attribute name
 #'
-#' @return
+#' @return the default value or computed output of the default function
 #' @export
 #'
 #' @examples
+#' value <- dm_get_default(data.model = mydatamodel, name = "date")
 
 
 dm_get_default <- function(data.model, name){

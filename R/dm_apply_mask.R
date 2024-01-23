@@ -1,14 +1,15 @@
 
 
-#' Title
+#' Apply data model filter
 #'
-#' @param data.model
-#' @param items
+#' @param data.model a \emph{mandatory} data model
+#' @param items a \emph{mandatory} item data.frame
 #'
-#' @return
+#' @return an item data.frame, without the filtered attributes (columns)
 #' @export
 #'
 #' @examples
+#' filetered_items <- dm_apply_mask(data.model = mydatamodel, items = myitems)
 
 
 dm_apply_mask <- function(data.model, items){

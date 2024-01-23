@@ -2,13 +2,21 @@
 % Please edit documentation in R/dm_get_default.R
 \name{dm_get_default}
 \alias{dm_get_default}
-\title{Title}
+\title{Default value for an attribute}
 \usage{
 dm_get_default(data.model, name)
 }
 \arguments{
-\item{name}{}
+\item{data.model}{a data.frame containing the data model}
+
+\item{name}{a character string with the attribute name}
+}
+\value{
+the default value or computed output of the default function
 }
 \description{
-Title
+Default value for an attribute
+}
+\examples{
+value <- dm_get_default(data.model = mydatamodel, name = "date")
 }

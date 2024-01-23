@@ -1,13 +1,14 @@
 
 
-#' Title
+#' Extract filters from data model
 #'
-#' @param data.model
+#' @param data.model a data.frame containing the data model
 #'
-#' @return
+#' @return a named vector of the attribute filters
 #' @export
 #'
 #' @examples
+#' dm_filter(data.model = mydatamodel)
 
 
 dm_filter <- function(data.model){

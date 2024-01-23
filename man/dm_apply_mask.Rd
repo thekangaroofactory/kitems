@@ -2,13 +2,21 @@
 % Please edit documentation in R/dm_apply_mask.R
 \name{dm_apply_mask}
 \alias{dm_apply_mask}
-\title{Title}
+\title{Apply data model filter}
 \usage{
 dm_apply_mask(data.model, items)
 }
 \arguments{
-\item{items}{}
+\item{data.model}{a \emph{mandatory} data model}
+
+\item{items}{a \emph{mandatory} item data.frame}
+}
+\value{
+an item data.frame, without the filtered attributes (columns)
 }
 \description{
-Title
+Apply data model filter
+}
+\examples{
+filetered_items <- dm_apply_mask(data.model = mydatamodel, items = myitems)
 }

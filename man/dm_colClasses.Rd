@@ -10,8 +10,11 @@ dm_colClasses(data.model = NULL)
 \item{data.model}{a data.frame containing the data model}
 }
 \value{
-a named vector
+a named vector of the attribute types
 }
 \description{
 Extract colClasses from data model
+}
+\examples{
+dm_colClasses(data.model = mydatamodel)
 }
