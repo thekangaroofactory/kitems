@@ -73,15 +73,8 @@ from the r object passed as an argument of the module server):
 - r\[\[trigger_delete\]\]
 - r\[\[trigger_save\]\]
 
-<div class="alert alert-warning">
-
-*\[Warning\]* Indicates a neutral informative change or action.
-
-</div>
-
-<div class="alert alert-danger"
-  <strong>Danger:</strong> This is a warning!
-</div>
+> \[!CAUTION\] Advises about risks or negative outcomes of certain
+> actions.
 
 ## Triggers
 

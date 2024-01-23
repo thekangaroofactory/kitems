@@ -20,25 +20,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r, include = FALSE}
-knitr::knit_hooks$set(
-   error = function(x, options) {
-     paste('\n\n<div class="alert alert-danger">',
-           gsub('##', '\n', gsub('^##\ Error', '**Error**', x)),
-           '</div>', sep = '\n')
-   },
-   warning = function(x, options) {
-     paste('\n\n<div class="alert alert-warning">',
-           gsub('##', '\n', gsub('^##\ Warning:', '**Warning**', x)),
-           '</div>', sep = '\n')
-   },
-   message = function(x, options) {
-     paste('\n\n<div class="alert alert-info">',
-           gsub('##', '\n', x),
-           '</div>', sep = '\n')
-   }
-)
-```
 
 # kitems
 
@@ -118,15 +99,11 @@ from the r object passed as an argument of the module server):
 -   r[[trigger_delete]]
 -   r[[trigger_save]]
 
-::: {.alert .alert-warning}
-*[Warning]* Indicates a neutral informative change or action.
-:::
 
-```{=html}
-<div class="alert alert-danger"
-  <strong>Danger:</strong> This is a warning!
-</div>
-```
+> [!CAUTION]
+> Advises about risks or negative outcomes of certain actions.
+
+
 ## Triggers
 
 Triggers are basically reactiveValues stored in the r object that can be
