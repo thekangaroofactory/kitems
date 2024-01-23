@@ -1,13 +1,14 @@
 
 
-#' Title
+#' Date sliderInput
 #'
-#' @param id
+#' @param id the server module id
 #'
-#' @return
+#' @return a rendered sliderInput
 #' @export
 #'
 #' @examples
+#' date_slider_INPUT(id = "mydata")
 
 
 # -- INPUT: date slider
