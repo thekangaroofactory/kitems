@@ -17,3 +17,40 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(kitems)
 ```
+
+# Import existing data
+
+Whenever a module server instance is launched without a data model (i.e data.model argument is NULL and no persistent data model is found for this instance id), an "Import data" button will be displayed along with the "Create" button in the Data model section of the Administration console (output from the admin_UI() function).
+
+A step by step modal dialog will be opened to perform this import.
+
+
+## Select file
+
+The first step is to select the source file containing the data to be imported.
+The browser window will only display the .csv files.
+
+Select a file and click open.
+When the 'Upload complete' message is displayed under the fileInput, click the "Next" button (or Cancel).
+
+
+## Data preview 
+
+A data table (DT) is displayed to preview the data.
+Click "Next" (or Cancel if you want to abort).
+
+
+## Data model preview
+
+The data model is build from the data (using the dm_check_integrity() function).
+Template classes will be applied to 'known' attribute names (like date or id).
+If not part of the template, the attribute type is guessed using class() function.
+
+Click "Import" to confirm data import (or Cancel to abort)
+
+
+## Import
+
+Data will be imported to the location provided through the path attribute of the module server function.
+The data model will be created and saved.
+
