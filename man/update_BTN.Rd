@@ -2,13 +2,19 @@
 % Please edit documentation in R/kitems_buttons_ui.R
 \name{update_BTN}
 \alias{update_BTN}
-\title{Title}
+\title{Update item button}
 \usage{
 update_BTN(id)
 }
 \arguments{
-\item{id}{}
+\item{id}{the server module id}
+}
+\value{
+a rendered actionButton
 }
 \description{
-Title
+Update item button
+}
+\examples{
+update_BTN(id = "mydata")
 }
