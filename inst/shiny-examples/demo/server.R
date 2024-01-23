@@ -13,10 +13,12 @@ shinyServer(
     # Environment
     # -------------------------------------
 
+    # -- Get path to demo app data
+    demo_dir <- system.file("shiny-examples", "demo", "data", package = "kitems")
+
     # -- Define path_list
-    path_list <- list(project = "./",
-                      resource = "./resource",
-                      data = "./data")
+    path_list <- list(resource = demo_dir,
+                      data = demo_dir)
 
 
     # -------------------------------------
