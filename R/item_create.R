@@ -5,8 +5,8 @@
 #' @param values a list of values, most likely output values coming from UI inputs
 #' @param data.model a data.frame, defining the data model
 #'
-#'
 #' @return a data.frame of the new item, coerced to match with colClasses
+#' @export
 #'
 #' @examples
 

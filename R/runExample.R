@@ -1,6 +1,11 @@
 
 
+#' Title
+#'
+#' @return
 #' @export
+#'
+#' @examples
 
 runExample <- function() {
 
