@@ -66,17 +66,47 @@ kitems strongly relies on Shiny (shiny and shinydashboard packages are
 set as ‘depends’ dependencies). It provides reactive values (accessible
 from the r object passed as an argument of the module server):
 
-- r\[\[r_data_model\]\]
-- r\[\[r_items\]\]
+- r\[\[data_model\]\]
+- r\[[items](#items)\]
 - r\[\[trigger_add\]\]
 - r\[\[trigger_update\]\]
 - r\[\[trigger_delete\]\]
 - r\[\[trigger_save\]\]
 
-> \[!CAUTION\] Advises about risks or negative outcomes of certain
-> actions.
+> \[!CAUTION\] Data model and items reactive values should be handled
+> with caution as updating there values will trigger auto save (for
+> items, if autosave = TRUE).
 
-## Triggers
+### Data Model
+
+``` r
+library(kitems)
+#> Le chargement a nécessité le package : shiny
+#> Le chargement a nécessité le package : shinydashboard
+#> 
+#> Attachement du package : 'shinydashboard'
+#> L'objet suivant est masqué depuis 'package:graphics':
+#> 
+#>     box
+#> 
+#> Attachement du package : 'kitems'
+#> L'objet suivant est masqué depuis 'package:shiny':
+#> 
+#>     runExample
+
+# -- define module id
+id <- "mydata"
+
+# -- get data model reactiveValue name
+data_model <- dm_name(id)
+```
+
+The data model for this id can be accessed **in a reactive context** by
+using: r\[\[data_model\]\]
+
+### Items
+
+### Triggers
 
 Triggers are basically reactiveValues stored in the r object that can be
 used to communicate actions to the module server.
