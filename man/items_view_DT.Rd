@@ -2,13 +2,19 @@
 % Please edit documentation in R/kitems_tables_ui.R
 \name{items_view_DT}
 \alias{items_view_DT}
-\title{Title}
+\title{Default view}
 \usage{
 items_view_DT(id)
 }
 \arguments{
-\item{id}{}
+\item{id}{the id of the module server instance}
+}
+\value{
+a rendered DT data table
 }
 \description{
-Title
+Default view
+}
+\examples{
+items_view_DT(id = "mydata")
 }

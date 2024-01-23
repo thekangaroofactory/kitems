@@ -2,13 +2,19 @@
 % Please edit documentation in R/kitems_tables_ui.R
 \name{items_filtered_view_DT}
 \alias{items_filtered_view_DT}
-\title{Title}
+\title{Filtered view}
 \usage{
 items_filtered_view_DT(id)
 }
 \arguments{
-\item{id}{}
+\item{id}{the id of the module server instance}
+}
+\value{
+a rendered DT data table
 }
 \description{
-Title
+Filtered view
+}
+\examples{
+items_filtered_view_DT(id = "mydata")
 }
