@@ -5,7 +5,7 @@
 # ------------------------------------------------------------------------------
 
 # -- Define server logic
-shiny::shinyServer(
+shinyServer(
   function(input, output, session){
 
 
@@ -24,7 +24,7 @@ shiny::shinyServer(
     # -------------------------------------
 
     # -- declare r communication object
-    r <- shiny::reactiveValues()
+    r <- reactiveValues()
 
 
     # -------------------------------------
@@ -58,14 +58,14 @@ shiny::shinyServer(
     # -------------------------------------
 
     # -- data
-    shiny::observeEvent(r$data_items(), {
+    observeEvent(r$data_items(), {
 
       cat("Main server observer: data_items() has just been updated \n")
 
     })
 
     # -- data_2
-    shiny::observeEvent(r$data_2_items(), {
+    observeEvent(r$data_2_items(), {
 
       cat("Main server observer: data2_items() has just been updated \n")
 
@@ -76,7 +76,7 @@ shiny::shinyServer(
     # Generate dynamic sidebar
     # -------------------------------------
 
-    output$menu <- shinydashboard::renderMenu(dynamic_sidebar(r))
+    output$menu <- renderMenu(dynamic_sidebar(r))
 
 
   }

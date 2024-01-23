@@ -8,14 +8,14 @@
 # Define Sidebar UI
 # ------------------------------------------------------------------------------
 
-sidebar <- shinydashboard::dashboardSidebar(
+sidebar <- dashboardSidebar(
 
   # -- static section
-  shinydashboard::sidebarMenu(
-    shinydashboard::menuItem("Home", tabName = "home", icon = icon("dashboard"), selected = TRUE)),
+  sidebarMenu(
+    menuItem("Home", tabName = "home", icon = icon("dashboard"), selected = TRUE)),
 
   # -- add dynamic section
-  shinydashboard::sidebarMenu(id = "tabs", shinydashboard::sidebarMenuOutput("menu")),
+  sidebarMenu(id = "tabs", sidebarMenuOutput("menu")),
 
   collapsed = FALSE)
 
@@ -24,52 +24,52 @@ sidebar <- shinydashboard::dashboardSidebar(
 # Define Body UI
 # ------------------------------------------------------------------------------
 
-body <- shinydashboard::dashboardBody(
+body <- dashboardBody(
 
   # -- tabItems
-  shinydashboard::tabItems(
+  tabItems(
 
     # -- tabItem
-    shinydashboard::tabItem(tabName = "home",
+    tabItem(tabName = "home",
 
             # -- Admin
-            shiny::fluidRow(
-              shiny::column(width = 12,
+            fluidRow(
+              column(width = 12,
 
-                            shiny::h1("Home page"),
-                            shiny::h4("Filtered view:"),
-                            kitems::date_slider_INPUT("data_2"))),
+                     h1("Home page"),
+                     h4("Filtered view:"),
+                     kitems::date_slider_INPUT("data_2"))),
 
-            shiny::fluidRow(
-              shiny::column(width = 12,
-                            kitems::create_BTN("data_2"),
-                            kitems::update_BTN("data_2"),
-                            kitems::delete_BTN("data_2"))),
+            fluidRow(
+              column(width = 12,
+                     kitems::create_BTN("data_2"),
+                     kitems::update_BTN("data_2"),
+                     kitems::delete_BTN("data_2"))),
 
-            shiny::br(),
+            br(),
 
-            shiny::fluidRow(
-              shiny::column(width = 12,
-                            kitems::items_filtered_view_DT("data_2")))
+            fluidRow(
+              column(width = 12,
+                     kitems::items_filtered_view_DT("data_2")))
     ),
 
     # -- tabItem
-    shinydashboard::tabItem(tabName = "data",
+    tabItem(tabName = "data",
 
             # -- Admin
-            shiny::fluidRow(
-              shiny::column(width = 12,
+            fluidRow(
+              column(width = 12,
 
-                            kitems::admin_ui("data")))),
+                     kitems::admin_ui("data")))),
 
     # -- tabItem
-    shinydashboard::tabItem(tabName = "data_2",
+    tabItem(tabName = "data_2",
 
             # -- Admin
-            shiny::fluidRow(
-              shiny::column(width = 12,
+            fluidRow(
+              column(width = 12,
 
-                            kitems::admin_ui("data_2"))))
+                     kitems::admin_ui("data_2"))))
 
 
   ) # end tabItems
@@ -80,6 +80,6 @@ body <- shinydashboard::dashboardBody(
 # Put them together into a dashboard
 # ------------------------------------------------------------------------------
 
-shinydashboard::dashboardPage(
-  shinydashboard::dashboardHeader(title = "kitems Demo App"), sidebar, body)
+dashboardPage(
+  dashboardHeader(title = "kitems Demo App"), sidebar, body)
 
