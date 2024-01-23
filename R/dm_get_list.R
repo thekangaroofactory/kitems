@@ -1,12 +1,13 @@
 
 
-#' Title
+#' Available data models
 #'
-#' @param r
+#' @param r the shared reactive communication object
 #'
-#' @return
+#' @return a vector with the names (ids) of the data models available in session
 #'
 #' @examples
+#' dm_get_list(r)
 
 
 dm_get_list <- function(r){
