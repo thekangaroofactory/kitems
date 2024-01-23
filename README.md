@@ -32,7 +32,7 @@ delivered and can be run:
 The kitems framework is based on a two main notions: data model and
 items.
 
-## Data Model
+### Data Model
 
 The data model contains the specifications of the items you want to
 manage. It includes:
@@ -56,7 +56,7 @@ Attribute names and types are obvious. Supported data types are:
 - POSIXct,
 - POSIXlt.
 
-## Items
+### Items
 
 Items is a data.frame containing the data to be managed.
 
@@ -68,6 +68,9 @@ from the r object passed as an argument of the module server):
 
 - r\[\[data_model\]\]
 - r\[[items](#items)\]
+- r\[\[filtered_items\]\]
+- r\[\[selected_items\]\]
+- r\[\[filter_date\]\]
 - r\[\[trigger_add\]\]
 - r\[\[trigger_update\]\]
 - r\[\[trigger_delete\]\]
@@ -102,78 +105,264 @@ data_model <- dm_name(id)
 ```
 
 The data model for this id can be accessed **in a reactive context** by
-using: r\[\[data_model\]\]
+using: r[\[data_model\]]()
 
 ### Items
 
+``` r
+library(kitems)
+
+# -- define module id
+id <- "mydata"
+
+# -- get data model reactiveValue name
+items <- items_name(id)
+```
+
+The items for this id can be accessed **in a reactive context** by
+using: r[\[items\]]()
+
 ### Triggers
 
-Triggers are basically reactiveValues stored in the r object that can be
-used to communicate actions to the module server.
+Triggers are objects that can be used to communicate actions to the
+module server:
 
-Their name is built with paste0(id, “\_trigger_name”), with
-\[trigger_name\] being: \* trigger_add: add an item to the item list \*
-trigger_update \<- update an item from the item list \* trigger_delete
-\<- delete an item from the list \* trigger_save \<- save the item list
-(if autosave is turned off)
+- trigger_add: add an item to the item list
+- trigger_update: update an item from the item list
+- trigger_delete: delete an item from the list
+- trigger_save: save the item list (if autosave is turned off)
 
-## Item creation
+## Data model
+
+### Initialization
+
+Several options are available to initialize a data model when starting
+the module server:
+
+- pass a data model to data.model argument,
+- keep the data.model argument NULL.
+
+If data.model is set, it will be used to initialize the persistent data
+model. Note that once initialized, the persistent data model can be
+updated (for example through the admin UI) and will have the priority
+over the data.model argument.
+
+If data.model is NULL, the admin UI will display a create button to
+start a new data model, as well as an import data button.
+
+### Checking integrity
+
+When the module server is launched, it will perform an integrity check
+to ensure that the data (items) and data model are aligned.
+
+This is done through the dm_check_integrity() function. If not aligned,
+the data model will be updated to match with any missing attribute for
+example.
+
+## Item management
+
+### Item creation
 
 It’s recommended to use item_create() to create the item to be added to
-the list:
+the item list:
 
-id \<- “my_data”
+``` r
+library(kitems)
 
-r_data_model \<- dm_name(id) trigger_add \<- trigger_add_name(id)
+# -- define module id
+id <- "mydata"
 
-input_values \<- data.frame(id = 1, text = “demo”)
+# -- get names
+data_model <- dm_name(id)
+trigger_add <- trigger_add_name(id)
 
-item \<- item_create(values = input_values, data.model =
-r[\[r_data_model\]]()) r[\[trigger_add\]](item)
+# -- define inputs and create item (waning! this should be used in a reactive context)
+input_values <- data.frame(id = 1, text = "demo")
+item <- item_create(values = input_values, data.model = r[[data_model]]())
 
-Note: if autosave has been turned off, r\[\[trigger_save\]\] should be
+# -- trigger action (waning! this should be used in a reactive context)
+r[[trigger_add]](item)
+```
+
+Note: if autosave has been turned off, r[\[trigger_save\]]() should be
 used to make item changes persistent.
 
-## Item update
+### Item update
 
-It’s recommended to use item_create() to create a new item to replace
-the one in the list:
+It’s recommended to use item_create() to create a new item and replace
+the one in the item list:
 
-id \<- “my_data”
+``` r
+library(kitems)
 
-r_data_model \<- dm_name(id) trigger_update \<- trigger_update_name(id)
+# -- define module id
+id <- "mydata"
 
-input_values \<- data.frame(id = 1, text = “demo update”)
+# -- get names
+data_model <- dm_name(id)
+trigger_update <- trigger_update_name(id)
 
-item \<- item_create(values = input_values, data.model =
-r[\[r_data_model\]]()) r[\[trigger_update\]](item)
+# -- define inputs and create item (waning! this should be used in a reactive context)
+input_values <- data.frame(id = 1, text = "demo")
+item <- item_create(values = input_values, data.model = r[[data_model]]())
 
-## Item delete
+# -- trigger action (waning! this should be used in a reactive context)
+r[[trigger_update]](item)
+```
+
+### Item delete
 
 To delete an item, just pass it’s id to the trigger:
 
-id \<- “my_data”
+``` r
+library(kitems)
 
-trigger_delete \<- trigger_delete_name(id)
+# -- define module id
+id <- "mydata"
 
-item_id \<- 1704961867683 r[\[trigger_delete\]](item_id)
+# -- get trigger name
+trigger_delete <- trigger_delete_name(id)
 
-------------------------------------------------------------------------
+# -- trigger action (waning! this should be used in a reactive context)
+item_id <- 1704961867683 
+r[[trigger_delete]](item_id)
+```
+
+## Views
+
+### Default view
+
+The default view is provided through items_view_DT(). It is based on the
+r\[[items](#items)\] content (with data model masks applied).
+
+### Filtered view
+
+The filtered view is provided through items_filtered_view_DT() It is
+based on the r\[\[filtered_items\]\] content (with data model masks
+applied).
+
+## Selected Item(s)
+
+Both default and filtered view have row selection enabled. Selecting
+row(s) in *one or the other* table will trigger the update of
+r\[\[selected_items\]\] reactive value.
+
+> \[!CAUTION\] It is not recommended to display both views in the same
+> UI section as only the last selection will be kept in
+> r\[\[selected_items\]\]
+
+Selected item(s) will also trigger which buttons are available (or
+NULL).
 
 ## Inputs
 
-### date_slider_INPUT
+### Date sliderInput
 
 If the data model has an attribute named ‘date’, a date sliderInput will
 be created automatically to enable date filtering.
 
 This sliderInput will trigger a filter on the items to be displayed in
-the filtered view.
+the filtered view, i.e. only the matching items will be part of this
+view.
 
-If not implemented in your application’s UI, then no date filtered is
-applied by default.
+If not implemented through date_slider_INPUT() in your application’s UI,
+then no date filter is applied by default on the filtered view.
+
+Filter value (the sliderInput range) is available in the
+r[\[filter_date\]]() reactive value.
 
 ### Buttons
 
-create item update item : single selection delete item : support multi
-selection
+- create_BTN: create item
+- update_BTN: update selected item (single selection)
+- delete_BTN: delete selected item(s) (supports multi-selection)
+
+update_BTN and delete_BTN return NULL if no row is selected.
+
+## UI objects
+
+### Admin UI
+
+In order to avoid code duplication, an admin UI interface is provided by
+the admin_ui() function.
+
+``` r
+
+# -- Inside tabItems
+tabItems(...,
+
+         tabItem(tabName = "mydata",
+                 
+                 # -- Admin UI
+                 fluidRow(
+                   column(width = 12,
+                          
+                          kitems::admin_ui("mydata"))))
+)
+```
+
+### Sidebar
+
+A sidebarMenu object (menuItem) is also available as an output of the
+dynamic_sidebar() function. It will contain one menuSubItem object per
+data model (stored in the r reactive values).
+
+To implement it in your sidebar UI, it must first be rendered in your
+application server code:
+
+``` r
+# -------------------------------------
+# Generate dynamic sidebar
+# -------------------------------------
+
+output$menu <- renderMenu(dynamic_sidebar(r))
+```
+
+Then you can use this output inside the application UI code:
+
+``` r
+# -------------------------------------
+# Define Sidebar UI
+# -------------------------------------
+
+sidebar <- dashboardSidebar(
+
+  # -- static section
+  sidebarMenu(
+    menuItem("Home", tabName = "home", icon = icon("dashboard"), selected = TRUE)),
+
+  # -- add dynamic section
+  sidebarMenu(id = "tabs", sidebarMenuOutput("menu")),
+
+  collapsed = FALSE)
+```
+
+## Import & migration
+
+When the module server is initialized with data.model = NULL, an import
+data button is displayed in the data model section of the admin UI. This
+allows to create a data model from existing data.
+
+## Reactivity
+
+### Observe items
+
+``` r
+# -------------------------------------
+# Observe item lists
+# -------------------------------------
+
+id <- "mydata"
+items <- items_name(id)
+
+# -- Module id = mydata
+observeEvent(r[[items]](), {
+  
+  cat("Main application server observer: items object has just been updated. \n")
+  
+})
+```
+
+Note: as long as you know the module id, you can shortcut it with
+observeEvent(r\$mydata_items(), …) but this makes your code less
+resilient to changes.
