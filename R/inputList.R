@@ -1,20 +1,25 @@
 
 
-#' Title
+#' Build input tagList
 #'
-#' @param ns
-#' @param item
-#' @param update
-#' @param data.model
+#' @param ns the namespace function, output of shiny::NS()
+#' @param item an optional item (used to set default input values if update = TRUE)
+#' @param update an optional logical (default = FALSE) to trigger update behavior
+#' @param data.model a data.frame containing the data model
 #'
-#' @return
+#' @return a tagList() object containing the attribute inputs
 #' @export
 #'
+#' @details
+#' Data model skip feature will be used to return inputs only for the skip = FALSE attributes
+#'
 #' @examples
+#' inputList(ns, item = NULL, update = FALSE, data.model = mydatamodel)
+#' inputList(ns, item = myitem, update = TRUE, data.model = mydatamodel)
 
 inputList <- function(ns, item = NULL, update = FALSE, data.model){
 
-  cat("[getModalDialog] Building modal dialog \n")
+  cat("[inputList] Building input list \n")
   cat("  - update =", update, "\n")
 
   # -- get parameters from data model
