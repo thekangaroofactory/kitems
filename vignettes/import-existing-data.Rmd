@@ -1,8 +1,8 @@
 ---
-title: "how-to-use-this-package"
+title: "import-existing-data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{how-to-use-this-package}
+  %\VignetteIndexEntry{import-existing-data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
