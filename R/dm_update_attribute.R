@@ -1,15 +1,15 @@
 
 
-#' Title
+#' Update data model attribute
 #'
-#' @param data.model
-#' @param name
-#' @param default.val
-#' @param default.fun
-#' @param filter
-#' @param skip
+#' @param data.model a data.frame containing the data model
+#' @param name a character string of the attribute name
+#' @param default.val the new default value (default = NULL)
+#' @param default.fun a character string, the new default function name (default = NULL)
+#' @param filter a logical to set the filter value (default = FALSE)
+#' @param skip a logical to set the skip value (default = FALSE)
 #'
-#' @return
+#' @return the updated data model
 #' @export
 #'
 #' @details

@@ -2,7 +2,7 @@
 % Please edit documentation in R/dm_update_attribute.R
 \name{dm_update_attribute}
 \alias{dm_update_attribute}
-\title{Title}
+\title{Update data model attribute}
 \usage{
 dm_update_attribute(
   data.model,
@@ -14,10 +14,23 @@ dm_update_attribute(
 )
 }
 \arguments{
-\item{skip}{}
+\item{data.model}{a data.frame containing the data model}
+
+\item{name}{a character string of the attribute name}
+
+\item{default.val}{the new default value (default = NULL)}
+
+\item{default.fun}{a character string, the new default function name (default = NULL)}
+
+\item{filter}{a logical to set the filter value (default = FALSE)}
+
+\item{skip}{a logical to set the skip value (default = FALSE)}
+}
+\value{
+the updated data model
 }
 \description{
-Title
+Update data model attribute
 }
 \details{
 Updating attribute class is not supported by this function (as it requires data migration).
