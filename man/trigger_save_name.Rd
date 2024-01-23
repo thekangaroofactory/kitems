@@ -2,13 +2,19 @@
 % Please edit documentation in R/kitems_names.R
 \name{trigger_save_name}
 \alias{trigger_save_name}
-\title{Title}
+\title{Trigger save name}
 \usage{
 trigger_save_name(id)
 }
 \arguments{
-\item{id}{}
+\item{id}{the id of the module server instance}
+}
+\value{
+the name of the corresponding reactive value
 }
 \description{
-Title
+Trigger save name
+}
+\examples{
+trigger_save_name(id = "mydata")
 }
