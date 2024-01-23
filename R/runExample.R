@@ -1,11 +1,11 @@
 
 
-#' Title
+#' Run the shiny demo app
 #'
-#' @return
 #' @export
 #'
 #' @examples
+#' runExample()
 
 runExample <- function() {
 
