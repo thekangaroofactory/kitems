@@ -1,17 +1,24 @@
 
 
-# --------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # This is the server logic of the Shiny web application
-# --------------------------------------------------------------------------------
-
-# -- Load packages
-library(shiny)
-library(DT)
-
+# ------------------------------------------------------------------------------
 
 # -- Define server logic
 shinyServer(
   function(input, output, session){
+
+
+    # -------------------------------------
+    # Environment
+    # -------------------------------------
+
+    # -- Get path to demo app data
+    demo_dir <- system.file("shiny-examples", "demo", "data", package = "kitems")
+
+    # -- Define path_list
+    path_list <- list(resource = demo_dir,
+                      data = demo_dir)
 
 
     # -------------------------------------
@@ -27,7 +34,7 @@ shinyServer(
     # -------------------------------------
 
     # -- start module server: data
-    kitemsManager_Server(id = "data", r = r, path = path_list, file = "my_data.csv",
+    kitems::kitemsManager_Server(id = "data", r = r, path = path_list, file = "my_data.csv",
                          data.model = NULL,
                          create = TRUE, autosave = TRUE)
 
@@ -40,10 +47,10 @@ shinyServer(
     skip <- c("id")
 
     # -- build data model
-    dm <- data_model(colClasses, default.val, default.fun, filter, skip)
+    dm <- kitems::data_model(colClasses, default.val, default.fun, filter, skip)
 
     # -- start module server: data_2
-    kitemsManager_Server(id = "data_2", r = r, path = path_list, file = "my_data_2.csv",
+    kitems::kitemsManager_Server(id = "data_2", r = r, path = path_list, file = "my_data_2.csv",
                          data.model = dm,
                          create = TRUE, autosave = TRUE)
 
@@ -73,24 +80,6 @@ shinyServer(
 
     output$menu <- renderMenu(dynamic_sidebar(r))
 
-
-    # -------------------------------------
-    # SAND BOX
-    # -------------------------------------
-
-    # id <- "data_2"
-    #
-    # r_data_model <- dm_name(id)
-    # trigger_delete <- trigger_delete_name(id)
-    #
-    # observeEvent(r$data_2_items(), {
-    #
-    #   cat("*** SAND BOX: delete item \n")
-    #
-    #   item <- 1704961867683
-    #   r[[trigger_delete]](item)
-    #
-    # })
 
   }
 )

@@ -5,7 +5,6 @@
 #' @param data.model
 #'
 #' @return
-#' @export
 #'
 #' @examples
 

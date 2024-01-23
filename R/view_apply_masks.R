@@ -10,7 +10,6 @@
 #'
 #' @examples
 
-
 view_apply_masks <- function(data.model, items){
 
   # -- Apply data model masks

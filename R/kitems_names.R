@@ -1,27 +1,108 @@
 
 
-# -- data model
+#' Title
+#'
+#' @param id
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
 dm_name <- function(id){paste0(id, "_data_model")}
 
 
-# -- items
+#' Title
+#'
+#' @param id
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
 items_name <- function(id){paste0(id, "_items")}
 
 
-# -- views
+#' Title
+#'
+#' @param id
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
 filtered_items_name <- function(id){paste0(id, "_filtered_items")}
 
 
-# -- selected items
+#' Title
+#'
+#' @param id
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
 selected_items_name <- function(id){paste0(id, "_selected_items")}
 
-# -- filters
+
+#' Title
+#'
+#' @param id
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
 filter_date_name <- function(id){paste0(id, "_filter_date")}
 
 
-# -- triggers
-trigger_add_name <- function(id){paste0(id, "_trigger_add")}
-trigger_delete_name <- function(id){paste0(id, "_trigger_delete")}
-trigger_save_name <- function(id){paste0(id, "_trigger_save")}
-trigger_update_name <- function(id){paste0(id, "_trigger_update")}
+#' Title
+#'
+#' @param id
+#'
+#' @return
+#' @export
+#'
+#' @examples
 
+trigger_add_name <- function(id){paste0(id, "_trigger_add")}
+
+
+#' Title
+#'
+#' @param id
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
+trigger_delete_name <- function(id){paste0(id, "_trigger_delete")}
+
+
+#' Title
+#'
+#' @param id
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
+trigger_save_name <- function(id){paste0(id, "_trigger_save")}
+
+
+#' Title
+#'
+#' @param id
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
+trigger_update_name <- function(id){paste0(id, "_trigger_update")}

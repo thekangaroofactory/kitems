@@ -10,6 +10,8 @@
 #'
 #' @return a data.frame containing the data model.
 #'
+#' @export
+#'
 #' @details
 #' colClasses will be used to create the data.frame: names will define the attributes of the data model,
 #' and values will define the class (type) of the attributes.
@@ -37,10 +39,16 @@ data_model <- function(colClasses, default.val = NULL, default.fun = NULL, filte
   dm <- data.frame("name" = names(colClasses), "type" = unname(colClasses))
 
   # -- Add default.val (match input with names)
-  dm$default.val <- default.val[match(dm$name, names(default.val))]
+  if(!is.null(default.val))
+    dm$default.val <- default.val[match(dm$name, names(default.val))]
+  else
+    dm$default.val <- NA
 
   # -- Add default.fun (match input with names)
-  dm$default.fun <- default.fun[match(dm$name, names(default.fun))]
+  if(!is.null(default.fun))
+    dm$default.fun <- default.fun[match(dm$name, names(default.fun))]
+  else
+    dm$default.fun <- NA
 
   # -- Add filter (match input with names)
   dm$filter <- dm$name %in% filter

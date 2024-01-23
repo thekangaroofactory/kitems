@@ -21,7 +21,7 @@ dm_get_default <- function(data.model, name){
 
   # -- P1: default function
   if(!is.na(default_fun)){
-    value <- eval(do.call(getfun(default_fun), args = list()))
+    value <- eval(do.call(ktools::getNsFunction(default_fun), args = list()))
     cat("- strategy: applying default function, output =", value, "\n")}
 
   # -- P2: then default value

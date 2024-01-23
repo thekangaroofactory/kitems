@@ -6,7 +6,6 @@
 #' @param name
 #' @param type
 #' @param fill
-#' @param coerce
 #'
 #' @return
 #' @export
@@ -14,9 +13,6 @@
 #' @examples
 
 item_add_attribute <- function(x, name, type, fill = NA){
-
-  # -- Get supported class functions
-  coerce <- class_functions()
 
   # -- Check dim
   if(dim(x)[1] == 0){
@@ -33,7 +29,7 @@ item_add_attribute <- function(x, name, type, fill = NA){
 
     # -- coerce value
     cat("Coerce value to given class \n")
-    value <- eval(call(coerce[[type]], fill))
+    value <- eval(call(CLASS_FUNCTIONS[[type]], fill))
     cat("Output: \n")
     str(value)
 
