@@ -1,49 +1,11 @@
----
-output: github_document
-editor_options: 
-  markdown: 
-    wrap: 72
----
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
 <!-- You need to render `README.Rmd` to keep `README.md` up-to-date. -->
-
 <!-- use`devtools::build_readme()` for this.  -->
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-```
-
-```{r, include = FALSE}
-knitr::knit_hooks$set(
-   error = function(x, options) {
-     paste('\n\n<div class="alert alert-danger">',
-           gsub('##', '\n', gsub('^##\ Error', '**Error**', x)),
-           '</div>', sep = '\n')
-   },
-   warning = function(x, options) {
-     paste('\n\n<div class="alert alert-warning">',
-           gsub('##', '\n', gsub('^##\ Warning:', '**Warning**', x)),
-           '</div>', sep = '\n')
-   },
-   message = function(x, options) {
-     paste('\n\n<div class="alert alert-info">',
-           gsub('##', '\n', x),
-           '</div>', sep = '\n')
-   }
-)
-```
 
 # kitems
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 The goal of kitems is to provide a framework to manage data.frame like
@@ -65,13 +27,6 @@ devtools::install_github("thekangaroofactory/kitems")
 A basic shiny demo app which shows you how to use the package is
 delivered and can be run:
 
-```{r example, eval=FALSE, include=FALSE}
-library(kitems)
-
-runExample()
-
-```
-
 ## Framework Specifications
 
 The kitems framework is based on a two main notions: data model and
@@ -82,24 +37,24 @@ items.
 The data model contains the specifications of the items you want to
 manage. It includes:
 
--   attribute names,
--   attribute types,
--   default values,
--   default functions,
--   filter,
--   skip.
+- attribute names,
+- attribute types,
+- default values,
+- default functions,
+- filter,
+- skip.
 
 Attribute names and types are obvious. Supported data types are:
 
--   numeric,
--   integer,
--   double,
--   logical,
--   character,
--   factor,
--   Date,
--   POSIXct,
--   POSIXlt.
+- numeric,
+- integer,
+- double,
+- logical,
+- character,
+- factor,
+- Date,
+- POSIXct,
+- POSIXlt.
 
 ## Items
 
@@ -108,76 +63,77 @@ Items is a data.frame containing the data to be managed.
 ## Reactive Values
 
 kitems strongly relies on Shiny (shiny and shinydashboard packages are
-set as 'depends' dependencies). It provides reactive values (accessible
+set as ‘depends’ dependencies). It provides reactive values (accessible
 from the r object passed as an argument of the module server):
 
--   r[[r_data_model]]
--   r[[r_items]]
--   r[[trigger_add]]
--   r[[trigger_update]]
--   r[[trigger_delete]]
--   r[[trigger_save]]
+- r\[\[r_data_model\]\]
+- r\[\[r_items\]\]
+- r\[\[trigger_add\]\]
+- r\[\[trigger_update\]\]
+- r\[\[trigger_delete\]\]
+- r\[\[trigger_save\]\]
 
-::: {.alert .alert-warning}
-*[Warning]* Indicates a neutral informative change or action.
-:::
+<div class="alert alert-warning">
 
-```{=html}
+*\[Warning\]* Indicates a neutral informative change or action.
+
+</div>
+
 <div class="alert alert-danger"
   <strong>Danger:</strong> This is a warning!
 </div>
-```
+
 ## Triggers
 
 Triggers are basically reactiveValues stored in the r object that can be
 used to communicate actions to the module server.
 
-Their name is built with paste0(id, "\_trigger_name"), with
-[trigger_name] being: \* trigger_add: add an item to the item list \*
+Their name is built with paste0(id, “\_trigger_name”), with
+\[trigger_name\] being: \* trigger_add: add an item to the item list \*
 trigger_update \<- update an item from the item list \* trigger_delete
 \<- delete an item from the list \* trigger_save \<- save the item list
 (if autosave is turned off)
 
 ## Item creation
 
-It's recommended to use item_create() to create the item to be added to
+It’s recommended to use item_create() to create the item to be added to
 the list:
 
-id \<- "my_data"
+id \<- “my_data”
 
 r_data_model \<- dm_name(id) trigger_add \<- trigger_add_name(id)
 
-input_values \<- data.frame(id = 1, text = "demo")
+input_values \<- data.frame(id = 1, text = “demo”)
 
 item \<- item_create(values = input_values, data.model =
-r[[r_data_model]]()) r[[trigger_add]](item)
+r[\[r_data_model\]]()) r[\[trigger_add\]](item)
 
-Note: if autosave has been turned off, r[[trigger_save]] should be used
-to make item changes persistent.
+Note: if autosave has been turned off, r\[\[trigger_save\]\] should be
+used to make item changes persistent.
 
 ## Item update
 
-It's recommended to use item_create() to create a new item to replace
+It’s recommended to use item_create() to create a new item to replace
 the one in the list:
 
-id \<- "my_data"
+id \<- “my_data”
 
 r_data_model \<- dm_name(id) trigger_update \<- trigger_update_name(id)
 
-input_values \<- data.frame(id = 1, text = "demo update")
+input_values \<- data.frame(id = 1, text = “demo update”)
 
 item \<- item_create(values = input_values, data.model =
-r[[r_data_model]]()) r[[trigger_update]](item)
+r[\[r_data_model\]]()) r[\[trigger_update\]](item)
 
 ## Item delete
 
-To delete an item, just pass it's id to the trigger:
+To delete an item, just pass it’s id to the trigger:
 
-id \<- "my_data"
+id \<- “my_data”
 
 trigger_delete \<- trigger_delete_name(id)
 
-item_id \<- 1704961867683 r[[trigger_delete]](item_id)
+item_id \<- 1704961867683 r[\[trigger_delete\]](item_id)
 
 ------------------------------------------------------------------------
 
@@ -185,13 +141,13 @@ item_id \<- 1704961867683 r[[trigger_delete]](item_id)
 
 ### date_slider_INPUT
 
-If the data model has an attribute named 'date', a date sliderInput will
+If the data model has an attribute named ‘date’, a date sliderInput will
 be created automatically to enable date filtering.
 
 This sliderInput will trigger a filter on the items to be displayed in
 the filtered view.
 
-If not implemented in your application's UI, then no date filtered is
+If not implemented in your application’s UI, then no date filtered is
 applied by default.
 
 ### Buttons
