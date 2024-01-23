@@ -2,13 +2,19 @@
 % Please edit documentation in R/dynamic_sidebar.R
 \name{dynamic_sidebar}
 \alias{dynamic_sidebar}
-\title{Title}
+\title{Generate dynamic menuItem}
 \usage{
 dynamic_sidebar(r)
 }
 \arguments{
-\item{r}{}
+\item{r}{the reactive shared communication object}
+}
+\value{
+a sidebarMenu menuItem object with one menuSubItem per data model
 }
 \description{
-Title
+Generate dynamic menuItem
+}
+\examples{
+dynamic_sidebar(r)
 }
