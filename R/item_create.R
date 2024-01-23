@@ -4,7 +4,6 @@
 #'
 #' @param values a list of values, most likely output values coming from UI inputs
 #' @param data.model a data.frame, defining the data model
-#' @param coerce a named list, providing the as function for each supported type
 #'
 #'
 #' @return a data.frame of the new item, coerced to match with colClasses
@@ -15,16 +14,13 @@
 # -- function definition
 item_create <- function(values, data.model){
 
-  # -- Get supported class functions
-  coerce <- class_functions()
-
   # -- init params from data.model
   colClasses <- dm_colClasses(data.model)
   default.val <- dm_default_val(data.model)
   default.fun <- dm_default_fun(data.model)
 
   # -- helper function (takes single values)
-  helper <- function(key, value, class, default.val, default.fun, coerce){
+  helper <- function(key, value, class, default.val, default.fun){
 
     # -- coerce value
     cat("Helper function: \n")
@@ -47,7 +43,7 @@ item_create <- function(values, data.model){
 
     # -- coerce value
     cat("Coerce value to given class \n")
-    value <- eval(call(coerce[[class]], value))
+    value <- eval(call(CLASS_FUNCTIONS[[class]], value))
     cat("Output: \n")
     str(value)
 
@@ -62,8 +58,7 @@ item_create <- function(values, data.model){
                                                    value = values[[x]],
                                                    class = colClasses[[x]],
                                                    default.val = if(x %in% names(default.val)) default.val[[x]] else NULL,
-                                                   default.fun = if(x %in% names(default.fun)) default.fun[[x]] else NULL,
-                                                   coerce = coerce))
+                                                   default.fun = if(x %in% names(default.fun)) default.fun[[x]] else NULL))
 
   # -- rename & return as df
   names(item) <- names(values)
