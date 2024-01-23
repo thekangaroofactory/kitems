@@ -7,7 +7,7 @@
 item_add_attribute(x, name, type, fill = NA)
 }
 \arguments{
-\item{coerce}{}
+\item{fill}{}
 }
 \description{
 Title

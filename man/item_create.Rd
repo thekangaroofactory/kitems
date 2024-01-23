@@ -10,8 +10,6 @@ item_create(values, data.model)
 \item{values}{a list of values, most likely output values coming from UI inputs}
 
 \item{data.model}{a data.frame, defining the data model}
-
-\item{coerce}{a named list, providing the as function for each supported type}
 }
 \value{
 a data.frame of the new item, coerced to match with colClasses
