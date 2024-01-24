@@ -45,14 +45,15 @@ body <- dashboardBody(
                        br(),
                        p("This instance is started with data.model = NULL.", br(), "As no data model is provided, the administration console will only
                          display the Create and Import data buttons."),
-                       tags$pre("# -- start module server: data \nkitems::kitemsManager_Server(\nid = \"data\", \nr = r, \npath = path_list, \nfile = \"my_data.csv\", \ndata.model = NULL, \ncreate = TRUE, \nautosave = TRUE)"),
+                       tags$pre("# -- start module server: data \nkitems::kitemsManager_Server(\nid = \"data\", \nr = r, \npath = path_list, \nfile = \"my_data.csv\", \ndata.model = NULL, \ncreate = TRUE, \nautosave = FALSE)"),
 
                        # -- data_2
                        tags$li("data_2"),
                        br(),
                        p("This instance is started with a data.model (output of kitems::data_model() function)", br(),
                          "Administration console shows data model, the raw table, and the default view.", br(),
-                         "Also a sample data is provided with the demo app, so it can be displayed.")))),
+                         "Also a sample data is provided with the demo app, so it can be displayed.", br(), br(),
+                         "Note that autosave is set to FALSE, so create / update / delete won't be persistent (as save trigger is never called)")))),
 
             fluidRow(
 
