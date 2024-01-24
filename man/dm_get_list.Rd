@@ -16,5 +16,7 @@ a vector with the names (ids) of the data models available in session
 Available data models
 }
 \examples{
+\dontrun{
 dm_get_list(r)
+}
 }

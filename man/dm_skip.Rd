@@ -16,5 +16,7 @@ a vector containing the names of the attributes to skip (or NULL if data.model i
 Extract skipped attributes
 }
 \examples{
+\dontrun{
 dm_skip(data.model = mydatamodel)
+}
 }

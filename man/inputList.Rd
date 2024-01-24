@@ -25,6 +25,8 @@ Build input tagList
 Data model skip feature will be used to return inputs only for the skip = FALSE attributes
 }
 \examples{
+\dontrun{
 inputList(ns, item = NULL, update = FALSE, data.model = mydatamodel)
 inputList(ns, item = myitem, update = TRUE, data.model = mydatamodel)
+}
 }

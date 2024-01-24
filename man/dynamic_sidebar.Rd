@@ -16,5 +16,7 @@ a sidebarMenu menuItem object with one menuSubItem per data model
 Generate dynamic menuItem
 }
 \examples{
+\dontrun{
 dynamic_sidebar(r)
+}
 }

@@ -18,5 +18,7 @@ an updated data model
 Set data model attribute filter
 }
 \examples{
+\dontrun{
 dm_filter_set(data.model = mydatamodel, filter = c("id", "internal"))
+}
 }

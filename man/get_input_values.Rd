@@ -23,5 +23,7 @@ In case some names have no corresponding item in the input parameter, they will 
 in the output list.
 }
 \examples{
+\dontrun{
 values <- get_input_values(input, colClasses = c("date" = "Date", "text" = "character"))
+}
 }

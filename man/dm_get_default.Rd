@@ -18,5 +18,7 @@ the default value or computed output of the default function
 Default value for an attribute
 }
 \examples{
+\dontrun{
 value <- dm_get_default(data.model = mydatamodel, name = "date")
+}
 }

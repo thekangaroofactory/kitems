@@ -16,5 +16,7 @@ a logical, TRUE if data model has an attribute 'date' (exact match)
 Test date attribute
 }
 \examples{
+\dontrun{
 hasDate(data.model = mydatamodel)
+}
 }
