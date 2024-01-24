@@ -14,12 +14,13 @@
 #' @export
 #'
 #' @examples
-#'
+#' \dontrun{
 #' dm_add_attribute(data.model = mydatamodel, name = "new_attribute", type = "character")
 #' dm_add_attribute(data.model = mydatamodel, name = "total", type = "double", default.val = 0)
 #' dm_add_attribute(data.model = mydatamodel, name = "date", type = "Date", default.fun = "Sys.Date")
 #' dm_add_attribute(data.model = mydatamodel, name = "progress", type = "integer", skip = TRUE)
 #' dm_add_attribute(data.model = mydatamodel, name = "internal", type = "logical", filter = TRUE)
+#' }
 
 
 dm_add_attribute <- function(data.model, name, type, default.val = NA, default.fun = NA, skip = FALSE, filter = FALSE){

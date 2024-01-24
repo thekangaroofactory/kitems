@@ -8,7 +8,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' dm_default_val(data.model = mydatamodel)
+#' }
 
 
 dm_default_val <- function(data.model){

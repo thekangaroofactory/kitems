@@ -1,13 +1,12 @@
 Package: kitems
-Title: Manage Files and Dataframe Items
-Version: 0.0.0.9000
+Title: Framework to manage data.frame items
+Version: 0.4.0.0000
 Authors@R: 
-    person(given = "Kangaroo",
-           family = "Factory",
+    person(given = "philippe",
+           family = "peret",
            role = c("aut", "cre"),
-           email = "kangaroo.ai@kangaroo-ai.fr",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: Set of standard functions to manage create, load and save of dataframes into csv file.
+           email = "philippe.peret@hotmail.com")
+Description: Set of standard functions to manage data models and corresponding data.frame items.
 License: GPL (>=3)
 Encoding: UTF-8
 LazyData: true
@@ -15,10 +14,13 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.2
 Depends:
     shiny,
-    shinydashboard
+    shinydashboard,
+    shinyWidgets,
+    DT,
 Imports:
     kfiles,
-    ktools
+    ktools,
+    stringr
 Suggests: 
     knitr,
     rmarkdown,

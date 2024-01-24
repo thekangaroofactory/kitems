@@ -8,8 +8,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' dm_colClasses(data.model = mydatamodel)
-
+#' }
 
 dm_colClasses <- function(data.model = NULL){
 

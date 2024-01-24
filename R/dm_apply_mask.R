@@ -9,7 +9,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' filetered_items <- dm_apply_mask(data.model = mydatamodel, items = myitems)
+#' }
 
 
 dm_apply_mask <- function(data.model, items){

@@ -18,9 +18,11 @@
 #' data model.
 #'
 #' @examples
+#' \dontrun{
 #' feedback <- dm_check_integrity(mydatamodel, myitems)
 #' if(!is.logical(feedback))
 #'   mydatamodel <- feedback
+#' }
 
 dm_check_integrity <- function(data.model, items, template = NULL){
 
