@@ -16,5 +16,7 @@ a named vector of the attribute default values
 Extract default values from data model
 }
 \examples{
+\dontrun{
 dm_default_val(data.model = mydatamodel)
+}
 }

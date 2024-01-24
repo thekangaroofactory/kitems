@@ -16,5 +16,7 @@ a named vector of the attribute default functions
 Extract default function from data model
 }
 \examples{
+\dontrun{
 dm_default_fun(data.model = mydatamodel)
+}
 }

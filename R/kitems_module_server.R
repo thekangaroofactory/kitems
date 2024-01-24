@@ -10,6 +10,8 @@
 #' @param create a logical whether the data file should be created or not if missing (default = TRUE)
 #' @param autosave a logical whether the item auto save should be activated or not (default = TRUE)
 #'
+#' @import shiny shinydashboard shinyWidgets DT
+#'
 #' @export
 #'
 #' @details
@@ -22,8 +24,10 @@
 #' If autosave is FALSE, the save trigger should be used to make the data persistent
 #'
 #' @examples
+#' \dontrun{
 #' kitemsManager_Server(id = "mydata", r = r, file = "mydata.csv", path = "path/to/my/data",
 #'                      data.model = NULL, create = TRUE, autosave = TRUE)
+#' }
 
 
 # ------------------------------------------------------------------------------

@@ -18,5 +18,7 @@ an item data.frame, without the filtered attributes (columns)
 Apply data model filter
 }
 \examples{
+\dontrun{
 filetered_items <- dm_apply_mask(data.model = mydatamodel, items = myitems)
+}
 }

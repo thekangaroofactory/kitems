@@ -27,7 +27,9 @@ In case an extra attribute is found in the data model as compared to the items, 
 data model.
 }
 \examples{
+\dontrun{
 feedback <- dm_check_integrity(mydatamodel, myitems)
 if(!is.logical(feedback))
   mydatamodel <- feedback
+}
 }

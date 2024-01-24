@@ -16,5 +16,7 @@ a named vector of the attribute filters
 Extract filters from data model
 }
 \examples{
+\dontrun{
 dm_filter(data.model = mydatamodel)
+}
 }

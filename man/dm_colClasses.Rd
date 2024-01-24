@@ -16,5 +16,7 @@ a named vector of the attribute types
 Extract colClasses from data model
 }
 \examples{
+\dontrun{
 dm_colClasses(data.model = mydatamodel)
+}
 }
