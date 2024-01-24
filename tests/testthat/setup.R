@@ -6,6 +6,7 @@
 
 # -- declare colClasses
 colClasses <- c(id = "numeric", date = "POSIXct", name = "character", isvalid = "logical")
+colClasses_extra_att <- c(id = "numeric", date = "POSIXct", name = "character", isvalid = "logical", extra_att = "integer")
 
 # -- declare default.val
 default_val <- c("name" = "test", "isvalid" = TRUE)
@@ -27,10 +28,17 @@ skip <- c("isvalid")
 # -- build data model
 dm <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, filter = filter, skip = skip)
 dm_nofilter <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, filter = NULL, skip = skip)
-
+dm_extra_att <- data_model(colClasses = colClasses_extra_att, default.val = default_val, default.fun = default_fun, filter = filter, skip = skip)
 
 # -- items
 items <- data.frame("id" = c(1705158971950, 1705313192780, 1705313216662, 1705399423521),
                     "date" = c(2024-01-17, 2024-01-15, 2024-01-14, 2024-01-16),
                     "name" = c("Banana", "Apple", "Lemon", "Pear"),
                     "isvalid" = c(TRUE, FALSE, TRUE, FALSE))
+
+# -- items with additional attribute
+items_extra_att <- data.frame("id" = c(1705158971950, 1705313192780, 1705313216662, 1705399423521),
+                              "date" = c(2024-01-17, 2024-01-15, 2024-01-14, 2024-01-16),
+                              "name" = c("Banana", "Apple", "Lemon", "Pear"),
+                              "isvalid" = c(TRUE, FALSE, TRUE, FALSE),
+                              "extra_att" = c("this", "is", "an", "extra"))
