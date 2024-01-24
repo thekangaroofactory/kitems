@@ -10,5 +10,8 @@ runExample()
 Run the shiny demo app
 }
 \examples{
+
+\dontrun{
 runExample()
+}
 }

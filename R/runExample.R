@@ -5,7 +5,10 @@
 #' @export
 #'
 #' @examples
+#'
+#' \dontrun{
 #' runExample()
+#' }
 
 runExample <- function() {
 

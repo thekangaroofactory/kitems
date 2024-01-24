@@ -14,7 +14,9 @@
 #' - a default mask (replace . and _ by a space in the attribute names, plus capitalize first letter)
 #'
 #' @examples
+#' \dontrun{
 #' view_apply_masks(data.model = "mydatamodel", items = "myitems")
+#' }
 
 view_apply_masks <- function(data.model, items){
 

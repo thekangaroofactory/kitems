@@ -25,5 +25,7 @@ Two masks are applied:
 }
 }
 \examples{
+\dontrun{
 view_apply_masks(data.model = "mydatamodel", items = "myitems")
+}
 }
