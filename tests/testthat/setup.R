@@ -14,10 +14,10 @@ default_val <- c("name" = "test", "isvalid" = TRUE)
 default_fun <- c("date" = "Sys.Date")
 
 # -- declare filter
-filter <- c("id" = TRUE)
+filter <- c("id")
 
 # -- declare filter
-skip <- c("isvalid" = TRUE)
+skip <- c("isvalid")
 
 
 # ------------------------------------------------------------------------------
@@ -26,6 +26,8 @@ skip <- c("isvalid" = TRUE)
 
 # -- build data model
 dm <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, filter = filter, skip = skip)
+dm_nofilter <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, filter = NULL, skip = skip)
+
 
 # -- items
 items <- data.frame("id" = c(1705158971950, 1705313192780, 1705313216662, 1705399423521),
