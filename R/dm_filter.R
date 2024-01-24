@@ -15,10 +15,18 @@
 
 dm_filter <- function(data.model){
 
-  # -- Check NULL & get names where filter TRUE
-  if(!is.null(data.model))
-    data.model[data.model$filter, ]$name
-  else
-    NULL
+  # -- check data model
+  if(is.null(data.model))
+    return(NULL)
+
+  # -- get names where filter TRUE
+  x <- data.model[data.model$filter, ]$name
+
+  # -- check (no filter in data model)
+  if(identical(x, character(0)))
+    x <- NULL
+
+  # -- return
+  return(x)
 
 }
