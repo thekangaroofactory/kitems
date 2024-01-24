@@ -9,7 +9,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' value <- dm_get_default(data.model = mydatamodel, name = "date")
+#' }
 
 
 dm_get_default <- function(data.model, name){

@@ -7,7 +7,9 @@
 #' @return a vector with the names (ids) of the data models available in session
 #'
 #' @examples
+#' \dontrun{
 #' dm_get_list(r)
+#' }
 
 
 dm_get_list <- function(r){

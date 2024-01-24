@@ -8,7 +8,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' dynamic_sidebar(r)
+#' }
 
 
 dynamic_sidebar <- function(r){

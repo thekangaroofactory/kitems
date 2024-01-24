@@ -8,7 +8,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' dm_skip(data.model = mydatamodel)
+#' }
 
 
 dm_skip <- function(data.model){

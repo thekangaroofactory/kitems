@@ -8,7 +8,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' dm_filter(data.model = mydatamodel)
+#' }
 
 
 dm_filter <- function(data.model){

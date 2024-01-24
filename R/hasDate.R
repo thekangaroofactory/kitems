@@ -7,7 +7,9 @@
 #' @return a logical, TRUE if data model has an attribute 'date' (exact match)
 #'
 #' @examples
+#' \dontrun{
 #' hasDate(data.model = mydatamodel)
+#' }
 
 
 hasDate <- function(data.model){

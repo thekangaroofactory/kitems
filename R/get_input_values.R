@@ -12,7 +12,9 @@
 #' in the output list.
 #'
 #' @examples
+#' \dontrun{
 #' values <- get_input_values(input, colClasses = c("date" = "Date", "text" = "character"))
+#' }
 
 
 # -- function definition

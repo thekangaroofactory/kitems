@@ -9,7 +9,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' dm_filter_set(data.model = mydatamodel, filter = c("id", "internal"))
+#' }
 
 
 dm_filter_set <- function(data.model, filter){
