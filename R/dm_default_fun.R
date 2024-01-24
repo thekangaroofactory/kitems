@@ -15,7 +15,14 @@
 
 dm_default_fun <- function(data.model){
 
-  # -- Extract
-  data.model[!is.na(data.model$default.fun)]$default.fun
+  # -- Slice data model
+  dm <- data.model[!is.na(data.model$default.fun), c("name", "default.fun")]
+
+  # -- Extract default_fun
+  default_fun <- dm$default.fun
+  names(default_fun) <- dm$name
+
+  # -- return
+  default_fun
 
 }
