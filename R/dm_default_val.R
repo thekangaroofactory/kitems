@@ -15,7 +15,14 @@
 
 dm_default_val <- function(data.model){
 
-  # -- Extract
-  data.model[!is.na(data.model$default.val)]$default.val
+  # -- Slice data model
+  dm <- data.model[!is.na(data.model$default.val), c("name", "default.val")]
+
+  # -- Extract default_val
+  default_val <- dm$default.val
+  names(default_val) <- dm$name
+
+  # -- return
+  default_val
 
 }
