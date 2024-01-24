@@ -39,8 +39,6 @@
 
 data_model <- function(colClasses, default.val = NULL, default.fun = NULL, filter = NULL, skip = NULL){
 
-  cat("[data_model] Building data model \n")
-
   # -- Build data.frame from colClasses (named vector)
   dm <- data.frame("name" = names(colClasses), "type" = unname(colClasses))
 

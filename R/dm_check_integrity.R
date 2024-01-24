@@ -24,7 +24,6 @@
 
 dm_check_integrity <- function(data.model, items, template = NULL){
 
-  cat("Checking data model integrity \n")
   integrity <- TRUE
 
   # -- Check for missing attributes (columns in item data.frame not in data model)

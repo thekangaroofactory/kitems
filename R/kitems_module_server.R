@@ -120,6 +120,7 @@ kitemsManager_Server <- function(id, r, file, path,
     # -- Check for NULL data mode + data.frame
     if(!is.null(data.model) & !is.null(items)){
 
+      cat(MODULE, "Checking data model integrity \n")
       result <- dm_check_integrity(data.model = data.model, items = items, template = TEMPLATE_DATA_MODEL)
 
       # -- Check feedback (otherwise value is TRUE)
@@ -375,6 +376,7 @@ kitemsManager_Server <- function(id, r, file, path,
     if(hasDate(isolate(r[[r_data_model]]()))){
 
       # -- Declare output
+      cat(MODULE, "Building date sliderInput \n")
       output$date_slider <- input_date_slider(isolate(r[[r_items]]()), ns = ns)
 
       # -- Observe items min/max date
@@ -521,7 +523,7 @@ kitemsManager_Server <- function(id, r, file, path,
         removeModal()
 
         # -- Get data model
-        cat("Extract data model from data \n")
+        cat(MODULE, "Extract data model from data \n")
         data.model <- dm_check_integrity(data.model = NULL, items = items, template = TEMPLATE_DATA_MODEL)
 
         # -- Display modal
@@ -716,10 +718,12 @@ kitemsManager_Server <- function(id, r, file, path,
       skip <- c("id")
 
       # -- init data model & store
+      cat(MODULE, "-- Building data model \n")
       dm <- data_model(colClasses, default.val = default_val, default.fun = default_fun, filter = filter, skip = skip)
       r[[r_data_model]](dm)
 
       # -- init items
+      cat(MODULE, "-- Init data \n")
       items <- kfiles::read_data(file = file,
                                  path = path$data,
                                  colClasses = colClasses,
