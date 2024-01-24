@@ -1,18 +1,13 @@
 
 
 #----------------------------------
-#  INIT
-#----------------------------------
-
-# data model
-colClasses <- c(id = "numeric", date = "POSIXct", name = "character", isvalid = "logical")
-
-
-#----------------------------------
 #  TEST
 #----------------------------------
 
 test_that("data_model: colClasses argument only", {
+
+  # -- init
+  colClasses <- c(id = "numeric", date = "POSIXct", name = "character", isvalid = "logical")
 
   # -- function call
   dm <- data_model(colClasses, default.val = NULL, default.fun = NULL, filter = NULL, skip = NULL)
@@ -25,5 +20,3 @@ test_that("data_model: colClasses argument only", {
 
 
 })
-
-
