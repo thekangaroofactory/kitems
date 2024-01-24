@@ -12,6 +12,10 @@ The goal of kitems is to provide a framework to manage data.frame like
 items and a set of tools to implement it within a shiny web application.
 For that reason, it is delivered as a shiny module.
 
+## Code coverage
+
+[![codecov](https://codecov.io/gh/thekangaroofactory/kitems/graph/badge.svg?token=7P74NK51JJ)](https://codecov.io/gh/thekangaroofactory/kitems)
+
 ## Installation
 
 You can install the development version of kitems from
@@ -84,18 +88,6 @@ from the r object passed as an argument of the module server):
 
 ``` r
 library(kitems)
-#> Le chargement a nécessité le package : shiny
-#> Le chargement a nécessité le package : shinydashboard
-#> 
-#> Attachement du package : 'shinydashboard'
-#> L'objet suivant est masqué depuis 'package:graphics':
-#> 
-#>     box
-#> 
-#> Attachement du package : 'kitems'
-#> L'objet suivant est masqué depuis 'package:shiny':
-#> 
-#>     runExample
 
 # -- define module id
 id <- "mydata"
@@ -110,8 +102,6 @@ using: r[\[data_model\]]()
 ### Items
 
 ``` r
-library(kitems)
-
 # -- define module id
 id <- "mydata"
 
