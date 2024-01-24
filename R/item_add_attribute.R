@@ -14,7 +14,9 @@
 #' fill will be coerced to the class name provided in type
 #'
 #' @examples
+#' \dontrun{
 #' item_add_attribute(items = myitems, name = "comment", type = "character", fill = "none")
+#' }
 
 item_add_attribute <- function(items, name, type, fill = NA){
 
@@ -34,8 +36,7 @@ item_add_attribute <- function(items, name, type, fill = NA){
     # -- coerce value
     cat("Coerce value to given class \n")
     value <- eval(call(CLASS_FUNCTIONS[[type]], fill))
-    cat("Output: \n")
-    str(value)
+    cat("Output:", class(value), value, "\n")
 
     # -- Add col
     items[name] <- value

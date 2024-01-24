@@ -12,7 +12,9 @@
 #' The min and max values are set to the min() and max() of items$date
 #'
 #' @examples
+#' \dontrun{
 #' input_date_slider(items = myitems, ns = shiny::NS())
+#' }
 
 
 input_date_slider <- function(items, ns){

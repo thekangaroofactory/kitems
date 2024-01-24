@@ -14,8 +14,10 @@
 #' File connector: if file is not NULL, then data are loaded from the given .csv
 #'
 #' @examples
+#' \dontrun{
 #' # -- File connector:
 #' item_load(data.model = mydatamodel, file = "mydata.csv", path = "path/to/my/data", create = TRUE)
+#' }
 
 
 item_load <- function(data.model, file = NULL, path = NULL, create = TRUE){

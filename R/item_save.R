@@ -12,8 +12,10 @@
 #' File connector: if file is not NULL, then data is saved to .csv
 #'
 #' @examples
+#' \dontrun{
 #' # -- File connector:
 #' item_save(data = mydata, file = "mydata.csv", path = "path/to/my/data")
+#' }
 
 
 item_save <- function(data, file = NULL, path = NULL){

@@ -9,7 +9,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' item_delete(items = myitems, id = 123456789)
+#' }
 
 
 item_delete <- function(items, id){

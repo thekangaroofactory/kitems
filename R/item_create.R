@@ -9,7 +9,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' item_create(values, data.model = mydatamodel)
+#' }
 
 
 # -- function definition
@@ -45,8 +47,7 @@ item_create <- function(values, data.model){
     # -- coerce value
     cat("Coerce value to given class \n")
     value <- eval(call(CLASS_FUNCTIONS[[class]], value))
-    cat("Output: \n")
-    str(value)
+    cat("Output:", class(value), value, "\n")
 
     # -- return
     c(key = value)

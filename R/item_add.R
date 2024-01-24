@@ -9,7 +9,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' item_add(items = myitems, item = mynewitem)
+#' }
 
 item_add <- function(items, item){
 
