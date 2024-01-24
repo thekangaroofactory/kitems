@@ -30,8 +30,6 @@ test_that("dm_check_integrity: extra attribute in data model", {
   # -- function call
   output <- dm_check_integrity(data.model = dm_extra_att, items = items, template = NULL)
 
-  str(output)
-
   # -- checks:
   expect_output(str(output), "data.frame")
 
