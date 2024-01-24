@@ -41,16 +41,21 @@ kitemsManager_Server <- function(id, r, file, path,
 
     # -- Build log pattern
     MODULE <- paste0("[", id, "]")
-
-
-    # --------------------------------------------------------------------------
-    # Init:
-    # --------------------------------------------------------------------------
-
     cat(MODULE, "Starting kitems module server... \n")
+
+    # -- Check if app is running
+    is_running <- shiny::isRunning()
 
     # -- Get namespace
     ns <- session$ns
+
+
+    # --------------------------------------------------------------------------
+    # Declare objects:
+    # --------------------------------------------------------------------------
+
+    # -- Init items
+    items <- NULL
 
     # -- Check paths (to avoid connection problems if missing folder)
     missing_path <- path[!dir.exists(unlist(path))]
@@ -87,71 +92,89 @@ kitemsManager_Server <- function(id, r, file, path,
 
 
     # --------------------------------------------------------------------------
-    # Read data model:
+    # Initialize data model and items:
     # --------------------------------------------------------------------------
 
-    # -- Check url
-    if(file.exists(dm_url)){
+    # -- Notify progress
+    withProgress(message = paste("Starting", MODULE, "item manager:"), value = 0, {
 
-      data.model <- readRDS(dm_url)
-      cat(MODULE, "Read data model done \n")}
+      # ------------------------------------------------------------------------
+      # Read data model:
+      # ------------------------------------------------------------------------
 
+      # -- Check url
+      if(file.exists(dm_url)){
 
-    # --------------------------------------------------------------------------
-    # Read the data (items):
-    # --------------------------------------------------------------------------
+        data.model <- readRDS(dm_url)
+        cat(MODULE, "Read data model done \n")}
 
-    # -- Init
-    items <- NULL
-
-    # -- Check for NULL data model (then no reason to try loading)
-    if(!is.null(data.model))
-
-      items <- item_load(data.model = data.model,
-                         file = file,
-                         path = path,
-                         create = create)
+      # Increment the progress bar, and update the detail text.
+      incProgress(1/4, detail = "data model")
 
 
-    # --------------------------------------------------------------------------
-    # Check data model integrity:
-    # --------------------------------------------------------------------------
+      # ------------------------------------------------------------------------
+      # Read the data (items):
+      # ------------------------------------------------------------------------
 
-    # -- Check for NULL data mode + data.frame
-    if(!is.null(data.model) & !is.null(items)){
-
-      cat(MODULE, "Checking data model integrity \n")
-      result <- dm_check_integrity(data.model = data.model, items = items, template = TEMPLATE_DATA_MODEL)
-
-      # -- Check feedback (otherwise value is TRUE)
-      if(is.data.frame(result)){
-
-        # -- Update data model & save
-        data.model <- result
-        saveRDS(data.model, file = dm_url)
-        cat(MODULE, "Data model saved \n")
-
-        # -- Reload data with updated data model
-        cat(MODULE, "[Warning] Data model not synchronized with items data.frame! \n")
-        cat(MODULE, "Reloading the item data with updated data model \n")
+      # -- Check for NULL data model (then no reason to try loading)
+      if(!is.null(data.model))
 
         items <- item_load(data.model = data.model,
                            file = file,
                            path = path,
                            create = create)
 
-      }}
+      # Increment the progress bar, and update the detail text.
+      incProgress(2/4, detail = "items")
 
 
-    # --------------------------------------------------------------------------
-    # Store into reactive values:
-    # --------------------------------------------------------------------------
+      # --------------------------------------------------------------------------
+      # Check data model integrity:
+      # --------------------------------------------------------------------------
 
-    # -- Store data model (either content of the RDS or the server function input)
-    r[[r_data_model]] <- reactiveVal(data.model)
+      # -- Check for NULL data mode + data.frame
+      if(!is.null(data.model) & !is.null(items)){
 
-    # -- Store items
-    r[[r_items]]<- reactiveVal(items)
+        cat(MODULE, "Checking data model integrity \n")
+        result <- dm_check_integrity(data.model = data.model, items = items, template = TEMPLATE_DATA_MODEL)
+
+        # -- Check feedback (otherwise value is TRUE)
+        if(is.data.frame(result)){
+
+          # -- Update data model & save
+          data.model <- result
+          saveRDS(data.model, file = dm_url)
+          cat(MODULE, "Data model saved \n")
+
+          # -- Reload data with updated data model
+          cat(MODULE, "[Warning] Data model not synchronized with items data.frame! \n")
+          cat(MODULE, "Reloading the item data with updated data model \n")
+
+          items <- item_load(data.model = data.model,
+                             file = file,
+                             path = path,
+                             create = create)
+
+        }}
+
+      # Increment the progress bar, and update the detail text.
+      incProgress(3/4, detail = "Integrity checked")
+
+
+      # ------------------------------------------------------------------------
+      # Store into reactive values:
+      # ------------------------------------------------------------------------
+
+      # -- Store data model (either content of the RDS or the server function input)
+      r[[r_data_model]] <- reactiveVal(data.model)
+
+      # -- Store items
+      r[[r_items]]<- reactiveVal(items)
+
+      # Increment the progress bar, and update the detail text.
+      incProgress(4/4, detail = "done")
+
+    }) #end withProgress
 
 
     # --------------------------------------------------------------------------
@@ -212,6 +235,10 @@ kitemsManager_Server <- function(id, r, file, path,
       item_list <- item_add(r[[r_items]](), r[[trigger_add]]())
       r[[r_items]](item_list)
 
+      # -- notify
+      if(is_running)
+        showNotification(paste(MODULE, "Item created."), type = "message")
+
     }, ignoreInit = TRUE)
 
 
@@ -222,6 +249,10 @@ kitemsManager_Server <- function(id, r, file, path,
       cat(MODULE, "[TRIGGER] Update item \n")
       item_list <- item_update(r[[r_items]](), r[[trigger_update]]())
       r[[r_items]](item_list)
+
+      # -- notify
+      if(is_running)
+        showNotification(paste(MODULE, "Item updated."), type = "message")
 
     }, ignoreInit = TRUE)
 
@@ -234,6 +265,10 @@ kitemsManager_Server <- function(id, r, file, path,
       cat("-- Item(s) to be deleted =", as.character(r[[trigger_delete]]()), "\n")
       item_list <- item_delete(r[[r_items]](), r[[trigger_delete]]())
       r[[r_items]](item_list)
+
+      # -- notify
+      if(is_running)
+        showNotification(paste(MODULE, "Item(s) deleted."), type = "message")
 
     }, ignoreInit = TRUE)
 
@@ -248,6 +283,8 @@ kitemsManager_Server <- function(id, r, file, path,
 
       # -- Notify
       cat(MODULE, "[TRIGGER] Item list has been saved \n")
+      if(is_running)
+        showNotification(paste(MODULE, "Items saved."), type = "message")
 
     }, ignoreInit = TRUE)
 
@@ -543,6 +580,10 @@ kitemsManager_Server <- function(id, r, file, path,
           # -- Store items & data model
           r[[r_items]](items)
           r[[r_data_model]](data.model)
+
+          # -- notify
+          if(is_running)
+            showNotification(paste(MODULE, "Data imported."), type = "message")
 
         })
 
@@ -895,6 +936,10 @@ kitemsManager_Server <- function(id, r, file, path,
       cat("--  Add item to list \n")
       item_list <- item_add(r[[r_items]](), item)
       r[[r_items]](item_list)
+
+      # -- notify
+      if(is_running)
+        showNotification(paste(MODULE, "Item created."), type = "message")
 
     })
 
