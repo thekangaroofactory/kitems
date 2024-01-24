@@ -5,8 +5,8 @@
 #' @param colClasses a \emph{mandatory} named vector of classes, defining the data model.
 #' @param default.val an optional named vector of values, defining the default values.
 #' @param default.fun an optional named vector of functions, defining the default functions to be used to generate default values.
-#' @param filter an optional named vector of logical, indicating whether or not the attribute should be filtered from the table view.
-#' @param skip an optional named vector of logical, indicating whether or not the attribute should be skipped from the user input form.
+#' @param filter an optional character vector, indicating which attribute names should be filtered from the table view.
+#' @param skip an optional character vector, indicating which attribute names should be skipped from the user input form.
 #'
 #' @return a data.frame containing the data model.
 #'
