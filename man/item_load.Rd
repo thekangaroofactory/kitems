@@ -4,16 +4,16 @@
 \alias{item_load}
 \title{Load data}
 \usage{
-item_load(data.model, file, path, create)
+item_load(data.model, file = NULL, path = NULL, create = TRUE)
 }
 \arguments{
 \item{data.model}{a data.frame containing the data model}
 
-\item{file}{the file name}
+\item{file}{an optional file name (including .csv extension)}
 
-\item{path}{the path to the file}
+\item{path}{an optional path to the file}
 
-\item{create}{a logical to indicate if missing file should be created or not}
+\item{create}{a logical (default = TRUE) to indicate if missing file should be created or not}
 }
 \value{
 the data (items)
@@ -21,6 +21,12 @@ the data (items)
 \description{
 Load data
 }
+\details{
+File connector: if file is not NULL, then data are loaded from the given .csv
+}
 \examples{
+\dontrun{
+# -- File connector:
 item_load(data.model = mydatamodel, file = "mydata.csv", path = "path/to/my/data", create = TRUE)
+}
 }

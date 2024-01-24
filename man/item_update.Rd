@@ -21,5 +21,7 @@ Update item
 The item$id value will be used to replace the corresponding item in the items data.frame
 }
 \examples{
+\dontrun{
 item_update(items = myitems, item = myupdateditem)
+}
 }

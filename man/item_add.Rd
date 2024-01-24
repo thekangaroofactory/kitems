@@ -18,5 +18,7 @@ the updated items data.frame
 Add item
 }
 \examples{
+\dontrun{
 item_add(items = myitems, item = mynewitem)
+}
 }

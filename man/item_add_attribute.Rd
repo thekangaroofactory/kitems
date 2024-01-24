@@ -25,5 +25,7 @@ Add attribute to existing items
 fill will be coerced to the class name provided in type
 }
 \examples{
+\dontrun{
 item_add_attribute(items = myitems, name = "comment", type = "character", fill = "none")
+}
 }

@@ -18,5 +18,7 @@ an updated data.frame of the items
 Delete item
 }
 \examples{
+\dontrun{
 item_delete(items = myitems, id = 123456789)
+}
 }

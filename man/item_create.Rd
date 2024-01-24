@@ -18,5 +18,7 @@ a data.frame of the new item, coerced to match with colClasses
 Create a new item
 }
 \examples{
+\dontrun{
 item_create(values, data.model = mydatamodel)
+}
 }
