@@ -35,8 +35,8 @@ shinyServer(
 
     # -- start module server: data
     kitems::kitemsManager_Server(id = "data", r = r, path = path_list, file = "my_data.csv",
-                         data.model = NULL,
-                         create = TRUE, autosave = TRUE)
+                                 data.model = NULL,
+                                 create = TRUE, autosave = TRUE)
 
 
     # -- setup default values/functions:
@@ -51,8 +51,8 @@ shinyServer(
 
     # -- start module server: data_2
     kitems::kitemsManager_Server(id = "data_2", r = r, path = path_list, file = "my_data_2.csv",
-                         data.model = dm,
-                         create = TRUE, autosave = TRUE)
+                                 data.model = dm,
+                                 create = TRUE, autosave = TRUE)
 
 
     # -------------------------------------
