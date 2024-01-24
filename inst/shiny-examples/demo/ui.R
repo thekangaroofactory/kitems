@@ -52,10 +52,7 @@ body <- dashboardBody(
                        br(),
                        p("This instance is started with a data.model (output of kitems::data_model() function)", br(),
                          "Administration console shows data model, the raw table, and the default view.", br(),
-                         "Also a sample data is provided with the demo app, so it can be displayed.")
-
-                     )
-              )),
+                         "Also a sample data is provided with the demo app, so it can be displayed.")))),
 
             fluidRow(
 
@@ -72,12 +69,7 @@ body <- dashboardBody(
                        p(""),
 
                        tags$li("The filetered data table view:"), br(),
-                       kitems::items_filtered_view_DT("data_2")
-
-                       )))
-
-
-    ),
+                       kitems::items_filtered_view_DT("data_2"))))),
 
     # -- tabItem
     tabItem(tabName = "data",
