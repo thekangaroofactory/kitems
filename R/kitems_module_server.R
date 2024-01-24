@@ -176,9 +176,9 @@ kitemsManager_Server <- function(id, r, file, path,
       observeEvent(r[[r_items]](), {
 
         # -- Write
-        kfiles::write_data(data = r[[r_items]](),
-                           file = file,
-                           path = path$data)
+        item_save(data = r[[r_items]](),
+                  file = file,
+                  path = path$data)
 
         # -- Notify
         cat(MODULE, "[EVENT] Item list has been (auto) saved \n")
@@ -241,9 +241,9 @@ kitemsManager_Server <- function(id, r, file, path,
     observeEvent(r[[trigger_save]](), {
 
       # -- Write
-      kfiles::write_data(data = r[[r_items]](),
-                         file = file,
-                         path = path$data)
+      item_save(data = r[[r_items]](),
+                file = file,
+                path = path$data)
 
       # -- Notify
       cat(MODULE, "[TRIGGER] Item list has been saved \n")
