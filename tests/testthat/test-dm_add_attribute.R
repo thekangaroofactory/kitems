@@ -1,20 +1,5 @@
 
 
-# ------------------------------------------------------------------------------
-# Init
-# ------------------------------------------------------------------------------
-
-# -- declare colClasses
-colClasses <- c(id = "numeric", date = "POSIXct", name = "character", isvalid = "logical")
-
-# -- build data model
-dm <- data_model(colClasses = colClasses, default.val = NULL, default.fun = NULL, filter = NULL, skip = NULL)
-
-
-# ------------------------------------------------------------------------------
-# Tests
-# ------------------------------------------------------------------------------
-
 test_that("dm_add_attribute: add attribute", {
 
   # -- test:

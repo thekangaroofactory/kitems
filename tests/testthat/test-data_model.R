@@ -1,23 +1,5 @@
 
 
-# ------------------------------------------------------------------------------
-# Init
-# ------------------------------------------------------------------------------
-
-# -- declare colClasses
-colClasses <- c(id = "numeric", date = "POSIXct", name = "character", isvalid = "logical")
-
-# -- declare default.val
-default_val <- c("name" = "test", "isvalid" = TRUE)
-
-# -- declare default.fun
-default_fun <- c("date" = "Sys.Date")
-
-
-# ------------------------------------------------------------------------------
-# Tests
-# ------------------------------------------------------------------------------
-
 test_that("data_model: colClasses argument only", {
 
   # -- function call
