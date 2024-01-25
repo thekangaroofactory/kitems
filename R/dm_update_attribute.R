@@ -30,7 +30,7 @@
 #' }
 
 
-dm_update_attribute <- function(data.model, name, default.val = NULL, default.fun = NULL, filter = FALSE, skip = FALSE){
+dm_update_attribute <- function(data.model, name, default.val = NA, default.fun = NA, filter = FALSE, skip = FALSE){
 
   # -- update row
   data.model[match(name, data.model$name), ]$default.val <- default.val
