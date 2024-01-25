@@ -32,7 +32,8 @@ ns <- shiny::NS("id")
 module_id <- "data"
 
 # -- data path
-path <- list(data = system.file("shiny-examples", "demo", "data", package = "kitems"))
+path <- list(data = system.file("shiny-examples", "demo", "data", package = "kitems"),
+             resource = system.file("shiny-examples", "demo", "data", package = "kitems"))
 path_test_output <- file.path(system.file("tests", "testthat", package = "kitems"), "testdata")
 
 # -- test file
