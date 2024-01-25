@@ -3,10 +3,10 @@
 test_that("dm_check_integrity", {
 
   # -- function call
-  output <- dm_check_integrity(data.model = dm, items = items, template = NULL)
+  x <- dm_check_integrity(data.model = dm, items = items, template = NULL)
 
   # -- check
-  expect_true(output)
+  expect_true(x)
 
 })
 
@@ -14,13 +14,13 @@ test_that("dm_check_integrity", {
 test_that("dm_check_integrity: extra attribute in items", {
 
   # -- function call
-  output <- dm_check_integrity(data.model = dm, items = items_extra_att, template = NULL)
+  x <- dm_check_integrity(data.model = dm, items = items_extra_att, template = NULL)
 
   # -- checks:
-  expect_output(str(output), "data.frame")
+  expect_s3_class(x, "data.frame")
 
-  # -- check: output dim
-  expect_equal(dim(output), c(5,6))
+  # -- check: x dim
+  expect_equal(dim(x), c(5,6))
 
 })
 
@@ -28,12 +28,12 @@ test_that("dm_check_integrity: extra attribute in items", {
 test_that("dm_check_integrity: extra attribute in data model", {
 
   # -- function call
-  output <- dm_check_integrity(data.model = dm_extra_att, items = items, template = NULL)
+  x <- dm_check_integrity(data.model = dm_extra_att, items = items, template = NULL)
 
   # -- checks:
-  expect_output(str(output), "data.frame")
+  expect_s3_class(x, "data.frame")
 
-  # -- check: output dim
-  expect_equal(dim(output), c(4,6))
+  # -- check: x dim
+  expect_equal(dim(x), c(4,6))
 
 })
