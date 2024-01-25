@@ -2,9 +2,6 @@
 
 test_that("inputList: create", {
 
-  # -- init
-  ns <- shiny::NS("id")
-
   # -- function call
   x <- inputList(ns = ns, data.model = dm)
 
@@ -15,9 +12,6 @@ test_that("inputList: create", {
 
 
 test_that("inputList: update", {
-
-  # -- init
-  ns <- shiny::NS("id")
 
   # -- function call
   x <- inputList(ns = ns, item = items[1, ], update = TRUE, data.model = dm)

@@ -24,6 +24,9 @@ skip <- c("isvalid")
 # -- declare communication object
 r <- reactiveValues(dm1_data_model = 1, dm2_data_model = 2)
 
+# -- declare namespace
+ns <- shiny::NS("id")
+
 
 # ------------------------------------------------------------------------------
 # Build standard objects
@@ -47,3 +50,7 @@ items_extra_att <- data.frame("id" = c(1705158971950, 1705313192780, 17053132166
                               "name" = c("Banana", "Apple", "Lemon", "Pear"),
                               "isvalid" = c(TRUE, FALSE, TRUE, FALSE),
                               "extra_att" = c("this", "is", "an", "extra"))
+
+# -- items without row
+items_no_row <- data.frame("id" = as.numeric(numeric()),
+                           "name" = as.character(character()))
