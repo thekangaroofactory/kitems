@@ -24,6 +24,9 @@ skip <- c("isvalid")
 # -- declare communication object
 r <- reactiveValues(dm1_data_model = 1, dm2_data_model = 2)
 
+# -- declare namespace
+ns <- shiny::NS("id")
+
 
 # ------------------------------------------------------------------------------
 # Build standard objects
@@ -37,13 +40,17 @@ dm_no_date<- data_model(colClasses = colClasses_no_date)
 
 # -- items
 items <- data.frame("id" = c(1705158971950, 1705313192780, 1705313216662, 1705399423521),
-                    "date" = c(2024-01-17, 2024-01-15, 2024-01-14, 2024-01-16),
+                    "date" = c(as.Date(2024-01-17, origin = "1970-01-01"), as.Date(2024-01-15, origin = "1970-01-01"), as.Date(2024-01-14, origin = "1970-01-01"), as.Date(2024-01-16, origin = "1970-01-01")),
                     "name" = c("Banana", "Apple", "Lemon", "Pear"),
                     "isvalid" = c(TRUE, FALSE, TRUE, FALSE))
 
 # -- items with additional attribute
 items_extra_att <- data.frame("id" = c(1705158971950, 1705313192780, 1705313216662, 1705399423521),
-                              "date" = c(2024-01-17, 2024-01-15, 2024-01-14, 2024-01-16),
+                              "date" = c(as.Date(2024-01-17, origin = "1970-01-01"), as.Date(2024-01-15, origin = "1970-01-01"), as.Date(2024-01-14, origin = "1970-01-01"), as.Date(2024-01-16, origin = "1970-01-01")),
                               "name" = c("Banana", "Apple", "Lemon", "Pear"),
                               "isvalid" = c(TRUE, FALSE, TRUE, FALSE),
                               "extra_att" = c("this", "is", "an", "extra"))
+
+# -- items without row
+items_no_row <- data.frame("id" = as.numeric(numeric()),
+                           "name" = as.character(character()))
