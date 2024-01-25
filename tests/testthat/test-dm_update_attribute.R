@@ -9,6 +9,6 @@ test_that("dm_update_attribute", {
   expect_s3_class(x, "data.frame")
 
   # -- test output value
-  expect_equal(x[x$name == "isvalid", ]$default.val, "NA")
+  expect_equal(as.character(x[x$name == "isvalid", ]$default.val), "NA")
 
 })
