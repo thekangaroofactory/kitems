@@ -32,7 +32,7 @@ inputList <- function(ns, item = NULL, update = FALSE, data.model){
   # -- helper function
   add_input <- function(x, colClasses, value){
 
-    cat("  - Dealing with attribute :", names(colClasses), "/ type =", colClasses, "\n")
+    cat("  - Dealing with attribute :", names(colClasses), "/ type =", colClasses, "/ value =", value, "\n")
 
     # -- character
     if(colClasses == "character")
@@ -71,11 +71,18 @@ inputList <- function(ns, item = NULL, update = FALSE, data.model){
         daysofweekdisabled = NULL)
 
     # -- logical
-    if(colClasses == "logical")
+    if(colClasses == "logical"){
+
+      # -- check value
+      if(is.character(value))
+        value <- as.logical(value)
+
+      # -- input
       input <- checkboxInput(inputId = ns(names(colClasses)),
                              label = "logical",
                              value = value,
                              width = NULL)
+    }
 
     # -- return
     input

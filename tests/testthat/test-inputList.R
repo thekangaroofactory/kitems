@@ -3,7 +3,7 @@
 test_that("inputList: create", {
 
   # -- function call
-  x <- inputList(ns = ns, data.model = dm)
+  x <- inputList(ns = ns, data.model = dm_no_skip)
 
   # -- check class
   expect_type(x, "list")
