@@ -34,7 +34,7 @@ item_create <- function(values, data.model){
     cat("  - default.fun =", default.fun, "\n")
 
     # -- test: isTruthy(FALSE) >> FALSE so need to skip for logicals // but include NA (is.logical(NA) >> TRUE)
-    if(!is.logical(value) | is.na(NA))
+    if(!is.logical(value) | is.na(value))
 
       if(!shiny::isTruthy(value)){
 
