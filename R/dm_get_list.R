@@ -4,7 +4,7 @@
 #'
 #' @param r the shared reactive communication object
 #'
-#' @return a vector with the names (ids) of the data models available in session
+#' @return a list with the names (ids) of the data models available in session
 #'
 #' @examples
 #' \dontrun{

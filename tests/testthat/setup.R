@@ -20,6 +20,9 @@ filter <- c("id")
 # -- declare filter
 skip <- c("isvalid")
 
+# -- declare communication object
+r <- reactiveValues(dm1_data_model = 1, dm2_data_model = 2)
+
 
 # ------------------------------------------------------------------------------
 # Build standard objects

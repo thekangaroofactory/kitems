@@ -3,7 +3,7 @@
 test_that("dm_add_attribute: add attribute", {
 
   # -- test:
-  res <- dm_add_attribute(data.model = dm,
+  x <- dm_add_attribute(data.model = dm,
                           name = "new_att",
                           type = "character",
                           default.val = NA,
@@ -12,10 +12,10 @@ test_that("dm_add_attribute: add attribute", {
                           filter = FALSE)
 
   # -- checks:
-  expect_output(str(res), "data.frame")
+  expect_s3_class(x, "data.frame")
 
   # -- check: output dim
-  expect_equal(dim(res), c(5,6))
+  expect_equal(dim(x), c(5,6))
 
 })
 
@@ -23,7 +23,7 @@ test_that("dm_add_attribute: add attribute", {
 test_that("dm_add_attribute: empty default.val", {
 
   # -- test:
-  res <- dm_add_attribute(data.model = dm,
+  x <- dm_add_attribute(data.model = dm,
                           name = "new_att",
                           type = "character",
                           default.val = "",
@@ -32,10 +32,10 @@ test_that("dm_add_attribute: empty default.val", {
                           filter = FALSE)
 
   # -- checks:
-  expect_output(str(res), "data.frame")
+  expect_s3_class(x, "data.frame")
 
   # -- check: output dim
-  expect_equal(dim(res), c(5,6))
+  expect_equal(dim(x), c(5,6))
 
 })
 
@@ -43,7 +43,7 @@ test_that("dm_add_attribute: empty default.val", {
 test_that("dm_add_attribute: empty default.fun", {
 
   # -- test:
-  res <- dm_add_attribute(data.model = dm,
+  x <- dm_add_attribute(data.model = dm,
                           name = "new_att",
                           type = "character",
                           default.val = NA,
@@ -52,10 +52,10 @@ test_that("dm_add_attribute: empty default.fun", {
                           filter = FALSE)
 
   # -- checks:
-  expect_output(str(res), "data.frame")
+  expect_s3_class(x, "data.frame")
 
   # -- check: output dim
-  expect_equal(dim(res), c(5,6))
+  expect_equal(dim(x), c(5,6))
 
 })
 
@@ -63,7 +63,7 @@ test_that("dm_add_attribute: empty default.fun", {
 test_that("dm_add_attribute: skip NULL", {
 
   # -- test:
-  res <- dm_add_attribute(data.model = dm,
+  x <- dm_add_attribute(data.model = dm,
                           name = "new_att",
                           type = "character",
                           default.val = NA,
@@ -72,10 +72,10 @@ test_that("dm_add_attribute: skip NULL", {
                           filter = FALSE)
 
   # -- checks:
-  expect_output(str(res), "data.frame")
+  expect_s3_class(x, "data.frame")
 
   # -- check: output dim
-  expect_equal(dim(res), c(5,6))
+  expect_equal(dim(x), c(5,6))
 
 })
 
@@ -83,7 +83,7 @@ test_that("dm_add_attribute: skip NULL", {
 test_that("dm_add_attribute: filter NULL", {
 
   # -- test:
-  res <- dm_add_attribute(data.model = dm,
+  x <- dm_add_attribute(data.model = dm,
                           name = "new_att",
                           type = "character",
                           default.val = NA,
@@ -92,9 +92,9 @@ test_that("dm_add_attribute: filter NULL", {
                           filter = NULL)
 
   # -- checks:
-  expect_output(str(res), "data.frame")
+  expect_s3_class(x, "data.frame")
 
   # -- check: output dim
-  expect_equal(dim(res), c(5,6))
+  expect_equal(dim(x), c(5,6))
 
 })
