@@ -75,12 +75,25 @@ item_new <- data.frame("id" = c(170539948521),
                        "name" = c("Mango"),
                        "isvalid" = c(TRUE))
 
-# -- new to update
+# -- new item (trigger)
+item_new_2 <- data.frame("id" = c(170539948521),
+                         "name" = c("Mango"),
+                         "total" = 12,
+                         "comment" = "server added",
+                         "date" = c(as.Date("2024-01-25", origin = "01-01-1970")))
+
+# -- item update
 item_update <- data.frame("id" = c(1705313192780),
                        "date" = c(as.Date("2024-01-01", origin = "01-01-1970")),
                        "name" = c("Apple-update"),
                        "isvalid" = c(TRUE))
 
+# -- new update (trigger)
+item_update_2 <- data.frame("id" = c(1705313192780),
+                            "name" = c("Apple update"),
+                            "total" = 1,
+                            "comment" = "server updated",
+                            "date" = c(as.Date("2024-01-01", origin = "01-01-1970")))
 
 # -- values to create attribute
 values <- list("id" = c(170539948621),

@@ -42,7 +42,79 @@ test_that("kitemsManager_Server works", {
     expect_s3_class(x, "data.frame")
 
     # -- test dim
-    expect_equal(dim(x), c(4,5))
+    expect_equal(dim(x), c(4, 5))
+
+
+    # --------------------------------------------------------------------------
+    # Trigger new
+    # --------------------------------------------------------------------------
+
+    # -- trigger call
+    r_trigger_add <- trigger_add_name(module_id)
+    r[[r_trigger_add]](item_new_2)
+
+    # -- flush reactive values
+    session$flushReact()
+
+    # -- check
+    x <- r[[r_items]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), c(5, 5))
+
+    # -- test id
+    expect_true(item_new_2$id %in% x$id)
+
+
+    # --------------------------------------------------------------------------
+    # Trigger update
+    # --------------------------------------------------------------------------
+
+    r_trigger_update <- trigger_update_name(module_id)
+    r[[r_trigger_update]](item_update_2)
+
+    # -- flush reactive values
+    session$flushReact()
+
+    # -- check
+    x <- r[[r_items]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), c(5, 5))
+
+    # -- test id
+    expect_equal(x[x$id == item_update_2$id, ]$comment, item_update_2$comment)
+
+
+    # --------------------------------------------------------------------------
+    # Trigger delete
+    # --------------------------------------------------------------------------
+
+    r_trigger_delete <- trigger_delete_name(module_id)
+    r[[r_trigger_delete]](item_update_2)
+
+    # -- flush reactive values
+    session$flushReact()
+
+    # -- check
+    x <- r[[r_items]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), c(4, 5))
+
+    # -- test id
+    expect_false(item_update_2$id %in% x$id)
+
+    print(output$hasDataModel)
 
   })
 
