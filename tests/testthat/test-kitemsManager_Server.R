@@ -114,7 +114,6 @@ test_that("kitemsManager_Server works", {
     # -- test id
     expect_false(item_update_2$id %in% x$id)
 
-    print(output$hasDataModel)
 
   })
 
