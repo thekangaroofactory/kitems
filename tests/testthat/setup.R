@@ -103,3 +103,7 @@ values <- list("id" = c(170539948621),
 
 # -- item id (to delete)
 item_id <- 1705313192780
+
+
+# -- date selection
+date_slider_value <- c(19737, 19739)

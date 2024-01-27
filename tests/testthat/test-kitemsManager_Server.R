@@ -115,6 +115,20 @@ test_that("kitemsManager_Server works", {
     expect_false(item_update_2$id %in% x$id)
 
 
+    # --------------------------------------------------------------------------
+    # date
+    # --------------------------------------------------------------------------
+
+    # -- update input
+    session$setInputs(date_slider = date_slider_value)
+
+    # -- check
+    expect_equal(r[[r_filter_date]](), date_slider_value)
+
+    # -- check filter
+    expect_equal(dim(r[[r_filtered_items]]()), c(2, 5))
+
+
   })
 
 
