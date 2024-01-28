@@ -62,7 +62,7 @@ kitemsManager_Server <- function(id, r, file, path,
     items <- NULL
 
     # -- Check paths (to avoid connection problems if missing folder)
-    missing_path <- path[!dir.exists(unlist(path))]
+    missing_path <- unique(path[!dir.exists(unlist(path))])
     result <- lapply(missing_path, dir.create)
 
 
