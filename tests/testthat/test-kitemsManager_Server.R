@@ -129,6 +129,20 @@ test_that("kitemsManager_Server works", {
     expect_equal(dim(r[[r_filtered_items]]()), c(2, 5))
 
 
+    # --------------------------------------------------------------------------
+    # delete
+    # --------------------------------------------------------------------------
+
+    # -- update input (click)
+    session$setInputs(delete_btn = 1)
+
+    # -- simulate selection
+    r[[r_selected_items]](item_id)
+
+    # -- update input (click)
+    session$setInputs(confirm_delete_btn = 1)
+
+
   })
 
 
