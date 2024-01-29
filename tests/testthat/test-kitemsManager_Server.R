@@ -202,6 +202,19 @@ test_that("kitemsManager_Server TRIGGERS work", {
     # -- test id
     expect_false(update_item$id %in% x$id)
 
+
+    # --------------------------------------------------------------------------
+    # Trigger delete
+    # --------------------------------------------------------------------------
+
+    # -- get the id of the item that was just added before
+    r_trigger_save <- trigger_save_name(module_id)
+    r[[r_trigger_save]](1)
+
+    # -- flush reactive values
+    session$flushReact()
+
+
   })
 
 })
