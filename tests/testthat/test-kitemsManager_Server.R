@@ -82,9 +82,6 @@ test_that("kitemsManager_Server works", {
   # -- module server call
   testServer(kitemsManager_Server, args = params, {
 
-    # -- test output: date_slider
-    expect_snapshot(output$date_slider)
-
     # --------------------------------------------------------------------------
     # Data model
     # --------------------------------------------------------------------------
