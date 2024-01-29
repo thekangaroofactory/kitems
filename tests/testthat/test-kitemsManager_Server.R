@@ -54,11 +54,11 @@ saveRDS(dm, file = dm_url)
 # -- items
 
 items <- item_create(list(id = NA, date = NA, name = "Apple", quantity = 1, total = 12.5, isvalid = TRUE), dm)
-new_item <- item_create(list(id = NA, date = NA, name = "Banana", quantity = 12, total = 106.3, isvalid = FALSE), dm)
+new_item <- item_create(list(id = NA, date = "2024-01-14", name = "Banana", quantity = 12, total = 106.3, isvalid = FALSE), dm)
 items <- item_add(items, new_item)
-new_item <- item_create(list(id = NA, date = NA, name = "Mango", quantity = 3, total = 45.7, isvalid = TRUE), dm)
+new_item <- item_create(list(id = NA, date = "2024-01-16", name = "Mango", quantity = 3, total = 45.7, isvalid = TRUE), dm)
 items <- item_add(items, new_item)
-new_item <- item_create(list(id = NA, date = NA, name = "Orange", quantity = 7, total = 17.5, isvalid = FALSE), dm)
+new_item <- item_create(list(id = NA, date = "2024-01-17", name = "Orange", quantity = 7, total = 17.5, isvalid = FALSE), dm)
 items <- item_add(items, new_item)
 
 item_save(items, file = "my_data.csv", path = testdata_path)
@@ -112,6 +112,26 @@ test_that("kitemsManager_Server works", {
     # -- test dim
     expect_equal(dim(x), c(4, 6))
 
+  })
+
+})
+
+
+test_that("kitemsManager_Server TRIGGERS work", {
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 file = "my_data.csv",
+                 path = test_path,
+                 data.model = dm,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    session$flushReact()
 
     # --------------------------------------------------------------------------
     # Trigger new
@@ -186,36 +206,79 @@ test_that("kitemsManager_Server works", {
     # -- test id
     expect_false(update_item$id %in% x$id)
 
+  })
+
+})
+
+
+test_that("kitemsManager_Server Date filter works", {
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 file = "my_data.csv",
+                 path = test_path,
+                 data.model = dm,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
 
     # --------------------------------------------------------------------------
     # date
     # --------------------------------------------------------------------------
 
     # -- update input
-    # session$setInputs(date_slider = date_slider_value)
-    #
-    # # -- check
-    # expect_equal(r[[r_filter_date]](), date_slider_value)
-    #
-    # # -- check filter
-    # expect_equal(dim(r[[r_filtered_items]]()), c(2, 5))
+    session$setInputs(date_slider = date_slider_value)
 
+    # -- check
+    expect_equal(r[[r_filter_date]](), date_slider_value)
+
+    # -- check filter
+    expect_equal(dim(r[[r_filtered_items]]()), c(0, 6))
+
+  })
+
+})
+
+
+test_that("kitemsManager_Server delete btn works", {
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 file = "my_data.csv",
+                 path = test_path,
+                 data.model = dm,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
 
     # --------------------------------------------------------------------------
     # delete
     # --------------------------------------------------------------------------
 
     # -- update input (click)
-    # session$setInputs(delete_btn = 1)
-    #
-    # # -- simulate selection
-    # r[[r_selected_items]](item_id)
-    #
-    # # -- update input (click)
-    # session$setInputs(confirm_delete_btn = 1)
+    session$setInputs(delete_btn = 1)
 
+    # -- simulate selection
+    r[[r_selected_items]](r[[r_items]]()$id[[1]])
+
+    # -- update input (click)
+    session$setInputs(confirm_delete_btn = 1)
+
+    # -- check
+    x <- r[[r_items]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), c(3, 6))
 
   })
-
 
 })
