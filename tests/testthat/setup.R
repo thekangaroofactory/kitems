@@ -107,3 +107,13 @@ item_id <- 1705313192780
 
 # -- date selection
 date_slider_value <- c(19737, 19739)
+
+
+# -- cleanup function
+clean_all <- function(testdata_path){
+
+  unlink(testdata_path, recursive = TRUE)
+
+}
+
+
