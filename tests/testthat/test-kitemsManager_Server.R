@@ -252,6 +252,48 @@ test_that("kitemsManager_Server Date filter works", {
 })
 
 
+test_that("In table selection works", {
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 file = "my_data.csv",
+                 path = test_path,
+                 data.model = dm,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    # --------------------------------------------------------------------------
+    # select rows
+    # --------------------------------------------------------------------------
+
+    # -- flush reactive values
+    session$flushReact()
+
+    # -- update input
+    session$setInputs(default_view_rows_selected = c(1,2))
+
+    # -- check
+    expect_equal(r[[r_selected_items]](), r[[r_items]]()$id[1:2])
+
+    # -- flush reactive values
+    session$flushReact()
+
+    # -- update input
+    session$setInputs(filtered_view_rows_selected = c(3,4))
+
+    # -- check
+    expect_equal(r[[r_selected_items]](), NULL)
+
+
+  })
+
+})
+
+
 test_that("kitemsManager_Server delete btn works", {
 
   # -- declare arguments
