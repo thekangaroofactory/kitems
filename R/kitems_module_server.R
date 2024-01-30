@@ -326,6 +326,9 @@ kitemsManager_Server <- function(id, r, file, path,
       if(!is.null(filter_date))
         items <- items[items$date >= filter_date[1] & items$date <= filter_date[2], ]
 
+
+      cat(MODULE, "ouput dim =", dim(items), "\n")
+
       # -- Store
       r[[r_filtered_items]](items)
 
