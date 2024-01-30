@@ -3,15 +3,15 @@
 test_that("multiplication works", {
 
   # -- function call
-  x <- item_add(items, item_new)
+  x <- item_add(items, new_item)
 
   # -- test class
   expect_s3_class(x, "data.frame")
 
   # -- test dim
-  expect_equal(dim(x), c(5,4))
+  expect_equal(dim(x), dim(items) + c(1, 0))
 
   # -- test added attribute
-  expect_equal(unlist(x[x$name == "Mango", ]), c(id = "170539948521", date = "19747", name = "Mango", isvalid = "TRUE"))
+  expect_equal(x[x$name == new_item$name, ]$total, new_item$total)
 
 })

@@ -1,70 +1,7 @@
 
 
-# --------------------------------------------------------------------------
-# Setup test environment & data
-# --------------------------------------------------------------------------
-
-# -- create testdata folder
-testdata_path <- file.path(system.file("tests", "testthat", package = "kitems"), "testdata")
-dir.create(testdata_path)
-
-
-test_path = list(data = testdata_path,
-                 resource = testdata_path)
-
-
-# -- module id
-module_id <- "data"
-
-# -- declare communication object
-r <- reactiveValues()
-
-
-# -- data model
-
-# -- declare colClasses
-colClasses <- c(id = "double",
-                date = "POSIXct",
-                name = "character",
-                quantity = "integer",
-                total = "numeric",
-                isvalid = "logical")
-
-# -- declare default.val
-default_val <- c("name" = "fruit", "isvalid" = TRUE)
-
-# -- declare default.fun
-default_fun <- c("id" = "ktools::getTimestamp", "date" = "Sys.Date")
-
-# -- declare filter
-filter <- c("id")
-
-# -- declare filter
-skip <- c("isvalid")
-
-# -- build data model
-dm <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, filter = filter, skip = skip)
-
-# -- save data model
-dm_url <- file.path(testdata_path, paste0(dm_name(module_id), ".rds"))
-saveRDS(dm, file = dm_url)
-
-
-# -- items
-
-items <- item_create(list(id = NA, date = NA, name = "Apple", quantity = 1, total = 12.5, isvalid = TRUE), dm)
-new_item <- item_create(list(id = NA, date = "2024-01-14", name = "Banana", quantity = 12, total = 106.3, isvalid = FALSE), dm)
-items <- item_add(items, new_item)
-new_item <- item_create(list(id = NA, date = "2024-01-16", name = "Mango", quantity = 3, total = 45.7, isvalid = TRUE), dm)
-items <- item_add(items, new_item)
-new_item <- item_create(list(id = NA, date = "2024-01-17", name = "Orange", quantity = 7, total = 17.5, isvalid = FALSE), dm)
-items <- item_add(items, new_item)
-
-item_save(items, file = "my_data.csv", path = testdata_path)
-
-new_item <- item_create(list(id = NA, date = NA, name = "Raspberry", quantity = 34, total = 86.4, isvalid = TRUE), dm)
-update_item <- item_create(list(id = NA, date = NA, name = "Apple update", quantity = 100, total = 0.1, isvalid = FALSE), dm)
-
+# -- create data
+create_testdata()
 
 
 test_that("kitemsManager_Server works", {
@@ -180,12 +117,8 @@ test_that("kitemsManager_Server TRIGGERS work", {
     # Trigger delete
     # --------------------------------------------------------------------------
 
-    # -- get the id of the item that was just added before
-    id_delete <- r[[r_items]]()[ r[[r_items]]()$name == new_item$name, ]$id
-
-
     r_trigger_delete <- trigger_delete_name(module_id)
-    r[[r_trigger_delete]](id_delete)
+    r[[r_trigger_delete]](new_item$id)
 
     # -- flush reactive values
     session$flushReact()
@@ -200,11 +133,11 @@ test_that("kitemsManager_Server TRIGGERS work", {
     expect_equal(dim(x), c(4, 6))
 
     # -- test id
-    expect_false(update_item$id %in% x$id)
+    expect_false(new_item$id %in% x$id)
 
 
     # --------------------------------------------------------------------------
-    # Trigger delete
+    # Trigger save
     # --------------------------------------------------------------------------
 
     # -- get the id of the item that was just added before

@@ -2,11 +2,8 @@
 
 test_that("get_input_values", {
 
-  # -- init
-  input <- list(name = "myname", value = 12)
-
   # -- function call
-  x <- get_input_values(input = input, colClasses = colClasses)
+  x <- get_input_values(input = input_values, colClasses = colClasses)
 
   # -- test output class
   expect_type(x, "list")
@@ -15,6 +12,6 @@ test_that("get_input_values", {
   expect_equal(names(x), names(colClasses))
 
   # -- test output values
-  expect_equal(x, list(id = NULL, "date" = NULL, "name" = "myname", "isvalid" = NULL))
+  expect_equal(x, list(id = NULL, "date" = NULL, "name" = "myname", "quantity" = 12, "total" = 34.8, "isvalid" = NULL))
 
 })

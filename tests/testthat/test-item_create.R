@@ -9,7 +9,7 @@ test_that("item_create", {
   expect_s3_class(x, "data.frame")
 
   # -- test dim
-  expect_equal(dim(x), c(1,4))
+  expect_equal(dim(x), c(1, length(colClasses)))
 
   # -- test logical: #176
   expect_false(x$isvalid)

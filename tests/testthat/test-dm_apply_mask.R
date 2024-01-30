@@ -9,7 +9,7 @@ test_that("dm_apply_mask", {
   expect_s3_class(x, "data.frame")
 
   # -- check: output dim
-  expect_equal(dim(x), c(4,3))
+  expect_equal(dim(x), c(dim(items)[1], sum(!dm$filter)))
 
 })
 
@@ -23,6 +23,6 @@ test_that("dm_apply_mask: no filter", {
   expect_s3_class(x, "data.frame")
 
   # -- check: output dim
-  expect_equal(dim(x), c(4,4))
+  expect_equal(dim(x), dim(items))
 
 })

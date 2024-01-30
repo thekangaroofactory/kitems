@@ -20,7 +20,7 @@ test_that("dm_check_integrity: extra attribute in items", {
   expect_s3_class(x, "data.frame")
 
   # -- check: x dim
-  expect_equal(dim(x), c(5,6))
+  expect_equal(dim(x), c(dim(dm)[1] + 1, 6))
 
 })
 
@@ -34,6 +34,6 @@ test_that("dm_check_integrity: extra attribute in data model", {
   expect_s3_class(x, "data.frame")
 
   # -- check: x dim
-  expect_equal(dim(x), c(4,6))
+  expect_equal(dim(x), c(dim(dm_extra_att)[1] - 1, 6))
 
 })

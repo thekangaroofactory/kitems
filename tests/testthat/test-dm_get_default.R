@@ -23,7 +23,7 @@ test_that("dm_get_default: default.val", {
   expect_type(x, "character")
 
   # -- test value
-  expect_equal(x, "test")
+  expect_equal(x, "fruit")
 
 })
 
@@ -34,6 +34,6 @@ test_that("dm_get_default: NA", {
   x <- dm_get_default(data.model = dm, name = "id")
 
   # -- test value is NA
-  expect_true(is.na(x))
+  expect_true(is.numeric(x))
 
 })
