@@ -4,7 +4,11 @@
 create_testdata()
 
 
-test_that("kitemsManager_Server works", {
+# --------------------------------------------------------------------------
+# Scenario: test with data model & item file
+# --------------------------------------------------------------------------
+
+test_that("Server works", {
 
   # -- declare arguments
   params <- list(id = module_id,
@@ -50,7 +54,11 @@ test_that("kitemsManager_Server works", {
 })
 
 
-test_that("kitemsManager_Server TRIGGERS work", {
+# --------------------------------------------------------------------------
+# Scenario: test with data model & item file
+# --------------------------------------------------------------------------
+
+test_that("TRIGGERS work", {
 
   # -- declare arguments
   params <- list(id = module_id,
@@ -153,7 +161,11 @@ test_that("kitemsManager_Server TRIGGERS work", {
 })
 
 
-test_that("kitemsManager_Server Date filter works", {
+# --------------------------------------------------------------------------
+# Scenario: date sliderInput
+# --------------------------------------------------------------------------
+
+test_that("Date sliderInput works", {
 
   # -- declare arguments
   params <- list(id = module_id,
@@ -185,7 +197,11 @@ test_that("kitemsManager_Server Date filter works", {
 })
 
 
-test_that("In table selection works", {
+# --------------------------------------------------------------------------
+# Scenario: in table selection
+# --------------------------------------------------------------------------
+
+test_that("Selection works", {
 
   # -- declare arguments
   params <- list(id = module_id,
@@ -227,7 +243,11 @@ test_that("In table selection works", {
 })
 
 
-test_that("kitemsManager_Server delete btn works", {
+# --------------------------------------------------------------------------
+# Scenario: delete item
+# --------------------------------------------------------------------------
+
+test_that("Delete works", {
 
   # -- declare arguments
   params <- list(id = module_id,
@@ -267,6 +287,74 @@ test_that("kitemsManager_Server delete btn works", {
 
 })
 
+
+# --------------------------------------------------------------------------
+# Scenario: without data model
+# --------------------------------------------------------------------------
+
+# -- cleanup test data
+clean_all(testdata_path)
+
+
+test_that("No data model works", {
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 file = "my_data.csv",
+                 path = test_path,
+                 data.model = NULL,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    # --------------------------------------------------------------------------
+    # both data model & items should be NULL
+    # --------------------------------------------------------------------------
+
+    # -- data model
+    x <- r[[r_data_model]]()
+
+    # -- test
+    expect_null(x)
+
+    # -- items
+    x <- r[[r_items]]()
+
+    # -- test
+    expect_null(x)
+
+
+    # --------------------------------------------------------------------------
+    # Create data model
+    # --------------------------------------------------------------------------
+
+    # -- click
+    session$setInputs(dm_create = 1)
+
+    # -- data model
+    x <- r[[r_data_model]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), c(1, 6))
+
+    # -- items
+    x <- r[[r_items]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), c(0, 1))
+
+  })
+
+})
 
 # --------------------------------------------------------------------------
 # Cleanup
