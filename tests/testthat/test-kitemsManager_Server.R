@@ -723,3 +723,87 @@ test_that("Delete works", {
 # --------------------------------------------------------------------------
 
 clean_all(testdata_path)
+
+
+# --------------------------------------------------------------------------
+# Scenario: import data
+# --------------------------------------------------------------------------
+
+# -- create test data
+create_data_to_import()
+
+test_that("Import works", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: import data")
+  cat("\n-------------------------------------------------------------------------- \n")
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 file = "my_data.csv",
+                 path = test_path,
+                 data.model = NULL,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    # -- click
+    session$setInputs(import_data = 1)
+
+    # -- create input value
+    value <- data.frame(name = "data_to_import",
+                        size = 12,
+                        type = "dummy",
+                        datapath = file.path(testdata_path, "data_to_import.csv"))
+
+    # -- set file input & click
+    session$setInputs(input_file = value)
+    session$setInputs(confirm_import_file = 1)
+
+    # -- click
+    session$setInputs(confirm_import_data = 1)
+    session$setInputs(confirm_data_model = 1)
+
+
+    # --------------------------------------------------------------------------
+    # Data model
+    # --------------------------------------------------------------------------
+
+    r_data_model <- dm_name(module_id)
+    x <- r[[r_data_model]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), dim(dm))
+
+
+    # --------------------------------------------------------------------------
+    # Items
+    # --------------------------------------------------------------------------
+
+
+    r_items <- items_name(module_id)
+    x <- r[[r_items]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), c(4, 6))
+
+
+  })
+
+})
+
+
+# --------------------------------------------------------------------------
+# Cleanup
+# --------------------------------------------------------------------------
+
+clean_all(testdata_path)

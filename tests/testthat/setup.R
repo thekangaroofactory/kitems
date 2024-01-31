@@ -117,7 +117,7 @@ date_slider_value <- c(19737, 19739)
 # Declare helper functions
 # --------------------------------------------------------------------------
 
-# -- helper: build data model
+# -- helper: create test data
 create_testdata <- function(){
 
   # -- create folder
@@ -129,6 +129,18 @@ create_testdata <- function(){
 
   # -- save items
   item_save(items, file = "my_data.csv", path = testdata_path)
+
+}
+
+
+# -- helper: create data to import
+create_data_to_import <- function(){
+
+  # -- create folder
+  dir.create(testdata_path)
+
+  # -- save items
+  item_save(items, file = "data_to_import.csv", path = testdata_path)
 
 }
 
