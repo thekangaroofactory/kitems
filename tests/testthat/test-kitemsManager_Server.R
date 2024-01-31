@@ -601,6 +601,75 @@ test_that("Create works", {
 
 
 # --------------------------------------------------------------------------
+# Scenario: update item
+# --------------------------------------------------------------------------
+
+test_that("Update works", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: update item")
+  cat("\n-------------------------------------------------------------------------- \n")
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 file = "my_data.csv",
+                 path = test_path,
+                 data.model = dm,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    # -- get items
+    r_items <- items_name(module_id)
+    x <- r[[r_items]]()
+
+    # -- flush reactive values
+    session$flushReact()
+
+    # -- select item
+    r[[r_selected_items]](x$id[1])
+
+    # -- click
+    session$setInputs(update_btn = 1)
+
+    # -- update inputs (values to create item)
+    session$setInputs(id = x$id[1])
+    session$setInputs(date = x$date[1] + 1)
+    session$setInputs(name = paste0(x$name[1], "-updated"))
+    session$setInputs(quantity = x$quantity[1] + 10)
+    session$setInputs(total = x$total[1] + 0.5)
+    session$setInputs(isvalid = !x$isvalid[1])
+
+    # -- click
+    session$setInputs(confirm_update_btn = 1)
+
+
+    # --------------------------------------------------------------------------
+    # Items
+    # --------------------------------------------------------------------------
+
+
+    r_items <- items_name(module_id)
+    x <- r[[r_items]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), dim(items))
+
+    # -- test name
+    expect_true(grepl("updated", x$name[1], fixed = TRUE))
+
+  })
+
+})
+
+
+# --------------------------------------------------------------------------
 # Scenario: delete item
 # --------------------------------------------------------------------------
 
