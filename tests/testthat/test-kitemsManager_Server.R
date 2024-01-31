@@ -787,6 +787,53 @@ test_that("Delete works", {
 
 
 # --------------------------------------------------------------------------
+# Scenario: min/max date when items has no row
+# --------------------------------------------------------------------------
+
+test_that("Min/max date works", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: min/max date when items has no row")
+  cat("\n-------------------------------------------------------------------------- \n")
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 file = "my_data.csv",
+                 path = test_path,
+                 data.model = dm,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    # -- flush reactive values
+    session$flushReact()
+
+    # -- delete all items
+    r_trigger_delete <- trigger_delete_name(module_id)
+    r[[r_trigger_delete]](r[[r_items]]()$id)
+
+    # -- flush reactive values
+    session$flushReact()
+
+    # -- check
+    x <- r[[r_items]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x)[1], 0)
+
+
+  })
+
+})
+
+
+# --------------------------------------------------------------------------
 # Cleanup
 # --------------------------------------------------------------------------
 
