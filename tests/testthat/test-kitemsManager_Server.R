@@ -133,13 +133,13 @@ test_that("Server works", {
 
 
 # --------------------------------------------------------------------------
-# Scenario: add attribute
+# Scenario: add/delete attribute
 # --------------------------------------------------------------------------
 
 test_that("Add attribute works", {
 
   cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: Add attribute works")
+  cat("Scenario: Add/delete attribute works")
   cat("\n-------------------------------------------------------------------------- \n")
 
   # -- declare arguments
@@ -192,6 +192,45 @@ test_that("Add attribute works", {
 
     # -- test dim
     expect_equal(dim(x), dim(items) + c(0, 1))
+
+
+    # --------------------------------------------------------------------------
+    # Delete attribute
+    # --------------------------------------------------------------------------
+
+    # -- update input & click
+    session$setInputs(dm_dz_att_name = "status")
+    session$setInputs(dm_dz_delete_att = 1)
+
+
+    # --------------------------------------------------------------------------
+    # Data model
+    # --------------------------------------------------------------------------
+
+    # -- check
+    r_data_model <- dm_name(module_id)
+    x <- r[[r_data_model]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), dim(dm))
+
+
+    # --------------------------------------------------------------------------
+    # Items
+    # --------------------------------------------------------------------------
+
+    r_items <- items_name(module_id)
+    x <- r[[r_items]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), dim(items))
+
 
   })
 
