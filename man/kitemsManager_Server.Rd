@@ -4,26 +4,14 @@
 \alias{kitemsManager_Server}
 \title{Module server}
 \usage{
-kitemsManager_Server(
-  id,
-  r,
-  file,
-  path,
-  data.model = NULL,
-  create = TRUE,
-  autosave = TRUE
-)
+kitemsManager_Server(id, r, path, create = TRUE, autosave = TRUE)
 }
 \arguments{
 \item{id}{the id to be used for the module server instance}
 
 \item{r}{the shared reactive value communication object}
 
-\item{file}{the file name to be used for persistent data}
-
-\item{path}{a path list containing "data" and "resources" (see details)}
-
-\item{data.model}{a data.frame of the data model (default = NULL)}
+\item{path}{a path where data model and items will be stored}
 
 \item{create}{a logical whether the data file should be created or not if missing (default = TRUE)}
 
@@ -33,17 +21,11 @@ kitemsManager_Server(
 Module server
 }
 \details{
-The path list should contain "data" (where the item data.frame will be stored as a .csv file)
-as well as "ressources" (where the data model .rds file will be stored)
-
-If data.model is NULL, then no data model will be initialized and the create button will be
-available in the data model admin UI
-
 If autosave is FALSE, the save trigger should be used to make the data persistent
 }
 \examples{
 \dontrun{
-kitemsManager_Server(id = "mydata", r = r, file = "mydata.csv", path = "path/to/my/data",
-                     data.model = NULL, create = TRUE, autosave = TRUE)
+kitemsManager_Server(id = "mydata", r = r, path = "path/to/my/data",
+                     create = TRUE, autosave = TRUE)
 }
 }

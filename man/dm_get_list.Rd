@@ -10,7 +10,7 @@ dm_get_list(r)
 \item{r}{the shared reactive communication object}
 }
 \value{
-a vector with the names (ids) of the data models available in session
+a list with the names (ids) of the data models available in session
 }
 \description{
 Available data models

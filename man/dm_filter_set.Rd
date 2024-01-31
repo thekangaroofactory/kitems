@@ -17,6 +17,9 @@ an updated data model
 \description{
 Set data model attribute filter
 }
+\details{
+If filter is NULL, then the data model passed as data.model is returned
+}
 \examples{
 \dontrun{
 dm_filter_set(data.model = mydatamodel, filter = c("id", "internal"))

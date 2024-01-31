@@ -7,8 +7,8 @@
 dm_update_attribute(
   data.model,
   name,
-  default.val = NULL,
-  default.fun = NULL,
+  default.val = NA,
+  default.fun = NA,
   filter = FALSE,
   skip = FALSE
 )
