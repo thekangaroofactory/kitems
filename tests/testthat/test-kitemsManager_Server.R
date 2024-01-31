@@ -448,6 +448,14 @@ test_that("TRIGGERS work", {
 
 
 # --------------------------------------------------------------------------
+# Cleanup
+# --------------------------------------------------------------------------
+
+clean_all(testdata_path)
+create_testdata()
+
+
+# --------------------------------------------------------------------------
 # Scenario: date sliderInput
 # --------------------------------------------------------------------------
 
@@ -538,6 +546,61 @@ test_that("Selection works", {
 
 
 # --------------------------------------------------------------------------
+# Scenario: create item
+# --------------------------------------------------------------------------
+
+test_that("Create works", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: create item")
+  cat("\n-------------------------------------------------------------------------- \n")
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 file = "my_data.csv",
+                 path = test_path,
+                 data.model = dm,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    # -- click
+    session$setInputs(create_btn = 1)
+
+    # -- update inputs (values to create item)
+    session$setInputs(id = NA)
+    session$setInputs(date = NA)
+    session$setInputs(name = "Orange")
+    session$setInputs(quantity = 4)
+    session$setInputs(total = 78.9)
+    session$setInputs(isvalid = FALSE)
+
+    # -- click
+    session$setInputs(confirm_create_btn = 1)
+
+
+    # --------------------------------------------------------------------------
+    # Items
+    # --------------------------------------------------------------------------
+
+    r_items <- items_name(module_id)
+    x <- r[[r_items]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), dim(items) + c(1, 0))
+
+  })
+
+})
+
+
+# --------------------------------------------------------------------------
 # Scenario: delete item
 # --------------------------------------------------------------------------
 
@@ -579,7 +642,7 @@ test_that("Delete works", {
     expect_s3_class(x, "data.frame")
 
     # -- test dim
-    expect_equal(dim(x), c(3, 6))
+    expect_equal(dim(x), dim(items) - c(1, 0))
 
   })
 
