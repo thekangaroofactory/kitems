@@ -19,9 +19,9 @@ data_model(
 
 \item{default.fun}{an optional named vector of functions, defining the default functions to be used to generate default values.}
 
-\item{filter}{an optional named vector of logical, indicating whether or not the attribute should be filtered from the table view.}
+\item{filter}{an optional character vector, indicating which attribute names should be filtered from the table view.}
 
-\item{skip}{an optional named vector of logical, indicating whether or not the attribute should be skipped from the user input form.}
+\item{skip}{an optional character vector, indicating which attribute names should be skipped from the user input form.}
 }
 \value{
 a data.frame containing the data model.
