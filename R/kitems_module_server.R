@@ -829,10 +829,7 @@ kitemsManager_Server <- function(id, r, path,
                          label = "Select cols order",
                          choices = colnames(r[[r_items]]()),
                          selected = colnames(r[[r_items]]()),
-                         multiple = TRUE),
-
-          # order attribute button
-          actionButton(ns("dm_sort_col"), label = "Reorder"))})
+                         multiple = TRUE))})
 
 
     # -- BTN sort_col
