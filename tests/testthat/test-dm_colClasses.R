@@ -6,6 +6,6 @@ test_that("dm_colClasses", {
   x <- dm_colClasses(data.model = dm)
 
   # -- test
-  expect_mapequal(x, c(id = "numeric", date = "POSIXct", name = "character", isvalid = "logical"))
+  expect_mapequal(x, colClasses)
 
 })

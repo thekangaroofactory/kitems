@@ -15,7 +15,7 @@ test_that("dm_add_attribute: add attribute", {
   expect_s3_class(x, "data.frame")
 
   # -- check: output dim
-  expect_equal(dim(x), c(5,6))
+  expect_equal(dim(x), c(dim(dm)[1] + 1, 6))
 
 })
 
@@ -35,7 +35,7 @@ test_that("dm_add_attribute: empty default.val", {
   expect_s3_class(x, "data.frame")
 
   # -- check: output dim
-  expect_equal(dim(x), c(5,6))
+  expect_equal(dim(x), c(dim(dm)[1] + 1, 6))
 
 })
 
@@ -55,7 +55,7 @@ test_that("dm_add_attribute: empty default.fun", {
   expect_s3_class(x, "data.frame")
 
   # -- check: output dim
-  expect_equal(dim(x), c(5,6))
+  expect_equal(dim(x), c(dim(dm)[1] + 1, 6))
 
 })
 
@@ -75,7 +75,7 @@ test_that("dm_add_attribute: skip NULL", {
   expect_s3_class(x, "data.frame")
 
   # -- check: output dim
-  expect_equal(dim(x), c(5,6))
+  expect_equal(dim(x), c(dim(dm)[1] + 1, 6))
 
 })
 
@@ -95,6 +95,6 @@ test_that("dm_add_attribute: filter NULL", {
   expect_s3_class(x, "data.frame")
 
   # -- check: output dim
-  expect_equal(dim(x), c(5,6))
+  expect_equal(dim(x), c(dim(dm)[1] + 1, 6))
 
 })

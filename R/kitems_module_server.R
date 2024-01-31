@@ -62,7 +62,7 @@ kitemsManager_Server <- function(id, r, file, path,
     items <- NULL
 
     # -- Check paths (to avoid connection problems if missing folder)
-    missing_path <- path[!dir.exists(unlist(path))]
+    missing_path <- unique(path[!dir.exists(unlist(path))])
     result <- lapply(missing_path, dir.create)
 
 
@@ -106,11 +106,20 @@ kitemsManager_Server <- function(id, r, file, path,
       # Read data model:
       # ------------------------------------------------------------------------
 
+      cat(MODULE, "Checking if data model file exists:", dm_url, "\n")
+
       # -- Check url
       if(file.exists(dm_url)){
 
+        cat(MODULE, "Reading data model from file \n")
         data.model <- readRDS(dm_url)
-        cat(MODULE, "Read data model done \n")}
+        cat(MODULE, "output dim =", dim(data.model),"\n")
+
+      } else {
+
+        cat(MODULE, "No data model file found. \n")
+
+        }
 
       # Increment the progress bar, and update the detail text.
       incProgress(1/4, detail = "data model")
@@ -226,6 +235,7 @@ kitemsManager_Server <- function(id, r, file, path,
 
     # -- Declare reactive objects (for external use)
     r[[trigger_add]] <- reactiveVal(NULL)
+    cat(MODULE, "trigger_add is now available @", trigger_add, "\n")
     r[[trigger_update]] <- reactiveVal(NULL)
     r[[trigger_delete]] <- reactiveVal(NULL)
     r[[trigger_save]] <- reactiveVal(0)
@@ -315,6 +325,9 @@ kitemsManager_Server <- function(id, r, file, path,
       filter_date <- r[[r_filter_date]]()
       if(!is.null(filter_date))
         items <- items[items$date >= filter_date[1] & items$date <= filter_date[2], ]
+
+
+      cat(MODULE, "ouput dim =", dim(items), "\n")
 
       # -- Store
       r[[r_filtered_items]](items)

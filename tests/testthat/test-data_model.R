@@ -9,7 +9,7 @@ test_that("data_model: colClasses argument only", {
   expect_s3_class(x, "data.frame")
 
   # -- check: output dim
-  expect_equal(dim(x), c(4,6))
+  expect_equal(dim(x), c(length(colClasses), 6))
 
 })
 
@@ -23,7 +23,7 @@ test_that("data_model: default.val", {
   expect_s3_class(x, "data.frame")
 
   # -- check: output dim
-  expect_equal(dim(x), c(4,6))
+  expect_equal(dim(x), c(length(colClasses), 6))
 
 })
 
@@ -37,6 +37,6 @@ test_that("data_model: default.fun", {
   expect_s3_class(x, "data.frame")
 
   # -- check: output dim
-  expect_equal(dim(x), c(4,6))
+  expect_equal(dim(x), c(length(colClasses), 6))
 
 })
