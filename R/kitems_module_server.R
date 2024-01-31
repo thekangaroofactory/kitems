@@ -80,6 +80,22 @@ kitemsManager_Server <- function(id, r, path,
     min_date <- reactiveVal(NULL)
     max_date <- reactiveVal(NULL)
 
+    # -- Build triggers names from module id
+    trigger_add <- trigger_add_name(id)
+    trigger_update <- trigger_update_name(id)
+    trigger_delete <- trigger_delete_name(id)
+    trigger_save <- trigger_save_name(id)
+
+    # -- Declare reactive objects (for external use)
+    r[[trigger_add]] <- reactiveVal(NULL)
+    r[[trigger_update]] <- reactiveVal(NULL)
+    r[[trigger_delete]] <- reactiveVal(NULL)
+    r[[trigger_save]] <- reactiveVal(0)
+    cat(MODULE, "trigger_add available @", trigger_add, "\n")
+    cat(MODULE, "trigger_update available @", trigger_update, "\n")
+    cat(MODULE, "trigger_delete available @", trigger_delete, "\n")
+    cat(MODULE, "trigger_save available @", trigger_save, "\n")
+
 
     # --------------------------------------------------------------------------
     # Initialize data model and items:
@@ -210,22 +226,8 @@ kitemsManager_Server <- function(id, r, path,
 
 
     # --------------------------------------------------------------------------
-    # Declare triggers:
+    # Triggers:
     # --------------------------------------------------------------------------
-
-    # -- Build triggers names from module id
-    trigger_add <- trigger_add_name(id)
-    trigger_update <- trigger_update_name(id)
-    trigger_delete <- trigger_delete_name(id)
-    trigger_save <- trigger_save_name(id)
-
-    # -- Declare reactive objects (for external use)
-    r[[trigger_add]] <- reactiveVal(NULL)
-    cat(MODULE, "trigger_add is now available @", trigger_add, "\n")
-    r[[trigger_update]] <- reactiveVal(NULL)
-    r[[trigger_delete]] <- reactiveVal(NULL)
-    r[[trigger_save]] <- reactiveVal(0)
-
 
     # -- Observe: trigger_add
     observeEvent(r[[trigger_add]](), {
