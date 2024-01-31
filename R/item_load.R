@@ -36,7 +36,7 @@ item_load <- function(data.model, file = NULL, path = NULL, create = TRUE){
 
     # -- Try load (see read_data for details about returns)
     items <- kfiles::read_data(file = file,
-                               path = path$data,
+                               path = path,
                                colClasses = col.classes,
                                create = create)
 

@@ -13,9 +13,7 @@ test_that("No data model works", {
   # -- declare arguments
   params <- list(id = module_id,
                  r = r,
-                 file = "my_data.csv",
-                 path = test_path,
-                 data.model = NULL,
+                 path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
 
@@ -91,9 +89,7 @@ test_that("Server works", {
   # -- declare arguments
   params <- list(id = module_id,
                  r = r,
-                 file = "my_data.csv",
-                 path = test_path,
-                 data.model = dm,
+                 path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
 
@@ -150,9 +146,7 @@ test_that("Data model integrity works", {
   # -- declare arguments
   params <- list(id = module_id,
                  r = r,
-                 file = "my_data.csv",
-                 path = test_path,
-                 data.model = dm,
+                 path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
 
@@ -213,9 +207,7 @@ test_that("Add attribute works", {
   # -- declare arguments
   params <- list(id = module_id,
                  r = r,
-                 file = "my_data.csv",
-                 path = test_path,
-                 data.model = dm,
+                 path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
 
@@ -318,9 +310,7 @@ test_that("Server works", {
   # -- declare arguments
   params <- list(id = module_id,
                  r = r,
-                 file = "my_data.csv",
-                 path = test_path,
-                 data.model = dm,
+                 path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
 
@@ -416,9 +406,7 @@ test_that("TRIGGERS work", {
   # -- declare arguments
   params <- list(id = module_id,
                  r = r,
-                 file = "my_data.csv",
-                 path = test_path,
-                 data.model = dm,
+                 path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
 
@@ -536,9 +524,7 @@ test_that("Date sliderInput works", {
   # -- declare arguments
   params <- list(id = module_id,
                  r = r,
-                 file = "my_data.csv",
-                 path = test_path,
-                 data.model = dm,
+                 path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
 
@@ -576,9 +562,7 @@ test_that("Selection works", {
   # -- declare arguments
   params <- list(id = module_id,
                  r = r,
-                 file = "my_data.csv",
-                 path = test_path,
-                 data.model = dm,
+                 path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
 
@@ -626,9 +610,7 @@ test_that("Create works", {
   # -- declare arguments
   params <- list(id = module_id,
                  r = r,
-                 file = "my_data.csv",
-                 path = test_path,
-                 data.model = dm,
+                 path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
 
@@ -681,9 +663,7 @@ test_that("Update works", {
   # -- declare arguments
   params <- list(id = module_id,
                  r = r,
-                 file = "my_data.csv",
-                 path = test_path,
-                 data.model = dm,
+                 path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
 
@@ -750,9 +730,7 @@ test_that("Delete works", {
   # -- declare arguments
   params <- list(id = module_id,
                  r = r,
-                 file = "my_data.csv",
-                 path = test_path,
-                 data.model = dm,
+                 path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
 
@@ -799,9 +777,7 @@ test_that("Min/max date works", {
   # -- declare arguments
   params <- list(id = module_id,
                  r = r,
-                 file = "my_data.csv",
-                 path = test_path,
-                 data.model = dm,
+                 path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
 
@@ -856,9 +832,7 @@ test_that("Import works", {
   # -- declare arguments
   params <- list(id = module_id,
                  r = r,
-                 file = "my_data.csv",
-                 path = test_path,
-                 data.model = NULL,
+                 path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
 
@@ -872,7 +846,7 @@ test_that("Import works", {
     value <- data.frame(name = "data_to_import",
                         size = 12,
                         type = "dummy",
-                        datapath = file.path(testdata_path, "data_to_import.csv"))
+                        datapath = file.path(testdata_path, import_url))
 
     # -- set file input & click
     session$setInputs(input_file = value)

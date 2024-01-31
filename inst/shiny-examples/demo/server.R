@@ -16,15 +16,6 @@ shinyServer(
     # -- Get path to demo app data
     demo_dir <- system.file("shiny-examples", "demo", "data", package = "kitems")
 
-    # -- Define path_list
-    path_list <- list(resource = demo_dir,
-                      data = demo_dir)
-
-
-    # -------------------------------------
-    # Communication objects
-    # -------------------------------------
-
     # -- declare r communication object
     r <- reactiveValues()
 
@@ -34,24 +25,12 @@ shinyServer(
     # -------------------------------------
 
     # -- start module server: data
-    kitems::kitemsManager_Server(id = "data", r = r, path = path_list, file = "my_data.csv",
-                                 data.model = NULL,
+    kitems::kitemsManager_Server(id = "data", r = r, path = demo_dir,
                                  create = TRUE, autosave = FALSE)
 
 
-    # -- setup default values/functions:
-    colClasses <- c("id" = "double", "name" = "character", "total" = "numeric")
-    default.val <- c("name" = "test", "total" = 2)
-    default.fun <- c("id" = "ktools::getTimestamp")
-    filter <- c("id")
-    skip <- c("id")
-
-    # -- build data model
-    dm <- kitems::data_model(colClasses, default.val, default.fun, filter, skip)
-
     # -- start module server: data_2
-    kitems::kitemsManager_Server(id = "data_2", r = r, path = path_list, file = "my_data_2.csv",
-                                 data.model = dm,
+    kitems::kitemsManager_Server(id = "data_2", r = r, path = demo_dir,
                                  create = TRUE, autosave = FALSE)
 
 
