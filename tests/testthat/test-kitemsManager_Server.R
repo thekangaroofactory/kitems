@@ -1,14 +1,92 @@
 
 
-# -- create data
-create_testdata()
+# --------------------------------------------------------------------------
+# Scenario: without data model
+# --------------------------------------------------------------------------
+
+test_that("No data model works", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: without data model")
+  cat("\n-------------------------------------------------------------------------- \n")
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 file = "my_data.csv",
+                 path = test_path,
+                 data.model = NULL,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    # --------------------------------------------------------------------------
+    # both data model & items should be NULL
+    # --------------------------------------------------------------------------
+
+    # -- data model
+    x <- r[[r_data_model]]()
+
+    # -- test
+    expect_null(x)
+
+    # -- items
+    x <- r[[r_items]]()
+
+    # -- test
+    expect_null(x)
+
+
+    # --------------------------------------------------------------------------
+    # Create data model
+    # --------------------------------------------------------------------------
+
+    # -- click
+    session$setInputs(dm_create = 1)
+
+    # -- data model
+    x <- r[[r_data_model]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), c(1, 6))
+
+    # -- items
+    x <- r[[r_items]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), c(0, 1))
+
+  })
+
+})
+
+# --------------------------------------------------------------------------
+# Cleanup
+# --------------------------------------------------------------------------
+
+clean_all(testdata_path)
 
 
 # --------------------------------------------------------------------------
 # Scenario: test with data model & item file
 # --------------------------------------------------------------------------
 
+# -- create data
+create_testdata()
+
 test_that("Server works", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: test with data model & item file")
+  cat("\n-------------------------------------------------------------------------- \n")
 
   # -- declare arguments
   params <- list(id = module_id,
@@ -55,10 +133,14 @@ test_that("Server works", {
 
 
 # --------------------------------------------------------------------------
-# Scenario: test with data model & item file
+# Scenario: add attribute
 # --------------------------------------------------------------------------
 
-test_that("TRIGGERS work", {
+test_that("Add attribute works", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: Add attribute works")
+  cat("\n-------------------------------------------------------------------------- \n")
 
   # -- declare arguments
   params <- list(id = module_id,
@@ -72,6 +154,81 @@ test_that("TRIGGERS work", {
   # -- module server call
   testServer(kitemsManager_Server, args = params, {
 
+    # -- update input
+    session$setInputs(add_att_name = "status")
+    session$setInputs(add_att_type = "character")
+    session$setInputs(add_att_default_val = "draft")
+    session$setInputs(add_att_default_fun = NA)
+    session$setInputs(add_att_skip = FALSE)
+
+    # -- click
+    session$setInputs(add_att = 1)
+
+
+    # --------------------------------------------------------------------------
+    # Data model
+    # --------------------------------------------------------------------------
+
+    # -- check
+    r_data_model <- dm_name(module_id)
+    x <- r[[r_data_model]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), dim(dm) + c(1, 0))
+
+
+    # --------------------------------------------------------------------------
+    # Items
+    # --------------------------------------------------------------------------
+
+    r_items <- items_name(module_id)
+    x <- r[[r_items]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), dim(items) + c(0, 1))
+
+  })
+
+})
+
+
+# --------------------------------------------------------------------------
+# Cleanup
+# --------------------------------------------------------------------------
+
+clean_all(testdata_path)
+create_testdata()
+
+
+# --------------------------------------------------------------------------
+# Scenario: test triggers
+# --------------------------------------------------------------------------
+
+test_that("TRIGGERS work", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: test triggers")
+  cat("\n-------------------------------------------------------------------------- \n")
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 file = "my_data.csv",
+                 path = test_path,
+                 data.model = dm,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    # -- flush reactive values
     session$flushReact()
 
     # --------------------------------------------------------------------------
@@ -167,6 +324,10 @@ test_that("TRIGGERS work", {
 
 test_that("Date sliderInput works", {
 
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: date sliderInput")
+  cat("\n-------------------------------------------------------------------------- \n")
+
   # -- declare arguments
   params <- list(id = module_id,
                  r = r,
@@ -202,6 +363,10 @@ test_that("Date sliderInput works", {
 # --------------------------------------------------------------------------
 
 test_that("Selection works", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: in table selection")
+  cat("\n-------------------------------------------------------------------------- \n")
 
   # -- declare arguments
   params <- list(id = module_id,
@@ -249,6 +414,10 @@ test_that("Selection works", {
 
 test_that("Delete works", {
 
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: delete item")
+  cat("\n-------------------------------------------------------------------------- \n")
+
   # -- declare arguments
   params <- list(id = module_id,
                  r = r,
@@ -287,74 +456,6 @@ test_that("Delete works", {
 
 })
 
-
-# --------------------------------------------------------------------------
-# Scenario: without data model
-# --------------------------------------------------------------------------
-
-# -- cleanup test data
-clean_all(testdata_path)
-
-
-test_that("No data model works", {
-
-  # -- declare arguments
-  params <- list(id = module_id,
-                 r = r,
-                 file = "my_data.csv",
-                 path = test_path,
-                 data.model = NULL,
-                 create = FALSE,
-                 autosave = TRUE)
-
-  # -- module server call
-  testServer(kitemsManager_Server, args = params, {
-
-    # --------------------------------------------------------------------------
-    # both data model & items should be NULL
-    # --------------------------------------------------------------------------
-
-    # -- data model
-    x <- r[[r_data_model]]()
-
-    # -- test
-    expect_null(x)
-
-    # -- items
-    x <- r[[r_items]]()
-
-    # -- test
-    expect_null(x)
-
-
-    # --------------------------------------------------------------------------
-    # Create data model
-    # --------------------------------------------------------------------------
-
-    # -- click
-    session$setInputs(dm_create = 1)
-
-    # -- data model
-    x <- r[[r_data_model]]()
-
-    # -- test class
-    expect_s3_class(x, "data.frame")
-
-    # -- test dim
-    expect_equal(dim(x), c(1, 6))
-
-    # -- items
-    x <- r[[r_items]]()
-
-    # -- test class
-    expect_s3_class(x, "data.frame")
-
-    # -- test dim
-    expect_equal(dim(x), c(0, 1))
-
-  })
-
-})
 
 # --------------------------------------------------------------------------
 # Cleanup
