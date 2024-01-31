@@ -133,6 +133,25 @@ create_testdata <- function(){
 }
 
 
+# -- helper: create integrity test data
+create_integrity_testdata <- function(){
+
+  # -- create folder
+  dir.create(testdata_path)
+
+  # -- alter data model
+  dm <- dm[-3, ]
+
+  # -- save data model
+  dm_url <- file.path(testdata_path, paste0(dm_name(module_id), ".rds"))
+  saveRDS(dm, file = dm_url)
+
+  # -- save items
+  item_save(items, file = "my_data.csv", path = testdata_path)
+
+}
+
+
 # -- helper: create data to import
 create_data_to_import <- function(){
 

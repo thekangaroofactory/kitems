@@ -133,6 +133,74 @@ test_that("Server works", {
 
 
 # --------------------------------------------------------------------------
+# Scenario: data model integrity
+# --------------------------------------------------------------------------
+
+# -- setup
+clean_all(testdata_path)
+create_integrity_testdata()
+
+
+test_that("Data model integrity works", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: data model integrity")
+  cat("\n-------------------------------------------------------------------------- \n")
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 file = "my_data.csv",
+                 path = test_path,
+                 data.model = dm,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    # --------------------------------------------------------------------------
+    # Data model
+    # --------------------------------------------------------------------------
+
+    r_data_model <- dm_name(module_id)
+    x <- r[[r_data_model]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), c(6,6))
+
+
+    # --------------------------------------------------------------------------
+    # Items
+    # --------------------------------------------------------------------------
+
+    r_items <- items_name(module_id)
+    x <- r[[r_items]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), c(4, 6))
+
+  })
+
+})
+
+
+# --------------------------------------------------------------------------
+# Cleanup
+# --------------------------------------------------------------------------
+
+# -- setup
+clean_all(testdata_path)
+create_testdata()
+
+
+# --------------------------------------------------------------------------
 # Scenario: add/delete attribute
 # --------------------------------------------------------------------------
 
