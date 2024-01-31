@@ -21,9 +21,10 @@ r <- reactiveValues()
 # -- create testdata folder
 testdata_path <- file.path(system.file("tests", "testthat", package = "kitems"), "testdata")
 
-# ******************** TO BE DELETED
-test_path = list(data = testdata_path,
-                 resource = testdata_path)
+# -- build urls
+dm_url <- file.path(testdata_path, paste0(dm_name(module_id), ".rds"))
+items_url <- file.path(testdata_path, paste0(items_name(module_id), ".csv"))
+import_url <- "data_to_import.csv"
 
 
 # ------------------------------------------------------------------------------
@@ -124,11 +125,10 @@ create_testdata <- function(){
   dir.create(testdata_path)
 
   # -- save data model
-  dm_url <- file.path(testdata_path, paste0(dm_name(module_id), ".rds"))
   saveRDS(dm, file = dm_url)
 
   # -- save items
-  item_save(items, file = "my_data.csv", path = testdata_path)
+  item_save(items, file = items_url, path = testdata_path)
 
 }
 
@@ -143,11 +143,10 @@ create_integrity_testdata <- function(){
   dm <- dm[-3, ]
 
   # -- save data model
-  dm_url <- file.path(testdata_path, paste0(dm_name(module_id), ".rds"))
   saveRDS(dm, file = dm_url)
 
   # -- save items
-  item_save(items, file = "my_data.csv", path = testdata_path)
+  item_save(items, file = items_url, path = testdata_path)
 
 }
 
@@ -159,7 +158,7 @@ create_data_to_import <- function(){
   dir.create(testdata_path)
 
   # -- save items
-  item_save(items, file = "data_to_import.csv", path = testdata_path)
+  item_save(items, file = import_url, path = testdata_path)
 
 }
 

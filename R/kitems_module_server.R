@@ -4,9 +4,7 @@
 #'
 #' @param id the id to be used for the module server instance
 #' @param r the shared reactive value communication object
-#' @param file the file name to be used for persistent data
-#' @param path a path list containing "data" and "resources" (see details)
-#' @param data.model a data.frame of the data model (default = NULL)
+#' @param path a path where data model and items will be stored
 #' @param create a logical whether the data file should be created or not if missing (default = TRUE)
 #' @param autosave a logical whether the item auto save should be activated or not (default = TRUE)
 #'
@@ -15,18 +13,13 @@
 #' @export
 #'
 #' @details
-#' The path list should contain "data" (where the item data.frame will be stored as a .csv file)
-#' as well as "ressources" (where the data model .rds file will be stored)
-#'
-#' If data.model is NULL, then no data model will be initialized and the create button will be
-#' available in the data model admin UI
 #'
 #' If autosave is FALSE, the save trigger should be used to make the data persistent
 #'
 #' @examples
 #' \dontrun{
-#' kitemsManager_Server(id = "mydata", r = r, file = "mydata.csv", path = "path/to/my/data",
-#'                      data.model = NULL, create = TRUE, autosave = TRUE)
+#' kitemsManager_Server(id = "mydata", r = r, path = "path/to/my/data",
+#'                      create = TRUE, autosave = TRUE)
 #' }
 
 
@@ -34,10 +27,14 @@
 # Shiny module server logic
 # ------------------------------------------------------------------------------
 
-kitemsManager_Server <- function(id, r, file, path,
-                                 data.model = NULL,
+kitemsManager_Server <- function(id, r, path,
                                  create = TRUE, autosave = TRUE) {
   moduleServer(id, function(input, output, session) {
+
+    # -- Check path (to avoid connection problems if missing folder)
+    if(!dir.exists(path))
+      dir.create(path)
+
 
     # --------------------------------------------------------------------------
     # Declare config parameters:
@@ -58,36 +55,25 @@ kitemsManager_Server <- function(id, r, file, path,
     # Declare objects:
     # --------------------------------------------------------------------------
 
-    # -- Init items
+    # -- Init data
+    data.model <- NULL
     items <- NULL
 
-    # -- Check paths (to avoid connection problems if missing folder)
-    missing_path <- unique(path[!dir.exists(unlist(path))])
-    result <- lapply(missing_path, dir.create)
-
-
-    # -- Build filename from module id
-    dm_url <- file.path(path$resource, paste0(dm_name(id), ".rds"))
-
+    # -- Build urls from module id
+    dm_url <- file.path(path, paste0(dm_name(id), ".rds"))
+    items_url <- file.path(path, paste0(items_name(id), ".csv"))
 
     # -- Build object names from module id (to access outside module)
     r_data_model <- dm_name(id)
     r_items <- items_name(id)
-
     r_filtered_items <- filtered_items_name(id)
-
     r_selected_items <- selected_items_name(id)
-
     r_filter_date <- filter_date_name(id)
-
 
     # -- Declare reactive objects (for external use)
     r[[r_items]] <- reactiveVal(NULL)
-
     r[[r_filtered_items]] <- reactiveVal(NULL)
-
     r[[r_selected_items]] <- reactiveVal(NULL)
-
     r[[r_filter_date]] <- reactiveVal(NULL)
 
     # -- Declare date slider objects
@@ -133,7 +119,7 @@ kitemsManager_Server <- function(id, r, file, path,
       if(!is.null(data.model))
 
         items <- item_load(data.model = data.model,
-                           file = file,
+                           file = items_url,
                            path = path,
                            create = create)
 
@@ -164,7 +150,7 @@ kitemsManager_Server <- function(id, r, file, path,
           cat(MODULE, "Reloading the item data with updated data model \n")
 
           items <- item_load(data.model = data.model,
-                             file = file,
+                             file = items_url,
                              path = path,
                              create = create)
 
@@ -214,8 +200,8 @@ kitemsManager_Server <- function(id, r, file, path,
 
         # -- Write
         item_save(data = r[[r_items]](),
-                  file = file,
-                  path = path$data)
+                  file = items_url,
+                  path = path)
 
         # -- Notify
         cat(MODULE, "[EVENT] Item list has been (auto) saved \n")
@@ -292,8 +278,8 @@ kitemsManager_Server <- function(id, r, file, path,
 
       # -- Write
       item_save(data = r[[r_items]](),
-                file = file,
-                path = path$data)
+                file = items_url,
+                path = path)
 
       # -- Notify
       cat(MODULE, "[TRIGGER] Item list has been saved \n")
@@ -782,8 +768,8 @@ kitemsManager_Server <- function(id, r, file, path,
 
       # -- init items
       cat(MODULE, "-- Init data \n")
-      items <- kfiles::read_data(file = file,
-                                 path = path$data,
+      items <- kfiles::read_data(file = items_url,
+                                 path = path,
                                  colClasses = colClasses,
                                  create = TRUE)
 
