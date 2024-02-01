@@ -192,14 +192,15 @@ kitemsManager_Server <- function(id, r, path,
     # Auto save the data model:
     # --------------------------------------------------------------------------
 
-    # -- Observe data model
-    observeEvent(r[[r_data_model]](), {
+    # -- Check parameter & observe data model
+    if(autosave)
+      observeEvent(r[[r_data_model]](), {
 
-      # -- Write & notify
-      saveRDS(r[[r_data_model]](), file = dm_url)
-      cat(MODULE, "Data model saved \n")
+        # -- Write & notify
+        saveRDS(r[[r_data_model]](), file = dm_url)
+        cat(MODULE, "[EVENT] Data model has been (auto) saved \n")
 
-    }, ignoreInit = TRUE)
+      }, ignoreInit = TRUE)
 
 
     # --------------------------------------------------------------------------
