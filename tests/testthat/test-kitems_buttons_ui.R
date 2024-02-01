@@ -9,7 +9,7 @@ test_that("create_BTN works", {
   expect_type(x, "list")
 
   # -- test output
-  expect_equal(unlist(x), c(name = "span", attribs.id = "data-create_btn", attribs.class = "shiny-html-output"))
+  expect_equal(unlist(x), c(name = "span", attribs.id = "data-create_btn_output", attribs.class = "shiny-html-output"))
 
 })
 
@@ -23,7 +23,7 @@ test_that("update_BTN works", {
   expect_type(x, "list")
 
   # -- test output
-  expect_equal(unlist(x), c(name = "span", attribs.id = "data-update_btn", attribs.class = "shiny-html-output"))
+  expect_equal(unlist(x), c(name = "span", attribs.id = "data-update_btn_output", attribs.class = "shiny-html-output"))
 
 })
 
@@ -37,6 +37,6 @@ test_that("delete_BTN works", {
   expect_type(x, "list")
 
   # -- test output
-  expect_equal(unlist(x), c(name = "span", attribs.id = "data-delete_btn", attribs.class = "shiny-html-output"))
+  expect_equal(unlist(x), c(name = "span", attribs.id = "data-delete_btn_output", attribs.class = "shiny-html-output"))
 
 })
