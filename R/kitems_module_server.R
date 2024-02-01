@@ -918,7 +918,7 @@ kitemsManager_Server <- function(id, r, path,
     # --------------------------------------------------------------------------
 
     # -- Declare: create_btn
-    output$create_btn <- renderUI(actionButton(inputId = ns("create_btn"),
+    output$create_btn_output <- renderUI(actionButton(inputId = ns("create_btn"),
                                                  label = "Create"))
 
     # -- Observe: create_btn
@@ -959,7 +959,7 @@ kitemsManager_Server <- function(id, r, path,
     # --------------------------------------------------------------------------
 
     # -- Declare: update_btn
-    output$update_btn <- renderUI(
+    output$update_btn_output <- renderUI(
 
       # -- check item selection + single row
       if(is.null(r[[r_selected_items]]()) | length(r[[r_selected_items]]()) != 1)
@@ -1017,7 +1017,7 @@ kitemsManager_Server <- function(id, r, path,
     # --------------------------------------------------------------------------
 
     # -- Declare: delete_btn
-    output$delete_btn <- renderUI(
+    output$delete_btn_output <- renderUI(
 
       # -- check item selection
       if(is.null(r[[r_selected_items]]()))
