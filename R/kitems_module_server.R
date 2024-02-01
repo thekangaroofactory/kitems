@@ -819,7 +819,7 @@ kitemsManager_Server <- function(id, r, path,
     output$dm_sort_buttons <- renderUI(
 
       # -- check NULL data model
-      if(is.null(r[[r_items]]()))
+      if(is.null(r[[r_data_model]]()))
         NULL
 
       else {
@@ -829,8 +829,8 @@ kitemsManager_Server <- function(id, r, path,
           # order attribute name
           selectizeInput(inputId = ns("dm_order_cols"),
                          label = "Select cols order",
-                         choices = colnames(r[[r_items]]()),
-                         selected = colnames(r[[r_items]]()),
+                         choices = r[[r_data_model]]()$name,
+                         selected = r[[r_data_model]]()$name,
                          multiple = TRUE))})
 
 
