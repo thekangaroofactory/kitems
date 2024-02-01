@@ -934,14 +934,8 @@ kitemsManager_Server <- function(id, r, path,
       cat("--  Create item \n")
       item <- item_create(values = input_values, data.model = r[[r_data_model]]())
 
-      # -- add item to list & store
-      cat("--  Add item to list \n")
-      item_list <- item_add(r[[r_items]](), item)
-      r[[r_items]](item_list)
-
-      # -- notify
-      if(is_running)
-        showNotification(paste(MODULE, "Item created."), type = "message")
+      # -- call trigger
+      r[[trigger_add]](item)
 
     })
 
@@ -1033,7 +1027,7 @@ kitemsManager_Server <- function(id, r, path,
 
     })
 
-    # -- Observe: confirm_create_btn
+    # -- Observe: confirm_delete_btn
     observeEvent(input$confirm_delete_btn, {
 
       cat(MODULE, "[EVENT] Confirm delete item(s) \n")
