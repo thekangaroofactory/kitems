@@ -626,7 +626,7 @@ kitemsManager_Server <- function(id, r, path,
                                            # -- select attribute name
                                            selectizeInput(inputId = ns("dm_dz_att_name"),
                                                           label = "Name",
-                                                          choices = colnames(r[[r_items]]()),
+                                                          choices = r[[r_data_model]]()$name,
                                                           selected = NULL,
                                                           options = list(create = FALSE,
                                                                          placeholder = 'Type or select an option below',
@@ -636,13 +636,27 @@ kitemsManager_Server <- function(id, r, path,
                                            actionButton(ns("dm_dz_delete_att"), label = "Delete")))))
 
 
-    # -- Observe button: delete attribute
+    # -- Observer button:
     observeEvent(input$dm_dz_delete_att, {
+
+      # -- Open dialog for confirmation
+      showModal(modalDialog(title = "Delete attribute",
+                            "Danger: deleting an attribute can't be undone! Do you confirm?",
+                            footer = tagList(
+                              modalButton("Cancel"),
+                              actionButton(ns("dm_dz_confirm_delete_att"), "Delete"))))})
+
+
+    # -- Observe button: delete attribute
+    observeEvent(input$dm_dz_confirm_delete_att, {
 
       # -- check
       req(input$dm_dz_att_name)
 
       cat("[BTN] Delete attribute:", input$dm_dz_att_name, "\n")
+
+      # -- clode modal
+      removeModal()
 
       # -- drop column! & store
       items <- r[[r_items]]()
