@@ -76,9 +76,21 @@ kitemsManager_Server <- function(id, r, path,
     r[[r_selected_items]] <- reactiveVal(NULL)
     r[[r_filter_date]] <- reactiveVal(NULL)
 
-    # -- Declare date slider objects
-    min_date <- reactiveVal(NULL)
-    max_date <- reactiveVal(NULL)
+    # -- Build triggers names from module id
+    trigger_add <- trigger_add_name(id)
+    trigger_update <- trigger_update_name(id)
+    trigger_delete <- trigger_delete_name(id)
+    trigger_save <- trigger_save_name(id)
+
+    # -- Declare reactive objects (for external use)
+    r[[trigger_add]] <- reactiveVal(NULL)
+    r[[trigger_update]] <- reactiveVal(NULL)
+    r[[trigger_delete]] <- reactiveVal(NULL)
+    r[[trigger_save]] <- reactiveVal(0)
+    cat(MODULE, "trigger_add available @", trigger_add, "\n")
+    cat(MODULE, "trigger_update available @", trigger_update, "\n")
+    cat(MODULE, "trigger_delete available @", trigger_delete, "\n")
+    cat(MODULE, "trigger_save available @", trigger_save, "\n")
 
 
     # --------------------------------------------------------------------------
@@ -180,14 +192,15 @@ kitemsManager_Server <- function(id, r, path,
     # Auto save the data model:
     # --------------------------------------------------------------------------
 
-    # -- Observe data model
-    observeEvent(r[[r_data_model]](), {
+    # -- Check parameter & observe data model
+    if(autosave)
+      observeEvent(r[[r_data_model]](), {
 
-      # -- Write & notify
-      saveRDS(r[[r_data_model]](), file = dm_url)
-      cat(MODULE, "Data model saved \n")
+        # -- Write & notify
+        saveRDS(r[[r_data_model]](), file = dm_url)
+        cat(MODULE, "[EVENT] Data model has been (auto) saved \n")
 
-    }, ignoreInit = TRUE)
+      }, ignoreInit = TRUE)
 
 
     # --------------------------------------------------------------------------
@@ -210,22 +223,8 @@ kitemsManager_Server <- function(id, r, path,
 
 
     # --------------------------------------------------------------------------
-    # Declare triggers:
+    # Triggers:
     # --------------------------------------------------------------------------
-
-    # -- Build triggers names from module id
-    trigger_add <- trigger_add_name(id)
-    trigger_update <- trigger_update_name(id)
-    trigger_delete <- trigger_delete_name(id)
-    trigger_save <- trigger_save_name(id)
-
-    # -- Declare reactive objects (for external use)
-    r[[trigger_add]] <- reactiveVal(NULL)
-    cat(MODULE, "trigger_add is now available @", trigger_add, "\n")
-    r[[trigger_update]] <- reactiveVal(NULL)
-    r[[trigger_delete]] <- reactiveVal(NULL)
-    r[[trigger_save]] <- reactiveVal(0)
-
 
     # -- Observe: trigger_add
     observeEvent(r[[trigger_add]](), {
@@ -294,13 +293,7 @@ kitemsManager_Server <- function(id, r, path,
     # --------------------------------------------------------------------------
 
     # -- Filtered item table view
-    observeEvent({
-
-      # -- Multiple conditions!
-      r[[r_items]]()
-      r[[r_filter_date]]()
-
-    }, {
+    r[[r_filtered_items]] <- reactive({
 
       cat(MODULE, "Updating filtered item view \n")
 
@@ -312,13 +305,40 @@ kitemsManager_Server <- function(id, r, path,
       if(!is.null(filter_date))
         items <- items[items$date >= filter_date[1] & items$date <= filter_date[2], ]
 
-
       cat(MODULE, "ouput dim =", dim(items), "\n")
 
-      # -- Store
-      r[[r_filtered_items]](items)
+      # -- Return
+      items
 
-    }, ignoreInit = FALSE)
+    })
+
+
+    # # -- Filtered item table view
+    # observeEvent({
+    #
+    #   # -- Multiple conditions!
+    #   r[[r_items]]()
+    #   r[[r_filter_date]]()
+    #
+    # }, {
+    #
+    #   cat(MODULE, "Updating filtered item view \n")
+    #
+    #   # -- Get items
+    #   items <- r[[r_items]]()
+    #
+    #   # -- Apply date filter
+    #   filter_date <- r[[r_filter_date]]()
+    #   if(!is.null(filter_date))
+    #     items <- items[items$date >= filter_date[1] & items$date <= filter_date[2], ]
+    #
+    #
+    #   cat(MODULE, "ouput dim =", dim(items), "\n")
+    #
+    #   # -- Store
+    #   r[[r_filtered_items]](items)
+    #
+    # }, ignoreInit = FALSE)
 
 
     # --------------------------------------------------------------------------
@@ -412,18 +432,14 @@ kitemsManager_Server <- function(id, r, path,
     # Declare outputs: Inputs
     # --------------------------------------------------------------------------
 
-    # -- Declare date_slider (check date attribute)
-    if(hasDate(isolate(r[[r_data_model]]()))){
+    # -- Declare output:
+    output$date_slider <- renderUI({
 
-      # -- Declare output
-      cat(MODULE, "Building date sliderInput \n")
-      output$date_slider <- input_date_slider(isolate(r[[r_items]]()), ns = ns)
-
-      # -- Observe items min/max date
-      observeEvent(r[[r_items]](), {
+      # -- check data model
+      if(hasDate(r[[r_data_model]]())){
 
         # -- Get min/max
-        if(dim(r[[r_items]]())[1] != 0){
+        if(dim(r[[r_items]]())[1] > 0){
 
           min <- min(r[[r_items]]()$date)
           max <- max(r[[r_items]]()$date)
@@ -435,32 +451,24 @@ kitemsManager_Server <- function(id, r, path,
 
         }
 
-        # -- Update if needed
-        if(min != ifelse(is.null(min_date()), 0, min_date()))
-          min_date(min)
+        # -- Get input range (to keep selection during update)
+        range <- isolate(input$date_slider)
+        value <- if(is.null(range))
+          c(min, max)
+        else
+          value <- range
 
-        if(max != ifelse(is.null(max_date()), 0, max_date()))
-          max_date(max)
 
-      }, ignoreInit = TRUE)
+        cat(MODULE, "Building date sliderInput \n")
+        sliderInput(inputId = ns("date_slider"),
+                    label = "Date",
+                    min = min,
+                    max = max,
+                    value = value)
 
-      # -- Observe for date range update
-      observeEvent({
-        min_date()
-        max_date()
-      }, {
+      } else NULL
 
-        cat(MODULE, "Update sliderInput min/max \n")
-
-        # -- update input
-        updateSliderInput(session,
-                          inputId = "date_slider",
-                          min = min_date(),
-                          max = max_date())
-
-      })
-
-    }
+    })
 
     # -- Observe: date_slider
     observeEvent(input$date_slider, {
@@ -624,7 +632,7 @@ kitemsManager_Server <- function(id, r, path,
                                            # -- select attribute name
                                            selectizeInput(inputId = ns("dm_dz_att_name"),
                                                           label = "Name",
-                                                          choices = colnames(r[[r_items]]()),
+                                                          choices = r[[r_data_model]]()$name,
                                                           selected = NULL,
                                                           options = list(create = FALSE,
                                                                          placeholder = 'Type or select an option below',
@@ -634,13 +642,27 @@ kitemsManager_Server <- function(id, r, path,
                                            actionButton(ns("dm_dz_delete_att"), label = "Delete")))))
 
 
-    # -- Observe button: delete attribute
+    # -- Observer button:
     observeEvent(input$dm_dz_delete_att, {
+
+      # -- Open dialog for confirmation
+      showModal(modalDialog(title = "Delete attribute",
+                            "Danger: deleting an attribute can't be undone! Do you confirm?",
+                            footer = tagList(
+                              modalButton("Cancel"),
+                              actionButton(ns("dm_dz_confirm_delete_att"), "Delete"))))})
+
+
+    # -- Observe button: delete attribute
+    observeEvent(input$dm_dz_confirm_delete_att, {
 
       # -- check
       req(input$dm_dz_att_name)
 
       cat("[BTN] Delete attribute:", input$dm_dz_att_name, "\n")
+
+      # -- clode modal
+      removeModal()
 
       # -- drop column! & store
       items <- r[[r_items]]()
@@ -817,7 +839,7 @@ kitemsManager_Server <- function(id, r, path,
     output$dm_sort_buttons <- renderUI(
 
       # -- check NULL data model
-      if(is.null(r[[r_items]]()))
+      if(is.null(r[[r_data_model]]()))
         NULL
 
       else {
@@ -827,12 +849,9 @@ kitemsManager_Server <- function(id, r, path,
           # order attribute name
           selectizeInput(inputId = ns("dm_order_cols"),
                          label = "Select cols order",
-                         choices = colnames(r[[r_items]]()),
-                         selected = colnames(r[[r_items]]()),
-                         multiple = TRUE),
-
-          # order attribute button
-          actionButton(ns("dm_sort_col"), label = "Reorder"))})
+                         choices = r[[r_data_model]]()$name,
+                         selected = r[[r_data_model]]()$name,
+                         multiple = TRUE))})
 
 
     # -- BTN sort_col
@@ -862,7 +881,7 @@ kitemsManager_Server <- function(id, r, path,
     output$adm_filter_buttons <- renderUI(
 
       # -- check NULL data model
-      if(is.null(r[[r_items]]()))
+      if(is.null(r[[r_data_model]]()))
         NULL
 
       else {
@@ -878,7 +897,7 @@ kitemsManager_Server <- function(id, r, path,
         # -- define input
         selectizeInput(inputId = ns("adm_filter_col"),
                        label = "Filter columns",
-                       choices = colnames(r[[r_items]]()),
+                       choices = r[[r_data_model]]()$name,
                        selected = filter_cols,
                        multiple = TRUE,
                        options = list(create = FALSE,
@@ -905,7 +924,7 @@ kitemsManager_Server <- function(id, r, path,
     # --------------------------------------------------------------------------
 
     # -- Declare: create_btn
-    output$create_btn <- renderUI(actionButton(inputId = ns("create_btn"),
+    output$create_btn_output <- renderUI(actionButton(inputId = ns("create_btn"),
                                                  label = "Create"))
 
     # -- Observe: create_btn
@@ -935,14 +954,8 @@ kitemsManager_Server <- function(id, r, path,
       cat("--  Create item \n")
       item <- item_create(values = input_values, data.model = r[[r_data_model]]())
 
-      # -- add item to list & store
-      cat("--  Add item to list \n")
-      item_list <- item_add(r[[r_items]](), item)
-      r[[r_items]](item_list)
-
-      # -- notify
-      if(is_running)
-        showNotification(paste(MODULE, "Item created."), type = "message")
+      # -- call trigger
+      r[[trigger_add]](item)
 
     })
 
@@ -952,7 +965,7 @@ kitemsManager_Server <- function(id, r, path,
     # --------------------------------------------------------------------------
 
     # -- Declare: update_btn
-    output$update_btn <- renderUI(
+    output$update_btn_output <- renderUI(
 
       # -- check item selection + single row
       if(is.null(r[[r_selected_items]]()) | length(r[[r_selected_items]]()) != 1)
@@ -1010,7 +1023,7 @@ kitemsManager_Server <- function(id, r, path,
     # --------------------------------------------------------------------------
 
     # -- Declare: delete_btn
-    output$delete_btn <- renderUI(
+    output$delete_btn_output <- renderUI(
 
       # -- check item selection
       if(is.null(r[[r_selected_items]]()))
@@ -1034,7 +1047,7 @@ kitemsManager_Server <- function(id, r, path,
 
     })
 
-    # -- Observe: confirm_create_btn
+    # -- Observe: confirm_delete_btn
     observeEvent(input$confirm_delete_btn, {
 
       cat(MODULE, "[EVENT] Confirm delete item(s) \n")

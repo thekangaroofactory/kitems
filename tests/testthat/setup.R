@@ -111,7 +111,7 @@ item_id <- items$id[1]
 
 
 # -- date selection
-date_slider_value <- c(19737, 19739)
+date_slider_value <- c(as.POSIXct(as.Date("2024-01-15")), as.POSIXct(as.Date("2024-01-17")))
 
 
 # --------------------------------------------------------------------------

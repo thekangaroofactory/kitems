@@ -261,6 +261,7 @@ test_that("Add attribute works", {
     # -- update input & click
     session$setInputs(dm_dz_att_name = "status")
     session$setInputs(dm_dz_delete_att = 1)
+    session$setInputs(dm_dz_confirm_delete_att = 1)
 
 
     # --------------------------------------------------------------------------
@@ -542,7 +543,7 @@ test_that("Date sliderInput works", {
     expect_equal(r[[r_filter_date]](), date_slider_value)
 
     # -- check filter
-    expect_equal(dim(r[[r_filtered_items]]()), c(0, 6))
+    expect_equal(dim(r[[r_filtered_items]]()), c(2, 6))
 
   })
 
@@ -589,7 +590,7 @@ test_that("Selection works", {
     session$setInputs(filtered_view_rows_selected = c(3,4))
 
     # -- check
-    expect_equal(r[[r_selected_items]](), NULL)
+    expect_equal(r[[r_selected_items]](), r[[r_items]]()$id[1:2])
 
 
   })
