@@ -260,6 +260,7 @@ test_that("Add attribute works", {
 
     # -- update input & click
     session$setInputs(dm_dz_att_name = "status")
+    session$setInputs(dm_dz_delete_att = 1)
     session$setInputs(dm_dz_confirm_delete_att = 1)
 
 
