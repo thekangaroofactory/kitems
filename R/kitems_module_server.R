@@ -861,7 +861,7 @@ kitemsManager_Server <- function(id, r, path,
     output$adm_filter_buttons <- renderUI(
 
       # -- check NULL data model
-      if(is.null(r[[r_items]]()))
+      if(is.null(r[[r_data_model]]()))
         NULL
 
       else {
@@ -877,7 +877,7 @@ kitemsManager_Server <- function(id, r, path,
         # -- define input
         selectizeInput(inputId = ns("adm_filter_col"),
                        label = "Filter columns",
-                       choices = colnames(r[[r_items]]()),
+                       choices = r[[r_data_model]]()$name,
                        selected = filter_cols,
                        multiple = TRUE,
                        options = list(create = FALSE,
