@@ -25,6 +25,10 @@ item_create <- function(values, data.model){
   # -- helper function (takes single values)
   helper <- function(key, value, class, default.val, default.fun){
 
+    # -- security check: NULL will cause next test to fail
+    if(is.null(value))
+      value <- NA
+
     # -- coerce value
     cat("Helper function: \n")
     cat("  - key =", key, "\n")
