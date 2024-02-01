@@ -76,10 +76,6 @@ kitemsManager_Server <- function(id, r, path,
     r[[r_selected_items]] <- reactiveVal(NULL)
     r[[r_filter_date]] <- reactiveVal(NULL)
 
-    # -- Declare date slider objects
-    min_date <- reactiveVal(NULL)
-    max_date <- reactiveVal(NULL)
-
     # -- Build triggers names from module id
     trigger_add <- trigger_add_name(id)
     trigger_update <- trigger_update_name(id)
@@ -414,18 +410,14 @@ kitemsManager_Server <- function(id, r, path,
     # Declare outputs: Inputs
     # --------------------------------------------------------------------------
 
-    # -- Declare date_slider (check date attribute)
-    if(hasDate(isolate(r[[r_data_model]]()))){
+    # -- Declare output:
+    output$date_slider <- renderUI({
 
-      # -- Declare output
-      cat(MODULE, "Building date sliderInput \n")
-      output$date_slider <- input_date_slider(isolate(r[[r_items]]()), ns = ns)
-
-      # -- Observe items min/max date
-      observeEvent(r[[r_items]](), {
+      # -- check data model
+      if(hasDate(r[[r_data_model]]())){
 
         # -- Get min/max
-        if(dim(r[[r_items]]())[1] != 0){
+        if(dim(r[[r_items]]())[1] > 0){
 
           min <- min(r[[r_items]]()$date)
           max <- max(r[[r_items]]()$date)
@@ -437,32 +429,24 @@ kitemsManager_Server <- function(id, r, path,
 
         }
 
-        # -- Update if needed
-        if(min != ifelse(is.null(min_date()), 0, min_date()))
-          min_date(min)
+        # -- Get input range (to keep selection during update)
+        range <- isolate(input$date_slider)
+        value <- if(is.null(range))
+          c(min, max)
+        else
+          value <- range
 
-        if(max != ifelse(is.null(max_date()), 0, max_date()))
-          max_date(max)
 
-      }, ignoreInit = TRUE)
+        cat(MODULE, "Building date sliderInput \n")
+        sliderInput(inputId = ns("date_slider"),
+                    label = "Date",
+                    min = min,
+                    max = max,
+                    value = value)
 
-      # -- Observe for date range update
-      observeEvent({
-        min_date()
-        max_date()
-      }, {
+      } else NULL
 
-        cat(MODULE, "Update sliderInput min/max \n")
-
-        # -- update input
-        updateSliderInput(session,
-                          inputId = "date_slider",
-                          min = min_date(),
-                          max = max_date())
-
-      })
-
-    }
+    })
 
     # -- Observe: date_slider
     observeEvent(input$date_slider, {
