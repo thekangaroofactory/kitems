@@ -589,7 +589,7 @@ test_that("Selection works", {
     session$setInputs(filtered_view_rows_selected = c(3,4))
 
     # -- check
-    expect_equal(r[[r_selected_items]](), NULL)
+    expect_equal(r[[r_selected_items]](), r[[r_items]]()$id[1:2])
 
 
   })
