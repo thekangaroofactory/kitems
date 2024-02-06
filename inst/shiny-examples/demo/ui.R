@@ -8,7 +8,7 @@
 # Define Sidebar UI
 # ------------------------------------------------------------------------------
 
-sidebar <- dashboardSidebar(
+sidebar <- shinydashboard::dashboardSidebar(
 
   # -- static section
   sidebarMenu(
