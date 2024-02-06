@@ -481,11 +481,6 @@ kitemsManager_Server <- function(id, r, path,
     })
 
 
-
-
-
-
-
     # --------------------------------------------------------------------------
     # Admin UI:
     # --------------------------------------------------------------------------
@@ -571,21 +566,9 @@ kitemsManager_Server <- function(id, r, path,
     })
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # --------------------------------------------------------------------------
+    # Import data:
+    # --------------------------------------------------------------------------
 
     # -- Observe: import_data
     observeEvent(input$import_data, {
@@ -624,7 +607,8 @@ kitemsManager_Server <- function(id, r, path,
                                  create = FALSE)
 
       # -- Display modal
-      showModal(modalDialog(DT::renderDT(items),
+      # adding options to renderDT #207
+      showModal(modalDialog(DT::renderDT(items, rownames = FALSE, options = list(scrollX = TRUE)),
                             title = "Import data",
                             footer = tagList(
                               modalButton("Cancel"),
@@ -641,8 +625,9 @@ kitemsManager_Server <- function(id, r, path,
         data.model <- dm_check_integrity(data.model = NULL, items = items, template = TEMPLATE_DATA_MODEL)
 
         # -- Display modal
+        # adding options to renderDT #207
         showModal(modalDialog(p("Data model built from the data:"),
-                              DT::renderDT(data.model),
+                              DT::renderDT(data.model, rownames = FALSE, options = list(scrollX = TRUE)),
                               title = "Import data",
                               footer = tagList(
                                 modalButton("Cancel"),
