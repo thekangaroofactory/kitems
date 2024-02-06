@@ -454,8 +454,40 @@ kitemsManager_Server <- function(id, r, path,
 
         # -- Get input range (to keep selection during update)
         range <- isolate(input$date_slider)
+
+
+        # ----------------------------------------------------------------------
+        # ***** THIS SHOULD BE EXPORTED TO ktools!
+        # ----------------------------------------------------------------------
+        date_range <- function(min, max, type = "this_year"){
+
+          # -- test type
+          if(type == "this_year"){
+
+            # -- get current year
+            this_year <- format(Sys.Date(), "%Y")
+            floor_year <- lubridate::floor_date(Sys.Date(), unit = "year")
+            ceiling_year <- lubridate::ceiling_date(Sys.Date(), unit = "year") - 1
+
+            if(min < floor_year)
+              min <- floor_year
+
+            if(max > ceiling_year)
+              max <- ceiling_year
+
+          }
+
+          # -- return
+          range <- c(min, max)
+
+        }
+        # ----------------------------------------------------------------------
+
+
+        # -- Set value
+        # implement this_year strategy by default #211
         value <- if(is.null(range))
-          c(min, max)
+          date_range(min, max)
         else
           value <- range
 
