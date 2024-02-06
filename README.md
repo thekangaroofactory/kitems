@@ -327,6 +327,21 @@ sidebar <- dashboardSidebar(
   collapsed = FALSE)
 ```
 
+The tabName linked to each menuSubItem should be named after the module
+id. Here is an example how to access the administration console from the
+menuSubItem:
+
+``` r
+# -- kitems admin
+tabItem(tabName = "my_data",
+        
+        # -- Admin UI
+        fluidRow(
+          column(width = 12,
+                 
+                 kitems::admin_ui("my_data"))))
+```
+
 ## Import & migration
 
 When the module server is initialized with data.model = NULL, an import
