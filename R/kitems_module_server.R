@@ -481,44 +481,110 @@ kitemsManager_Server <- function(id, r, path,
     })
 
 
-    # --------------------------------------------------------------------------
-    # Declare data model:
-    # --------------------------------------------------------------------------
 
-    output$hasDataModel <- reactive({
 
-      if(is.null(r[[r_data_model]]()))
-        FALSE
-      else
-        TRUE
+
+
+
+    # --------------------------------------------------------------------------
+    # Admin UI:
+    # --------------------------------------------------------------------------
+    # The whole section answers #206 (removes conditionalPanel on ui side and
+    # computes on server side)
+
+    # -- data model tab
+    output$admin_dm_tab <- renderUI({
+
+      # -- check NULL data model
+      if(is.null(r[[r_data_model]]())){
+
+        # -- display create / import btns
+        fluidRow(column(width = 12,
+                        p("No data model found. You need to create one to start."),
+                        actionButton(ns("dm_create"), label = "Create"),
+                        actionButton(ns("import_data"), label = "Import data")))
+
+      } else {
+
+        # -- display data model
+        tagList(
+
+          fluidRow(column(width = 2,
+
+                          p("Actions"),
+                          uiOutput(ns("dm_add_att"))),
+
+                   column(width = 10,
+                          p("Table"),
+                          DT::DTOutput(ns("data_model")))),
+
+          fluidRow(column(width = 12,
+                          br(),
+                          uiOutput(ns("dm_danger_btn")),
+                          uiOutput(ns("dm_danger_zone")))))
+
+      }
 
     })
 
-    outputOptions(output, "hasDataModel", suspendWhenHidden = FALSE)
+
+    # -- raw table tab
+    output$admin_raw_tab <- renderUI({
+
+      # -- check NULL data model
+      if(!is.null(r[[r_data_model]]())){
+
+        # -- display raw table
+        fluidRow(column(width = 2,
+                        p("Actions"),
+                        uiOutput(ns("dm_sort_buttons"))),
+
+                 column(width = 10,
+                        p("Raw Table"),
+                        DT::DTOutput(ns("raw_item_table"))))
+
+      }
+
+    })
 
 
-    # --------------------------------------------------------------------------
-    # Create data model:
-    # --------------------------------------------------------------------------
+    # -- raw table tab
+    output$admin_view_tab <- renderUI({
 
-    # -- Create from scratch
-    output$admin_dm_create <- renderUI(
+      # -- check NULL data model
+      if(!is.null(r[[r_data_model]]())){
 
-      # check for null data model
-      if(is.null(r[[r_data_model]]()))
-        actionButton(ns("dm_create"), label = "Create"))
+        # -- display view table
+        fluidRow(column(width = 2,
+                        p("Actions"),
+                        uiOutput(ns("adm_filter_buttons")),
+                        p("Column name mask applied by default:",br(),
+                          "- replace dot, underscore with space",br(),
+                          "- capitalize first letters")),
+
+                 column(width = 10,
+                        p("Filtered Table"),
+                        DT::DTOutput(ns("view_item_table"))))
+
+      }
+
+    })
 
 
-    # --------------------------------------------------------------------------
-    # Import data:
-    # --------------------------------------------------------------------------
 
-    # -- Import data
-    output$admin_import_data <- renderUI(
 
-      # check for null data model
-      if(is.null(r[[r_data_model]]()))
-        actionButton(ns("import_data"), label = "Import data"))
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     # -- Observe: import_data
