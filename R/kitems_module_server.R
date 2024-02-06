@@ -357,8 +357,9 @@ kitemsManager_Server <- function(id, r, path,
                                            selection = list(mode = 'single', target = "row", selected = NULL))
 
     # -- colClasses for admin
+    # setting rownames = FALSE #209
     output$data_model <- DT::renderDT(r[[r_data_model]](),
-                                      rownames = TRUE,
+                                      rownames = FALSE,
                                       options = list(lengthMenu = c(5, 10, 15), pageLength = 10, dom = "t", scrollX = TRUE),
                                       selection = list(mode = 'single', target = "row", selected = NULL))
 
@@ -627,7 +628,6 @@ kitemsManager_Server <- function(id, r, path,
         # -- Display modal
         # adding options to renderDT #207
         showModal(modalDialog(p("Data model built from the data:"),
-                              DT::renderDT(data.model, rownames = FALSE, options = list(scrollX = TRUE)),
                               title = "Import data",
                               footer = tagList(
                                 modalButton("Cancel"),
