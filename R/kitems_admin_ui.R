@@ -30,7 +30,8 @@ admin_ui <- function(id){
 
                wellPanel(h3(paste("Name: ", id)),
 
-                         conditionalPanel(condition ="output.hasDataModel == false", ns = ns,
+                         # -- condition should use ns() #206
+                         conditionalPanel(condition = paste0("output.", ns("hasDataModel"), " == false"), ns = ns,
                                           fluidRow(column(width = 12,
                                                           p("No data model found. You need to create one to start."),
                                                           uiOutput(ns("admin_dm_create"), inline = TRUE),
