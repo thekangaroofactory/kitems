@@ -610,9 +610,23 @@ kitemsManager_Server <- function(id, r, path,
                                  colClasses = NA,
                                  create = FALSE)
 
+      # -- Check if datatset has id #208
+      hasId <- TRUE
+      if(!"id" %in% colnames(items)){
+
+        cat(MODULE, "[WARNING] Dataset has no id column, creating one \n")
+        items <- kitems::item_add_attribute(items, name = "id", type = "double", fill = ktools::getTimestamp())
+
+        hasId <- FALSE
+
+      }
+
       # -- Display modal
       # adding options to renderDT #207
       showModal(modalDialog(DT::renderDT(items, rownames = FALSE, options = list(scrollX = TRUE)),
+                            # -- test: in case no id column exists #208
+                            if(!hasId)
+                              p("Note: the dataset had no id column, it has been generated automatically."),
                             title = "Import data",
                             footer = tagList(
                               modalButton("Cancel"),
@@ -631,6 +645,7 @@ kitemsManager_Server <- function(id, r, path,
         # -- Display modal
         # adding options to renderDT #207
         showModal(modalDialog(p("Data model built from the data:"),
+                              DT::renderDT(data.model, rownames = FALSE, options = list(scrollX = TRUE)),
                               title = "Import data",
                               footer = tagList(
                                 modalButton("Cancel"),
