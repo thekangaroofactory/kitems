@@ -614,10 +614,22 @@ kitemsManager_Server <- function(id, r, path,
       hasId <- TRUE
       if(!"id" %in% colnames(items)){
 
-        cat(MODULE, "[WARNING] Dataset has no id column, creating one \n")
-        items <- kitems::item_add_attribute(items, name = "id", type = "double", fill = ktools::getTimestamp())
+        # -- Display message has it can take a bit of time depending on dataset size
+        showModal(modalDialog(p("Computing ids to import the dataset..."),
+                              title = "Import data",
+                              footer = NULL))
 
+                # -- Compute a vector of ids (should be fixed by #214)
+        cat(MODULE, "[WARNING] Dataset has no id column, creating one \n")
+        fill <- ktools::seq_timestamp(n = nrow(items))
+
+        # -- add attribute & reorder
+        items <- kitems::item_add_attribute(items, name = "id", type = "double", fill = fill)
+        items <- items[c("id", colnames(items)[!colnames(items) %in% "id"])]
         hasId <- FALSE
+
+        # -- close modal
+        removeModal()
 
       }
 
@@ -628,6 +640,7 @@ kitemsManager_Server <- function(id, r, path,
                             if(!hasId)
                               p("Note: the dataset had no id column, it has been generated automatically."),
                             title = "Import data",
+                            size = "l",
                             footer = tagList(
                               modalButton("Cancel"),
                               actionButton(ns("confirm_import_data"), "Next"))))
@@ -647,6 +660,7 @@ kitemsManager_Server <- function(id, r, path,
         showModal(modalDialog(p("Data model built from the data:"),
                               DT::renderDT(data.model, rownames = FALSE, options = list(scrollX = TRUE)),
                               title = "Import data",
+                              size = "l",
                               footer = tagList(
                                 modalButton("Cancel"),
                                 actionButton(ns("confirm_data_model"), "Import"))))
