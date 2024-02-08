@@ -38,6 +38,10 @@
 
 data_model <- function(colClasses, default.val = NULL, default.fun = NULL, filter = NULL, skip = NULL){
 
+  # -- check arg #217
+  if(is.null(names(colClasses)))
+    stop("colClasses must be a named vector")
+
   # -- Build data.frame from colClasses (named vector)
   dm <- data.frame("name" = names(colClasses), "type" = unname(colClasses))
 
