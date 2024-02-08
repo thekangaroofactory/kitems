@@ -49,6 +49,25 @@ dm_check_integrity <- function(data.model, items, template = NULL){
     missing_types[names(missing_types) %in% template$name][] <- template[idx, ]$type
 
     # -- Add missing attributes
+    # Adding different call if attribute id is missing #215
+    if("id" %in% missing_att){
+
+      # -- call with all params
+      data.model <- dm_add_attribute(data.model,
+                                     name = "id",
+                                     type = TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == "id", ]$type,
+                                     default.val = NA,
+                                     default.fun = "ktools::getTimestamp",
+                                     skip = TRUE,
+                                     filter = TRUE)
+
+      # -- drop id from lists
+      missing_att <- missing_att[missing_att != "id"]
+      missing_types <- missing_types[names(missing_types) != "id"]
+
+    }
+
+    # -- default call
     data.model <- dm_add_attribute(data.model, name = missing_att, type = missing_types)
 
   }

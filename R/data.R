@@ -58,9 +58,9 @@ DEFAULT_FUNCTIONS <- list("numeric" = c(NA),
 # -- Data model template
 TEMPLATE_DATA_MODEL <- data.frame(name = c("date",
                                            "name", "title", "description", "comment", "note", "status", "detail",
-                                           "debit", "credit", "amount", "total", "balance",
+                                           "id", "debit", "credit", "amount", "total", "balance",
                                            "quantity", "progress"),
                                   type = c("Date",
                                            rep("character", 7),
-                                           rep("numeric", 5),
+                                           rep("numeric", 6),
                                            rep("integer", 2)))

@@ -574,7 +574,7 @@ kitemsManager_Server <- function(id, r, path,
     # Import data:
     # --------------------------------------------------------------------------
 
-    # -- Observe: import_data
+    # -- Observe: click (start import)
     observeEvent(input$import_data, {
 
       cat(MODULE, "[EVENT] Import data \n")
@@ -594,7 +594,7 @@ kitemsManager_Server <- function(id, r, path,
     })
 
 
-    # -- Observe: confirm_import_file
+    # -- Observe: click (confirm file)
     observeEvent(input$confirm_import_file, {
 
       # -- Check file input
@@ -611,8 +611,7 @@ kitemsManager_Server <- function(id, r, path,
                                  create = FALSE)
 
       # -- Check if datatset has id #208
-      hasId <- TRUE
-      if(!"id" %in% colnames(items)){
+      hasId <- if(!"id" %in% colnames(items)){
 
         # -- Display message has it can take a bit of time depending on dataset size
         showModal(modalDialog(p("Computing ids to import the dataset..."),
@@ -626,12 +625,14 @@ kitemsManager_Server <- function(id, r, path,
         # -- add attribute & reorder
         items <- kitems::item_add_attribute(items, name = "id", type = "numeric", fill = fill)
         items <- items[c("id", colnames(items)[!colnames(items) %in% "id"])]
-        hasId <- FALSE
 
         # -- close modal
         removeModal()
 
-      }
+        # -- return
+        FALSE
+
+      } else TRUE
 
       # -- Display modal
       # adding options to renderDT #207
@@ -645,7 +646,7 @@ kitemsManager_Server <- function(id, r, path,
                               modalButton("Cancel"),
                               actionButton(ns("confirm_import_data"), "Next"))))
 
-      # -- Observe: confirm_import_data
+      # -- Observe: click (confirm data)
       observeEvent(input$confirm_import_data, {
 
         # -- Close modal
