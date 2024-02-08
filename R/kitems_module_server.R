@@ -613,14 +613,21 @@ kitemsManager_Server <- function(id, r, path,
       # -- Check if datatset has id #208
       hasId <- if(!"id" %in% colnames(items)){
 
+        # -- nb id to compute
+        n <- nrow(items)
+
+        # -- compute expected time (based on average time per id) #221
+        expected_time <- round(n * 0.0156)
+
         # -- Display message has it can take a bit of time depending on dataset size
-        showModal(modalDialog(p("Computing ids to import the dataset..."),
+        showModal(modalDialog(p("Computing", n, "id(s) to import the dataset..."),
+                              p("Expected time:", expected_time, "s"),
                               title = "Import data",
                               footer = NULL))
 
                 # -- Compute a vector of ids (should be fixed by #214)
         cat(MODULE, "[WARNING] Dataset has no id column, creating one \n")
-        fill <- ktools::seq_timestamp(n = nrow(items))
+        fill <- ktools::seq_timestamp(n = n)
 
         # -- add attribute & reorder
         items <- kitems::item_add_attribute(items, name = "id", type = "numeric", fill = fill)
