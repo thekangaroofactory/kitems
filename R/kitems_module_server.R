@@ -671,6 +671,11 @@ kitemsManager_Server <- function(id, r, path,
           # -- Close modal
           removeModal()
 
+          # -- Check items classes #216
+          # Because dataset was read first, the current colclasses are 'guessed' and may not comply with the data model
+          # ex: date class is forced in data model, but it may be char ("2024-02-07) or num (19760)
+          items <- item_check_integrity(items = items, data.model = data.model)
+
           # -- Store items & data model
           r[[r_items]](items)
           r[[r_data_model]](data.model)
