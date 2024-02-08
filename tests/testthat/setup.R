@@ -32,7 +32,7 @@ import_url <- "data_to_import.csv"
 # ------------------------------------------------------------------------------
 
 # -- declare colClasses
-colClasses <- c(id = "double", date = "POSIXct", name = "character", quantity = "integer", total = "numeric", isvalid = "logical")
+colClasses <- c(id = "numeric", date = "POSIXct", name = "character", quantity = "integer", total = "numeric", isvalid = "logical")
 colClasses_extra_att <- c(colClasses, extra_att = "integer")
 colClasses_no_date <- colClasses[!names(colClasses) %in% "date"]
 

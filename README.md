@@ -52,7 +52,6 @@ Attribute names and types are obvious. Supported data types are:
 
 - numeric,
 - integer,
-- double,
 - logical,
 - character,
 - factor,

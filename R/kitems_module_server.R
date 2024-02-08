@@ -624,7 +624,7 @@ kitemsManager_Server <- function(id, r, path,
         fill <- ktools::seq_timestamp(n = nrow(items))
 
         # -- add attribute & reorder
-        items <- kitems::item_add_attribute(items, name = "id", type = "double", fill = fill)
+        items <- kitems::item_add_attribute(items, name = "id", type = "numeric", fill = fill)
         items <- items[c("id", colnames(items)[!colnames(items) %in% "id"])]
         hasId <- FALSE
 

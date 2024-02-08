@@ -5,9 +5,9 @@
 # --------------------------------------------------------------------------
 
 # -- Object types (supported)
+# removed double #218
 OBJECT_CLASS <- c("numeric",
                   "integer",
-                  "double",
                   "logical",
                   "character",
                   "factor",
@@ -18,7 +18,6 @@ OBJECT_CLASS <- c("numeric",
 # -- Define list of as functions
 CLASS_FUNCTIONS <- list("numeric" = "as.numeric",
                         "integer" = "as.integer",
-                        "double" = "as.double",
                         "logical" = "as.logical",
                         "character" = "as.character",
                         "factor" = "as.factor",
@@ -34,7 +33,6 @@ CLASS_FUNCTIONS <- list("numeric" = "as.numeric",
 # -- Default values
 DEFAULT_VALUES <- list("numeric" = c(NA, 0),
                        "integer" = c(NA, 0),
-                       "double" = c(NA, 0),
                        "logical" = c(NA, FALSE, TRUE),
                        "character" = c(NA, ""),
                        "factor" = c(NA),
@@ -45,7 +43,6 @@ DEFAULT_VALUES <- list("numeric" = c(NA, 0),
 # -- Default functions
 DEFAULT_FUNCTIONS <- list("numeric" = c(NA),
                           "integer" = c(NA),
-                          "double" = c(NA),
                           "logical" = c(NA),
                           "character" = c(NA),
                           "factor" = c(NA),
@@ -65,5 +62,5 @@ TEMPLATE_DATA_MODEL <- data.frame(name = c("date",
                                            "quantity", "progress"),
                                   type = c("Date",
                                            rep("character", 7),
-                                           rep("double", 5),
+                                           rep("numeric", 5),
                                            rep("integer", 2)))

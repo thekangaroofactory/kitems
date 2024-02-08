@@ -42,8 +42,9 @@ inputList <- function(ns, item = NULL, update = FALSE, data.model){
                          width = NULL,
                          placeholder = NULL)
 
-    # -- numeric, integer, double
-    if(colClasses %in% c("numeric", "integer", "double"))
+    # -- numeric, integer
+    # removed double #218
+    if(colClasses %in% c("numeric", "integer"))
       input <- numericInput(
         inputId = ns(names(colClasses)),
         label = names(colClasses),

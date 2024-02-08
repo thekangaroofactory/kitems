@@ -39,8 +39,9 @@ dm_check_integrity <- function(data.model, items, template = NULL){
     missing_types <- sapply(items[missing_att], class)
 
     # -- Force id attribute class to double (otherwise detected as numeric)
-    if("id" %in% names(missing_types))
-      missing_types[["id"]] <- "double"
+    # Removed this hack: #218
+    # if("id" %in% names(missing_types))
+    #   missing_types[["id"]] <- "double"
 
     # -- Force attribute classes when part of template
     idx <- match(names(missing_types), template$name)

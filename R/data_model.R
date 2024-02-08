@@ -30,7 +30,7 @@
 #' default.val <- c("total" = 2, "name" = "test")
 #'
 #' # no need to set all values
-#' colClasses <- c("id" = "double", "name" = "character", "total" = "numeric")
+#' colClasses <- c("id" = "numeric", "name" = "character", "total" = "numeric")
 #' default.val <- c("name" = "test", "total" = 2)
 #'
 #' data_model(colClasses, default.val, default.fun = NULL)
