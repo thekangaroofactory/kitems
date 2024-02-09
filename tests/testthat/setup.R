@@ -151,6 +151,22 @@ create_integrity_testdata <- function(){
 }
 
 
+# -- helper: create import data without id
+create_noid_data_to_import <- function(){
+
+  # -- create folder
+  dir.create(testdata_path)
+
+  # -- save data model
+  saveRDS(dm, file = dm_url)
+
+  # -- drop id column & save items
+  items$id <- NULL
+  item_save(items, file = import_url, path = testdata_path)
+
+}
+
+
 # -- helper: create data to import
 create_data_to_import <- function(){
 
