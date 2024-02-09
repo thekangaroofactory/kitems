@@ -26,29 +26,69 @@
 
 dm_check_integrity <- function(data.model, items, template = NULL){
 
+  # -- init
   integrity <- TRUE
 
   # -- Check for missing attributes (columns in item data.frame not in data model)
   missing_att <- colnames(items)[(!colnames(items) %in% data.model$name)]
   if(!identical(missing_att, character(0))){
 
-    cat("[Warning] Missing attribute in data model:", missing_att, "\n")
+    # -- nb attribute to add
+    n <- length(missing_att)
+
+    cat("[Warning]", n, "missing attribute(s) in data model:", missing_att, "\n")
     integrity <- FALSE
 
-    # -- Get class from data.frame & add attributes
-    missing_types <- sapply(items[missing_att], class)
+    # -- helper: get unique value for class()
+    helper <- function(x){
+      class(x)[1]}
 
-    # -- Force id attribute class to double (otherwise detected as numeric)
-    if("id" %in% names(missing_types))
-      missing_types[["id"]] <- "double"
+    # -- Get class from items
+    missing_types <- sapply(items[missing_att], helper)
+    missing_types <- unlist(missing_types)
 
-    # -- Force attribute classes when part of template
-    idx <- match(names(missing_types), template$name)
-    idx <- idx[!is.na(idx)]
-    missing_types[names(missing_types) %in% template$name][] <- template[idx, ]$type
+    # -- Set defaults
+    # note: sequence to prepare for update from template
+    missing_default_val <- rep(NA, n)
+    missing_default_fun <- rep(NA, n)
+    missing_skip <- rep(FALSE, n)
+    missing_filter <- rep(FALSE, n)
+
+    # -- Set names
+    names(missing_default_val) <- missing_att
+    names(missing_default_fun) <- missing_att
+    names(missing_skip) <- missing_att
+    names(missing_filter) <- missing_att
+
+    # -- Chech argument
+    if(!is.null(template)){
+
+      # -- Check if any attribute is part of template
+      if(any(missing_att %in% TEMPLATE_DATA_MODEL$name)){
+
+        # -- get index & drop NAs (attribute not matching in template)
+        idx <- match(names(missing_types), template$name)
+        idx <- idx[!is.na(idx)]
+
+        cat("-- attribute(s) in template:", template$name[idx], "\n")
+
+        # -- update parameters
+        missing_types[names(missing_types) %in% template$name][] <- template[idx, ]$type
+        missing_default_val[names(missing_default_val) %in% template$name][] <- template[idx, ]$default.val
+        missing_default_fun[names(missing_default_fun) %in% template$name][] <- template[idx, ]$default.fun
+        missing_skip[names(missing_skip) %in% template$name][] <- template[idx, ]$filter
+        missing_filter[names(missing_filter) %in% template$name][] <- template[idx, ]$skip
+
+      }}
 
     # -- Add missing attributes
-    data.model <- dm_add_attribute(data.model, name = missing_att, type = missing_types)
+    data.model <- dm_add_attribute(data.model = data.model,
+                                   name = missing_att,
+                                   type = missing_types,
+                                   default.val = missing_default_val,
+                                   default.fun = missing_default_fun,
+                                   skip = missing_skip,
+                                   filter = missing_filter)
 
   }
 

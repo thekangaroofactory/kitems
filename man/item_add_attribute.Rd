@@ -13,7 +13,7 @@ item_add_attribute(items, name, type, fill = NA)
 
 \item{type}{a character string of the attribute type}
 
-\item{fill}{the value (default = NA) to be used to fill the existing rows}
+\item{fill}{the value (default = NA) to be used to fill the existing rows (see details)}
 }
 \value{
 the updated items data.frame
@@ -23,6 +23,8 @@ Add attribute to existing items
 }
 \details{
 fill will be coerced to the class name provided in type
+If a vector is given as input for fill, it will be used: items\link{name} <- value
+Make sure the vector length is same as the number of rows, otherwise an error will be raised by R
 }
 \examples{
 \dontrun{

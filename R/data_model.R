@@ -30,13 +30,17 @@
 #' default.val <- c("total" = 2, "name" = "test")
 #'
 #' # no need to set all values
-#' colClasses <- c("id" = "double", "name" = "character", "total" = "numeric")
+#' colClasses <- c("id" = "numeric", "name" = "character", "total" = "numeric")
 #' default.val <- c("name" = "test", "total" = 2)
 #'
 #' data_model(colClasses, default.val, default.fun = NULL)
 #'
 
 data_model <- function(colClasses, default.val = NULL, default.fun = NULL, filter = NULL, skip = NULL){
+
+  # -- check arg #217
+  if(is.null(names(colClasses)))
+    stop("colClasses must be a named vector")
 
   # -- Build data.frame from colClasses (named vector)
   dm <- data.frame("name" = names(colClasses), "type" = unname(colClasses))

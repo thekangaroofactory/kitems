@@ -357,8 +357,9 @@ kitemsManager_Server <- function(id, r, path,
                                            selection = list(mode = 'single', target = "row", selected = NULL))
 
     # -- colClasses for admin
+    # setting rownames = FALSE #209
     output$data_model <- DT::renderDT(r[[r_data_model]](),
-                                      rownames = TRUE,
+                                      rownames = FALSE,
                                       options = list(lengthMenu = c(5, 10, 15), pageLength = 10, dom = "t", scrollX = TRUE),
                                       selection = list(mode = 'single', target = "row", selected = NULL))
 
@@ -453,12 +454,15 @@ kitemsManager_Server <- function(id, r, path,
 
         # -- Get input range (to keep selection during update)
         range <- isolate(input$date_slider)
+
+        # -- Set value
+        # implement this_year strategy by default #211
         value <- if(is.null(range))
-          c(min, max)
+          ktools::date_range(min, max, type = "this_year")
         else
           value <- range
 
-
+        # -- date slider
         cat(MODULE, "Building date sliderInput \n")
         sliderInput(inputId = ns("date_slider"),
                     label = "Date",
@@ -482,46 +486,95 @@ kitemsManager_Server <- function(id, r, path,
 
 
     # --------------------------------------------------------------------------
-    # Declare data model:
+    # Admin UI:
     # --------------------------------------------------------------------------
+    # The whole section answers #206 (removes conditionalPanel on ui side and
+    # computes on server side)
 
-    output$hasDataModel <- reactive({
+    # -- data model tab
+    output$admin_dm_tab <- renderUI({
 
-      if(is.null(r[[r_data_model]]()))
-        FALSE
-      else
-        TRUE
+      # -- check NULL data model
+      if(is.null(r[[r_data_model]]())){
+
+        # -- display create / import btns
+        fluidRow(column(width = 12,
+                        p("No data model found. You need to create one to start."),
+                        actionButton(ns("dm_create"), label = "Create"),
+                        actionButton(ns("import_data"), label = "Import data")))
+
+      } else {
+
+        # -- display data model
+        tagList(
+
+          fluidRow(column(width = 2,
+
+                          p("Actions"),
+                          uiOutput(ns("dm_add_att"))),
+
+                   column(width = 10,
+                          p("Table"),
+                          DT::DTOutput(ns("data_model")))),
+
+          fluidRow(column(width = 12,
+                          br(),
+                          uiOutput(ns("dm_danger_btn")),
+                          uiOutput(ns("dm_danger_zone")))))
+
+      }
 
     })
 
-    outputOptions(output, "hasDataModel", suspendWhenHidden = FALSE)
+
+    # -- raw table tab
+    output$admin_raw_tab <- renderUI({
+
+      # -- check NULL data model
+      if(!is.null(r[[r_data_model]]())){
+
+        # -- display raw table
+        fluidRow(column(width = 2,
+                        p("Actions"),
+                        uiOutput(ns("dm_sort_buttons"))),
+
+                 column(width = 10,
+                        p("Raw Table"),
+                        DT::DTOutput(ns("raw_item_table"))))
+
+      }
+
+    })
 
 
-    # --------------------------------------------------------------------------
-    # Create data model:
-    # --------------------------------------------------------------------------
+    # -- raw table tab
+    output$admin_view_tab <- renderUI({
 
-    # -- Create from scratch
-    output$admin_dm_create <- renderUI(
+      # -- check NULL data model
+      if(!is.null(r[[r_data_model]]())){
 
-      # check for null data model
-      if(is.null(r[[r_data_model]]()))
-        actionButton(ns("dm_create"), label = "Create"))
+        # -- display view table
+        fluidRow(column(width = 2,
+                        p("Actions"),
+                        uiOutput(ns("adm_filter_buttons")),
+                        p("Column name mask applied by default:",br(),
+                          "- replace dot, underscore with space",br(),
+                          "- capitalize first letters")),
+
+                 column(width = 10,
+                        p("Filtered Table"),
+                        DT::DTOutput(ns("view_item_table"))))
+
+      }
+
+    })
 
 
     # --------------------------------------------------------------------------
     # Import data:
     # --------------------------------------------------------------------------
 
-    # -- Import data
-    output$admin_import_data <- renderUI(
-
-      # check for null data model
-      if(is.null(r[[r_data_model]]()))
-        actionButton(ns("import_data"), label = "Import data"))
-
-
-    # -- Observe: import_data
+    # -- Observe: click (start import)
     observeEvent(input$import_data, {
 
       cat(MODULE, "[EVENT] Import data \n")
@@ -541,7 +594,7 @@ kitemsManager_Server <- function(id, r, path,
     })
 
 
-    # -- Observe: confirm_import_file
+    # -- Observe: click (confirm file)
     observeEvent(input$confirm_import_file, {
 
       # -- Check file input
@@ -557,14 +610,50 @@ kitemsManager_Server <- function(id, r, path,
                                  colClasses = NA,
                                  create = FALSE)
 
+      # -- Check if datatset has id #208
+      hasId <- if(!"id" %in% colnames(items)){
+
+        # -- nb id to compute
+        n <- nrow(items)
+
+        # -- compute expected time (based on average time per id) #221
+        expected_time <- round(n * 0.0156)
+
+        # -- Display message has it can take a bit of time depending on dataset size
+        showModal(modalDialog(p("Computing", n, "id(s) to import the dataset..."),
+                              p("Expected time:", expected_time, "s"),
+                              title = "Import data",
+                              footer = NULL))
+
+                # -- Compute a vector of ids (should be fixed by #214)
+        cat(MODULE, "[WARNING] Dataset has no id column, creating one \n")
+        fill <- ktools::seq_timestamp(n = n)
+
+        # -- add attribute & reorder
+        items <- kitems::item_add_attribute(items, name = "id", type = "numeric", fill = fill)
+        items <- items[c("id", colnames(items)[!colnames(items) %in% "id"])]
+
+        # -- close modal
+        removeModal()
+
+        # -- return
+        FALSE
+
+      } else TRUE
+
       # -- Display modal
-      showModal(modalDialog(DT::renderDT(items),
+      # adding options to renderDT #207
+      showModal(modalDialog(DT::renderDT(items, rownames = FALSE, options = list(scrollX = TRUE)),
+                            # -- test: in case no id column exists #208
+                            if(!hasId)
+                              p("Note: the dataset had no id column, it has been generated automatically."),
                             title = "Import data",
+                            size = "l",
                             footer = tagList(
                               modalButton("Cancel"),
                               actionButton(ns("confirm_import_data"), "Next"))))
 
-      # -- Observe: confirm_import_data
+      # -- Observe: click (confirm data)
       observeEvent(input$confirm_import_data, {
 
         # -- Close modal
@@ -575,9 +664,11 @@ kitemsManager_Server <- function(id, r, path,
         data.model <- dm_check_integrity(data.model = NULL, items = items, template = TEMPLATE_DATA_MODEL)
 
         # -- Display modal
+        # adding options to renderDT #207
         showModal(modalDialog(p("Data model built from the data:"),
-                              DT::renderDT(data.model),
+                              DT::renderDT(data.model, rownames = FALSE, options = list(scrollX = TRUE)),
                               title = "Import data",
+                              size = "l",
                               footer = tagList(
                                 modalButton("Cancel"),
                                 actionButton(ns("confirm_data_model"), "Import"))))
@@ -587,6 +678,11 @@ kitemsManager_Server <- function(id, r, path,
 
           # -- Close modal
           removeModal()
+
+          # -- Check items classes #216
+          # Because dataset was read first, the current colclasses are 'guessed' and may not comply with the data model
+          # ex: date class is forced in data model, but it may be char ("2024-02-07) or num (19760)
+          items <- item_check_integrity(items = items, data.model = data.model)
 
           # -- Store items & data model
           r[[r_items]](items)
@@ -777,15 +873,21 @@ kitemsManager_Server <- function(id, r, path,
       cat("[BTN] Create data \n")
 
       # -- init parameters (id)
-      colClasses <- c("id" = "numeric")
-      default_val <- c("id" = NA)
-      default_fun <- c("id" = "ktools::getTimestamp")
-      filter <- c("id")
-      skip <- c("id")
+      # Implement template #220
+      template <- TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == "id", ]
+      colClasses <- c("id" = template$type)
+      filter <- if(template$filter) c("id") else NULL
+      skip <- if(template$skip) c("id") else NULL
 
       # -- init data model & store
       cat(MODULE, "-- Building data model \n")
-      dm <- data_model(colClasses, default.val = default_val, default.fun = default_fun, filter = filter, skip = skip)
+      dm <- data_model(colClasses = colClasses,
+                       default.val = template$default.val,
+                       default.fun = template$default.fun,
+                       filter = filter,
+                       skip = skip)
+
+      # -- store
       r[[r_data_model]](dm)
 
       # -- init items

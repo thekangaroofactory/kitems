@@ -32,7 +32,7 @@ import_url <- "data_to_import.csv"
 # ------------------------------------------------------------------------------
 
 # -- declare colClasses
-colClasses <- c(id = "double", date = "POSIXct", name = "character", quantity = "integer", total = "numeric", isvalid = "logical")
+colClasses <- c(id = "numeric", date = "POSIXct", name = "character", quantity = "integer", total = "numeric", isvalid = "logical")
 colClasses_extra_att <- c(colClasses, extra_att = "integer")
 colClasses_no_date <- colClasses[!names(colClasses) %in% "date"]
 
@@ -147,6 +147,22 @@ create_integrity_testdata <- function(){
 
   # -- save items
   item_save(items, file = items_url, path = testdata_path)
+
+}
+
+
+# -- helper: create import data without id
+create_noid_data_to_import <- function(){
+
+  # -- create folder
+  dir.create(testdata_path)
+
+  # -- save data model
+  saveRDS(dm, file = dm_url)
+
+  # -- drop id column & save items
+  items$id <- NULL
+  item_save(items, file = import_url, path = testdata_path)
 
 }
 

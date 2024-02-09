@@ -40,3 +40,16 @@ test_that("data_model: default.fun", {
   expect_equal(dim(x), c(length(colClasses), 6))
 
 })
+
+
+# ------------------------------------------------------------------------------
+# Negative test(s)
+# ------------------------------------------------------------------------------
+
+test_that("data_model: colClasses not named", {
+
+  # -- check: error
+  expect_error(data_model(colClasses = c(1, 2)))
+
+})
+

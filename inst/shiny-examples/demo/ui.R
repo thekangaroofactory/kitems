@@ -4,6 +4,12 @@
 # This is the user-interface definition of the Shiny web application
 # ------------------------------------------------------------------------------
 
+# -- Check: when runExample is called from kitems::runExample() without attaching kitems #204
+if(!"shinydashboard" %in% (.packages())){
+  library(shinydashboard)
+}
+
+
 # ------------------------------------------------------------------------------
 # Define Sidebar UI
 # ------------------------------------------------------------------------------

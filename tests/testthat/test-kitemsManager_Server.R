@@ -893,6 +893,83 @@ test_that("Import works", {
 
 
 # --------------------------------------------------------------------------
+# Scenario: import data without id
+# --------------------------------------------------------------------------
+
+# -- Cleanup & create test data
+clean_all(testdata_path)
+create_noid_data_to_import()
+
+
+test_that("Import data without id works", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: Import data without id works")
+  cat("\n-------------------------------------------------------------------------- \n")
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 path = testdata_path,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    # -- click
+    session$setInputs(import_data = 1)
+
+    # -- create input value
+    value <- data.frame(name = "data_to_import",
+                        size = 12,
+                        type = "dummy",
+                        datapath = file.path(testdata_path, import_url))
+
+    # -- set file input & click
+    session$setInputs(input_file = value)
+    session$setInputs(confirm_import_file = 1)
+
+    # -- click
+    session$setInputs(confirm_import_data = 1)
+    session$setInputs(confirm_data_model = 1)
+
+
+    # --------------------------------------------------------------------------
+    # Data model
+    # --------------------------------------------------------------------------
+
+    r_data_model <- dm_name(module_id)
+    x <- r[[r_data_model]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), dim(dm))
+
+
+    # --------------------------------------------------------------------------
+    # Items
+    # --------------------------------------------------------------------------
+
+
+    r_items <- items_name(module_id)
+    x <- r[[r_items]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), c(4, 6))
+
+
+  })
+
+})
+
+
+# --------------------------------------------------------------------------
 # Cleanup
 # --------------------------------------------------------------------------
 

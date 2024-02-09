@@ -57,7 +57,8 @@ shinyServer(
     # Generate dynamic sidebar
     # -------------------------------------
 
-    output$menu <- renderMenu(dynamic_sidebar(r))
+    # -- adding pkg::fun() call #205
+    output$menu <- renderMenu(kitems::dynamic_sidebar(r))
 
 
   }

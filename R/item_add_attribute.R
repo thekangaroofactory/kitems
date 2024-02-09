@@ -5,13 +5,15 @@
 #' @param items a data.frame of the items
 #' @param name a character string of the attribute name
 #' @param type a character string of the attribute type
-#' @param fill the value (default = NA) to be used to fill the existing rows
+#' @param fill the value (default = NA) to be used to fill the existing rows (see details)
 #'
 #' @return the updated items data.frame
 #' @export
 #'
 #' @details
 #' fill will be coerced to the class name provided in type
+#' If a vector is given as input for fill, it will be used: items[name] <- value
+#' Make sure the vector length is same as the number of rows, otherwise an error will be raised by R
 #'
 #' @examples
 #' \dontrun{
@@ -34,7 +36,7 @@ item_add_attribute <- function(items, name, type, fill = NA){
   } else {
 
     # -- coerce value
-    cat("Coerce value to given class \n")
+    cat("Coerce value(s) to given class \n")
     value <- eval(call(CLASS_FUNCTIONS[[type]], fill))
     cat("Output:", class(value), value, "\n")
 

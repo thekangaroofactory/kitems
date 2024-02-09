@@ -6,7 +6,7 @@ test_that("dm_get_default: default.fun", {
   x <- dm_get_default(data.model = dm, name = "date")
 
   # -- test class
-  expect_type(x, "double")
+  expect_equal(class(x), "Date")
 
   # -- test value
   expect_equal(x, as.Date(Sys.Date()))
