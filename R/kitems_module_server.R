@@ -873,15 +873,21 @@ kitemsManager_Server <- function(id, r, path,
       cat("[BTN] Create data \n")
 
       # -- init parameters (id)
-      colClasses <- c("id" = "numeric")
-      default_val <- c("id" = NA)
-      default_fun <- c("id" = "ktools::getTimestamp")
-      filter <- c("id")
-      skip <- c("id")
+      # Implement template #220
+      template <- TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == "id", ]
+      colClasses <- c("id" = template$type)
+      filter <- if(template$filter) c("id") else NULL
+      skip <- if(template$skip) c("id") else NULL
 
       # -- init data model & store
       cat(MODULE, "-- Building data model \n")
-      dm <- data_model(colClasses, default.val = default_val, default.fun = default_fun, filter = filter, skip = skip)
+      dm <- data_model(colClasses = colClasses,
+                       default.val = template$default.val,
+                       default.fun = template$default.fun,
+                       filter = filter,
+                       skip = skip)
+
+      # -- store
       r[[r_data_model]](dm)
 
       # -- init items
