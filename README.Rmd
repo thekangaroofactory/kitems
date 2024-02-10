@@ -34,7 +34,6 @@ For that reason, it is delivered as a shiny module.
 
 [![codecov](https://codecov.io/gh/thekangaroofactory/kitems/graph/badge.svg?token=7P74NK51JJ)](https://codecov.io/gh/thekangaroofactory/kitems)
 
-
 ## Installation
 
 You can install the development version of kitems from
@@ -288,6 +287,10 @@ then no date filter is applied by default on the filtered view.
 Filter value (the sliderInput range) is available in the
 r[[filter_date]]() reactive value.
 
+**Note** In case you want to build a reactive object on top of
+r[[filter_date]] and r[[filtered_items]], it is recommended to test both
+for NULL to avoid firing computation at startup.
+
 ### Buttons
 
 -   create_BTN: create item
@@ -357,9 +360,9 @@ sidebar <- dashboardSidebar(
 
 ```
 
-
-The tabName linked to each menuSubItem should be named after the module id.
-Here is an example how to access the administration console from the menuSubItem:
+The tabName linked to each menuSubItem should be named after the module
+id. Here is an example how to access the administration console from the
+menuSubItem:
 
 ```{r tabname_ui, eval=FALSE}
 # -- kitems admin
@@ -371,7 +374,6 @@ tabItem(tabName = "my_data",
                  
                  kitems::admin_ui("my_data"))))
 ```
-
 
 ## Import & migration
 

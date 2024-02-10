@@ -260,6 +260,10 @@ then no date filter is applied by default on the filtered view.
 Filter value (the sliderInput range) is available in the
 r[\[filter_date\]]() reactive value.
 
+**Note** In case you want to build a reactive object on top of
+r\[\[filter_date\]\] and r\[\[filtered_items\]\], it is recommended to
+test both for NULL to avoid firing computation at startup.
+
 ### Buttons
 
 - create_BTN: create item
