@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-#' /dontrun{
+#' \dontrun{
 #' dm_table_mask(data.model = dm)
 #' }
 

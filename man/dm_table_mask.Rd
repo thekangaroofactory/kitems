@@ -16,7 +16,7 @@ a data.frame with renamed columns
 Apply mask on data model table
 }
 \examples{
-/dontrun{
+\dontrun{
 dm_table_mask(data.model = dm)
 }
 }
