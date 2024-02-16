@@ -30,17 +30,26 @@
 #' }
 
 
-dm_update_attribute <- function(data.model, name, default.val = NA, default.fun = NA, skip = FALSE){
+dm_update_attribute <- function(data.model, name, default.val = NULL, default.fun = NULL, skip = NULL){
 
   # -- make sure default.val & fun are mutual exclusive #229
-  if(!is.na(default.fun))
+  if(!is.null(default.fun))
     default.val <- NA
+  else
+    if(!is.null(default.val))
+      default.fun <- NA
 
   # -- update row
   # removed filter: #225
-  data.model[match(name, data.model$name), ]$default.val <- default.val
-  data.model[match(name, data.model$name), ]$default.fun <- default.fun
-  data.model[match(name, data.model$name), ]$skip <- skip
+  # adding tests to update only if not NULL #226
+  if(!is.null(default.val))
+    data.model[match(name, data.model$name), ]$default.val <- default.val
+
+  if(!is.null(default.fun))
+    data.model[match(name, data.model$name), ]$default.fun <- default.fun
+
+  if(!is.null(skip))
+    data.model[match(name, data.model$name), ]$skip <- skip
 
   # -- return
   data.model

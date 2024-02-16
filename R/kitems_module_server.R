@@ -361,7 +361,7 @@ kitemsManager_Server <- function(id, r, path,
     output$data_model <- DT::renderDT(dm_table_mask(r[[r_data_model]]()),
                                       rownames = FALSE,
                                       options = list(lengthMenu = c(5, 10, 15), pageLength = 10, dom = "t", scrollX = TRUE),
-                                      selection = list(mode = 'single', target = "row", selected = NULL))
+                                      selection = list(mode = 'single', target = "row", selected = isolate(input$data_model_rows_selected)))
 
 
     # --------------------------------------------------------------------------
@@ -960,10 +960,10 @@ kitemsManager_Server <- function(id, r, path,
       } else {
         if(input$dm_default_choice == "val"){
           default_val <- input$dm_att_default_detail
-          default_fun <- dm[row, ]$default.fun
+          default_fun <- NULL
 
         } else {
-          default_val <- dm[row, ]$default.val
+          default_val <- NULL
           default_fun <- input$dm_att_default_detail}}
 
       # -- skip (force for id)
