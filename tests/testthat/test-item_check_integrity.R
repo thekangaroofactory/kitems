@@ -43,3 +43,20 @@ test_that("item_check_integrity / error works", {
   expect_equal(class(x$date), "character")
 
 })
+
+
+test_that("item_check_integrity / warning works", {
+
+  # -- generate mismatch to solve
+  items$name <- "dummy_string"
+
+  # -- alter dm
+  dm[dm$name == "name", ]$type <- "numeric"
+
+  # -- function call
+  x <- item_check_integrity(items = items, data.model = dm)
+
+  # -- test
+  expect_equal(class(x$name), "character")
+
+})
