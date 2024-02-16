@@ -511,11 +511,14 @@ kitemsManager_Server <- function(id, r, path,
           fluidRow(column(width = 2,
 
                           p("Actions"),
-                          uiOutput(ns("dm_add_att"))),
+                          uiOutput(ns("dm_add_att")),
+                          uiOutput(ns("dm_upd_att"))),
 
                    column(width = 10,
                           p("Table"),
-                          DT::DTOutput(ns("data_model")))),
+                          DT::DTOutput(ns("data_model")),
+                          br(),
+                          p("Filter can be changed in the 'view' tab."))),
 
           fluidRow(column(width = 12,
                           br(),
@@ -929,6 +932,76 @@ kitemsManager_Server <- function(id, r, path,
       # Add column to items & store
       items <- item_add_attribute(r[[r_items]](), name = input$add_att_name, type = input$add_att_type, fill = value)
       r[[r_items]](items)
+
+    })
+
+
+    # -- observe data_model selected row
+    observeEvent(input$data_model_rows_selected, {
+
+      # -- get selected row
+      row <- input$data_model_rows_selected
+
+      # -- check NULL
+      if(is.null(row))
+        output$dm_upd_att <- NULL
+
+      else {
+
+        # --
+        # **********************************************************************
+        # TO BE RENAMED AS dm_att_actions
+        # so that it will cover all with same output
+        # **********************************************************************
+        output$dm_add_att <- NULL
+
+        attribute <- r[[r_data_model]]()[row, ]
+
+        output$dm_upd_att <- dm_inputs_ui(update = TRUE, attribute = attribute, ns = ns)
+
+      }
+
+    }, ignoreNULL = FALSE)
+
+
+    # -- observe upd_att button
+    observeEvent(input$upd_att, {
+
+      # -- check
+      req(isTruthy(input$dm_att_default_detail))
+
+      cat("[EVENT] Update data model attribute \n")
+
+      # -- get selected row
+      row <- input$data_model_rows_selected
+
+      # -- get data model
+      dm <- r[[r_data_model]]()
+
+      # -- default val & fun
+      if(input$dm_default_choice == "val"){
+        default_val <- input$dm_att_default_detail
+        default_fun <- dm[row, ]$default.fun
+      } else {
+        default_val <- dm[row, ]$default.val
+        default_fun <- input$dm_att_default_detail}
+
+      # -- skip (force for id)
+      skip <- if(dm[row, ]$name != "id")
+        dm[row, ]$skip <- input$upd_att_skip
+      else
+        TRUE
+
+      # -- update data model
+      dm <- dm_update_attribute(dm,
+                                name = dm[row, ]$name,
+                                default.val = default_val,
+                                default.fun = default_fun,
+                                filter = dm[row, ]$filter,
+                                skip = skip)
+
+      # -- store
+      r[[r_data_model]](dm)
 
     })
 
