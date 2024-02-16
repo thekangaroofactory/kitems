@@ -32,6 +32,10 @@
 
 dm_update_attribute <- function(data.model, name, default.val = NA, default.fun = NA, skip = FALSE){
 
+  # -- make sure default.val & fun are mutual exclusive #229
+  if(!is.na(default.fun))
+    default.val <- NA
+
   # -- update row
   # removed filter: #225
   data.model[match(name, data.model$name), ]$default.val <- default.val
