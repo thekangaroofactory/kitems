@@ -824,7 +824,7 @@ clean_all(testdata_path)
 # -- create test data
 create_data_to_import()
 
-test_that("Import works", {
+test_that("Import data works", {
 
   cat("\n-------------------------------------------------------------------------- \n")
   cat("Scenario: import data")
