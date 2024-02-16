@@ -1,5 +1,17 @@
 
 
+#' Apply mask on data model table
+#'
+#' @param data.model a data.frame of the data model
+#'
+#' @return a data.frame with renamed columns
+#' @export
+#'
+#' @examples
+#' /dontrun{
+#' dm_table_mask(data.model = dm)
+#' }
+
 
 dm_table_mask <- function(data.model){
 
