@@ -195,6 +195,35 @@ create_testdata()
 
 
 # --------------------------------------------------------------------------
+# Scenario: select data model attribute
+# --------------------------------------------------------------------------
+
+
+test_that("Add attribute works", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: select data model attribute")
+  cat("\n-------------------------------------------------------------------------- \n")
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 path = testdata_path,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    # -- click
+    session$setInputs(data_model_rows_selected = 1)
+
+  })
+
+})
+
+
+# --------------------------------------------------------------------------
 # Scenario: add/delete attribute
 # --------------------------------------------------------------------------
 
