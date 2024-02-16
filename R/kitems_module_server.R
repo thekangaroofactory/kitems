@@ -358,10 +358,10 @@ kitemsManager_Server <- function(id, r, path,
 
     # -- colClasses for admin
     # setting rownames = FALSE #209
-    output$data_model <- DT::renderDT(r[[r_data_model]](),
+    output$data_model <- DT::renderDT(dm_table_mask(r[[r_data_model]]()),
                                       rownames = FALSE,
                                       options = list(lengthMenu = c(5, 10, 15), pageLength = 10, dom = "t", scrollX = TRUE),
-                                      selection = list(mode = 'single', target = "row", selected = NULL))
+                                      selection = list(mode = 'single', target = "row", selected = isolate(input$data_model_rows_selected)))
 
 
     # --------------------------------------------------------------------------
@@ -511,11 +511,13 @@ kitemsManager_Server <- function(id, r, path,
           fluidRow(column(width = 2,
 
                           p("Actions"),
-                          uiOutput(ns("dm_add_att"))),
+                          uiOutput(ns("dm_att_form"))),
 
                    column(width = 10,
                           p("Table"),
-                          DT::DTOutput(ns("data_model")))),
+                          DT::DTOutput(ns("data_model")),
+                          br(),
+                          p("Filter can be changed in the 'view' tab."))),
 
           fluidRow(column(width = 12,
                           br(),
@@ -777,94 +779,40 @@ kitemsManager_Server <- function(id, r, path,
     # Add attribute to data model:
     # --------------------------------------------------------------------------
 
-    # -- define inputs
-    output$dm_add_att <- renderUI({
-
-      # check
-      if(is.null(r[[r_items]]()))
-        NULL
-
-      else {
-
-        tagList(
-
-          # attribute name
-          selectizeInput(inputId = ns("add_att_name"),
-                         label = "Name",
-                         choices = TEMPLATE_DATA_MODEL$name[!TEMPLATE_DATA_MODEL$name %in% colnames(r[[r_items]]())],
-                         selected = NULL,
-                         options = list(create = TRUE,
-                                        placeholder = 'Type or select an option below',
-                                        onInitialize = I('function() { this.setValue(""); }'))),
-
-          # attribute type
-          selectizeInput(inputId = ns("add_att_type"),
-                         label = "Type",
-                         choices = OBJECT_CLASS,
-                         selected = NULL,
-                         options = list(create = FALSE,
-                                        placeholder = 'Type or select an option below',
-                                        onInitialize = I('function() { this.setValue(""); }'))),
-
-          # attribute default.val
-          selectizeInput(inputId = ns("add_att_default_val"),
-                         label = "Default value",
-                         choices = NULL,
-                         selected = NULL,
-                         options = list(create = TRUE,
-                                        placeholder = 'Type or select an option below',
-                                        onInitialize = I('function() { this.setValue(""); }'))),
-
-          # attribute default.fun
-          selectizeInput(inputId = ns("add_att_default_fun"),
-                         label = "Default function",
-                         choices = NULL,
-                         selected = NULL,
-                         options = list(create = TRUE,
-                                        placeholder = 'Type or select an option below',
-                                        onInitialize = I('function() { this.setValue(""); }'))),
-
-          # skip
-          checkboxInput(inputId = ns("add_att_skip"),
-                        label = "Skip (input form)",
-                        value = FALSE),
-
-          # add attribute button
-          actionButton(ns("add_att"), label = "Add attribute")
-
-        ) # end tagList
-
-      }})
-
-
-    # -- update add_att_type given add_att_name
-    observeEvent(input$add_att_name, {
+    # -- update dm_att_type given dm_att_name
+    observeEvent(input$dm_att_name, {
 
       # -- check if input in template
-      if(tolower(input$add_att_name) %in% TEMPLATE_DATA_MODEL$name)
+      if(tolower(input$dm_att_name) %in% TEMPLATE_DATA_MODEL$name)
 
         updateSelectizeInput(session = session,
-                             inputId = "add_att_type",
+                             inputId = "dm_att_type",
                              choices = OBJECT_CLASS,
-                             selected = TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == input$add_att_name, ]$type)})
+                             selected = TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == input$dm_att_name, ]$type)})
 
 
-    # -- update add_att_type given add_att_name
-    observeEvent(input$add_att_type, {
+    # -- update dm_att_default_detail given dm_att_type & dm_default_choice
+    observeEvent({
+      input$dm_att_type
+      input$dm_default_choice}, {
 
-      # -- check if input in template
-      updateSelectizeInput(session = session,
-                           inputId = "add_att_default_val",
-                           choices = DEFAULT_VALUES[[input$add_att_type]],
-                           selected = NULL)
+        # -- set param
+        if(input$dm_default_choice == "none")
+          choices <- NULL
+        else {
+          choices <- if(input$dm_default_choice == "val")
+            DEFAULT_VALUES[[input$dm_att_type]]
+          else
+            DEFAULT_FUNCTIONS[[input$dm_att_type]]}
 
-      # -- check if input in template
-      updateSelectizeInput(session = session,
-                           inputId = "add_att_default_fun",
-                           choices = DEFAULT_FUNCTIONS[[input$add_att_type]],
-                           selected = NULL)
 
-    })
+        # -- check if input in template
+        updateSelectizeInput(session = session,
+                             inputId = "dm_att_default_detail",
+                             choices = choices,
+                             selected = NULL)
+
+      })
 
 
     # -- BTN dm_create
@@ -907,28 +855,132 @@ kitemsManager_Server <- function(id, r, path,
     observeEvent(input$add_att, {
 
       # check
-      req(input$add_att_name,
-          input$add_att_type)
+      req(input$dm_att_name,
+          input$dm_att_type)
 
       cat("[BTN] Add column \n")
+
+      # -- test default choice
+      if(input$dm_default_choice == "none"){
+
+        default_val <- NA
+        default_fun <- NA
+
+      } else {
+
+        if(input$dm_default_choice == "val"){
+
+          default_val <- input$dm_att_default_detail
+          default_fun <- NA
+
+        } else {
+
+          default_val <- NA
+          default_fun <- input$dm_att_default_detail}}
+
 
       # Add attribute to the data model & store
       dm <- r[[r_data_model]]()
       dm <- dm_add_attribute(data.model = dm,
-                             name = input$add_att_name,
-                             type = input$add_att_type,
-                             default.val = input$add_att_default_val,
-                             default.fun = input$add_att_default_fun,
-                             skip = input$add_att_skip,
+                             name = input$dm_att_name,
+                             type = input$dm_att_type,
+                             default.val = default_val,
+                             default.fun = default_fun,
+                             skip = input$dm_att_skip,
                              filter = FALSE)
+
+      # -- store
       r[[r_data_model]](dm)
 
       # -- get default value
-      value <- dm_get_default(data.model = dm, name = input$add_att_name)
+      value <- dm_get_default(data.model = dm, name = input$dm_att_name)
 
-      # Add column to items & store
-      items <- item_add_attribute(r[[r_items]](), name = input$add_att_name, type = input$add_att_type, fill = value)
+      # -- Add column to items & store
+      items <- item_add_attribute(r[[r_items]](), name = input$dm_att_name, type = input$dm_att_type, fill = value)
       r[[r_items]](items)
+
+      # -- update form
+      # in case an attribute from template was added, it's necessary to drop it from available choices
+      output$dm_att_form <- dm_inputs_ui(names = TEMPLATE_DATA_MODEL$name[!TEMPLATE_DATA_MODEL$name %in% colnames(r[[r_items]]())],
+                                         types = OBJECT_CLASS,
+                                         ns = ns)
+
+    })
+
+
+    # -- observe data_model selected row
+    observeEvent(input$data_model_rows_selected, {
+
+      # -- get selected row
+      row <- input$data_model_rows_selected
+
+      # -- check NULL (no row selected)
+      if(is.null(row)){
+
+        # -- update form (creation mode, only if r_items not NULL)
+        if(is.null(r[[r_items]]()))
+          output$dm_att_form <- NULL
+        else
+          output$dm_att_form <- dm_inputs_ui(names = TEMPLATE_DATA_MODEL$name[!TEMPLATE_DATA_MODEL$name %in% colnames(r[[r_items]]())],
+                                             types = OBJECT_CLASS,
+                                             ns = ns)
+
+      } else {
+
+        # -- get attribute to update
+        attribute <- r[[r_data_model]]()[row, ]
+
+        # -- update form (update mode)
+        output$dm_att_form <- dm_inputs_ui(update = TRUE, attribute = attribute, ns = ns)
+
+      }
+
+    }, ignoreNULL = FALSE)
+
+
+    # -- observe upd_att button
+    observeEvent(input$upd_att, {
+
+      # -- check
+      #req(isTruthy(input$dm_att_default_detail))
+
+      cat("[EVENT] Update data model attribute \n")
+
+      # -- get selected row
+      row <- input$data_model_rows_selected
+
+      # -- get data model
+      dm <- r[[r_data_model]]()
+
+      # -- default val & fun
+      if(input$dm_default_choice == "none"){
+        default_val <- NA
+        default_fun <- NA
+
+      } else {
+        if(input$dm_default_choice == "val"){
+          default_val <- input$dm_att_default_detail
+          default_fun <- NULL
+
+        } else {
+          default_val <- NULL
+          default_fun <- input$dm_att_default_detail}}
+
+      # -- skip (force for id)
+      skip <- if(dm[row, ]$name != "id")
+        dm[row, ]$skip <- input$dm_att_skip
+      else
+        TRUE
+
+      # -- update data model
+      dm <- dm_update_attribute(dm,
+                                name = dm[row, ]$name,
+                                default.val = default_val,
+                                default.fun = default_fun,
+                                skip = skip)
+
+      # -- store
+      r[[r_data_model]](dm)
 
     })
 

@@ -34,6 +34,11 @@ dm_add_attribute <- function(data.model, name, type, default.val = NA, default.f
   if(identical(default.fun, ""))
     default.fun <- NA
 
+  # -- make sure default.val & fun are mutual exclusive #230
+  # limitation: to when default.fun contains only 1 value (one attribute is added at a time)
+  if(length(default.fun) == 1 && !is.na(default.fun))
+    default.val <- NA
+
   # -- Check for NULL
   if(is.null(skip))
     skip <- FALSE

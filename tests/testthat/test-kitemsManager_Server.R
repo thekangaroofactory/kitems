@@ -215,11 +215,11 @@ test_that("Add attribute works", {
   testServer(kitemsManager_Server, args = params, {
 
     # -- update input
-    session$setInputs(add_att_name = "status")
-    session$setInputs(add_att_type = "character")
-    session$setInputs(add_att_default_val = "draft")
-    session$setInputs(add_att_default_fun = NA)
-    session$setInputs(add_att_skip = FALSE)
+    session$setInputs(dm_att_name = "status")
+    session$setInputs(dm_att_type = "character")
+    session$setInputs(dm_default_choice = "val")
+    session$setInputs(dm_att_default_detail = "draft")
+    session$setInputs(dm_att_skip = FALSE)
 
     # -- click
     session$setInputs(add_att = 1)
@@ -824,7 +824,7 @@ clean_all(testdata_path)
 # -- create test data
 create_data_to_import()
 
-test_that("Import works", {
+test_that("Import data works", {
 
   cat("\n-------------------------------------------------------------------------- \n")
   cat("Scenario: import data")

@@ -7,10 +7,9 @@
 dm_update_attribute(
   data.model,
   name,
-  default.val = NA,
-  default.fun = NA,
-  filter = FALSE,
-  skip = FALSE
+  default.val = NULL,
+  default.fun = NULL,
+  skip = NULL
 )
 }
 \arguments{
@@ -21,8 +20,6 @@ dm_update_attribute(
 \item{default.val}{the new default value (default = NULL)}
 
 \item{default.fun}{a character string, the new default function name (default = NULL)}
-
-\item{filter}{a logical to set the filter value (default = FALSE)}
 
 \item{skip}{a logical to set the skip value (default = FALSE)}
 }
@@ -37,6 +34,8 @@ Updating attribute class is not supported by this function (as it requires data 
 
 Use of vector to update several attributes is supported as long as length of the different parameters
 is either same as name or 1 (then all rows gets same value).
+
+Note that filter should be updated using dm_filter_set() function
 }
 \examples{
 \dontrun{
@@ -45,7 +44,6 @@ dm_update_attribute(data.model = dm,
                     name = c("name","total"),
                     default.val = c("test", 2),
                     default.fun = NA,
-                    filter = FALSE,
                     skip = TRUE)
 }
 }
