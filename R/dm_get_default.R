@@ -24,7 +24,20 @@ dm_get_default <- function(data.model, name){
 
   # -- P1: default function
   if(!is.na(default_fun)){
-    value <- eval(do.call(ktools::getNsFunction(default_fun), args = list()))
+
+    # -- wrapping next line into a tryCatch #235
+    #value <- eval(do.call(ktools::getNsFunction(default_fun), args = list()))
+    value <- tryCatch(eval(do.call(ktools::getNsFunction(default_fun), args = list())),
+
+                      error = function(e) {
+
+                        # -- print error
+                        cat("[WARNING] There was an error when trying to apply the default function =", default_fun, "\n")
+                        print(e)
+
+                        # -- return NA (default)
+                        NA})
+
     cat("- strategy: applying default function, output =", value, "\n")}
 
   # -- P2: then default value

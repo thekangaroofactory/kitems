@@ -37,3 +37,21 @@ test_that("dm_get_default: NA", {
   expect_true(is.numeric(x))
 
 })
+
+
+# ------------------------------------------------------------------------------
+# Negative tests
+# ------------------------------------------------------------------------------
+
+test_that("dm_get_default / default.fun error", {
+
+  # -- alter data model
+  dm[dm$name == "date", ]$default.fun <- "as.Date"
+
+  # -- function call
+  x <- dm_get_default(data.model = dm, name = "date")
+
+  # -- test value is NA
+  expect_true(is.na(x))
+
+})

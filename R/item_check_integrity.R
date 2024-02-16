@@ -65,7 +65,7 @@ item_check_integrity <- function(items, data.model){
       error = function(e){
 
         cat("[ERROR] Coerce", att_name, "to", dm_class, "did not work! \n")
-        message(e)
+        print(e)
 
         # -- setting output (see replace)
         output <- NULL},
@@ -73,17 +73,12 @@ item_check_integrity <- function(items, data.model){
       # -- catch warnings
       warning = function(w){
 
-        message(w)
+        print(w)
         output <- NULL
 
-      },
-
-      # -- finally
-      finally = {
-
-        cat("   >> Check after conversion:", class(output), "\n")
-
       })
+
+    cat("   >> Check after conversion:", class(new_values), "\n")
 
     # -- return
     if(!is.null(new_values))

@@ -195,6 +195,46 @@ create_testdata()
 
 
 # --------------------------------------------------------------------------
+# Scenario: select data model attribute
+# --------------------------------------------------------------------------
+
+
+test_that("Select data model attribute works", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: select data model attribute")
+  cat("\n-------------------------------------------------------------------------- \n")
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 path = testdata_path,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    # -- click
+    session$setInputs(data_model_rows_selected = 1)
+
+    # --------------------------------------------------------------------------
+    # Data model (dummy check)
+    # --------------------------------------------------------------------------
+
+    # -- check
+    r_data_model <- dm_name(module_id)
+    x <- r[[r_data_model]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+  })
+
+})
+
+
+# --------------------------------------------------------------------------
 # Scenario: add/delete attribute
 # --------------------------------------------------------------------------
 
@@ -292,6 +332,242 @@ test_that("Add attribute works", {
     # -- test dim
     expect_equal(dim(x), dim(items))
 
+
+  })
+
+})
+
+
+test_that("Add attribute / dm_default_choice = none works", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: Add/delete attribute works")
+  cat("\n-------------------------------------------------------------------------- \n")
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 path = testdata_path,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    # -- update input
+    session$setInputs(dm_att_name = "my_att")
+    session$setInputs(dm_att_type = "character")
+    session$setInputs(dm_default_choice = "none")
+
+    # -- click
+    session$setInputs(add_att = 1)
+
+    # --------------------------------------------------------------------------
+    # Data model
+    # --------------------------------------------------------------------------
+
+    # -- check
+    r_data_model <- dm_name(module_id)
+    x <- r[[r_data_model]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_true(is.na(x[x$name == "my_att", ]$default.val))
+    expect_true(is.na(x[x$name == "my_att", ]$default.fun))
+
+    # -- cleanup
+    session$setInputs(dm_dz_att_name = "my_att")
+    session$setInputs(dm_dz_delete_att = 1)
+    session$setInputs(dm_dz_confirm_delete_att = 1)
+
+  })
+
+})
+
+
+test_that("Add attribute / dm_default_choice = fun works", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: Add/delete attribute works")
+  cat("\n-------------------------------------------------------------------------- \n")
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 path = testdata_path,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    # -- update input
+    session$setInputs(dm_att_name = "my_date")
+    session$setInputs(dm_att_type = "Date")
+    session$setInputs(dm_default_choice = "fun")
+    session$setInputs(dm_att_default_detail = "Sys.Date")
+
+    # -- click
+    session$setInputs(add_att = 1)
+
+    # --------------------------------------------------------------------------
+    # Data model
+    # --------------------------------------------------------------------------
+
+    # -- check
+    r_data_model <- dm_name(module_id)
+    x <- r[[r_data_model]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_true(is.na(x[x$name == "my_date", ]$default.val))
+    expect_equal(x[x$name == "my_date", ]$default.fun, "Sys.Date")
+
+    # -- cleanup
+    session$setInputs(dm_dz_att_name = "my_date")
+    session$setInputs(dm_dz_delete_att = 1)
+    session$setInputs(dm_dz_confirm_delete_att = 1)
+
+  })
+
+})
+
+
+# --------------------------------------------------------------------------
+# Scenario: update data model
+# --------------------------------------------------------------------------
+
+test_that("Update attribute / dm_default_choice = none works", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: Update attribute / dm_default_choice = none works")
+  cat("\n-------------------------------------------------------------------------- \n")
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 path = testdata_path,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    # -- update input
+    session$setInputs(data_model_rows_selected = 1)
+    session$setInputs(dm_default_choice = "none")
+
+    # -- click
+    session$setInputs(upd_att = 1)
+
+    # --------------------------------------------------------------------------
+    # Data model
+    # --------------------------------------------------------------------------
+
+    # -- check
+    r_data_model <- dm_name(module_id)
+    x <- r[[r_data_model]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test values
+    expect_true(is.na(x[1, ]$default.val))
+    expect_true(is.na(x[1, ]$default.fun))
+
+  })
+
+})
+
+
+test_that("Update attribute / dm_default_choice = val works", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: Update attribute / dm_default_choice = val works")
+  cat("\n-------------------------------------------------------------------------- \n")
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 path = testdata_path,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    # -- update input
+    session$setInputs(data_model_rows_selected = 3)
+    session$setInputs(dm_att_type = "character")
+    session$setInputs(dm_default_choice = "val")
+    session$setInputs(dm_att_default_detail = "update_fruit")
+
+    # -- click
+    session$setInputs(upd_att = 1)
+
+    # --------------------------------------------------------------------------
+    # Data model
+    # --------------------------------------------------------------------------
+
+    # -- check
+    r_data_model <- dm_name(module_id)
+    x <- r[[r_data_model]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test values
+    expect_equal(x[3, ]$default.val, "update_fruit")
+    expect_true(is.na(x[3, ]$default.fun))
+
+  })
+
+})
+
+
+test_that("Update attribute / dm_default_choice = fun works", {
+
+  cat("\n-------------------------------------------------------------------------- \n")
+  cat("Scenario: Update attribute / dm_default_choice = fun works")
+  cat("\n-------------------------------------------------------------------------- \n")
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = r,
+                 path = testdata_path,
+                 create = FALSE,
+                 autosave = TRUE)
+
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
+
+    # -- update input
+    session$setInputs(data_model_rows_selected = 3)
+    session$setInputs(dm_att_type = "character")
+    session$setInputs(dm_default_choice = "fun")
+    session$setInputs(dm_att_default_detail = "Sys.timezone")
+
+    # -- click
+    session$setInputs(upd_att = 1)
+
+    # --------------------------------------------------------------------------
+    # Data model
+    # --------------------------------------------------------------------------
+
+    # -- check
+    r_data_model <- dm_name(module_id)
+    x <- r[[r_data_model]]()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test values
+    expect_equal(x[3, ]$default.fun, "Sys.timezone")
+    expect_true(is.na(x[3, ]$default.val))
 
   })
 
