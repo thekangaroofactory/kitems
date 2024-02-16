@@ -34,3 +34,15 @@ test_that("dm_inputs_ui / update works", {
 
 
 })
+
+
+test_that("dm_inputs_ui / update att with default.val works", {
+
+  # -- function call
+  x <- dm_inputs_ui(update = TRUE, attribute = dm[dm$name == "name", ], ns = shiny::NS())
+
+  # -- check
+  expect_equal(class(x), c("shiny.render.function", "function"))
+
+
+})
