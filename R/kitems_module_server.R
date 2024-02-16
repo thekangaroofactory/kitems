@@ -977,7 +977,6 @@ kitemsManager_Server <- function(id, r, path,
                                 name = dm[row, ]$name,
                                 default.val = default_val,
                                 default.fun = default_fun,
-                                filter = dm[row, ]$filter,
                                 skip = skip)
 
       # -- store

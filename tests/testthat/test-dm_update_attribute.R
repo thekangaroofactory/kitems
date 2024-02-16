@@ -3,7 +3,7 @@
 test_that("dm_update_attribute", {
 
   # -- function call
-  x <- dm_update_attribute(data.model = dm, name = "isvalid", default.val = NA, default.fun = NA, filter = FALSE, skip = FALSE)
+  x <- dm_update_attribute(data.model = dm, name = "isvalid", default.val = NA, default.fun = NA, skip = FALSE)
 
   # -- test class
   expect_s3_class(x, "data.frame")

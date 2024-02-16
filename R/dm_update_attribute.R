@@ -6,7 +6,6 @@
 #' @param name a character string of the attribute name
 #' @param default.val the new default value (default = NULL)
 #' @param default.fun a character string, the new default function name (default = NULL)
-#' @param filter a logical to set the filter value (default = FALSE)
 #' @param skip a logical to set the skip value (default = FALSE)
 #'
 #' @return the updated data model
@@ -18,6 +17,8 @@
 #' Use of vector to update several attributes is supported as long as length of the different parameters
 #' is either same as name or 1 (then all rows gets same value).
 #'
+#' Note that filter should be updated using dm_filter_set() function
+#'
 #' @examples
 #' \dontrun{
 #' #Use of vector to update several attributes:
@@ -25,17 +26,16 @@
 #'                     name = c("name","total"),
 #'                     default.val = c("test", 2),
 #'                     default.fun = NA,
-#'                     filter = FALSE,
 #'                     skip = TRUE)
 #' }
 
 
-dm_update_attribute <- function(data.model, name, default.val = NA, default.fun = NA, filter = FALSE, skip = FALSE){
+dm_update_attribute <- function(data.model, name, default.val = NA, default.fun = NA, skip = FALSE){
 
   # -- update row
+  # removed filter: #225
   data.model[match(name, data.model$name), ]$default.val <- default.val
   data.model[match(name, data.model$name), ]$default.fun <- default.fun
-  data.model[match(name, data.model$name), ]$filter <- filter
   data.model[match(name, data.model$name), ]$skip <- skip
 
   # -- return
