@@ -17,13 +17,13 @@ test_that("dm_update_attribute works", {
 test_that("dm_update_attribute / default.val", {
 
   # -- function call
-  x <- dm_update_attribute(data.model = dm, name = "isvalid", default.val = TRUE, default.fun = NULL, skip = NULL)
+  x <- dm_update_attribute(data.model = dm, name = "name", default.val = "blueberry", default.fun = NULL, skip = NULL)
 
   # -- test class
   expect_s3_class(x, "data.frame")
 
   # -- test output value
-  expect_equal(x[x$name == "isvalid", ]$default.val, "TRUE")
+  expect_equal(x[x$name == "name", ]$default.val, "blueberry")
 
 })
 
