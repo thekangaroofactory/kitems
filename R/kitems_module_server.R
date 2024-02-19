@@ -305,6 +305,10 @@ kitemsManager_Server <- function(id, r, path,
       if(!is.null(filter_date))
         items <- items[items$date >= filter_date[1] & items$date <= filter_date[2], ]
 
+      # -- Apply ordering
+      if(!is.null(filter_date))
+        items <- items[order(items$date, decreasing = TRUE), ]
+
       cat(MODULE, "ouput dim =", dim(items), "\n")
 
       # -- Return
