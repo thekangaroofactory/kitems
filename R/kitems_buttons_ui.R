@@ -15,7 +15,8 @@
 create_BTN <- function(id){
 
   # namespace
-  ns <- NS(id)
+  # ns <- NS(id)
+  ns <- session$ns(id)
 
   # UI
   uiOutput(ns("create_btn_output"), inline = TRUE)
