@@ -375,6 +375,27 @@ tabItem(tabName = "my_data",
                  kitems::admin_ui("my_data"))))
 ```
 
+### Nested module considerations
+
+In case the kitemsManager_Server module server function is called from
+inside a module (i.e. as a nested module), then it is not possible to
+call the UI functions from the main app with the nested module id.
+
+From there, two options are available:
+
+-   wrap the package UI functions into functions from the calling module
+    (encapsulation)\
+    For example, you could create an action_BTN function that would
+    implement create_BTN, update_BTN and delete_BTN into a single UI
+
+-   call the package UI functions directly from the main app using
+    multiple namespaces:\
+    (as specified in the shiny::NS function)
+
+```{r nested_module, eval=FALSE}
+ kitems::admin_ui(c("module_id", "nested_module_id"))
+```
+
 ## Import & migration
 
 When the module server is initialized with data.model = NULL, an import
