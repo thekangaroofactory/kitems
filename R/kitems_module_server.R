@@ -68,12 +68,14 @@ kitemsManager_Server <- function(id, r, path,
     r_items <- items_name(id)
     r_filtered_items <- filtered_items_name(id)
     r_selected_items <- selected_items_name(id)
+    r_clicked_column <- clicked_column_name(id)
     r_filter_date <- filter_date_name(id)
 
     # -- Declare reactive objects (for external use)
     r[[r_items]] <- reactiveVal(NULL)
     r[[r_filtered_items]] <- reactiveVal(NULL)
     r[[r_selected_items]] <- reactiveVal(NULL)
+    r[[r_clicked_column]] <- reactiveVal(NULL)
     r[[r_filter_date]] <- reactiveVal(NULL)
 
     # -- Build triggers names from module id
@@ -431,6 +433,22 @@ kitemsManager_Server <- function(id, r, path,
       r[[r_selected_items]](ids)
 
     }, ignoreNULL = FALSE)
+
+
+    # -- Filtered view
+    observeEvent(input$filtered_view_cell_clicked$col, {
+
+      # -- Get table col names (need to apply masks to get correct columns, hence sending only first row)
+      cols <- colnames(view_apply_masks(r[[r_data_model]](), head(r[[r_filtered_items]](), n = 1)))
+
+      # -- Get name of the clicked column
+      col_clicked <- cols[input$filtered_view_cell_clicked$col + 1]
+      cat(MODULE, "Clicked column (filtered view) =", col_clicked, "\n")
+
+      # -- Store
+      r[[r_clicked_column]](col_clicked)
+
+    }, ignoreNULL = TRUE)
 
 
     # --------------------------------------------------------------------------

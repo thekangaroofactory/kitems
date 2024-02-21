@@ -52,6 +52,19 @@ filtered_items_name <- function(id){paste0(id, "_filtered_items")}
 selected_items_name <- function(id){paste0(id, "_selected_items")}
 
 
+#' Clicked column name
+#'
+#' @param id the id of the module server instance
+#'
+#' @return the name of the corresponding reactive value
+#' @export
+#'
+#' @examples
+#' clicked_column_name(id = "mydata")
+
+clicked_column_name <- function(id){paste0(id, "_clicked_column")}
+
+
 #' Filter date name
 #'
 #' @param id the id of the module server instance
