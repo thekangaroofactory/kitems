@@ -458,6 +458,14 @@ kitemsManager_Server <- function(id, r, path,
     # Declare outputs: Inputs
     # --------------------------------------------------------------------------
 
+    # -- date slider options
+    output$date_slider_strategy <- renderUI(radioButtons(inputId = ns("date_slider_strategy"),
+                                                         label = "Strategy",
+                                                         choices = c("this-year", "keep-range"),
+                                                         selected = "this-year",
+                                                         inline = TRUE))
+
+
     # -- Declare output:
     output$date_slider <- renderUI({
 
@@ -482,7 +490,8 @@ kitemsManager_Server <- function(id, r, path,
 
         # -- Set value
         # implement this_year strategy by default #211
-        value <- if(is.null(range))
+        # keep this year after item is added #223 & #242
+        value <- if(is.null(input$date_slider_strategy) || input$date_slider_strategy == "this-year")
           ktools::date_range(min, max, type = "this_year")
         else
           value <- range
@@ -499,12 +508,14 @@ kitemsManager_Server <- function(id, r, path,
 
     })
 
+
     # -- Observe: date_slider
     observeEvent(input$date_slider, {
 
       cat(MODULE, "Date sliderInput has been updated: \n")
       cat("-- values =", input$date_slider, "\n")
 
+      # -- store
       r[[r_filter_date]](input$date_slider)
 
     })
