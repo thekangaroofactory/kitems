@@ -31,6 +31,9 @@ kitemsManager_Server <- function(id, r, path,
                                  create = TRUE, autosave = TRUE) {
   moduleServer(id, function(input, output, session) {
 
+    # -- check reactive #240
+    stopifnot(class(r) == "reactivevalues")
+
     # -- Check path (to avoid connection problems if missing folder)
     if(!dir.exists(path))
       dir.create(path)

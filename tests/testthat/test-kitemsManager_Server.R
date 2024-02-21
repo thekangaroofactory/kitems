@@ -1250,3 +1250,21 @@ test_that("Import data without id works", {
 # --------------------------------------------------------------------------
 
 clean_all(testdata_path)
+
+
+test_that("r not reactive fails", {
+
+  # -- dummy
+  dummy <- 1
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 r = dummy,
+                 path = testdata_path,
+                 create = FALSE,
+                 autosave = FALSE)
+
+  # -- module server call
+  expect_error(testServer(kitemsManager_Server, args = params))
+
+})
