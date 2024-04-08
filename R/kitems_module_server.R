@@ -367,9 +367,10 @@ kitemsManager_Server <- function(id, r, path,
 
     # -- colClasses for admin
     # setting rownames = FALSE #209
+    # setting dom = "tpl" instead of "t" #245
     output$data_model <- DT::renderDT(dm_table_mask(r[[r_data_model]]()),
                                       rownames = FALSE,
-                                      options = list(lengthMenu = c(5, 10, 15), pageLength = 10, dom = "t", scrollX = TRUE),
+                                      options = list(lengthMenu = c(5, 10, 15), pageLength = 10, dom = "tpl", scrollX = TRUE),
                                       selection = list(mode = 'single', target = "row", selected = isolate(input$data_model_rows_selected)))
 
 
