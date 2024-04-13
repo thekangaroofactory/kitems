@@ -86,16 +86,19 @@ kitemsManager_Server <- function(id, r, path,
     trigger_update <- trigger_update_name(id)
     trigger_delete <- trigger_delete_name(id)
     trigger_save <- trigger_save_name(id)
+    trigger_create <- trigger_create_name(id)
 
     # -- Declare reactive objects (for external use)
     r[[trigger_add]] <- reactiveVal(NULL)
     r[[trigger_update]] <- reactiveVal(NULL)
     r[[trigger_delete]] <- reactiveVal(NULL)
     r[[trigger_save]] <- reactiveVal(0)
+    r[[trigger_create]] <- reactiveVal(0)
     cat(MODULE, "trigger_add available @", trigger_add, "\n")
     cat(MODULE, "trigger_update available @", trigger_update, "\n")
     cat(MODULE, "trigger_delete available @", trigger_delete, "\n")
     cat(MODULE, "trigger_save available @", trigger_save, "\n")
+    cat(MODULE, "trigger_create available @", trigger_create, "\n")
 
 
     # --------------------------------------------------------------------------
@@ -1118,8 +1121,10 @@ kitemsManager_Server <- function(id, r, path,
     output$create_btn_output <- renderUI(actionButton(inputId = ns("create_btn"),
                                                  label = "Create"))
 
-    # -- Observe: create_btn
-    observeEvent(input$create_btn, {
+    # -- Observe: create_btn & r[[trigger_create]]
+    # Add trigger to fire observer without implementing the button in UI #252
+    observeEvent({input$create_btn
+      r[[trigger_create]]()}, {
 
       showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, data.model = r[[r_data_model]]()),
                             title = "Create",

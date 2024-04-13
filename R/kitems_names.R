@@ -128,3 +128,16 @@ trigger_save_name <- function(id){paste0(id, "_trigger_save")}
 #' trigger_update_name(id = "mydata")
 
 trigger_update_name <- function(id){paste0(id, "_trigger_update")}
+
+
+#' Trigger create name
+#'
+#' @param id the id of the module server instance
+#'
+#' @return the name of the corresponding reactive value
+#' @export
+#'
+#' @examples
+#' trigger_create_name(id = "mydata")
+
+trigger_create_name <- function(id){paste0(id, "_trigger_create")}
