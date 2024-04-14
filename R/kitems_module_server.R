@@ -1132,7 +1132,7 @@ kitemsManager_Server <- function(id, r, path,
                               modalButton("Cancel"),
                               actionButton(ns("confirm_create_btn"), "Create"))))
 
-    })
+    }, ignoreInit = TRUE)
 
     # -- Observe: confirm_create_btn
     observeEvent(input$confirm_create_btn, {
