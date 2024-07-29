@@ -1126,11 +1126,17 @@ kitemsManager_Server <- function(id, r, path,
     observeEvent({input$create_btn
       r[[trigger_create]]()}, {
 
-      showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, data.model = r[[r_data_model]]()),
-                            title = "Create",
-                            footer = tagList(
-                              modalButton("Cancel"),
-                              actionButton(ns("confirm_create_btn"), "Create"))))
+        cat("************************************* \n")
+        str(r[[trigger_create]]())
+        str(input$create_btn)
+
+        if(r[[trigger_create]]() != 0 | input$create_btn != 0)
+
+          showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, data.model = r[[r_data_model]]()),
+                                title = "Create",
+                                footer = tagList(
+                                  modalButton("Cancel"),
+                                  actionButton(ns("confirm_create_btn"), "Create"))))
 
     }, ignoreInit = TRUE)
 
