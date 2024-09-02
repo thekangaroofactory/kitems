@@ -3,8 +3,7 @@
 #' Save data
 #'
 #' @param data a data.frame containing the data to be saved
-#' @param file an optional file name (including .csv extension)
-#' @param path an optional path to the file
+#' @param file the url of the file (including path & .csv extension)
 #'
 #' @export
 #'
@@ -14,22 +13,18 @@
 #' @examples
 #' \dontrun{
 #' # -- File connector:
-#' item_save(data = mydata, file = "mydata.csv", path = "path/to/my/data")
+#' item_save(data = mydata, file = "path/to/my/data/mydata.csv")
 #' }
 
 
-item_save <- function(data, file = NULL, path = NULL){
+item_save <- function(data, file = NULL){
 
   # ----------------------------------------------------------------------------
   # Connector: file (.csv)
   # ----------------------------------------------------------------------------
+
   if(!is.null(file))
-
-    # -- Write
-    kfiles::write_data(data = data,
-                       file = file,
-                       path = path)
-
+    kfiles::write_data(data, file)
 
   # ----------------------------------------------------------------------------
 

@@ -79,13 +79,10 @@ kitemsManager_Server <- function(id, r, path,
     r[[r_filter_date]] <- reactiveVal(NULL)
 
     # -- Build triggers names from module id
-    trigger_save <- trigger_save_name(id)
     trigger_create <- trigger_create_name(id)
 
     # -- Declare reactive objects (for external use)
-    r[[trigger_save]] <- reactiveVal(0)
     r[[trigger_create]] <- reactiveVal(0)
-    cat(MODULE, "trigger_save available @", trigger_save, "\n")
     cat(MODULE, "trigger_create available @", trigger_create, "\n")
 
 
@@ -208,34 +205,12 @@ kitemsManager_Server <- function(id, r, path,
       observeEvent(k_items(), {
 
         # -- Write
-        item_save(data = k_items(),
-                  file = items_url,
-                  path = path)
+        item_save(data = k_items(), file = items_url)
 
         # -- Notify
         cat(MODULE, "[EVENT] Item list has been (auto) saved \n")
 
       }, ignoreInit = TRUE)
-
-
-    # --------------------------------------------------------------------------
-    # Triggers:
-    # --------------------------------------------------------------------------
-
-    # -- Observe: trigger_save (items)
-    observeEvent(r[[trigger_save]](), {
-
-      # -- Write
-      item_save(data = k_items(),
-                file = items_url,
-                path = path)
-
-      # -- Notify
-      cat(MODULE, "[TRIGGER] Item list has been saved \n")
-      if(is_running)
-        showNotification(paste(MODULE, "Items saved."), type = "message")
-
-    }, ignoreInit = TRUE)
 
 
     # --------------------------------------------------------------------------
@@ -1209,6 +1184,7 @@ kitemsManager_Server <- function(id, r, path,
 
     # -- the reference (not the value!)
     list(id = id,
+         url = items_url,
          items = k_items,
          data_model = k_data_model)
 
