@@ -4,21 +4,20 @@
 \alias{item_add}
 \title{Add item}
 \usage{
-item_add(items, item)
+item_add(items, item, name = NULL)
 }
 \arguments{
-\item{items}{the items data.frame}
+\item{items}{the reference! of the reactive value carrying the items}
 
 \item{item}{an item data.frame to be added}
-}
-\value{
-the updated items data.frame
+
+\item{name}{an optional character string to display along with the notification (basically the name of the item)}
 }
 \description{
 Add item
 }
 \examples{
 \dontrun{
-item_add(items = myitems, item = mynewitem)
+item_add(items = myitems, item = mynewitem, name = "myitem")
 }
 }
