@@ -79,15 +79,12 @@ kitemsManager_Server <- function(id, r, path,
     r[[r_filter_date]] <- reactiveVal(NULL)
 
     # -- Build triggers names from module id
-    trigger_delete <- trigger_delete_name(id)
     trigger_save <- trigger_save_name(id)
     trigger_create <- trigger_create_name(id)
 
     # -- Declare reactive objects (for external use)
-    r[[trigger_delete]] <- reactiveVal(NULL)
     r[[trigger_save]] <- reactiveVal(0)
     r[[trigger_create]] <- reactiveVal(0)
-    cat(MODULE, "trigger_delete available @", trigger_delete, "\n")
     cat(MODULE, "trigger_save available @", trigger_save, "\n")
     cat(MODULE, "trigger_create available @", trigger_create, "\n")
 
@@ -224,37 +221,6 @@ kitemsManager_Server <- function(id, r, path,
     # --------------------------------------------------------------------------
     # Triggers:
     # --------------------------------------------------------------------------
-
-    # -- Observe: trigger_update
-    # observeEvent(r[[trigger_update]](), {
-    #
-    #   # -- add item to list & store
-    #   cat(MODULE, "[TRIGGER] Update item \n")
-    #   item_list <- item_update(k_items(), r[[trigger_update]]())
-    #   k_items(item_list)
-    #
-    #   # -- notify
-    #   if(is_running)
-    #     showNotification(paste(MODULE, "Item updated."), type = "message")
-    #
-    # }, ignoreInit = TRUE)
-
-
-    # -- Observe: trigger_delete
-    observeEvent(r[[trigger_delete]](), {
-
-      # -- add item to list & store
-      cat(MODULE, "[TRIGGER] Delete item(s) \n")
-      cat("-- Item(s) to be deleted =", as.character(r[[trigger_delete]]()), "\n")
-      item_list <- item_delete(k_items(), r[[trigger_delete]]())
-      k_items(item_list)
-
-      # -- notify
-      if(is_running)
-        showNotification(paste(MODULE, "Item(s) deleted."), type = "message")
-
-    }, ignoreInit = TRUE)
-
 
     # -- Observe: trigger_save (items)
     observeEvent(r[[trigger_save]](), {
@@ -1230,9 +1196,9 @@ kitemsManager_Server <- function(id, r, path,
       # -- close modal
       removeModal()
 
-      # -- get selected items (ids) & call trigger
+      # -- get selected items (ids) & delete
       ids <- r[[r_selected_items]]()
-      r[[trigger_delete]](ids)
+      item_delete(k_items, ids, name = id)
 
     })
 
