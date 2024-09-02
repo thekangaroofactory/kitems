@@ -73,26 +73,25 @@ kitemsManager_Server <- function(id, r, path,
     r_filter_date <- filter_date_name(id)
 
     # -- Declare reactive objects (for external use)
-    # r[[r_items]] <- reactiveVal(NULL)
     r[[r_filtered_items]] <- reactiveVal(NULL)
     r[[r_selected_items]] <- reactiveVal(NULL)
     r[[r_clicked_column]] <- reactiveVal(NULL)
     r[[r_filter_date]] <- reactiveVal(NULL)
 
     # -- Build triggers names from module id
-    trigger_add <- trigger_add_name(id)
+    # trigger_add <- trigger_add_name(id)
     trigger_update <- trigger_update_name(id)
     trigger_delete <- trigger_delete_name(id)
     trigger_save <- trigger_save_name(id)
     trigger_create <- trigger_create_name(id)
 
     # -- Declare reactive objects (for external use)
-    r[[trigger_add]] <- reactiveVal(NULL)
+    # r[[trigger_add]] <- reactiveVal(NULL)
     r[[trigger_update]] <- reactiveVal(NULL)
     r[[trigger_delete]] <- reactiveVal(NULL)
     r[[trigger_save]] <- reactiveVal(0)
     r[[trigger_create]] <- reactiveVal(0)
-    cat(MODULE, "trigger_add available @", trigger_add, "\n")
+    # cat(MODULE, "trigger_add available @", trigger_add, "\n")
     cat(MODULE, "trigger_update available @", trigger_update, "\n")
     cat(MODULE, "trigger_delete available @", trigger_delete, "\n")
     cat(MODULE, "trigger_save available @", trigger_save, "\n")
@@ -233,18 +232,18 @@ kitemsManager_Server <- function(id, r, path,
     # --------------------------------------------------------------------------
 
     # -- Observe: trigger_add
-    observeEvent(r[[trigger_add]](), {
-
-      # -- add item to list & store
-      cat(MODULE, "[TRIGGER] Add item \n")
-      item_list <- item_add(k_items(), r[[trigger_add]]())
-      k_items(item_list)
-
-      # -- notify
-      if(is_running)
-        showNotification(paste(MODULE, "Item created."), type = "message")
-
-    }, ignoreInit = TRUE)
+    # observeEvent(r[[trigger_add]](), {
+    #
+    #   # -- add item to list & store
+    #   cat(MODULE, "[TRIGGER] Add item \n")
+    #   item_list <- item_add(k_items(), r[[trigger_add]]())
+    #   k_items(item_list)
+    #
+    #   # -- notify
+    #   if(is_running)
+    #     showNotification(paste(MODULE, "Item created."), type = "message")
+    #
+    # }, ignoreInit = TRUE)
 
 
     # -- Observe: trigger_update
@@ -1152,7 +1151,8 @@ kitemsManager_Server <- function(id, r, path,
       item <- item_create(values = input_values, data.model = k_data_model())
 
       # -- call trigger
-      r[[trigger_add]](item)
+      # r[[trigger_add]](item)
+      item_add(k_items, item, name = "xxx")
 
     })
 
