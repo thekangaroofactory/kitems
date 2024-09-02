@@ -4,14 +4,12 @@
 \alias{item_save}
 \title{Save data}
 \usage{
-item_save(data, file = NULL, path = NULL)
+item_save(data, file = NULL)
 }
 \arguments{
 \item{data}{a data.frame containing the data to be saved}
 
-\item{file}{an optional file name (including .csv extension)}
-
-\item{path}{an optional path to the file}
+\item{file}{the url of the file (including path & .csv extension)}
 }
 \description{
 Save data
@@ -22,6 +20,6 @@ File connector: if file is not NULL, then data is saved to .csv
 \examples{
 \dontrun{
 # -- File connector:
-item_save(data = mydata, file = "mydata.csv", path = "path/to/my/data")
+item_save(data = mydata, file = "path/to/my/data/mydata.csv")
 }
 }
