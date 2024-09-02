@@ -1245,7 +1245,8 @@ kitemsManager_Server <- function(id, r, path,
     # --------------------------------------------------------------------------
 
     # -- the reference (not the value!)
-    list(items = k_items,
+    list(id = id,
+         items = k_items,
          data_model = k_data_model)
 
   })
