@@ -79,17 +79,14 @@ kitemsManager_Server <- function(id, r, path,
     r[[r_filter_date]] <- reactiveVal(NULL)
 
     # -- Build triggers names from module id
-    trigger_update <- trigger_update_name(id)
     trigger_delete <- trigger_delete_name(id)
     trigger_save <- trigger_save_name(id)
     trigger_create <- trigger_create_name(id)
 
     # -- Declare reactive objects (for external use)
-    r[[trigger_update]] <- reactiveVal(NULL)
     r[[trigger_delete]] <- reactiveVal(NULL)
     r[[trigger_save]] <- reactiveVal(0)
     r[[trigger_create]] <- reactiveVal(0)
-    cat(MODULE, "trigger_update available @", trigger_update, "\n")
     cat(MODULE, "trigger_delete available @", trigger_delete, "\n")
     cat(MODULE, "trigger_save available @", trigger_save, "\n")
     cat(MODULE, "trigger_create available @", trigger_create, "\n")
@@ -229,18 +226,18 @@ kitemsManager_Server <- function(id, r, path,
     # --------------------------------------------------------------------------
 
     # -- Observe: trigger_update
-    observeEvent(r[[trigger_update]](), {
-
-      # -- add item to list & store
-      cat(MODULE, "[TRIGGER] Update item \n")
-      item_list <- item_update(k_items(), r[[trigger_update]]())
-      k_items(item_list)
-
-      # -- notify
-      if(is_running)
-        showNotification(paste(MODULE, "Item updated."), type = "message")
-
-    }, ignoreInit = TRUE)
+    # observeEvent(r[[trigger_update]](), {
+    #
+    #   # -- add item to list & store
+    #   cat(MODULE, "[TRIGGER] Update item \n")
+    #   item_list <- item_update(k_items(), r[[trigger_update]]())
+    #   k_items(item_list)
+    #
+    #   # -- notify
+    #   if(is_running)
+    #     showNotification(paste(MODULE, "Item updated."), type = "message")
+    #
+    # }, ignoreInit = TRUE)
 
 
     # -- Observe: trigger_delete
@@ -1190,8 +1187,8 @@ kitemsManager_Server <- function(id, r, path,
       item <- item_create(values = input_values, data.model = k_data_model())
 
       # -- update item & store
-      cat("--  Call update trigger \n")
-      r[[trigger_update]](item)
+      cat("--  Update item \n")
+      item_update(k_items, item, name = id)
 
     })
 

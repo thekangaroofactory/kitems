@@ -4,15 +4,14 @@
 \alias{item_update}
 \title{Update item}
 \usage{
-item_update(items, item)
+item_update(items, item, name = NULL)
 }
 \arguments{
-\item{items}{a data.frame of the items}
+\item{items}{the reference! of the reactiveVal carrying the data.frame of the items}
 
-\item{item}{the items to be updated}
-}
-\value{
-an updated data.frame of the items
+\item{item}{the item to be updated}
+
+\item{name}{a character string used inside the notification (typically the name of the items)}
 }
 \description{
 Update item
@@ -22,6 +21,6 @@ The item$id value will be used to replace the corresponding item in the items da
 }
 \examples{
 \dontrun{
-item_update(items = myitems, item = myupdateditem)
+item_update(items = myitems, item = myupdateditem, name = "myitem")
 }
 }
