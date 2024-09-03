@@ -78,13 +78,6 @@ kitemsManager_Server <- function(id, r, path,
     r[[r_clicked_column]] <- reactiveVal(NULL)
     r[[r_filter_date]] <- reactiveVal(NULL)
 
-    # -- Build triggers names from module id
-    trigger_create <- trigger_create_name(id)
-
-    # -- Declare reactive objects (for external use)
-    r[[trigger_create]] <- reactiveVal(0)
-    cat(MODULE, "trigger_create available @", trigger_create, "\n")
-
 
     # --------------------------------------------------------------------------
     # Initialize data model and items:
@@ -1038,21 +1031,15 @@ kitemsManager_Server <- function(id, r, path,
     output$create_btn_output <- renderUI(actionButton(inputId = ns("create_btn"),
                                                  label = "Create"))
 
-    # -- Observe: create_btn & r[[trigger_create]]
-    # Add trigger to fire observer without implementing the button in UI #252
-    observeEvent({input$create_btn
-      r[[trigger_create]]()}, {
-
-        # -- check to avoid modal to fire at startup #256
-        if(r[[trigger_create]]() != 0 | input$create_btn != 0)
+    # -- Observe: create_btn
+    observeEvent(input$create_btn,
 
           showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, data.model = k_data_model()),
                                 title = "Create",
                                 footer = tagList(
                                   modalButton("Cancel"),
-                                  actionButton(ns("confirm_create_btn"), "Create"))))
+                                  actionButton(ns("confirm_create_btn"), "Create")))))
 
-    }, ignoreInit = TRUE)
 
     # -- Observe: confirm_create_btn
     observeEvent(input$confirm_create_btn, {
