@@ -638,7 +638,7 @@ kitemsManager_Server <- function(id, r, path,
 
           # -- Store items & data model
           k_items(items)
-          data_model(data.model)
+          k_data_model(data.model)
 
           # -- notify
           if(is_running)
@@ -720,7 +720,7 @@ kitemsManager_Server <- function(id, r, path,
       # -- update data model & store
       dm <- k_data_model()
       dm <- dm[dm$name != input$dm_dz_att_name, ]
-      data_model(dm)
+      k_data_model(dm)
 
     })
 
@@ -786,7 +786,7 @@ kitemsManager_Server <- function(id, r, path,
                        skip = skip)
 
       # -- store
-      data_model(dm)
+      k_data_model(dm)
 
       # -- init items
       cat(MODULE, "-- Init data \n")
@@ -840,7 +840,7 @@ kitemsManager_Server <- function(id, r, path,
                              filter = FALSE)
 
       # -- store
-      data_model(dm)
+      k_data_model(dm)
 
       # -- get default value
       value <- dm_get_default(data.model = dm, name = input$dm_att_name)
@@ -930,7 +930,7 @@ kitemsManager_Server <- function(id, r, path,
                                 skip = skip)
 
       # -- store
-      data_model(dm)
+      k_data_model(dm)
 
     })
 
@@ -972,7 +972,7 @@ kitemsManager_Server <- function(id, r, path,
       # -- Reorder data model & store
       dm <- k_data_model()
       dm <- dm[match(input$dm_order_cols, dm$name), ]
-      data_model(dm)
+      k_data_model(dm)
 
     })
 
@@ -1018,7 +1018,7 @@ kitemsManager_Server <- function(id, r, path,
       # -- Check NULL data model
       if(!is.null(dm)){
         dm <- dm_filter_set(data.model = dm, filter = input$adm_filter_col)
-        data_model(dm)}
+        k_data_model(dm)}
 
     }, ignoreInit = TRUE, ignoreNULL = FALSE)
 
