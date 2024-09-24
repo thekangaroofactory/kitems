@@ -19,6 +19,21 @@
 
 item_save <- function(data, file = NULL){
 
+  # --------------------------------------------------------------------------
+  # Ensure timezone continuity #269
+  # --------------------------------------------------------------------------
+
+  # -- get datetime index
+  # To avoid adding data.model to the function signature, get classes from data
+  classes <- lapply(data, function(x) class(x)[1])
+  idx <- which(classes %in% c("POSIXct", "POSIXlt"))
+
+  # -- convert to ISO 8601 character format
+  if(length(idx) > 0){
+    cat("[item_save] Convert datetime attribute(s) to ISO-8601 =", names(data[idx]), "\n")
+    data[idx] <- format(data[idx], "%FT%H:%M:%S%z")}
+
+
   # ----------------------------------------------------------------------------
   # Connector: file (.csv)
   # ----------------------------------------------------------------------------
