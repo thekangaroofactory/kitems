@@ -99,6 +99,11 @@ inputList <- function(ns, item = NULL, update = FALSE, data.model){
   cat("  - Filter out attributes to skip:", skip, "\n")
   colClasses <- colClasses[!names(colClasses) %in% skip]
 
+  # -- check
+  # when id is the only attribute, colClasses will be empty #243
+  if(length(colClasses) == 0)
+    return("Warning: there is no attribute that requires an input value (all attributes are skipped!).")
+
   # -- Define default input values
   if(update){
 
