@@ -78,6 +78,10 @@ inputList <- function(ns, item = NULL, update = FALSE, data.model){
       if(is.character(value))
         value <- as.logical(value)
 
+      # -- check NA (in case no default has been set) #246
+      if(is.na(value))
+        value <- FALSE
+
       # -- input
       input <- checkboxInput(inputId = ns(names(colClasses)),
                              label = "logical",
