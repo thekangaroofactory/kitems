@@ -791,11 +791,12 @@ kitemsManager_Server <- function(id, r, path,
       k_data_model(dm)
 
       # -- init items
+      # create = autosave : so that file won't be created if autosave is FALSE #271
       cat(MODULE, "-- Init data \n")
       items <- kfiles::read_data(file = items_url,
                                  path = path,
                                  colClasses = colClasses,
-                                 create = TRUE)
+                                 create = autosave)
 
       # -- store items
       k_items(items)
