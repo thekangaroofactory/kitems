@@ -906,18 +906,31 @@ kitemsManager_Server <- function(id, r, path,
       dm <- k_data_model()
 
       # -- default val & fun
-      if(input$dm_default_choice == "none"){
-        default_val <- NA
-        default_fun <- NA
+      # check: in case of id, attribute has no default choice
+      # hence input$dm_default_choice is not reliable in this case #248
+      if(dm[row, ]$name != "id"){
 
-      } else {
-        if(input$dm_default_choice == "val"){
-          default_val <- input$dm_att_default_detail
-          default_fun <- NULL
+        if(input$dm_default_choice == "none"){
+          default_val <- NA
+          default_fun <- NA
 
         } else {
-          default_val <- NULL
-          default_fun <- input$dm_att_default_detail}}
+
+          if(input$dm_default_choice == "val"){
+            default_val <- input$dm_att_default_detail
+            default_fun <- NULL
+
+          } else {
+            default_val <- NULL
+            default_fun <- input$dm_att_default_detail}}
+
+      } else {
+
+        # -- when attribute is id
+        default_val <- NULL
+        default_fun <- input$dm_att_default_detail
+
+      }
 
       # -- skip (force for id)
       skip <- if(dm[row, ]$name != "id")
