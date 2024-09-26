@@ -715,11 +715,13 @@ kitemsManager_Server <- function(id, r, path,
       removeModal()
 
       # -- drop column! & store
+      cat(MODULE, "Drop attribute from all items \n")
       items <- k_items()
       items[input$dm_dz_att_name] <- NULL
       k_items(items)
 
       # -- update data model & store
+      cat(MODULE, "Drop attribute from data model \n")
       dm <- k_data_model()
       dm <- dm[dm$name != input$dm_dz_att_name, ]
       k_data_model(dm)
@@ -869,6 +871,12 @@ kitemsManager_Server <- function(id, r, path,
       # -- get selected row
       row <- input$data_model_rows_selected
 
+      # -- check out of limit value #272
+      # If last row is selected and attribute is deleted, a crash would occur
+      if(!is.null(row))
+        if(row > nrow(k_data_model()))
+          row <- NULL
+
       # -- check NULL (no row selected)
       if(is.null(row)){
 
@@ -890,7 +898,7 @@ kitemsManager_Server <- function(id, r, path,
 
       }
 
-    }, ignoreNULL = FALSE)
+    }, ignoreNULL = FALSE, ignoreInit = TRUE)
 
 
     # -- observe upd_att button
