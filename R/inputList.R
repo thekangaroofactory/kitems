@@ -84,7 +84,7 @@ inputList <- function(ns, item = NULL, update = FALSE, data.model){
 
       # -- input
       input <- checkboxInput(inputId = ns(names(colClasses)),
-                             label = "logical",
+                             label = names(colClasses),
                              value = value,
                              width = NULL)
     }
