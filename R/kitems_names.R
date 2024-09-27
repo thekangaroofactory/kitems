@@ -26,19 +26,6 @@ dm_name <- function(id){paste0(id, "_data_model")}
 items_name <- function(id){paste0(id, "_items")}
 
 
-#' Trigger add name
-#'
-#' @param id the id of the module server instance
-#'
-#' @return the name of the corresponding reactive value
-#' @export
-#'
-#' @examples
-#' trigger_add_name(id = "mydata")
-
-trigger_add_name <- function(id){paste0(id, "_trigger_add")}
-
-
 #' Trigger delete name
 #'
 #' @param id the id of the module server instance
