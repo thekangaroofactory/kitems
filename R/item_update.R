@@ -2,10 +2,10 @@
 
 #' Update item
 #'
-#' @param items a data.frame of the items
-#' @param item the items to be updated
+#' @param items the reference! of the reactiveVal carrying the data.frame of the items
+#' @param item the item to be updated
+#' @param name a character string used inside the notification (typically the name of the items)
 #'
-#' @return an updated data.frame of the items
 #' @export
 #'
 #' @details
@@ -13,19 +13,24 @@
 #'
 #' @examples
 #' \dontrun{
-#' item_update(items = myitems, item = myupdateditem)
+#' item_update(items = myitems, item = myupdateditem, name = "myitem")
 #' }
 
 
-item_update <- function(items, item){
+item_update <- function(items, item, name = NULL){
 
-  # -- get target item id
-  id <- item$id
+  # -- check items
+  stopifnot("reactiveVal" %in% class(items))
 
-  # -- update row
-  items[items$id == id, ] <- item
+  # -- get value & update
+  x <- items()
+  x[x$id == item$id, ] <- item
 
-  # -- return
-  items
+  # -- store
+  items(x)
+
+  # -- notify
+  if(shiny::isRunning())
+    showNotification(paste(name, "Item updated."), type = "message")
 
 }

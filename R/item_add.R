@@ -3,19 +3,26 @@
 #' Add item
 #'
 #' @param item an item data.frame to be added
-#' @param items the items data.frame
+#' @param items the reference! of the reactive value carrying the items
+#' @param name an optional character string to display along with the notification (basically the name of the item)
 #'
-#' @return the updated items data.frame
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' item_add(items = myitems, item = mynewitem)
+#' item_add(items = myitems, item = mynewitem, name = "myitem")
 #' }
 
-item_add <- function(items, item){
+item_add <- function(items, item, name = NULL){
 
-  # -- rbind
-  items <- rbind(items, item)
+  # -- check items
+  stopifnot("reactiveVal" %in% class(items))
+
+  # -- rbind & store
+  items(rbind(items(), item))
+
+  # -- notify
+  if(shiny::isRunning())
+    showNotification(paste(name, "Item created."), type = "message")
 
 }

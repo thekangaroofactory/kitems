@@ -18,6 +18,8 @@ date_slider_INPUT <- function(id){
   ns <- NS(id)
 
   # UI
-  uiOutput(ns("date_slider"))
+    fluidRow(
+      column(width = 6, uiOutput(ns("date_slider"))),
+      column(width = 6, uiOutput(ns("date_slider_strategy"))))
 
 }

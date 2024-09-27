@@ -4,12 +4,14 @@
 \alias{item_delete}
 \title{Delete item}
 \usage{
-item_delete(items, id)
+item_delete(items, id, name = NULL)
 }
 \arguments{
-\item{items}{a data.frame of the items}
+\item{items}{the reference! of the reactive value carrying the items}
 
 \item{id}{the id of the item to delete}
+
+\item{name}{a character string used inside the notification (typically the name of the items)}
 }
 \value{
 an updated data.frame of the items
@@ -19,6 +21,6 @@ Delete item
 }
 \examples{
 \dontrun{
-item_delete(items = myitems, id = 123456789)
+item_delete(items = myitems, id = 123456789, name = "myitems")
 }
 }

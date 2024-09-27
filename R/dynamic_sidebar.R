@@ -2,21 +2,18 @@
 
 #' Generate dynamic menuItem
 #'
-#' @param r the reactive shared communication object
+#' @param names a list of the data model names
 #'
 #' @return a sidebarMenu menuItem object with one menuSubItem per data model
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' dynamic_sidebar(r)
+#' dynamic_sidebar(names = list("data", "data2"))
 #' }
 
 
-dynamic_sidebar <- function(r){
-
-  # -- Get data model list
-  dm_list <- dm_get_list(r = r)
+dynamic_sidebar <- function(names){
 
   # -- Helper: return sub item
   helper <- function(name){
@@ -24,7 +21,7 @@ dynamic_sidebar <- function(r){
                 icon = shiny::icon("angle-double-right"))}
 
   # -- Apply helper
-  subitems <- lapply(dm_list, FUN = helper)
+  subitems <- lapply(names, FUN = helper)
 
   # -- Return sidebar
   sidebarMenu(

@@ -73,6 +73,7 @@ from the r object passed as an argument of the module server):
 - r\[[items](#items)\]
 - r\[\[filtered_items\]\]
 - r\[\[selected_items\]\]
+- r\[\[clicked_column\]\]
 - r\[\[filter_date\]\]
 - r\[\[trigger_add\]\]
 - r\[\[trigger_update\]\]
@@ -343,6 +344,27 @@ tabItem(tabName = "my_data",
           column(width = 12,
                  
                  kitems::admin_ui("my_data"))))
+```
+
+### Nested module considerations
+
+In case the kitemsManager_Server module server function is called from
+inside a module (i.e. as a nested module), then it is not possible to
+call the UI functions from the main app with the nested module id.
+
+From there, two options are available:
+
+- wrap the package UI functions into functions from the calling module
+  (encapsulation)  
+  For example, you could create an action_BTN function that would
+  implement create_BTN, update_BTN and delete_BTN into a single UI
+
+- call the package UI functions directly from the main app using
+  multiple namespaces:  
+  (as specified in the shiny::NS function)
+
+``` r
+ kitems::admin_ui(c("module_id", "nested_module_id"))
 ```
 
 ## Import & migration

@@ -4,10 +4,10 @@
 \alias{dynamic_sidebar}
 \title{Generate dynamic menuItem}
 \usage{
-dynamic_sidebar(r)
+dynamic_sidebar(names)
 }
 \arguments{
-\item{r}{the reactive shared communication object}
+\item{names}{a list of the data model names}
 }
 \value{
 a sidebarMenu menuItem object with one menuSubItem per data model
@@ -17,6 +17,6 @@ Generate dynamic menuItem
 }
 \examples{
 \dontrun{
-dynamic_sidebar(r)
+dynamic_sidebar(names = list("data", "data2"))
 }
 }
