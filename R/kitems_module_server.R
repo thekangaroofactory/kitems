@@ -13,7 +13,7 @@
 #'
 #' @details
 #'
-#' If autosave is FALSE, the save trigger should be used to make the data persistent
+#' If autosave is FALSE, the item_save function should be used to make the data persistent
 #'
 #' @examples
 #' \dontrun{
@@ -28,6 +28,7 @@
 
 kitemsManager_Server <- function(id, path,
                                  create = TRUE, autosave = TRUE) {
+
   moduleServer(id, function(input, output, session) {
 
     # -- Check path (to avoid connection problems if missing folder)
@@ -43,9 +44,6 @@ kitemsManager_Server <- function(id, path,
     MODULE <- paste0("[", id, "]")
     cat(MODULE, "Starting kitems module server... \n")
 
-    # -- Check if app is running
-    is_running <- shiny::isRunning()
-
     # -- Get namespace
     ns <- session$ns
 
@@ -54,9 +52,9 @@ kitemsManager_Server <- function(id, path,
     # Declare objects:
     # --------------------------------------------------------------------------
 
-    # -- Init data
-    data.model <- NULL
-    items <- NULL
+    # -- Init data (non persistent values to init the module)
+    init_dm <- NULL
+    init_items <- NULL
 
     # -- Build urls from module id
     dm_url <- file.path(path, paste0(dm_name(id), ".rds"))
@@ -86,8 +84,8 @@ kitemsManager_Server <- function(id, path,
       if(file.exists(dm_url)){
 
         cat(MODULE, "Reading data model from file \n")
-        data.model <- readRDS(dm_url)
-        cat(MODULE, "output dim =", dim(data.model),"\n")
+        init_dm <- readRDS(dm_url)
+        cat(MODULE, "output dim =", dim(init_dm),"\n")
 
       } else {
 
@@ -104,9 +102,9 @@ kitemsManager_Server <- function(id, path,
       # ------------------------------------------------------------------------
 
       # -- Check for NULL data model (then no reason to try loading)
-      if(!is.null(data.model))
+      if(!is.null(init_dm))
 
-        items <- item_load(data.model = data.model,
+        init_items <- item_load(data.model = init_dm,
                            file = items_url,
                            path = path,
                            create = create)
@@ -120,24 +118,24 @@ kitemsManager_Server <- function(id, path,
       # --------------------------------------------------------------------------
 
       # -- Check for NULL data mode + data.frame
-      if(!is.null(data.model) & !is.null(items)){
+      if(!is.null(init_dm) & !is.null(init_items)){
 
         cat(MODULE, "Checking data model integrity \n")
-        result <- dm_check_integrity(data.model = data.model, items = items, template = TEMPLATE_DATA_MODEL)
+        result <- dm_check_integrity(data.model = init_dm, items = init_items, template = TEMPLATE_DATA_MODEL)
 
         # -- Check feedback (otherwise value is TRUE)
         if(is.data.frame(result)){
 
           # -- Update data model & save
-          data.model <- result
-          saveRDS(data.model, file = dm_url)
+          init_dm <- result
+          saveRDS(init_dm, file = dm_url)
           cat(MODULE, "Data model saved \n")
 
           # -- Reload data with updated data model
           cat(MODULE, "[Warning] Data model not synchronized with items data.frame! \n")
           cat(MODULE, "Reloading the item data with updated data model \n")
 
-          items <- item_load(data.model = data.model,
+          init_items <- item_load(data.model = init_dm,
                              file = items_url,
                              path = path,
                              create = create)
@@ -153,10 +151,12 @@ kitemsManager_Server <- function(id, path,
       # ------------------------------------------------------------------------
 
       # -- Store data model (either content of the RDS or the server function input)
-      k_data_model <- reactiveVal(data.model)
+      k_data_model <- reactiveVal(init_dm)
+      rm(init_dm)
 
       # -- Store items
-      k_items <- reactiveVal(items)
+      k_items <- reactiveVal(init_items)
+      rm(init_items)
 
       # Increment the progress bar, and update the detail text.
       incProgress(4/4, detail = "done")
@@ -333,7 +333,7 @@ kitemsManager_Server <- function(id, path,
 
 
     # --------------------------------------------------------------------------
-    # Declare outputs: Inputs
+    # Declare Inputs
     # --------------------------------------------------------------------------
 
     # -- date slider options
@@ -344,7 +344,7 @@ kitemsManager_Server <- function(id, path,
                                                          inline = TRUE))
 
 
-    # -- Declare output:
+    # -- date slider
     output$date_slider <- renderUI({
 
       # -- check data model
@@ -386,6 +386,10 @@ kitemsManager_Server <- function(id, path,
 
     })
 
+
+    # --------------------------------------------------------------------------
+    # Observe Inputs
+    # --------------------------------------------------------------------------
 
     # -- Observe: date_slider
     observeEvent(input$date_slider, {
@@ -577,12 +581,12 @@ kitemsManager_Server <- function(id, path,
 
         # -- Get data model
         cat(MODULE, "Extract data model from data \n")
-        data.model <- dm_check_integrity(data.model = NULL, items = items, template = TEMPLATE_DATA_MODEL)
+        init_dm <- dm_check_integrity(data.model = NULL, items = items, template = TEMPLATE_DATA_MODEL)
 
         # -- Display modal
         # adding options to renderDT #207
         showModal(modalDialog(p("Data model built from the data:"),
-                              DT::renderDT(data.model, rownames = FALSE, options = list(scrollX = TRUE)),
+                              DT::renderDT(init_dm, rownames = FALSE, options = list(scrollX = TRUE)),
                               title = "Import data",
                               size = "l",
                               footer = tagList(
@@ -598,14 +602,14 @@ kitemsManager_Server <- function(id, path,
           # -- Check items classes #216
           # Because dataset was read first, the current colclasses are 'guessed' and may not comply with the data model
           # ex: date class is forced in data model, but it may be char ("2024-02-07) or num (19760)
-          items <- item_check_integrity(items = items, data.model = data.model)
+          items <- item_check_integrity(items = items, data.model = init_dm)
 
           # -- Store items & data model
           k_items(items)
-          k_data_model(data.model)
+          k_data_model(init_dm)
 
           # -- notify
-          if(is_running)
+          if(shiny::isRunning())
             showNotification(paste(MODULE, "Data imported."), type = "message")
 
         })
