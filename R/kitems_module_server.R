@@ -777,11 +777,11 @@ kitemsManager_Server <- function(id, r, path,
       # -- init parameters (id)
       # Implement template #220
       template <- TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == "id", ]
-      colClasses <- c("id" = template$type)
-      default_val <- c("id" = template$default.val)
-      default_fun <- c("id" = template$default.fun)
-      filter <- if(template$filter) c("id") else NULL
-      skip <- if(template$skip) c("id") else NULL
+      colClasses <- c(template$name = template$type)
+      default_val <- c(template$name = template$default.val)
+      default_fun <- c(template$name = template$default.fun)
+      filter <- if(template$filter) template$name else NULL
+      skip <- if(template$skip) template$name else NULL
 
       # -- init data model & store
       cat(MODULE, "-- Building data model \n")
