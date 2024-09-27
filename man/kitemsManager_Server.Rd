@@ -19,7 +19,7 @@ kitemsManager_Server(id, path, create = TRUE, autosave = TRUE)
 Module server
 }
 \details{
-If autosave is FALSE, the save trigger should be used to make the data persistent
+If autosave is FALSE, the item_save function should be used to make the data persistent
 }
 \examples{
 \dontrun{
