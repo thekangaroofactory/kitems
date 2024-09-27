@@ -26,19 +26,6 @@ dm_name <- function(id){paste0(id, "_data_model")}
 items_name <- function(id){paste0(id, "_items")}
 
 
-#' Trigger delete name
-#'
-#' @param id the id of the module server instance
-#'
-#' @return the name of the corresponding reactive value
-#' @export
-#'
-#' @examples
-#' trigger_delete_name(id = "mydata")
-
-trigger_delete_name <- function(id){paste0(id, "_trigger_delete")}
-
-
 #' Trigger save name
 #'
 #' @param id the id of the module server instance
