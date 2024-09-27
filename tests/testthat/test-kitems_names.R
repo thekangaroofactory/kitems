@@ -15,12 +15,6 @@ test_that("kitems_names works", {
   expect_equal(x, paste0(module_id, "_items"))
 
   # -- function call
-  x <- filter_date_name(module_id)
-
-  # -- check
-  expect_equal(x, paste0(module_id, "_filter_date"))
-
-  # -- function call
   x <- trigger_add_name(module_id)
 
   # -- check

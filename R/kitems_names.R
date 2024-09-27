@@ -26,19 +26,6 @@ dm_name <- function(id){paste0(id, "_data_model")}
 items_name <- function(id){paste0(id, "_items")}
 
 
-#' Filter date name
-#'
-#' @param id the id of the module server instance
-#'
-#' @return the name of the corresponding reactive value
-#' @export
-#'
-#' @examples
-#' filter_date_name(id = "mydata")
-
-filter_date_name <- function(id){paste0(id, "_filter_date")}
-
-
 #' Trigger add name
 #'
 #' @param id the id of the module server instance
