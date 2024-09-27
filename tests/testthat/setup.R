@@ -153,7 +153,7 @@ create_noid_data_to_import <- function(){
   dir.create(testdata_path, showWarnings = FALSE)
 
   # -- save data model
-  saveRDS(dm, file = dm_url)
+  #saveRDS(dm, file = dm_url)
 
   # -- drop id column & save items
   items$id <- NULL
