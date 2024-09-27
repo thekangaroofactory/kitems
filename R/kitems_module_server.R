@@ -235,34 +235,6 @@ kitemsManager_Server <- function(id, r, path,
     })
 
 
-    # # -- Filtered item table view
-    # observeEvent({
-    #
-    #   # -- Multiple conditions!
-    #   r[[r_items]]()
-    #   r[[r_filter_date]]()
-    #
-    # }, {
-    #
-    #   cat(MODULE, "Updating filtered item view \n")
-    #
-    #   # -- Get items
-    #   items <- r[[r_items]]()
-    #
-    #   # -- Apply date filter
-    #   filter_date <- r[[r_filter_date]]()
-    #   if(!is.null(filter_date))
-    #     items <- items[items$date >= filter_date[1] & items$date <= filter_date[2], ]
-    #
-    #
-    #   cat(MODULE, "ouput dim =", dim(items), "\n")
-    #
-    #   # -- Store
-    #   r[[r_filtered_items]](items)
-    #
-    # }, ignoreInit = FALSE)
-
-
     # --------------------------------------------------------------------------
     # Declare admin outputs:
     # --------------------------------------------------------------------------
