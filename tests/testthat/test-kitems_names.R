@@ -15,12 +15,6 @@ test_that("kitems_names works", {
   expect_equal(x, paste0(module_id, "_items"))
 
   # -- function call
-  x <- filtered_items_name(module_id)
-
-  # -- check
-  expect_equal(x, paste0(module_id, "_filtered_items"))
-
-  # -- function call
   x <- selected_items_name(module_id)
 
   # -- check

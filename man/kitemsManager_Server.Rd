@@ -4,12 +4,10 @@
 \alias{kitemsManager_Server}
 \title{Module server}
 \usage{
-kitemsManager_Server(id, r, path, create = TRUE, autosave = TRUE)
+kitemsManager_Server(id, path, create = TRUE, autosave = TRUE)
 }
 \arguments{
 \item{id}{the id to be used for the module server instance}
-
-\item{r}{the shared reactive value communication object}
 
 \item{path}{a path where data model and items will be stored}
 
@@ -25,7 +23,7 @@ If autosave is FALSE, the save trigger should be used to make the data persisten
 }
 \examples{
 \dontrun{
-kitemsManager_Server(id = "mydata", r = r, path = "path/to/my/data",
+kitemsManager_Server(id = "mydata", path = "path/to/my/data",
                      create = TRUE, autosave = TRUE)
 }
 }
