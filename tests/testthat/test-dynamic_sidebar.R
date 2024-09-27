@@ -3,7 +3,7 @@
 test_that("dynamic_sidebar", {
 
   # -- function call
-  x <- dynamic_sidebar(r = reactiveValues(dm1_data_model = 1, dm2_data_model = 2))
+  x <- dynamic_sidebar(names = c("data_1", "data_2"))
 
   # -- test output class
   expect_type(x, "list")

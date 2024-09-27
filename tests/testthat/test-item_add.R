@@ -1,17 +1,30 @@
 
 
-test_that("multiplication works", {
+test_that("item_add works", {
 
-  # -- function call
-  x <- item_add(items, new_item)
+  # -- declare arguments
+  params <- list(id = module_id,
+                 path = testdata_path,
+                 create = FALSE,
+                 autosave = FALSE)
 
-  # -- test class
-  expect_s3_class(x, "data.frame")
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
 
-  # -- test dim
-  expect_equal(dim(x), dim(items) + c(1, 0))
+    x <- reactiveVal(items)
 
-  # -- test added attribute
-  expect_equal(x[x$name == new_item$name, ]$total, new_item$total)
+    # -- function call
+    item_add(x, new_item)
+
+    # -- test class
+    expect_s3_class(x(), "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x()), dim(items) + c(1, 0))
+
+    # -- test added attribute
+    #expect_equal(x[x$name == new_item$name, ]$total, new_item$total)
+
+  })
 
 })

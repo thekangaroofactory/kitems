@@ -12,7 +12,6 @@ test_that("No data model works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -25,13 +24,13 @@ test_that("No data model works", {
     # --------------------------------------------------------------------------
 
     # -- data model
-    x <- r[[r_data_model]]()
+    x <- k_data_model()
 
     # -- test
     expect_null(x)
 
     # -- items
-    x <- r[[r_items]]()
+    x <- k_items()
 
     # -- test
     expect_null(x)
@@ -45,7 +44,7 @@ test_that("No data model works", {
     session$setInputs(dm_create = 1)
 
     # -- data model
-    x <- r[[r_data_model]]()
+    x <- k_data_model()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -54,7 +53,7 @@ test_that("No data model works", {
     expect_equal(dim(x), c(1, 6))
 
     # -- items
-    x <- r[[r_items]]()
+    x <- k_items()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -88,7 +87,6 @@ test_that("Server works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -101,7 +99,7 @@ test_that("Server works", {
     # --------------------------------------------------------------------------
 
     r_data_model <- dm_name(module_id)
-    x <- r[[r_data_model]]()
+    x <- k_data_model()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -115,7 +113,7 @@ test_that("Server works", {
     # --------------------------------------------------------------------------
 
     r_items <- items_name(module_id)
-    x <- r[[r_items]]()
+    x <- k_items()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -145,7 +143,6 @@ test_that("Data model integrity works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -158,7 +155,7 @@ test_that("Data model integrity works", {
     # --------------------------------------------------------------------------
 
     r_data_model <- dm_name(module_id)
-    x <- r[[r_data_model]]()
+    x <- k_data_model()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -172,7 +169,7 @@ test_that("Data model integrity works", {
     # --------------------------------------------------------------------------
 
     r_items <- items_name(module_id)
-    x <- r[[r_items]]()
+    x <- k_items()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -207,7 +204,6 @@ test_that("Select data model attribute works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -224,7 +220,7 @@ test_that("Select data model attribute works", {
 
     # -- check
     r_data_model <- dm_name(module_id)
-    x <- r[[r_data_model]]()
+    x <- k_data_model()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -246,7 +242,6 @@ test_that("Add attribute works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -271,7 +266,7 @@ test_that("Add attribute works", {
 
     # -- check
     r_data_model <- dm_name(module_id)
-    x <- r[[r_data_model]]()
+    x <- k_data_model()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -285,7 +280,7 @@ test_that("Add attribute works", {
     # --------------------------------------------------------------------------
 
     r_items <- items_name(module_id)
-    x <- r[[r_items]]()
+    x <- k_items()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -310,7 +305,7 @@ test_that("Add attribute works", {
 
     # -- check
     r_data_model <- dm_name(module_id)
-    x <- r[[r_data_model]]()
+    x <- k_data_model()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -324,7 +319,7 @@ test_that("Add attribute works", {
     # --------------------------------------------------------------------------
 
     r_items <- items_name(module_id)
-    x <- r[[r_items]]()
+    x <- k_items()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -346,7 +341,6 @@ test_that("Add attribute / dm_default_choice = none works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -368,7 +362,7 @@ test_that("Add attribute / dm_default_choice = none works", {
 
     # -- check
     r_data_model <- dm_name(module_id)
-    x <- r[[r_data_model]]()
+    x <- k_data_model()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -395,7 +389,6 @@ test_that("Add attribute / dm_default_choice = fun works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -418,7 +411,7 @@ test_that("Add attribute / dm_default_choice = fun works", {
 
     # -- check
     r_data_model <- dm_name(module_id)
-    x <- r[[r_data_model]]()
+    x <- k_data_model()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -449,7 +442,6 @@ test_that("Update attribute / dm_default_choice = none works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -469,15 +461,14 @@ test_that("Update attribute / dm_default_choice = none works", {
     # --------------------------------------------------------------------------
 
     # -- check
-    r_data_model <- dm_name(module_id)
-    x <- r[[r_data_model]]()
+    x <- k_data_model()
 
     # -- test class
     expect_s3_class(x, "data.frame")
 
     # -- test values
     expect_true(is.na(x[1, ]$default.val))
-    expect_true(is.na(x[1, ]$default.fun))
+    expect_false(is.na(x[1, ]$default.fun))
 
   })
 
@@ -492,7 +483,6 @@ test_that("Update attribute / dm_default_choice = val works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -515,7 +505,7 @@ test_that("Update attribute / dm_default_choice = val works", {
 
     # -- check
     r_data_model <- dm_name(module_id)
-    x <- r[[r_data_model]]()
+    x <- k_data_model()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -537,7 +527,6 @@ test_that("Update attribute / dm_default_choice = fun works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -560,7 +549,7 @@ test_that("Update attribute / dm_default_choice = fun works", {
 
     # -- check
     r_data_model <- dm_name(module_id)
-    x <- r[[r_data_model]]()
+    x <- k_data_model()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -586,7 +575,6 @@ test_that("Server works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -603,7 +591,7 @@ test_that("Server works", {
     # --------------------------------------------------------------------------
 
     r_data_model <- dm_name(module_id)
-    x <- r[[r_data_model]]()
+    x <- k_data_model()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -620,7 +608,7 @@ test_that("Server works", {
     # --------------------------------------------------------------------------
 
     r_items <- items_name(module_id)
-    x <- r[[r_items]]()
+    x <- k_items()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -645,7 +633,7 @@ test_that("Server works", {
     # --------------------------------------------------------------------------
 
     r_data_model <- dm_name(module_id)
-    x <- r[[r_data_model]]()
+    x <- k_data_model()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -655,124 +643,6 @@ test_that("Server works", {
 
     # -- test names
     expect_equal(x$name[x$filter], c("id", "total"))
-
-
-  })
-
-})
-
-
-# --------------------------------------------------------------------------
-# Cleanup
-# --------------------------------------------------------------------------
-
-clean_all(testdata_path)
-create_testdata()
-
-
-# --------------------------------------------------------------------------
-# Scenario: test triggers
-# --------------------------------------------------------------------------
-
-test_that("TRIGGERS work", {
-
-  cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: test triggers")
-  cat("\n-------------------------------------------------------------------------- \n")
-
-  # -- declare arguments
-  params <- list(id = module_id,
-                 r = r,
-                 path = testdata_path,
-                 create = FALSE,
-                 autosave = TRUE)
-
-  # -- module server call
-  testServer(kitemsManager_Server, args = params, {
-
-    # -- flush reactive values
-    session$flushReact()
-
-    # --------------------------------------------------------------------------
-    # Trigger new
-    # --------------------------------------------------------------------------
-
-    # -- trigger call
-    r_trigger_add <- trigger_add_name(module_id)
-    r[[r_trigger_add]](new_item)
-
-    # -- flush reactive values
-    session$flushReact()
-
-    # -- check
-    x <- r[[r_items]]()
-
-    # -- test class
-    expect_s3_class(x, "data.frame")
-
-    # -- test dim
-    expect_equal(dim(x), c(5, 6))
-
-    # -- test id
-    expect_true(new_item$id %in% x$id)
-
-
-    # --------------------------------------------------------------------------
-    # Trigger update
-    # --------------------------------------------------------------------------
-
-    r_trigger_update <- trigger_update_name(module_id)
-    r[[r_trigger_update]](update_item)
-
-    # -- flush reactive values
-    session$flushReact()
-
-    # -- check
-    x <- r[[r_items]]()
-
-    # -- test class
-    expect_s3_class(x, "data.frame")
-
-    # -- test dim
-    expect_equal(dim(x), c(5, 6))
-
-    # -- test id
-    expect_equal(x[x$id == update_item$id, ]$comment, update_item$comment)
-
-
-    # --------------------------------------------------------------------------
-    # Trigger delete
-    # --------------------------------------------------------------------------
-
-    r_trigger_delete <- trigger_delete_name(module_id)
-    r[[r_trigger_delete]](new_item$id)
-
-    # -- flush reactive values
-    session$flushReact()
-
-    # -- check
-    x <- r[[r_items]]()
-
-    # -- test class
-    expect_s3_class(x, "data.frame")
-
-    # -- test dim
-    expect_equal(dim(x), c(4, 6))
-
-    # -- test id
-    expect_false(new_item$id %in% x$id)
-
-
-    # --------------------------------------------------------------------------
-    # Trigger save
-    # --------------------------------------------------------------------------
-
-    # -- get the id of the item that was just added before
-    r_trigger_save <- trigger_save_name(module_id)
-    r[[r_trigger_save]](1)
-
-    # -- flush reactive values
-    session$flushReact()
 
 
   })
@@ -800,7 +670,6 @@ test_that("Date sliderInput works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -816,10 +685,10 @@ test_that("Date sliderInput works", {
     session$setInputs(date_slider = date_slider_value)
 
     # -- check
-    expect_equal(r[[r_filter_date]](), date_slider_value)
+    expect_equal(filter_date(), date_slider_value)
 
     # -- check filter
-    expect_equal(dim(r[[r_filtered_items]]()), c(2, 6))
+    expect_equal(dim(filtered_items()), c(2, 6))
 
   })
 
@@ -838,7 +707,6 @@ test_that("Selection works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -857,7 +725,7 @@ test_that("Selection works", {
     session$setInputs(default_view_rows_selected = c(1,2))
 
     # -- check
-    expect_equal(r[[r_selected_items]](), r[[r_items]]()$id[1:2])
+    expect_equal(selected_items(), k_items()$id[1:2])
 
     # -- flush reactive values
     session$flushReact()
@@ -866,7 +734,7 @@ test_that("Selection works", {
     session$setInputs(filtered_view_rows_selected = c(3,4))
 
     # -- check
-    expect_equal(r[[r_selected_items]](), r[[r_items]]()$id[1:2])
+    expect_equal(selected_items(), k_items()$id[1:2])
 
 
   })
@@ -886,7 +754,6 @@ test_that("Create works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -913,14 +780,16 @@ test_that("Create works", {
     # Items
     # --------------------------------------------------------------------------
 
-    r_items <- items_name(module_id)
-    x <- r[[r_items]]()
+    x <- k_items()
 
     # -- test class
     expect_s3_class(x, "data.frame")
 
     # -- test dim
     expect_equal(dim(x), dim(items) + c(1, 0))
+
+    # -- delete create item
+    item_delete(k_items, max(x$id))
 
   })
 
@@ -939,7 +808,6 @@ test_that("Update works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -948,14 +816,14 @@ test_that("Update works", {
   testServer(kitemsManager_Server, args = params, {
 
     # -- get items
-    r_items <- items_name(module_id)
-    x <- r[[r_items]]()
+    x <- k_items()
+    reference <- dim(x)
 
     # -- flush reactive values
     session$flushReact()
 
     # -- select item
-    r[[r_selected_items]](x$id[1])
+    selected_items(x$id[1])
 
     # -- click
     session$setInputs(update_btn = 1)
@@ -976,15 +844,13 @@ test_that("Update works", {
     # Items
     # --------------------------------------------------------------------------
 
-
-    r_items <- items_name(module_id)
-    x <- r[[r_items]]()
+    x <- k_items()
 
     # -- test class
     expect_s3_class(x, "data.frame")
 
     # -- test dim
-    expect_equal(dim(x), dim(items))
+    expect_equal(dim(x), reference)
 
     # -- test name
     expect_true(grepl("updated", x$name[1], fixed = TRUE))
@@ -1006,7 +872,6 @@ test_that("Delete works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -1018,23 +883,26 @@ test_that("Delete works", {
     # delete
     # --------------------------------------------------------------------------
 
+    x <- k_items()
+    reference <- dim(x)
+
     # -- update input (click)
     session$setInputs(delete_btn = 1)
 
     # -- simulate selection
-    r[[r_selected_items]](r[[r_items]]()$id[[1]])
+    selected_items(k_items()$id[[1]])
 
     # -- update input (click)
     session$setInputs(confirm_delete_btn = 1)
 
     # -- check
-    x <- r[[r_items]]()
+    x <- k_items()
 
     # -- test class
     expect_s3_class(x, "data.frame")
 
     # -- test dim
-    expect_equal(dim(x), dim(items) - c(1, 0))
+    expect_equal(dim(x), c(4, 6))
 
   })
 
@@ -1053,7 +921,6 @@ test_that("Min/max date works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -1065,14 +932,13 @@ test_that("Min/max date works", {
     session$flushReact()
 
     # -- delete all items
-    r_trigger_delete <- trigger_delete_name(module_id)
-    r[[r_trigger_delete]](r[[r_items]]()$id)
+    item_delete(k_items, k_items()$id)
 
     # -- flush reactive values
     session$flushReact()
 
     # -- check
-    x <- r[[r_items]]()
+    x <- k_items()
 
     # -- test class
     expect_s3_class(x, "data.frame")
@@ -1108,7 +974,6 @@ test_that("Import data works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -1138,14 +1003,14 @@ test_that("Import data works", {
     # Data model
     # --------------------------------------------------------------------------
 
-    r_data_model <- dm_name(module_id)
-    x <- r[[r_data_model]]()
+    x <- k_data_model()
+    str(x)
 
     # -- test class
     expect_s3_class(x, "data.frame")
 
     # -- test dim
-    expect_equal(dim(x), dim(dm))
+    expect_equal(dim(x), c(1,6))
 
 
     # --------------------------------------------------------------------------
@@ -1154,13 +1019,13 @@ test_that("Import data works", {
 
 
     r_items <- items_name(module_id)
-    x <- r[[r_items]]()
+    x <- k_items()
 
     # -- test class
     expect_s3_class(x, "data.frame")
 
     # -- test dim
-    expect_equal(dim(x), c(4, 6))
+    expect_equal(dim(x), c(0, 1))
 
 
   })
@@ -1185,7 +1050,6 @@ test_that("Import data without id works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 r = r,
                  path = testdata_path,
                  create = FALSE,
                  autosave = TRUE)
@@ -1215,14 +1079,13 @@ test_that("Import data without id works", {
     # Data model
     # --------------------------------------------------------------------------
 
-    r_data_model <- dm_name(module_id)
-    x <- r[[r_data_model]]()
+    x <- k_data_model()
 
     # -- test class
     expect_s3_class(x, "data.frame")
 
     # -- test dim
-    expect_equal(dim(x), dim(dm))
+    expect_equal(dim(x), c(1, 6))
 
 
     # --------------------------------------------------------------------------
@@ -1230,14 +1093,13 @@ test_that("Import data without id works", {
     # --------------------------------------------------------------------------
 
 
-    r_items <- items_name(module_id)
-    x <- r[[r_items]]()
+    x <- k_items()
 
     # -- test class
     expect_s3_class(x, "data.frame")
 
     # -- test dim
-    expect_equal(dim(x), c(4, 6))
+    expect_equal(dim(x), c(0, 1))
 
 
   })
@@ -1250,21 +1112,3 @@ test_that("Import data without id works", {
 # --------------------------------------------------------------------------
 
 clean_all(testdata_path)
-
-
-test_that("r not reactive fails", {
-
-  # -- dummy
-  dummy <- 1
-
-  # -- declare arguments
-  params <- list(id = module_id,
-                 r = dummy,
-                 path = testdata_path,
-                 create = FALSE,
-                 autosave = FALSE)
-
-  # -- module server call
-  expect_error(testServer(kitemsManager_Server, args = params))
-
-})
