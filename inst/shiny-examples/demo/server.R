@@ -25,12 +25,12 @@ shinyServer(
     # -------------------------------------
 
     # -- start module server: data
-    data <- kitems::kitemsManager_Server(id = "data", r = r, path = demo_dir,
+    data <- kitems::kitemsManager_Server(id = "data", path = demo_dir,
                                          create = TRUE, autosave = FALSE)
 
 
     # -- start module server: data_2
-    data_2 <- kitems::kitemsManager_Server(id = "data_2", r = r, path = demo_dir,
+    data_2 <- kitems::kitemsManager_Server(id = "data_2", path = demo_dir,
                                            create = TRUE, autosave = FALSE)
 
 

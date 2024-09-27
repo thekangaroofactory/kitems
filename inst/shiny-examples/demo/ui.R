@@ -51,7 +51,7 @@ body <- dashboardBody(
                        br(),
                        p("This instance is started with data.model = NULL.", br(), "As no data model is provided, the administration console will only
                          display the Create and Import data buttons."),
-                       tags$pre("# -- start module server: data \nkitems::kitemsManager_Server(\nid = \"data\", \nr = r, \npath = path_list, \nfile = \"my_data.csv\", \ndata.model = NULL, \ncreate = TRUE, \nautosave = FALSE)"),
+                       tags$pre("# -- start module server: data \nkitems::kitemsManager_Server(\nid = \"data\", \npath = path_list, \ncreate = TRUE, \nautosave = FALSE)"),
 
                        # -- data_2
                        tags$li("data_2"),

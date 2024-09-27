@@ -3,7 +3,6 @@
 #' Module server
 #'
 #' @param id the id to be used for the module server instance
-#' @param r the shared reactive value communication object
 #' @param path a path where data model and items will be stored
 #' @param create a logical whether the data file should be created or not if missing (default = TRUE)
 #' @param autosave a logical whether the item auto save should be activated or not (default = TRUE)
@@ -18,7 +17,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' kitemsManager_Server(id = "mydata", r = r, path = "path/to/my/data",
+#' kitemsManager_Server(id = "mydata", path = "path/to/my/data",
 #'                      create = TRUE, autosave = TRUE)
 #' }
 
@@ -27,12 +26,9 @@
 # Shiny module server logic
 # ------------------------------------------------------------------------------
 
-kitemsManager_Server <- function(id, r, path,
+kitemsManager_Server <- function(id, path,
                                  create = TRUE, autosave = TRUE) {
   moduleServer(id, function(input, output, session) {
-
-    # -- check reactive #240
-    stopifnot(class(r) == "reactivevalues")
 
     # -- Check path (to avoid connection problems if missing folder)
     if(!dir.exists(path))
@@ -66,17 +62,11 @@ kitemsManager_Server <- function(id, r, path,
     dm_url <- file.path(path, paste0(dm_name(id), ".rds"))
     items_url <- file.path(path, paste0(items_name(id), ".csv"))
 
-    # -- Build object names from module id (to access outside module)
-    r_filtered_items <- filtered_items_name(id)
-    r_selected_items <- selected_items_name(id)
-    r_clicked_column <- clicked_column_name(id)
-    r_filter_date <- filter_date_name(id)
-
     # -- Declare reactive objects (for external use)
-    r[[r_filtered_items]] <- reactiveVal(NULL)
-    r[[r_selected_items]] <- reactiveVal(NULL)
-    r[[r_clicked_column]] <- reactiveVal(NULL)
-    r[[r_filter_date]] <- reactiveVal(NULL)
+    filtered_items <- reactiveVal(NULL)
+    selected_items <- reactiveVal(NULL)
+    clicked_column <- reactiveVal(NULL)
+    filter_date <- reactiveVal(NULL)
 
 
     # --------------------------------------------------------------------------
@@ -211,7 +201,7 @@ kitemsManager_Server <- function(id, r, path,
     # --------------------------------------------------------------------------
 
     # -- Filtered item table view
-    r[[r_filtered_items]] <- reactive({
+    filtered_items <- reactive({
 
       cat(MODULE, "Updating filtered item view \n")
 
@@ -219,7 +209,7 @@ kitemsManager_Server <- function(id, r, path,
       items <- k_items()
 
       # -- Apply date filter
-      filter_date <- r[[r_filter_date]]()
+      filter_date <- filter_date()
       if(!is.null(filter_date))
         items <- items[items$date >= filter_date[1] & items$date <= filter_date[2], ]
 
@@ -271,7 +261,7 @@ kitemsManager_Server <- function(id, r, path,
                                         selection = list(mode = 'multiple', target = "row", selected = NULL))
 
     # -- Filtered view
-    output$filtered_view <- DT::renderDT(view_apply_masks(k_data_model(), r[[r_filtered_items]]()),
+    output$filtered_view <- DT::renderDT(view_apply_masks(k_data_model(), filtered_items()),
                                         rownames = FALSE,
                                         selection = list(mode = 'multiple', target = "row", selected = NULL))
 
@@ -283,7 +273,7 @@ kitemsManager_Server <- function(id, r, path,
     # -- Default view
     observeEvent(input$default_view_rows_selected, {
 
-      # -- Setting ignoreNULL to FALSE + check to allow unselect all (then r_selected_items will be NULL)
+      # -- Setting ignoreNULL to FALSE + check to allow unselect all (then selected_items will be NULL)
       if(is.null(input$default_view_rows_selected))
         ids <- NULL
 
@@ -298,7 +288,7 @@ kitemsManager_Server <- function(id, r, path,
       }
 
       # -- Store
-      r[[r_selected_items]](ids)
+      selected_items(ids)
 
     }, ignoreNULL = FALSE)
 
@@ -306,7 +296,7 @@ kitemsManager_Server <- function(id, r, path,
     # -- Filtered view
     observeEvent(input$filtered_view_rows_selected, {
 
-      # -- Setting ignoreNULL to FALSE + check to allow unselect all (then r_selected_items will be NULL)
+      # -- Setting ignoreNULL to FALSE + check to allow unselect all (then selected_items will be NULL)
       if(is.null(input$filtered_view_rows_selected))
         ids <- NULL
 
@@ -315,13 +305,13 @@ kitemsManager_Server <- function(id, r, path,
         cat(MODULE, "Selected rows (filtered view) =", input$filtered_view_rows_selected, "\n")
 
         # -- Get item ids from the default view
-        ids <- r[[r_filtered_items]]()[input$filtered_view_rows_selected, ]$id
+        ids <- filtered_items()[input$filtered_view_rows_selected, ]$id
         cat("-- ids =", as.character(ids), "\n")
 
       }
 
       # -- Store
-      r[[r_selected_items]](ids)
+      selected_items(ids)
 
     }, ignoreNULL = FALSE)
 
@@ -330,14 +320,14 @@ kitemsManager_Server <- function(id, r, path,
     observeEvent(input$filtered_view_cell_clicked$col, {
 
       # -- Get table col names (need to apply masks to get correct columns, hence sending only first row)
-      cols <- colnames(view_apply_masks(k_data_model(), head(r[[r_filtered_items]](), n = 1)))
+      cols <- colnames(view_apply_masks(k_data_model(), head(filtered_items(), n = 1)))
 
       # -- Get name of the clicked column
       col_clicked <- cols[input$filtered_view_cell_clicked$col + 1]
       cat(MODULE, "Clicked column (filtered view) =", col_clicked, "\n")
 
       # -- Store
-      r[[r_clicked_column]](col_clicked)
+      clicked_column(col_clicked)
 
     }, ignoreNULL = TRUE)
 
@@ -404,7 +394,7 @@ kitemsManager_Server <- function(id, r, path,
       cat("-- values =", input$date_slider, "\n")
 
       # -- store
-      r[[r_filter_date]](input$date_slider)
+      filter_date(input$date_slider)
 
     })
 
@@ -749,9 +739,9 @@ kitemsManager_Server <- function(id, r, path,
       # -- init parameters (id)
       # Implement template #220
       template <- TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == "id", ]
-      colClasses <- c(template$name = template$type)
-      default_val <- c(template$name = template$default.val)
-      default_fun <- c(template$name = template$default.fun)
+      colClasses <- setNames(template$type, template$name)
+      default_val <- setNames(template$default.val, template$name)
+      default_fun <- setNames(template$default.fun, template$name)
       filter <- if(template$filter) template$name else NULL
       skip <- if(template$skip) template$name else NULL
 
@@ -1069,7 +1059,7 @@ kitemsManager_Server <- function(id, r, path,
     output$update_btn_output <- renderUI(
 
       # -- check item selection + single row
-      if(is.null(r[[r_selected_items]]()) | length(r[[r_selected_items]]()) != 1)
+      if(is.null(selected_items()) | length(selected_items()) != 1)
         NULL
       else
         actionButton(inputId = ns("update_btn"),
@@ -1082,7 +1072,7 @@ kitemsManager_Server <- function(id, r, path,
       cat(MODULE, "[EVENT] Update item \n")
 
       # -- Get selected item
-      item <- k_items()[k_items()$id == r[[r_selected_items]](), ]
+      item <- k_items()[k_items()$id == selected_items(), ]
 
       # -- Dialog
       showModal(modalDialog(inputList(ns, item = item, update = TRUE, data.model = k_data_model()),
@@ -1106,7 +1096,7 @@ kitemsManager_Server <- function(id, r, path,
       input_values <- get_input_values(input, dm_colClasses(k_data_model()))
 
       # -- update id (to replace selected item)
-      input_values$id <- r[[r_selected_items]]()
+      input_values$id <- selected_items()
 
       # -- create item based on input list
       cat("--  Create item \n")
@@ -1127,7 +1117,7 @@ kitemsManager_Server <- function(id, r, path,
     output$delete_btn_output <- renderUI(
 
       # -- check item selection
-      if(is.null(r[[r_selected_items]]()))
+      if(is.null(selected_items()))
         NULL
       else
         actionButton(inputId = ns("delete_btn"),
@@ -1157,7 +1147,7 @@ kitemsManager_Server <- function(id, r, path,
       removeModal()
 
       # -- get selected items (ids) & delete
-      ids <- r[[r_selected_items]]()
+      ids <- selected_items()
       item_delete(k_items, ids, name = id)
 
     })
@@ -1171,7 +1161,11 @@ kitemsManager_Server <- function(id, r, path,
     list(id = id,
          url = items_url,
          items = k_items,
-         data_model = k_data_model)
+         data_model = k_data_model,
+         filtered_items = filtered_items,
+         selected_items = selected_items,
+         clicked_column = clicked_column,
+         filter_date <- filter_date)
 
   })
 }
