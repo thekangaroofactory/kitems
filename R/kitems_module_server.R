@@ -661,9 +661,13 @@ kitemsManager_Server <- function(id, path,
     # -- Observer button:
     observeEvent(input$dm_dz_delete_att, {
 
+      # -- check data model size (to display warning)
+      single_row <- nrow(k_data_model()) == 1
+
       # -- Open dialog for confirmation
       showModal(modalDialog(title = "Delete attribute",
-                            "Danger: deleting an attribute can't be undone! Do you confirm?",
+                            p("Danger: deleting an attribute can't be undone! Do you confirm?"),
+                            if(single_row) p("Note that the data model will be deleted since this is the last attribute."),
                             footer = tagList(
                               modalButton("Cancel"),
                               actionButton(ns("dm_dz_confirm_delete_att"), "Delete"))))})
@@ -680,17 +684,39 @@ kitemsManager_Server <- function(id, path,
       # -- clode modal
       removeModal()
 
-      # -- drop column! & store
+      # -- drop column!
       cat(MODULE, "Drop attribute from all items \n")
       items <- k_items()
       items[input$dm_dz_att_name] <- NULL
-      k_items(items)
 
-      # -- update data model & store
+      # -- update data model
       cat(MODULE, "Drop attribute from data model \n")
       dm <- k_data_model()
       dm <- dm[dm$name != input$dm_dz_att_name, ]
-      k_data_model(dm)
+
+
+      # -- check for empty data model & store
+      if(nrow(dm) == 0){
+        cat(MODULE, "Warning! Empty Data model, cleaning data model & items \n")
+        k_items(NULL)
+        k_data_model(NULL)
+
+        if(autosave){
+          cat(MODULE, "Deleting data model & item files \n")
+          unlink(dm_url)
+          unlink(items_url)
+
+          # -- notify
+          if(shiny::isRunning())
+            showNotification(paste(MODULE, "Empty data model deleted."), type = "message")}
+
+      } else {
+        k_items(items)
+        k_data_model(dm)
+
+        # -- notify
+        if(shiny::isRunning())
+          showNotification(paste(MODULE, "Attribute deleted."), type = "message")}
 
     })
 
