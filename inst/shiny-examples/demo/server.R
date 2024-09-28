@@ -32,6 +32,32 @@ shinyServer(
                                            create = TRUE, autosave = FALSE)
 
 
+    # --------------------------------------------------------------------------
+    # Nested module implementation
+    # --------------------------------------------------------------------------
+
+    # -- define module server
+    # Note: it should be in a different file, but that function would need to be
+    # exported from the package to work with the demo.
+    nested_Server <- function(id, demo_dir) {
+
+      moduleServer(id, function(input, output, session) {
+
+        # -- Note: this modules demonstrate how to implement kitems server
+        # as a nested module.
+
+        # -- start module server: data_3
+        # autosave = FALSE to keep demo data frozen
+        data_3 <- kitems::kitemsManager_Server(id = "data_3", path = demo_dir,
+                                               create = TRUE, autosave = FALSE)
+
+      })
+    }
+
+    # -- call shiny module (nested module implementation)
+    data_3 <- nested_Server(id = "wrapper", demo_dir)
+
+
     # -------------------------------------
     # Observe item lists
     # -------------------------------------
@@ -56,7 +82,7 @@ shinyServer(
     # -------------------------------------
 
     # -- build menu from list of ids
-    output$menu <- renderMenu(kitems::dynamic_sidebar(names = list("data", "data_2")))
+    output$menu <- renderMenu(kitems::dynamic_sidebar(names = list("data", "data_2", "data_3")))
 
 
   }

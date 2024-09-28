@@ -42,31 +42,35 @@ body <- dashboardBody(
               column(width = 8,
 
                      h1("Introduction"),
-                     p("This application demonstrates how to implement kitems module.", br(), "It includes two instances of the module:"),
+                     p("This application demonstrates how to implement kitems module.", br(), "It includes three instances of the module:"),
 
                      tags$ul(
 
                        # -- data
-                       tags$li("data"),
-                       br(),
-                       p("This instance has no corresponding files (data model or items) in the provided path.", br(),
-                       "As no data model is provided, the administration console will only display the Create and Import data buttons."),
-                       tags$pre("# -- start module server: \ndata <- kitems::kitemsManager_Server(id = \"data\", path = \"path/to/my/data\", \ncreate = TRUE, autosave = FALSE)"),
+                       tags$li("data",
+                               br(), br(),
+                               p("This instance has no corresponding files (data model or items) in the provided path.", br(),
+                                 "As no data model is provided, the administration console will only display the Create and Import data buttons."),
+                               tags$pre("# -- start module server: \ndata <- kitems::kitemsManager_Server(id = \"data\", path = \"path/to/my/data\", \ncreate = TRUE, autosave = FALSE)")),
 
                        # -- data_2
-                       tags$li("data_2"),
-                       br(),
-                       p("This instance is started with a data model (output of kitems::data_model() function)", br(),
-                         "Administration console shows data model, the raw table, and the default view.", br(),
-                         "Also a sample data is provided with the demo app, so it can be displayed.", br(), br(),
+                       tags$li("data_2",
+                               br(), br(),
+                               p("This instance is started with a data model (output of kitems::data_model() function)", br(),
+                                 "Administration console shows data model, the raw table, and the default view.", br(),
+                                 "Also a sample data is provided with the demo app, so it can be displayed.", br(), br(),
 
-                         box(title = "Autosave is set to FALSE",
-                             width = 6,
-                             solidHeader = TRUE,
-                             status = "info",
-                             "Create / update / delete won't be persistent (the save function is never called)"),
+                                 fluidRow(
+                                   box(title = "Autosave is set to FALSE",
+                                       width = 6,
+                                       solidHeader = TRUE,
+                                       status = "info",
+                                       "Create / update / delete won't be persistent (the save function is never called)")))),
 
-                         )))),
+                       # -- data_3
+                       tags$li("data_3",
+                               br(), br(),
+                               p("This instance has been implemented as a nested module (kitems server is called from a module called wrapper)"))))),
 
             # -- data_2
             fluidRow(
@@ -135,7 +139,16 @@ body <- dashboardBody(
             fluidRow(
               column(width = 12,
 
-                     kitems::admin_ui("data_2"))))
+                     kitems::admin_ui("data_2")))),
+
+    # -- Content tab
+    tabItem(tabName = "data_3",
+
+            # -- Admin
+            fluidRow(
+              column(width = 12,
+
+                     kitems::admin_ui("wrapper-data_3"))))
 
 
   ) # end tabItems
