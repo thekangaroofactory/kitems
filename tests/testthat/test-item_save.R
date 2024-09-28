@@ -3,10 +3,10 @@
 test_that("item_save works", {
 
   # -- function call
-  item_save(data = items, file = "my_data.csv", path = testdata_path)
+  item_save(data = items, file = items_url)
 
   # -- check file exists
-  expect_true(file.exists(file.path(testdata_path, "my_data.csv")))
+  expect_true(file.exists(items_url))
 
 })
 

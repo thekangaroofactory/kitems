@@ -3,7 +3,6 @@
 #' Module server
 #'
 #' @param id the id to be used for the module server instance
-#' @param r the shared reactive value communication object
 #' @param path a path where data model and items will be stored
 #' @param create a logical whether the data file should be created or not if missing (default = TRUE)
 #' @param autosave a logical whether the item auto save should be activated or not (default = TRUE)
@@ -14,11 +13,11 @@
 #'
 #' @details
 #'
-#' If autosave is FALSE, the save trigger should be used to make the data persistent
+#' If autosave is FALSE, the item_save function should be used to make the data persistent
 #'
 #' @examples
 #' \dontrun{
-#' kitemsManager_Server(id = "mydata", r = r, path = "path/to/my/data",
+#' kitemsManager_Server(id = "mydata", path = "path/to/my/data",
 #'                      create = TRUE, autosave = TRUE)
 #' }
 
@@ -27,12 +26,10 @@
 # Shiny module server logic
 # ------------------------------------------------------------------------------
 
-kitemsManager_Server <- function(id, r, path,
+kitemsManager_Server <- function(id, path,
                                  create = TRUE, autosave = TRUE) {
-  moduleServer(id, function(input, output, session) {
 
-    # -- check reactive #240
-    stopifnot(class(r) == "reactivevalues")
+  moduleServer(id, function(input, output, session) {
 
     # -- Check path (to avoid connection problems if missing folder)
     if(!dir.exists(path))
@@ -47,9 +44,6 @@ kitemsManager_Server <- function(id, r, path,
     MODULE <- paste0("[", id, "]")
     cat(MODULE, "Starting kitems module server... \n")
 
-    # -- Check if app is running
-    is_running <- shiny::isRunning()
-
     # -- Get namespace
     ns <- session$ns
 
@@ -58,25 +52,19 @@ kitemsManager_Server <- function(id, r, path,
     # Declare objects:
     # --------------------------------------------------------------------------
 
-    # -- Init data
-    data.model <- NULL
-    items <- NULL
+    # -- Init data (non persistent values to init the module)
+    init_dm <- NULL
+    init_items <- NULL
 
     # -- Build urls from module id
     dm_url <- file.path(path, paste0(dm_name(id), ".rds"))
     items_url <- file.path(path, paste0(items_name(id), ".csv"))
 
-    # -- Build object names from module id (to access outside module)
-    r_filtered_items <- filtered_items_name(id)
-    r_selected_items <- selected_items_name(id)
-    r_clicked_column <- clicked_column_name(id)
-    r_filter_date <- filter_date_name(id)
-
     # -- Declare reactive objects (for external use)
-    r[[r_filtered_items]] <- reactiveVal(NULL)
-    r[[r_selected_items]] <- reactiveVal(NULL)
-    r[[r_clicked_column]] <- reactiveVal(NULL)
-    r[[r_filter_date]] <- reactiveVal(NULL)
+    filtered_items <- reactiveVal(NULL)
+    selected_items <- reactiveVal(NULL)
+    clicked_column <- reactiveVal(NULL)
+    filter_date <- reactiveVal(NULL)
 
 
     # --------------------------------------------------------------------------
@@ -96,8 +84,8 @@ kitemsManager_Server <- function(id, r, path,
       if(file.exists(dm_url)){
 
         cat(MODULE, "Reading data model from file \n")
-        data.model <- readRDS(dm_url)
-        cat(MODULE, "output dim =", dim(data.model),"\n")
+        init_dm <- readRDS(dm_url)
+        cat(MODULE, "output dim =", dim(init_dm),"\n")
 
       } else {
 
@@ -114,9 +102,9 @@ kitemsManager_Server <- function(id, r, path,
       # ------------------------------------------------------------------------
 
       # -- Check for NULL data model (then no reason to try loading)
-      if(!is.null(data.model))
+      if(!is.null(init_dm))
 
-        items <- item_load(data.model = data.model,
+        init_items <- item_load(data.model = init_dm,
                            file = items_url,
                            path = path,
                            create = create)
@@ -130,24 +118,24 @@ kitemsManager_Server <- function(id, r, path,
       # --------------------------------------------------------------------------
 
       # -- Check for NULL data mode + data.frame
-      if(!is.null(data.model) & !is.null(items)){
+      if(!is.null(init_dm) & !is.null(init_items)){
 
         cat(MODULE, "Checking data model integrity \n")
-        result <- dm_check_integrity(data.model = data.model, items = items, template = TEMPLATE_DATA_MODEL)
+        result <- dm_check_integrity(data.model = init_dm, items = init_items, template = TEMPLATE_DATA_MODEL)
 
         # -- Check feedback (otherwise value is TRUE)
         if(is.data.frame(result)){
 
           # -- Update data model & save
-          data.model <- result
-          saveRDS(data.model, file = dm_url)
+          init_dm <- result
+          saveRDS(init_dm, file = dm_url)
           cat(MODULE, "Data model saved \n")
 
           # -- Reload data with updated data model
           cat(MODULE, "[Warning] Data model not synchronized with items data.frame! \n")
           cat(MODULE, "Reloading the item data with updated data model \n")
 
-          items <- item_load(data.model = data.model,
+          init_items <- item_load(data.model = init_dm,
                              file = items_url,
                              path = path,
                              create = create)
@@ -163,10 +151,12 @@ kitemsManager_Server <- function(id, r, path,
       # ------------------------------------------------------------------------
 
       # -- Store data model (either content of the RDS or the server function input)
-      k_data_model <- reactiveVal(data.model)
+      k_data_model <- reactiveVal(init_dm)
+      rm(init_dm)
 
       # -- Store items
-      k_items <- reactiveVal(items)
+      k_items <- reactiveVal(init_items)
+      rm(init_items)
 
       # Increment the progress bar, and update the detail text.
       incProgress(4/4, detail = "done")
@@ -211,7 +201,7 @@ kitemsManager_Server <- function(id, r, path,
     # --------------------------------------------------------------------------
 
     # -- Filtered item table view
-    r[[r_filtered_items]] <- reactive({
+    filtered_items <- reactive({
 
       cat(MODULE, "Updating filtered item view \n")
 
@@ -219,7 +209,7 @@ kitemsManager_Server <- function(id, r, path,
       items <- k_items()
 
       # -- Apply date filter
-      filter_date <- r[[r_filter_date]]()
+      filter_date <- filter_date()
       if(!is.null(filter_date))
         items <- items[items$date >= filter_date[1] & items$date <= filter_date[2], ]
 
@@ -233,34 +223,6 @@ kitemsManager_Server <- function(id, r, path,
       items
 
     })
-
-
-    # # -- Filtered item table view
-    # observeEvent({
-    #
-    #   # -- Multiple conditions!
-    #   r[[r_items]]()
-    #   r[[r_filter_date]]()
-    #
-    # }, {
-    #
-    #   cat(MODULE, "Updating filtered item view \n")
-    #
-    #   # -- Get items
-    #   items <- r[[r_items]]()
-    #
-    #   # -- Apply date filter
-    #   filter_date <- r[[r_filter_date]]()
-    #   if(!is.null(filter_date))
-    #     items <- items[items$date >= filter_date[1] & items$date <= filter_date[2], ]
-    #
-    #
-    #   cat(MODULE, "ouput dim =", dim(items), "\n")
-    #
-    #   # -- Store
-    #   r[[r_filtered_items]](items)
-    #
-    # }, ignoreInit = FALSE)
 
 
     # --------------------------------------------------------------------------
@@ -299,7 +261,7 @@ kitemsManager_Server <- function(id, r, path,
                                         selection = list(mode = 'multiple', target = "row", selected = NULL))
 
     # -- Filtered view
-    output$filtered_view <- DT::renderDT(view_apply_masks(k_data_model(), r[[r_filtered_items]]()),
+    output$filtered_view <- DT::renderDT(view_apply_masks(k_data_model(), filtered_items()),
                                         rownames = FALSE,
                                         selection = list(mode = 'multiple', target = "row", selected = NULL))
 
@@ -311,7 +273,7 @@ kitemsManager_Server <- function(id, r, path,
     # -- Default view
     observeEvent(input$default_view_rows_selected, {
 
-      # -- Setting ignoreNULL to FALSE + check to allow unselect all (then r_selected_items will be NULL)
+      # -- Setting ignoreNULL to FALSE + check to allow unselect all (then selected_items will be NULL)
       if(is.null(input$default_view_rows_selected))
         ids <- NULL
 
@@ -326,7 +288,7 @@ kitemsManager_Server <- function(id, r, path,
       }
 
       # -- Store
-      r[[r_selected_items]](ids)
+      selected_items(ids)
 
     }, ignoreNULL = FALSE)
 
@@ -334,7 +296,7 @@ kitemsManager_Server <- function(id, r, path,
     # -- Filtered view
     observeEvent(input$filtered_view_rows_selected, {
 
-      # -- Setting ignoreNULL to FALSE + check to allow unselect all (then r_selected_items will be NULL)
+      # -- Setting ignoreNULL to FALSE + check to allow unselect all (then selected_items will be NULL)
       if(is.null(input$filtered_view_rows_selected))
         ids <- NULL
 
@@ -343,13 +305,13 @@ kitemsManager_Server <- function(id, r, path,
         cat(MODULE, "Selected rows (filtered view) =", input$filtered_view_rows_selected, "\n")
 
         # -- Get item ids from the default view
-        ids <- r[[r_filtered_items]]()[input$filtered_view_rows_selected, ]$id
+        ids <- filtered_items()[input$filtered_view_rows_selected, ]$id
         cat("-- ids =", as.character(ids), "\n")
 
       }
 
       # -- Store
-      r[[r_selected_items]](ids)
+      selected_items(ids)
 
     }, ignoreNULL = FALSE)
 
@@ -358,20 +320,20 @@ kitemsManager_Server <- function(id, r, path,
     observeEvent(input$filtered_view_cell_clicked$col, {
 
       # -- Get table col names (need to apply masks to get correct columns, hence sending only first row)
-      cols <- colnames(view_apply_masks(k_data_model(), head(r[[r_filtered_items]](), n = 1)))
+      cols <- colnames(view_apply_masks(k_data_model(), head(filtered_items(), n = 1)))
 
       # -- Get name of the clicked column
       col_clicked <- cols[input$filtered_view_cell_clicked$col + 1]
       cat(MODULE, "Clicked column (filtered view) =", col_clicked, "\n")
 
       # -- Store
-      r[[r_clicked_column]](col_clicked)
+      clicked_column(col_clicked)
 
     }, ignoreNULL = TRUE)
 
 
     # --------------------------------------------------------------------------
-    # Declare outputs: Inputs
+    # Declare Inputs
     # --------------------------------------------------------------------------
 
     # -- date slider options
@@ -382,7 +344,7 @@ kitemsManager_Server <- function(id, r, path,
                                                          inline = TRUE))
 
 
-    # -- Declare output:
+    # -- date slider
     output$date_slider <- renderUI({
 
       # -- check data model
@@ -425,6 +387,10 @@ kitemsManager_Server <- function(id, r, path,
     })
 
 
+    # --------------------------------------------------------------------------
+    # Observe Inputs
+    # --------------------------------------------------------------------------
+
     # -- Observe: date_slider
     observeEvent(input$date_slider, {
 
@@ -432,7 +398,7 @@ kitemsManager_Server <- function(id, r, path,
       cat("-- values =", input$date_slider, "\n")
 
       # -- store
-      r[[r_filter_date]](input$date_slider)
+      filter_date(input$date_slider)
 
     })
 
@@ -615,12 +581,12 @@ kitemsManager_Server <- function(id, r, path,
 
         # -- Get data model
         cat(MODULE, "Extract data model from data \n")
-        data.model <- dm_check_integrity(data.model = NULL, items = items, template = TEMPLATE_DATA_MODEL)
+        init_dm <- dm_check_integrity(data.model = NULL, items = items, template = TEMPLATE_DATA_MODEL)
 
         # -- Display modal
         # adding options to renderDT #207
         showModal(modalDialog(p("Data model built from the data:"),
-                              DT::renderDT(data.model, rownames = FALSE, options = list(scrollX = TRUE)),
+                              DT::renderDT(init_dm, rownames = FALSE, options = list(scrollX = TRUE)),
                               title = "Import data",
                               size = "l",
                               footer = tagList(
@@ -636,14 +602,14 @@ kitemsManager_Server <- function(id, r, path,
           # -- Check items classes #216
           # Because dataset was read first, the current colclasses are 'guessed' and may not comply with the data model
           # ex: date class is forced in data model, but it may be char ("2024-02-07) or num (19760)
-          items <- item_check_integrity(items = items, data.model = data.model)
+          items <- item_check_integrity(items = items, data.model = init_dm)
 
           # -- Store items & data model
           k_items(items)
-          k_data_model(data.model)
+          k_data_model(init_dm)
 
           # -- notify
-          if(is_running)
+          if(shiny::isRunning())
             showNotification(paste(MODULE, "Data imported."), type = "message")
 
         })
@@ -777,11 +743,11 @@ kitemsManager_Server <- function(id, r, path,
       # -- init parameters (id)
       # Implement template #220
       template <- TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == "id", ]
-      colClasses <- c("id" = template$type)
-      default_val <- c("id" = template$default.val)
-      default_fun <- c("id" = template$default.fun)
-      filter <- if(template$filter) c("id") else NULL
-      skip <- if(template$skip) c("id") else NULL
+      colClasses <- setNames(template$type, template$name)
+      default_val <- setNames(template$default.val, template$name)
+      default_fun <- setNames(template$default.fun, template$name)
+      filter <- if(template$filter) template$name else NULL
+      skip <- if(template$skip) template$name else NULL
 
       # -- init data model & store
       cat(MODULE, "-- Building data model \n")
@@ -1097,7 +1063,7 @@ kitemsManager_Server <- function(id, r, path,
     output$update_btn_output <- renderUI(
 
       # -- check item selection + single row
-      if(is.null(r[[r_selected_items]]()) | length(r[[r_selected_items]]()) != 1)
+      if(is.null(selected_items()) | length(selected_items()) != 1)
         NULL
       else
         actionButton(inputId = ns("update_btn"),
@@ -1110,7 +1076,7 @@ kitemsManager_Server <- function(id, r, path,
       cat(MODULE, "[EVENT] Update item \n")
 
       # -- Get selected item
-      item <- k_items()[k_items()$id == r[[r_selected_items]](), ]
+      item <- k_items()[k_items()$id == selected_items(), ]
 
       # -- Dialog
       showModal(modalDialog(inputList(ns, item = item, update = TRUE, data.model = k_data_model()),
@@ -1134,7 +1100,7 @@ kitemsManager_Server <- function(id, r, path,
       input_values <- get_input_values(input, dm_colClasses(k_data_model()))
 
       # -- update id (to replace selected item)
-      input_values$id <- r[[r_selected_items]]()
+      input_values$id <- selected_items()
 
       # -- create item based on input list
       cat("--  Create item \n")
@@ -1155,7 +1121,7 @@ kitemsManager_Server <- function(id, r, path,
     output$delete_btn_output <- renderUI(
 
       # -- check item selection
-      if(is.null(r[[r_selected_items]]()))
+      if(is.null(selected_items()))
         NULL
       else
         actionButton(inputId = ns("delete_btn"),
@@ -1185,7 +1151,7 @@ kitemsManager_Server <- function(id, r, path,
       removeModal()
 
       # -- get selected items (ids) & delete
-      ids <- r[[r_selected_items]]()
+      ids <- selected_items()
       item_delete(k_items, ids, name = id)
 
     })
@@ -1199,7 +1165,11 @@ kitemsManager_Server <- function(id, r, path,
     list(id = id,
          url = items_url,
          items = k_items,
-         data_model = k_data_model)
+         data_model = k_data_model,
+         filtered_items = filtered_items,
+         selected_items = selected_items,
+         clicked_column = clicked_column,
+         filter_date <- filter_date)
 
   })
 }

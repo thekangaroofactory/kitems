@@ -2,16 +2,29 @@
 
 test_that("item_delete", {
 
-  # -- function call
-  x <- item_delete(items = items, id = item_id)
+  # -- declare arguments
+  params <- list(id = module_id,
+                 path = testdata_path,
+                 create = FALSE,
+                 autosave = FALSE)
 
-  # -- test class
-  expect_s3_class(x, "data.frame")
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
 
-  # -- test dim
-  expect_equal(dim(x), dim(items) - c(1, 0))
+    x <- reactiveVal(items)
 
-  # -- test missing id
-  expect_false(item_id %in% x$id)
+    # -- function call
+    item_delete(items = x, id = item_id)
+
+    # -- test class
+    expect_s3_class(x(), "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x()), dim(items) - c(1, 0))
+
+    # -- test missing id
+    expect_false(item_id %in% x()$id)
+
+  })
 
 })

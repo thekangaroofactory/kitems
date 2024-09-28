@@ -10,9 +10,6 @@ ns <- shiny::NS("id")
 # -- module id
 module_id <- "data"
 
-# -- declare communication object
-r <- reactiveValues()
-
 
 # --------------------------------------------------------------------------
 # Setup test environment
@@ -68,13 +65,11 @@ dm_no_date <- data_model(colClasses = colClasses_no_date)
 # ------------------------------------------------------------------------------
 
 # -- build base items
-items <- item_create(list(id = NA, date = NA, name = "Apple", quantity = 1, total = 12.5, isvalid = TRUE), dm)
-new_item <- item_create(list(id = NA, date = "2024-01-14", name = "Banana", quantity = 12, total = 106.3, isvalid = FALSE), dm)
-items <- item_add(items, new_item)
-new_item <- item_create(list(id = NA, date = "2024-01-16", name = "Mango", quantity = 3, total = 45.7, isvalid = TRUE), dm)
-items <- item_add(items, new_item)
-new_item <- item_create(list(id = NA, date = "2024-01-17", name = "Orange", quantity = 7, total = 17.5, isvalid = FALSE), dm)
-items <- item_add(items, new_item)
+item1 <- item_create(list(id = NA, date = NA, name = "Apple", quantity = 1, total = 12.5, isvalid = TRUE), dm)
+item2 <- item_create(list(id = NA, date = "2024-01-14", name = "Banana", quantity = 12, total = 106.3, isvalid = FALSE), dm)
+item3 <- item_create(list(id = NA, date = "2024-01-16", name = "Mango", quantity = 3, total = 45.7, isvalid = TRUE), dm)
+item4 <- item_create(list(id = NA, date = "2024-01-17", name = "Orange", quantity = 7, total = 17.5, isvalid = FALSE), dm)
+items <- rbind(item1, item2, item3, item4)
 
 # -- items with additional attribute
 items_extra_att <- items
@@ -122,13 +117,13 @@ date_slider_value <- c(as.POSIXct(as.Date("2024-01-15")), as.POSIXct(as.Date("20
 create_testdata <- function(){
 
   # -- create folder
-  dir.create(testdata_path)
+  dir.create(testdata_path, showWarnings = FALSE)
 
   # -- save data model
   saveRDS(dm, file = dm_url)
 
   # -- save items
-  item_save(items, file = items_url, path = testdata_path)
+  item_save(items, file = items_url)
 
 }
 
@@ -137,7 +132,7 @@ create_testdata <- function(){
 create_integrity_testdata <- function(){
 
   # -- create folder
-  dir.create(testdata_path)
+  dir.create(testdata_path, showWarnings = FALSE)
 
   # -- alter data model
   dm <- dm[-3, ]
@@ -146,7 +141,7 @@ create_integrity_testdata <- function(){
   saveRDS(dm, file = dm_url)
 
   # -- save items
-  item_save(items, file = items_url, path = testdata_path)
+  item_save(items, file = items_url)
 
 }
 
@@ -155,14 +150,14 @@ create_integrity_testdata <- function(){
 create_noid_data_to_import <- function(){
 
   # -- create folder
-  dir.create(testdata_path)
+  dir.create(testdata_path, showWarnings = FALSE)
 
   # -- save data model
-  saveRDS(dm, file = dm_url)
+  #saveRDS(dm, file = dm_url)
 
   # -- drop id column & save items
   items$id <- NULL
-  item_save(items, file = import_url, path = testdata_path)
+  item_save(items, file = items_url)
 
 }
 
@@ -171,10 +166,10 @@ create_noid_data_to_import <- function(){
 create_data_to_import <- function(){
 
   # -- create folder
-  dir.create(testdata_path)
+  dir.create(testdata_path, showWarnings = FALSE)
 
   # -- save items
-  item_save(items, file = import_url, path = testdata_path)
+  item_save(items, file = items_url)
 
 }
 

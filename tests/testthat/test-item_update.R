@@ -2,16 +2,30 @@
 
 test_that("item_update works", {
 
-  # -- function call
-  x <- item_update(items = items, item = update_item)
+  # -- declare arguments
+  params <- list(id = module_id,
+                 path = testdata_path,
+                 create = FALSE,
+                 autosave = FALSE)
 
-  # -- test class
-  expect_s3_class(x, "data.frame")
+  # -- module server call
+  testServer(kitemsManager_Server, args = params, {
 
-  # -- test dim
-  expect_equal(dim(x), dim(items))
+    # -- init
+    x <- reactiveVal(items)
 
-  # -- test updated name
-  expect_equal(x[x$id == update_item$id, ]$name, "Apple-update")
+    # -- function call
+    item_update(items = x, item = update_item)
+
+    # -- test class
+    expect_s3_class(x(), "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x()), dim(items))
+
+    # -- test updated name
+    expect_equal(x()[x()$id == update_item$id, ]$name, "Apple-update")
+
+  })
 
 })
