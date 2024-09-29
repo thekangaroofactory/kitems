@@ -12,8 +12,7 @@ OBJECT_CLASS <- c("numeric",
                   "character",
                   "factor",
                   "Date",
-                  "POSIXct",
-                  "POSIXlt")
+                  "POSIXct")
 
 # -- Define list of as functions
 CLASS_FUNCTIONS <- list("numeric" = "as.numeric",
@@ -22,8 +21,7 @@ CLASS_FUNCTIONS <- list("numeric" = "as.numeric",
                         "character" = "as.character",
                         "factor" = "as.factor",
                         "Date" = ".Date",
-                        "POSIXct" = "as.POSIXct",
-                        "POSIXlt" = "as.POSIXlt")
+                        "POSIXct" = "as.POSIXct")
 
 
 # --------------------------------------------------------------------------
@@ -37,8 +35,7 @@ DEFAULT_VALUES <- list("numeric" = c(NA, 0),
                        "character" = c(NA, ""),
                        "factor" = c(NA),
                        "Date" = c(NA),
-                       "POSIXct" = c(NA),
-                       "POSIXlt" = c(NA))
+                       "POSIXct" = c(NA))
 
 # -- Default functions
 DEFAULT_FUNCTIONS <- list("numeric" = c(NA),
@@ -47,8 +44,7 @@ DEFAULT_FUNCTIONS <- list("numeric" = c(NA),
                           "character" = c(NA),
                           "factor" = c(NA),
                           "Date" = c("Sys.Date"),
-                          "POSIXct" = c("Sys.Date", "Sys.time"),
-                          "POSIXlt" = c("Sys.Date", "Sys.time"))
+                          "POSIXct" = c("Sys.Date", "Sys.time"))
 
 
 # --------------------------------------------------------------------------

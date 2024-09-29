@@ -56,7 +56,9 @@ Supported types are:
 - factor
 - Date
 - POSIXct
-- POSIXlt
+
+Note: class POSIXlt is not supported as it stores datetime values into a
+list that is not recommended to store into a data.frame.
 
 Defaults (value and function) are used to setup a value if it’s not
 provided during the item creation process. For function, the reference

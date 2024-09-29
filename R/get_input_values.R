@@ -24,14 +24,14 @@ get_input_values <- function(input, colClasses){
   values <- lapply(names(colClasses), function(x) input[[x]])
   names(values) <- names(colClasses)
 
-  # -- case POSIXct & POSIXlt
+  # -- case POSIXct
   # Need to retrieve additional time & timezone inputs
-  if(any(colClasses %in% c("POSIXct", "POSIXlt"))){
+  if(any(colClasses == "POSIXct")){
 
     cat("[get_input_values] Need to retrieve additional time & timezone inputs \n")
 
     # -- get attributes
-    att_names <- names(colClasses)[colClasses %in% c("POSIXct", "POSIXlt")]
+    att_names <- names(colClasses)[colClasses == "POSIXct"]
 
     # -- helper function
     helper <- function(name){

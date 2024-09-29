@@ -54,8 +54,8 @@ inputList <- function(ns, item = NULL, update = FALSE, data.model){
         step = NA,
         width = NULL)
 
-    # -- date, POSIXct, POSIXlt
-    if(colClasses %in% c("Date", "POSIXct", "POSIXlt"))
+    # -- date, POSIXct
+    if(colClasses %in% c("Date", "POSIXct"))
       input <- dateInput(
         inputId = ns(names(colClasses)),
         label = names(colClasses),
@@ -71,8 +71,8 @@ inputList <- function(ns, item = NULL, update = FALSE, data.model){
         datesdisabled = NULL,
         daysofweekdisabled = NULL)
 
-    # -- POSIXct, POSIXlt (add time & timezone inputs)
-    if(colClasses %in% c("POSIXct", "POSIXlt")){
+    # -- POSIXct (add time & timezone inputs)
+    if(colClasses == "POSIXct"){
 
       # -- get timezone from value
       # Note: pick values matching with OlsonNames list
