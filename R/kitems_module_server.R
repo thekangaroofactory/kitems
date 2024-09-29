@@ -557,12 +557,12 @@ kitemsManager_Server <- function(id, path,
                               title = "Import data",
                               footer = NULL))
 
-                # -- Compute a vector of ids (should be fixed by #214)
+        # -- Compute a vector of ids (should be fixed by #214)
         cat(MODULE, "[WARNING] Dataset has no id column, creating one \n")
         fill <- ktools::seq_timestamp(n = n)
 
         # -- add attribute & reorder
-        items <- kitems::item_add_attribute(items, name = "id", type = "numeric", fill = fill)
+        items <- item_add_attribute(items, name = "id", type = "numeric", fill = fill)
         items <- items[c("id", colnames(items)[!colnames(items) %in% "id"])]
 
         # -- close modal

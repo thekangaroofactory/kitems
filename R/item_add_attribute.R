@@ -23,7 +23,7 @@
 item_add_attribute <- function(items, name, type, fill = NA){
 
   # -- Check dim
-  if(dim(items)[1] == 0){
+  if(nrow(items) == 0){
 
     # -- Get col names and add
     cols <- colnames(items)
@@ -35,13 +35,19 @@ item_add_attribute <- function(items, name, type, fill = NA){
 
   } else {
 
-    # -- coerce value
-    cat("Coerce value(s) to given class \n")
-    value <- eval(call(CLASS_FUNCTIONS[[type]], fill))
-    cat("Output:", class(value), value, "\n")
+    # -- check fill length
+    if(length(fill) != nrow(items) & length(fill) != 1){
+      cat("-- Warning! fill length does not match with nrow(items), setting fill = NA \n")
+      fill <- NA}
+
+    # -- check & coerce fill class
+    if(class(fill) != type){
+
+      fill <- eval(call(CLASS_FUNCTIONS[[type]], fill))
+      cat("-- Coerce value(s):", class(fill), fill, "\n")}
 
     # -- Add col
-    items[name] <- value
+    items[name] <- fill
 
   }
 
