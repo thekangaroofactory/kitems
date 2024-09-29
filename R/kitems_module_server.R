@@ -72,7 +72,7 @@ kitemsManager_Server <- function(id, path,
     # --------------------------------------------------------------------------
 
     # -- Notify progress
-    withProgress(message = paste("Starting", MODULE, "item manager:"), value = 0, {
+    withProgress(message = MODULE, value = 0, {
 
       # ------------------------------------------------------------------------
       # Read data model:
@@ -94,7 +94,7 @@ kitemsManager_Server <- function(id, path,
         }
 
       # Increment the progress bar, and update the detail text.
-      incProgress(1/4, detail = "data model")
+      incProgress(1/4, detail = "Read data model")
 
 
       # ------------------------------------------------------------------------
@@ -110,14 +110,14 @@ kitemsManager_Server <- function(id, path,
                            create = create)
 
       # Increment the progress bar, and update the detail text.
-      incProgress(2/4, detail = "items")
+      incProgress(2/4, detail = "Read items")
 
 
-      # --------------------------------------------------------------------------
+      # ------------------------------------------------------------------------
       # Check data model integrity:
-      # --------------------------------------------------------------------------
+      # ------------------------------------------------------------------------
 
-      # -- Check for NULL data mode + data.frame
+      # -- Check for NULL data model + data.frame
       if(!is.null(init_dm) & !is.null(init_items)){
 
         cat(MODULE, "Checking data model integrity \n")
@@ -142,6 +142,18 @@ kitemsManager_Server <- function(id, path,
 
         }}
 
+
+      # ------------------------------------------------------------------------
+      # Check items integrity:
+      # ------------------------------------------------------------------------
+
+      # -- Check classes vs data.model
+      if(!is.null(init_dm) & !is.null(init_items)){
+
+        cat(MODULE, "Checking items classes integrity \n")
+        init_items <- item_check_integrity(items = init_items,
+                                           data.model = init_dm)}
+
       # Increment the progress bar, and update the detail text.
       incProgress(3/4, detail = "Integrity checked")
 
@@ -159,7 +171,7 @@ kitemsManager_Server <- function(id, path,
       rm(init_items)
 
       # Increment the progress bar, and update the detail text.
-      incProgress(4/4, detail = "done")
+      incProgress(4/4, detail = "Load data done")
 
     }) #end withProgress
 

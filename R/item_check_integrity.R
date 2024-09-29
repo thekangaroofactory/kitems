@@ -35,6 +35,11 @@ item_check_integrity <- function(items, data.model){
   # -- columns to fix
   cols <- names(items_classes[items_classes != colClasses])
 
+  # -- check: return input if nothing to do
+  if(length(cols) == 0){
+    cat("-- success, nothing to do \n")
+    return(items)}
+
   # -- helper function
   helper <- function(att_name){
 
