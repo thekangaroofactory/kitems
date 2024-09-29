@@ -22,11 +22,20 @@ dm_filter_set <- function(data.model, filter){
   # -- test filter
   if(!is.null(filter)){
 
-    # -- Reset filters
-    data.model$filter <- FALSE
+    # -- current filters
+    current_filter <- data.model[data.model$filter, ]$name
 
-    # -- Reset filters
-    data.model[match(filter, data.model$name), ]$filter <- TRUE
+    # -- attributes to filter
+    att_set <- filter[!filter %in% current_filter]
+    if(length(att_set) > 0){
+      cat("-- filter to set =", att_set, "\n")
+      data.model[data.model$name %in% att_set, ]$filter <- TRUE}
+
+    # -- attributes to un-filter
+    att_unset <- current_filter[!current_filter %in% filter]
+    if(length(att_unset) > 0){
+      cat("-- filter to unset =", att_unset, "\n")
+      data.model[data.model$name %in% att_unset, ]$filter <- FALSE}
 
   }
 

@@ -1042,8 +1042,11 @@ kitemsManager_Server <- function(id, path,
     # observe filter input
     observeEvent(input$adm_filter_col, {
 
-      cat("[BTN] Filter columns:", input$adm_filter_col, "\n")
+      # -- check to avoid useless updates
       dm <- k_data_model()
+      req(!setequal(input$adm_filter_col,dm[dm$filter, ]$name))
+
+      cat(MODULE, "Set filtered attributes:", input$adm_filter_col, "\n")
 
       # -- Check NULL data model
       if(!is.null(dm)){
