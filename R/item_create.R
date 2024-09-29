@@ -23,35 +23,44 @@ item_create <- function(values, data.model){
   default.fun <- dm_default_fun(data.model)
 
   # -- helper function (takes single values)
-  helper <- function(key, value, class, default.val, default.fun){
+  helper <- function(key, value, colClass, default.val, default.fun){
 
-    # -- security check: NULL will cause next test to fail
+    # -- security check:
+    # NULL will cause next test to fail
     if(is.null(value))
       value <- NA
 
-    # -- coerce value
+    # -- summary for debug
+    cat("---------------- \n")
     cat("Helper function: \n")
     cat("  - key =", key, "\n")
     cat("  - value =", value, "\n")
-    cat("  - class =", class, "\n")
+    cat("  - class =", colClass, "\n")
     cat("  - default.val =", default.val, "\n")
     cat("  - default.fun =", default.fun, "\n")
 
-    # -- test: isTruthy(FALSE) >> FALSE so need to skip for logicals // but include NA (is.logical(NA) >> TRUE)
+    # -- test: isTruthy(FALSE) >> FALSE
+    # so need to skip for logicals // but include NA (is.logical(NA) >> TRUE)
     if(!is.logical(value) | is.na(value))
 
       if(!shiny::isTruthy(value)){
 
-        cat("Input not Truthy / Setting up default value \n")
+        cat("- Input not Truthy / Setting up default value \n")
         value <- dm_get_default(data.model, key)
 
       } else
-        cat("Input is Truthy, nothing to do \n")
+        cat("- Input is Truthy, nothing to do \n")
 
-    # -- coerce value
-    cat("Coerce value to given class \n")
-    value <- eval(call(CLASS_FUNCTIONS[[class]], value))
-    cat("Output:", class(value), value, "\n")
+    # -- test: match with target class
+    # note: value might have several classes (case POSIX*)
+    if(!colClass %in% class(value)){
+
+    cat("- Warning! class", class(value), "does not fit with", colClass, "/ Coerce value to target class \n")
+    value <- eval(call(CLASS_FUNCTIONS[[colClass]], value))
+    cat("  >> output: class =", class(value), "/ value =", value, "\n")
+
+    } else
+      cat("- Input has correct class, nothing to do \n")
 
     # -- return
     c(key = value)
@@ -62,7 +71,7 @@ item_create <- function(values, data.model){
   # -- apply helper values & rename output
   item <- lapply(names(values), function(x) helper(key = x,
                                                    value = values[[x]],
-                                                   class = colClasses[[x]],
+                                                   colClass = colClasses[[x]],
                                                    default.val = if(x %in% names(default.val)) default.val[[x]] else NULL,
                                                    default.fun = if(x %in% names(default.fun)) default.fun[[x]] else NULL))
 
