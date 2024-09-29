@@ -54,11 +54,11 @@ inputList <- function(ns, item = NULL, update = FALSE, data.model){
         step = NA,
         width = NULL)
 
-    # -- date, POSIXct
+    # -- date, POSIXct, POSIXlt
     if(colClasses %in% c("Date", "POSIXct", "POSIXlt"))
       input <- dateInput(
         inputId = ns(names(colClasses)),
-        label = "Date",
+        label = names(colClasses),
         value = value,
         min = NULL,
         max = NULL,
@@ -70,6 +70,34 @@ inputList <- function(ns, item = NULL, update = FALSE, data.model){
         autoclose = TRUE,
         datesdisabled = NULL,
         daysofweekdisabled = NULL)
+
+    # -- POSIXct, POSIXlt (add time & timezone inputs)
+    if(colClasses %in% c("POSIXct", "POSIXlt")){
+
+      # -- get timezone from value
+      # Note: pick values matching with OlsonNames list
+      # set default to Sys.timezone otherwise it will pick first choice
+      tz_value <- attr(as.POSIXlt(value),"tzone")
+      tz_value <- tz_value[tz_value %in% OlsonNames()]
+      if(length(tz_value > 1))
+        tz_value <- head(tz_value, 1)
+      if(length(tz_value == 0))
+        tz_value <- Sys.timezone()
+
+      # -- concatenate with date input
+      input <- wellPanel(input,
+
+                         # -- time (need to extract time from value)
+                         timeInput(inputId = ns(paste0(names(colClasses), "_time")),
+                                   label = paste(names(colClasses), "time"),
+                                   value = strftime(value, format="%H:%M:%S")),
+
+                         # -- timezone (need to extract tz from value)
+                         selectizeInput(inputId = ns(paste0(names(colClasses), "_tz")),
+                                        label = paste(names(colClasses), "timezone"),
+                                        choices = OlsonNames(),
+                                        selected = tz_value))}
+
 
     # -- logical
     if(colClasses == "logical"){

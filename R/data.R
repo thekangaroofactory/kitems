@@ -47,8 +47,8 @@ DEFAULT_FUNCTIONS <- list("numeric" = c(NA),
                           "character" = c(NA),
                           "factor" = c(NA),
                           "Date" = c("Sys.Date"),
-                          "POSIXct" = c("Sys.Date"),
-                          "POSIXlt" = c("Sys.Date"))
+                          "POSIXct" = c("Sys.Date", "Sys.time"),
+                          "POSIXlt" = c("Sys.Date", "Sys.time"))
 
 
 # --------------------------------------------------------------------------
