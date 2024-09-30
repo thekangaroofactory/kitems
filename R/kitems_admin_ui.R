@@ -18,7 +18,7 @@ admin_ui <- function(id){
   # -- Manage nested module(s)
   id_chain <- unlist(strsplit(id, split = "-"))
   name <- if(length(id_chain) > 1)
-    paste(tail(id_chain, 1), "(as nested module of", head(id_chain, -1), ")")
+    paste(utils::tail(id_chain, 1), "(as nested module of", utils::head(id_chain, -1), ")")
   else id
 
   # -- Define UI & return

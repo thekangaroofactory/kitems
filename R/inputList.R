@@ -80,7 +80,7 @@ inputList <- function(ns, item = NULL, update = FALSE, data.model){
       tz_value <- attr(as.POSIXlt(value),"tzone")
       tz_value <- tz_value[tz_value %in% OlsonNames()]
       if(length(tz_value > 1))
-        tz_value <- head(tz_value, 1)
+        tz_value <- utils::head(tz_value, 1)
       if(length(tz_value == 0))
         tz_value <- Sys.timezone()
 
