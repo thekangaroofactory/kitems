@@ -109,15 +109,8 @@ body <- dashboardBody(
 
                      h3("Items table"),
 
-                     p("Two views are delivered: standard and filtered."),
-                     tags$pre("# -- Standard view: \nitems_view_DT(id) \n\n# -- Filtered view: \nitems_filtered_view_DT(id)"),
-
-                     box(title = "Note",
-                         width = 6,
-                         solidHeader = TRUE,
-                         status = "info",
-                         "It is assumed that only one item table view will be used at a time \n",
-                         "This is because buttons fires actions on the last selected items - i.e. no matter in which table."),
+                     p("A filtered item view is available."),
+                     tags$pre("# -- Filtered view: \nitems_filtered_view_DT(id)"),
 
                      fluidRow(column(width = 12,
                                      wellPanel(
