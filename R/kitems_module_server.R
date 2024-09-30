@@ -78,18 +78,20 @@ kitemsManager_Server <- function(id, path,
       # Read data model:
       # ------------------------------------------------------------------------
 
-      cat(MODULE, "Checking if data model file exists:", dm_url, "\n")
+      cat(MODULE, "Checking if data model file exists:\n")
+      cat("-- path =", dirname(dm_url), "\n")
+      cat("-- file =", basename(dm_url), "\n")
 
       # -- Check url
       if(file.exists(dm_url)){
 
         cat(MODULE, "Reading data model from file \n")
         init_dm <- readRDS(dm_url)
-        cat(MODULE, "output dim =", dim(init_dm),"\n")
+        cat("-- output dim =", dim(init_dm),"\n")
 
       } else {
 
-        cat(MODULE, "No data model file found. \n")
+        cat(">> No data model file found. \n")
 
         }
 
@@ -140,7 +142,7 @@ kitemsManager_Server <- function(id, path,
                              path = path,
                              create = create)
 
-        }}
+        } else cat("-- success, nothing to do \n")}
 
 
       # ------------------------------------------------------------------------
@@ -229,7 +231,7 @@ kitemsManager_Server <- function(id, path,
       if(!is.null(filter_date))
         items <- items[order(items$date, decreasing = TRUE), ]
 
-      cat(MODULE, "ouput dim =", dim(items), "\n")
+      cat("-- ouput dim =", dim(items), "\n")
 
       # -- Return
       items
