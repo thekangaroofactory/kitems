@@ -247,7 +247,7 @@ kitemsManager_Server <- function(id, path,
                                           options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
                                           selection = list(mode = 'single', target = "row", selected = NULL))
 
-    # -- Masked view for admin (reuse of r_view_items)
+    # -- Masked view for admin
     output$view_item_table <- DT::renderDT(view_apply_masks(k_data_model(), k_items()),
                                            rownames = FALSE,
                                            selection = list(mode = 'single', target = "row", selected = NULL))
@@ -267,11 +267,6 @@ kitemsManager_Server <- function(id, path,
     # Declare outputs: Data tables
     # --------------------------------------------------------------------------
 
-    # -- Default view (reuse of r_view_items, includes dm masks)
-    output$default_view <- DT::renderDT(view_apply_masks(k_data_model(), k_items()),
-                                        rownames = FALSE,
-                                        selection = list(mode = 'multiple', target = "row", selected = NULL))
-
     # -- Filtered view
     output$filtered_view <- DT::renderDT(view_apply_masks(k_data_model(), filtered_items()),
                                         rownames = FALSE,
@@ -281,29 +276,6 @@ kitemsManager_Server <- function(id, path,
     # --------------------------------------------------------------------------
     # Managing in table selection
     # --------------------------------------------------------------------------
-
-    # -- Default view
-    observeEvent(input$default_view_rows_selected, {
-
-      # -- Setting ignoreNULL to FALSE + check to allow unselect all (then selected_items will be NULL)
-      if(is.null(input$default_view_rows_selected))
-        ids <- NULL
-
-      else {
-
-        cat(MODULE, "Selected rows (default view) =", input$default_view_rows_selected, "\n")
-
-        # -- Get item ids from the default view
-        ids <- k_items()[input$default_view_rows_selected, ]$id
-        cat("-- ids =", as.character(ids), "\n")
-
-      }
-
-      # -- Store
-      selected_items(ids)
-
-    }, ignoreNULL = FALSE)
-
 
     # -- Filtered view
     observeEvent(input$filtered_view_rows_selected, {
@@ -332,7 +304,7 @@ kitemsManager_Server <- function(id, path,
     observeEvent(input$filtered_view_cell_clicked$col, {
 
       # -- Get table col names (need to apply masks to get correct columns, hence sending only first row)
-      cols <- colnames(view_apply_masks(k_data_model(), head(filtered_items(), n = 1)))
+      cols <- colnames(view_apply_masks(k_data_model(), utils::head(filtered_items(), n = 1)))
 
       # -- Get name of the clicked column
       col_clicked <- cols[input$filtered_view_cell_clicked$col + 1]
@@ -781,9 +753,9 @@ kitemsManager_Server <- function(id, path,
       # -- init parameters (id)
       # Implement template #220
       template <- TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == "id", ]
-      colClasses <- setNames(template$type, template$name)
-      default_val <- setNames(template$default.val, template$name)
-      default_fun <- setNames(template$default.fun, template$name)
+      colClasses <- stats::setNames(template$type, template$name)
+      default_val <- stats::setNames(template$default.val, template$name)
+      default_fun <- stats::setNames(template$default.fun, template$name)
       filter <- if(template$filter) template$name else NULL
       skip <- if(template$skip) template$name else NULL
 
