@@ -4,8 +4,9 @@
 #'
 #' @param data.model a data.frame containing the data model
 #' @param name a character string of the attribute name
-#' @param default.val the new default value (default = NULL)
-#' @param default.fun a character string, the new default function name (default = NULL)
+#' @param default.val a character string, the new default value
+#' @param default.fun a character string, the new default function name
+#' @param default.arg an optional named vector of arguments, to pass along with the default function.
 #' @param skip a logical to set the skip value (default = FALSE)
 #'
 #' @return the updated data model
@@ -19,34 +20,36 @@
 #'
 #' Note that filter should be updated using dm_filter_set() function
 #'
+#' @seealso [data_model()]
+#'
 #' @examples
 #' \dontrun{
 #' #Use of vector to update several attributes:
 #' dm_update_attribute(data.model = dm,
 #'                     name = c("name","total"),
 #'                     default.val = c("test", 2),
-#'                     default.fun = NA,
+#'                     default.fun = NULL,
+#'                     default.arg = NULL,
 #'                     skip = TRUE)
 #' }
 
 
-dm_update_attribute <- function(data.model, name, default.val = NULL, default.fun = NULL, skip = NULL){
-
-  # -- make sure default.val & fun are mutual exclusive #229
-  if(!is.null(default.fun))
-    default.val <- NA
-  else
-    if(!is.null(default.val))
-      default.fun <- NA
+dm_update_attribute <- function(data.model, name, default.val = NULL, default.fun = NULL, default.arg = NULL, skip = NULL){
 
   # -- update row
   # removed filter: #225
   # adding tests to update only if not NULL #226
-  if(!is.null(default.val))
+  if(!is.null(default.val)){
     data.model[match(name, data.model$name), ]$default.val <- default.val
+    data.model[match(name, data.model$name), ]$default.fun <- NA
+    data.model[match(name, data.model$name), ]$default.arg <- NA}
 
-  if(!is.null(default.fun))
+  if(!is.null(default.fun)){
     data.model[match(name, data.model$name), ]$default.fun <- default.fun
+    data.model[match(name, data.model$name), ]$default.val <- NA}
+
+  if(!is.null(default.arg) & !is.null(default.fun))
+    data.model[match(name, data.model$name), ]$default.arg <- default.arg
 
   if(!is.null(skip))
     data.model[match(name, data.model$name), ]$skip <- skip

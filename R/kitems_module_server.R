@@ -798,21 +798,25 @@ kitemsManager_Server <- function(id, path,
       # -- test default choice
       if(input$dm_default_choice == "none"){
 
-        default_val <- NA
-        default_fun <- NA
+        default_val <- NULL
+        default_fun <- NULL
 
       } else {
 
         if(input$dm_default_choice == "val"){
 
-          default_val <- input$dm_att_default_detail
-          default_fun <- NA
+          default_val <- stats::setNames(input$dm_att_default_detail, input$dm_att_name)
+          default_fun <- NULL
 
         } else {
 
-          default_val <- NA
-          default_fun <- input$dm_att_default_detail}}
+          default_val <- NULL
+          default_fun <- stats::setNames(input$dm_att_default_detail, input$dm_att_name)}}
 
+      # -- skip
+      skip <- if(input$dm_att_skip)
+        input$dm_att_name
+      else NULL
 
       # Add attribute to the data model & store
       dm <- k_data_model()
@@ -821,8 +825,9 @@ kitemsManager_Server <- function(id, path,
                              type = input$dm_att_type,
                              default.val = default_val,
                              default.fun = default_fun,
-                             skip = input$dm_att_skip,
-                             filter = FALSE)
+                             default.arg = NULL,
+                             skip = skip,
+                             filter = NULL)
 
       # -- store
       k_data_model(dm)
@@ -931,6 +936,7 @@ kitemsManager_Server <- function(id, path,
                                 name = dm[row, ]$name,
                                 default.val = default_val,
                                 default.fun = default_fun,
+                                default.arg = NULL,
                                 skip = skip)
 
       # -- store

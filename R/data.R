@@ -48,6 +48,29 @@ DEFAULT_FUNCTIONS <- list("numeric" = c(NA),
 
 
 # --------------------------------------------------------------------------
+# Declare data model structure:
+# --------------------------------------------------------------------------
+
+# -- colClasses
+DATA_MODEL_COLCLASSES <- list(name = "character",
+                              type = "character",
+                              default.val = "character",
+                              default.fun = "character",
+                              default.arg = "character",
+                              filter = "logical",
+                              skip = "logical")
+
+# -- default values
+DATA_MODEL_DEFAULTS <- list(name = NA,
+                            type = NA,
+                            default.val = NA,
+                            default.fun = NA,
+                            default.arg = NA,
+                            filter = FALSE,
+                            skip = FALSE)
+
+
+# --------------------------------------------------------------------------
 # Declare templates:
 # --------------------------------------------------------------------------
 
@@ -73,6 +96,12 @@ TEMPLATE_DATA_MODEL <- data.frame(name = c("date",
                                   default.fun = c("Sys.Date",
                                                   rep(NA, 7),
                                                   "ktools::getTimestamp", rep(NA, 5),
+                                                  rep(NA, 2)),
+
+                                  # -- added #63
+                                  default.arg = c(NA,
+                                                  rep(NA, 7),
+                                                  rep(NA, 6),
                                                   rep(NA, 2)),
 
                                   # -- added #220
