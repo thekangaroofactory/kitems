@@ -33,7 +33,7 @@ test_that("Server works", {
 
     # -- test class & dim
     expect_s3_class(x, "data.frame")
-    expect_equal(dim(x), c(6,6))
+    expect_equal(dim(x), c(6, length(DATA_MODEL_COLCLASSES)))
 
 
     # --------------------------------------------------------------------------

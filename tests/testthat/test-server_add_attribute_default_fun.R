@@ -31,6 +31,7 @@ test_that("Add attribute / dm_default_choice = fun works", {
     session$setInputs(dm_att_type = "Date")
     session$setInputs(dm_default_choice = "fun")
     session$setInputs(dm_att_default_detail = "Sys.Date")
+    session$setInputs(dm_att_skip = FALSE)
 
     # -- click
     session$setInputs(add_att = 1)

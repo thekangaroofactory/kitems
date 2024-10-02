@@ -30,6 +30,7 @@ test_that("Add attribute / dm_default_choice = none works", {
     session$setInputs(dm_att_name = "my_att")
     session$setInputs(dm_att_type = "character")
     session$setInputs(dm_default_choice = "none")
+    session$setInputs(dm_att_skip = FALSE)
 
     # -- click
     session$setInputs(add_att = 1)

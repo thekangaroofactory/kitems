@@ -8,6 +8,7 @@ data_model(
   colClasses,
   default.val = NULL,
   default.fun = NULL,
+  default.arg = NULL,
   filter = NULL,
   skip = NULL
 )
@@ -18,6 +19,8 @@ data_model(
 \item{default.val}{an optional named vector of values, defining the default values.}
 
 \item{default.fun}{an optional named vector of functions, defining the default functions to be used to generate default values.}
+
+\item{default.arg}{an optional named vector of arguments, to pass along with the default function.}
 
 \item{filter}{an optional character vector, indicating which attribute names should be filtered from the table view.}
 
@@ -33,14 +36,22 @@ Build data model
 colClasses will be used to create the data.frame: names will define the attributes of the data model,
 and values will define the class (type) of the attributes.
 
-All other parameters are optional. When provided, they will be used matching names defined in colClasses, so:
+All default.* parameters are optional. When provided, they will be used to match with names defined in colClasses:
 \itemize{
-\item order in those vectors doesn't matter,
-\item no need to set values for all attributes (see examples),
-\item names in those vectors not matching with colClasses names will be ignored.
+\item order in those vectors doesn't matter
+\item there is no need to set values for all attributes (see examples)
+\item names in vectors not matching with colClasses names will be ignored
+}
+
+default.fun and default.val are mutual exclusive, with priority on default.fun (default.val will be forced to NA)
+default.arg requires default.fun not to be NULL (will be forced to NA otherwise)
+
+filter and skip directly contains the names of the attributes to set to TRUE
+
 If not provided, defaults will be applied:
-\item NA for default.val and default.fun,
-\item FALSE for filter and skip.
+\itemize{
+\item NA for default.val, default.fun and default.arg
+\item FALSE for filter and skip
 }
 }
 \examples{
@@ -52,6 +63,10 @@ default.val <- c("total" = 2, "name" = "test")
 colClasses <- c("id" = "numeric", "name" = "character", "total" = "numeric")
 default.val <- c("name" = "test", "total" = 2)
 
-data_model(colClasses, default.val, default.fun = NULL)
+# filter and skip
+filter <- "id"
+skip <- c("id", "date") for example
+
+data_model(colClasses, default.val, filter = filter, skip = skip)
 
 }

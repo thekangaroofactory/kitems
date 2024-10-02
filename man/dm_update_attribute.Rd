@@ -9,6 +9,7 @@ dm_update_attribute(
   name,
   default.val = NULL,
   default.fun = NULL,
+  default.arg = NULL,
   skip = NULL
 )
 }
@@ -17,9 +18,11 @@ dm_update_attribute(
 
 \item{name}{a character string of the attribute name}
 
-\item{default.val}{the new default value (default = NULL)}
+\item{default.val}{a character string, the new default value}
 
-\item{default.fun}{a character string, the new default function name (default = NULL)}
+\item{default.fun}{a character string, the new default function name}
+
+\item{default.arg}{an optional named vector of arguments, to pass along with the default function.}
 
 \item{skip}{a logical to set the skip value (default = FALSE)}
 }
@@ -43,7 +46,11 @@ Note that filter should be updated using dm_filter_set() function
 dm_update_attribute(data.model = dm,
                     name = c("name","total"),
                     default.val = c("test", 2),
-                    default.fun = NA,
+                    default.fun = NULL,
+                    default.arg = NULL,
                     skip = TRUE)
 }
+}
+\seealso{
+\code{\link[=data_model]{data_model()}}
 }

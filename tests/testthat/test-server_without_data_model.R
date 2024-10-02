@@ -41,7 +41,7 @@ test_that("launch server without data model", {
 
     # -- test class & dim
     expect_s3_class(x, "data.frame")
-    expect_equal(dim(x), c(1, 6))
+    expect_equal(dim(x), c(1, length(DATA_MODEL_COLCLASSES)))
 
     # -- items
     x <- k_items()

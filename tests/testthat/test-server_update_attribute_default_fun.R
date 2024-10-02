@@ -31,6 +31,7 @@ test_that("Update attribute / dm_default_choice = fun works", {
     session$setInputs(dm_att_type = "character")
     session$setInputs(dm_default_choice = "fun")
     session$setInputs(dm_att_default_detail = "Sys.timezone")
+    session$setInputs(dm_att_skip = FALSE)
 
     # -- click
     session$setInputs(upd_att = 1)
@@ -48,6 +49,7 @@ test_that("Update attribute / dm_default_choice = fun works", {
     # -- test values
     expect_equal(x[3, ]$default.fun, "Sys.timezone")
     expect_true(is.na(x[3, ]$default.val))
+
 
   })
 
