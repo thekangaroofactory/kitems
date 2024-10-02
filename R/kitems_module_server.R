@@ -971,8 +971,11 @@ kitemsManager_Server <- function(id, path,
     # -- BTN sort_col
     observeEvent(input$dm_order_cols, {
 
-      # -- Check
-      req(length(input$dm_order_cols) == dim(k_items())[2])
+      # -- Check:
+      # all columns need to be in the selection
+      # order must be different from the one already in place
+      req(length(input$dm_order_cols) == dim(k_items())[2],
+          !identical(input$dm_order_cols, k_data_model()$name))
 
       cat("[BTN] Reorder column \n")
 
