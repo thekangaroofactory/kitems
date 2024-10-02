@@ -1048,7 +1048,7 @@ kitemsManager_Server <- function(id, path,
 
       # -- Check NULL data model
       if(!is.null(dm)){
-        dm <- dm_filter_set(data.model = dm, filter = input$adm_filter_col)
+        dm <- dm_filter(data.model = dm, set = input$adm_filter_col)
         k_data_model(dm)}
 
     }, ignoreInit = TRUE, ignoreNULL = FALSE)
