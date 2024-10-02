@@ -211,32 +211,112 @@ kitemsManager_Server <- function(id, path,
 
 
     # --------------------------------------------------------------------------
+    # Declare Inputs
+    # --------------------------------------------------------------------------
+
+    # -- date slider options
+    output$date_slider_strategy <- renderUI(
+
+      # -- check data model
+      if(hasDate(k_data_model()))
+        radioButtons(inputId = ns("date_slider_strategy"),
+                     label = "Strategy",
+                     choices = c("this-year", "keep-range"),
+                     selected = "this-year",
+                     inline = TRUE)
+      else NULL)
+
+
+    # -- date slider
+    output$date_slider <- renderUI({
+
+      # -- check data model
+      if(hasDate(k_data_model()) & !is.null(input$date_slider_strategy)){
+
+        cat(MODULE, "Building date sliderInput \n")
+        cat("- strategy =", input$date_slider_strategy, "\n")
+
+        # -- Get min/max
+        if(dim(k_items())[1] > 0){
+
+          min <- min(k_items()$date)
+          max <- max(k_items()$date)
+
+        } else {
+
+          min <- as.Date(Sys.Date())
+          max <- min
+
+        }
+
+        # -- Get input range (to keep selection during update)
+        #range <- isolate(input$date_slider)
+
+        # -- Set value
+        # implement this_year strategy by default #211
+        # keep this year after item is added #223 & #242
+        value <- if(is.null(input$date_slider_strategy) || input$date_slider_strategy == "this-year")
+          ktools::date_range(min, max, type = "this_year")
+        else
+          value <- filter_date()
+
+        # -- date slider
+        sliderInput(inputId = ns("date_slider"),
+                    label = "Date",
+                    min = min,
+                    max = max,
+                    value = value)
+
+      } else NULL
+
+    })
+
+
+    # --------------------------------------------------------------------------
+    # Observe Inputs
+    # --------------------------------------------------------------------------
+
+    # -- Observe: date_slider
+    observeEvent(input$date_slider, {
+
+      cat(MODULE, "Date sliderInput has been updated: \n")
+      cat("-- values =", input$date_slider, "\n")
+
+      # -- store
+      filter_date(input$date_slider)
+
+    })
+
+
+    # --------------------------------------------------------------------------
     # Declare filtered items:
     # --------------------------------------------------------------------------
 
     # -- Filtered item table view
-    filtered_items <- reactive({
+    filtered_items <- reactive(
 
-      cat(MODULE, "Updating filtered item view \n")
+      # -- check
+      if(!is.null(filter_date())){
 
-      # -- Get items
-      items <- k_items()
+        cat(MODULE, "Updating filtered item view \n")
 
-      # -- Apply date filter
-      filter_date <- filter_date()
-      if(!is.null(filter_date))
-        items <- items[items$date >= filter_date[1] & items$date <= filter_date[2], ]
+        # -- init
+        items <- k_items()
 
-      # -- Apply ordering
-      if(!is.null(filter_date))
+        # -- Apply date filter
+        items <- items[items$date >= filter_date()[1] & items$date <= filter_date()[2], ]
+
+        # -- Apply ordering (WTF !??)
         items <- items[order(items$date, decreasing = TRUE), ]
 
-      cat("-- ouput dim =", dim(items), "\n")
+        cat("-- ouput dim =", dim(items), "\n")
 
-      # -- Return
-      items
+        # -- Return
+        items
 
-    })
+      } else k_items()
+
+    )
 
 
     # --------------------------------------------------------------------------
@@ -316,77 +396,6 @@ kitemsManager_Server <- function(id, path,
       clicked_column(col_clicked)
 
     }, ignoreNULL = TRUE)
-
-
-    # --------------------------------------------------------------------------
-    # Declare Inputs
-    # --------------------------------------------------------------------------
-
-    # -- date slider options
-    output$date_slider_strategy <- renderUI(radioButtons(inputId = ns("date_slider_strategy"),
-                                                         label = "Strategy",
-                                                         choices = c("this-year", "keep-range"),
-                                                         selected = "this-year",
-                                                         inline = TRUE))
-
-
-    # -- date slider
-    output$date_slider <- renderUI({
-
-      # -- check data model
-      if(hasDate(k_data_model())){
-
-        # -- Get min/max
-        if(dim(k_items())[1] > 0){
-
-          min <- min(k_items()$date)
-          max <- max(k_items()$date)
-
-        } else {
-
-          min <- as.Date(Sys.Date())
-          max <- min
-
-        }
-
-        # -- Get input range (to keep selection during update)
-        range <- isolate(input$date_slider)
-
-        # -- Set value
-        # implement this_year strategy by default #211
-        # keep this year after item is added #223 & #242
-        value <- if(is.null(input$date_slider_strategy) || input$date_slider_strategy == "this-year")
-          ktools::date_range(min, max, type = "this_year")
-        else
-          value <- range
-
-        # -- date slider
-        cat(MODULE, "Building date sliderInput \n")
-        sliderInput(inputId = ns("date_slider"),
-                    label = "Date",
-                    min = min,
-                    max = max,
-                    value = value)
-
-      } else NULL
-
-    })
-
-
-    # --------------------------------------------------------------------------
-    # Observe Inputs
-    # --------------------------------------------------------------------------
-
-    # -- Observe: date_slider
-    observeEvent(input$date_slider, {
-
-      cat(MODULE, "Date sliderInput has been updated: \n")
-      cat("-- values =", input$date_slider, "\n")
-
-      # -- store
-      filter_date(input$date_slider)
-
-    })
 
 
     # --------------------------------------------------------------------------
