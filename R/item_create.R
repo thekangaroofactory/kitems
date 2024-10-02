@@ -19,11 +19,9 @@ item_create <- function(values, data.model){
 
   # -- init params from data.model
   colClasses <- dm_colClasses(data.model)
-  default.val <- dm_default_val(data.model)
-  default.fun <- dm_default_fun(data.model)
 
   # -- helper function (takes single values)
-  helper <- function(key, value, colClass, default.val, default.fun){
+  helper <- function(key, value, colClass){
 
     # -- security check:
     # NULL will cause next test to fail
@@ -36,8 +34,6 @@ item_create <- function(values, data.model){
     cat("  - key =", key, "\n")
     cat("  - value =", value, "\n")
     cat("  - class =", colClass, "\n")
-    cat("  - default.val =", default.val, "\n")
-    cat("  - default.fun =", default.fun, "\n")
 
     # -- test: isTruthy(FALSE) >> FALSE
     # so need to skip for logicals // but include NA (is.logical(NA) >> TRUE)
@@ -71,9 +67,7 @@ item_create <- function(values, data.model){
   # -- apply helper values & rename output
   item <- lapply(names(values), function(x) helper(key = x,
                                                    value = values[[x]],
-                                                   colClass = colClasses[[x]],
-                                                   default.val = if(x %in% names(default.val)) default.val[[x]] else NULL,
-                                                   default.fun = if(x %in% names(default.fun)) default.fun[[x]] else NULL))
+                                                   colClass = colClasses[[x]]))
 
   # -- rename & return as df
   names(item) <- names(values)
