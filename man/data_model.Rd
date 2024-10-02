@@ -65,7 +65,7 @@ default.val <- c("name" = "test", "total" = 2)
 
 # filter and skip
 filter <- "id"
-skip <- c("id", "date") for example
+skip <- c("id", "date")
 
 data_model(colClasses, default.val, filter = filter, skip = skip)
 

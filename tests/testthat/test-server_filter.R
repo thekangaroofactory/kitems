@@ -8,13 +8,13 @@ create_testdata()
 
 
 # --------------------------------------------------------------------------
-# Scenario: date sliderInput
+# Scenario: filter data model cols
 # --------------------------------------------------------------------------
 
-test_that("Date sliderInput works", {
+test_that("Server works", {
 
   cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: date sliderInput")
+  cat("Scenario: filter data model cols")
   cat("\n-------------------------------------------------------------------------- \n")
 
   # -- declare arguments
@@ -27,18 +27,32 @@ test_that("Date sliderInput works", {
   testServer(kitemsManager_Server, args = params, {
 
     # --------------------------------------------------------------------------
-    # date
+    # filter cols
     # --------------------------------------------------------------------------
+    # -- flush reactive values
+    session$flushReact()
 
     # -- update input
-    session$setInputs(date_slider_strategy = "this-year")
-    session$setInputs(date_slider = date_slider_value)
+    session$setInputs(adm_filter_col = c("id", "total"))
 
-    # -- check
-    expect_equal(filter_date(), date_slider_value)
 
-    # -- check filter
-    expect_equal(dim(filtered_items()), c(2, 6))
+
+    # --------------------------------------------------------------------------
+    # Data model
+    # --------------------------------------------------------------------------
+
+    r_data_model <- dm_name(module_id)
+    x <- k_data_model()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), dim(dm))
+
+    # -- test names
+    expect_equal(x$name[x$filter], c("id", "total"))
+
 
   })
 

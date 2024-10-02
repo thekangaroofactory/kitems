@@ -4,12 +4,12 @@
 \alias{dm_migrate}
 \title{Migrate data model}
 \usage{
-dm_migrate(data.model, missing_col)
+dm_migrate(data.model, name)
 }
 \arguments{
 \item{data.model}{a data.frame of the data model}
 
-\item{missing_col}{a named list of the missing columns (most probably a subset of the target colClasses)}
+\item{name}{a named list of the missing columns (most probably a subset of the target colClasses)}
 }
 \value{
 the migrated data.model
@@ -19,6 +19,6 @@ Migrate data model
 }
 \examples{
 \dontrun{
-dm_migrate(data.model, missing_col = list(default.arg = "character"))
+dm_migrate(data.model, name = list(default.arg = "character"))
 }
 }

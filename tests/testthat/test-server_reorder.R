@@ -8,13 +8,13 @@ create_testdata()
 
 
 # --------------------------------------------------------------------------
-# Scenario: reorder & filter data model cols
+# Scenario: reorder data model cols
 # --------------------------------------------------------------------------
 
 test_that("Server works", {
 
   cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: reorder & filter data model cols")
+  cat("Scenario: reorder data model cols")
   cat("\n-------------------------------------------------------------------------- \n")
 
   # -- declare arguments
@@ -62,31 +62,6 @@ test_that("Server works", {
 
     # -- test names
     expect_equal(colnames(x), names(colClasses[order(names(colClasses))]))
-
-
-    # --------------------------------------------------------------------------
-    # filter cols
-    # --------------------------------------------------------------------------
-
-    # -- update input
-    session$setInputs(adm_filter_col = c("id", "total"))
-
-
-    # --------------------------------------------------------------------------
-    # Data model
-    # --------------------------------------------------------------------------
-
-    r_data_model <- dm_name(module_id)
-    x <- k_data_model()
-
-    # -- test class
-    expect_s3_class(x, "data.frame")
-
-    # -- test dim
-    expect_equal(dim(x), dim(dm))
-
-    # -- test names
-    expect_equal(x$name[x$filter], c("id", "total"))
 
 
   })
