@@ -267,7 +267,13 @@ kitemsManager_Server <- function(id, path,
                     max = max,
                     value = value)
 
-      } else NULL
+      } else {
+
+        # -- cleanup after remove date attribute
+        if(!is.null(filter_date()))
+          filter_date(NULL)
+
+        NULL}
 
     })
 
