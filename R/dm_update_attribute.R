@@ -18,7 +18,7 @@
 #' Use of vector to update several attributes is supported as long as length of the different parameters
 #' is either same as name or 1 (then all rows gets same value).
 #'
-#' Note that filter should be updated using dm_filter_set() function
+#' Note that filter should be updated using dm_filter() function
 #'
 #' @seealso [data_model()]
 #'
