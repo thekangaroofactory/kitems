@@ -44,12 +44,6 @@ get_input_values <- function(input, colClasses){
       names(extra_values) <- c(att_time, att_tz)
 
       # -- compute real value from all inputs
-
-      # as.POSIXct(paste(as.character(values[name]), extra_values[att_time]), tz = extra_values[att_tz])
-
-      # bar <- strptime(paste(as.character(values[[name]]), extra_values[[att_time]]), format = "%Y-%m-%d %H:%M:%S", tz = extra_values[[att_tz]])
-      # str(bar)
-
       value <- eval(call(CLASS_FUNCTIONS[[colClasses[name]]], paste(as.character(values[[name]]), extra_values[[att_time]]), tz = extra_values[[att_tz]]))
       cat("- Attribute =", name, "/ value =", class(value), value, "\n")
 
