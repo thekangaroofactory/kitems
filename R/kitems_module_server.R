@@ -1152,8 +1152,13 @@ kitemsManager_Server <- function(id, path,
     # --------------------------------------------------------------------------
 
     # -- Declare: create_btn
-    output$create_btn_output <- renderUI(actionButton(inputId = ns("create_btn"),
-                                                 label = "Create"))
+    output$create_btn_output <- renderUI(
+
+      # -- Check data model #290
+      if(!is.null(k_data_model()))
+            actionButton(inputId = ns("create_btn"),
+                         label = "Create"))
+
 
     # -- Observe: create_btn
     observeEvent(input$create_btn,

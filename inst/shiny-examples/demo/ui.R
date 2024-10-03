@@ -99,7 +99,7 @@ body <- dashboardBody(
                      h3("Action buttons"),
 
                      p("Create / update / delete item action buttons are provided", br(),
-                       "their UI functions will return a button or NULL depending on selection in the items table:"),
+                       "their UI functions will return a button or NULL depending on the data model (create) or selection in the items table:"),
 
                      kitems::create_BTN("data_2"),
                      kitems::update_BTN("data_2"),
