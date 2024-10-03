@@ -419,7 +419,15 @@ kitemsManager_Server <- function(id, path,
         # -- display create / import btns
         fluidRow(column(width = 12,
                         p("No data model found. You need to create one to start."),
-                        actionButton(ns("dm_create"), label = "Create"),
+
+                        # -- Check if item file already exists:
+                        # if data model was deleted, but not the items #282
+                        if(file.exists(items_url))
+                          p("Item file already exists: you need to delete it before creating a new data model.", br(),
+                            items_url)
+                        else
+                          actionButton(ns("dm_create"), label = "Create"),
+
                         actionButton(ns("import_data"), label = "Import data")))
 
       } else {
@@ -641,23 +649,37 @@ kitemsManager_Server <- function(id, path,
                  # -- Define output
                  output$dm_danger_zone <- renderUI(
 
-                   if(input$adm_dz_toggle)
-                     shinydashboard::box(title = "Delete attribute", status = "danger", width = 4,
+                   # -- check toggle btn
+                   if(input$adm_dz_toggle){
 
-                                         tagList(
+                     tagList(
 
-                                           # -- select attribute name
-                                           selectizeInput(inputId = ns("dm_dz_att_name"),
-                                                          label = "Name",
-                                                          choices = k_data_model()$name,
-                                                          selected = NULL,
-                                                          options = list(create = FALSE,
-                                                                         placeholder = 'Type or select an option below',
-                                                                         onInitialize = I('function() { this.setValue(""); }'))),
+                       # -- delete attribute
+                       shinydashboard::box(title = "Delete attribute", status = "danger", width = 4,
 
-                                           # -- delete
-                                           actionButton(ns("dm_dz_delete_att"), label = "Delete")))))
+                                           tagList(
 
+                                             # -- select attribute name
+                                             selectizeInput(inputId = ns("dm_dz_att_name"),
+                                                            label = "Name",
+                                                            choices = k_data_model()$name,
+                                                            selected = NULL,
+                                                            options = list(create = FALSE,
+                                                                           placeholder = 'Type or select an option below',
+                                                                           onInitialize = I('function() { this.setValue(""); }'))),
+
+                                             # -- delete att
+                                             actionButton(ns("dm_dz_delete_att"), label = "Delete"))),
+
+                       # -- delete data model
+                       shinydashboard::box(title = "Delete data model", status = "danger", width = 4,
+                                           p("Click here to delete the data model and ALL corresponding items."),
+                                           actionButton(ns("dm_dz_delete_dm"), label = "Delete all!")))}))
+
+
+    # --------------------------------------------------------------------------
+    # Delete attribute:
+    # --------------------------------------------------------------------------
 
     # -- Observer button:
     observeEvent(input$dm_dz_delete_att, {
@@ -718,6 +740,77 @@ kitemsManager_Server <- function(id, path,
         # -- notify
         if(shiny::isRunning())
           showNotification(paste(MODULE, "Attribute deleted."), type = "message")}
+
+    })
+
+    # --------------------------------------------------------------------------
+    # Delete data model:
+    # --------------------------------------------------------------------------
+
+    # -- Observer button:
+    observeEvent(input$dm_dz_delete_dm, {
+
+      cat(MODULE, "Delete data model preview \n")
+
+      # -- Open dialog for confirmation
+      showModal(modalDialog(title = "Delete data model",
+
+                            p("Danger: deleting a data model can't be undone! Do you confirm?", br(),
+
+                              # -- check items
+                              if(!is.null(k_items()))
+                                "- All items in session will be deleted", br(),
+
+                              # -- check dm file
+                              if(file.exists(dm_url)){
+                                if(autosave)
+                                  "- Data model file will be deleted"
+                                else
+                                  "- Data model file won't be deleted (autosave is off)"}),
+
+                            # -- check items file
+                            if(file.exists(items_url) & autosave)
+                              checkboxInput(inputId = ns("dm_dz_confirm_delete_dm_items"), label = "Delete items file"),
+
+                            # -- confirm string
+                            p("Type the following string:", paste0("delete_", id)),
+                            textInput(inputId = ns("dm_dz_confirm_delete_dm_string"),
+                                      label = ""),
+
+                            # -- footer
+                            footer = tagList(
+                              modalButton("Cancel"),
+                              actionButton(ns("dm_dz_confirm_delete_dm"), "Delete"))))})
+
+
+    # -- Observer button:
+    observeEvent(input$dm_dz_confirm_delete_dm, {
+
+      # -- check string
+      req(input$dm_dz_confirm_delete_dm_string == paste0("delete_", id))
+
+      cat(MODULE, "Delete data model confirmed! \n")
+
+      # -- close dialog
+      removeModal()
+
+      # -- delete items
+      if(!is.null(k_items()))
+        k_items(NULL)
+
+      # -- delete data model & file
+      k_data_model(NULL)
+      if(file.exists(dm_url) & autosave)
+        unlink(dm_url)
+
+      # -- delete items file
+      if(file.exists(items_url) & autosave)
+        if(input$dm_dz_confirm_delete_dm_items)
+          unlink(items_url)
+
+      # -- notify
+      if(shiny::isRunning())
+        showNotification(paste(MODULE, "Data model deleted."), type = "warning")
 
     })
 
