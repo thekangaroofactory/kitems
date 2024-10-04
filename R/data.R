@@ -58,7 +58,9 @@ DATA_MODEL_COLCLASSES <- list(name = "character",
                               default.fun = "character",
                               default.arg = "character",
                               filter = "logical",
-                              skip = "logical")
+                              skip = "logical",
+                              sort.rank = "numeric",
+                              sort.desc = "logical")
 
 # -- default values
 DATA_MODEL_DEFAULTS <- list(name = NA,
@@ -67,7 +69,9 @@ DATA_MODEL_DEFAULTS <- list(name = NA,
                             default.fun = NA,
                             default.arg = NA,
                             filter = FALSE,
-                            skip = FALSE)
+                            skip = FALSE,
+                            sort.rank = NA,
+                            sort.desc = NA)
 
 
 # --------------------------------------------------------------------------
@@ -99,10 +103,7 @@ TEMPLATE_DATA_MODEL <- data.frame(name = c("date",
                                                   rep(NA, 2)),
 
                                   # -- added #63
-                                  default.arg = c(NA,
-                                                  rep(NA, 7),
-                                                  rep(NA, 6),
-                                                  rep(NA, 2)),
+                                  default.arg = rep(NA, 16),
 
                                   # -- added #220
                                   filter = c(FALSE,
@@ -114,5 +115,11 @@ TEMPLATE_DATA_MODEL <- data.frame(name = c("date",
                                   skip = c(FALSE,
                                            rep(FALSE, 7),
                                            TRUE, rep(FALSE, 5),
-                                           rep(FALSE, 2)))
+                                           rep(FALSE, 2)),
+
+                                  # -- added #239
+                                  sort.rank = rep(NA, 16),
+
+                                  # -- added #239
+                                  sort.desc = rep(NA, 16))
 

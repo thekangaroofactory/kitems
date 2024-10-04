@@ -8,6 +8,8 @@
 #' @param default.arg an optional named vector of arguments, to pass along with the default function.
 #' @param filter an optional character vector, indicating which attribute names should be filtered from the table view.
 #' @param skip an optional character vector, indicating which attribute names should be skipped from the user input form.
+#' @param sort.rank an optional named numeric vector, to define sort orders.
+#' @param sort.desc an optional named logical vector, to define if sort should be descending.
 #'
 #' @return a data.frame containing the data model.
 #'
@@ -32,22 +34,28 @@
 #' - FALSE for filter and skip
 #'
 #' @examples
-#' # order in vectors doesn't matter:
+#' # -- order in vectors doesn't matter:
 #' default.val <- c("name" = "test", "total" = 2)
 #' default.val <- c("total" = 2, "name" = "test")
 #'
-#' # no need to set all values
+#' # -- no need to set all values
 #' colClasses <- c("id" = "numeric", "name" = "character", "total" = "numeric")
 #' default.val <- c("name" = "test", "total" = 2)
 #'
-#' # filter and skip
+#' # -- filter and skip
 #' filter <- "id"
 #' skip <- c("id", "date")
+#'
+#' # -- sort
+#' sort.rank = c("date" = 1, "total" = 2, "name" = 3)
+#' sort.desc = c("date" = TRUE, "total" = FALSE)
 #'
 #' data_model(colClasses, default.val, filter = filter, skip = skip)
 #'
 
-data_model <- function(colClasses, default.val = NULL, default.fun = NULL, default.arg = NULL, filter = NULL, skip = NULL){
+data_model <- function(colClasses, default.val = NULL, default.fun = NULL, default.arg = NULL,
+                       filter = NULL, skip = NULL,
+                       sort.rank = NULL, sort.desc = NULL){
 
   # -- check arg #217
   if(is.null(names(colClasses)))
@@ -84,6 +92,18 @@ data_model <- function(colClasses, default.val = NULL, default.fun = NULL, defau
 
   # -- Add skip (match input with names)
   dm$skip <- dm$name %in% skip
+
+  # -- Add sort.rank (match input with names)
+  if(isTruthy(sort.rank))
+    dm$sort.rank <- as.numeric(sort.rank[match(dm$name, names(sort.rank))])
+  else
+    dm$sort.rank <- NA
+
+  # -- Add sort.desc (match input with names)
+  if(isTruthy(sort.desc))
+    dm$sort.desc <- as.logical(sort.desc[match(dm$name, names(sort.desc))])
+  else
+    dm$sort.desc <- NA
 
   # -- Return
   dm

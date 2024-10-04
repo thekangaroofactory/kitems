@@ -308,12 +308,14 @@ kitemsManager_Server <- function(id, path,
 
         # -- init
         items <- k_items()
+        dm <- k_data_model()
 
         # -- Apply date filter
         items <- items[items$date >= filter_date()[1] & items$date <= filter_date()[2], ]
 
-        # -- Apply ordering (WTF !??)
-        items <- items[order(items$date, decreasing = TRUE), ]
+        # -- Apply ordering
+        if(any(!is.na(dm$sort.rank)))
+          items <- item_sort(items, dm)
 
         cat("-- ouput dim =", dim(items), "\n")
 
@@ -935,7 +937,9 @@ kitemsManager_Server <- function(id, path,
                              default.fun = default_fun,
                              default.arg = NULL,
                              skip = skip,
-                             filter = NULL)
+                             filter = NULL,
+                             sort.rank = NULL,
+                             sort.desc = NULL)
 
       # -- store
       k_data_model(dm)

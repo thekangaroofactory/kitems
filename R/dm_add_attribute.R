@@ -10,6 +10,8 @@
 #' @param default.arg an optional named vector of arguments, to pass along with the default function.
 #' @param skip an optional character vector, with the name(s) of the attribute(s) to skip
 #' @param filter an optional character vector, with the name(s) of the attribute(s) to filter
+#' @param sort.rank an optional named numeric vector, to define sort orders
+#' @param sort.desc an optional named logical vector, to define if sort should be descending
 #'
 #' @return the updated data model
 #' @export
@@ -26,7 +28,10 @@
 #' }
 
 
-dm_add_attribute <- function(data.model, name, type, default.val = NULL, default.fun = NULL, default.arg = NULL, filter = NULL, skip = NULL){
+dm_add_attribute <- function(data.model, name, type,
+                             default.val = NULL, default.fun = NULL, default.arg = NULL,
+                             filter = NULL, skip = NULL,
+                             sort.rank = NULL, sort.desc = NULL){
 
   cat("[dm_add_attribute] Add attribute to data model =", name, "\n")
 
@@ -36,7 +41,9 @@ dm_add_attribute <- function(data.model, name, type, default.val = NULL, default
                               default.fun = default.fun,
                               default.arg = default.arg,
                               filter = filter,
-                              skip = skip)
+                              skip = skip,
+                              sort.rank = sort.rank,
+                              sort.desc = sort.desc)
 
   # -- Merge to data.model (return)
   data.model <- rbind(data.model, new_attribute)
