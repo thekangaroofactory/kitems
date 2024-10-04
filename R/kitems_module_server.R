@@ -436,6 +436,11 @@ kitemsManager_Server <- function(id, path,
         # -- display data model
         tagList(
 
+          if(!autosave)
+            fluidRow(column(width = 12),
+                     shinydashboard::box("Modification in the data model won't be saved.", title = "Autosave off", status = "warning",
+                                         solidHeader = TRUE, collapsible = TRUE)),
+
           fluidRow(column(width = 2,
 
                           p("Actions"),
