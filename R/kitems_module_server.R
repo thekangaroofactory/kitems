@@ -130,13 +130,12 @@ kitemsManager_Server <- function(id, path,
 
           # -- Update data model & save
           init_dm <- result
-          saveRDS(init_dm, file = dm_url)
-          cat(MODULE, "Data model saved \n")
+          if(autosave){
+            saveRDS(init_dm, file = dm_url)
+            cat(MODULE, "Data model saved \n")}
 
           # -- Reload data with updated data model
-          cat(MODULE, "[Warning] Data model not synchronized with items data.frame! \n")
           cat(MODULE, "Reloading the item data with updated data model \n")
-
           init_items <- item_load(data.model = init_dm,
                              file = items_url,
                              path = path,
