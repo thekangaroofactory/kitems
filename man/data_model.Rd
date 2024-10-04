@@ -10,7 +10,9 @@ data_model(
   default.fun = NULL,
   default.arg = NULL,
   filter = NULL,
-  skip = NULL
+  skip = NULL,
+  sort.rank = NULL,
+  sort.desc = NULL
 )
 }
 \arguments{
@@ -25,6 +27,10 @@ data_model(
 \item{filter}{an optional character vector, indicating which attribute names should be filtered from the table view.}
 
 \item{skip}{an optional character vector, indicating which attribute names should be skipped from the user input form.}
+
+\item{sort.rank}{an optional named numeric vector, to define sort orders.}
+
+\item{sort.desc}{an optional named logical vector, to define if sort should be descending.}
 }
 \value{
 a data.frame containing the data model.
@@ -55,17 +61,21 @@ If not provided, defaults will be applied:
 }
 }
 \examples{
-# order in vectors doesn't matter:
+# -- order in vectors doesn't matter:
 default.val <- c("name" = "test", "total" = 2)
 default.val <- c("total" = 2, "name" = "test")
 
-# no need to set all values
+# -- no need to set all values
 colClasses <- c("id" = "numeric", "name" = "character", "total" = "numeric")
 default.val <- c("name" = "test", "total" = 2)
 
-# filter and skip
+# -- filter and skip
 filter <- "id"
 skip <- c("id", "date")
+
+# -- sort
+sort.rank = c("date" = 1, "total" = 2, "name" = 3)
+sort.desc = c("date" = TRUE, "total" = FALSE)
 
 data_model(colClasses, default.val, filter = filter, skip = skip)
 

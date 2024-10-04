@@ -12,7 +12,9 @@ dm_add_attribute(
   default.fun = NULL,
   default.arg = NULL,
   filter = NULL,
-  skip = NULL
+  skip = NULL,
+  sort.rank = NULL,
+  sort.desc = NULL
 )
 }
 \arguments{
@@ -31,6 +33,10 @@ dm_add_attribute(
 \item{filter}{an optional character vector, with the name(s) of the attribute(s) to filter}
 
 \item{skip}{an optional character vector, with the name(s) of the attribute(s) to skip}
+
+\item{sort.rank}{an optional named numeric vector, to define sort orders}
+
+\item{sort.desc}{an optional named logical vector, to define if sort should be descending}
 }
 \value{
 the updated data model
