@@ -66,6 +66,11 @@ kitemsManager_Server <- function(id, path,
     clicked_column <- reactiveVal(NULL)
     filter_date <- reactiveVal(NULL)
 
+    # -- Declare internal reactives
+    #w_update_attribute <- reactiveVal(NULL)
+    isValid <- reactiveValues()
+    isUpdate <- reactiveVal(FALSE)
+
 
     # --------------------------------------------------------------------------
     # Initialize data model and items:
@@ -441,17 +446,22 @@ kitemsManager_Server <- function(id, path,
                      shinydashboard::box("Modification in the data model won't be saved.", title = "Autosave off", status = "warning",
                                          solidHeader = TRUE, collapsible = TRUE)),
 
-          fluidRow(column(width = 2,
+          # -- the table
+          fluidRow(column(width = 12,
+                          h3("Table"),
+                          DT::DTOutput(ns("data_model")))),
 
-                          p("Actions"),
-                          uiOutput(ns("dm_att_form"))),
+          # -- actions
+          fluidRow(column(width = 12,
+                          h3("Actions"),
+                          actionButton(inputId = ns("new_attribute"), label = "New attribute"),
+                          uiOutput(ns("update_attribute")))),
 
-                   column(width = 10,
-                          p("Table"),
-                          DT::DTOutput(ns("data_model")),
-                          br(),
-                          p("Filter can be changed in the 'view' tab."))),
+          # -- info
+          fluidRow(column(width = 12,
+                          p(icon(name = "circle-info"), "Filter can also be changed in the 'view' tab."))),
 
+          # -- danger zone
           fluidRow(column(width = 12,
                           br(),
                           uiOutput(ns("dm_danger_btn")),
@@ -900,69 +910,791 @@ kitemsManager_Server <- function(id, path,
     })
 
 
-    # -- BTN add_att
-    observeEvent(input$add_att, {
+    # --------------------------------------------------------------------------
+    # Add / update data model attribute (assistant) ----
+    # --------------------------------------------------------------------------
 
-      # check
-      req(input$dm_att_name,
-          input$dm_att_type)
+    # ---------------------------------
+    # Step.1: name & type ----
+    # ---------------------------------
+    # Note: there is no need to support update in step.1
 
-      cat("[BTN] Add column \n")
+    # -- observe button
+    # Added #281
+    observeEvent(input$new_attribute, {
 
-      # -- test default choice
-      if(input$dm_default_choice == "none"){
+      # -- check selected row & unselect
+      # Step.2 will check for selected row to determine if it's an update
+      if(!is.null(input$data_model_rows_selected))
+        selectRows(proxy = dataTableProxy("data_model"), selected = NULL)
 
-        default_val <- NULL
-        default_fun <- NULL
+      # -- init
+      isUpdate(FALSE)
+      isValid$name <- FALSE
+      isValid$type <- FALSE
 
-      } else {
+      # -- prepare
+      names <- TEMPLATE_DATA_MODEL[!TEMPLATE_DATA_MODEL$name %in% k_data_model()$name, "name"]
+      types <- OBJECT_CLASS
 
-        if(input$dm_default_choice == "val"){
+      # -- display modal
+      showModal(modalDialog(
 
-          default_val <- stats::setNames(input$dm_att_default_detail, input$dm_att_name)
-          default_fun <- NULL
+        # -- body
+        tagList(
 
-        } else {
+          h4("Step 1:"),
+          p("Define attribute name and type."),
 
-          default_val <- NULL
-          default_fun <- stats::setNames(input$dm_att_default_detail, input$dm_att_name)}}
+          # -- attribute name
+          selectizeInput(inputId = ns("w_name"),
+                         label = "Name",
+                         choices = names,
+                         selected = NULL,
+                         options = list(create = TRUE,
+                                        placeholder = 'Type or select an option below',
+                                        onInitialize = I('function() { this.setValue(""); }'))),
 
-      # -- skip
-      skip <- if(input$dm_att_skip)
-        input$dm_att_name
-      else NULL
+          # -- attribute type
+          selectizeInput(inputId = ns("w_type"),
+                         label = "Type",
+                         choices = types,
+                         selected = NULL,
+                         options = list(create = FALSE,
+                                        placeholder = 'Type or select an option below',
+                                        onInitialize = I('function() { this.setValue(""); }'))),
 
-      # Add attribute to the data model & store
-      dm <- k_data_model()
-      dm <- dm_add_attribute(data.model = dm,
-                             name = input$dm_att_name,
-                             type = input$dm_att_type,
-                             default.val = default_val,
-                             default.fun = default_fun,
-                             default.arg = NULL,
-                             skip = skip,
-                             filter = NULL,
-                             sort.rank = NULL,
-                             sort.desc = NULL)
+          # -- comments
+          uiOutput(ns("w_name_note")),
+          uiOutput(ns("w_type_note"))
 
-      # -- store
-      k_data_model(dm)
+        ),
 
-      # -- get default value
-      value <- dm_get_default(data.model = dm, name = input$dm_att_name)
-
-      # -- Add column to items & store
-      items <- item_add_attribute(k_items(), name = input$dm_att_name, type = input$dm_att_type, fill = value)
-      k_items(items)
-
-      # -- update form
-      # in case an attribute from template was added, it's necessary to drop it from available choices
-      output$dm_att_form <- dm_inputs_ui(names = TEMPLATE_DATA_MODEL$name[!TEMPLATE_DATA_MODEL$name %in% colnames(k_items())],
-                                         types = OBJECT_CLASS,
-                                         ns = ns)
+        # -- params
+        title = "Attribute setup assistant",
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton(inputId = ns("w_set_default"), "Next"))))
 
     })
 
+
+    # -- check attribute name
+    observeEvent(input$w_name, {
+
+      # -- empty
+      if(input$w_name == ""){
+
+        name <- "xmark"
+        style <- "color: #FFD43B;"
+        msg <- "Attribute name is empty"
+        isValid$name <- FALSE
+
+      } else {
+
+        # -- duplicate name
+        if(input$w_name %in% k_data_model()$name){
+
+          name <- "circle-xmark"
+          style <- "color: #ff0000;"
+          msg <- "This attribute name is already used in the data model!"
+          isValid$name <- FALSE
+
+        } else {
+
+          # -- good
+          name <- "check"
+          style <- "color: #80ff80;"
+          msg <- "Attribute name is ok"
+          isValid$name <- TRUE
+
+          # -- update default type
+          if(input$w_name %in% TEMPLATE_DATA_MODEL$name)
+            updateSelectizeInput(inputId = "w_type",
+                                 selected = TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == input$w_name, ]$type)
+
+        }}
+
+      # -- note
+      output$w_name_note <- renderUI(tagList(icon(name = name, class = "fa-solid", style = style), msg))
+
+    })
+
+
+    # -- check attribute type
+    observeEvent(input$w_type, {
+
+      # -- empty
+      if(input$w_type == ""){
+
+        name <- "xmark"
+        style <- "color: #FFD43B;"
+        msg <- "Attribute type is empty"
+        isValid$type <- FALSE
+
+      } else {
+
+        # -- good
+        name <- "check"
+        style <- "color: #80ff80;"
+        msg <- paste("Sample value:", as.character(CLASS_EXAMPLES[[input$w_type]]))
+        isValid$type <- TRUE
+
+      }
+
+      # -- note
+      output$w_type_note <- renderUI(tagList(icon(name = name, class = "fa-solid", style = style), msg))
+
+    })
+
+
+    # ---------------------------------
+    # Step.2: defaults ----
+    # ---------------------------------
+    # entry point for the update process (step.1 skipped)
+
+    # -- observe button
+    observeEvent({
+      input$w_set_default
+      input$update_attribute}, {
+
+        # -- check selected row (update)
+        # Selection was cleared in step.1 if it's a creation
+        if(!is.null(input$data_model_rows_selected)){
+
+          cat("[EVENT] Update data model attribute \n")
+
+          # -- init values
+          isValid$name <- TRUE
+          isValid$type <- TRUE
+          isUpdate(TRUE)}
+
+
+        # -- Requires valid name & type
+        req(isValid$name & isValid$type)
+        removeModal()
+
+        # -- init input params
+        if(isUpdate()){
+
+          # -- get attribute
+          attribute <- k_data_model()[input$data_model_rows_selected, ]
+
+          name <- attribute$name
+          type <- attribute$type
+          selected <- if(!is.na(attribute$default.fun)) "fun" else
+            if(!is.na(attribute$default.val)) "val" else "none"
+
+          # -- case when w_default_choice input has already same value as selected
+          # need to update other inputs otherwise they keep old values
+          if(!is.null(input$w_default_choice))
+            if(selected == "val" & input$w_default_choice == "val"){
+
+              updateTextInput(inputId = "w_default_val",
+                              value = attribute$default.val)
+
+            } else if(selected == "fun" & input$w_default_choice == "fun"){
+
+              updateSelectizeInput(inputId = "w_default_fun",
+                                   choices = unique(c(attribute$default.fun, DEFAULT_FUNCTIONS[[attribute$type]])),
+                                   selected = attribute$default.fun)
+
+              updateTextInput(inputId = "w_default_arg",
+                              value = attribute$default.arg)}
+
+        } else { # -- create
+
+          name <- input$w_name
+          type <- input$w_type
+          selected <- "none"}
+
+        cat("[step.2] init: name =", name, "/ type =", type, "/ selected =", selected, "\n")
+
+        # -- display modal
+        showModal(modalDialog(
+
+          # -- body
+          tagList(
+
+            h4("Step 2:"),
+            p("Setup how default values should be generated."),
+
+            p("Attribute:"),
+            tags$ul(
+              tags$li("name =", name),
+              tags$li("type =", type)),
+
+            # -- default strategy
+            radioButtons(inputId = ns("w_default_choice"),
+                         label = "Choose strategy:",
+                         choices = c("no default" = "none", "value" = "val", "function" = "fun"),
+                         selected = selected),
+
+            # -- default details
+            uiOutput(ns("w_default_detail")),
+
+            # -- comments
+            uiOutput(ns("w_default_note"))),
+
+          # -- params
+          title = "Attribute setup assistant",
+          footer = tagList(
+            modalButton("Cancel"),
+            actionButton(inputId = ns("w_set_sf"), "Next"))))
+
+      })
+
+
+    # -- Observe radioButtons
+    observeEvent(input$w_default_choice, {
+
+      cat("[step.2] w_default_choice input =", input$w_default_choice, "\n")
+
+      # -- no default
+      if(input$w_default_choice == "none"){
+
+        # -- no need for detail input
+        output$w_default_detail <- NULL
+        output$w_default_note <- renderUI(tagList(icon(name = "check",
+                                                       class = "fa-solid",
+                                                       style = "color: #80ff80;"),
+                                                  "Default value will be NA"))
+
+        # -- so next is available
+        isValid$default_detail <- TRUE
+
+      } else {
+
+        # -- default value
+        if(input$w_default_choice == "val"){
+
+          # -- setup input params
+          if(isUpdate()){
+
+            attribute <- k_data_model()[input$data_model_rows_selected, ]
+            value <- attribute$default.val
+
+          } else { # -- create
+
+            value <- DEFAULT_VALUES[[input$w_type]]}
+
+          cat("[step.2] Set w_default_val: value =", value, "\n")
+
+          # -- update outputs
+          output$w_default_detail <- renderUI(tagList(
+            p("Rule: any value that can be coerced to the expected type"),
+            textInput(inputId = ns("w_default_val"),
+                      label = "Default value",
+                      value = value,
+                      placeholder = "Enter a valid value")))
+
+        } else { # -- default function
+
+          # -- setup input params
+          if(isUpdate()){
+
+            attribute <- k_data_model()[input$data_model_rows_selected, ]
+            choices <- unique(c(attribute$default.fun, DEFAULT_FUNCTIONS[[attribute$type]]))
+            selected <- attribute$default.fun
+            value <- attribute$default.arg
+
+          } else { # -- create
+
+            choices <- DEFAULT_FUNCTIONS[[input$w_type]]
+            selected <- NULL
+            value <- NULL}
+
+          cat("[step.2] Set w_default_fun: selected =", selected, "\n")
+
+          # -- update outputs
+          output$w_default_detail <- renderUI(tagList(
+
+            p("The function must be reachable with a do.call:"),
+            tags$ul(
+              tags$li("either loaded in the global environment"),
+              tags$li("or accessible in an installed package (ex: pkg::function)")),
+
+            # -- function
+            selectizeInput(inputId = ns("w_default_fun"),
+                           label = "Default function",
+                           choices = choices,
+                           selected = selected,
+                           options = list(create = TRUE,
+                                          placeholder = "Enter a valid functions name without ()")),
+
+            p("It can take arguments provided as a list (see ?do.call)"),
+
+            # -- arguments
+            textInput(inputId = ns("w_default_arg"),
+                      label = "Arguments",
+                      value = value,
+                      placeholder = "Enter arguments, ex: list(a = 1, b = TRUE)")))}}
+
+    })
+
+
+    # -- observe textInput (value)
+    # takes w_default_choice to update messages upon radio change
+    observeEvent({
+      input$w_default_choice
+      input$w_default_val}, {
+
+        # -- check
+        if(input$w_default_choice == "val"){
+
+          cat("[step.2] w_default_val =", input$w_default_val, "\n")
+
+          # -- empty
+          if(input$w_default_val == ""){
+
+            name <- "xmark"
+            style <- "color: #FFD43B;"
+            msg <- "Default value is empty"
+            isValid$default_detail <- FALSE
+
+          } else {
+
+            # -- check update
+            type <- if(isUpdate())
+              k_data_model()[input$data_model_rows_selected, ]$type
+            else
+              input$w_type
+
+            # -- try: coerce input to expected class
+            cat("[step.2] Eval default value \n")
+            value <- tryCatch(
+              eval(call(CLASS_FUNCTIONS[[type]], input$w_default_val)),
+              error = function(e) e,
+              warning = function(w) w)
+
+            # -- check output
+            if("error" %in% class(value)){
+
+              cat("[Error]", value$message)
+              name <- "circle-xmark"
+              style <- "color: #ff0000;"
+              msg <- paste("Default value is KO, error =", value$message)
+              isValid$default_detail <- FALSE
+
+            } else {
+
+              if("warning" %in% class(value)){
+
+                cat("[Warning]", value$message)
+                name <- "xmark"
+                style <- "color: #FFD43B;"
+                msg <- paste("Default value is KO, warning =", value$message)
+                isValid$default_detail <- FALSE
+
+              } else {
+
+                name <- "check"
+                style <- "color: #80ff80;"
+                msg <- paste0("Default value is OK [class = ", class(value)[1], " / value = ", value, "]")
+                isValid$default_detail <- TRUE}}}
+
+          # -- update output
+          output$w_default_note <- renderUI(tagList(icon(name = name,
+                                                         class = "fa-solid",
+                                                         style = style), msg))}
+
+    })
+
+
+    # -- observe textInput (function & arg)
+    # takes w_default_choice to update messages upon radio change
+    observeEvent({
+      input$w_default_choice
+      input$w_default_fun
+      input$w_default_arg}, {
+
+        # -- check
+        if(input$w_default_choice == "fun"){
+
+          cat("[step.2] w_default_fun =", input$w_default_fun, "\n")
+          cat("[step.2] w_default_arg =", input$w_default_arg, "\n")
+
+          # -- empty
+          if(input$w_default_fun == ""){
+
+            name <- "xmark"
+            style <- "color: #FFD43B;"
+            msg <- paste("Default function is empty")
+            isValid$default_detail <- FALSE
+
+          } else {
+
+            # -- check args
+            if(input$w_default_arg == "")
+              args <- list()
+
+            else {
+
+              # -- eval input
+              cat("[step.2] Eval function arguments \n")
+              args <- tryCatch(eval(parse(text = input$w_default_arg)),
+                               error = function(e) e,
+                               warning = function(w) w)
+
+              # -- check output
+              if("error" %in% class(args))
+                print(args$message)
+
+              else if("warning" %in% class(args))
+                print(args$message)
+
+            }
+
+            # -- check update
+            type <- if(isUpdate())
+              k_data_model()[input$data_model_rows_selected, ]$type
+            else
+              input$w_type
+
+
+            # -- try: call given function
+            cat("[step.2] Eval function \n")
+            value <-  tryCatch(
+              eval(call(CLASS_FUNCTIONS[[type]], eval(do.call(ktools::getNsFunction(input$w_default_fun), args = args)))),
+              error = function(e) e,
+              warning = function(w) w)
+
+            # -- check output
+            if("error" %in% class(value)){
+
+              cat("[Error]", value$message)
+              name <- "circle-xmark"
+              style <- "color: #ff0000;"
+              msg <- paste("Default funcion is KO, error =", value$message)
+              isValid$default_detail <- FALSE
+
+            } else {
+
+              if("warning" %in% class(value)){
+
+                cat("[Warning]", value$message)
+                name <- "xmark"
+                style <- "color: #FFD43B;"
+                msg <- paste("Default function is KO, warning =", value$message)
+                isValid$default_detail <- FALSE
+
+              } else { # -- no error or warning
+
+                # -- check class
+                name <- "check"
+                style <- "color: #80ff80;"
+                msg <- paste0("Default function is OK [class = ", class(value)[1], " / value = ", value, "]")
+                isValid$default_detail <- TRUE}}}
+
+          # -- update output
+          output$w_default_note <- renderUI(tagList(icon(name = name,
+                                                         class = "fa-solid",
+                                                         style = style), msg))}
+
+      })
+
+
+    # ---------------------------------
+    # Step.3: skip & filter
+    # ---------------------------------
+
+    # -- observer actionButton
+    observeEvent(input$w_set_sf, {
+
+      # -- Requires valid defaults
+      req(isValid$default_detail)
+      removeModal()
+
+      # -- init input values
+      if(isUpdate()){
+
+        attribute <- k_data_model()[input$data_model_rows_selected, ]
+        value_skip <- attribute$skip
+        value_filter <- attribute$filter
+
+      } else {
+
+        value_skip <- FALSE
+        value_filter <- FALSE}
+
+      cat("[step.3] init: skip =", value_skip, "/ filter =", value_filter, "\n")
+
+
+      # -- display modal
+      showModal(modalDialog(
+
+        # -- body
+        tagList(
+
+          h4("Step 3:"),
+          p("Setup skip & filter."),
+
+          # -- skip
+          p("Should the attribute be skipped from the item creation form", br(), "(default strategy will be applied to fill the value)"),
+          checkboxInput(inputId = ns("w_skip"),
+                        label = "Skip",
+                        value = value_skip),
+
+          # -- filter
+          p("Should the attribute be filtered from the item view"),
+          checkboxInput(inputId = ns("w_filter"),
+                        label = "Filter",
+                        value = value_filter)),
+
+        # -- params
+        title = "Attribute setup assistant",
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton(inputId = ns("w_set_sort"), "Next"))))
+
+    })
+
+
+    # ---------------------------------
+    # Step.4: order
+    # ---------------------------------
+
+    # -- observer actionButton
+    observeEvent(input$w_set_sort, {
+
+      # -- Close window
+      removeModal()
+
+      # -- init input params
+      if(isUpdate()){
+
+        # -- get attribute
+        attribute <- k_data_model()[input$data_model_rows_selected, ]
+        value <- ifelse(is.na(attribute$sort.rank), FALSE, TRUE)
+
+        # -- make sure options are correctly set
+        if(value){
+          updateNumericInput(inputId = "w_sort_rank",
+                             value = attribute$sort.rank)
+
+          updateRadioButtons(inputId = "w_sort_desc",
+                             selected = attribute$sort.desc)}
+
+      } else
+        value <- FALSE
+
+      cat("[step.4] init: ordering =", value, "\n")
+
+      # -- display modal
+      showModal(modalDialog(
+
+        # -- body
+        tagList(
+
+          h4("Step 4:"),
+          p("Setup ordering options."),
+
+          # -- set ordering
+          p("Should the attribute be filtered from the item view"),
+          checkboxInput(inputId = ns("w_sort"),
+                        label = "Ordering",
+                        value = value),
+
+          # -- details
+          uiOutput(ns("w_sort_details"))
+
+          ),
+
+        # -- params
+        title = "Attribute setup assistant",
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton(inputId = ns("w_ask_confirm"), "Next"))))
+
+    })
+
+
+    # -- observe checkbox
+    observeEvent(input$w_sort, {
+
+      if(input$w_sort){
+
+        # -- prepare
+        value_rank <- 1
+        value_desc <- FALSE
+
+        # -- update outputs
+        output$w_sort_details <- renderUI(tagList(
+
+          # -- rank
+          p("In which order should the attribute be used to sort the items."),
+          numericInput(inputId = ns("w_sort_rank"),
+                       label = "Rank",
+                       value = value_rank,
+                       min = 0,
+                       max = NA,
+                       step = 1),
+
+          # -- desc
+          p("Whether ordering should be ascending or descending."),
+          radioButtons(inputId = ns("w_sort_desc"),
+                       label = "Direction",
+                       choices = c("asceding" = FALSE, "descending" = TRUE),
+                       selected = value_desc)))
+
+      } else
+        output$w_sort_details <- NULL
+
+    })
+
+
+    # ---------------------------------
+    # Step.5: confirm create
+    # ---------------------------------
+
+    # -- observer actionButton
+    observeEvent(input$w_ask_confirm, {
+
+      # -- Close window
+      removeModal()
+      cat("[step.5] Ask for confirmation \n")
+
+      # -- display modal
+      showModal(modalDialog(
+
+        # -- body
+        tagList(
+
+          h4("Step 5:"),
+          p("Review and confirm attribute", ifelse(isUpdate(), "update.", "creation.")),
+
+          # -- set ordering
+          tags$ul(
+            tags$li("name =", input$w_name),
+            tags$li("type =", input$w_type),
+            tags$li("default strategy =", input$w_default_choice),
+            if(input$w_default_choice == "val")
+              tags$ul(
+                tags$li("Value =", input$w_default_val)),
+            if(input$w_default_choice == "fun")
+              tags$ul(
+                tags$li("Function =", input$w_default_fun),
+                tags$li("Arguments =", ifelse(input$w_default_arg == "", "(empty)", input$w_default_arg))),
+            tags$li("skip =", input$w_skip),
+            tags$li("filter =", input$w_filter),
+            tags$li("Ordering =", input$w_sort),
+            if(input$w_sort)
+              tags$ul(
+                tags$li("Rank =", input$w_sort_rank),
+                tags$li("Direction =", input$w_sort_desc)),
+
+            )),
+
+        # -- params
+        title = "Attribute setup assistant",
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton(inputId = ns("w_confirm"), paste("Confirm", ifelse(isUpdate(), "update", "create"))))))
+
+    })
+
+
+    # ---------------------------------
+    # Step.6: create
+    # ---------------------------------
+
+    # -- observer actionButton
+    observeEvent(input$w_confirm, {
+
+      # -- Close window
+      removeModal()
+      cat("[step.6] Confirm, operation =", ifelse(isUpdate(), "update", "create"), "\n")
+
+      # -- get the data model
+      dm <- k_data_model()
+
+      # -- check
+      dm <- if(isUpdate()){
+
+        # -- get attribute to update
+        attribute <- k_data_model()[input$data_model_rows_selected, ]
+
+        # -- prepare values
+        # only values to be updated will be not NULL
+
+        # -- default val
+        default_val <- NULL
+        if(input$w_default_choice == "val")
+          if(input$w_default_val != attribute$default.val)
+            default_val <- input$w_default_val
+
+        # -- default fun & arg
+        default_fun <- NULL
+        default_arg <- NULL
+        if(input$w_default_choice == "fun"){
+
+          if(input$w_default_fun != attribute$default.fun)
+            default_fun <- input$w_default_fun
+
+          if(input$w_default_arg != attribute$default.arg)
+            default_arg <- input$w_default_arg}
+
+        # -- skip & filter
+        skip <- if(input$w_skip != attribute$skip) input$w_skip else NULL
+        filter <- if(input$w_filter != attribute$filter) input$w_filter else NULL
+
+        # -- ordering
+        sort_rank <- NULL
+        sort_desc <- NULL
+        if(input$w_sort){
+          if(input$w_sort_rank != attribute$sort.rank)
+            sort_rank <- input$w_sort_rank
+          if(input$w_sort_desc != attribute$sort.desc)
+            sort_desc <- input$w_sort_desc}
+
+        # -- Update attribute
+        dm_update_attribute(data.model = dm,
+                            name = attribute$name,
+                            default.val = default_val,
+                            default.fun = default_fun,
+                            default.arg = default_arg,
+                            skip = skip,
+                            filter = filter,
+                            sort.rank = sort_rank,
+                            sort.desc = sort_desc)
+
+      } else
+
+        # -- Add attribute to the data model
+        dm_add_attribute(data.model = dm,
+                         name = input$w_name,
+                         type = input$w_type,
+                         default.val = if(input$w_default_choice == "val") stats::setNames(input$w_default_val, input$w_name) else NULL,
+                         default.fun = if(input$w_default_choice == "fun") stats::setNames(input$w_default_fun, input$w_name) else NULL,
+                         default.arg = if(input$w_default_choice == "fun") stats::setNames(input$w_default_arg, input$w_name) else NULL,
+                         skip = if(input$w_skip) input$w_name else NULL,
+                         filter = if(input$w_filter) input$w_name else NULL,
+                         sort.rank = if(input$w_sort) stats::setNames(input$w_sort_rank, input$w_name) else NULL,
+                         sort.desc = if(input$w_sort) stats::setNames(input$w_sort_desc, input$w_name) else NULL)
+
+      # -- store
+      cat("[step.6] Update data model \n")
+      k_data_model(dm)
+
+      # -- Add column to items (create attribute only)
+      if(!isUpdate()){
+
+        # -- get default value
+        value <- dm_get_default(data.model = dm, name = input$w_name)
+
+        # -- Add column to items & store
+        cat("[step.6] Add new attribute to existing items \n")
+        items <- item_add_attribute(k_items(), name = input$w_name, type = input$w_type, fill = value)
+        k_items(items)
+
+      } else isUpdate(FALSE) # -- reset update
+
+    })
+
+
+    # --------------------------------------------------------------------------
+    # Data model row select
+    # --------------------------------------------------------------------------
 
     # -- observe data_model selected row
     observeEvent(input$data_model_rows_selected, {
@@ -977,88 +1709,18 @@ kitemsManager_Server <- function(id, path,
           row <- NULL
 
       # -- check NULL (no row selected)
-      if(is.null(row)){
+      if(is.null(row))
 
-        # -- update form (creation mode, only if r_items not NULL)
-        if(is.null(k_items()))
-          output$dm_att_form <- NULL
-        else
-          output$dm_att_form <- dm_inputs_ui(names = TEMPLATE_DATA_MODEL$name[!TEMPLATE_DATA_MODEL$name %in% colnames(k_items())],
-                                             types = OBJECT_CLASS,
-                                             ns = ns)
+        # -- update output
+        output$update_attribute <- NULL
 
-      } else {
+      else
 
-        # -- get attribute to update
-        attribute <- k_data_model()[row, ]
-
-        # -- update form (update mode)
-        output$dm_att_form <- dm_inputs_ui(update = TRUE, attribute = attribute, ns = ns)
-
-      }
+        # -- update output
+        output$update_attribute <- renderUI(actionButton(inputId = ns("update_attribute"),
+                                                         label = "Update attribute"))
 
     }, ignoreNULL = FALSE, ignoreInit = TRUE)
-
-
-    # -- observe upd_att button
-    observeEvent(input$upd_att, {
-
-      # -- check
-      #req(isTruthy(input$dm_att_default_detail))
-
-      cat("[EVENT] Update data model attribute \n")
-
-      # -- get selected row
-      row <- input$data_model_rows_selected
-
-      # -- get data model
-      dm <- k_data_model()
-
-      # -- default val & fun
-      # check: in case of id, attribute has no default choice
-      # hence input$dm_default_choice is not reliable in this case #248
-      if(dm[row, ]$name != "id"){
-
-        if(input$dm_default_choice == "none"){
-          default_val <- NA
-          default_fun <- NA
-
-        } else {
-
-          if(input$dm_default_choice == "val"){
-            default_val <- input$dm_att_default_detail
-            default_fun <- NULL
-
-          } else {
-            default_val <- NULL
-            default_fun <- input$dm_att_default_detail}}
-
-      } else {
-
-        # -- when attribute is id
-        default_val <- NULL
-        default_fun <- input$dm_att_default_detail
-
-      }
-
-      # -- skip (force for id)
-      skip <- if(dm[row, ]$name != "id")
-        dm[row, ]$skip <- input$dm_att_skip
-      else
-        TRUE
-
-      # -- update data model
-      dm <- dm_update_attribute(dm,
-                                name = dm[row, ]$name,
-                                default.val = default_val,
-                                default.fun = default_fun,
-                                default.arg = NULL,
-                                skip = skip)
-
-      # -- store
-      k_data_model(dm)
-
-    })
 
 
     # --------------------------------------------------------------------------

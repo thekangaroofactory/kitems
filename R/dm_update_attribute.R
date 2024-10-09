@@ -7,7 +7,10 @@
 #' @param default.val a character string, the new default value
 #' @param default.fun a character string, the new default function name
 #' @param default.arg an optional named vector of arguments, to pass along with the default function.
-#' @param skip a logical to set the skip value (default = FALSE)
+#' @param skip a logical to set the skip value
+#' @param filter a logical to set the filter value
+#' @param sort.rank a numeric, used to define sort rank
+#' @param sort.desc a logical, to define if sorting should be in descending order
 #'
 #' @return the updated data model
 #' @export
@@ -17,8 +20,6 @@
 #'
 #' Use of vector to update several attributes is supported as long as length of the different parameters
 #' is either same as name or 1 (then all rows gets same value).
-#'
-#' Note that filter should be updated using dm_filter() function
 #'
 #' @seealso [data_model()]
 #'
@@ -34,7 +35,10 @@
 #' }
 
 
-dm_update_attribute <- function(data.model, name, default.val = NULL, default.fun = NULL, default.arg = NULL, skip = NULL){
+dm_update_attribute <- function(data.model, name,
+                                default.val = NULL, default.fun = NULL, default.arg = NULL,
+                                skip = NULL, filter = NULL,
+                                sort.rank = NULL, sort.desc = NULL){
 
   # -- update row
   # removed filter: #225
@@ -53,6 +57,15 @@ dm_update_attribute <- function(data.model, name, default.val = NULL, default.fu
 
   if(!is.null(skip))
     data.model[match(name, data.model$name), ]$skip <- skip
+
+  if(!is.null(filter))
+    data.model[match(name, data.model$name), ]$filter <- filter
+
+  if(!is.null(sort.rank))
+    data.model[match(name, data.model$name), ]$sort.rank <- sort.rank
+
+  if(!is.null(sort.desc))
+    data.model[match(name, data.model$name), ]$sort.desc <- sort.desc
 
   # -- return
   data.model

@@ -23,28 +23,37 @@ CLASS_FUNCTIONS <- list("numeric" = "as.numeric",
                         "Date" = ".Date",
                         "POSIXct" = "as.POSIXct")
 
+# -- Define list of examples #281
+CLASS_EXAMPLES <- list("numeric" = 10.5,
+                       "integer" = 2,
+                       "logical" = TRUE,
+                       "character" = "mango",
+                       "factor" = "- (NA, a factor can't be displayed here)",
+                       "Date" = as.Date(Sys.Date()),
+                       "POSIXct" = as.POSIXct(Sys.time()))
+
 
 # --------------------------------------------------------------------------
 # Declare config parameters:
 # --------------------------------------------------------------------------
 
 # -- Default values
-DEFAULT_VALUES <- list("numeric" = c(NA, 0),
-                       "integer" = c(NA, 0),
-                       "logical" = c(NA, FALSE, TRUE),
-                       "character" = c(NA, ""),
-                       "factor" = c(NA),
-                       "Date" = c(NA),
-                       "POSIXct" = c(NA))
+DEFAULT_VALUES <- list("numeric" = 0,
+                       "integer" = 0,
+                       "logical" = FALSE,
+                       "character" = "",
+                       "factor" = NULL,
+                       "Date" = Sys.Date(),
+                       "POSIXct" = Sys.time())
 
 # -- Default functions
-DEFAULT_FUNCTIONS <- list("numeric" = c(NA),
-                          "integer" = c(NA),
-                          "logical" = c(NA),
-                          "character" = c(NA),
-                          "factor" = c(NA),
-                          "Date" = c("Sys.Date"),
-                          "POSIXct" = c("Sys.Date", "Sys.time"))
+DEFAULT_FUNCTIONS <- list("numeric" = NULL,
+                          "integer" = NULL,
+                          "logical" = NULL,
+                          "character" = NULL,
+                          "factor" = NULL,
+                          "Date" = "Sys.Date",
+                          "POSIXct" = c("Sys.time", "Sys.Date"))
 
 
 # --------------------------------------------------------------------------
