@@ -8,13 +8,13 @@ create_testdata()
 
 
 # --------------------------------------------------------------------------
-# Scenario: add attribute
+# Scenario: filter data model cols
 # --------------------------------------------------------------------------
 
-test_that("Add attribute works", {
+test_that("Server works", {
 
   cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: Add attribute works")
+  cat("Scenario: filter data model cols")
   cat("\n-------------------------------------------------------------------------- \n")
 
   # -- declare arguments
@@ -26,38 +26,33 @@ test_that("Add attribute works", {
   # -- module server call
   testServer(kitemsManager_Server, args = params, {
 
-    # -- update input
-    session$setInputs(dm_att_name = "status")
-    session$setInputs(dm_att_type = "character")
-    session$setInputs(dm_default_choice = "val")
-    session$setInputs(dm_att_default_detail = "draft")
-    session$setInputs(dm_att_skip = FALSE)
+    # --------------------------------------------------------------------------
+    # filter cols
+    # --------------------------------------------------------------------------
+    # -- flush reactive values
+    session$flushReact()
 
-    # -- click
-    session$setInputs(add_att = 1)
+    # -- update input
+    session$setInputs(adm_filter_col = c("id", "total"))
+
 
 
     # --------------------------------------------------------------------------
     # Data model
     # --------------------------------------------------------------------------
 
-    # -- check
+    r_data_model <- dm_name(module_id)
     x <- k_data_model()
 
-    # -- test class & dim
+    # -- test class
     expect_s3_class(x, "data.frame")
-    expect_equal(dim(x), dim(dm) + c(1, 0))
 
+    # -- test dim
+    expect_equal(dim(x), dim(dm))
 
-    # --------------------------------------------------------------------------
-    # Items
-    # --------------------------------------------------------------------------
+    # -- test names
+    expect_equal(x$name[x$filter], c("id", "total"))
 
-    x <- k_items()
-
-    # -- test class & dim
-    expect_s3_class(x, "data.frame")
-    expect_equal(dim(x), dim(items) + c(0, 1))
 
   })
 

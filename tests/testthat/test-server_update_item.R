@@ -42,6 +42,8 @@ test_that("Update works", {
     # -- update inputs (values to create item)
     session$setInputs(id = x$id[1])
     session$setInputs(date = x$date[1] + 1)
+    session$setInputs(date_time = "17:17:17")
+    session$setInputs(date_tz = "UTC")
     session$setInputs(name = paste0(x$name[1], "-updated"))
     session$setInputs(quantity = x$quantity[1] + 10)
     session$setInputs(total = x$total[1] + 0.5)

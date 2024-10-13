@@ -55,7 +55,7 @@ test_that("Import data works", {
     expect_s3_class(x, "data.frame")
 
     # -- test dim
-    expect_equal(dim(x), c(1,6))
+    expect_equal(dim(x), c(1, length(DATA_MODEL_COLCLASSES)))
 
 
     # --------------------------------------------------------------------------

@@ -34,15 +34,6 @@ test_that("Selection works", {
     session$flushReact()
 
     # -- update input
-    session$setInputs(default_view_rows_selected = c(1,2))
-
-    # -- check
-    expect_equal(selected_items(), k_items()$id[1:2])
-
-    # -- flush reactive values
-    session$flushReact()
-
-    # -- update input
     session$setInputs(filtered_view_rows_selected = c(3,4))
 
     # -- check

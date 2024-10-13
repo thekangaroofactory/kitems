@@ -31,6 +31,7 @@ test_that("Date sliderInput works", {
     # --------------------------------------------------------------------------
 
     # -- update input
+    session$setInputs(date_slider_strategy = "this-year")
     session$setInputs(date_slider = date_slider_value)
 
     # -- check

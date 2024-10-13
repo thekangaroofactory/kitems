@@ -26,7 +26,7 @@ item_save <- function(data, file = NULL){
   # -- get datetime index
   # To avoid adding data.model to the function signature, get classes from data
   classes <- lapply(data, function(x) class(x)[1])
-  idx <- which(classes %in% c("POSIXct", "POSIXlt"))
+  idx <- which(classes == "POSIXct")
 
   # -- convert to ISO 8601 character format
   if(length(idx) > 0){

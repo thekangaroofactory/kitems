@@ -15,6 +15,12 @@ admin_ui <- function(id){
   # -- Get namespace
   ns <- NS(id)
 
+  # -- Manage nested module(s)
+  id_chain <- unlist(strsplit(id, split = "-"))
+  name <- if(length(id_chain) > 1)
+    paste(utils::tail(id_chain, 1), "(as nested module of", utils::head(id_chain, -1), ")")
+  else id
+
   # -- Define UI & return
   tagList(
 
@@ -28,19 +34,19 @@ admin_ui <- function(id){
       # -- Data model
       tabPanel(title = "Data model",
 
-               wellPanel(h3(paste("Name: ", id)),
+               wellPanel(h3(paste("Name: ", name)),
                          uiOutput(ns("admin_dm_tab")))),
 
       # -- Raw table
       tabPanel(title = "Raw table",
 
-               wellPanel(h3(paste("Name: ", id)),
+               wellPanel(h3(paste("Name: ", name)),
                          uiOutput(ns("admin_raw_tab")))),
 
       # --View table
       tabPanel(title = "View",
 
-               wellPanel(h3(paste("Name: ", id)),
+               wellPanel(h3(paste("Name: ", name)),
                          uiOutput(ns("admin_view_tab"))))))
 
 }

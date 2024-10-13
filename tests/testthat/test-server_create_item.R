@@ -31,7 +31,9 @@ test_that("Create works", {
 
     # -- update inputs (values to create item)
     session$setInputs(id = NA)
-    session$setInputs(date = NA)
+    session$setInputs(date = Sys.Date())
+    session$setInputs(date_time = "14:50:42")
+    session$setInputs(date_tz = "CET")
     session$setInputs(name = "Orange")
     session$setInputs(quantity = 4)
     session$setInputs(total = 78.9)

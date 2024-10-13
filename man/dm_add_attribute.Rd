@@ -8,10 +8,13 @@ dm_add_attribute(
   data.model,
   name,
   type,
-  default.val = NA,
-  default.fun = NA,
-  skip = FALSE,
-  filter = FALSE
+  default.val = NULL,
+  default.fun = NULL,
+  default.arg = NULL,
+  filter = NULL,
+  skip = NULL,
+  sort.rank = NULL,
+  sort.desc = NULL
 )
 }
 \arguments{
@@ -21,13 +24,19 @@ dm_add_attribute(
 
 \item{type}{a \emph{mandatory} character string for the new attribute type}
 
-\item{default.val}{an optional default value}
+\item{default.val}{an optional named vector of values, defining the default values.}
 
-\item{default.fun}{an optional default function}
+\item{default.fun}{an optional named vector of functions, defining the default functions to be used to generate default values.}
 
-\item{skip}{an optional logical value (default = FALSE) if the attribute should be skipped in the input form}
+\item{default.arg}{an optional named vector of arguments, to pass along with the default function.}
 
-\item{filter}{an optional logical value (default = FALSE) if the attribute should be masked in the filtered view}
+\item{filter}{an optional character vector, with the name(s) of the attribute(s) to filter}
+
+\item{skip}{an optional character vector, with the name(s) of the attribute(s) to skip}
+
+\item{sort.rank}{an optional named numeric vector, to define sort orders}
+
+\item{sort.desc}{an optional named logical vector, to define if sort should be descending}
 }
 \value{
 the updated data model
@@ -40,7 +49,10 @@ Add attribute to a data model
 dm_add_attribute(data.model = mydatamodel, name = "new_attribute", type = "character")
 dm_add_attribute(data.model = mydatamodel, name = "total", type = "numeric", default.val = 0)
 dm_add_attribute(data.model = mydatamodel, name = "date", type = "Date", default.fun = "Sys.Date")
-dm_add_attribute(data.model = mydatamodel, name = "progress", type = "integer", skip = TRUE)
-dm_add_attribute(data.model = mydatamodel, name = "internal", type = "logical", filter = TRUE)
+dm_add_attribute(data.model = mydatamodel, name = "progress", type = "integer", skip = "progress")
+dm_add_attribute(data.model = mydatamodel, name = "internal", type = "logical", filter = "internal")
 }
+}
+\seealso{
+\code{\link[=data_model]{data_model()}}
 }

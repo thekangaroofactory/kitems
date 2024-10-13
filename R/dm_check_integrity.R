@@ -51,16 +51,18 @@ dm_check_integrity <- function(data.model, items, template = NULL){
     # note: sequence to prepare for update from template
     missing_default_val <- rep(NA, n)
     missing_default_fun <- rep(NA, n)
+    missing_default_arg <- rep(NA, n)
     missing_skip <- rep(FALSE, n)
     missing_filter <- rep(FALSE, n)
 
     # -- Set names
     names(missing_default_val) <- missing_att
     names(missing_default_fun) <- missing_att
+    names(missing_default_arg) <- missing_att
     names(missing_skip) <- missing_att
     names(missing_filter) <- missing_att
 
-    # -- Chech argument
+    # -- Check argument
     if(!is.null(template)){
 
       # -- Check if any attribute is part of template
@@ -76,6 +78,7 @@ dm_check_integrity <- function(data.model, items, template = NULL){
         missing_types[names(missing_types) %in% template$name][] <- template[idx, ]$type
         missing_default_val[names(missing_default_val) %in% template$name][] <- template[idx, ]$default.val
         missing_default_fun[names(missing_default_fun) %in% template$name][] <- template[idx, ]$default.fun
+        missing_default_arg[names(missing_default_arg) %in% template$name][] <- template[idx, ]$default.arg
         missing_skip[names(missing_skip) %in% template$name][] <- template[idx, ]$filter
         missing_filter[names(missing_filter) %in% template$name][] <- template[idx, ]$skip
 
@@ -87,8 +90,9 @@ dm_check_integrity <- function(data.model, items, template = NULL){
                                    type = missing_types,
                                    default.val = missing_default_val,
                                    default.fun = missing_default_fun,
-                                   skip = missing_skip,
-                                   filter = missing_filter)
+                                   default.arg = missing_default_arg,
+                                   skip = names(missing_skip),
+                                   filter = names(missing_filter))
 
   }
 
@@ -103,6 +107,27 @@ dm_check_integrity <- function(data.model, items, template = NULL){
     data.model <- data.model[!data.model$name %in% extra_att, ]
 
   }
+
+  # -- Check for data model version
+  dm_colClasses <- lapply(data.model, class)
+  missing_col <- DATA_MODEL_COLCLASSES[!names(DATA_MODEL_COLCLASSES) %in% names(dm_colClasses)]
+
+  # -- migrate
+  if(length(missing_col > 0)){
+
+    cat("[Warning] Data model migration is needed \n")
+    integrity <- FALSE
+
+    # -- call migration
+    data.model <- dm_migrate(data.model, names(missing_col))}
+
+
+  # -- Check for column order
+  if(!identical(names(data.model), names(DATA_MODEL_COLCLASSES))){
+    cat("[Warning] Reordering data model columns \n")
+    data.model <- data.model[names(DATA_MODEL_COLCLASSES)]
+    integrity <- FALSE}
+
 
   # -- Return
   if(!integrity)

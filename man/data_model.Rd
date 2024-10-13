@@ -8,8 +8,11 @@ data_model(
   colClasses,
   default.val = NULL,
   default.fun = NULL,
+  default.arg = NULL,
   filter = NULL,
-  skip = NULL
+  skip = NULL,
+  sort.rank = NULL,
+  sort.desc = NULL
 )
 }
 \arguments{
@@ -19,9 +22,15 @@ data_model(
 
 \item{default.fun}{an optional named vector of functions, defining the default functions to be used to generate default values.}
 
+\item{default.arg}{an optional named vector of arguments, to pass along with the default function.}
+
 \item{filter}{an optional character vector, indicating which attribute names should be filtered from the table view.}
 
 \item{skip}{an optional character vector, indicating which attribute names should be skipped from the user input form.}
+
+\item{sort.rank}{an optional named numeric vector, to define sort orders.}
+
+\item{sort.desc}{an optional named logical vector, to define if sort should be descending.}
 }
 \value{
 a data.frame containing the data model.
@@ -33,25 +42,41 @@ Build data model
 colClasses will be used to create the data.frame: names will define the attributes of the data model,
 and values will define the class (type) of the attributes.
 
-All other parameters are optional. When provided, they will be used matching names defined in colClasses, so:
+All default.* parameters are optional. When provided, they will be used to match with names defined in colClasses:
 \itemize{
-\item order in those vectors doesn't matter,
-\item no need to set values for all attributes (see examples),
-\item names in those vectors not matching with colClasses names will be ignored.
+\item order in those vectors doesn't matter
+\item there is no need to set values for all attributes (see examples)
+\item names in vectors not matching with colClasses names will be ignored
+}
+
+default.fun and default.val are mutual exclusive, with priority on default.fun (default.val will be forced to NA)
+default.arg requires default.fun not to be NULL (will be forced to NA otherwise)
+
+filter and skip directly contains the names of the attributes to set to TRUE
+
 If not provided, defaults will be applied:
-\item NA for default.val and default.fun,
-\item FALSE for filter and skip.
+\itemize{
+\item NA for default.val, default.fun and default.arg
+\item FALSE for filter and skip
 }
 }
 \examples{
-# order in vectors doesn't matter:
+# -- order in vectors doesn't matter:
 default.val <- c("name" = "test", "total" = 2)
 default.val <- c("total" = 2, "name" = "test")
 
-# no need to set all values
+# -- no need to set all values
 colClasses <- c("id" = "numeric", "name" = "character", "total" = "numeric")
 default.val <- c("name" = "test", "total" = 2)
 
-data_model(colClasses, default.val, default.fun = NULL)
+# -- filter and skip
+filter <- "id"
+skip <- c("id", "date")
+
+# -- sort
+sort.rank = c("date" = 1, "total" = 2, "name" = 3)
+sort.desc = c("date" = TRUE, "total" = FALSE)
+
+data_model(colClasses, default.val, filter = filter, skip = skip)
 
 }

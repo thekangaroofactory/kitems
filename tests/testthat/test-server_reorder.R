@@ -8,13 +8,13 @@ create_testdata()
 
 
 # --------------------------------------------------------------------------
-# Test
+# Scenario: reorder data model cols
 # --------------------------------------------------------------------------
 
-test_that("Update attribute / dm_default_choice = fun works", {
+test_that("Server works", {
 
   cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: Update attribute / dm_default_choice = fun works")
+  cat("Scenario: reorder data model cols")
   cat("\n-------------------------------------------------------------------------- \n")
 
   # -- declare arguments
@@ -27,27 +27,42 @@ test_that("Update attribute / dm_default_choice = fun works", {
   testServer(kitemsManager_Server, args = params, {
 
     # -- update input
-    session$setInputs(data_model_rows_selected = 3)
-    session$setInputs(dm_att_type = "character")
-    session$setInputs(dm_default_choice = "fun")
-    session$setInputs(dm_att_default_detail = "Sys.timezone")
+    session$setInputs(dm_order_cols = names(colClasses[order(names(colClasses))]))
 
-    # -- click
-    session$setInputs(upd_att = 1)
 
     # --------------------------------------------------------------------------
     # Data model
     # --------------------------------------------------------------------------
 
-    # -- check
+    r_data_model <- dm_name(module_id)
     x <- k_data_model()
 
     # -- test class
     expect_s3_class(x, "data.frame")
 
-    # -- test values
-    expect_equal(x[3, ]$default.fun, "Sys.timezone")
-    expect_true(is.na(x[3, ]$default.val))
+    # -- test dim
+    expect_equal(dim(x), dim(dm))
+
+    # -- test names
+    expect_equal(x$name, names(colClasses[order(names(colClasses))]))
+
+
+    # --------------------------------------------------------------------------
+    # Items
+    # --------------------------------------------------------------------------
+
+    r_items <- items_name(module_id)
+    x <- k_items()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), dim(items))
+
+    # -- test names
+    expect_equal(colnames(x), names(colClasses[order(names(colClasses))]))
+
 
   })
 

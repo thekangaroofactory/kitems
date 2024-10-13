@@ -12,8 +12,7 @@ OBJECT_CLASS <- c("numeric",
                   "character",
                   "factor",
                   "Date",
-                  "POSIXct",
-                  "POSIXlt")
+                  "POSIXct")
 
 # -- Define list of as functions
 CLASS_FUNCTIONS <- list("numeric" = "as.numeric",
@@ -22,8 +21,16 @@ CLASS_FUNCTIONS <- list("numeric" = "as.numeric",
                         "character" = "as.character",
                         "factor" = "as.factor",
                         "Date" = ".Date",
-                        "POSIXct" = "as.POSIXct",
-                        "POSIXlt" = "as.POSIXlt")
+                        "POSIXct" = "as.POSIXct")
+
+# -- Define list of examples #281
+CLASS_EXAMPLES <- list("numeric" = 10.5,
+                       "integer" = 2,
+                       "logical" = TRUE,
+                       "character" = "mango",
+                       "factor" = "- (NA, a factor can't be displayed here)",
+                       "Date" = as.Date(Sys.Date()),
+                       "POSIXct" = as.POSIXct(Sys.time()))
 
 
 # --------------------------------------------------------------------------
@@ -31,24 +38,49 @@ CLASS_FUNCTIONS <- list("numeric" = "as.numeric",
 # --------------------------------------------------------------------------
 
 # -- Default values
-DEFAULT_VALUES <- list("numeric" = c(NA, 0),
-                       "integer" = c(NA, 0),
-                       "logical" = c(NA, FALSE, TRUE),
-                       "character" = c(NA, ""),
-                       "factor" = c(NA),
-                       "Date" = c(NA),
-                       "POSIXct" = c(NA),
-                       "POSIXlt" = c(NA))
+DEFAULT_VALUES <- list("numeric" = 0,
+                       "integer" = 0,
+                       "logical" = FALSE,
+                       "character" = "",
+                       "factor" = NULL,
+                       "Date" = Sys.Date(),
+                       "POSIXct" = Sys.time())
 
 # -- Default functions
-DEFAULT_FUNCTIONS <- list("numeric" = c(NA),
-                          "integer" = c(NA),
-                          "logical" = c(NA),
-                          "character" = c(NA),
-                          "factor" = c(NA),
-                          "Date" = c("Sys.Date"),
-                          "POSIXct" = c("Sys.Date"),
-                          "POSIXlt" = c("Sys.Date"))
+DEFAULT_FUNCTIONS <- list("numeric" = NULL,
+                          "integer" = NULL,
+                          "logical" = NULL,
+                          "character" = NULL,
+                          "factor" = NULL,
+                          "Date" = "Sys.Date",
+                          "POSIXct" = c("Sys.time", "Sys.Date"))
+
+
+# --------------------------------------------------------------------------
+# Declare data model structure:
+# --------------------------------------------------------------------------
+
+# -- colClasses
+DATA_MODEL_COLCLASSES <- list(name = "character",
+                              type = "character",
+                              default.val = "character",
+                              default.fun = "character",
+                              default.arg = "character",
+                              filter = "logical",
+                              skip = "logical",
+                              sort.rank = "numeric",
+                              sort.desc = "logical")
+
+# -- default values
+DATA_MODEL_DEFAULTS <- list(name = NA,
+                            type = NA,
+                            default.val = NA,
+                            default.fun = NA,
+                            default.arg = NA,
+                            filter = FALSE,
+                            skip = FALSE,
+                            sort.rank = NA,
+                            sort.desc = NA)
 
 
 # --------------------------------------------------------------------------
@@ -79,6 +111,9 @@ TEMPLATE_DATA_MODEL <- data.frame(name = c("date",
                                                   "ktools::getTimestamp", rep(NA, 5),
                                                   rep(NA, 2)),
 
+                                  # -- added #63
+                                  default.arg = rep(NA, 16),
+
                                   # -- added #220
                                   filter = c(FALSE,
                                              rep(FALSE, 7),
@@ -89,5 +124,11 @@ TEMPLATE_DATA_MODEL <- data.frame(name = c("date",
                                   skip = c(FALSE,
                                            rep(FALSE, 7),
                                            TRUE, rep(FALSE, 5),
-                                           rep(FALSE, 2)))
+                                           rep(FALSE, 2)),
+
+                                  # -- added #239
+                                  sort.rank = rep(NA, 16),
+
+                                  # -- added #239
+                                  sort.desc = rep(NA, 16))
 

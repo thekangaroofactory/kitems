@@ -9,7 +9,11 @@ dm_update_attribute(
   name,
   default.val = NULL,
   default.fun = NULL,
-  skip = NULL
+  default.arg = NULL,
+  skip = NULL,
+  filter = NULL,
+  sort.rank = NULL,
+  sort.desc = NULL
 )
 }
 \arguments{
@@ -17,11 +21,19 @@ dm_update_attribute(
 
 \item{name}{a character string of the attribute name}
 
-\item{default.val}{the new default value (default = NULL)}
+\item{default.val}{a character string, the new default value}
 
-\item{default.fun}{a character string, the new default function name (default = NULL)}
+\item{default.fun}{a character string, the new default function name}
 
-\item{skip}{a logical to set the skip value (default = FALSE)}
+\item{default.arg}{an optional named vector of arguments, to pass along with the default function.}
+
+\item{skip}{a logical to set the skip value}
+
+\item{filter}{a logical to set the filter value}
+
+\item{sort.rank}{a numeric, used to define sort rank}
+
+\item{sort.desc}{a logical, to define if sorting should be in descending order}
 }
 \value{
 the updated data model
@@ -34,8 +46,6 @@ Updating attribute class is not supported by this function (as it requires data 
 
 Use of vector to update several attributes is supported as long as length of the different parameters
 is either same as name or 1 (then all rows gets same value).
-
-Note that filter should be updated using dm_filter_set() function
 }
 \examples{
 \dontrun{
@@ -43,7 +53,11 @@ Note that filter should be updated using dm_filter_set() function
 dm_update_attribute(data.model = dm,
                     name = c("name","total"),
                     default.val = c("test", 2),
-                    default.fun = NA,
+                    default.fun = NULL,
+                    default.arg = NULL,
                     skip = TRUE)
 }
+}
+\seealso{
+\code{\link[=data_model]{data_model()}}
 }

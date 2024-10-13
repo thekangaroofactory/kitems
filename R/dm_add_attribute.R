@@ -5,54 +5,45 @@
 #' @param data.model a \emph{mandatory} data model, structured as an output of data_model() function
 #' @param name a \emph{mandatory} character string for the new attribute name
 #' @param type a \emph{mandatory} character string for the new attribute type
-#' @param default.val an optional default value
-#' @param default.fun an optional default function
-#' @param skip an optional logical value (default = FALSE) if the attribute should be skipped in the input form
-#' @param filter an optional logical value (default = FALSE) if the attribute should be masked in the filtered view
+#' @param default.val an optional named vector of values, defining the default values.
+#' @param default.fun an optional named vector of functions, defining the default functions to be used to generate default values.
+#' @param default.arg an optional named vector of arguments, to pass along with the default function.
+#' @param skip an optional character vector, with the name(s) of the attribute(s) to skip
+#' @param filter an optional character vector, with the name(s) of the attribute(s) to filter
+#' @param sort.rank an optional named numeric vector, to define sort orders
+#' @param sort.desc an optional named logical vector, to define if sort should be descending
 #'
 #' @return the updated data model
 #' @export
+#'
+#' @seealso [data_model()]
 #'
 #' @examples
 #' \dontrun{
 #' dm_add_attribute(data.model = mydatamodel, name = "new_attribute", type = "character")
 #' dm_add_attribute(data.model = mydatamodel, name = "total", type = "numeric", default.val = 0)
 #' dm_add_attribute(data.model = mydatamodel, name = "date", type = "Date", default.fun = "Sys.Date")
-#' dm_add_attribute(data.model = mydatamodel, name = "progress", type = "integer", skip = TRUE)
-#' dm_add_attribute(data.model = mydatamodel, name = "internal", type = "logical", filter = TRUE)
+#' dm_add_attribute(data.model = mydatamodel, name = "progress", type = "integer", skip = "progress")
+#' dm_add_attribute(data.model = mydatamodel, name = "internal", type = "logical", filter = "internal")
 #' }
 
 
-dm_add_attribute <- function(data.model, name, type, default.val = NA, default.fun = NA, skip = FALSE, filter = FALSE){
+dm_add_attribute <- function(data.model, name, type,
+                             default.val = NULL, default.fun = NULL, default.arg = NULL,
+                             filter = NULL, skip = NULL,
+                             sort.rank = NULL, sort.desc = NULL){
 
-  cat("[dm_add_attribute] Add attribute to data model \n")
+  cat("[dm_add_attribute] Add attribute to data model =", name, "\n")
 
-  # -- Check for empty strings (data.frame would fail)
-  if(identical(default.val, ""))
-    default.val <- NA
-
-  if(identical(default.fun, ""))
-    default.fun <- NA
-
-  # -- make sure default.val & fun are mutual exclusive #230
-  # limitation: to when default.fun contains only 1 value (one attribute is added at a time)
-  if(length(default.fun) == 1 && !is.na(default.fun))
-    default.val <- NA
-
-  # -- Check for NULL
-  if(is.null(skip))
-    skip <- FALSE
-
-  if(is.null(filter))
-    filter <- FALSE
-
-  # -- Init attribute
-  new_attribute <- data.frame(name = name,
-                              type = type,
+  # -- Init attribute (using data_model to fit with structure)
+  new_attribute <- data_model(colClasses = stats::setNames(type, name),
                               default.val = default.val,
                               default.fun = default.fun,
+                              default.arg = default.arg,
+                              filter = filter,
                               skip = skip,
-                              filter = filter)
+                              sort.rank = sort.rank,
+                              sort.desc = sort.desc)
 
   # -- Merge to data.model (return)
   data.model <- rbind(data.model, new_attribute)
