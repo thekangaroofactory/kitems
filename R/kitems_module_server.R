@@ -455,6 +455,7 @@ kitemsManager_Server <- function(id, path,
           fluidRow(column(width = 12,
                           h3("Actions"),
                           actionButton(inputId = ns("new_attribute"), label = "New attribute"),
+                          uiOutput(ns("try_onclick")),
                           uiOutput(ns("update_attribute")))),
 
           # -- info
@@ -1048,15 +1049,44 @@ kitemsManager_Server <- function(id, path,
     })
 
 
+    # **************************************************************************
+    # **************************************************************************
+
+    output$try_onclick <- renderUI(
+
+      tagList(
+        actionButton(ns("btn_1"), "Try Btn_1",
+                     onclick = sprintf('Shiny.setInputValue(\"%s\", this.id, {priority: \"event\"})',
+                                       ns("try_button_click"))),
+
+        actionButton(ns("btn_2"), "Try Btn_2",
+                     onclick = sprintf('Shiny.setInputValue(\"%s\", this.id, {priority: \"event\"})',
+                                       ns("try_button_click")))
+      ))
+
+    observeEvent(input$try_button_click, {
+
+      cat("**************** TRY OK *********************** \n")
+      str(input$try_button_click)
+
+    })
+
+
+    # **************************************************************************
+    # **************************************************************************
+
+
     # ---------------------------------
     # Step.2: defaults ----
     # ---------------------------------
     # entry point for the update process (step.1 skipped)
 
     # -- observe button
-    observeEvent({
-      input$w_set_default
-      input$update_attribute}, {
+    observeEvent(list(input$w_set_default, input$update_attribute), {
+
+      req(input$w_set_default != 0 | input$update_attribute != 0)
+        cat("********************\n")
+
 
         # -- check selected row (update)
         # Selection was cleared in step.1 if it's a creation
@@ -1068,7 +1098,6 @@ kitemsManager_Server <- function(id, path,
           isValid$name <- TRUE
           isValid$type <- TRUE
           isUpdate(TRUE)}
-
 
         # -- Requires valid name & type
         req(isValid$name & isValid$type)
