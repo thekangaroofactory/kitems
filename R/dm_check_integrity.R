@@ -121,6 +121,14 @@ dm_check_integrity <- function(data.model, items, template = NULL){
     # -- call migration
     data.model <- dm_migrate(data.model, names(missing_col))}
 
+
+  # -- Check for column order
+  if(!identical(names(data.model), names(DATA_MODEL_COLCLASSES))){
+    cat("[Warning] Reordering data model columns \n")
+    data.model <- data.model[names(DATA_MODEL_COLCLASSES)]
+    integrity <- FALSE}
+
+
   # -- Return
   if(!integrity)
     data.model
