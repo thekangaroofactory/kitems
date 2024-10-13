@@ -454,8 +454,7 @@ kitemsManager_Server <- function(id, path,
           # -- actions
           fluidRow(column(width = 12,
                           h3("Actions"),
-                          actionButton(inputId = ns("new_attribute"), label = "New attribute"),
-                          uiOutput(ns("try_onclick")),
+                          actionButton(inputId = ns("w_new_attribute"), label = "New attribute"),
                           uiOutput(ns("update_attribute")))),
 
           # -- info
@@ -912,22 +911,19 @@ kitemsManager_Server <- function(id, path,
 
 
     # --------------------------------------------------------------------------
-    # Add / update data model attribute (assistant) ----
+    # Data model attribute wizard ----
     # --------------------------------------------------------------------------
 
     # ---------------------------------
-    # Step.1: name & type ----
+    # Step.1: attribute name & type ----
     # ---------------------------------
     # Note: there is no need to support update in step.1
 
     # -- observe button
     # Added #281
-    observeEvent(input$new_attribute, {
+    observeEvent(input$w_new_attribute, {
 
-      # -- check selected row & unselect
-      # Step.2 will check for selected row to determine if it's an update
-      if(!is.null(input$data_model_rows_selected))
-        selectRows(proxy = dataTableProxy("data_model"), selected = NULL)
+      cat("[EVENT] Create data model attribute wizard \n")
 
       # -- init
       isUpdate(FALSE)
@@ -975,7 +971,9 @@ kitemsManager_Server <- function(id, path,
         title = "Attribute setup assistant",
         footer = tagList(
           modalButton("Cancel"),
-          actionButton(inputId = ns("w_set_default"), "Next"))))
+          actionButton(inputId = ns("w_confirm_1"), label = "Next",
+                       onclick = sprintf('Shiny.setInputValue(\"%s\", "create", {priority: \"event\"})',
+                                         ns("w_set_default"))))))
 
     })
 
@@ -1049,129 +1047,97 @@ kitemsManager_Server <- function(id, path,
     })
 
 
-    # **************************************************************************
-    # **************************************************************************
-
-    output$try_onclick <- renderUI(
-
-      tagList(
-        actionButton(ns("btn_1"), "Try Btn_1",
-                     onclick = sprintf('Shiny.setInputValue(\"%s\", this.id, {priority: \"event\"})',
-                                       ns("try_button_click"))),
-
-        actionButton(ns("btn_2"), "Try Btn_2",
-                     onclick = sprintf('Shiny.setInputValue(\"%s\", this.id, {priority: \"event\"})',
-                                       ns("try_button_click")))
-      ))
-
-    observeEvent(input$try_button_click, {
-
-      cat("**************** TRY OK *********************** \n")
-      str(input$try_button_click)
-
-    })
-
-
-    # **************************************************************************
-    # **************************************************************************
-
-
     # ---------------------------------
     # Step.2: defaults ----
     # ---------------------------------
     # entry point for the update process (step.1 skipped)
 
     # -- observe button
-    observeEvent(list(input$w_set_default, input$update_attribute), {
+    observeEvent(input$w_set_default, {
 
-      req(input$w_set_default != 0 | input$update_attribute != 0)
-        cat("********************\n")
+      # -- check input (entry point for update)
+      if(input$w_set_default == "update"){
 
+        cat("[EVENT] Update data model attribute wizard \n")
 
-        # -- check selected row (update)
-        # Selection was cleared in step.1 if it's a creation
-        if(!is.null(input$data_model_rows_selected)){
+        # -- init values (to pass req)
+        isValid$name <- TRUE
+        isValid$type <- TRUE
+        isUpdate(TRUE)}
 
-          cat("[EVENT] Update data model attribute \n")
+      # -- Requires valid name & type
+      req(isValid$name & isValid$type)
+      removeModal()
 
-          # -- init values
-          isValid$name <- TRUE
-          isValid$type <- TRUE
-          isUpdate(TRUE)}
+      # -- init input params
+      if(isUpdate()){
 
-        # -- Requires valid name & type
-        req(isValid$name & isValid$type)
-        removeModal()
+        # -- get attribute
+        attribute <- k_data_model()[input$data_model_rows_selected, ]
 
-        # -- init input params
-        if(isUpdate()){
+        name <- attribute$name
+        type <- attribute$type
+        selected <- if(!is.na(attribute$default.fun)) "fun" else
+          if(!is.na(attribute$default.val)) "val" else "none"
 
-          # -- get attribute
-          attribute <- k_data_model()[input$data_model_rows_selected, ]
+        # -- case when w_default_choice input has already same value as selected
+        # need to update other inputs otherwise they keep old values
+        if(!is.null(input$w_default_choice))
+          if(selected == "val" & input$w_default_choice == "val"){
 
-          name <- attribute$name
-          type <- attribute$type
-          selected <- if(!is.na(attribute$default.fun)) "fun" else
-            if(!is.na(attribute$default.val)) "val" else "none"
+            updateTextInput(inputId = "w_default_val",
+                            value = attribute$default.val)
 
-          # -- case when w_default_choice input has already same value as selected
-          # need to update other inputs otherwise they keep old values
-          if(!is.null(input$w_default_choice))
-            if(selected == "val" & input$w_default_choice == "val"){
+          } else if(selected == "fun" & input$w_default_choice == "fun"){
 
-              updateTextInput(inputId = "w_default_val",
-                              value = attribute$default.val)
+            updateSelectizeInput(inputId = "w_default_fun",
+                                 choices = unique(c(attribute$default.fun, DEFAULT_FUNCTIONS[[attribute$type]])),
+                                 selected = attribute$default.fun)
 
-            } else if(selected == "fun" & input$w_default_choice == "fun"){
+            updateTextInput(inputId = "w_default_arg",
+                            value = attribute$default.arg)}
 
-              updateSelectizeInput(inputId = "w_default_fun",
-                                   choices = unique(c(attribute$default.fun, DEFAULT_FUNCTIONS[[attribute$type]])),
-                                   selected = attribute$default.fun)
+      } else { # -- create
 
-              updateTextInput(inputId = "w_default_arg",
-                              value = attribute$default.arg)}
+        name <- input$w_name
+        type <- input$w_type
+        selected <- "none"}
 
-        } else { # -- create
+      cat("[step.2] init: name =", name, "/ type =", type, "/ selected =", selected, "\n")
 
-          name <- input$w_name
-          type <- input$w_type
-          selected <- "none"}
+      # -- display modal
+      showModal(modalDialog(
 
-        cat("[step.2] init: name =", name, "/ type =", type, "/ selected =", selected, "\n")
+        # -- body
+        tagList(
 
-        # -- display modal
-        showModal(modalDialog(
+          h4("Step 2:"),
+          p("Setup how default values should be generated."),
 
-          # -- body
-          tagList(
+          p("Attribute:"),
+          tags$ul(
+            tags$li("name =", name),
+            tags$li("type =", type)),
 
-            h4("Step 2:"),
-            p("Setup how default values should be generated."),
+          # -- default strategy
+          radioButtons(inputId = ns("w_default_choice"),
+                       label = "Choose strategy:",
+                       choices = c("no default" = "none", "value" = "val", "function" = "fun"),
+                       selected = selected),
 
-            p("Attribute:"),
-            tags$ul(
-              tags$li("name =", name),
-              tags$li("type =", type)),
+          # -- default details
+          uiOutput(ns("w_default_detail")),
 
-            # -- default strategy
-            radioButtons(inputId = ns("w_default_choice"),
-                         label = "Choose strategy:",
-                         choices = c("no default" = "none", "value" = "val", "function" = "fun"),
-                         selected = selected),
+          # -- comments
+          uiOutput(ns("w_default_note"))),
 
-            # -- default details
-            uiOutput(ns("w_default_detail")),
+        # -- params
+        title = "Attribute setup assistant",
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton(inputId = ns("w_set_sf"), "Next"))))
 
-            # -- comments
-            uiOutput(ns("w_default_note"))),
-
-          # -- params
-          title = "Attribute setup assistant",
-          footer = tagList(
-            modalButton("Cancel"),
-            actionButton(inputId = ns("w_set_sf"), "Next"))))
-
-      })
+    })
 
 
     # -- Observe radioButtons
@@ -1746,8 +1712,15 @@ kitemsManager_Server <- function(id, path,
       else
 
         # -- update output
+        # set custom value for w_set_default input to trigger step.2 of the wizard
         output$update_attribute <- renderUI(actionButton(inputId = ns("update_attribute"),
-                                                         label = "Update attribute"))
+                                                         label = "Update attribute",
+                                                         onclick = sprintf('Shiny.setInputValue(\"%s\", "update", {priority: \"event\"})',
+                                                                           ns("w_set_default"))))
+
+
+
+
 
     }, ignoreNULL = FALSE, ignoreInit = TRUE)
 
