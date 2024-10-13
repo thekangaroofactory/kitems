@@ -10,7 +10,10 @@ dm_update_attribute(
   default.val = NULL,
   default.fun = NULL,
   default.arg = NULL,
-  skip = NULL
+  skip = NULL,
+  filter = NULL,
+  sort.rank = NULL,
+  sort.desc = NULL
 )
 }
 \arguments{
@@ -24,7 +27,13 @@ dm_update_attribute(
 
 \item{default.arg}{an optional named vector of arguments, to pass along with the default function.}
 
-\item{skip}{a logical to set the skip value (default = FALSE)}
+\item{skip}{a logical to set the skip value}
+
+\item{filter}{a logical to set the filter value}
+
+\item{sort.rank}{a numeric, used to define sort rank}
+
+\item{sort.desc}{a logical, to define if sorting should be in descending order}
 }
 \value{
 the updated data model
@@ -37,8 +46,6 @@ Updating attribute class is not supported by this function (as it requires data 
 
 Use of vector to update several attributes is supported as long as length of the different parameters
 is either same as name or 1 (then all rows gets same value).
-
-Note that filter should be updated using dm_filter() function
 }
 \examples{
 \dontrun{
