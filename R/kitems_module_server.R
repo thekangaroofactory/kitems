@@ -22,23 +22,17 @@
 #' }
 
 
-# ------------------------------------------------------------------------------
-# Shiny module server logic
-# ------------------------------------------------------------------------------
+# -- Shiny module server logic -------------------------------------------------
 
 kitemsManager_Server <- function(id, path,
                                  create = TRUE, autosave = TRUE) {
 
   moduleServer(id, function(input, output, session) {
 
-    # -- Check path (to avoid connection problems if missing folder)
-    if(!dir.exists(path))
-      dir.create(path)
+    # __________________________________________________________________________
+    # -- Init app environment --------------------------------------------------
 
-
-    # --------------------------------------------------------------------------
-    # Declare config parameters:
-    # --------------------------------------------------------------------------
+    ## -- Declare config parameters ----
 
     # -- Build log pattern
     MODULE <- paste0("[", id, "]")
@@ -48,9 +42,7 @@ kitemsManager_Server <- function(id, path,
     ns <- session$ns
 
 
-    # --------------------------------------------------------------------------
-    # Declare objects:
-    # --------------------------------------------------------------------------
+    ## -- Declare objects ----
 
     # -- Init data (non persistent values to init the module)
     init_dm <- NULL
@@ -67,21 +59,21 @@ kitemsManager_Server <- function(id, path,
     filter_date <- reactiveVal(NULL)
 
     # -- Declare internal reactives
-    #w_update_attribute <- reactiveVal(NULL)
     isValid <- reactiveValues()
     isUpdate <- reactiveVal(FALSE)
 
+    # -- Check path (to avoid connection problems if missing folder)
+    if(!dir.exists(path))
+      dir.create(path)
 
-    # --------------------------------------------------------------------------
-    # Initialize data model and items:
-    # --------------------------------------------------------------------------
+
+    # __________________________________________________________________________
+    # -- Initialize data model and items ---------------------------------------
 
     # -- Notify progress
     withProgress(message = MODULE, value = 0, {
 
-      # ------------------------------------------------------------------------
-      # Read data model:
-      # ------------------------------------------------------------------------
+      ## -- Read data model ----------------------------------------------------
 
       cat(MODULE, "Checking if data model file exists:\n")
       cat("-- path =", dirname(dm_url), "\n")
@@ -100,13 +92,11 @@ kitemsManager_Server <- function(id, path,
 
         }
 
-      # Increment the progress bar, and update the detail text.
+      # -- Increment the progress bar, and update the detail text.
       incProgress(1/4, detail = "Read data model")
 
 
-      # ------------------------------------------------------------------------
-      # Read the data (items):
-      # ------------------------------------------------------------------------
+      # -- Read the data (items) ----------------------------------------------
 
       # -- Check for NULL data model (then no reason to try loading)
       if(!is.null(init_dm))
@@ -116,13 +106,11 @@ kitemsManager_Server <- function(id, path,
                            path = path,
                            create = create)
 
-      # Increment the progress bar, and update the detail text.
+      # -- Increment the progress bar, and update the detail text.
       incProgress(2/4, detail = "Read items")
 
 
-      # ------------------------------------------------------------------------
-      # Check data model integrity:
-      # ------------------------------------------------------------------------
+      # -- Check data model integrity -----------------------------------------
 
       # -- Check for NULL data model + data.frame
       if(!is.null(init_dm) & !is.null(init_items)){
@@ -149,9 +137,7 @@ kitemsManager_Server <- function(id, path,
         } else cat("-- success, nothing to do \n")}
 
 
-      # ------------------------------------------------------------------------
-      # Check items integrity:
-      # ------------------------------------------------------------------------
+      # -- Check items integrity -----------------------------------------------
 
       # -- Check classes vs data.model
       if(!is.null(init_dm) & !is.null(init_items)){
@@ -164,9 +150,7 @@ kitemsManager_Server <- function(id, path,
       incProgress(3/4, detail = "Integrity checked")
 
 
-      # ------------------------------------------------------------------------
-      # Store into reactive values:
-      # ------------------------------------------------------------------------
+      # -- Store into reactive values ------------------------------------------
 
       # -- Store data model (either content of the RDS or the server function input)
       k_data_model <- reactiveVal(init_dm)
@@ -182,9 +166,10 @@ kitemsManager_Server <- function(id, path,
     }) #end withProgress
 
 
-    # --------------------------------------------------------------------------
-    # Auto save the data model:
-    # --------------------------------------------------------------------------
+    # __________________________________________________________________________
+    # -- Auto save -------------------------------------------------------------
+
+    ## -- Data model ----
 
     # -- Check parameter & observe data model
     if(autosave)
@@ -197,9 +182,7 @@ kitemsManager_Server <- function(id, path,
       }, ignoreInit = TRUE)
 
 
-    # --------------------------------------------------------------------------
-    # Auto save the data:
-    # --------------------------------------------------------------------------
+    ## -- Items ----
 
     # -- Check parameter & observe items
     if(autosave)
@@ -214,11 +197,158 @@ kitemsManager_Server <- function(id, path,
       }, ignoreInit = TRUE)
 
 
-    # --------------------------------------------------------------------------
-    # Declare Inputs
-    # --------------------------------------------------------------------------
+    # __________________________________________________________________________
+    # -- Item management ----
+    # __________________________________________________________________________
+    ## -- Create item ----
 
-    # -- date slider options
+    # -- Declare: create_btn
+    output$create_btn_output <- renderUI(
+
+      # -- Check data model #290
+      if(!is.null(k_data_model()))
+        actionButton(inputId = ns("create_btn"),
+                     label = "Create"))
+
+
+    # -- Observe: create_btn
+    observeEvent(input$create_btn,
+
+                 showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, data.model = k_data_model()),
+                                       title = "Create",
+                                       footer = tagList(
+                                         modalButton("Cancel"),
+                                         actionButton(ns("confirm_create_btn"), "Create")))))
+
+
+    # -- Observe: confirm_create_btn
+    observeEvent(input$confirm_create_btn, {
+
+      cat(MODULE, "[EVENT] Create item \n")
+
+      # -- close modal
+      removeModal()
+
+      # -- get list of input values & name it
+      cat("--  Get list of input values \n")
+      input_values <- get_input_values(input, dm_colClasses(k_data_model()))
+
+      # -- create item based on input list
+      cat("--  Create item \n")
+      item <- item_create(values = input_values, data.model = k_data_model())
+
+      # -- update reactive
+      item_add(k_items, item, name = id)
+
+    })
+
+
+    # __________________________________________________________________________
+    ## -- Update item ----
+    # __________________________________________________________________________
+
+    # -- Declare: update_btn
+    output$update_btn_output <- renderUI(
+
+      # -- check item selection + single row
+      if(is.null(selected_items()) | length(selected_items()) != 1)
+        NULL
+      else
+        actionButton(inputId = ns("update_btn"),
+                     label = "Update"))
+
+
+    # -- Observe: update_btn
+    observeEvent(input$update_btn, {
+
+      cat(MODULE, "[EVENT] Update item \n")
+
+      # -- Get selected item
+      item <- k_items()[k_items()$id == selected_items(), ]
+
+      # -- Dialog
+      showModal(modalDialog(inputList(ns, item = item, update = TRUE, data.model = k_data_model()),
+                            title = "Update",
+                            footer = tagList(
+                              modalButton("Cancel"),
+                              actionButton(ns("confirm_update_btn"), "Update"))))
+
+    })
+
+    # -- Observe: confirm_update_btn
+    observeEvent(input$confirm_update_btn, {
+
+      cat(MODULE, "[EVENT] Confirm update item \n")
+
+      # -- close modal
+      removeModal()
+
+      # -- get list of input values & name it
+      cat("--  Get list of input values \n")
+      input_values <- get_input_values(input, dm_colClasses(k_data_model()))
+
+      # -- update id (to replace selected item)
+      input_values$id <- selected_items()
+
+      # -- create item based on input list
+      cat("--  Create item \n")
+      item <- item_create(values = input_values, data.model = k_data_model())
+
+      # -- update item & store
+      cat("--  Update item \n")
+      item_update(k_items, item, name = id)
+
+    })
+
+
+    # __________________________________________________________________________
+    ## -- Delete item(s) ----
+    # __________________________________________________________________________
+
+    # -- Declare: delete_btn
+    output$delete_btn_output <- renderUI(
+
+      # -- check item selection
+      if(is.null(selected_items()))
+        NULL
+      else
+        actionButton(inputId = ns("delete_btn"),
+                     label = "Delete"))
+
+
+    # -- Observe: create_btn
+    observeEvent(input$delete_btn, {
+
+      cat(MODULE, "[EVENT] Delete item(s) \n")
+
+      # -- Open dialog for confirmation
+      showModal(modalDialog(title = "Delete item(s)",
+                            "Danger: deleting item(s) can't be undone! Do you confirm?",
+                            footer = tagList(
+                              modalButton("Cancel"),
+                              actionButton(ns("confirm_delete_btn"), "Delete"))))
+
+    })
+
+    # -- Observe: confirm_delete_btn
+    observeEvent(input$confirm_delete_btn, {
+
+      cat(MODULE, "[EVENT] Confirm delete item(s) \n")
+
+      # -- close modal
+      removeModal()
+
+      # -- get selected items (ids) & delete
+      ids <- selected_items()
+      item_delete(k_items, ids, name = id)
+
+    })
+
+
+    # __________________________________________________________________________
+    # -- Date slider -----------------------------------------------------------
+
+    ## -- Date slider strategy ----
     output$date_slider_strategy <- renderUI(
 
       # -- check data model
@@ -231,7 +361,7 @@ kitemsManager_Server <- function(id, path,
       else NULL)
 
 
-    # -- date slider
+    ## -- Date slider ----
     output$date_slider <- renderUI({
 
       # -- check data model
@@ -282,11 +412,7 @@ kitemsManager_Server <- function(id, path,
     })
 
 
-    # --------------------------------------------------------------------------
-    # Observe Inputs
-    # --------------------------------------------------------------------------
-
-    # -- Observe: date_slider
+    ## -- Observe date_slider input ----
     observeEvent(input$date_slider, {
 
       cat(MODULE, "Date sliderInput has been updated: \n")
@@ -298,11 +424,10 @@ kitemsManager_Server <- function(id, path,
     })
 
 
-    # --------------------------------------------------------------------------
-    # Declare filtered items:
-    # --------------------------------------------------------------------------
+    # __________________________________________________________________________
+    # -- Filtered items --------------------------------------------------------
 
-    # -- Filtered item table view
+    ## -- Declare filtered_items ----
     filtered_items <- reactive(
 
       # -- check
@@ -331,47 +456,15 @@ kitemsManager_Server <- function(id, path,
     )
 
 
-    # --------------------------------------------------------------------------
-    # Declare admin outputs:
-    # --------------------------------------------------------------------------
-
-    # -- Raw view for admin
-    output$raw_item_table <- DT::renderDT(k_items(),
-                                          rownames = FALSE,
-                                          options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
-                                          selection = list(mode = 'single', target = "row", selected = NULL))
-
-    # -- Masked view for admin
-    output$view_item_table <- DT::renderDT(view_apply_masks(k_data_model(), k_items()),
-                                           rownames = FALSE,
-                                           selection = list(mode = 'single', target = "row", selected = NULL))
-
-    # -- colClasses for admin
-    # setting rownames = FALSE #209
-    # setting dom = "tpl" instead of "t" #245
-    # allowing display all #244
-    output$data_model <- DT::renderDT(dm_table_mask(k_data_model()),
-                                      rownames = FALSE,
-                                      options = list(lengthMenu = list(c(20, 50, -1), c('20', '50', 'All')),
-                                                     pageLength = 20, dom = "tpl", scrollX = TRUE),
-                                      selection = list(mode = 'single', target = "row", selected = isolate(input$data_model_rows_selected)))
-
-
-    # --------------------------------------------------------------------------
-    # Declare outputs: Data tables
-    # --------------------------------------------------------------------------
-
-    # -- Filtered view
+    ## -- Declare view ----
     output$filtered_view <- DT::renderDT(view_apply_masks(k_data_model(), filtered_items()),
                                         rownames = FALSE,
                                         selection = list(mode = 'multiple', target = "row", selected = NULL))
 
 
-    # --------------------------------------------------------------------------
-    # Managing in table selection
-    # --------------------------------------------------------------------------
+    ## -- Manage in table selection ----
 
-    # -- Filtered view
+    ### -- Selected row / selected_items ----
     observeEvent(input$filtered_view_rows_selected, {
 
       # -- Setting ignoreNULL to FALSE + check to allow unselect all (then selected_items will be NULL)
@@ -394,7 +487,7 @@ kitemsManager_Server <- function(id, path,
     }, ignoreNULL = FALSE)
 
 
-    # -- Filtered view
+    ### -- Cell clicked / clicked_column ----
     observeEvent(input$filtered_view_cell_clicked$col, {
 
       # -- Get table col names (need to apply masks to get correct columns, hence sending only first row)
@@ -410,13 +503,86 @@ kitemsManager_Server <- function(id, path,
     }, ignoreNULL = TRUE)
 
 
-    # --------------------------------------------------------------------------
-    # Admin UI:
-    # --------------------------------------------------------------------------
-    # The whole section answers #206 (removes conditionalPanel on ui side and
-    # computes on server side)
+    # __________________________________________________________________________
+    # -- Admin UI ----
+    # __________________________________________________________________________
 
-    # -- data model tab
+    ## -- Admin tables ---------------------------------------------------------
+
+    ### -- Data model ----
+    # setting rownames = FALSE #209
+    # setting dom = "tpl" instead of "t" #245
+    # allowing display all #244
+    output$data_model <- DT::renderDT(dm_table_mask(k_data_model()),
+                                      rownames = FALSE,
+                                      options = list(lengthMenu = list(c(20, 50, -1), c('20', '50', 'All')),
+                                                     pageLength = 20, dom = "tpl", scrollX = TRUE),
+                                      selection = list(mode = 'single', target = "row", selected = isolate(input$data_model_rows_selected)))
+
+    ### -- Raw view ----
+    output$raw_item_table <- DT::renderDT(k_items(),
+                                          rownames = FALSE,
+                                          options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
+                                          selection = list(mode = 'single', target = "row", selected = NULL))
+
+    ### -- Masked view ----
+    output$view_item_table <- DT::renderDT(view_apply_masks(k_data_model(), k_items()),
+                                           rownames = FALSE,
+                                           selection = list(mode = 'single', target = "row", selected = NULL))
+
+
+    ## -- Admin inputs ---------------------------------------------------------
+
+    ### -- Sort inputs ----
+    output$dm_sort_buttons <- renderUI(
+
+      # -- check NULL data model
+      if(is.null(k_data_model()))
+        NULL
+
+      else {
+
+        tagList(
+
+          # order attribute name
+          selectizeInput(inputId = ns("dm_order_cols"),
+                         label = "Select cols order",
+                         choices = k_data_model()$name,
+                         selected = k_data_model()$name,
+                         multiple = TRUE))})
+
+
+    ### -- Filter inputs ----
+    output$adm_filter_buttons <- renderUI(
+
+      # -- check NULL data model
+      if(is.null(k_data_model()))
+        NULL
+
+      else {
+
+        # -- init params
+        filter_cols <- dm_filter(k_data_model())
+
+        onInitialize <- if(is.null(filter_cols))
+          I('function() { this.setValue(""); }')
+        else
+          NULL
+
+        # -- define input
+        selectizeInput(inputId = ns("adm_filter_col"),
+                       label = "Filter columns",
+                       choices = k_data_model()$name,
+                       selected = filter_cols,
+                       multiple = TRUE,
+                       options = list(create = FALSE,
+                                      placeholder = 'Type or select an option below',
+                                      onInitialize = onInitialize))})
+
+
+    ## -- Admin tabs -----------------------------------------------------------
+
+    ### -- Data model tab ----
     output$admin_dm_tab <- renderUI({
 
       # -- check NULL data model
@@ -472,7 +638,7 @@ kitemsManager_Server <- function(id, path,
     })
 
 
-    # -- raw table tab
+    ### -- Raw table tab ----
     output$admin_raw_tab <- renderUI({
 
       # -- check NULL data model
@@ -492,7 +658,7 @@ kitemsManager_Server <- function(id, path,
     })
 
 
-    # -- raw table tab
+    ### -- Masked view tab ----
     output$admin_view_tab <- renderUI({
 
       # -- check NULL data model
@@ -515,11 +681,82 @@ kitemsManager_Server <- function(id, path,
     })
 
 
-    # --------------------------------------------------------------------------
-    # Import data:
-    # --------------------------------------------------------------------------
+    ## -- Observe admin tabs ---------------------------------------------------
 
-    # -- Observe: click (start import)
+    ### -- Data_model selected row ----
+    observeEvent(input$data_model_rows_selected, {
+
+      # -- get selected row
+      row <- input$data_model_rows_selected
+
+      # -- check out of limit value #272
+      # If last row is selected and attribute is deleted, a crash would occur
+      if(!is.null(row))
+        if(row > nrow(k_data_model()))
+          row <- NULL
+
+      # -- check NULL (no row selected)
+      if(is.null(row))
+
+        # -- update output
+        output$update_attribute <- NULL
+
+      else
+
+        # -- update output
+        # set custom value for w_set_default input to trigger step.2 of the wizard
+        output$update_attribute <- renderUI(actionButton(inputId = ns("update_attribute"),
+                                                         label = "Update attribute",
+                                                         onclick = sprintf('Shiny.setInputValue(\"%s\", "update", {priority: \"event\"})',
+                                                                           ns("w_set_default"))))
+
+    }, ignoreNULL = FALSE, ignoreInit = TRUE)
+
+
+    ### -- Sort attributes / columns ----
+    observeEvent(input$dm_order_cols, {
+
+      # -- Check:
+      # all columns need to be in the selection
+      # order must be different from the one already in place
+      req(length(input$dm_order_cols) == dim(k_items())[2],
+          !identical(input$dm_order_cols, k_data_model()$name))
+
+      cat("[BTN] Reorder column \n")
+
+      # -- Reorder items & store
+      k_items(k_items()[input$dm_order_cols])
+
+      # -- Reorder data model & store
+      dm <- k_data_model()
+      dm <- dm[match(input$dm_order_cols, dm$name), ]
+      k_data_model(dm)
+
+    })
+
+
+    ### -- Filter attributes ----
+    observeEvent(input$adm_filter_col, {
+
+      # -- check to avoid useless updates
+      dm <- k_data_model()
+      req(!setequal(input$adm_filter_col,dm[dm$filter, ]$name))
+
+      cat(MODULE, "Set filtered attributes:", input$adm_filter_col, "\n")
+
+      # -- Check NULL data model
+      if(!is.null(dm)){
+        dm <- dm_filter(data.model = dm, set = input$adm_filter_col)
+        k_data_model(dm)}
+
+    }, ignoreInit = TRUE, ignoreNULL = FALSE)
+
+
+    # __________________________________________________________________________
+    # -- Import data ----
+    # __________________________________________________________________________
+
+    ## -- Observe: click (start import) ----
     observeEvent(input$import_data, {
 
       cat(MODULE, "[EVENT] Import data \n")
@@ -539,7 +776,7 @@ kitemsManager_Server <- function(id, path,
     })
 
 
-    # -- Observe: click (confirm file)
+    ## -- Observe: click (confirm file) ----
     observeEvent(input$confirm_import_file, {
 
       # -- Check file input
@@ -644,196 +881,9 @@ kitemsManager_Server <- function(id, path,
     })
 
 
-    # --------------------------------------------------------------------------
-    # Declare danger zone:
-    # --------------------------------------------------------------------------
-
-    # -- Toggle btn
-    output$dm_danger_btn <- renderUI(
-
-      # -- Check for NULL data model
-      if(!is.null(k_data_model()))
-        shinyWidgets::materialSwitch(inputId = ns("adm_dz_toggle"),
-                                     label = "Danger zone",
-                                     value = FALSE,
-                                     status = "danger"))
-
-
-    # -- Observe Toggle btn
-    observeEvent(input$adm_dz_toggle,
-
-                 # -- Define output
-                 output$dm_danger_zone <- renderUI(
-
-                   # -- check toggle btn
-                   if(input$adm_dz_toggle){
-
-                     tagList(
-
-                       # -- delete attribute
-                       shinydashboard::box(title = "Delete attribute", status = "danger", width = 4,
-
-                                           tagList(
-
-                                             # -- select attribute name
-                                             selectizeInput(inputId = ns("dm_dz_att_name"),
-                                                            label = "Name",
-                                                            choices = k_data_model()$name,
-                                                            selected = NULL,
-                                                            options = list(create = FALSE,
-                                                                           placeholder = 'Type or select an option below',
-                                                                           onInitialize = I('function() { this.setValue(""); }'))),
-
-                                             # -- delete att
-                                             actionButton(ns("dm_dz_delete_att"), label = "Delete"))),
-
-                       # -- delete data model
-                       shinydashboard::box(title = "Delete data model", status = "danger", width = 4,
-                                           p("Click here to delete the data model and ALL corresponding items."),
-                                           actionButton(ns("dm_dz_delete_dm"), label = "Delete all!")))}))
-
-
-    # --------------------------------------------------------------------------
-    # Delete attribute:
-    # --------------------------------------------------------------------------
-
-    # -- Observer button:
-    observeEvent(input$dm_dz_delete_att, {
-
-      # -- check data model size (to display warning)
-      single_row <- nrow(k_data_model()) == 1
-
-      # -- Open dialog for confirmation
-      showModal(modalDialog(title = "Delete attribute",
-                            p("Danger: deleting an attribute can't be undone! Do you confirm?"),
-                            if(single_row) p("Note that the data model will be deleted since this is the last attribute."),
-                            footer = tagList(
-                              modalButton("Cancel"),
-                              actionButton(ns("dm_dz_confirm_delete_att"), "Delete"))))})
-
-
-    # -- Observe button: delete attribute
-    observeEvent(input$dm_dz_confirm_delete_att, {
-
-      # -- check
-      req(input$dm_dz_att_name)
-
-      cat("[BTN] Delete attribute:", input$dm_dz_att_name, "\n")
-
-      # -- clode modal
-      removeModal()
-
-      # -- drop column!
-      cat(MODULE, "Drop attribute from all items \n")
-      items <- k_items()
-      items[input$dm_dz_att_name] <- NULL
-
-      # -- update data model
-      cat(MODULE, "Drop attribute from data model \n")
-      dm <- k_data_model()
-      dm <- dm[dm$name != input$dm_dz_att_name, ]
-
-
-      # -- check for empty data model & store
-      if(nrow(dm) == 0){
-        cat(MODULE, "Warning! Empty Data model, cleaning data model & items \n")
-        k_items(NULL)
-        k_data_model(NULL)
-
-        if(autosave){
-          cat(MODULE, "Deleting data model & item files \n")
-          unlink(dm_url)
-          unlink(items_url)
-
-          # -- notify
-          if(shiny::isRunning())
-            showNotification(paste(MODULE, "Empty data model deleted."), type = "message")}
-
-      } else {
-        k_items(items)
-        k_data_model(dm)
-
-        # -- notify
-        if(shiny::isRunning())
-          showNotification(paste(MODULE, "Attribute deleted."), type = "message")}
-
-    })
-
-    # --------------------------------------------------------------------------
-    # Delete data model:
-    # --------------------------------------------------------------------------
-
-    # -- Observer button:
-    observeEvent(input$dm_dz_delete_dm, {
-
-      cat(MODULE, "Delete data model preview \n")
-
-      # -- Open dialog for confirmation
-      showModal(modalDialog(title = "Delete data model",
-
-                            p("Danger: deleting a data model can't be undone! Do you confirm?", br(),
-
-                              # -- check items
-                              if(!is.null(k_items()))
-                                "- All items in session will be deleted", br(),
-
-                              # -- check dm file
-                              if(file.exists(dm_url)){
-                                if(autosave)
-                                  "- Data model file will be deleted"
-                                else
-                                  "- Data model file won't be deleted (autosave is off)"}),
-
-                            # -- check items file
-                            if(file.exists(items_url) & autosave)
-                              checkboxInput(inputId = ns("dm_dz_confirm_delete_dm_items"), label = "Delete items file"),
-
-                            # -- confirm string
-                            p("Type the following string:", paste0("delete_", id)),
-                            textInput(inputId = ns("dm_dz_confirm_delete_dm_string"),
-                                      label = ""),
-
-                            # -- footer
-                            footer = tagList(
-                              modalButton("Cancel"),
-                              actionButton(ns("dm_dz_confirm_delete_dm"), "Delete"))))})
-
-
-    # -- Observer button:
-    observeEvent(input$dm_dz_confirm_delete_dm, {
-
-      # -- check string
-      req(input$dm_dz_confirm_delete_dm_string == paste0("delete_", id))
-
-      cat(MODULE, "Delete data model confirmed! \n")
-
-      # -- close dialog
-      removeModal()
-
-      # -- delete items
-      if(!is.null(k_items()))
-        k_items(NULL)
-
-      # -- delete data model & file
-      k_data_model(NULL)
-      if(file.exists(dm_url) & autosave)
-        unlink(dm_url)
-
-      # -- delete items file
-      if(file.exists(items_url) & autosave)
-        if(input$dm_dz_confirm_delete_dm_items)
-          unlink(items_url)
-
-      # -- notify
-      if(shiny::isRunning())
-        showNotification(paste(MODULE, "Data model deleted."), type = "warning")
-
-    })
-
-
-    # --------------------------------------------------------------------------
-    # Create data model:
-    # --------------------------------------------------------------------------
+    # __________________________________________________________________________
+    # -- Create data model ----
+    # __________________________________________________________________________
 
     # -- Observe: actionButton
     observeEvent(input$dm_create, {
@@ -874,13 +924,11 @@ kitemsManager_Server <- function(id, path,
     })
 
 
-    # --------------------------------------------------------------------------
+    # __________________________________________________________________________
     # Data model attribute wizard ----
-    # --------------------------------------------------------------------------
+    # __________________________________________________________________________
 
-    # ---------------------------------
-    # Step.1: attribute name & type ----
-    # ---------------------------------
+    ## -- Step.1: attribute name & type ----
     # Note: there is no need to support update in step.1
 
     # -- observe button
@@ -1011,9 +1059,7 @@ kitemsManager_Server <- function(id, path,
     })
 
 
-    # ---------------------------------
-    # Step.2: defaults ----
-    # ---------------------------------
+    ## -- Step.2: defaults ----
     # entry point for the update process (step.1 skipped)
 
     # -- observe button
@@ -1353,9 +1399,7 @@ kitemsManager_Server <- function(id, path,
       })
 
 
-    # ---------------------------------
-    # Step.3: skip & filter
-    # ---------------------------------
+    ## -- Step.3: skip & filter ----
 
     # -- observer actionButton
     observeEvent(input$w_set_sf, {
@@ -1409,9 +1453,7 @@ kitemsManager_Server <- function(id, path,
     })
 
 
-    # ---------------------------------
-    # Step.4: order
-    # ---------------------------------
+    ## -- Step.4: order ----
 
     # -- observer actionButton
     observeEvent(input$w_set_sort, {
@@ -1502,9 +1544,7 @@ kitemsManager_Server <- function(id, path,
     })
 
 
-    # ---------------------------------
-    # Step.5: confirm create
-    # ---------------------------------
+    ## -- Step.5: confirm create ----
 
     # -- observer actionButton
     observeEvent(input$w_ask_confirm, {
@@ -1553,9 +1593,7 @@ kitemsManager_Server <- function(id, path,
     })
 
 
-    # ---------------------------------
-    # Step.6: create
-    # ---------------------------------
+    ## -- Step.6: create ----
 
     # -- observer actionButton
     observeEvent(input$w_confirm, {
@@ -1651,288 +1689,193 @@ kitemsManager_Server <- function(id, path,
     })
 
 
-    # --------------------------------------------------------------------------
-    # Data model row select
-    # --------------------------------------------------------------------------
+    # __________________________________________________________________________
+    # -- Danger zone ----
+    # __________________________________________________________________________
 
-    # -- observe data_model selected row
-    observeEvent(input$data_model_rows_selected, {
+    ## -- Declare Toggle btn ----
+    output$dm_danger_btn <- renderUI(
 
-      # -- get selected row
-      row <- input$data_model_rows_selected
-
-      # -- check out of limit value #272
-      # If last row is selected and attribute is deleted, a crash would occur
-      if(!is.null(row))
-        if(row > nrow(k_data_model()))
-          row <- NULL
-
-      # -- check NULL (no row selected)
-      if(is.null(row))
-
-        # -- update output
-        output$update_attribute <- NULL
-
-      else
-
-        # -- update output
-        # set custom value for w_set_default input to trigger step.2 of the wizard
-        output$update_attribute <- renderUI(actionButton(inputId = ns("update_attribute"),
-                                                         label = "Update attribute",
-                                                         onclick = sprintf('Shiny.setInputValue(\"%s\", "update", {priority: \"event\"})',
-                                                                           ns("w_set_default"))))
-
-
-
-
-
-    }, ignoreNULL = FALSE, ignoreInit = TRUE)
-
-
-    # --------------------------------------------------------------------------
-    # Sort attributes / columns:
-    # --------------------------------------------------------------------------
-
-    # -- define inputs
-    output$dm_sort_buttons <- renderUI(
-
-      # -- check NULL data model
-      if(is.null(k_data_model()))
-        NULL
-
-      else {
-
-        tagList(
-
-          # order attribute name
-          selectizeInput(inputId = ns("dm_order_cols"),
-                         label = "Select cols order",
-                         choices = k_data_model()$name,
-                         selected = k_data_model()$name,
-                         multiple = TRUE))})
-
-
-    # -- BTN sort_col
-    observeEvent(input$dm_order_cols, {
-
-      # -- Check:
-      # all columns need to be in the selection
-      # order must be different from the one already in place
-      req(length(input$dm_order_cols) == dim(k_items())[2],
-          !identical(input$dm_order_cols, k_data_model()$name))
-
-      cat("[BTN] Reorder column \n")
-
-      # -- Reorder items & store
-      k_items(k_items()[input$dm_order_cols])
-
-      # -- Reorder data model & store
-      dm <- k_data_model()
-      dm <- dm[match(input$dm_order_cols, dm$name), ]
-      k_data_model(dm)
-
-    })
-
-
-    # --------------------------------------------------------------------------
-    # Filter view:
-    # --------------------------------------------------------------------------
-
-    # inputs
-    output$adm_filter_buttons <- renderUI(
-
-      # -- check NULL data model
-      if(is.null(k_data_model()))
-        NULL
-
-      else {
-
-        # -- init params
-        filter_cols <- dm_filter(k_data_model())
-
-        onInitialize <- if(is.null(filter_cols))
-          I('function() { this.setValue(""); }')
-        else
-          NULL
-
-        # -- define input
-        selectizeInput(inputId = ns("adm_filter_col"),
-                       label = "Filter columns",
-                       choices = k_data_model()$name,
-                       selected = filter_cols,
-                       multiple = TRUE,
-                       options = list(create = FALSE,
-                                      placeholder = 'Type or select an option below',
-                                      onInitialize = onInitialize))})
-
-
-    # observe filter input
-    observeEvent(input$adm_filter_col, {
-
-      # -- check to avoid useless updates
-      dm <- k_data_model()
-      req(!setequal(input$adm_filter_col,dm[dm$filter, ]$name))
-
-      cat(MODULE, "Set filtered attributes:", input$adm_filter_col, "\n")
-
-      # -- Check NULL data model
-      if(!is.null(dm)){
-        dm <- dm_filter(data.model = dm, set = input$adm_filter_col)
-        k_data_model(dm)}
-
-    }, ignoreInit = TRUE, ignoreNULL = FALSE)
-
-
-    # --------------------------------------------------------------------------
-    # Create item:
-    # --------------------------------------------------------------------------
-
-    # -- Declare: create_btn
-    output$create_btn_output <- renderUI(
-
-      # -- Check data model #290
+      # -- Check for NULL data model
       if(!is.null(k_data_model()))
-            actionButton(inputId = ns("create_btn"),
-                         label = "Create"))
+        shinyWidgets::materialSwitch(inputId = ns("adm_dz_toggle"),
+                                     label = "Danger zone",
+                                     value = FALSE,
+                                     status = "danger"))
 
 
-    # -- Observe: create_btn
-    observeEvent(input$create_btn,
+    ## -- Observe Toggle btn ----
+    observeEvent(input$adm_dz_toggle,
 
-          showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, data.model = k_data_model()),
-                                title = "Create",
-                                footer = tagList(
-                                  modalButton("Cancel"),
-                                  actionButton(ns("confirm_create_btn"), "Create")))))
+                 # -- Define output
+                 output$dm_danger_zone <- renderUI(
 
+                   # -- check toggle btn
+                   if(input$adm_dz_toggle){
 
-    # -- Observe: confirm_create_btn
-    observeEvent(input$confirm_create_btn, {
+                     tagList(
 
-      cat(MODULE, "[EVENT] Create item \n")
+                       # -- delete attribute
+                       shinydashboard::box(title = "Delete attribute", status = "danger", width = 4,
 
-      # -- close modal
-      removeModal()
+                                           tagList(
 
-      # -- get list of input values & name it
-      cat("--  Get list of input values \n")
-      input_values <- get_input_values(input, dm_colClasses(k_data_model()))
+                                             # -- select attribute name
+                                             selectizeInput(inputId = ns("dm_dz_att_name"),
+                                                            label = "Name",
+                                                            choices = k_data_model()$name,
+                                                            selected = NULL,
+                                                            options = list(create = FALSE,
+                                                                           placeholder = 'Type or select an option below',
+                                                                           onInitialize = I('function() { this.setValue(""); }'))),
 
-      # -- create item based on input list
-      cat("--  Create item \n")
-      item <- item_create(values = input_values, data.model = k_data_model())
+                                             # -- delete att
+                                             actionButton(ns("dm_dz_delete_att"), label = "Delete"))),
 
-      # -- update reactive
-      item_add(k_items, item, name = id)
-
-    })
-
-
-    # --------------------------------------------------------------------------
-    # Update item:
-    # --------------------------------------------------------------------------
-
-    # -- Declare: update_btn
-    output$update_btn_output <- renderUI(
-
-      # -- check item selection + single row
-      if(is.null(selected_items()) | length(selected_items()) != 1)
-        NULL
-      else
-        actionButton(inputId = ns("update_btn"),
-                     label = "Update"))
+                       # -- delete data model
+                       shinydashboard::box(title = "Delete data model", status = "danger", width = 4,
+                                           p("Click here to delete the data model and ALL corresponding items."),
+                                           actionButton(ns("dm_dz_delete_dm"), label = "Delete all!")))}))
 
 
-    # -- Observe: update_btn
-    observeEvent(input$update_btn, {
+    ## -- Delete attribute ------------------------------------------------------
 
-      cat(MODULE, "[EVENT] Update item \n")
+    ### -- Observe button ----
+    observeEvent(input$dm_dz_delete_att, {
 
-      # -- Get selected item
-      item <- k_items()[k_items()$id == selected_items(), ]
-
-      # -- Dialog
-      showModal(modalDialog(inputList(ns, item = item, update = TRUE, data.model = k_data_model()),
-                            title = "Update",
-                            footer = tagList(
-                              modalButton("Cancel"),
-                              actionButton(ns("confirm_update_btn"), "Update"))))
-
-    })
-
-    # -- Observe: confirm_update_btn
-    observeEvent(input$confirm_update_btn, {
-
-      cat(MODULE, "[EVENT] Confirm update item \n")
-
-      # -- close modal
-      removeModal()
-
-      # -- get list of input values & name it
-      cat("--  Get list of input values \n")
-      input_values <- get_input_values(input, dm_colClasses(k_data_model()))
-
-      # -- update id (to replace selected item)
-      input_values$id <- selected_items()
-
-      # -- create item based on input list
-      cat("--  Create item \n")
-      item <- item_create(values = input_values, data.model = k_data_model())
-
-      # -- update item & store
-      cat("--  Update item \n")
-      item_update(k_items, item, name = id)
-
-    })
-
-
-    # --------------------------------------------------------------------------
-    # Delete item(s):
-    # --------------------------------------------------------------------------
-
-    # -- Declare: delete_btn
-    output$delete_btn_output <- renderUI(
-
-      # -- check item selection
-      if(is.null(selected_items()))
-        NULL
-      else
-        actionButton(inputId = ns("delete_btn"),
-                     label = "Delete"))
-
-
-    # -- Observe: create_btn
-    observeEvent(input$delete_btn, {
-
-      cat(MODULE, "[EVENT] Delete item(s) \n")
+      # -- check data model size (to display warning)
+      single_row <- nrow(k_data_model()) == 1
 
       # -- Open dialog for confirmation
-      showModal(modalDialog(title = "Delete item(s)",
-                            "Danger: deleting item(s) can't be undone! Do you confirm?",
+      showModal(modalDialog(title = "Delete attribute",
+                            p("Danger: deleting an attribute can't be undone! Do you confirm?"),
+                            if(single_row) p("Note that the data model will be deleted since this is the last attribute."),
                             footer = tagList(
                               modalButton("Cancel"),
-                              actionButton(ns("confirm_delete_btn"), "Delete"))))
+                              actionButton(ns("dm_dz_confirm_delete_att"), "Delete"))))})
 
-    })
 
-    # -- Observe: confirm_delete_btn
-    observeEvent(input$confirm_delete_btn, {
+    ### -- Observe confirm button ----
+    observeEvent(input$dm_dz_confirm_delete_att, {
 
-      cat(MODULE, "[EVENT] Confirm delete item(s) \n")
+      # -- check
+      req(input$dm_dz_att_name)
 
-      # -- close modal
+      cat("[BTN] Delete attribute:", input$dm_dz_att_name, "\n")
+
+      # -- clode modal
       removeModal()
 
-      # -- get selected items (ids) & delete
-      ids <- selected_items()
-      item_delete(k_items, ids, name = id)
+      # -- drop column!
+      cat(MODULE, "Drop attribute from all items \n")
+      items <- k_items()
+      items[input$dm_dz_att_name] <- NULL
+
+      # -- update data model
+      cat(MODULE, "Drop attribute from data model \n")
+      dm <- k_data_model()
+      dm <- dm[dm$name != input$dm_dz_att_name, ]
+
+
+      # -- check for empty data model & store
+      if(nrow(dm) == 0){
+        cat(MODULE, "Warning! Empty Data model, cleaning data model & items \n")
+        k_items(NULL)
+        k_data_model(NULL)
+
+        if(autosave){
+          cat(MODULE, "Deleting data model & item files \n")
+          unlink(dm_url)
+          unlink(items_url)
+
+          # -- notify
+          if(shiny::isRunning())
+            showNotification(paste(MODULE, "Empty data model deleted."), type = "message")}
+
+      } else {
+        k_items(items)
+        k_data_model(dm)
+
+        # -- notify
+        if(shiny::isRunning())
+          showNotification(paste(MODULE, "Attribute deleted."), type = "message")}
 
     })
 
 
-    # --------------------------------------------------------------------------
-    # Module server return value:
-    # --------------------------------------------------------------------------
+    ## -- Delete data model ----------------------------------------------------
+
+    ### -- Observe button ----
+    observeEvent(input$dm_dz_delete_dm, {
+
+      cat(MODULE, "Delete data model preview \n")
+
+      # -- Open dialog for confirmation
+      showModal(modalDialog(title = "Delete data model",
+
+                            p("Danger: deleting a data model can't be undone! Do you confirm?", br(),
+
+                              # -- check items
+                              if(!is.null(k_items()))
+                                "- All items in session will be deleted", br(),
+
+                              # -- check dm file
+                              if(file.exists(dm_url)){
+                                if(autosave)
+                                  "- Data model file will be deleted"
+                                else
+                                  "- Data model file won't be deleted (autosave is off)"}),
+
+                            # -- check items file
+                            if(file.exists(items_url) & autosave)
+                              checkboxInput(inputId = ns("dm_dz_confirm_delete_dm_items"), label = "Delete items file"),
+
+                            # -- confirm string
+                            p("Type the following string:", paste0("delete_", id)),
+                            textInput(inputId = ns("dm_dz_confirm_delete_dm_string"),
+                                      label = ""),
+
+                            # -- footer
+                            footer = tagList(
+                              modalButton("Cancel"),
+                              actionButton(ns("dm_dz_confirm_delete_dm"), "Delete"))))})
+
+
+    ### -- Observe confirm button ----
+    observeEvent(input$dm_dz_confirm_delete_dm, {
+
+      # -- check string
+      req(input$dm_dz_confirm_delete_dm_string == paste0("delete_", id))
+
+      cat(MODULE, "Delete data model confirmed! \n")
+
+      # -- close dialog
+      removeModal()
+
+      # -- delete items
+      if(!is.null(k_items()))
+        k_items(NULL)
+
+      # -- delete data model & file
+      k_data_model(NULL)
+      if(file.exists(dm_url) & autosave)
+        unlink(dm_url)
+
+      # -- delete items file
+      if(file.exists(items_url) & autosave)
+        if(input$dm_dz_confirm_delete_dm_items)
+          unlink(items_url)
+
+      # -- notify
+      if(shiny::isRunning())
+        showNotification(paste(MODULE, "Data model deleted."), type = "warning")
+
+    })
+
+
+    # __________________________________________________________________________
+    # -- Module server return value ----
+    # __________________________________________________________________________
 
     # -- the reference (not the value!)
     list(id = id,
