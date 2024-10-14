@@ -832,46 +832,10 @@ kitemsManager_Server <- function(id, path,
 
 
     # --------------------------------------------------------------------------
-    # Add attribute to data model:
+    # Create data model:
     # --------------------------------------------------------------------------
 
-    # -- update dm_att_type given dm_att_name
-    observeEvent(input$dm_att_name, {
-
-      # -- check if input in template
-      if(tolower(input$dm_att_name) %in% TEMPLATE_DATA_MODEL$name)
-
-        updateSelectizeInput(session = session,
-                             inputId = "dm_att_type",
-                             choices = OBJECT_CLASS,
-                             selected = TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == input$dm_att_name, ]$type)})
-
-
-    # -- update dm_att_default_detail given dm_att_type & dm_default_choice
-    observeEvent({
-      input$dm_att_type
-      input$dm_default_choice}, {
-
-        # -- set param
-        if(input$dm_default_choice == "none")
-          choices <- NULL
-        else {
-          choices <- if(input$dm_default_choice == "val")
-            DEFAULT_VALUES[[input$dm_att_type]]
-          else
-            DEFAULT_FUNCTIONS[[input$dm_att_type]]}
-
-
-        # -- check if input in template
-        updateSelectizeInput(session = session,
-                             inputId = "dm_att_default_detail",
-                             choices = choices,
-                             selected = NULL)
-
-      })
-
-
-    # -- BTN dm_create
+    # -- Observe: actionButton
     observeEvent(input$dm_create, {
 
       cat("[BTN] Create data \n")
