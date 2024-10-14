@@ -57,3 +57,20 @@ test_that("dm_check_integrity: extra attribute in data model", {
 
 })
 
+
+test_that("dm_check_integrity: migrate data model", {
+
+  # -- alter data model
+  dm$default.arg <- NULL
+
+  # -- function call
+  x <- dm_check_integrity(data.model = dm, items = items, template = NULL)
+
+  # -- checks:
+  expect_s3_class(x, "data.frame")
+
+  # -- check: x dim
+  expect_equal(dim(x), c(dim(dm)[1], length(DATA_MODEL_COLCLASSES)))
+
+})
+
