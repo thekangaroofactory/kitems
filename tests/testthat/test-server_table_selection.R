@@ -1,21 +1,11 @@
 
 
-# --------------------------------------------------------------------------
-# Setup
-# --------------------------------------------------------------------------
-
+# -- Setup
 create_testdata()
 
 
-# --------------------------------------------------------------------------
-# Scenario: in table selection
-# --------------------------------------------------------------------------
-
-test_that("Selection works", {
-
-  cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: in table selection")
-  cat("\n-------------------------------------------------------------------------- \n")
+# -- Scenario:
+test_that("[testServer] In table selection works", {
 
   # -- declare arguments
   params <- list(id = module_id,
@@ -26,10 +16,6 @@ test_that("Selection works", {
   # -- module server call
   testServer(kitemsManager_Server, args = params, {
 
-    # --------------------------------------------------------------------------
-    # select rows
-    # --------------------------------------------------------------------------
-
     # -- flush reactive values
     session$flushReact()
 
@@ -39,14 +25,16 @@ test_that("Selection works", {
     # -- check
     expect_equal(selected_items(), k_items()$id[1:2])
 
+    # -- update input
+    session$setInputs(filtered_view_cell_clicked = list(col = 3))
+
+    # -- check
+    expect_equal(clicked_column(), "Total")
 
   })
 
 })
 
 
-# --------------------------------------------------------------------------
-# Cleanup
-# --------------------------------------------------------------------------
-
+# -- Cleanup
 clean_all(testdata_path)
