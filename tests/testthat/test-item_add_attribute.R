@@ -30,3 +30,27 @@ test_that("item_add_attribute: items without row", {
 
 })
 
+
+test_that("item_add_attribute: wrong fill length", {
+
+  # -- function call
+  x <- item_add_attribute(items = items, name = "new_attribute", type = "logical", fill = c(TRUE, FALSE))
+
+  # -- tests
+  expect_s3_class(x, "data.frame")
+  expect_equal(dim(x), c(4, 7))
+
+})
+
+
+test_that("item_add_attribute: wrong fill type", {
+
+  # -- function call
+  x <- item_add_attribute(items = items, name = "new_attribute", type = "logical", fill = 1)
+
+  # -- tests
+  expect_s3_class(x, "data.frame")
+  expect_equal(dim(x), c(4, 7))
+
+})
+
