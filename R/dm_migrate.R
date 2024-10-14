@@ -19,7 +19,9 @@ dm_migrate <- function(data.model, name){
 
   # -- add missing columns
   # fill with defaults
-  suppressWarnings(data.model[name] <- DATA_MODEL_DEFAULTS[name])
+  tryCatch(data.model[name] <- DATA_MODEL_DEFAULTS[name],
+           error = function(e) print(e$message),
+           warning = function(w) print(w$message))
 
   # -- return
   data.model

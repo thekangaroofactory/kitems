@@ -5,7 +5,7 @@ create_testdata()
 
 
 # -- Scenario:
-test_that("[testServer] In table selection works", {
+test_that("[testServer] Admin UI danger zone works", {
 
   # -- declare arguments
   params <- list(id = module_id,
@@ -20,16 +20,10 @@ test_that("[testServer] In table selection works", {
     session$flushReact()
 
     # -- update input
-    session$setInputs(filtered_view_rows_selected = c(3,4))
+    session$setInputs(adm_dz_toggle = TRUE)
 
-    # -- check
-    expect_equal(selected_items(), k_items()$id[1:2])
-
-    # -- update input
-    session$setInputs(filtered_view_cell_clicked = list(col = 3))
-
-    # -- check
-    expect_equal(clicked_column(), "Total")
+    # -- test output
+    expect_type(output$dm_danger_zone, "list")
 
   })
 

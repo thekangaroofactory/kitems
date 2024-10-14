@@ -44,7 +44,7 @@ item_add_attribute <- function(items, name, type, fill = NA){
     if(class(fill) != type){
 
       fill <- eval(call(CLASS_FUNCTIONS[[type]], fill))
-      cat("-- Coerce value(s):", class(fill), fill, "\n")}
+      cat("-- Warning! fill type does not match with expected one, coerce value(s):", class(fill), fill, "\n")}
 
     # -- Add col
     items[name] <- fill

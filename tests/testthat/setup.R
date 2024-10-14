@@ -36,8 +36,9 @@ colClasses_no_date <- colClasses[!names(colClasses) %in% "date"]
 # -- declare default.val
 default_val <- c("name" = "fruit", "isvalid" = TRUE)
 
-# -- declare default.fun
+# -- declare default.fun & arg
 default_fun <- c("id" = "ktools::getTimestamp", "date" = "Sys.Date")
+default_arg <- c("id" = "list(k = 10)")
 
 # -- declare filter
 filter <- c("id")
