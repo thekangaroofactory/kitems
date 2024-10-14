@@ -41,3 +41,16 @@ test_that("dm_update_attribute / default.fun", {
 
 })
 
+
+test_that("dm_update_attribute / default.fun + default.arg", {
+
+  # -- function call
+  x <- dm_update_attribute(data.model = dm, name = "id", default.fun = "ktools::getTimestamp", default.arg = "list(k = 10)")
+
+  # -- tests
+  expect_s3_class(x, "data.frame")
+  expect_equal(x[x$name == "id", ]$default.fun, "ktools::getTimestamp")
+  expect_equal(x[x$name == "id", ]$default.arg, "list(k = 10)")
+
+})
+
