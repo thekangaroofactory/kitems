@@ -42,6 +42,34 @@ test_that("data_model: default.fun", {
 })
 
 
+test_that("data_model: default.arg", {
+
+  # -- function call
+  x <- data_model(colClasses = colClasses, default.fun = default_fun, default.arg = default_arg)
+
+  # -- check: output is data.frame
+  expect_s3_class(x, "data.frame")
+
+  # -- check: output dim
+  expect_equal(dim(x), c(length(colClasses), length(DATA_MODEL_COLCLASSES)))
+
+})
+
+
+test_that("data_model: sort", {
+
+  # -- function call
+  x <- data_model(colClasses = colClasses, sort.rank = c("date" = 1), sort.desc = c("date" = TRUE))
+
+  # -- check: output is data.frame
+  expect_s3_class(x, "data.frame")
+
+  # -- check: output dim
+  expect_equal(dim(x), c(length(colClasses), length(DATA_MODEL_COLCLASSES)))
+
+})
+
+
 # ------------------------------------------------------------------------------
 # Negative test(s)
 # ------------------------------------------------------------------------------
