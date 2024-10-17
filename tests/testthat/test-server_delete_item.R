@@ -40,7 +40,7 @@ test_that("Delete works", {
     selected_items(k_items()$id[[1]])
 
     # -- update input (click)
-    session$setInputs(confirm_delete_btn = 1)
+    session$setInputs(item_delete_confirm = 1)
 
     # -- check
     x <- k_items()

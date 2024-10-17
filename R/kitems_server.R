@@ -198,27 +198,27 @@ kitems_server <- function(id, path,
     # __________________________________________________________________________
     ## -- Create item ----
 
-    # -- Declare: create_btn
-    output$create_btn_output <- renderUI(
+    # -- Declare: output
+    output$item_create <- renderUI(
 
       # -- Check data model #290
       if(!is.null(k_data_model()))
-        actionButton(inputId = ns("create_btn"),
+        actionButton(inputId = ns("item_create"),
                      label = "Create"))
 
 
-    # -- Observe: create_btn
-    observeEvent(input$create_btn,
+    # -- Observe: actionButton
+    observeEvent(input$item_create,
 
                  showModal(modalDialog(item_form(ns, item = NULL, update = FALSE, data.model = k_data_model()),
                                        title = "Create",
                                        footer = tagList(
                                          modalButton("Cancel"),
-                                         actionButton(ns("confirm_create_btn"), "Create")))))
+                                         actionButton(ns("item_create_confirm"), "Create")))))
 
 
-    # -- Observe: confirm_create_btn
-    observeEvent(input$confirm_create_btn, {
+    # -- Observe: actionButton
+    observeEvent(input$item_create_confirm, {
 
       cat(MODULE, "[EVENT] Create item \n")
 
@@ -243,19 +243,19 @@ kitems_server <- function(id, path,
     ## -- Update item ----
     # __________________________________________________________________________
 
-    # -- Declare: update_btn
-    output$update_btn_output <- renderUI(
+    # -- Declare: output
+    output$item_update <- renderUI(
 
       # -- check item selection + single row
       if(is.null(selected_items()) | length(selected_items()) != 1)
         NULL
       else
-        actionButton(inputId = ns("update_btn"),
+        actionButton(inputId = ns("item_update"),
                      label = "Update"))
 
 
-    # -- Observe: update_btn
-    observeEvent(input$update_btn, {
+    # -- Observe: actionButton
+    observeEvent(input$item_update, {
 
       cat(MODULE, "[EVENT] Update item \n")
 
@@ -267,12 +267,12 @@ kitems_server <- function(id, path,
                             title = "Update",
                             footer = tagList(
                               modalButton("Cancel"),
-                              actionButton(ns("confirm_update_btn"), "Update"))))
+                              actionButton(ns("item_update_confirm"), "Update"))))
 
     })
 
-    # -- Observe: confirm_update_btn
-    observeEvent(input$confirm_update_btn, {
+    # -- Observe: actionButton
+    observeEvent(input$item_update_confirm, {
 
       cat(MODULE, "[EVENT] Confirm update item \n")
 
@@ -301,19 +301,19 @@ kitems_server <- function(id, path,
     ## -- Delete item(s) ----
     # __________________________________________________________________________
 
-    # -- Declare: delete_btn
-    output$delete_btn_output <- renderUI(
+    # -- Declare: output
+    output$item_delete <- renderUI(
 
       # -- check item selection
       if(is.null(selected_items()))
         NULL
       else
-        actionButton(inputId = ns("delete_btn"),
+        actionButton(inputId = ns("item_delete"),
                      label = "Delete"))
 
 
-    # -- Observe: create_btn
-    observeEvent(input$delete_btn, {
+    # -- Observe: actionButton
+    observeEvent(input$item_delete, {
 
       cat(MODULE, "[EVENT] Delete item(s) \n")
 
@@ -322,12 +322,12 @@ kitems_server <- function(id, path,
                             "Danger: deleting item(s) can't be undone! Do you confirm?",
                             footer = tagList(
                               modalButton("Cancel"),
-                              actionButton(ns("confirm_delete_btn"), "Delete"))))
+                              actionButton(ns("item_delete_confirm"), "Delete"))))
 
     })
 
-    # -- Observe: confirm_delete_btn
-    observeEvent(input$confirm_delete_btn, {
+    # -- Observe: actionButton
+    observeEvent(input$item_delete_confirm, {
 
       cat(MODULE, "[EVENT] Confirm delete item(s) \n")
 

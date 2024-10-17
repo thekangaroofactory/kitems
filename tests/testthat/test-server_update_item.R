@@ -50,7 +50,7 @@ test_that("Update works", {
     session$setInputs(isvalid = !x$isvalid[1])
 
     # -- click
-    session$setInputs(confirm_update_btn = 1)
+    session$setInputs(item_update_confirm = 1)
 
 
     # --------------------------------------------------------------------------
