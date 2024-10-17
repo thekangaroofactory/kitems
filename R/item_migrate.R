@@ -17,10 +17,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' item_add_attribute(items = myitems, name = "comment", type = "character", fill = "none")
+#' item_migrate(items = myitems, name = "comment", type = "character", fill = "none")
 #' }
 
-item_add_attribute <- function(items, name, type, fill = NA){
+item_migrate <- function(items, name, type, fill = NA){
 
   # -- Check dim
   if(nrow(items) == 0){

@@ -1,6 +1,6 @@
 
 
-#' Check data model
+#' Check data model integrity
 #'
 #' @param data.model a \emph{mandatory} data model
 #' @param items a \emph{mandatory} item data.frame
@@ -19,12 +19,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' feedback <- dm_check_integrity(mydatamodel, myitems)
+#' feedback <- dm_integrity(mydatamodel, myitems)
 #' if(!is.logical(feedback))
 #'   mydatamodel <- feedback
 #' }
 
-dm_check_integrity <- function(data.model, items, template = NULL){
+dm_integrity <- function(data.model, items, template = NULL){
 
   # -- init
   integrity <- TRUE
@@ -85,14 +85,14 @@ dm_check_integrity <- function(data.model, items, template = NULL){
       }}
 
     # -- Add missing attributes
-    data.model <- dm_add_attribute(data.model = data.model,
-                                   name = missing_att,
-                                   type = missing_types,
-                                   default.val = missing_default_val,
-                                   default.fun = missing_default_fun,
-                                   default.arg = missing_default_arg,
-                                   skip = names(missing_skip),
-                                   filter = names(missing_filter))
+    data.model <- add_attribute(data.model = data.model,
+                                name = missing_att,
+                                type = missing_types,
+                                default.val = missing_default_val,
+                                default.fun = missing_default_fun,
+                                default.arg = missing_default_arg,
+                                skip = names(missing_skip),
+                                filter = names(missing_filter))
 
   }
 

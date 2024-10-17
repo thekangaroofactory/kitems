@@ -1,6 +1,6 @@
 
 
-#' Data model admin UI
+#' Admin UI
 #'
 #' @param id the module id
 #'

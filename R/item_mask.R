@@ -15,13 +15,18 @@
 #'
 #' @examples
 #' \dontrun{
-#' view_apply_masks(data.model = "mydatamodel", items = "myitems")
+#' item_mask(data.model = "mydatamodel", items = "myitems")
 #' }
 
-view_apply_masks <- function(data.model, items){
+item_mask <- function(data.model, items){
 
-  # -- Apply data model masks
-  items <- dm_apply_mask(data.model, items)
+  # -- Get filter from data model
+  filter_cols <- dm_filter(data.model)
+
+  # -- Apply attribute filter
+  if(!is.null(filter_cols))
+    items <- items[-which(names(items) %in% filter_cols)]
+
 
   # -- Apply attribute/column name mask
   if(!is.null(items)){

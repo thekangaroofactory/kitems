@@ -1,6 +1,6 @@
 
 
-#' Build input tagList
+#' Build item input tagList
 #'
 #' @param ns the namespace function, output of shiny::NS()
 #' @param item an optional item (used to set default input values if update = TRUE)
@@ -15,18 +15,18 @@
 #'
 #' @examples
 #' \dontrun{
-#' inputList(ns, item = NULL, update = FALSE, data.model = mydatamodel)
-#' inputList(ns, item = myitem, update = TRUE, data.model = mydatamodel)
+#' item_form(ns, item = NULL, update = FALSE, data.model = mydatamodel)
+#' item_form(ns, item = myitem, update = TRUE, data.model = mydatamodel)
 #' }
 
-inputList <- function(ns, item = NULL, update = FALSE, data.model){
+item_form <- function(ns, item = NULL, update = FALSE, data.model){
 
-  cat("[inputList] Building input list \n")
+  cat("[item_form] Building input list \n")
   cat("  - update =", update, "\n")
 
   # -- get parameters from data model
   colClasses <- dm_colClasses(data.model)
-  skip <- dm_skip(data.model)
+  skip <- data.model[data.model$skip, ]$name
 
 
   # -- helper function
@@ -140,7 +140,7 @@ inputList <- function(ns, item = NULL, update = FALSE, data.model){
 
   } else {
 
-    values <- lapply(names(colClasses), function(x) dm_get_default(data.model, x))
+    values <- lapply(names(colClasses), function(x) dm_default(data.model, x))
     names(values) <- names(colClasses)
 
   }

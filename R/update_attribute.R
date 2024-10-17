@@ -26,19 +26,19 @@
 #' @examples
 #' \dontrun{
 #' #Use of vector to update several attributes:
-#' dm_update_attribute(data.model = dm,
-#'                     name = c("name","total"),
-#'                     default.val = c("test", 2),
-#'                     default.fun = NULL,
-#'                     default.arg = NULL,
-#'                     skip = TRUE)
+#' update_attribute(data.model = dm,
+#'                  name = c("name","total"),
+#'                  default.val = c("test", 2),
+#'                  default.fun = NULL,
+#'                  default.arg = NULL,
+#'                  skip = TRUE)
 #' }
 
 
-dm_update_attribute <- function(data.model, name,
-                                default.val = NULL, default.fun = NULL, default.arg = NULL,
-                                skip = NULL, filter = NULL,
-                                sort.rank = NULL, sort.desc = NULL){
+update_attribute <- function(data.model, name,
+                             default.val = NULL, default.fun = NULL, default.arg = NULL,
+                             skip = NULL, filter = NULL,
+                             sort.rank = NULL, sort.desc = NULL){
 
   # -- update row
   # removed filter: #225

@@ -8,9 +8,9 @@
 #' @export
 #'
 #' @examples
-#' items_filtered_view_DT(id = "mydata")
+#' filtered_view_ui(id = "mydata")
 
-items_filtered_view_DT <- function(id){
+filtered_view_ui <- function(id){
 
   # -- namespace
   ns <- NS(id)

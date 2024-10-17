@@ -20,20 +20,20 @@
 #'
 #' @examples
 #' \dontrun{
-#' dm_add_attribute(data.model = mydatamodel, name = "new_attribute", type = "character")
-#' dm_add_attribute(data.model = mydatamodel, name = "total", type = "numeric", default.val = 0)
-#' dm_add_attribute(data.model = mydatamodel, name = "date", type = "Date", default.fun = "Sys.Date")
-#' dm_add_attribute(data.model = mydatamodel, name = "progress", type = "integer", skip = "progress")
-#' dm_add_attribute(data.model = mydatamodel, name = "internal", type = "logical", filter = "internal")
+#' add_attribute(data.model = mydatamodel, name = "new_attribute", type = "character")
+#' add_attribute(data.model = mydatamodel, name = "total", type = "numeric", default.val = 0)
+#' add_attribute(data.model = mydatamodel, name = "date", type = "Date", default.fun = "Sys.Date")
+#' add_attribute(data.model = mydatamodel, name = "progress", type = "integer", skip = "progress")
+#' add_attribute(data.model = mydatamodel, name = "internal", type = "logical", filter = "internal")
 #' }
 
 
-dm_add_attribute <- function(data.model, name, type,
-                             default.val = NULL, default.fun = NULL, default.arg = NULL,
-                             filter = NULL, skip = NULL,
-                             sort.rank = NULL, sort.desc = NULL){
+add_attribute <- function(data.model, name, type,
+                          default.val = NULL, default.fun = NULL, default.arg = NULL,
+                          filter = NULL, skip = NULL,
+                          sort.rank = NULL, sort.desc = NULL){
 
-  cat("[dm_add_attribute] Add attribute to data model =", name, "\n")
+  cat("[add_attribute] Add attribute to data model =", name, "\n")
 
   # -- Init attribute (using data_model to fit with structure)
   new_attribute <- data_model(colClasses = stats::setNames(type, name),

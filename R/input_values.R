@@ -6,6 +6,7 @@
 #' @param colClasses a named vector of classes, defining the data model
 #'
 #' @return a list of values
+#' @export
 #'
 #' @details the output list will contain as many entries as the colClasses named vector.
 #' In case some names have no corresponding item in the input parameter, they will get NULL as value
@@ -13,12 +14,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' values <- get_input_values(input, colClasses = c("date" = "Date", "text" = "character"))
+#' values <- input_values(input, colClasses = c("date" = "Date", "text" = "character"))
 #' }
 
 
 # -- function definition
-get_input_values <- function(input, colClasses){
+input_values <- function(input, colClasses){
 
   # -- get values from input object
   values <- lapply(names(colClasses), function(x) input[[x]])
@@ -28,7 +29,7 @@ get_input_values <- function(input, colClasses){
   # Need to retrieve additional time & timezone inputs
   if(any(colClasses == "POSIXct")){
 
-    cat("[get_input_values] Need to retrieve additional time & timezone inputs \n")
+    cat("[input_values] Need to retrieve additional time & timezone inputs \n")
 
     # -- get attributes
     att_names <- names(colClasses)[colClasses == "POSIXct"]

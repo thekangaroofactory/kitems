@@ -15,11 +15,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' items <- item_check_integrity(items, data.model)
+#' items <- item_integrity(items, data.model)
 #' }
 
 
-item_check_integrity <- function(items, data.model){
+item_integrity <- function(items, data.model){
 
   # -- check args
   if(is.null(items) || is.null(data.model))

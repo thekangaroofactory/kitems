@@ -2,7 +2,7 @@
 
 # -- Shiny module server logic -------------------------------------------------
 
-admin_Server <- function(k_data_model, k_items, path, dm_url, items_url, autosave) {
+admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosave) {
 
   # -- force set id to 'admin'
   id <- "admin"
@@ -29,7 +29,7 @@ admin_Server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     # setting rownames = FALSE #209
     # setting dom = "tpl" instead of "t" #245
     # allowing display all #244
-    output$data_model <- DT::renderDT(dm_table_mask(k_data_model()),
+    output$data_model <- DT::renderDT(dm_mask(k_data_model()),
                                       rownames = FALSE,
                                       options = list(lengthMenu = list(c(20, 50, -1), c('20', '50', 'All')),
                                                      pageLength = 20, dom = "tpl", scrollX = TRUE),
@@ -42,7 +42,7 @@ admin_Server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
                                           selection = list(mode = 'single', target = "row", selected = NULL))
 
     ## -- Masked view ----
-    output$view_item_table <- DT::renderDT(view_apply_masks(k_data_model(), k_items()),
+    output$view_item_table <- DT::renderDT(item_mask(k_data_model(), k_items()),
                                            rownames = FALSE,
                                            selection = list(mode = 'single', target = "row", selected = NULL))
 
@@ -328,7 +328,7 @@ admin_Server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
         fill <- ktools::seq_timestamp(n = n)
 
         # -- add attribute & reorder
-        items <- item_add_attribute(items, name = "id", type = "numeric", fill = fill)
+        items <- item_migrate(items, name = "id", type = "numeric", fill = fill)
         items <- items[c("id", colnames(items)[!colnames(items) %in% "id"])]
 
         # -- close modal
@@ -359,7 +359,7 @@ admin_Server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
         # -- Get data model
         cat(MODULE, "Extract data model from data \n")
-        init_dm <- dm_check_integrity(data.model = NULL, items = items, template = TEMPLATE_DATA_MODEL)
+        init_dm <- dm_integrity(data.model = NULL, items = items, template = TEMPLATE_DATA_MODEL)
 
         # -- Display modal
         # adding options to renderDT #207
@@ -380,7 +380,7 @@ admin_Server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
           # -- Check items classes #216
           # Because dataset was read first, the current colclasses are 'guessed' and may not comply with the data model
           # ex: date class is forced in data model, but it may be char ("2024-02-07) or num (19760)
-          items <- item_check_integrity(items = items, data.model = init_dm)
+          items <- item_integrity(items = items, data.model = init_dm)
 
           # -- Store items & data model
           k_items(items)
@@ -1161,29 +1161,29 @@ admin_Server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
             sort_desc <- input$w_sort_desc}
 
         # -- Update attribute
-        dm_update_attribute(data.model = dm,
-                            name = attribute$name,
-                            default.val = default_val,
-                            default.fun = default_fun,
-                            default.arg = default_arg,
-                            skip = skip,
-                            filter = filter,
-                            sort.rank = sort_rank,
-                            sort.desc = sort_desc)
+        update_attribute(data.model = dm,
+                         name = attribute$name,
+                         default.val = default_val,
+                         default.fun = default_fun,
+                         default.arg = default_arg,
+                         skip = skip,
+                         filter = filter,
+                         sort.rank = sort_rank,
+                         sort.desc = sort_desc)
 
       } else
 
         # -- Add attribute to the data model
-        dm_add_attribute(data.model = dm,
-                         name = input$w_name,
-                         type = input$w_type,
-                         default.val = if(input$w_default_choice == "val") stats::setNames(input$w_default_val, input$w_name) else NULL,
-                         default.fun = if(input$w_default_choice == "fun") stats::setNames(input$w_default_fun, input$w_name) else NULL,
-                         default.arg = if(input$w_default_choice == "fun") stats::setNames(input$w_default_arg, input$w_name) else NULL,
-                         skip = if(input$w_skip) input$w_name else NULL,
-                         filter = if(input$w_filter) input$w_name else NULL,
-                         sort.rank = if(input$w_sort) stats::setNames(input$w_sort_rank, input$w_name) else NULL,
-                         sort.desc = if(input$w_sort) stats::setNames(input$w_sort_desc, input$w_name) else NULL)
+        add_attribute(data.model = dm,
+                      name = input$w_name,
+                      type = input$w_type,
+                      default.val = if(input$w_default_choice == "val") stats::setNames(input$w_default_val, input$w_name) else NULL,
+                      default.fun = if(input$w_default_choice == "fun") stats::setNames(input$w_default_fun, input$w_name) else NULL,
+                      default.arg = if(input$w_default_choice == "fun") stats::setNames(input$w_default_arg, input$w_name) else NULL,
+                      skip = if(input$w_skip) input$w_name else NULL,
+                      filter = if(input$w_filter) input$w_name else NULL,
+                      sort.rank = if(input$w_sort) stats::setNames(input$w_sort_rank, input$w_name) else NULL,
+                      sort.desc = if(input$w_sort) stats::setNames(input$w_sort_desc, input$w_name) else NULL)
 
       # -- store
       cat("[step.6] Update data model \n")
@@ -1193,11 +1193,11 @@ admin_Server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       if(!isUpdate()){
 
         # -- get default value
-        value <- dm_get_default(data.model = dm, name = input$w_name)
+        value <- dm_default(data.model = dm, name = input$w_name)
 
         # -- Add column to items & store
         cat("[step.6] Add new attribute to existing items \n")
-        items <- item_add_attribute(k_items(), name = input$w_name, type = input$w_type, fill = value)
+        items <- item_migrate(k_items(), name = input$w_name, type = input$w_type, fill = value)
         k_items(items)
 
       } else isUpdate(FALSE) # -- reset update

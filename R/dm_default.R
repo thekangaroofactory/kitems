@@ -1,6 +1,6 @@
 
 
-#' Default value for an attribute
+#' Compute default value for an attribute
 #'
 #' @param data.model a data.frame containing the data model
 #' @param name a character string with the attribute name
@@ -10,13 +10,13 @@
 #'
 #' @examples
 #' \dontrun{
-#' value <- dm_get_default(data.model = mydatamodel, name = "date")
+#' value <- dm_default(data.model = mydatamodel, name = "date")
 #' }
 
 
-dm_get_default <- function(data.model, name){
+dm_default <- function(data.model, name){
 
-  cat("[dm_get_default] Get default for attribute:", name, "\n")
+  cat("[dm_default] Get default for attribute:", name, "\n")
 
   # -- get defaults from data model
   default_val <- data.model[data.model$name == name, ]$default.val

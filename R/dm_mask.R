@@ -9,11 +9,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' dm_table_mask(data.model = dm)
+#' dm_mask(data.model = dm)
 #' }
 
 
-dm_table_mask <- function(data.model){
+dm_mask <- function(data.model){
 
   # -- Apply attribute/column name mask
   if(!is.null(data.model)){

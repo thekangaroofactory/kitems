@@ -17,14 +17,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' kitemsManager_Server(id = "mydata", path = "path/to/my/data",
-#'                      create = TRUE, autosave = TRUE)
+#' kitems_server(id = "mydata", path = "path/to/my/data",
+#'               create = TRUE, autosave = TRUE)
 #' }
 
 
 # -- Shiny module server logic -------------------------------------------------
 
-kitemsManager_Server <- function(id, path,
+kitems_server <- function(id, path,
                                  create = TRUE, autosave = TRUE) {
 
   moduleServer(id, function(input, output, session) {
@@ -112,7 +112,7 @@ kitemsManager_Server <- function(id, path,
       if(!is.null(init_dm) & !is.null(init_items)){
 
         cat(MODULE, "Checking data model integrity \n")
-        result <- dm_check_integrity(data.model = init_dm, items = init_items, template = TEMPLATE_DATA_MODEL)
+        result <- dm_integrity(data.model = init_dm, items = init_items, template = TEMPLATE_DATA_MODEL)
 
         # -- Check feedback (otherwise value is TRUE)
         if(is.data.frame(result)){
@@ -139,8 +139,8 @@ kitemsManager_Server <- function(id, path,
       if(!is.null(init_dm) & !is.null(init_items)){
 
         cat(MODULE, "Checking items classes integrity \n")
-        init_items <- item_check_integrity(items = init_items,
-                                           data.model = init_dm)}
+        init_items <- item_integrity(items = init_items,
+                                     data.model = init_dm)}
 
       # Increment the progress bar, and update the detail text.
       incProgress(3/4, detail = "Integrity checked")
@@ -210,7 +210,7 @@ kitemsManager_Server <- function(id, path,
     # -- Observe: create_btn
     observeEvent(input$create_btn,
 
-                 showModal(modalDialog(inputList(ns, item = NULL, update = FALSE, data.model = k_data_model()),
+                 showModal(modalDialog(item_form(ns, item = NULL, update = FALSE, data.model = k_data_model()),
                                        title = "Create",
                                        footer = tagList(
                                          modalButton("Cancel"),
@@ -227,7 +227,7 @@ kitemsManager_Server <- function(id, path,
 
       # -- get list of input values & name it
       cat("--  Get list of input values \n")
-      input_values <- get_input_values(input, dm_colClasses(k_data_model()))
+      input_values <- input_values(input, dm_colClasses(k_data_model()))
 
       # -- create item based on input list
       cat("--  Create item \n")
@@ -263,7 +263,7 @@ kitemsManager_Server <- function(id, path,
       item <- k_items()[k_items()$id == selected_items(), ]
 
       # -- Dialog
-      showModal(modalDialog(inputList(ns, item = item, update = TRUE, data.model = k_data_model()),
+      showModal(modalDialog(item_form(ns, item = item, update = TRUE, data.model = k_data_model()),
                             title = "Update",
                             footer = tagList(
                               modalButton("Cancel"),
@@ -281,7 +281,7 @@ kitemsManager_Server <- function(id, path,
 
       # -- get list of input values & name it
       cat("--  Get list of input values \n")
-      input_values <- get_input_values(input, dm_colClasses(k_data_model()))
+      input_values <- input_values(input, dm_colClasses(k_data_model()))
 
       # -- update id (to replace selected item)
       input_values$id <- selected_items()
@@ -453,7 +453,7 @@ kitemsManager_Server <- function(id, path,
 
 
     ## -- Declare view ----
-    output$filtered_view <- DT::renderDT(view_apply_masks(k_data_model(), filtered_items()),
+    output$filtered_view <- DT::renderDT(item_mask(k_data_model(), filtered_items()),
                                         rownames = FALSE,
                                         selection = list(mode = 'multiple', target = "row", selected = NULL))
 
@@ -487,7 +487,7 @@ kitemsManager_Server <- function(id, path,
     observeEvent(input$filtered_view_cell_clicked$col, {
 
       # -- Get table col names (need to apply masks to get correct columns, hence sending only first row)
-      cols <- colnames(view_apply_masks(k_data_model(), utils::head(filtered_items(), n = 1)))
+      cols <- colnames(item_mask(k_data_model(), utils::head(filtered_items(), n = 1)))
 
       # -- Get name of the clicked column
       col_clicked <- cols[input$filtered_view_cell_clicked$col + 1]
@@ -504,7 +504,7 @@ kitemsManager_Server <- function(id, path,
     # __________________________________________________________________________
 
     # -- Call module
-    admin_Server(k_data_model, k_items, path, dm_url, items_url, autosave)
+    admin_server(k_data_model, k_items, path, dm_url, items_url, autosave)
 
 
     # __________________________________________________________________________

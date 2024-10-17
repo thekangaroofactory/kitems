@@ -42,7 +42,7 @@ item_create <- function(values, data.model){
       if(!shiny::isTruthy(value)){
 
         cat("- Input not Truthy / Setting up default value \n")
-        value <- dm_get_default(data.model, key)
+        value <- dm_default(data.model, key)
 
       } else
         cat("- Input is Truthy, nothing to do \n")
