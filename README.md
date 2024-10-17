@@ -110,7 +110,7 @@ list(id,
 library(kitems)
 
 # -- call module
-mydata <- kitemsManager_Server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
+mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
 
 # -- get data model
 data_model <- mydata$data_model()
@@ -124,7 +124,7 @@ value list, as data_model()
 ``` r
 
 # -- call module
-mydata <- kitemsManager_Server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
+mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
 
 # -- get items
 items <- mydata$items()
@@ -148,8 +148,8 @@ start a new data model, as well as an import data button.
 When the module server is launched, it will perform an integrity check
 to ensure that the data (items) and data model are aligned.
 
-This is done through the dm_check_integrity() function. If not aligned,
-the data model will be updated to match with any missing attribute for
+This is done through the dm_integrity() function. If not aligned, the
+data model will be updated to match with any missing attribute for
 example.
 
 ## Item management
@@ -163,7 +163,7 @@ added to the item list:
 library(kitems)
 
 # -- call module
-mydata <- kitemsManager_Server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
+mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
 
 # -- define inputs and create item (waning! this should be used in a reactive context)
 input_values <- data.frame(id = 1, text = "demo")
@@ -185,7 +185,7 @@ replace the one in the item list:
 library(kitems)
 
 # -- call module
-mydata <- kitemsManager_Server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
+mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
 
 # -- define inputs and create item (waning! this should be used in a reactive context)
 input_values <- data.frame(id = 1, text = "demo")
@@ -203,7 +203,7 @@ To delete an item, just pass it’s id to the trigger:
 library(kitems)
 
 # -- call module
-mydata <- kitemsManager_Server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
+mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
 
 # -- delete item (waning! this should be used in a reactive context)
 item_id <- 1704961867683 
@@ -219,8 +219,8 @@ items content (with data model masks applied).
 
 ### Filtered view
 
-The filtered view is provided through items_filtered_view_DT() It is
-based on the filtered_items content (with data model masks applied).
+The filtered view is provided through filtered_view_ui() It is based on
+the filtered_items content (with data model masks applied).
 
 ## Selected Item(s)
 
@@ -338,9 +338,9 @@ tabItem(tabName = "my_data",
 
 ### Nested module considerations
 
-In case the kitemsManager_Server module server function is called from
-inside a module (i.e. as a nested module), then it is not possible to
-call the UI functions from the main app with the nested module id.
+In case the kitems_server module server function is called from inside a
+module (i.e. as a nested module), then it is not possible to call the UI
+functions from the main app with the nested module id.
 
 From there, two options are available:
 
