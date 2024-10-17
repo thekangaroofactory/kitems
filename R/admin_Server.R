@@ -25,32 +25,32 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
     # -- Admin tables ---------------------------------------------------------
 
-    ## -- Data model ----
+    ## -- Data model table ----
     # setting rownames = FALSE #209
     # setting dom = "tpl" instead of "t" #245
     # allowing display all #244
-    output$data_model <- DT::renderDT(dm_mask(k_data_model()),
-                                      rownames = FALSE,
-                                      options = list(lengthMenu = list(c(20, 50, -1), c('20', '50', 'All')),
-                                                     pageLength = 20, dom = "tpl", scrollX = TRUE),
-                                      selection = list(mode = 'single', target = "row", selected = isolate(input$data_model_rows_selected)))
+    output$dm_table <- DT::renderDT(dm_mask(k_data_model()),
+                                    rownames = FALSE,
+                                    options = list(lengthMenu = list(c(20, 50, -1), c('20', '50', 'All')),
+                                                   pageLength = 20, dom = "tpl", scrollX = TRUE),
+                                    selection = list(mode = 'single', target = "row", selected = isolate(input$dm_table_rows_selected)))
 
-    ## -- Raw view ----
-    output$raw_item_table <- DT::renderDT(k_items(),
-                                          rownames = FALSE,
-                                          options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
-                                          selection = list(mode = 'single', target = "row", selected = NULL))
+    ## -- Raw item table ----
+    output$raw_table <- DT::renderDT(k_items(),
+                                     rownames = FALSE,
+                                     options = list(lengthMenu = c(5, 10, 15), pageLength = 5, dom = "t", scrollX = TRUE),
+                                     selection = list(mode = 'single', target = "row", selected = NULL))
 
-    ## -- Masked view ----
-    output$view_item_table <- DT::renderDT(item_mask(k_data_model(), k_items()),
-                                           rownames = FALSE,
-                                           selection = list(mode = 'single', target = "row", selected = NULL))
+    ## -- Masked item view ----
+    output$masked_table <- DT::renderDT(item_mask(k_data_model(), k_items()),
+                                        rownames = FALSE,
+                                        selection = list(mode = 'single', target = "row", selected = NULL))
 
 
     # -- Admin inputs ---------------------------------------------------------
 
     ## -- Sort inputs ----
-    output$dm_sort_buttons <- renderUI(
+    output$dm_sort <- renderUI(
 
       # -- check NULL data model
       if(is.null(k_data_model()))
@@ -61,7 +61,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
         tagList(
 
           # order attribute name
-          selectizeInput(inputId = ns("dm_order_cols"),
+          selectizeInput(inputId = ns("dm_sort"),
                          label = "Select cols order",
                          choices = k_data_model()$name,
                          selected = k_data_model()$name,
@@ -69,7 +69,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
 
     ## -- Filter inputs ----
-    output$adm_filter_buttons <- renderUI(
+    output$dm_filter <- renderUI(
 
       # -- check NULL data model
       if(is.null(k_data_model()))
@@ -86,7 +86,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
           NULL
 
         # -- define input
-        selectizeInput(inputId = ns("adm_filter_col"),
+        selectizeInput(inputId = ns("dm_filter"),
                        label = "Filter columns",
                        choices = k_data_model()$name,
                        selected = filter_cols,
@@ -99,7 +99,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     # -- Admin tabs -----------------------------------------------------------
 
     ## -- Data model tab ----
-    output$admin_dm_tab <- renderUI({
+    output$dm_tab <- renderUI({
 
       # -- check NULL data model
       if(is.null(k_data_model())){
@@ -116,7 +116,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
                         else
                           actionButton(ns("dm_create"), label = "Create"),
 
-                        actionButton(ns("import_data"), label = "Import data")))
+                        actionButton(ns("import"), label = "Import data")))
 
       } else {
 
@@ -131,12 +131,12 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
           # -- the table
           fluidRow(column(width = 12,
                           h3("Table"),
-                          DT::DTOutput(ns("data_model")))),
+                          DT::DTOutput(ns("dm_table")))),
 
           # -- actions
           fluidRow(column(width = 12,
                           h3("Actions"),
-                          actionButton(inputId = ns("w_new_attribute"), label = "New attribute"),
+                          actionButton(inputId = ns("create_attribute"), label = "New attribute"),
                           uiOutput(ns("update_attribute")))),
 
           # -- info
@@ -146,8 +146,8 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
           # -- danger zone
           fluidRow(column(width = 12,
                           br(),
-                          uiOutput(ns("dm_danger_btn")),
-                          uiOutput(ns("dm_danger_zone")))))
+                          uiOutput(ns("dz_toggle")),
+                          uiOutput(ns("danger_zone")))))
 
       }
 
@@ -155,7 +155,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
 
     ## -- Raw table tab ----
-    output$admin_raw_tab <- renderUI({
+    output$raw_tab <- renderUI({
 
       # -- check NULL data model
       if(!is.null(k_data_model())){
@@ -163,11 +163,11 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
         # -- display raw table
         fluidRow(column(width = 2,
                         p("Actions"),
-                        uiOutput(ns("dm_sort_buttons"))),
+                        uiOutput(ns("dm_sort"))),
 
                  column(width = 10,
                         p("Raw Table"),
-                        DT::DTOutput(ns("raw_item_table"))))
+                        DT::DTOutput(ns("raw_table"))))
 
       }
 
@@ -175,7 +175,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
 
     ## -- Masked view tab ----
-    output$admin_view_tab <- renderUI({
+    output$masked_tab <- renderUI({
 
       # -- check NULL data model
       if(!is.null(k_data_model())){
@@ -183,14 +183,14 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
         # -- display view table
         fluidRow(column(width = 2,
                         p("Actions"),
-                        uiOutput(ns("adm_filter_buttons")),
+                        uiOutput(ns("dm_filter")),
                         p("Column name mask applied by default:",br(),
                           "- replace dot, underscore with space",br(),
                           "- capitalize first letters")),
 
                  column(width = 10,
                         p("Filtered Table"),
-                        DT::DTOutput(ns("view_item_table"))))
+                        DT::DTOutput(ns("masked_table"))))
 
       }
 
@@ -200,10 +200,10 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     # -- Observe admin tabs ---------------------------------------------------
 
     ## -- Data_model selected row ----
-    observeEvent(input$data_model_rows_selected, {
+    observeEvent(input$dm_table_rows_selected, {
 
       # -- get selected row
-      row <- input$data_model_rows_selected
+      row <- input$dm_table_rows_selected
 
       # -- check out of limit value #272
       # If last row is selected and attribute is deleted, a crash would occur
@@ -230,39 +230,39 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
 
     ## -- Sort attributes / columns ----
-    observeEvent(input$dm_order_cols, {
+    observeEvent(input$dm_sort, {
 
       # -- Check:
       # all columns need to be in the selection
       # order must be different from the one already in place
-      req(length(input$dm_order_cols) == dim(k_items())[2],
-          !identical(input$dm_order_cols, k_data_model()$name))
+      req(length(input$dm_sort) == dim(k_items())[2],
+          !identical(input$dm_sort, k_data_model()$name))
 
       cat("[BTN] Reorder column \n")
 
       # -- Reorder items & store
-      k_items(k_items()[input$dm_order_cols])
+      k_items(k_items()[input$dm_sort])
 
       # -- Reorder data model & store
       dm <- k_data_model()
-      dm <- dm[match(input$dm_order_cols, dm$name), ]
+      dm <- dm[match(input$dm_sort, dm$name), ]
       k_data_model(dm)
 
     })
 
 
     ## -- Filter attributes ----
-    observeEvent(input$adm_filter_col, {
+    observeEvent(input$dm_filter, {
 
       # -- check to avoid useless updates
       dm <- k_data_model()
-      req(!setequal(input$adm_filter_col,dm[dm$filter, ]$name))
+      req(!setequal(input$dm_filter,dm[dm$filter, ]$name))
 
-      cat(MODULE, "Set filtered attributes:", input$adm_filter_col, "\n")
+      cat(MODULE, "Set filtered attributes:", input$dm_filter, "\n")
 
       # -- Check NULL data model
       if(!is.null(dm)){
-        dm <- dm_filter(data.model = dm, set = input$adm_filter_col)
+        dm <- dm_filter(data.model = dm, set = input$dm_filter)
         k_data_model(dm)}
 
     }, ignoreInit = TRUE, ignoreNULL = FALSE)
@@ -273,12 +273,12 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     # __________________________________________________________________________
 
     ## -- Observe: click (start import) ----
-    observeEvent(input$import_data, {
+    observeEvent(input$import, {
 
       cat(MODULE, "[EVENT] Import data \n")
 
       # -- Display modal
-      showModal(modalDialog(fileInput(inputId = ns("input_file"),
+      showModal(modalDialog(fileInput(inputId = ns("import_file"),
                                       label = "Select file",
                                       multiple = FALSE,
                                       accept = ".csv",
@@ -287,22 +287,22 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
                             title = "Import data",
                             footer = tagList(
                               modalButton("Cancel"),
-                              actionButton(ns("confirm_import_file"), "Next"))))
+                              actionButton(ns("import_file_confirm"), "Next"))))
 
     })
 
 
-    ## -- Observe: click (confirm file) ----
-    observeEvent(input$confirm_import_file, {
+    ## -- Observe: actionButton ----
+    observeEvent(input$import_file_confirm, {
 
       # -- Check file input
-      req(input$input_file)
+      req(input$import_file)
 
       # -- Close modal
       removeModal()
 
       # -- Load the data
-      file <- input$input_file
+      file <- input$import_file
       items <- kfiles::read_data(file = file$datapath,
                                  path = NULL,
                                  colClasses = NA,
@@ -349,10 +349,10 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
                             size = "l",
                             footer = tagList(
                               modalButton("Cancel"),
-                              actionButton(ns("confirm_import_data"), "Next"))))
+                              actionButton(ns("import_items_confirm"), "Next"))))
 
-      # -- Observe: click (confirm data)
-      observeEvent(input$confirm_import_data, {
+      # -- Observe: actionButton
+      observeEvent(input$import_items_confirm, {
 
         # -- Close modal
         removeModal()
@@ -369,10 +369,10 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
                               size = "l",
                               footer = tagList(
                                 modalButton("Cancel"),
-                                actionButton(ns("confirm_data_model"), "Import"))))
+                                actionButton(ns("import_dm_confirm"), "Import"))))
 
-        # -- Observe: confirm_data_model
-        observeEvent(input$confirm_data_model, {
+        # -- Observe: actionButton
+        observeEvent(input$import_dm_confirm, {
 
           # -- Close modal
           removeModal()
@@ -449,7 +449,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
     # -- observe button
     # Added #281
-    observeEvent(input$w_new_attribute, {
+    observeEvent(input$create_attribute, {
 
       cat("[EVENT] Create data model attribute wizard \n")
 
@@ -599,7 +599,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       if(isUpdate()){
 
         # -- get attribute
-        attribute <- k_data_model()[input$data_model_rows_selected, ]
+        attribute <- k_data_model()[input$dm_table_rows_selected, ]
 
         name <- attribute$name
         type <- attribute$type
@@ -692,7 +692,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
           # -- setup input params
           if(isUpdate()){
 
-            attribute <- k_data_model()[input$data_model_rows_selected, ]
+            attribute <- k_data_model()[input$dm_table_rows_selected, ]
             value <- attribute$default.val
 
           } else { # -- create
@@ -714,7 +714,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
           # -- setup input params
           if(isUpdate()){
 
-            attribute <- k_data_model()[input$data_model_rows_selected, ]
+            attribute <- k_data_model()[input$dm_table_rows_selected, ]
             choices <- unique(c(attribute$default.fun, DEFAULT_FUNCTIONS[[attribute$type]]))
             selected <- attribute$default.fun
             value <- attribute$default.arg
@@ -777,7 +777,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
             # -- check update
             type <- if(isUpdate())
-              k_data_model()[input$data_model_rows_selected, ]$type
+              k_data_model()[input$dm_table_rows_selected, ]$type
             else
               input$w_type
 
@@ -868,7 +868,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
             # -- check update
             type <- if(isUpdate())
-              k_data_model()[input$data_model_rows_selected, ]$type
+              k_data_model()[input$dm_table_rows_selected, ]$type
             else
               input$w_type
 
@@ -927,7 +927,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       # -- init input values
       if(isUpdate()){
 
-        attribute <- k_data_model()[input$data_model_rows_selected, ]
+        attribute <- k_data_model()[input$dm_table_rows_selected, ]
         value_skip <- attribute$skip
         value_filter <- attribute$filter
 
@@ -981,7 +981,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       if(isUpdate()){
 
         # -- get attribute
-        attribute <- k_data_model()[input$data_model_rows_selected, ]
+        attribute <- k_data_model()[input$dm_table_rows_selected, ]
         value <- ifelse(is.na(attribute$sort.rank), FALSE, TRUE)
 
         # -- make sure options are correctly set
@@ -1125,7 +1125,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       dm <- if(isUpdate()){
 
         # -- get attribute to update
-        attribute <- k_data_model()[input$data_model_rows_selected, ]
+        attribute <- k_data_model()[input$dm_table_rows_selected, ]
 
         # -- prepare values
         # only values to be updated will be not NULL
@@ -1210,24 +1210,24 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     # __________________________________________________________________________
 
     ## -- Declare Toggle btn ----
-    output$dm_danger_btn <- renderUI(
+    output$dz_toggle <- renderUI(
 
       # -- Check for NULL data model
       if(!is.null(k_data_model()))
-        shinyWidgets::materialSwitch(inputId = ns("adm_dz_toggle"),
+        shinyWidgets::materialSwitch(inputId = ns("dz_toggle"),
                                      label = "Danger zone",
                                      value = FALSE,
                                      status = "danger"))
 
 
     ## -- Observe Toggle btn ----
-    observeEvent(input$adm_dz_toggle,
+    observeEvent(input$dz_toggle,
 
                  # -- Define output
-                 output$dm_danger_zone <- renderUI(
+                 output$danger_zone <- renderUI(
 
                    # -- check toggle btn
-                   if(input$adm_dz_toggle){
+                   if(input$dz_toggle){
 
                      tagList(
 
@@ -1237,7 +1237,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
                                            tagList(
 
                                              # -- select attribute name
-                                             selectizeInput(inputId = ns("dm_dz_att_name"),
+                                             selectizeInput(inputId = ns("dz_delete_att_name"),
                                                             label = "Name",
                                                             choices = k_data_model()$name,
                                                             selected = NULL,
@@ -1246,18 +1246,18 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
                                                                            onInitialize = I('function() { this.setValue(""); }'))),
 
                                              # -- delete att
-                                             actionButton(ns("dm_dz_delete_att"), label = "Delete"))),
+                                             actionButton(ns("dz_delete_att"), label = "Delete"))),
 
                        # -- delete data model
                        shinydashboard::box(title = "Delete data model", status = "danger", width = 4,
                                            p("Click here to delete the data model and ALL corresponding items."),
-                                           actionButton(ns("dm_dz_delete_dm"), label = "Delete all!")))}))
+                                           actionButton(ns("dz_delete_dm"), label = "Delete all!")))}))
 
 
     ## -- Delete attribute ------------------------------------------------------
 
     ### -- Observe button ----
-    observeEvent(input$dm_dz_delete_att, {
+    observeEvent(input$dz_delete_att, {
 
       # -- check data model size (to display warning)
       single_row <- nrow(k_data_model()) == 1
@@ -1268,16 +1268,16 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
                             if(single_row) p("Note that the data model will be deleted since this is the last attribute."),
                             footer = tagList(
                               modalButton("Cancel"),
-                              actionButton(ns("dm_dz_confirm_delete_att"), "Delete"))))})
+                              actionButton(ns("dz_delete_att_confirm"), "Delete"))))})
 
 
     ### -- Observe confirm button ----
-    observeEvent(input$dm_dz_confirm_delete_att, {
+    observeEvent(input$dz_delete_att_confirm, {
 
       # -- check
-      req(input$dm_dz_att_name)
+      req(input$dz_delete_att_name)
 
-      cat("[BTN] Delete attribute:", input$dm_dz_att_name, "\n")
+      cat("[BTN] Delete attribute:", input$dz_delete_att_name, "\n")
 
       # -- clode modal
       removeModal()
@@ -1285,12 +1285,12 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       # -- drop column!
       cat(MODULE, "Drop attribute from all items \n")
       items <- k_items()
-      items[input$dm_dz_att_name] <- NULL
+      items[input$dz_delete_att_name] <- NULL
 
       # -- update data model
       cat(MODULE, "Drop attribute from data model \n")
       dm <- k_data_model()
-      dm <- dm[dm$name != input$dm_dz_att_name, ]
+      dm <- dm[dm$name != input$dz_delete_att_name, ]
 
 
       # -- check for empty data model & store
@@ -1322,7 +1322,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     ## -- Delete data model ----------------------------------------------------
 
     ### -- Observe button ----
-    observeEvent(input$dm_dz_delete_dm, {
+    observeEvent(input$dz_delete_dm, {
 
       cat(MODULE, "Delete data model preview \n")
 
@@ -1344,24 +1344,24 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
                             # -- check items file
                             if(file.exists(items_url) & autosave)
-                              checkboxInput(inputId = ns("dm_dz_confirm_delete_dm_items"), label = "Delete items file"),
+                              checkboxInput(inputId = ns("dz_delete_dm_items"), label = "Delete items file"),
 
                             # -- confirm string
                             p("Type the following string:", paste0("delete_", id)),
-                            textInput(inputId = ns("dm_dz_confirm_delete_dm_string"),
+                            textInput(inputId = ns("dz_delete_dm_string"),
                                       label = ""),
 
                             # -- footer
                             footer = tagList(
                               modalButton("Cancel"),
-                              actionButton(ns("dm_dz_confirm_delete_dm"), "Delete"))))})
+                              actionButton(ns("dz_delete_dm_confirm"), "Delete"))))})
 
 
     ### -- Observe confirm button ----
-    observeEvent(input$dm_dz_confirm_delete_dm, {
+    observeEvent(input$dz_delete_dm_confirm, {
 
       # -- check string
-      req(input$dm_dz_confirm_delete_dm_string == paste0("delete_", unlist(strsplit(ns(id), split = "-"))[1]))
+      req(input$dz_delete_dm_string == paste0("delete_", unlist(strsplit(ns(id), split = "-"))[1]))
 
       cat(MODULE, "Delete data model confirmed! \n")
 
@@ -1379,7 +1379,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
       # -- delete items file
       if(file.exists(items_url) & autosave)
-        if(input$dm_dz_confirm_delete_dm_items)
+        if(input$dz_delete_dm_items)
           unlink(items_url)
 
       # -- notify
