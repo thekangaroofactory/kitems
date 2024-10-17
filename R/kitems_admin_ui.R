@@ -35,18 +35,18 @@ admin_ui <- function(id){
       tabPanel(title = "Data model",
 
                wellPanel(h3(paste("Name: ", name)),
-                         uiOutput(ns("admin_dm_tab")))),
+                         uiOutput(ns("admin-admin_dm_tab")))),
 
       # -- Raw table
       tabPanel(title = "Raw table",
 
                wellPanel(h3(paste("Name: ", name)),
-                         uiOutput(ns("admin_raw_tab")))),
+                         uiOutput(ns("admin-admin_raw_tab")))),
 
       # --View table
       tabPanel(title = "View",
 
                wellPanel(h3(paste("Name: ", name)),
-                         uiOutput(ns("admin_view_tab"))))))
+                         uiOutput(ns("admin-admin_view_tab"))))))
 
 }
