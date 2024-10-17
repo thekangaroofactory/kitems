@@ -21,7 +21,7 @@ test_that("[testServer] Create attribute wizard works", {
 
     # -- update inputs
     # case: character attribute
-    session$setInputs('admin-w_new_attribute' = 1)
+    session$setInputs('admin-create_attribute' = 1)
 
     session$setInputs('admin-w_name' = "test")
     session$setInputs('admin-w_type' = "character")

@@ -24,14 +24,14 @@ test_that("Select data model attribute works", {
   testServer(kitems_server, args = params, {
 
     # -- click
-    session$setInputs('admin-data_model_rows_selected' = 1)
+    session$setInputs('admin-dm_table_rows_selected' = 1)
 
     # --------------------------------------------------------------------------
     # Data model (dummy check)
     # --------------------------------------------------------------------------
 
     # -- test class
-    expect_equal(input$'admin-data_model_rows_selected', 1)
+    expect_equal(input$'admin-dm_table_rows_selected', 1)
 
   })
 

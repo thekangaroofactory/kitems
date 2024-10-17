@@ -20,10 +20,10 @@ test_that("[testServer] Delete data model works", {
     session$flushReact()
 
     # -- update input
-    session$setInputs('admin-dm_dz_delete_dm' = 1)
-    session$setInputs('admin-dm_dz_confirm_delete_dm_string' = "delete_data")
-    session$setInputs('admin-dm_dz_confirm_delete_dm_items' = TRUE)
-    session$setInputs('admin-dm_dz_confirm_delete_dm' = 1)
+    session$setInputs('admin-dz_delete_dm' = 1)
+    session$setInputs('admin-dz_delete_dm_string' = "delete_data")
+    session$setInputs('admin-dz_delete_dm_items' = TRUE)
+    session$setInputs('admin-dz_delete_dm_confirm' = 1)
 
     # - tests
     expect_null(k_data_model())

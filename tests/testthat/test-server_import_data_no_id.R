@@ -23,7 +23,7 @@ test_that("Import data without id works", {
   testServer(kitems_server, args = params, {
 
     # -- click
-    session$setInputs('admin-import_data' = 1)
+    session$setInputs('admin-import' = 1)
 
     # -- create input value
     value <- data.frame(name = "data_to_import",
@@ -32,12 +32,12 @@ test_that("Import data without id works", {
                         datapath = file.path(testdata_path, import_url))
 
     # -- set file input & click
-    session$setInputs('admin-input_file' = value)
-    session$setInputs('admin-confirm_import_file' = 1)
+    session$setInputs('admin-import_file' = value)
+    session$setInputs('admin-import_file_confirm' = 1)
 
     # -- click
-    session$setInputs('admin-confirm_import_data' = 1)
-    session$setInputs('admin-confirm_data_model' = 1)
+    session$setInputs('admin-import_items_confirm' = 1)
+    session$setInputs('admin-import_dm_confirm' = 1)
 
 
     # --------------------------------------------------------------------------

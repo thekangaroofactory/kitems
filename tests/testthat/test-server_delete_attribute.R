@@ -27,9 +27,9 @@ test_that("delete attribute works", {
   testServer(kitems_server, args = params, {
 
     # -- update input & click
-    session$setInputs(dm_dz_att_name = "status")
-    session$setInputs(dm_dz_delete_att = 1)
-    session$setInputs(dm_dz_confirm_delete_att = 1)
+    session$setInputs('admin-dz_delete_att_name' = "status")
+    session$setInputs('admin-dz_delete_att' = 1)
+    session$setInputs('admin-dz_delete_att_confirm' = 1)
 
 
     # --------------------------------------------------------------------------

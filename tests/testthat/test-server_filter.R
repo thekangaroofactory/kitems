@@ -33,7 +33,7 @@ test_that("Server works", {
     session$flushReact()
 
     # -- update input
-    session$setInputs('admin-adm_filter_col' = c("id", "total"))
+    session$setInputs('admin-dm_filter' = c("id", "total"))
 
 
 
