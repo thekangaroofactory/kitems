@@ -20,10 +20,10 @@ test_that("[testServer] Admin UI danger zone works", {
     session$flushReact()
 
     # -- update input
-    session$setInputs(adm_dz_toggle = TRUE)
+    session$setInputs('admin-adm_dz_toggle' = TRUE)
 
     # -- test output
-    expect_type(output$dm_danger_zone, "list")
+    expect_type(output$'admin-dm_danger_zone', "list")
 
   })
 

@@ -21,26 +21,26 @@ test_that("[testServer] Create attribute wizard works", {
 
     # -- update inputs
     # case: character attribute
-    session$setInputs(w_new_attribute = 1)
+    session$setInputs('admin-w_new_attribute' = 1)
 
-    session$setInputs(w_name = "test")
-    session$setInputs(w_type = "character")
-    session$setInputs(w_confirm_1 = 1)
+    session$setInputs('admin-w_name' = "test")
+    session$setInputs('admin-w_type' = "character")
+    session$setInputs('admin-w_confirm_1' = 1)
 
     # -- case: no default
-    session$setInputs(w_default_choice = "none")
-    session$setInputs(w_set_sf = 1)
+    session$setInputs('admin-w_default_choice' = "none")
+    session$setInputs('admin-w_set_sf' = 1)
 
     # -- case: skip = FALSE, filter = FALSE
-    session$setInputs(w_skip = FALSE)
-    session$setInputs(w_filter = FALSE)
-    session$setInputs(w_set_sort = 1)
+    session$setInputs('admin-w_skip' = FALSE)
+    session$setInputs('admin-w_filter' = FALSE)
+    session$setInputs('admin-w_set_sort' = 1)
 
     # -- case: sort = FALSE
-    session$setInputs(w_sort = FALSE)
+    session$setInputs('admin-w_sort' = FALSE)
 
-    session$setInputs(w_ask_confirm = 1)
-    session$setInputs(w_confirm = 1)
+    session$setInputs('admin-w_ask_confirm' = 1)
+    session$setInputs('admin-w_confirm' = 1)
 
     # - tests
     expect_true("test" %in% k_data_model()$name)

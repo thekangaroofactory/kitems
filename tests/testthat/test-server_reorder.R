@@ -27,7 +27,7 @@ test_that("Server works", {
   testServer(kitemsManager_Server, args = params, {
 
     # -- update input
-    session$setInputs(dm_order_cols = names(colClasses[order(names(colClasses))]))
+    session$setInputs('admin-dm_order_cols' = names(colClasses[order(names(colClasses))]))
 
 
     # --------------------------------------------------------------------------

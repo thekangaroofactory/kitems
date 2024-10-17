@@ -34,7 +34,7 @@ test_that("launch server without data model", {
     # --------------------------------------------------------------------------
 
     # -- click
-    session$setInputs(dm_create = 1)
+    session$setInputs('admin-dm_create' = 1)
 
     # -- data model
     x <- k_data_model()
