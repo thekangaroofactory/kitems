@@ -51,7 +51,7 @@ body <- dashboardBody(
                                br(), br(),
                                p("This instance has no corresponding files (data model or items) in the provided path.", br(),
                                  "As no data model is provided, the administration console will only display the Create and Import data buttons."),
-                               tags$pre("# -- start module server: \ndata <- kitems::kitemsManager_Server(id = \"data\", path = \"path/to/my/data\", \ncreate = TRUE, autosave = FALSE)")),
+                               tags$pre("# -- start module server: \ndata <- kitems::kitems_server(id = \"data\", path = \"path/to/my/data\", \ncreate = TRUE, autosave = FALSE)")),
 
                        # -- data_2
                        tags$li("data_2",
@@ -110,11 +110,11 @@ body <- dashboardBody(
                      h3("Items table"),
 
                      p("A filtered item view is available."),
-                     tags$pre("# -- Filtered view: \nitems_filtered_view_DT(id)"),
+                     tags$pre("# -- Filtered view: \nfiltered_view_ui(id)"),
 
                      fluidRow(column(width = 12,
                                      wellPanel(
-                                       kitems::items_filtered_view_DT("data_2"))))))),
+                                       kitems::filtered_view_ui("data_2"))))))),
 
     # -- Content tab
     tabItem(tabName = "data",
