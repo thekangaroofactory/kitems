@@ -42,7 +42,7 @@ Click "Next" (or Cancel if you want to abort).
 
 ## Data model preview
 
-The data model is build from the data (using the dm_check_integrity() function).
+The data model is build from the data (using the dm_integrity() function).
 Template classes will be applied to 'known' attribute names (like date or id).
 If not part of the template, the attribute type is guessed using class() function.
 

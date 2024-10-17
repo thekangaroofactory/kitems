@@ -25,10 +25,10 @@ test_that("Import data works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitemsManager_Server, args = params, {
+  testServer(kitems_server, args = params, {
 
     # -- click
-    session$setInputs(import_data = 1)
+    session$setInputs('admin-import' = 1)
 
     # -- create input value
     value <- data.frame(name = "data_to_import",
@@ -37,12 +37,12 @@ test_that("Import data works", {
                         datapath = file.path(testdata_path, import_url))
 
     # -- set file input & click
-    session$setInputs(input_file = value)
-    session$setInputs(confirm_import_file = 1)
+    session$setInputs('admin-import_file' = value)
+    session$setInputs('admin-import_file_confirm' = 1)
 
     # -- click
-    session$setInputs(confirm_import_data = 1)
-    session$setInputs(confirm_data_model = 1)
+    session$setInputs('admin-import_items_confirm' = 1)
+    session$setInputs('admin-import_dm_confirm' = 1)
 
 
     # --------------------------------------------------------------------------

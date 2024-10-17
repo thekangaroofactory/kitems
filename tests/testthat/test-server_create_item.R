@@ -24,10 +24,10 @@ test_that("Create works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitemsManager_Server, args = params, {
+  testServer(kitems_server, args = params, {
 
     # -- click
-    session$setInputs(create_btn = 1)
+    session$setInputs(item_create = 1)
 
     # -- update inputs (values to create item)
     session$setInputs(id = NA)
@@ -40,7 +40,7 @@ test_that("Create works", {
     session$setInputs(isvalid = FALSE)
 
     # -- click
-    session$setInputs(confirm_create_btn = 1)
+    session$setInputs(item_create_confirm = 1)
 
 
     # --------------------------------------------------------------------------

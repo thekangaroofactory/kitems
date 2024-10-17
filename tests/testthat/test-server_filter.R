@@ -24,7 +24,7 @@ test_that("Server works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitemsManager_Server, args = params, {
+  testServer(kitems_server, args = params, {
 
     # --------------------------------------------------------------------------
     # filter cols
@@ -33,7 +33,7 @@ test_that("Server works", {
     session$flushReact()
 
     # -- update input
-    session$setInputs(adm_filter_col = c("id", "total"))
+    session$setInputs('admin-dm_filter' = c("id", "total"))
 
 
 

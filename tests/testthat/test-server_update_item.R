@@ -24,7 +24,7 @@ test_that("Update works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitemsManager_Server, args = params, {
+  testServer(kitems_server, args = params, {
 
     # -- get items
     x <- k_items()
@@ -50,7 +50,7 @@ test_that("Update works", {
     session$setInputs(isvalid = !x$isvalid[1])
 
     # -- click
-    session$setInputs(confirm_update_btn = 1)
+    session$setInputs(item_update_confirm = 1)
 
 
     # --------------------------------------------------------------------------

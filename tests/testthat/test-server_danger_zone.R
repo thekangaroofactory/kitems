@@ -14,16 +14,16 @@ test_that("[testServer] Admin UI danger zone works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitemsManager_Server, args = params, {
+  testServer(kitems_server, args = params, {
 
     # -- flush reactive values
     session$flushReact()
 
     # -- update input
-    session$setInputs(adm_dz_toggle = TRUE)
+    session$setInputs('admin-dz_toggle' = TRUE)
 
     # -- test output
-    expect_type(output$dm_danger_zone, "list")
+    expect_type(output$'admin-danger_zone', "list")
 
   })
 

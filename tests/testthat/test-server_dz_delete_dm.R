@@ -14,16 +14,16 @@ test_that("[testServer] Delete data model works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitemsManager_Server, args = params, {
+  testServer(kitems_server, args = params, {
 
     # -- flush reactive values
     session$flushReact()
 
     # -- update input
-    session$setInputs(dm_dz_delete_dm = 1)
-    session$setInputs(dm_dz_confirm_delete_dm_string = "delete_data")
-    session$setInputs(dm_dz_confirm_delete_dm_items = TRUE)
-    session$setInputs(dm_dz_confirm_delete_dm = 1)
+    session$setInputs('admin-dz_delete_dm' = 1)
+    session$setInputs('admin-dz_delete_dm_string' = "delete_data")
+    session$setInputs('admin-dz_delete_dm_items' = TRUE)
+    session$setInputs('admin-dz_delete_dm_confirm' = 1)
 
     # - tests
     expect_null(k_data_model())
