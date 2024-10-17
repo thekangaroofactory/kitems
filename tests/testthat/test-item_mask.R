@@ -1,9 +1,9 @@
 
 
-test_that("view_apply_masks works", {
+test_that("item_mask works", {
 
   # -- function call
-  x <- view_apply_masks(data.model = dm, items = items)
+  x <- item_mask(data.model = dm, items = items)
 
   # -- test class
   expect_s3_class(x, "data.frame")

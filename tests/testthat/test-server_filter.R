@@ -24,7 +24,7 @@ test_that("Server works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitemsManager_Server, args = params, {
+  testServer(kitems_server, args = params, {
 
     # --------------------------------------------------------------------------
     # filter cols

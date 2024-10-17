@@ -1,17 +1,17 @@
 
 
 # -- setup
-create_testdata()
+create_integrity_testdata()
 
 
 # --------------------------------------------------------------------------
-# Scenario: select data model attribute
+# Scenario: data model integrity
 # --------------------------------------------------------------------------
 
-test_that("Select data model attribute works", {
+test_that("Data model integrity works", {
 
   cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: select data model attribute")
+  cat("Scenario: data model integrity")
   cat("\n-------------------------------------------------------------------------- \n")
 
   # -- declare arguments
@@ -21,20 +21,28 @@ test_that("Select data model attribute works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitemsManager_Server, args = params, {
-
-    # -- click
-    session$setInputs(data_model_rows_selected = 1)
+  testServer(kitems_server, args = params, {
 
     # --------------------------------------------------------------------------
-    # Data model (dummy check)
+    # Data model
     # --------------------------------------------------------------------------
 
-    # -- check
     x <- k_data_model()
 
-    # -- test class
+    # -- test class & dim
     expect_s3_class(x, "data.frame")
+    expect_equal(dim(x), c(6, length(DATA_MODEL_COLCLASSES)))
+
+
+    # --------------------------------------------------------------------------
+    # Items
+    # --------------------------------------------------------------------------
+
+    x <- k_items()
+
+    # -- test class & dim
+    expect_s3_class(x, "data.frame")
+    expect_equal(dim(x), c(4, 6))
 
   })
 

@@ -14,7 +14,7 @@ test_that("[testServer] Create attribute wizard works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitemsManager_Server, args = params, {
+  testServer(kitems_server, args = params, {
 
     # -- flush reactive values
     session$flushReact()

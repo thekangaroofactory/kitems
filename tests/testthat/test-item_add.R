@@ -9,7 +9,7 @@ test_that("item_add works", {
                  autosave = FALSE)
 
   # -- module server call
-  testServer(kitemsManager_Server, args = params, {
+  testServer(kitems_server, args = params, {
 
     x <- reactiveVal(items)
 

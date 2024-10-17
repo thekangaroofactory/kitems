@@ -1,9 +1,9 @@
 
 
-test_that("dm_check_integrity", {
+test_that("dm_integrity", {
 
   # -- function call
-  x <- dm_check_integrity(data.model = dm, items = items, template = NULL)
+  x <- dm_integrity(data.model = dm, items = items, template = NULL)
 
   # -- check
   expect_true(x)
@@ -11,10 +11,10 @@ test_that("dm_check_integrity", {
 })
 
 
-test_that("dm_check_integrity: extra attribute in items", {
+test_that("dm_integrity: extra attribute in items", {
 
   # -- function call
-  x <- dm_check_integrity(data.model = dm, items = items_extra_att, template = NULL)
+  x <- dm_integrity(data.model = dm, items = items_extra_att, template = NULL)
 
   # -- checks:
   expect_s3_class(x, "data.frame")
@@ -25,10 +25,10 @@ test_that("dm_check_integrity: extra attribute in items", {
 })
 
 
-test_that("dm_check_integrity: missing id", {
+test_that("dm_integrity: missing id", {
 
   # -- function call
-  x <- dm_check_integrity(data.model = dm[dm$name != "id", ], items = items, template = TEMPLATE_DATA_MODEL)
+  x <- dm_integrity(data.model = dm[dm$name != "id", ], items = items, template = TEMPLATE_DATA_MODEL)
 
   # -- checks:
   expect_s3_class(x, "data.frame")
@@ -44,10 +44,10 @@ test_that("dm_check_integrity: missing id", {
 })
 
 
-test_that("dm_check_integrity: extra attribute in data model", {
+test_that("dm_integrity: extra attribute in data model", {
 
   # -- function call
-  x <- dm_check_integrity(data.model = dm_extra_att, items = items, template = NULL)
+  x <- dm_integrity(data.model = dm_extra_att, items = items, template = NULL)
 
   # -- checks:
   expect_s3_class(x, "data.frame")
@@ -58,13 +58,13 @@ test_that("dm_check_integrity: extra attribute in data model", {
 })
 
 
-test_that("dm_check_integrity: migrate data model", {
+test_that("dm_integrity: migrate data model", {
 
   # -- alter data model
   dm$default.arg <- NULL
 
   # -- function call
-  x <- dm_check_integrity(data.model = dm, items = items, template = NULL)
+  x <- dm_integrity(data.model = dm, items = items, template = NULL)
 
   # -- checks:
   expect_s3_class(x, "data.frame")

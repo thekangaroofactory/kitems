@@ -24,7 +24,7 @@ test_that("Update works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitemsManager_Server, args = params, {
+  testServer(kitems_server, args = params, {
 
     # -- get items
     x <- k_items()

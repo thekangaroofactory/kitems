@@ -24,7 +24,7 @@ test_that("Server works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitemsManager_Server, args = params, {
+  testServer(kitems_server, args = params, {
 
     # -- update input
     session$setInputs('admin-dm_order_cols' = names(colClasses[order(names(colClasses))]))

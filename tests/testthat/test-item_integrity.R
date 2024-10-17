@@ -1,6 +1,6 @@
 
 
-test_that("item_check_integrity works", {
+test_that("item_integrity works", {
 
   # -- generate mismatch to solve
   items$date <- "2024-01-01"
@@ -9,7 +9,7 @@ test_that("item_check_integrity works", {
   dm[dm$name == "date", ]$type <- "Date"
 
   # -- function call
-  x <- item_check_integrity(items = items, data.model = dm)
+  x <- item_integrity(items = items, data.model = dm)
 
   # -- test
   expect_equal(class(x$date), "Date")
@@ -17,10 +17,10 @@ test_that("item_check_integrity works", {
 })
 
 
-test_that("item_check_integrity / NULL items works", {
+test_that("item_integrity / NULL items works", {
 
   # -- function call
-  x <- item_check_integrity(items = NULL, data.model = dm)
+  x <- item_integrity(items = NULL, data.model = dm)
 
   # -- test
   expect_null(x)
@@ -28,7 +28,7 @@ test_that("item_check_integrity / NULL items works", {
 })
 
 
-test_that("item_check_integrity / error works", {
+test_that("item_integrity / error works", {
 
   # -- generate mismatch to solve
   items$date <- "dummy_string"
@@ -37,7 +37,7 @@ test_that("item_check_integrity / error works", {
   dm[dm$name == "date", ]$type <- "Date"
 
   # -- function call
-  x <- item_check_integrity(items = items, data.model = dm)
+  x <- item_integrity(items = items, data.model = dm)
 
   # -- test
   expect_equal(class(x$date), "character")
@@ -45,7 +45,7 @@ test_that("item_check_integrity / error works", {
 })
 
 
-test_that("item_check_integrity / warning works", {
+test_that("item_integrity / warning works", {
 
   # -- generate mismatch to solve
   items$name <- "dummy_string"
@@ -54,7 +54,7 @@ test_that("item_check_integrity / warning works", {
   dm[dm$name == "name", ]$type <- "numeric"
 
   # -- function call
-  x <- item_check_integrity(items = items, data.model = dm)
+  x <- item_integrity(items = items, data.model = dm)
 
   # -- test
   expect_equal(class(x$name), "character")

@@ -16,7 +16,7 @@ test_that("launch server without data model", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitemsManager_Server, args = params, {
+  testServer(kitems_server, args = params, {
 
     # --------------------------------------------------------------------------
     # both data model & items should be NULL

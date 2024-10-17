@@ -24,7 +24,7 @@ test_that("Create works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitemsManager_Server, args = params, {
+  testServer(kitems_server, args = params, {
 
     # -- click
     session$setInputs(create_btn = 1)

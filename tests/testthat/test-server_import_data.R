@@ -25,7 +25,7 @@ test_that("Import data works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitemsManager_Server, args = params, {
+  testServer(kitems_server, args = params, {
 
     # -- click
     session$setInputs('admin-import_data' = 1)
