@@ -1,9 +1,9 @@
 
 
-test_that("update_attribute works", {
+test_that("attribute_update works", {
 
   # -- function call
-  x <- update_attribute(data.model = dm, name = "isvalid", default.val = NA, default.fun = NA, skip = FALSE)
+  x <- attribute_update(data.model = dm, name = "isvalid", default.val = NA, default.fun = NA, skip = FALSE)
 
   # -- test class
   expect_s3_class(x, "data.frame")
@@ -14,10 +14,10 @@ test_that("update_attribute works", {
 })
 
 
-test_that("update_attribute / default.val", {
+test_that("attribute_update / default.val", {
 
   # -- function call
-  x <- update_attribute(data.model = dm, name = "name", default.val = "blueberry", default.fun = NULL, skip = NULL)
+  x <- attribute_update(data.model = dm, name = "name", default.val = "blueberry", default.fun = NULL, skip = NULL)
 
   # -- test class
   expect_s3_class(x, "data.frame")
@@ -28,10 +28,10 @@ test_that("update_attribute / default.val", {
 })
 
 
-test_that("update_attribute / default.fun", {
+test_that("attribute_update / default.fun", {
 
   # -- function call
-  x <- update_attribute(data.model = dm, name = "date", default.val = NULL, default.fun = "Sys.Date", skip = NULL)
+  x <- attribute_update(data.model = dm, name = "date", default.val = NULL, default.fun = "Sys.Date", skip = NULL)
 
   # -- test class
   expect_s3_class(x, "data.frame")
@@ -42,10 +42,10 @@ test_that("update_attribute / default.fun", {
 })
 
 
-test_that("update_attribute / default.fun + default.arg", {
+test_that("attribute_update / default.fun + default.arg", {
 
   # -- function call
-  x <- update_attribute(data.model = dm, name = "id", default.fun = "ktools::getTimestamp", default.arg = "list(k = 10)")
+  x <- attribute_update(data.model = dm, name = "id", default.fun = "ktools::getTimestamp", default.arg = "list(k = 10)")
 
   # -- tests
   expect_s3_class(x, "data.frame")

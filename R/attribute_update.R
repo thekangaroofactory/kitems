@@ -26,7 +26,7 @@
 #' @examples
 #' \dontrun{
 #' #Use of vector to update several attributes:
-#' update_attribute(data.model = dm,
+#' attribute_update(data.model = dm,
 #'                  name = c("name","total"),
 #'                  default.val = c("test", 2),
 #'                  default.fun = NULL,
@@ -35,7 +35,7 @@
 #' }
 
 
-update_attribute <- function(data.model, name,
+attribute_update <- function(data.model, name,
                              default.val = NULL, default.fun = NULL, default.arg = NULL,
                              skip = NULL, filter = NULL,
                              sort.rank = NULL, sort.desc = NULL){

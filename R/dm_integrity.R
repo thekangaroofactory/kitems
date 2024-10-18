@@ -85,14 +85,14 @@ dm_integrity <- function(data.model, items, template = NULL){
       }}
 
     # -- Add missing attributes
-    data.model <- add_attribute(data.model = data.model,
-                                name = missing_att,
-                                type = missing_types,
-                                default.val = missing_default_val,
-                                default.fun = missing_default_fun,
-                                default.arg = missing_default_arg,
-                                skip = names(missing_skip),
-                                filter = names(missing_filter))
+    data.model <- attribute_create(data.model = data.model,
+                                   name = missing_att,
+                                   type = missing_types,
+                                   default.val = missing_default_val,
+                                   default.fun = missing_default_fun,
+                                   default.arg = missing_default_arg,
+                                   skip = names(missing_skip),
+                                   filter = names(missing_filter))
 
   }
 

@@ -1161,7 +1161,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
             sort_desc <- input$w_sort_desc}
 
         # -- Update attribute
-        update_attribute(data.model = dm,
+        attribute_update(data.model = dm,
                          name = attribute$name,
                          default.val = default_val,
                          default.fun = default_fun,
@@ -1174,16 +1174,16 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       } else
 
         # -- Add attribute to the data model
-        add_attribute(data.model = dm,
-                      name = input$w_name,
-                      type = input$w_type,
-                      default.val = if(input$w_default_choice == "val") stats::setNames(input$w_default_val, input$w_name) else NULL,
-                      default.fun = if(input$w_default_choice == "fun") stats::setNames(input$w_default_fun, input$w_name) else NULL,
-                      default.arg = if(input$w_default_choice == "fun") stats::setNames(input$w_default_arg, input$w_name) else NULL,
-                      skip = if(input$w_skip) input$w_name else NULL,
-                      filter = if(input$w_filter) input$w_name else NULL,
-                      sort.rank = if(input$w_sort) stats::setNames(input$w_sort_rank, input$w_name) else NULL,
-                      sort.desc = if(input$w_sort) stats::setNames(input$w_sort_desc, input$w_name) else NULL)
+        attribute_create(data.model = dm,
+                         name = input$w_name,
+                         type = input$w_type,
+                         default.val = if(input$w_default_choice == "val") stats::setNames(input$w_default_val, input$w_name) else NULL,
+                         default.fun = if(input$w_default_choice == "fun") stats::setNames(input$w_default_fun, input$w_name) else NULL,
+                         default.arg = if(input$w_default_choice == "fun") stats::setNames(input$w_default_arg, input$w_name) else NULL,
+                         skip = if(input$w_skip) input$w_name else NULL,
+                         filter = if(input$w_filter) input$w_name else NULL,
+                         sort.rank = if(input$w_sort) stats::setNames(input$w_sort_rank, input$w_name) else NULL,
+                         sort.desc = if(input$w_sort) stats::setNames(input$w_sort_desc, input$w_name) else NULL)
 
       # -- store
       cat("[step.6] Update data model \n")
@@ -1274,49 +1274,20 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     ### -- Observe confirm button ----
     observeEvent(input$dz_delete_att_confirm, {
 
-      # -- check
+      # -- check & close modal
       req(input$dz_delete_att_name)
-
       cat("[BTN] Delete attribute:", input$dz_delete_att_name, "\n")
-
-      # -- clode modal
       removeModal()
 
-      # -- drop column!
-      cat(MODULE, "Drop attribute from all items \n")
-      items <- k_items()
-      items[input$dz_delete_att_name] <- NULL
-
-      # -- update data model
-      cat(MODULE, "Drop attribute from data model \n")
-      dm <- k_data_model()
-      dm <- dm[dm$name != input$dz_delete_att_name, ]
-
-
-      # -- check for empty data model & store
-      if(nrow(dm) == 0){
-        cat(MODULE, "Warning! Empty Data model, cleaning data model & items \n")
-        k_items(NULL)
-        k_data_model(NULL)
-
-        if(autosave){
-          cat(MODULE, "Deleting data model & item files \n")
-          unlink(dm_url)
-          unlink(items_url)
-
-          # -- notify
-          if(shiny::isRunning())
-            showNotification(paste(MODULE, "Empty data model deleted."), type = "message")}
-
-      } else {
-        k_items(items)
-        k_data_model(dm)
-
-        # -- notify
-        if(shiny::isRunning())
-          showNotification(paste(MODULE, "Attribute deleted."), type = "message")}
-
-    })
+      # -- perform delete
+      attribute_delete(k_data_model,
+                       k_items,
+                       name = input$dz_delete_att_name,
+                       MODULE,
+                       autosave,
+                       dm_url,
+                       items_url,
+                       notify = shiny::isRunning())})
 
 
     ## -- Delete data model ----------------------------------------------------
