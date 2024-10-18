@@ -1209,49 +1209,26 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     # -- Danger zone ----
     # __________________________________________________________________________
 
-    ## -- Declare Toggle btn ----
+    ## -- Toggle btn ----
     output$dz_toggle <- renderUI(
 
       # -- Check for NULL data model
       if(!is.null(k_data_model()))
-        shinyWidgets::materialSwitch(inputId = ns("dz_toggle"),
+        shinyWidgets::materialSwitch(inputId = ns("dz_toggle_btn"),
                                      label = "Danger zone",
                                      value = FALSE,
                                      status = "danger"))
 
 
-    ## -- Observe Toggle btn ----
-    observeEvent(input$dz_toggle,
+    ## -- Danger zone ui output ----
+    output$danger_zone <- renderUI(
 
-                 # -- Define output
-                 output$danger_zone <- renderUI(
+      # -- check toggle btn
+      if(input$dz_toggle_btn)
+        danger_zone_ui(k_data_model, ns)) %>%
 
-                   # -- check toggle btn
-                   if(input$dz_toggle){
-
-                     tagList(
-
-                       # -- delete attribute
-                       shinydashboard::box(title = "Delete attribute", status = "danger", width = 4,
-
-                                           tagList(
-
-                                             # -- select attribute name
-                                             selectizeInput(inputId = ns("dz_delete_att_name"),
-                                                            label = "Name",
-                                                            choices = k_data_model()$name,
-                                                            selected = NULL,
-                                                            options = list(create = FALSE,
-                                                                           placeholder = 'Type or select an option below',
-                                                                           onInitialize = I('function() { this.setValue(""); }'))),
-
-                                             # -- delete att
-                                             actionButton(ns("dz_delete_att"), label = "Delete"))),
-
-                       # -- delete data model
-                       shinydashboard::box(title = "Delete data model", status = "danger", width = 4,
-                                           p("Click here to delete the data model and ALL corresponding items."),
-                                           actionButton(ns("dz_delete_dm"), label = "Delete all!")))}))
+      # -- event
+      bindEvent(input$dz_toggle_btn, ignoreInit = TRUE)
 
 
     ## -- Delete attribute ------------------------------------------------------
