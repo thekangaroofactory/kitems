@@ -1321,72 +1321,33 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
     ## -- Delete data model ----------------------------------------------------
 
-    ### -- Observe button ----
+    ### -- Observe actionButton ----
     observeEvent(input$dz_delete_dm, {
 
       cat(MODULE, "Delete data model preview \n")
 
       # -- Open dialog for confirmation
-      showModal(modalDialog(title = "Delete data model",
-
-                            p("Danger: deleting a data model can't be undone! Do you confirm?", br(),
-
-                              # -- check items
-                              if(!is.null(k_items()))
-                                "- All items in session will be deleted", br(),
-
-                              # -- check dm file
-                              if(file.exists(dm_url)){
-                                if(autosave)
-                                  "- Data model file will be deleted"
-                                else
-                                  "- Data model file won't be deleted (autosave is off)"}),
-
-                            # -- check items file
-                            if(file.exists(items_url) & autosave)
-                              checkboxInput(inputId = ns("dz_delete_dm_items"), label = "Delete items file"),
-
-                            # -- confirm string
-                            p("Type the following string:", paste0("delete_", id)),
-                            textInput(inputId = ns("dz_delete_dm_string"),
-                                      label = ""),
-
-                            # -- footer
-                            footer = tagList(
-                              modalButton("Cancel"),
-                              actionButton(ns("dz_delete_dm_confirm"), "Delete"))))})
+      showModal(
+        dm_delete_preview(hasItems = !is.null(k_items()),
+                          dm.file = file.exists(dm_url),
+                          item.file = file.exists(items_url),
+                          autosave = autosave,
+                          id = id,
+                          ns = ns))})
 
 
-    ### -- Observe confirm button ----
+    ### -- Observe confirm actionButton ----
     observeEvent(input$dz_delete_dm_confirm, {
 
-      # -- check string
+      # -- check string & close modal
       req(input$dz_delete_dm_string == paste0("delete_", unlist(strsplit(ns(id), split = "-"))[1]))
-
+      removeModal()
       cat(MODULE, "Delete data model confirmed! \n")
 
-      # -- close dialog
-      removeModal()
-
-      # -- delete items
-      if(!is.null(k_items()))
-        k_items(NULL)
-
-      # -- delete data model & file
-      k_data_model(NULL)
-      if(file.exists(dm_url) & autosave)
-        unlink(dm_url)
-
-      # -- delete items file
-      if(file.exists(items_url) & autosave)
-        if(input$dz_delete_dm_items)
-          unlink(items_url)
-
-      # -- notify
-      if(shiny::isRunning())
-        showNotification(paste(MODULE, "Data model deleted."), type = "warning")
-
-    })
+      # -- delete data model
+      dm_delete(k_data_model, k_items, dm_url, items_url,
+                autosave, item.file = input$dz_delete_dm_items,
+                notify = shiny::isRunning(), MODULE)})
 
   })
 

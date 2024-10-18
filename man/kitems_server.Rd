@@ -4,7 +4,7 @@
 \alias{kitems_server}
 \title{Module server}
 \usage{
-kitems_server(id, path, create = TRUE, autosave = TRUE)
+kitems_server(id, path, create = TRUE, autosave = TRUE, admin = FALSE)
 }
 \arguments{
 \item{id}{the id to be used for the module server instance}
@@ -14,12 +14,20 @@ kitems_server(id, path, create = TRUE, autosave = TRUE)
 \item{create}{a logical whether the data file should be created or not if missing (default = TRUE)}
 
 \item{autosave}{a logical whether the item auto save should be activated or not (default = TRUE)}
+
+\item{admin}{a logical indicating if the admin module server should be launched (default = FALSE)}
 }
 \description{
 Module server
 }
 \details{
-If autosave is FALSE, the item_save function should be used to make the data persistent
+If autosave is FALSE, the item_save function should be used to make the data persistent.
+To make the data model persistent, use \link[base]{saveRDS} function. The file name should be
+consistent with the output of \link[kitems]{dm_name} function used with \code{id} plus .rds extension.
+
+When admin is FALSE, \link[kitems]{admin_ui} will return an 'empty' layout (tabs with no content)
+\link[kitems]{dynamic_sidebar} is not affected by this parameter.
+It is expected that those function will not be used when admin = FALSE.
 }
 \examples{
 \dontrun{
