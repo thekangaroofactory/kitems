@@ -119,14 +119,12 @@ dm_integrity <- function(data.model, items, template = NULL){
     integrity <- FALSE
 
     # -- call migration
-    data.model <- dm_migrate(data.model, names(missing_col))}
+    data.model <- dm_migrate(data.model, names(missing_col))
 
-
-  # -- Check for column order
-  if(!identical(names(data.model), names(DATA_MODEL_COLCLASSES))){
-    cat("[Warning] Reordering data model columns \n")
-    data.model <- data.model[names(DATA_MODEL_COLCLASSES)]
-    integrity <- FALSE}
+    # -- check column order
+    if(!identical(names(data.model), names(DATA_MODEL_COLCLASSES))){
+      cat("[Warning] Reordering data model columns \n")
+      data.model <- data.model[names(DATA_MODEL_COLCLASSES)]}}
 
 
   # -- Return
