@@ -28,9 +28,3 @@ jobs:
         run: |
           R CMD INSTALL .
           Rscript -e 'covr::codecov()'
-
-      - uses: actions/checkout@main
-      - uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }} # required
-          verbose: true # optional (default = false)
