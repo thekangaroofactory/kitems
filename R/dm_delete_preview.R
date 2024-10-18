@@ -46,7 +46,7 @@ dm_delete_preview <- function(hasItems = FALSE, dm.file = FALSE, item.file = FAL
                 checkboxInput(inputId = ns("dz_delete_dm_items"), label = "Delete items file"),
 
               # -- confirm string
-              p("Type the following string:", paste0("delete_", id)),
+              p("Type the following string:", paste0("delete_", unlist(strsplit(ns(id), split = "-"))[1])),
               textInput(inputId = ns("dz_delete_dm_string"),
                         label = ""),
 
