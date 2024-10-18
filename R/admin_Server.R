@@ -1141,10 +1141,10 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
         default_arg <- NULL
         if(input$w_default_choice == "fun"){
 
-          if(input$w_default_fun != attribute$default.fun)
+          if(!identical(input$w_default_fun, attribute$default.fun))
             default_fun <- input$w_default_fun
 
-          if(input$w_default_arg != attribute$default.arg)
+          if(!identical(input$w_default_arg, attribute$default.arg))
             default_arg <- input$w_default_arg}
 
         # -- skip & filter
