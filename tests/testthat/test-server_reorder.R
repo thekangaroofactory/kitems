@@ -21,7 +21,8 @@ test_that("Server works", {
   params <- list(id = module_id,
                  path = testdata_path,
                  create = FALSE,
-                 autosave = TRUE)
+                 autosave = TRUE,
+                 admin = TRUE)
 
   # -- module server call
   testServer(kitems_server, args = params, {
