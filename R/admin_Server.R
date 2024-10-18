@@ -21,6 +21,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     # -- Declare internal reactives
     isValid <- reactiveValues()
     isUpdate <- reactiveVal(FALSE)
+    import_callback <- reactiveVal(NULL)
 
 
     # -- Admin tables ---------------------------------------------------------
@@ -275,126 +276,24 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     ## -- Observe: click (start import) ----
     observeEvent(input$import, {
 
-      cat(MODULE, "[EVENT] Import data \n")
+      cat(MODULE, "Import data \n")
 
-      # -- Display modal
-      showModal(modalDialog(fileInput(inputId = ns("import_file"),
-                                      label = "Select file",
-                                      multiple = FALSE,
-                                      accept = ".csv",
-                                      buttonLabel = "Browse...",
-                                      placeholder = "No file selected"),
-                            title = "Import data",
-                            footer = tagList(
-                              modalButton("Cancel"),
-                              actionButton(ns("import_file_confirm"), "Next"))))
-
-    })
+      # -- call module server
+      import_server(id = "import", k_data_model, k_items, callback = import_callback)})
 
 
-    ## -- Observe: actionButton ----
-    observeEvent(input$import_file_confirm, {
+    ## -- Observe: cleanup callback ----
+    # Once the module server is executed, cleanup observers (inputs can't be removed)
+    observeEvent(import_callback(), {
 
-      # -- Check file input
-      req(input$import_file)
+      # -- clean module observers
+      session$userData$build_item_obs$destroy()
+      session$userData$build_dm_obs$destroy()
+      session$userData$confirm_import_obs$destroy()
 
-      # -- Close modal
-      removeModal()
-
-      # -- Load the data
-      file <- input$import_file
-      items <- kfiles::read_data(file = file$datapath,
-                                 path = NULL,
-                                 colClasses = NA,
-                                 create = FALSE)
-
-      # -- Check if datatset has id #208
-      hasId <- if(!"id" %in% colnames(items)){
-
-        # -- nb id to compute
-        n <- nrow(items)
-
-        # -- compute expected time (based on average time per id) #221
-        expected_time <- round(n * 0.0156)
-
-        # -- Display message has it can take a bit of time depending on dataset size
-        showModal(modalDialog(p("Computing", n, "id(s) to import the dataset..."),
-                              p("Expected time:", expected_time, "s"),
-                              title = "Import data",
-                              footer = NULL))
-
-        # -- Compute a vector of ids (should be fixed by #214)
-        cat(MODULE, "[WARNING] Dataset has no id column, creating one \n")
-        fill <- ktools::seq_timestamp(n = n)
-
-        # -- add attribute & reorder
-        items <- item_migrate(items, name = "id", type = "numeric", fill = fill)
-        items <- items[c("id", colnames(items)[!colnames(items) %in% "id"])]
-
-        # -- close modal
-        removeModal()
-
-        # -- return
-        FALSE
-
-      } else TRUE
-
-      # -- Display modal
-      # adding options to renderDT #207
-      showModal(modalDialog(DT::renderDT(items, rownames = FALSE, options = list(scrollX = TRUE)),
-                            # -- test: in case no id column exists #208
-                            if(!hasId)
-                              p("Note: the dataset had no id column, it has been generated automatically."),
-                            title = "Import data",
-                            size = "l",
-                            footer = tagList(
-                              modalButton("Cancel"),
-                              actionButton(ns("import_items_confirm"), "Next"))))
-
-      # -- Observe: actionButton
-      observeEvent(input$import_items_confirm, {
-
-        # -- Close modal
-        removeModal()
-
-        # -- Get data model
-        cat(MODULE, "Extract data model from data \n")
-        init_dm <- dm_integrity(data.model = NULL, items = items, template = TEMPLATE_DATA_MODEL)
-
-        # -- Display modal
-        # adding options to renderDT #207
-        showModal(modalDialog(p("Data model built from the data:"),
-                              DT::renderDT(init_dm, rownames = FALSE, options = list(scrollX = TRUE)),
-                              title = "Import data",
-                              size = "l",
-                              footer = tagList(
-                                modalButton("Cancel"),
-                                actionButton(ns("import_dm_confirm"), "Import"))))
-
-        # -- Observe: actionButton
-        observeEvent(input$import_dm_confirm, {
-
-          # -- Close modal
-          removeModal()
-
-          # -- Check items classes #216
-          # Because dataset was read first, the current colclasses are 'guessed' and may not comply with the data model
-          # ex: date class is forced in data model, but it may be char ("2024-02-07) or num (19760)
-          items <- item_integrity(items = items, data.model = init_dm)
-
-          # -- Store items & data model
-          k_items(items)
-          k_data_model(init_dm)
-
-          # -- notify
-          if(shiny::isRunning())
-            showNotification(paste(MODULE, "Data imported."), type = "message")
-
-        })
-
-      })
-
-    })
+      # -- reset callback
+      import_callback(NULL)
+      cat(MODULE, "Import module cleanup done \n")})
 
 
     # __________________________________________________________________________
