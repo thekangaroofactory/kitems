@@ -6,6 +6,7 @@
 #' @param path a path where data model and items will be stored
 #' @param create a logical whether the data file should be created or not if missing (default = TRUE)
 #' @param autosave a logical whether the item auto save should be activated or not (default = TRUE)
+#' @param admin a logical indicating if the admin module server should be launched (default = FALSE)
 #'
 #' @import shiny shinydashboard shinyWidgets DT
 #'
@@ -13,7 +14,13 @@
 #'
 #' @details
 #'
-#' If autosave is FALSE, the item_save function should be used to make the data persistent
+#' If autosave is FALSE, the item_save function should be used to make the data persistent.
+#' To make the data model persistent, use \link[base]{saveRDS} function. The file name should be
+#' consistent with the output of \link[kitems]{dm_name} function used with \code{id} plus .rds extension.
+#'
+#' When admin is FALSE, \link[kitems]{admin_ui} will return an 'empty' layout (tabs with no content)
+#' \link[kitems]{dynamic_sidebar} is not affected by this parameter.
+#' It is expected that those function will not be used when admin = FALSE.
 #'
 #' @examples
 #' \dontrun{
@@ -25,7 +32,7 @@
 # -- Shiny module server logic -------------------------------------------------
 
 kitems_server <- function(id, path,
-                                 create = TRUE, autosave = TRUE) {
+                          create = TRUE, autosave = TRUE, admin = FALSE) {
 
   moduleServer(id, function(input, output, session) {
 
@@ -504,7 +511,8 @@ kitems_server <- function(id, path,
     # __________________________________________________________________________
 
     # -- Call module
-    admin_server(k_data_model, k_items, path, dm_url, items_url, autosave)
+    if(admin)
+      admin_server(k_data_model, k_items, path, dm_url, items_url, autosave)
 
 
     # __________________________________________________________________________

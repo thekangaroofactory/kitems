@@ -85,14 +85,14 @@ dm_integrity <- function(data.model, items, template = NULL){
       }}
 
     # -- Add missing attributes
-    data.model <- add_attribute(data.model = data.model,
-                                name = missing_att,
-                                type = missing_types,
-                                default.val = missing_default_val,
-                                default.fun = missing_default_fun,
-                                default.arg = missing_default_arg,
-                                skip = names(missing_skip),
-                                filter = names(missing_filter))
+    data.model <- attribute_create(data.model = data.model,
+                                   name = missing_att,
+                                   type = missing_types,
+                                   default.val = missing_default_val,
+                                   default.fun = missing_default_fun,
+                                   default.arg = missing_default_arg,
+                                   skip = names(missing_skip),
+                                   filter = names(missing_filter))
 
   }
 
@@ -119,14 +119,12 @@ dm_integrity <- function(data.model, items, template = NULL){
     integrity <- FALSE
 
     # -- call migration
-    data.model <- dm_migrate(data.model, names(missing_col))}
+    data.model <- dm_migrate(data.model, names(missing_col))
 
-
-  # -- Check for column order
-  if(!identical(names(data.model), names(DATA_MODEL_COLCLASSES))){
-    cat("[Warning] Reordering data model columns \n")
-    data.model <- data.model[names(DATA_MODEL_COLCLASSES)]
-    integrity <- FALSE}
+    # -- check column order
+    if(!identical(names(data.model), names(DATA_MODEL_COLCLASSES))){
+      cat("[Warning] Reordering data model columns \n")
+      data.model <- data.model[names(DATA_MODEL_COLCLASSES)]}}
 
 
   # -- Return

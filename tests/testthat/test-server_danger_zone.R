@@ -11,7 +11,8 @@ test_that("[testServer] Admin UI danger zone works", {
   params <- list(id = module_id,
                  path = testdata_path,
                  create = FALSE,
-                 autosave = TRUE)
+                 autosave = TRUE,
+                 admin = TRUE)
 
   # -- module server call
   testServer(kitems_server, args = params, {
@@ -20,7 +21,7 @@ test_that("[testServer] Admin UI danger zone works", {
     session$flushReact()
 
     # -- update input
-    session$setInputs('admin-dz_toggle' = TRUE)
+    session$setInputs('admin-dz_toggle_btn' = TRUE)
 
     # -- test output
     expect_type(output$'admin-danger_zone', "list")

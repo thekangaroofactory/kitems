@@ -20,20 +20,20 @@
 #'
 #' @examples
 #' \dontrun{
-#' add_attribute(data.model = mydatamodel, name = "new_attribute", type = "character")
-#' add_attribute(data.model = mydatamodel, name = "total", type = "numeric", default.val = 0)
-#' add_attribute(data.model = mydatamodel, name = "date", type = "Date", default.fun = "Sys.Date")
-#' add_attribute(data.model = mydatamodel, name = "progress", type = "integer", skip = "progress")
-#' add_attribute(data.model = mydatamodel, name = "internal", type = "logical", filter = "internal")
+#' attribute_create(data.model = mydatamodel, name = "new_attribute", type = "character")
+#' attribute_create(data.model = mydatamodel, name = "total", type = "numeric", default.val = 0)
+#' attribute_create(data.model = mydatamodel, name = "date", type = "Date", default.fun = "Sys.Date")
+#' attribute_create(data.model = mydatamodel, name = "progress", type = "integer", skip = "progress")
+#' attribute_create(data.model = mydatamodel, name = "internal", type = "logical", filter = "internal")
 #' }
 
 
-add_attribute <- function(data.model, name, type,
+attribute_create <- function(data.model, name, type,
                           default.val = NULL, default.fun = NULL, default.arg = NULL,
                           filter = NULL, skip = NULL,
                           sort.rank = NULL, sort.desc = NULL){
 
-  cat("[add_attribute] Add attribute to data model =", name, "\n")
+  cat("[attribute_create] Add attribute to data model =", name, "\n")
 
   # -- Init attribute (using data_model to fit with structure)
   new_attribute <- data_model(colClasses = stats::setNames(type, name),
