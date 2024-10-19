@@ -28,7 +28,6 @@ jobs:
       - name: Setup
         run: |
           R CMD INSTALL .
-          source shim_package.sh
 
       - name: Test coverage
         run: |
