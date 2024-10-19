@@ -6,15 +6,16 @@
 # kitems
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/thekangaroofactory/kitems/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/thekangaroofactory/kitems/actions/workflows/R-CMD-check.yaml)
+
+[![codecov](https://codecov.io/gh/thekangaroofactory/kitems/graph/badge.svg?token=7P74NK51JJ)](https://codecov.io/gh/thekangaroofactory/kitems)
+
 <!-- badges: end -->
 
 The goal of kitems is to provide a framework to manage data.frame like
 items and a set of tools to implement it within a shiny web application.
 For that reason, it is delivered as a shiny module.
-
-## Code coverage
-
-[![codecov](https://codecov.io/gh/thekangaroofactory/kitems/graph/badge.svg?token=7P74NK51JJ)](https://codecov.io/gh/thekangaroofactory/kitems)
 
 ## Installation
 
