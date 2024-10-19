@@ -33,4 +33,5 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }} 
         run: |
-          covr::codecov(quiet = FALSE)
+          R CMD INSTALL .
+          Rscript -e 'covr::codecov()'
