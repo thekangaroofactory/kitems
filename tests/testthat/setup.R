@@ -80,6 +80,8 @@ items_extra_att$extra_att <- c("this", "is", "an", "extra")
 # -- items without row
 items_no_row <- data.frame("id" = as.numeric(numeric()),
                            "name" = as.character(character()))
+items_no_row2 <- data.frame("id" = as.numeric(numeric()),
+                            "date" = as.character(character()))
 
 # -- items to test triggers
 new_item <- item_create(list(id = NA, date = NA, name = "Raspberry", quantity = 34, total = 86.4, isvalid = TRUE), dm)
@@ -126,6 +128,21 @@ create_testdata <- function(){
 
   # -- save items
   item_save(items, file = items_url)
+
+}
+
+
+# -- helper: create empty items data
+create_empty_items <- function(){
+
+  # -- create folder
+  dir.create(testdata_path, showWarnings = FALSE)
+
+  # -- save data model
+  saveRDS(data_model(colClasses = c(id = "numeric", date = "POSIXct")), file = dm_url)
+
+  # -- save items
+  item_save(items_no_row2, file = items_url)
 
 }
 
