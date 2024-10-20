@@ -303,7 +303,11 @@ kitems_server <- function(id, path,
 
       # -- update item & store
       cat("--  Update item \n")
-      item_update(k_items, item, name = id)
+      item_update(k_items, item)
+
+      # -- notify
+      if(shiny::isRunning())
+        showNotification(paste(MODULE, "Item updated."), type = "message")
 
     })
 
