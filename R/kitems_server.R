@@ -241,7 +241,7 @@ kitems_server <- function(id, path,
       item <- item_create(values = input_values, data.model = k_data_model())
 
       # -- update reactive
-      item_add(k_items, item, name = id)
+      item_add(k_items, item)
 
       # -- notify
       if(shiny::isRunning())
