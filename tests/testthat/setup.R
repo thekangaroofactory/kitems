@@ -32,6 +32,7 @@ import_url <- "data_to_import.csv"
 colClasses <- c(id = "numeric", date = "POSIXct", name = "character", quantity = "integer", total = "numeric", isvalid = "logical")
 colClasses_extra_att <- c(colClasses, extra_att = "integer")
 colClasses_no_date <- colClasses[!names(colClasses) %in% "date"]
+colClasses_id_only <- c(id = "numeric")
 
 # -- declare default.val
 default_val <- c("name" = "fruit", "isvalid" = TRUE)
@@ -59,7 +60,7 @@ dm_nofilter <- data_model(colClasses = colClasses, default.val = default_val, de
 dm_no_skip <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, filter = filter, skip = NULL)
 dm_extra_att <- data_model(colClasses = colClasses_extra_att, default.val = default_val, default.fun = default_fun, filter = filter, skip = skip)
 dm_no_date <- data_model(colClasses = colClasses_no_date)
-
+dm_id_only <- data_model(colClasses = colClasses_id_only, skip = "id")
 
 # ------------------------------------------------------------------------------
 # Build items

@@ -140,12 +140,14 @@ item_form <- function(ns, item = NULL, update = FALSE, data.model){
 
   } else {
 
+    cat("[item_form] get attributes defaults: \n")
     values <- lapply(names(colClasses), function(x) dm_default(data.model, x))
     names(values) <- names(colClasses)
 
   }
 
   # -- apply helper
+  cat("[item_form] Loop on attributes: \n")
   feedback <- lapply(1:length(colClasses), function(x) add_input(x, colClasses[x], values[[x]]))
 
   # -- output
