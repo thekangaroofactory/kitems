@@ -2,7 +2,7 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [main, master, v0.5.5-beta]
+    branches: [main, master]
   pull_request:
     branches: [main, master]
 

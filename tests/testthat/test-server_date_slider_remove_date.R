@@ -8,63 +8,40 @@ create_testdata()
 
 
 # --------------------------------------------------------------------------
-# Scenario: update item
+# Scenario: date sliderInput remove date attribute
 # --------------------------------------------------------------------------
 
-test_that("Update works", {
+test_that("Date sliderInput remove date attribute works", {
 
   cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: update item")
+  cat("Scenario: date sliderInput remove date attribute")
   cat("\n-------------------------------------------------------------------------- \n")
 
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,
                  create = FALSE,
-                 autosave = TRUE)
+                 autosave = TRUE,
+                 admin = TRUE)
 
   # -- module server call
   testServer(kitems_server, args = params, {
 
-    # -- get items
-    x <- k_items()
-    reference <- dim(x)
-
-    # -- flush reactive values
-    session$flushReact()
-
-    # -- select item
-    selected_items(x$id[1])
-
-    # -- click
-    session$setInputs(item_update = 1)
-
-    # -- update inputs (values to create item)
-    session$setInputs(id = x$id[1])
-    session$setInputs(date = x$date[1] + 1)
-    session$setInputs(date_time = "17:17:17")
-    session$setInputs(date_tz = "UTC")
-    session$setInputs(name = paste0(x$name[1], "-updated"))
-    session$setInputs(quantity = x$quantity[1] + 10)
-    session$setInputs(total = x$total[1] + 0.5)
-    session$setInputs(isvalid = !x$isvalid[1])
-
-    # -- click
-    session$setInputs(item_update_confirm = 1)
-
-
     # --------------------------------------------------------------------------
-    # Items
+    # date
     # --------------------------------------------------------------------------
 
-    x <- k_items()
+    # -- update input
+    session$setInputs(date_slider_strategy = "this-year")
+    session$setInputs(date_slider = date_slider_value)
 
-    # -- test class & dim
-    expect_s3_class(x, "data.frame")
-    expect_equal(dim(x), reference)
+    # -- update input & click
+    session$setInputs('admin-dz_delete_att_name' = "date")
+    session$setInputs('admin-dz_delete_att' = 1)
+    session$setInputs('admin-dz_delete_att_confirm' = 1)
 
-    # -- test name
-    expect_true(grepl("updated", x$name[1], fixed = TRUE))
+    # -- check
+    expect_null(filter_date())
 
   })
 

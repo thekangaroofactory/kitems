@@ -54,3 +54,32 @@ test_that("attribute_update / default.fun + default.arg", {
 
 })
 
+
+test_that("attribute_update / filter", {
+
+  # -- function call
+  x <- attribute_update(data.model = dm, name = "name", filter = TRUE)
+
+  # -- test class
+  expect_s3_class(x, "data.frame")
+
+  # -- test output value
+  expect_true(x[x$name == "name", ]$filter)
+
+})
+
+
+test_that("attribute_update / sort.rank & sort.desc", {
+
+  # -- function call
+  x <- attribute_update(data.model = dm, name = "name", sort.rank = 1, sort.desc = TRUE)
+
+  # -- test class
+  expect_s3_class(x, "data.frame")
+
+  # -- test output value
+  expect_equal(x[x$name == "name", ]$sort.rank, 1)
+  expect_true(x[x$name == "name", ]$sort.desc)
+
+})
+
