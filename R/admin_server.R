@@ -475,8 +475,11 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
       # -- delete data model
       dm_delete(k_data_model, k_items, dm_url, items_url,
-                autosave, item.file = input$dz_delete_dm_items,
-                notify = shiny::isRunning(), MODULE)})
+                autosave, item.file = input$dz_delete_dm_items)
+
+      # -- notify
+      if(shiny::isRunning())
+        showNotification(paste(MODULE, "Data model deleted."), type = "warning")})
 
   })
 

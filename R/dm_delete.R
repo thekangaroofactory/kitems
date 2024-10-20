@@ -8,8 +8,6 @@
 #' @param items_url the url (path + filename) of the items
 #' @param autosave logical if the data should be saved
 #' @param item.file a logical if the item file should be deleted
-#' @param notify a logical if a shiny notification should be displayed (default = FALSE)
-#' @param MODULE an optional string to display in the notification
 #'
 #' @examples
 #' \dontrun{
@@ -18,13 +16,11 @@
 #' dm_url,
 #' items_url,
 #' autosave = TRUE,
-#' item.file = TRUE,
-#' notify = TRUE,
-#' MODULE = "mydata")
+#' item.file = TRUE)
 #' }
 
 # -- function definition
-dm_delete <- function(data.model, items, dm_url, items_url, autosave, item.file, notify = FALSE, MODULE = NULL){
+dm_delete <- function(data.model, items, dm_url, items_url, autosave, item.file){
 
   # -- delete items
   if(!is.null(items()))
@@ -39,9 +35,5 @@ dm_delete <- function(data.model, items, dm_url, items_url, autosave, item.file,
   if(file.exists(items_url) & autosave)
     if(item.file)
       unlink(items_url)
-
-  # -- notify
-  if(notify)
-    showNotification(paste(MODULE, "Data model deleted."), type = "warning")
 
 }
