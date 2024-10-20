@@ -2,7 +2,7 @@
 # -- create test file
 create_testdata()
 
-
+# -- base test -----------------------------------------------------------------
 test_that("item_load works", {
 
   # -- function call
@@ -13,6 +13,18 @@ test_that("item_load works", {
 
   # -- test dim
   expect_equal(dim(x), dim(items))
+
+})
+
+
+# -- no file -------------------------------------------------------------------
+test_that("item_load NULL dm works", {
+
+  # -- function call
+  x <- item_load(data.model = NULL)
+
+  # -- test output
+  expect_null(x)
 
 })
 
