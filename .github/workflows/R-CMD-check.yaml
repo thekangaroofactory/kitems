@@ -30,7 +30,7 @@ jobs:
 
       - name: create dir
         run: |
-          /usr/bin/sudo sudo mkdir /testdata
+          /usr/bin/sudo sudo mkdir -m 777 /testdata
 
       - uses: r-lib/actions/check-r-package@v2
         with:
