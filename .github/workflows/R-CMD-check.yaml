@@ -8,7 +8,7 @@ on:
 
 name: R-CMD-check
 
-permissions: read-all
+permissions: write-all
 
 jobs:
   R-CMD-check:
