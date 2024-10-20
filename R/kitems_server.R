@@ -353,6 +353,10 @@ kitems_server <- function(id, path,
       ids <- selected_items()
       item_delete(k_items, ids, name = id)
 
+      # -- notify
+      if(shiny::isRunning())
+        showNotification(paste(MODULE, "Item(s) deleted."), type = "message")
+
     })
 
 
