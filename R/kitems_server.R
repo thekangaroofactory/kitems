@@ -243,6 +243,10 @@ kitems_server <- function(id, path,
       # -- update reactive
       item_add(k_items, item, name = id)
 
+      # -- notify
+      if(shiny::isRunning())
+        showNotification(paste(MODULE, "Item created."), type = "message")
+
     })
 
 
