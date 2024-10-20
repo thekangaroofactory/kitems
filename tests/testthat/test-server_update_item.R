@@ -37,7 +37,7 @@ test_that("Update works", {
     selected_items(x$id[1])
 
     # -- click
-    session$setInputs(update_btn = 1)
+    session$setInputs(item_update = 1)
 
     # -- update inputs (values to create item)
     session$setInputs(id = x$id[1])
