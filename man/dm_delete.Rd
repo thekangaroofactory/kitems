@@ -4,16 +4,7 @@
 \alias{dm_delete}
 \title{Delete data model}
 \usage{
-dm_delete(
-  data.model,
-  items,
-  dm_url,
-  items_url,
-  autosave,
-  item.file,
-  notify = FALSE,
-  MODULE = NULL
-)
+dm_delete(data.model, items, dm_url, items_url, autosave, item.file)
 }
 \arguments{
 \item{data.model}{the reference of the data model reactive value}
@@ -27,10 +18,6 @@ dm_delete(
 \item{autosave}{logical if the data should be saved}
 
 \item{item.file}{a logical if the item file should be deleted}
-
-\item{notify}{a logical if a shiny notification should be displayed (default = FALSE)}
-
-\item{MODULE}{an optional string to display in the notification}
 }
 \description{
 Delete data model
@@ -42,8 +29,6 @@ items = mydata$items,
 dm_url,
 items_url,
 autosave = TRUE,
-item.file = TRUE,
-notify = TRUE,
-MODULE = "mydata")
+item.file = TRUE)
 }
 }

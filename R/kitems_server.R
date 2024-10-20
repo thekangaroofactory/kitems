@@ -351,7 +351,9 @@ kitems_server <- function(id, path,
 
       # -- get selected items (ids) & delete
       ids <- selected_items()
-      item_delete(k_items, ids, name = id)
+      cat("-- Item(s) to be deleted =", as.character(ids), "\n")
+      item_delete(k_items, ids)
+
 
       # -- notify
       if(shiny::isRunning())

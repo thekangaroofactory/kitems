@@ -14,15 +14,10 @@
 #' }
 
 
-item_delete <- function(items, id, name = NULL){
+item_delete <- function(items, id){
 
   # -- check items
   stopifnot("reactiveVal" %in% class(items))
-
-  # -- trace
-  MODULE <- paste0("[", ifelse(is.null(name), "kitems", name), "]")
-  cat(MODULE, "Delete item(s) \n")
-  cat("-- Item(s) to be deleted =", as.character(id), "\n")
 
   # -- drop item & store
   x <- items()[!items()$id %in% id, ]

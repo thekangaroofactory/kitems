@@ -17,11 +17,12 @@ Depends:
     shiny,
     shinydashboard,
     shinyWidgets,
-    DT,
 Imports:
+    DT,
     kfiles,
     ktools,
-    stringr
+    stringr,
+    magrittr
 Suggests: 
     knitr,
     rmarkdown,
