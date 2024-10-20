@@ -32,6 +32,7 @@ import_url <- "data_to_import.csv"
 colClasses <- c(id = "numeric", date = "POSIXct", name = "character", quantity = "integer", total = "numeric", isvalid = "logical")
 colClasses_extra_att <- c(colClasses, extra_att = "integer")
 colClasses_no_date <- colClasses[!names(colClasses) %in% "date"]
+colClasses_id_only <- c(id = "numeric")
 
 # -- declare default.val
 default_val <- c("name" = "fruit", "isvalid" = TRUE)
@@ -46,20 +47,25 @@ filter <- c("id")
 # -- declare filter
 skip <- c("isvalid")
 
+# -- declare sort
+sort_rank <- c("date" = 1)
+sort_desc <- c("date" = TRUE)
+
 
 # ------------------------------------------------------------------------------
 # Build data models
 # ------------------------------------------------------------------------------
 
 # -- build base data model
-dm <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, filter = filter, skip = skip)
+dm <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun,
+                 filter = filter, skip = skip, sort.rank = sort_rank, sort.desc = sort_desc)
 
 # -- build specific data models
 dm_nofilter <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, filter = NULL, skip = skip)
 dm_no_skip <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, filter = filter, skip = NULL)
 dm_extra_att <- data_model(colClasses = colClasses_extra_att, default.val = default_val, default.fun = default_fun, filter = filter, skip = skip)
 dm_no_date <- data_model(colClasses = colClasses_no_date)
-
+dm_id_only <- data_model(colClasses = colClasses_id_only, skip = "id")
 
 # ------------------------------------------------------------------------------
 # Build items
@@ -79,6 +85,8 @@ items_extra_att$extra_att <- c("this", "is", "an", "extra")
 # -- items without row
 items_no_row <- data.frame("id" = as.numeric(numeric()),
                            "name" = as.character(character()))
+items_no_row2 <- data.frame("id" = as.numeric(numeric()),
+                            "date" = as.character(character()))
 
 # -- items to test triggers
 new_item <- item_create(list(id = NA, date = NA, name = "Raspberry", quantity = 34, total = 86.4, isvalid = TRUE), dm)
@@ -125,6 +133,21 @@ create_testdata <- function(){
 
   # -- save items
   item_save(items, file = items_url)
+
+}
+
+
+# -- helper: create empty items data
+create_empty_items <- function(){
+
+  # -- create folder
+  dir.create(testdata_path, showWarnings = FALSE)
+
+  # -- save data model
+  saveRDS(data_model(colClasses = c(id = "numeric", date = "POSIXct")), file = dm_url)
+
+  # -- save items
+  item_save(items_no_row2, file = items_url)
 
 }
 

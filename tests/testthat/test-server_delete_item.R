@@ -34,7 +34,7 @@ test_that("Delete works", {
     reference <- dim(x)
 
     # -- update input (click)
-    session$setInputs(delete_btn = 1)
+    session$setInputs(item_delete = 1)
 
     # -- simulate selection
     selected_items(k_items()$id[[1]])

@@ -4,17 +4,17 @@
 # Setup
 # --------------------------------------------------------------------------
 
-create_testdata()
+create_empty_items()
 
 
 # --------------------------------------------------------------------------
-# Scenario: update item
+# Scenario: date sliderInput
 # --------------------------------------------------------------------------
 
-test_that("Update works", {
+test_that("Date sliderInput empty items works", {
 
   cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: update item")
+  cat("Scenario: date sliderInput empty items")
   cat("\n-------------------------------------------------------------------------- \n")
 
   # -- declare arguments
@@ -26,45 +26,12 @@ test_that("Update works", {
   # -- module server call
   testServer(kitems_server, args = params, {
 
-    # -- get items
-    x <- k_items()
-    reference <- dim(x)
-
-    # -- flush reactive values
-    session$flushReact()
-
-    # -- select item
-    selected_items(x$id[1])
-
-    # -- click
-    session$setInputs(item_update = 1)
-
-    # -- update inputs (values to create item)
-    session$setInputs(id = x$id[1])
-    session$setInputs(date = x$date[1] + 1)
-    session$setInputs(date_time = "17:17:17")
-    session$setInputs(date_tz = "UTC")
-    session$setInputs(name = paste0(x$name[1], "-updated"))
-    session$setInputs(quantity = x$quantity[1] + 10)
-    session$setInputs(total = x$total[1] + 0.5)
-    session$setInputs(isvalid = !x$isvalid[1])
-
-    # -- click
-    session$setInputs(item_update_confirm = 1)
-
-
     # --------------------------------------------------------------------------
-    # Items
+    # date
     # --------------------------------------------------------------------------
 
-    x <- k_items()
-
-    # -- test class & dim
-    expect_s3_class(x, "data.frame")
-    expect_equal(dim(x), reference)
-
-    # -- test name
-    expect_true(grepl("updated", x$name[1], fixed = TRUE))
+    # -- update input & check filter
+    expect_no_error(session$setInputs(date_slider_strategy = "this-year"))
 
   })
 

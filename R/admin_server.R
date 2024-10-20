@@ -1,5 +1,28 @@
 
 
+#' kitems Admin Server
+#'
+#' @param k_data_model the reference of the data model reactive value
+#' @param k_items the reference of the item reactive value
+#' @param path the path provided to the kitems server
+#' @param dm_url the url of the data model file
+#' @param items_url the url of the item file
+#' @param autosave the autosave value passed to the kitems server
+#'
+#' @importFrom magrittr %>%
+#'
+#' @examples
+#' \dontrun{
+#' admin_server(
+#' k_data_model = mydata$data_model,
+#' k_items = mydata$items,
+#' path = path,
+#' dm_url = dm_url,
+#' items_url = items_url,
+#' autosave = autosave)
+#' }
+
+
 # -- Shiny module server logic -------------------------------------------------
 
 admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosave) {
@@ -475,8 +498,11 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
       # -- delete data model
       dm_delete(k_data_model, k_items, dm_url, items_url,
-                autosave, item.file = input$dz_delete_dm_items,
-                notify = shiny::isRunning(), MODULE)})
+                autosave, item.file = input$dz_delete_dm_items)
+
+      # -- notify
+      if(shiny::isRunning())
+        showNotification(paste(MODULE, "Data model deleted."), type = "warning")})
 
   })
 

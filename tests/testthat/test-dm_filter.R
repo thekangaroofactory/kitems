@@ -22,6 +22,17 @@ test_that("dm_filter: get filters", {
 })
 
 
+test_that("dm_filter: get filters (no filter set)", {
+
+  # -- function call
+  x <- dm_filter(data.model = dm_nofilter)
+
+  # -- check
+  expect_null(x)
+
+})
+
+
 test_that("dm_filter: set / unset filters", {
 
   # -- function call
@@ -32,10 +43,11 @@ test_that("dm_filter: set / unset filters", {
   expect_true(x[x$name == "id", ]$filter)
 
   # -- function call
-  x <-dm_filter(data.model = dm_nofilter, set = "date")
+  x <-dm_filter(data.model = x, set = "date")
 
   # -- test class & filter
   expect_s3_class(x, "data.frame")
   expect_false(x[x$name == "id", ]$filter)
+  expect_true(x[x$name == "date", ]$filter)
 
 })
