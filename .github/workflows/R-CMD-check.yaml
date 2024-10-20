@@ -28,6 +28,10 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
+      - name: create dir
+        run: |
+          /usr/bin/sudo sudo mkdir /testdata
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
