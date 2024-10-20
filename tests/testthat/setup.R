@@ -47,13 +47,18 @@ filter <- c("id")
 # -- declare filter
 skip <- c("isvalid")
 
+# -- declare sort
+sort_rank <- c("date" = 1)
+sort_desc <- c("date" = TRUE)
+
 
 # ------------------------------------------------------------------------------
 # Build data models
 # ------------------------------------------------------------------------------
 
 # -- build base data model
-dm <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, filter = filter, skip = skip)
+dm <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun,
+                 filter = filter, skip = skip, sort.rank = sort_rank, sort.desc = sort_desc)
 
 # -- build specific data models
 dm_nofilter <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, filter = NULL, skip = skip)
