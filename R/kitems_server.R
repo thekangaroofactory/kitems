@@ -8,7 +8,7 @@
 #' @param autosave a logical whether the item auto save should be activated or not (default = TRUE)
 #' @param admin a logical indicating if the admin module server should be launched (default = FALSE)
 #'
-#' @import shiny shinydashboard shinyWidgets DT
+#' @import shiny shinydashboard shinyWidgets
 #'
 #' @export
 #'
@@ -242,6 +242,10 @@ kitems_server <- function(id, path,
 
       # -- update reactive
       item_add(k_items, item, name = id)
+
+      # -- notify
+      if(shiny::isRunning())
+        showNotification(paste(MODULE, "Item created."), type = "message")
 
     })
 
