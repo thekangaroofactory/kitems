@@ -8,7 +8,7 @@
 #' @param autosave a logical whether the item auto save should be activated or not (default = TRUE)
 #' @param admin a logical indicating if the admin module server should be launched (default = FALSE)
 #'
-#' @import shiny shinydashboard shinyWidgets DT
+#' @import shiny shinydashboard shinyWidgets
 #'
 #' @export
 #'
