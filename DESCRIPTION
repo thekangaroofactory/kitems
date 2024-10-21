@@ -19,6 +19,7 @@ Depends:
     shinyWidgets,
 Imports:
     DT,
+    dplyr,
     kfiles,
     ktools,
     stringr,
