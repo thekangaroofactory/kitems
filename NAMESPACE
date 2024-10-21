@@ -3,6 +3,7 @@
 export(admin_ui)
 export(attribute_create)
 export(attribute_update)
+export(backup)
 export(create_BTN)
 export(data_model)
 export(date_slider_INPUT)
