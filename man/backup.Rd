@@ -2,7 +2,7 @@
 % Please edit documentation in R/backup.R
 \name{backup}
 \alias{backup}
-\title{Backup Data Model File}
+\title{Backup Data Model & Items Files}
 \usage{
 backup(id, path, type = "items", max = NULL)
 }
@@ -16,7 +16,7 @@ backup(id, path, type = "items", max = NULL)
 \item{max}{an integer to indicate how many backup files are allowed}
 }
 \description{
-Backup Data Model File
+Backup Data Model & Items Files
 }
 \details{
 Backup file will be named as \emph{id_data_model_YYYY-MM-DD.rds}

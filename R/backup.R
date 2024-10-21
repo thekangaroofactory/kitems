@@ -1,6 +1,6 @@
 
 
-#' Backup Data Model File
+#' Backup Data Model & Items Files
 #'
 #' @param id the kitems id used to create the data model
 #' @param path the path to the data model
