@@ -2,6 +2,8 @@
 
 export(admin_ui)
 export(attribute_create)
+export(attribute_input)
+export(attribute_suggestion)
 export(attribute_update)
 export(backup)
 export(create_BTN)

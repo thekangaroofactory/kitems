@@ -4,7 +4,14 @@
 \alias{kitems_server}
 \title{Module server}
 \usage{
-kitems_server(id, path, create = TRUE, autosave = TRUE, admin = FALSE)
+kitems_server(
+  id,
+  path,
+  create = TRUE,
+  autosave = TRUE,
+  admin = FALSE,
+  shortcut = FALSE
+)
 }
 \arguments{
 \item{id}{the id to be used for the module server instance}
@@ -16,6 +23,8 @@ kitems_server(id, path, create = TRUE, autosave = TRUE, admin = FALSE)
 \item{autosave}{a logical whether the item auto save should be activated or not (default = TRUE)}
 
 \item{admin}{a logical indicating if the admin module server should be launched (default = FALSE)}
+
+\item{shortcut}{a logical should attribute shortcuts be computed when building the item form (default = FALSE)}
 }
 \description{
 Module server
