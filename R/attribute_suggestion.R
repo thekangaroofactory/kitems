@@ -32,7 +32,7 @@
 #'
 #' @examples
 #' foo <- c(rep("banana", 5) rep("mango", 3), rep("orange", 2))
-#' attribute_suggestion <- function(values = foo, type = "character)
+#' attribute_suggestion <- function(values = foo, type = "character")
 
 attribute_suggestion <- function(values, type = class(values), n = 3, floor = 10){
 
@@ -53,11 +53,11 @@ attribute_suggestion <- function(values, type = class(values), n = 3, floor = 10
 
     # -- switch to basic suggestions if occurrences < floor
     if(!any(suggestions > floor))
-      suggestions <- list(min = min(values), max = max(values), mean = mean(values), median = median(values))}
+      suggestions <- list(min = min(values), max = max(values), mean = round(mean(values), digits = 2), median = round(median(values), digits = 2))}
 
   # -- logical
   if(type == "logical")
-    suggestions <- list(true = round(sum(values) / length(values) * 100), false = round(sum(!values) / length(values) * 100))
+    suggestions <- list(true = round(sum(values, na.rm = T) / length(values) * 100), false = round(sum(!values, na.rm = T) / length(values) * 100))
 
   # -- Date, POSIXct
   if(type %in% c("Date", "POSIXct"))
