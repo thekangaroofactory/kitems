@@ -14,6 +14,7 @@
 #' @importFrom dplyr %>%
 #' @importFrom dplyr filter
 #' @importFrom dplyr if_any
+#' @importFrom rlang .data
 #'
 #' @details
 #' The function is not intended to perform any smart or advanced search. \cr
@@ -36,8 +37,10 @@ item_search <- function(items, pattern){
   cat("[item_search] Search pattern =", pattern, "\n")
 
   # -- filter items
+  # using .data from rlang to access the id column
+  # otherwise check() would complain about global variable!
   result <- items %>%
-    filter(if_any(-(id), ~ grepl(pattern, .)))
+    filter(if_any(-(.data$id), ~ grepl(pattern, .)))
 
   # -- check
   cat("[item_search] output dim =", dim(result), "\n")

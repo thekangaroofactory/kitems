@@ -20,6 +20,7 @@ Depends:
 Imports:
     DT,
     dplyr,
+    rlang,
     kfiles,
     ktools,
     stringr,
