@@ -36,6 +36,11 @@
 
 attribute_suggestion <- function(values, type = class(values), n = 3, floor = 10){
 
+  # -- check type
+  # class(value) will return c("POSIXct", "POSIXt")
+  if(length(type) > 1 & "POSIXct" %in% type)
+    type <- "POSIXct"
+
   # -- init
   suggestions <- NULL
 

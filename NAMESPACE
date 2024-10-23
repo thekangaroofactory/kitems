@@ -3,6 +3,7 @@
 export(admin_ui)
 export(attribute_create)
 export(attribute_input)
+export(attribute_shortcut)
 export(attribute_suggestion)
 export(attribute_update)
 export(backup)

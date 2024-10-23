@@ -83,12 +83,12 @@ attribute_input <- function(colClass, value = NULL, ns){
 
                        # -- time (need to extract time from value)
                        timeInput(inputId = ns(paste0(name, "_time")),
-                                 label = paste(name, "time"),
+                                 label = paste(label, "time"),
                                  value = strftime(value, format="%H:%M:%S")),
 
                        # -- timezone (need to extract tz from value)
                        selectizeInput(inputId = ns(paste0(name, "_tz")),
-                                      label = paste(name, "timezone"),
+                                      label = paste(label, "timezone"),
                                       choices = OlsonNames(),
                                       selected = tz_value))}
 
