@@ -10,7 +10,7 @@ attribute_shortcut(colClass, suggestions, ns)
 \item{colClass}{a length-one named vector. \code{names(colClass)} is the name of the attribute,
 and \code{colClass} is the type (class) of the attribute.}
 
-\item{suggestions}{a list of suggestions, output of \code{attribute_suggestion}}
+\item{suggestions}{a list of suggestions, output of \link[kitems]{attribute_suggestion}}
 
 \item{ns}{the module namespace function reference}
 }
@@ -30,8 +30,12 @@ Clicking on the corresponding actionLink will only trigger date & time inputs up
 Build Attribute Shortcuts
 }
 \examples{
-attribute_shortcut(colClass = c(name = "character"), suggestions = list(mango = 25, banana = 12, lemon = 10), ns = session$ns)
+\dontrun{
+attribute_shortcut(colClass = c(name = "character"),
+suggestions = list(mango = 25, banana = 12, lemon = 10),
+ns = session$ns)
+}
 }
 \seealso{
-\code{\link[=attribute_suggestion(), item_form]{attribute_suggestion(), item_form()}}
+\code{\link[=attribute_suggestion]{attribute_suggestion()}} \code{\link[=item_form]{item_form()}}
 }

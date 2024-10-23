@@ -39,6 +39,6 @@ For numeric & integer values, the default strategy is to compute the \code{n} mo
 If no occurrence reaches the \code{floor} level (\% of all items), then the standard list is returned.
 }
 \examples{
-foo <- c(rep("banana", 5) rep("mango", 3), rep("orange", 2))
+foo <- c(rep("banana", 5), rep("mango", 3), rep("orange", 2))
 attribute_suggestion <- function(values = foo, type = "character")
 }

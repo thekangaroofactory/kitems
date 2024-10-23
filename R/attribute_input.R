@@ -11,8 +11,10 @@
 #' @export
 #'
 #' @examples
-#' attribute_input(colClass = c(name = "character"))
-#' attribute_input(colClass = c(total = "numeric"), value = 10)
+#' \dontrun{
+#' attribute_input(colClass = c(name = "character"), ns)
+#' attribute_input(colClass = c(total = "numeric"), value = 10, ns)
+#' }
 
 # -- function
 attribute_input <- function(colClass, value = NULL, ns){

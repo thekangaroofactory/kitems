@@ -18,6 +18,9 @@ Update Attribute Input
 }
 \examples{
 \dontrun{
-attribute_input_update(data.model = mydata$data_model, shortcut_trigger = "name_banana", MODULE = "(mydata)")
+attribute_input_update(
+data.model = mydata$data_model,
+shortcut_trigger = "name_banana",
+MODULE = "(mydata)")
 }
 }

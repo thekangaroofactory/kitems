@@ -4,10 +4,10 @@
 #'
 #' @param colClass a length-one named vector. \code{names(colClass)} is the name of the attribute,
 #' and \code{colClass} is the type (class) of the attribute.
-#' @param suggestions a list of suggestions, output of \code{attribute_suggestion}
+#' @param suggestions a list of suggestions, output of \link[kitems]{attribute_suggestion}
 #' @param ns the module namespace function reference
 #'
-#' @seealso [attribute_suggestion(), item_form()]
+#' @seealso [attribute_suggestion()] [item_form()]
 #'
 #' @return a list of actionLink objects
 #'
@@ -23,7 +23,11 @@
 #' @export
 #'
 #' @examples
-#' attribute_shortcut(colClass = c(name = "character"), suggestions = list(mango = 25, banana = 12, lemon = 10), ns = session$ns)
+#' \dontrun{
+#' attribute_shortcut(colClass = c(name = "character"),
+#' suggestions = list(mango = 25, banana = 12, lemon = 10),
+#' ns = session$ns)
+#' }
 
 
 attribute_shortcut <- function(colClass, suggestions, ns){

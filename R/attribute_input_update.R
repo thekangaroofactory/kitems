@@ -6,9 +6,14 @@
 #' @param shortcut_trigger basically the value of input$shortcut_trigger
 #' @param MODULE an optional character string for the trace
 #'
+#' @importFrom utils tail
+#'
 #' @examples
 #' \dontrun{
-#' attribute_input_update(data.model = mydata$data_model, shortcut_trigger = "name_banana", MODULE = "(mydata)")
+#' attribute_input_update(
+#' data.model = mydata$data_model,
+#' shortcut_trigger = "name_banana",
+#' MODULE = "(mydata)")
 #' }
 
 attribute_input_update <- function(data.model, shortcut_trigger, MODULE = NULL){
