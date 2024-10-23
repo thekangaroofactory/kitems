@@ -13,11 +13,11 @@
 #'
 #' The return value is the output of \link[base]{lapply} applying \link[shiny]{actionLink} over \code{suggestions}
 #'
-#' The actionLink has an \code{onclick} property that will trigger \code{input$xxxx_trigger} (\code{ns(xxxx_trigger)})
+#' The actionLink has an \code{onclick} property that will trigger \code{input$shortcut_trigger} (\code{ns(shortcut_trigger)})
 #' Its value is of the form \code{[ns]-[attribute]_[value]}
-#' Basically, applying \code{tail(unlist(strsplit(input$xxxx_trigger, split = "-")), 1)} will access attribute_value
+#' Basically, applying \code{tail(unlist(strsplit(input$shortcut_trigger, split = "-")), 1)} will access attribute_value
 #'
-#' Note that for POSIXct attribute, the xxxx_trigger input will not carry the timezone information.
+#' Note that for POSIXct attribute, the shortcut_trigger input will not carry the timezone information.
 #' Clicking on the corresponding actionLink will only trigger date & time inputs update.
 #'
 #' @export
@@ -47,7 +47,7 @@ attribute_shortcut <- function(colClass, suggestions, ns){
                  label = paste(names(suggestions[x]), paste0("(", suggestions[x], "%)")),
                  icon = icon("bolt"),
                  onclick = sprintf('Shiny.setInputValue(\"%s\", this.id, {priority: \"event\"})',
-                                   ns("xxxx_trigger"))))
+                                   ns("shortcut_trigger"))))
 
 
   # -- numeric, integer
@@ -63,7 +63,7 @@ attribute_shortcut <- function(colClass, suggestions, ns){
                  label = paste(names(suggestions[x]), paste0("(", suggestions[x], ifelse(isStats, ")", "%)"))),
                  icon = icon("bolt"),
                  onclick = sprintf('Shiny.setInputValue(\"%s\", this.id, {priority: \"event\"})',
-                                   ns("xxxx_trigger"))))}
+                                   ns("shortcut_trigger"))))}
 
 
   # -- Date, POSIXct
@@ -76,7 +76,7 @@ attribute_shortcut <- function(colClass, suggestions, ns){
                  label = paste(names(suggestions[x]), paste0("(", eval(call(CLASS_FUNCTIONS[[colClass]], suggestions[[x]])), ")")),
                  icon = icon("bolt"),
                  onclick = sprintf('Shiny.setInputValue(\"%s\", this.id, {priority: \"event\"})',
-                                   ns("xxxx_trigger"))))
+                                   ns("shortcut_trigger"))))
 
 
   # -- return

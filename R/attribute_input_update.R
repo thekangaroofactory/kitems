@@ -3,18 +3,18 @@
 #' Update Attribute Input
 #'
 #' @param data.model the reference of the data model reactiveVal
-#' @param xxxx_trigger basically the value of input$xxxx_trigger
+#' @param shortcut_trigger basically the value of input$shortcut_trigger
 #' @param MODULE an optional character string for the trace
 #'
 #' @examples
 #' \dontrun{
-#' attribute_input_update(data.model = mydata$data_model, xxxx_trigger = "name_banana", MODULE = "(mydata)")
+#' attribute_input_update(data.model = mydata$data_model, shortcut_trigger = "name_banana", MODULE = "(mydata)")
 #' }
 
-attribute_input_update <- function(data.model, xxxx_trigger, MODULE = NULL){
+attribute_input_update <- function(data.model, shortcut_trigger, MODULE = NULL){
 
   # -- get attribute & value
-  key_value <- tail(unlist(strsplit(xxxx_trigger, split = "-")), 1)
+  key_value <- tail(unlist(strsplit(shortcut_trigger, split = "-")), 1)
   key_value <- unlist(strsplit(key_value, split = "_"))
   name <- key_value[1]
   input_id <- name

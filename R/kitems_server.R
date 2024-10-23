@@ -206,13 +206,10 @@ kitems_server <- function(id, path,
     # -- Item management ----
     # __________________________________________________________________________
 
-    # -- declare shortcut observer
+    ## -- declare shortcut observer ----
     if(shortcut)
-      observeEvent(input$xxxx_trigger, {
-
-        attribute_input_update(k_data_model, input$xxxx_trigger, MODULE)
-
-      })
+      observeEvent(input$shortcut_trigger,
+                   attribute_input_update(k_data_model, input$shortcut_trigger, MODULE))
 
 
     # __________________________________________________________________________

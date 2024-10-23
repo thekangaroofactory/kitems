@@ -4,12 +4,12 @@
 \alias{attribute_input_update}
 \title{Update Attribute Input}
 \usage{
-attribute_input_update(data.model, xxxx_trigger, MODULE = NULL)
+attribute_input_update(data.model, shortcut_trigger, MODULE = NULL)
 }
 \arguments{
 \item{data.model}{the reference of the data model reactiveVal}
 
-\item{xxxx_trigger}{basically the value of input$xxxx_trigger}
+\item{shortcut_trigger}{basically the value of input$shortcut_trigger}
 
 \item{MODULE}{an optional character string for the trace}
 }
@@ -18,6 +18,6 @@ Update Attribute Input
 }
 \examples{
 \dontrun{
-attribute_input_update(data.model = mydata$data_model, xxxx_trigger = "name_banana", MODULE = "(mydata)")
+attribute_input_update(data.model = mydata$data_model, shortcut_trigger = "name_banana", MODULE = "(mydata)")
 }
 }
