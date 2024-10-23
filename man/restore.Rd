@@ -17,6 +17,8 @@ restore(id, path, type = "items")
 Restore Data Model & Items Files
 }
 \examples{
+\dontrun{
 restore(id = "mydata", path = "path/to/mydata", type = "items")
 restore(id = "mydata", path = "path/to/mydata", type = "dm")
+}
 }

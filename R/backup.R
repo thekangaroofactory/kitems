@@ -17,7 +17,9 @@
 #' Whenever \code{max = NULL} (default), it will be replaced by 1
 #'
 #' @examples
+#' \dontrun{
 #' backup(id = "mydata", path = "path/to/my/data", max = 2)
+#' }
 
 
 backup <- function(id, path, type = "items", max = NULL){

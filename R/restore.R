@@ -9,8 +9,10 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' restore(id = "mydata", path = "path/to/mydata", type = "items")
 #' restore(id = "mydata", path = "path/to/mydata", type = "dm")
+#' }
 
 restore <- function(id, path, type = "items"){
 

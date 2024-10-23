@@ -26,5 +26,7 @@ If the number of backup files exceeds \code{max} then the oldest will be deleted
 Whenever \code{max = NULL} (default), it will be replaced by 1
 }
 \examples{
+\dontrun{
 backup(id = "mydata", path = "path/to/my/data", max = 2)
+}
 }

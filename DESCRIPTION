@@ -1,6 +1,6 @@
 Package: kitems
 Title: Framework To Manage Data.frame Items
-Version: 0.5.3
+Version: 0.5.5
 Authors@R: 
     person(given = "philippe",
            family = "peret",
