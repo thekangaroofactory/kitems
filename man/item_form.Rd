@@ -2,31 +2,35 @@
 % Please edit documentation in R/item_form.R
 \name{item_form}
 \alias{item_form}
-\title{Build item input tagList}
+\title{Build Item Form}
 \usage{
-item_form(ns, item = NULL, update = FALSE, data.model)
+item_form(data.model, items, update = FALSE, item = NULL, shortcut = FALSE, ns)
 }
 \arguments{
-\item{ns}{the namespace function, output of shiny::NS()}
+\item{data.model}{the data.frame of the data model}
 
-\item{item}{an optional item (used to set default input values if update = TRUE)}
+\item{items}{the data.frame of the items}
 
 \item{update}{an optional logical (default = FALSE) to trigger update behavior}
 
-\item{data.model}{a data.frame containing the data model}
+\item{item}{an optional item (used to set default input values if update = TRUE)}
+
+\item{shortcut}{a logical to indicate if shortcuts should be displayed}
+
+\item{ns}{the namespace function, output of shiny::NS()}
 }
 \value{
 a tagList() object containing the attribute inputs
 }
 \description{
-Build item input tagList
+Build Item Form
 }
 \details{
 Data model skip feature will be used to return inputs only for the skip = FALSE attributes
 }
 \examples{
 \dontrun{
-item_form(ns, item = NULL, update = FALSE, data.model = mydatamodel)
-item_form(ns, item = myitem, update = TRUE, data.model = mydatamodel)
+item_form(data.model = mydata$data_model(), update = FALSE, item = NULL, ns)
+item_form(data.model = mydata$data_model(), update = TRUE, item = myitem, ns)
 }
 }

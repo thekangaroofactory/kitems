@@ -1,5 +1,5 @@
-"id","name","total","comment","date"
-1705158971950,"Banana",25,"Cavendish",2024-01-17
-1705313192780,"Apple",1,"Golden",2024-01-15
-1705313216662,"Lemon",2,"Lisbon",2024-01-14
-1705399423521,"Pear",7,"Taylors gold",2024-01-16
+"id","name","total","comment","date","valid"
+1705158971950,"Banana",25,"Cavendish",2024-01-17,TRUE
+1705313192780,"Apple",1,"Golden",2024-01-15,FALSE
+1705313216662,"Lemon",2,"Lisbon",2024-01-14,TRUE
+1705399423521,"Pear",7,"Taylors gold",2024-01-16,FALSE

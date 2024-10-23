@@ -7,6 +7,7 @@
 #' @param create a logical whether the data file should be created or not if missing (default = TRUE)
 #' @param autosave a logical whether the item auto save should be activated or not (default = TRUE)
 #' @param admin a logical indicating if the admin module server should be launched (default = FALSE)
+#' @param shortcut a logical should attribute shortcuts be computed when building the item form (default = FALSE)
 #'
 #' @import shiny shinydashboard shinyWidgets
 #'
@@ -32,7 +33,8 @@
 # -- Shiny module server logic -------------------------------------------------
 
 kitems_server <- function(id, path,
-                          create = TRUE, autosave = TRUE, admin = FALSE) {
+                          create = TRUE, autosave = TRUE, admin = FALSE,
+                          shortcut = FALSE) {
 
   moduleServer(id, function(input, output, session) {
 
@@ -203,7 +205,16 @@ kitems_server <- function(id, path,
     # __________________________________________________________________________
     # -- Item management ----
     # __________________________________________________________________________
+
+    ## -- declare shortcut observer ----
+    if(shortcut)
+      observeEvent(input$shortcut_trigger,
+                   attribute_input_update(k_data_model, input$shortcut_trigger, MODULE))
+
+
+    # __________________________________________________________________________
     ## -- Create item ----
+    # __________________________________________________________________________
 
     # -- Declare: output
     output$item_create <- renderUI(
@@ -217,11 +228,18 @@ kitems_server <- function(id, path,
     # -- Observe: actionButton
     observeEvent(input$item_create,
 
-                 showModal(modalDialog(item_form(ns, item = NULL, update = FALSE, data.model = k_data_model()),
-                                       title = "Create",
-                                       footer = tagList(
-                                         modalButton("Cancel"),
-                                         actionButton(ns("item_create_confirm"), "Create")))))
+                 showModal(modalDialog(
+                   item_form(data.model = k_data_model(),
+                             items = k_items(),
+                             update = FALSE,
+                             item = NULL,
+                             shortcut = shortcut,
+                             ns = ns),
+                   title = "Create",
+                   footer = tagList(
+                     modalButton("Cancel"),
+                     actionButton(ns("item_create_confirm"), "Create")))))
+
 
 
     # -- Observe: actionButton
@@ -274,7 +292,12 @@ kitems_server <- function(id, path,
       item <- k_items()[k_items()$id == selected_items(), ]
 
       # -- Dialog
-      showModal(modalDialog(item_form(ns, item = item, update = TRUE, data.model = k_data_model()),
+      showModal(modalDialog(item_form(data.model = k_data_model(),
+                                      items = k_items(),
+                                      update = TRUE,
+                                      item = item,
+                                      shortcut = shortcut,
+                                      ns = ns),
                             title = "Update",
                             footer = tagList(
                               modalButton("Cancel"),
