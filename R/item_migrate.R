@@ -41,7 +41,7 @@ item_migrate <- function(items, name, type, fill = NA){
       fill <- NA}
 
     # -- check & coerce fill class
-    if(class(fill) != type){
+    if(! type %in% class(fill)){
 
       fill <- eval(call(CLASS_FUNCTIONS[[type]], fill))
       cat("-- Warning! fill type does not match with expected one, coerce value(s):", class(fill), fill, "\n")}
