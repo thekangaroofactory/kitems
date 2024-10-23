@@ -205,7 +205,19 @@ kitems_server <- function(id, path,
     # __________________________________________________________________________
     # -- Item management ----
     # __________________________________________________________________________
+
+    # -- declare shortcut observer
+    if(shortcut)
+      observeEvent(input$xxxx_trigger, {
+
+        attribute_input_update(k_data_model, input$xxxx_trigger, MODULE)
+
+      })
+
+
+    # __________________________________________________________________________
     ## -- Create item ----
+    # __________________________________________________________________________
 
     # -- Declare: output
     output$item_create <- renderUI(
@@ -219,16 +231,18 @@ kitems_server <- function(id, path,
     # -- Observe: actionButton
     observeEvent(input$item_create,
 
-                 showModal(modalDialog(item_form(data.model = k_data_model(),
-                                                 items = k_items(),
-                                                 update = FALSE,
-                                                 item = NULL,
-                                                 shortcut = shortcut,
-                                                 ns = ns),
-                                       title = "Create",
-                                       footer = tagList(
-                                         modalButton("Cancel"),
-                                         actionButton(ns("item_create_confirm"), "Create")))))
+                 showModal(modalDialog(
+                   item_form(data.model = k_data_model(),
+                             items = k_items(),
+                             update = FALSE,
+                             item = NULL,
+                             shortcut = shortcut,
+                             ns = ns),
+                   title = "Create",
+                   footer = tagList(
+                     modalButton("Cancel"),
+                     actionButton(ns("item_create_confirm"), "Create")))))
+
 
 
     # -- Observe: actionButton
