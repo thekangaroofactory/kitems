@@ -423,9 +423,6 @@ kitems_server <- function(id, path,
 
         }
 
-        # -- Get input range (to keep selection during update)
-        #range <- isolate(input$date_slider)
-
         # -- Set value
         # implement this_year strategy by default #211
         # keep this year after item is added #223 & #242
