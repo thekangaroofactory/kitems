@@ -34,7 +34,7 @@
 #'
 #' @examples
 #' foo <- c(rep("banana", 5), rep("mango", 3), rep("orange", 2))
-#' attribute_suggestion <- function(values = foo, type = "character")
+#' attribute_suggestion(values = foo, type = "character")
 
 attribute_suggestion <- function(values, type = class(values), n = 3, floor = 10){
 

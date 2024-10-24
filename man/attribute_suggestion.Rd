@@ -40,5 +40,5 @@ If no occurrence reaches the \code{floor} level (\% of all items), then the stan
 }
 \examples{
 foo <- c(rep("banana", 5), rep("mango", 3), rep("orange", 2))
-attribute_suggestion <- function(values = foo, type = "character")
+attribute_suggestion(values = foo, type = "character")
 }
