@@ -769,9 +769,8 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
                          sort.rank = if(input$w_sort) stats::setNames(input$w_sort_rank, input$w_name) else NULL,
                          sort.desc = if(input$w_sort) stats::setNames(input$w_sort_desc, input$w_name) else NULL)
 
-      # -- store
+      # -- log
       cat("[step.6] Update data model \n")
-      k_data_model(dm)
 
       # -- Add column to items (create attribute only)
       if(!update){
@@ -782,9 +781,13 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
         # -- Add column to items & store
         cat("[step.6] Add new attribute to existing items \n")
         items <- item_migrate(k_items(), name = input$w_name, type = input$w_type, fill = value)
-        k_items(items)
 
-      }
+        # -- store #324
+        k_items(items)
+        k_data_model(dm)
+
+      } else k_data_model(dm) # -- update
+
 
       # -- callback
       callback(TRUE)
