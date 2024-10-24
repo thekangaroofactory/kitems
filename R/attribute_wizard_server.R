@@ -113,18 +113,28 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
 
         } else {
 
-          # -- good
-          name <- "check"
-          style <- "color: #80ff80;"
-          msg <- "Attribute name is ok"
-          isValid$name <- TRUE
+          # -- blank space
+          if(grepl(" ", input$w_name)){
 
-          # -- update default type
-          if(input$w_name %in% TEMPLATE_DATA_MODEL$name)
-            updateSelectizeInput(inputId = "w_type",
-                                 selected = TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == input$w_name, ]$type)
+            name <- "circle-xmark"
+            style <- "color: #ff0000;"
+            msg <- "Blank space is forbidden in attribute name!"
+            isValid$name <- FALSE
 
-        }}
+          } else {
+
+            # -- good
+            name <- "check"
+            style <- "color: #80ff80;"
+            msg <- "Attribute name is ok"
+            isValid$name <- TRUE
+
+            # -- update default type
+            if(input$w_name %in% TEMPLATE_DATA_MODEL$name)
+              updateSelectizeInput(inputId = "w_type",
+                                   selected = TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == input$w_name, ]$type)
+
+          }}}
 
       # -- note
       output$w_name_note <- renderUI(tagList(icon(name = name, class = "fa-solid", style = style), msg))
