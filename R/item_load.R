@@ -34,8 +34,9 @@ item_load <- function(data.model, file = NULL, path = NULL, create = TRUE){
   # ----------------------------------------------------------------------------
   # datetime will be read as character (and converted later)
 
-  # -- get datetime index
+  # -- get datetime index & name
   idx_ct <- which(col.classes %in% "POSIXct")
+  names_ct <- names(col.classes[idx_ct])
 
   # -- convert classes
   if(length(idx_ct) > 0)
@@ -70,9 +71,12 @@ item_load <- function(data.model, file = NULL, path = NULL, create = TRUE){
     # but values are the same
 
     # -- POSIXct
-    if(length(idx_ct) > 0){
-      cat("[item_load] Converting attribute(s) to POSIXct =", names(col.classes[idx_ct]), "\n")
-      items[idx_ct] <- lapply(items[idx_ct], function(x) as.POSIXct(x, format = "%Y-%m-%dT%H:%M:%S%z", tz = ""))}
+    # check if items has the expected attribute #326
+    if(length(idx_ct) > 0)
+      if(names_ct %in% names(items)){
+
+        cat("[item_load] Converting attribute(s) to POSIXct =", names_ct, "\n")
+        items[names_ct] <- lapply(items[names_ct], function(x) as.POSIXct(x, format = "%Y-%m-%dT%H:%M:%S%z", tz = ""))}
 
   }
 
