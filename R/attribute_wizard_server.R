@@ -113,18 +113,28 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
 
         } else {
 
-          # -- good
-          name <- "check"
-          style <- "color: #80ff80;"
-          msg <- "Attribute name is ok"
-          isValid$name <- TRUE
+          # -- blank space
+          if(grepl(" ", input$w_name)){
 
-          # -- update default type
-          if(input$w_name %in% TEMPLATE_DATA_MODEL$name)
-            updateSelectizeInput(inputId = "w_type",
-                                 selected = TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == input$w_name, ]$type)
+            name <- "circle-xmark"
+            style <- "color: #ff0000;"
+            msg <- "Blank space is forbidden in attribute name!"
+            isValid$name <- FALSE
 
-        }}
+          } else {
+
+            # -- good
+            name <- "check"
+            style <- "color: #80ff80;"
+            msg <- "Attribute name is ok"
+            isValid$name <- TRUE
+
+            # -- update default type
+            if(input$w_name %in% TEMPLATE_DATA_MODEL$name)
+              updateSelectizeInput(inputId = "w_type",
+                                   selected = TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == input$w_name, ]$type)
+
+          }}}
 
       # -- note
       output$w_name_note <- renderUI(tagList(icon(name = name, class = "fa-solid", style = style), msg))
@@ -769,9 +779,8 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
                          sort.rank = if(input$w_sort) stats::setNames(input$w_sort_rank, input$w_name) else NULL,
                          sort.desc = if(input$w_sort) stats::setNames(input$w_sort_desc, input$w_name) else NULL)
 
-      # -- store
+      # -- log
       cat("[step.6] Update data model \n")
-      k_data_model(dm)
 
       # -- Add column to items (create attribute only)
       if(!update){
@@ -782,9 +791,13 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
         # -- Add column to items & store
         cat("[step.6] Add new attribute to existing items \n")
         items <- item_migrate(k_items(), name = input$w_name, type = input$w_type, fill = value)
-        k_items(items)
 
-      }
+        # -- store #324
+        k_items(items)
+        k_data_model(dm)
+
+      } else k_data_model(dm) # -- update
+
 
       # -- callback
       callback(TRUE)

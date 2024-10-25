@@ -7,6 +7,7 @@
 #' @param create a logical whether the data file should be created or not if missing (default = TRUE)
 #' @param autosave a logical whether the item auto save should be activated or not (default = TRUE)
 #' @param admin a logical indicating if the admin module server should be launched (default = FALSE)
+#' @param shortcut a logical should attribute shortcuts be computed when building the item form (default = FALSE)
 #'
 #' @import shiny shinydashboard shinyWidgets
 #'
@@ -32,7 +33,8 @@
 # -- Shiny module server logic -------------------------------------------------
 
 kitems_server <- function(id, path,
-                          create = TRUE, autosave = TRUE, admin = FALSE) {
+                          create = TRUE, autosave = TRUE, admin = FALSE,
+                          shortcut = FALSE) {
 
   moduleServer(id, function(input, output, session) {
 
@@ -203,7 +205,16 @@ kitems_server <- function(id, path,
     # __________________________________________________________________________
     # -- Item management ----
     # __________________________________________________________________________
+
+    ## -- declare shortcut observer ----
+    if(shortcut)
+      observeEvent(input$shortcut_trigger,
+                   attribute_input_update(k_data_model, input$shortcut_trigger, MODULE))
+
+
+    # __________________________________________________________________________
     ## -- Create item ----
+    # __________________________________________________________________________
 
     # -- Declare: output
     output$item_create <- renderUI(
@@ -217,11 +228,18 @@ kitems_server <- function(id, path,
     # -- Observe: actionButton
     observeEvent(input$item_create,
 
-                 showModal(modalDialog(item_form(ns, item = NULL, update = FALSE, data.model = k_data_model()),
-                                       title = "Create",
-                                       footer = tagList(
-                                         modalButton("Cancel"),
-                                         actionButton(ns("item_create_confirm"), "Create")))))
+                 showModal(modalDialog(
+                   item_form(data.model = k_data_model(),
+                             items = k_items(),
+                             update = FALSE,
+                             item = NULL,
+                             shortcut = shortcut,
+                             ns = ns),
+                   title = "Create",
+                   footer = tagList(
+                     modalButton("Cancel"),
+                     actionButton(ns("item_create_confirm"), "Create")))))
+
 
 
     # -- Observe: actionButton
@@ -240,12 +258,29 @@ kitems_server <- function(id, path,
       cat("--  Create item \n")
       item <- item_create(values = input_values, data.model = k_data_model())
 
-      # -- update reactive
-      item_add(k_items, item)
+      # -- Secure against errors raised by item_add #351
+      tryCatch({
 
-      # -- notify
-      if(shiny::isRunning())
-        showNotification(paste(MODULE, "Item created."), type = "message")
+        # -- add to items & update reactive
+        k_items(item_add(k_items(), item))
+
+        # -- prepare notify
+        msg <- "Item created."
+        type <- "message"},
+
+        # -- failed
+        error = function(e) {
+
+          # -- prepare notify
+          msg <- paste("Item has not been created. \n error =", e$message)
+          type <- "error"
+
+          # -- return
+          message(msg)},
+
+        # -- notify
+        finally = if(shiny::isRunning())
+          showNotification(paste(MODULE, msg), type))
 
     })
 
@@ -274,7 +309,12 @@ kitems_server <- function(id, path,
       item <- k_items()[k_items()$id == selected_items(), ]
 
       # -- Dialog
-      showModal(modalDialog(item_form(ns, item = item, update = TRUE, data.model = k_data_model()),
+      showModal(modalDialog(item_form(data.model = k_data_model(),
+                                      items = k_items(),
+                                      update = TRUE,
+                                      item = item,
+                                      shortcut = shortcut,
+                                      ns = ns),
                             title = "Update",
                             footer = tagList(
                               modalButton("Cancel"),
@@ -298,16 +338,32 @@ kitems_server <- function(id, path,
       input_values$id <- selected_items()
 
       # -- create item based on input list
-      cat("--  Create item \n")
+      cat("--  Create replacement item \n")
       item <- item_create(values = input_values, data.model = k_data_model())
 
-      # -- update item & store
-      cat("--  Update item \n")
-      item_update(k_items, item)
+      # -- Secure against errors raised by item_add #351
+      tryCatch({
 
-      # -- notify
-      if(shiny::isRunning())
-        showNotification(paste(MODULE, "Item updated."), type = "message")
+        # -- update item & reactive
+        k_items(item_update(k_items(), item))
+
+        # -- prepare notify
+        msg <- "Item updated."
+        type <- "message"},
+
+        # -- failed
+        error = function(e) {
+
+          # -- prepare notify
+          msg <- paste("Item has not been updated. \n error =", e$message)
+          type <- "error"
+
+          # -- return
+          message(msg)},
+
+        # -- notify
+        finally = if(shiny::isRunning())
+          showNotification(paste(MODULE, msg), type))
 
     })
 
@@ -349,15 +405,33 @@ kitems_server <- function(id, path,
       # -- close modal
       removeModal()
 
-      # -- get selected items (ids) & delete
+      # -- get selected items (ids)
       ids <- selected_items()
       cat("-- Item(s) to be deleted =", as.character(ids), "\n")
-      item_delete(k_items, ids)
 
+      # -- Secure against errors raised by item_add #351
+      tryCatch({
 
-      # -- notify
-      if(shiny::isRunning())
-        showNotification(paste(MODULE, "Item(s) deleted."), type = "message")
+        # -- delete item & update reactive
+        k_items(item_delete(k_items(), ids))
+
+        # -- prepare notify
+        msg <- "Item(s) deleted."
+        type <- "message"},
+
+        # -- failed
+        error = function(e) {
+
+          # -- prepare notify
+          msg <- paste("Item(s) has not been deleted. \n error =", e$message)
+          type <- "error"
+
+          # -- return
+          message(msg)},
+
+        # -- notify
+        finally = if(shiny::isRunning())
+          showNotification(paste(MODULE, msg), type))
 
     })
 
@@ -399,9 +473,6 @@ kitems_server <- function(id, path,
           max <- min
 
         }
-
-        # -- Get input range (to keep selection during update)
-        #range <- isolate(input$date_slider)
 
         # -- Set value
         # implement this_year strategy by default #211

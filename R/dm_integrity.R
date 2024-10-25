@@ -52,15 +52,13 @@ dm_integrity <- function(data.model, items, template = NULL){
     missing_default_val <- rep(NA, n)
     missing_default_fun <- rep(NA, n)
     missing_default_arg <- rep(NA, n)
-    missing_skip <- rep(FALSE, n)
-    missing_filter <- rep(FALSE, n)
+    missing_skip <- character()
+    missing_filter <- character()
 
     # -- Set names
     names(missing_default_val) <- missing_att
     names(missing_default_fun) <- missing_att
     names(missing_default_arg) <- missing_att
-    names(missing_skip) <- missing_att
-    names(missing_filter) <- missing_att
 
     # -- Check argument
     if(!is.null(template)){
@@ -79,8 +77,10 @@ dm_integrity <- function(data.model, items, template = NULL){
         missing_default_val[names(missing_default_val) %in% template$name][] <- template[idx, ]$default.val
         missing_default_fun[names(missing_default_fun) %in% template$name][] <- template[idx, ]$default.fun
         missing_default_arg[names(missing_default_arg) %in% template$name][] <- template[idx, ]$default.arg
-        missing_skip[names(missing_skip) %in% template$name][] <- template[idx, ]$filter
-        missing_filter[names(missing_filter) %in% template$name][] <- template[idx, ]$skip
+
+
+        missing_skip <- template[idx, ][template[idx, ]$skip, 'name']
+        missing_filter <- template[idx, ][template[idx, ]$filter, 'name']
 
       }}
 
@@ -91,8 +91,8 @@ dm_integrity <- function(data.model, items, template = NULL){
                                    default.val = missing_default_val,
                                    default.fun = missing_default_fun,
                                    default.arg = missing_default_arg,
-                                   skip = names(missing_skip),
-                                   filter = names(missing_filter))
+                                   skip = missing_skip,
+                                   filter = missing_filter)
 
   }
 

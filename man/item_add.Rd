@@ -7,9 +7,12 @@
 item_add(items, item)
 }
 \arguments{
-\item{items}{the reference! of the reactive value carrying the items}
+\item{items}{the data.frame of the items}
 
 \item{item}{an item data.frame to be added}
+}
+\value{
+the new data.frame of the items
 }
 \description{
 Add item

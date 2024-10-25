@@ -2,7 +2,7 @@ on:
   push:
     branches: [main, master]
   pull_request:
-    branches: [main, master, v0.5.5-beta]
+    branches: [main, master, v0.5.*-beta]
 
 name: test-coverage
 
