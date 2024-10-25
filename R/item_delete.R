@@ -17,8 +17,8 @@
 item_delete <- function(items, id){
 
   # -- check id
-  if(!id %in% items$id)
-    stop("Can't delete item - id does not exists in items list")
+  if(!all(id %in% items$id))
+    stop("Can't delete item - id does not exist in items list")
 
   # -- drop item & return
   items[!items$id %in% id, ]
