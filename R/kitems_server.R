@@ -258,8 +258,8 @@ kitems_server <- function(id, path,
       cat("--  Create item \n")
       item <- item_create(values = input_values, data.model = k_data_model())
 
-      # -- update reactive
-      item_add(k_items, item)
+      # -- add to items & update reactive
+      k_items(item_add(k_items(), item))
 
       # -- notify
       if(shiny::isRunning())
@@ -326,7 +326,7 @@ kitems_server <- function(id, path,
 
       # -- update item & store
       cat("--  Update item \n")
-      item_update(k_items, item)
+      k_items(item_update(k_items(), item))
 
       # -- notify
       if(shiny::isRunning())
@@ -375,7 +375,7 @@ kitems_server <- function(id, path,
       # -- get selected items (ids) & delete
       ids <- selected_items()
       cat("-- Item(s) to be deleted =", as.character(ids), "\n")
-      item_delete(k_items, ids)
+      k_items(item_delete(k_items(), ids))
 
 
       # -- notify

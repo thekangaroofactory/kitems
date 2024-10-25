@@ -2,10 +2,11 @@
 
 #' Update item
 #'
-#' @param items the reference! of the reactiveVal carrying the data.frame of the items
+#' @param items the data.frame of the items
 #' @param item the item to be updated
 #'
 #' @export
+#' @return the new data.frame of the items
 #'
 #' @details
 #' The item$id value will be used to replace the corresponding item in the items data.frame
@@ -18,14 +19,10 @@
 
 item_update <- function(items, item){
 
-  # -- check items
-  stopifnot("reactiveVal" %in% class(items))
-
   # -- get value & update
-  x <- items()
-  x[x$id == item$id, ] <- item
+  items[items$id == item$id, ] <- item
 
-  # -- store
-  items(x)
+  # -- return
+  items
 
 }

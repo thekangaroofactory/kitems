@@ -30,7 +30,7 @@ test_that("Min/max date works", {
     session$flushReact()
 
     # -- delete all items
-    item_delete(k_items, k_items()$id)
+    k_items(item_delete(k_items(), k_items()$id))
 
     # -- flush reactive values
     session$flushReact()

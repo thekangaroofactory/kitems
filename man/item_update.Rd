@@ -7,9 +7,12 @@
 item_update(items, item)
 }
 \arguments{
-\item{items}{the reference! of the reactiveVal carrying the data.frame of the items}
+\item{items}{the data.frame of the items}
 
 \item{item}{the item to be updated}
+}
+\value{
+the new data.frame of the items
 }
 \description{
 Update item
