@@ -49,14 +49,9 @@ test_that("Create works", {
 
     x <- k_items()
 
-    # -- test class
+    # -- test class & dim
     expect_s3_class(x, "data.frame")
-
-    # -- test dim
     expect_equal(dim(x), dim(items) + c(1, 0))
-
-    # -- delete create item
-    item_delete(k_items, max(x$id))
 
   })
 

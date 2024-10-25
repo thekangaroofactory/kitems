@@ -40,7 +40,7 @@ item_search <- function(items, pattern){
   # using .data from rlang to access the id column
   # otherwise check() would complain about global variable!
   result <- items %>%
-    filter(if_any(-(.data$id), ~ grepl(pattern, .)))
+    filter(if_any(-("id"), ~ grepl(pattern, .)))
 
   # -- check
   cat("[item_search] output dim =", dim(result), "\n")

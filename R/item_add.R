@@ -2,10 +2,11 @@
 
 #' Add item
 #'
+#' @param items the data.frame of the items
 #' @param item an item data.frame to be added
-#' @param items the reference! of the reactive value carrying the items
 #'
 #' @export
+#' @return the new data.frame of the items
 #'
 #' @examples
 #' \dontrun{
@@ -14,10 +15,15 @@
 
 item_add <- function(items, item){
 
-  # -- check items
-  stopifnot("reactiveVal" %in% class(items))
+  # -- check id uniqueness #330
+  if(item$id %in% items$id)
+    stop("Can't add item to the items data.frame \n id is not unique")
 
-  # -- rbind & store
-  items(rbind(items(), item))
+  # -- check item structure
+  tryCatch(item_chk_str(items, item),
+           error = function(e) stop(e$message))
+
+  # -- rbind & return
+  rbind(items, item)
 
 }

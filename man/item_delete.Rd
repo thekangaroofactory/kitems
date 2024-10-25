@@ -7,12 +7,12 @@
 item_delete(items, id)
 }
 \arguments{
-\item{items}{the reference! of the reactive value carrying the items}
+\item{items}{the data.frame of the items}
 
 \item{id}{the id of the item to delete}
 }
 \value{
-an updated data.frame of the items
+the new data.frame of the items
 }
 \description{
 Delete item
