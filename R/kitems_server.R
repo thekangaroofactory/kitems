@@ -258,12 +258,29 @@ kitems_server <- function(id, path,
       cat("--  Create item \n")
       item <- item_create(values = input_values, data.model = k_data_model())
 
-      # -- add to items & update reactive
-      k_items(item_add(k_items(), item))
+      # -- Secure against errors raised by item_add #351
+      tryCatch({
 
-      # -- notify
-      if(shiny::isRunning())
-        showNotification(paste(MODULE, "Item created."), type = "message")
+        # -- add to items & update reactive
+        k_items(item_add(k_items(), item))
+
+        # -- prepare notify
+        msg <- "Item created."
+        type <- "message"},
+
+        # -- failed
+        error = function(e) {
+
+          # -- prepare notify
+          msg <- paste("Item has not been created. \n error =", e$message)
+          type <- "error"
+
+          # -- return
+          message(msg)},
+
+        # -- notify
+        finally = if(shiny::isRunning())
+          showNotification(paste(MODULE, msg), type))
 
     })
 
@@ -321,16 +338,32 @@ kitems_server <- function(id, path,
       input_values$id <- selected_items()
 
       # -- create item based on input list
-      cat("--  Create item \n")
+      cat("--  Create replacement item \n")
       item <- item_create(values = input_values, data.model = k_data_model())
 
-      # -- update item & store
-      cat("--  Update item \n")
-      k_items(item_update(k_items(), item))
+      # -- Secure against errors raised by item_add #351
+      tryCatch({
 
-      # -- notify
-      if(shiny::isRunning())
-        showNotification(paste(MODULE, "Item updated."), type = "message")
+        # -- update item & reactive
+        k_items(item_update(k_items(), item))
+
+        # -- prepare notify
+        msg <- "Item updated."
+        type <- "message"},
+
+        # -- failed
+        error = function(e) {
+
+          # -- prepare notify
+          msg <- paste("Item has not been updated. \n error =", e$message)
+          type <- "error"
+
+          # -- return
+          message(msg)},
+
+        # -- notify
+        finally = if(shiny::isRunning())
+          showNotification(paste(MODULE, msg), type))
 
     })
 
@@ -372,15 +405,33 @@ kitems_server <- function(id, path,
       # -- close modal
       removeModal()
 
-      # -- get selected items (ids) & delete
+      # -- get selected items (ids)
       ids <- selected_items()
       cat("-- Item(s) to be deleted =", as.character(ids), "\n")
-      k_items(item_delete(k_items(), ids))
 
+      # -- Secure against errors raised by item_add #351
+      tryCatch({
 
-      # -- notify
-      if(shiny::isRunning())
-        showNotification(paste(MODULE, "Item(s) deleted."), type = "message")
+        # -- delete item & update reactive
+        k_items(item_delete(k_items(), ids))
+
+        # -- prepare notify
+        msg <- "Item(s) deleted."
+        type <- "message"},
+
+        # -- failed
+        error = function(e) {
+
+          # -- prepare notify
+          msg <- paste("Item(s) has not been deleted. \n error =", e$message)
+          type <- "error"
+
+          # -- return
+          message(msg)},
+
+        # -- notify
+        finally = if(shiny::isRunning())
+          showNotification(paste(MODULE, msg), type))
 
     })
 
