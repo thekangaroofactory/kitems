@@ -19,24 +19,9 @@ item_add <- function(items, item){
   if(item$id %in% items$id)
     stop("Can't add item to the items data.frame \n id is not unique")
 
-  # -- check item structure #345
-  ifelse(
-    ncol(item) != ncol(items),
-    stop("Can't add item to the items data.frame \n different column numbers"),
-
-    # -- check column names
-    ifelse(
-      any(names(item) != names(items)),
-      stop("Can't add item to the items data.frame \n different column names"),
-
-      # -- check column classes
-      ifelse(
-        !all(lapply(items, class) %in% lapply(item, class)),
-        stop("Can't add item to the items data.frame \n different column types"),
-
-        # -- all checks passed (dummy return to avoid error)
-        TRUE)))
-
+  # -- check item structure
+  tryCatch(item_chk_str(items, item),
+           error = function(e) stop(e$message))
 
   # -- rbind & return
   rbind(items, item)

@@ -19,6 +19,14 @@
 
 item_update <- function(items, item){
 
+  # -- check id
+  if(!item$id %in% items$id)
+    stop("Can't update item - id does not exist in items list")
+
+  # -- check item structure
+  tryCatch(item_chk_str(items, item),
+           error = function(e) stop(e$message))
+
   # -- get value & update
   items[items$id == item$id, ] <- item
 
