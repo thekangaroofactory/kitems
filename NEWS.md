@@ -1,3 +1,42 @@
+# kitems v0.5.6-beta
+
+The milestone focuses on item operations and introduces shortcuts for item creation
+
+## New features
+
+### Data-model
+* Check that attribute name does not contain blank space (#336)
+
+### Items
+* Item creation should protect against duplicated id (#330)
+* item_add should secure that item has expected structure & types (#345)
+* item_delete should secure id parameter (#350)
+* item add, update and delete functions should work out of a reactive context (#347)
+* item add, update & delete should be secured by tryCatch (#351)
+* Implement search function (#254)
+* Implement value suggestion for item creation inputs (#295)
+
+### Misc
+
+* Implement backup / restore mechanism (#294)
+* Cleanup range in date_slider section (#338)
+
+### Documentation
+
+* Implement NEWS (#334)
+* Implement pkgdown & GitHub Page CI (#331)
+
+
+## Bug Fix
+
+* Data model should be stored only once items have been migrated after adding an attribute (#324)
+* Error in if when trying to migrate items with a new POSIXct attribute (#325)
+* Need to double check that POSIXct column is there in the items before conversion (#326)
+* All attributes get skip & filter set to TRUE after import (#329)
+* item_search function needs to use .data (#328)
+* item_search throws a warning in tidyselect (#348)
+
+
 # kitems v0.5.5-beta
 
 The milestone focus is on code coverage
