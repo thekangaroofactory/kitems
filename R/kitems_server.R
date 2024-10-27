@@ -67,6 +67,9 @@ kitems_server <- function(id, path,
     clicked_column <- reactiveVal(NULL)
     filter_date <- reactiveVal(NULL)
 
+    # -- Declare reactive objects (for internal use)
+    hasDateSlider <- reactiveVal(FALSE)
+
     # -- Check path (to avoid connection problems if missing folder)
     if(!dir.exists(path))
       dir.create(path)
@@ -482,6 +485,10 @@ kitems_server <- function(id, path,
         else
           value <- filter_date()
 
+        # -- update reactive
+        # to trigger selected_items
+        hasDateSlider(TRUE)
+
         # -- date slider
         sliderInput(inputId = ns("date_slider"),
                     label = "Date",
@@ -492,8 +499,9 @@ kitems_server <- function(id, path,
       } else {
 
         # -- cleanup after remove date attribute
-        if(!is.null(filter_date()))
+        if(!is.null(filter_date())){
           filter_date(NULL)
+          hasDateSlider(FALSE)}
 
         NULL}
 
@@ -516,32 +524,35 @@ kitems_server <- function(id, path,
     # -- Filtered items --------------------------------------------------------
 
     ## -- Declare filtered_items ----
-    filtered_items <- reactive(
+    filtered_items <- reactive({
 
-      # -- check
-      if(!is.null(filter_date())){
+      # -- check: #357
+      # hasDateSlider is initialized to FALSE, so filtered_items remains NULL
+      # it is turned to TRUE after date_slider input has been created
+      if(hasDateSlider())
 
-        cat(MODULE, "Updating filtered item view \n")
+        # -- check
+        if(!is.null(filter_date())){
 
-        # -- init
-        items <- k_items()
-        dm <- k_data_model()
+          cat(MODULE, "Updating filtered item view \n")
 
-        # -- Apply date filter
-        items <- items[items$date >= filter_date()[1] & items$date <= filter_date()[2], ]
+          # -- init
+          items <- k_items()
+          dm <- k_data_model()
 
-        # -- Apply ordering
-        if(any(!is.na(dm$sort.rank)))
-          items <- item_sort(items, dm)
+          # -- Apply date filter
+          items <- items[items$date >= filter_date()[1] & items$date <= filter_date()[2], ]
 
-        cat("-- ouput dim =", dim(items), "\n")
+          # -- Apply ordering
+          if(any(!is.na(dm$sort.rank)))
+            items <- item_sort(items, dm)
 
-        # -- Return
-        items
+          cat("-- ouput dim =", dim(items), "\n")
 
-      } else k_items()
+          # -- Return
+          items}
 
-    )
+    })
 
 
     ## -- Declare view ----
