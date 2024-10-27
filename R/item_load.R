@@ -71,9 +71,12 @@ item_load <- function(data.model, file = NULL, path = NULL, create = TRUE){
     # but values are the same
 
     # -- POSIXct
-    # check if items has the expected attribute #326
+    # check if items has any of the expected attributes #326 #359
     if(length(idx_ct) > 0)
-      if(names_ct %in% names(items)){
+      if(any(names_ct %in% names(items))){
+
+        # -- because any is used, clean potential missing attribute(s)
+        names_ct <- names_ct[names_ct %in% names(items)]
 
         cat("[item_load] Converting attribute(s) to POSIXct =", names_ct, "\n")
         items[names_ct] <- lapply(items[names_ct], function(x) as.POSIXct(x, format = "%Y-%m-%dT%H:%M:%S%z", tz = ""))}
