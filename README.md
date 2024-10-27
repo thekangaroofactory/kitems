@@ -74,6 +74,25 @@ default value)
 
 Items is a data.frame containing the data to be managed.
 
+### Path
+
+Both data model & items files will be stored in a specific folder
+dedicated to that instance of the module. The folder is named after the
+id of the module.
+
+For this reason, unless there is a single instance of the module, it is
+not recommended to name any of the id with same name as the last folder
+of the provided path.
+
+Example:
+
+- path = “./path/to/data” & id = “data” will store files in
+  “./path/to/data”
+- path = “./path/to/data” & id = “data_1” will store files in
+  “./path/to/data/data_1”
+
+It may result in files being stored at different levels.
+
 ## Reactive Values
 
 kitems strongly relies on Shiny (shiny and shinydashboard packages are
