@@ -22,7 +22,7 @@ shinyServer(
 
     # -- start module server: data
     # autosave = FALSE to keep demo data frozen
-    data <- kitems::kitems_server(id = "data", path = demo_dir,
+    data <- kitems::kitems_server(id = "data_1", path = demo_dir,
                                   create = TRUE, autosave = FALSE, admin = TRUE)
 
 
@@ -89,7 +89,7 @@ shinyServer(
     # -------------------------------------
 
     # -- build menu from list of ids
-    output$menu <- renderMenu(kitems::dynamic_sidebar(names = list("data", "data_2", "data_3")))
+    output$menu <- renderMenu(kitems::dynamic_sidebar(names = list("data_1", "data_2", "data_3")))
 
 
   }

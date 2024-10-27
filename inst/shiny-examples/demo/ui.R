@@ -47,11 +47,11 @@ body <- dashboardBody(
                      tags$ul(
 
                        # -- data
-                       tags$li("data",
+                       tags$li("data_1",
                                br(), br(),
                                p("This instance has no corresponding files (data model or items) in the provided path.", br(),
                                  "As no data model is provided, the administration console will only display the Create and Import data buttons."),
-                               tags$pre("# -- start module server: \ndata <- kitems::kitems_server(id = \"data\", path = \"path/to/my/data\", \ncreate = TRUE, autosave = FALSE)")),
+                               tags$pre("# -- start module server: \ndata <- kitems::kitems_server(id = \"data_1\", path = \"path/to/my/data\", \ncreate = TRUE, autosave = FALSE)")),
 
                        # -- data_2
                        tags$li("data_2",
@@ -117,13 +117,13 @@ body <- dashboardBody(
                                        kitems::filtered_view_ui("data_2"))))))),
 
     # -- Content tab
-    tabItem(tabName = "data",
+    tabItem(tabName = "data_1",
 
             # -- Admin
             fluidRow(
               column(width = 12,
 
-                     kitems::admin_ui("data")))),
+                     kitems::admin_ui("data_1")))),
 
     # -- Content tab
     tabItem(tabName = "data_2",
