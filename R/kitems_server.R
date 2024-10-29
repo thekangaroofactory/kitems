@@ -653,7 +653,7 @@ kitems_server <- function(id, path,
          filtered_items = filtered_items,
          selected_items = selected_items,
          clicked_column = clicked_column,
-         filter_date <- filter_date)
+         filter_date = filter_date)
 
   })
 }
