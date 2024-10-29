@@ -2,6 +2,6 @@
 
 test_that("runExample works", {
 
-  expect_error(runExample())
+  expect_snapshot(runExample())
 
 })
