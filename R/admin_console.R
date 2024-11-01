@@ -33,7 +33,7 @@ server <- function(input, output, session) {
   else {
 
     # -- launch item servers
-    res <- lapply(items, function(x) kitems_server(id = x,
+    res <- lapply(items, function(x) kitems(id = x,
                                                    path = kitems_path,
                                                    create = FALSE,
                                                    autosave = TRUE,

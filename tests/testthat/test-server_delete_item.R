@@ -24,7 +24,7 @@ test_that("Delete works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitems_server, args = params, {
+  testServer(kitems, args = params, {
 
     # --------------------------------------------------------------------------
     # delete

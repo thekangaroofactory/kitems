@@ -24,7 +24,7 @@ test_that("delete attribute works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitems_server, args = params, {
+  testServer(kitems, args = params, {
 
     # -- update input & click
     session$setInputs('admin-dz_delete_att_name' = "status")
