@@ -6,8 +6,8 @@ Authors@R:
            family = "peret",
            role = c("aut", "cre"),
            email = "philippe.peret@hotmail.com")
-Description: Set of standard functions to manage data models and corresponding data.frame items.
-License: GPL (>=3)
+Description: A framework to manage data frame items and a set of tools to implement it within R Shiny applications
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
