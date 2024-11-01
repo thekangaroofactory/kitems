@@ -40,7 +40,7 @@ body <- dashboardBody(
                      h3("Data"),
                      p("This instance has no corresponding files (data model or items) in the path.", br(),
                        "The administration console will only display the Create and Import data buttons."),
-                     tags$pre("# -- start module server: \ndata_1 <- kitems::kitems_server(id = \"data_1\",
+                     tags$pre("# -- start module server: \ndata_1 <- kitems::kitems(id = \"data_1\",
                               path = \"path/to/my/data\", \ncreate = TRUE, autosave = FALSE, admin = TRUE)"),
                      p("Because autosave is FALSE (to keep demo app in frozen state), nothing will be saved if
                        data are created or imported."),

@@ -25,14 +25,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' kitems_server(id = "mydata", path = "path/to/my/data",
+#' kitems(id = "mydata", path = "path/to/my/data",
 #'               create = TRUE, autosave = TRUE)
 #' }
 
 
 # -- Shiny module server logic -------------------------------------------------
 
-kitems_server <- function(id, path,
+kitems <- function(id, path,
                           create = TRUE, autosave = TRUE, admin = FALSE,
                           shortcut = FALSE) {
 

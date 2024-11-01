@@ -24,14 +24,14 @@ shinyServer(
 
         # -- start kitems module server: data_3
         # autosave = FALSE to keep demo data frozen
-        data_3 <- kitems::kitems_server(id = "data_3", path = demo_dir,
+        data_3 <- kitems::kitems(id = "data_3", path = demo_dir,
                                         create = TRUE, autosave = FALSE, admin = TRUE)
 
       })
     }
 
     # -- call the wrapper module
-    # make sure it returns the output of kitems_server
+    # make sure it returns the output of kitems
     data_3 <- wrapper_server(id = "wrapper", demo_dir)
 
     # -- Generate dynamic sidebar ----

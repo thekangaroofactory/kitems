@@ -24,7 +24,7 @@ test_that("Min/max date works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitems_server, args = params, {
+  testServer(kitems, args = params, {
 
     # -- flush reactive values
     session$flushReact()

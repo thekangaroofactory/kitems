@@ -15,7 +15,7 @@ test_that("[testServer] Update attribute wizard works", {
                  admin = TRUE)
 
   # -- module server call
-  testServer(kitems_server, args = params, {
+  testServer(kitems, args = params, {
 
     # -- flush reactive values
     session$flushReact()

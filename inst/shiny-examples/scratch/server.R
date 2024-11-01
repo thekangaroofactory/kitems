@@ -16,7 +16,7 @@ shinyServer(
     # -- Launch module server ----
     # autosave = FALSE to keep demo data frozen
     # admin = TRUE to showcase sidebar
-    data_1 <- kitems::kitems_server(id = "data_1", path = demo_dir,
+    data_1 <- kitems::kitems(id = "data_1", path = demo_dir,
                                   create = TRUE, autosave = FALSE, admin = TRUE)
 
 

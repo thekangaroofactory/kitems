@@ -21,7 +21,7 @@ test_that("Select data model attribute works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitems_server, args = params, {
+  testServer(kitems, args = params, {
 
     # -- click
     session$setInputs('admin-dm_table_rows_selected' = 1)

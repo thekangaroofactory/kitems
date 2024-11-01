@@ -14,7 +14,7 @@ test_that("[testServer] In table selection works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitems_server, args = params, {
+  testServer(kitems, args = params, {
 
     # -- flush reactive values
     session$flushReact()

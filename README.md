@@ -130,7 +130,7 @@ list(id,
 library(kitems)
 
 # -- call module
-mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
+mydata <- kitems(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
 
 # -- get data model
 data_model <- mydata$data_model()
@@ -144,7 +144,7 @@ value list, as data_model()
 ``` r
 
 # -- call module
-mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
+mydata <- kitems(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
 
 # -- get items
 items <- mydata$items()
@@ -183,7 +183,7 @@ added to the item list:
 library(kitems)
 
 # -- call module
-mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
+mydata <- kitems(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
 
 # -- define inputs and create item (waning! this should be used in a reactive context)
 input_values <- data.frame(id = 1, text = "demo")
@@ -205,7 +205,7 @@ replace the one in the item list:
 library(kitems)
 
 # -- call module
-mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
+mydata <- kitems(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
 
 # -- define inputs and create item (waning! this should be used in a reactive context)
 input_values <- data.frame(id = 1, text = "demo")
@@ -223,7 +223,7 @@ To delete an item, just pass it’s id to the trigger:
 library(kitems)
 
 # -- call module
-mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
+mydata <- kitems(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
 
 # -- delete item (waning! this should be used in a reactive context)
 item_id <- 1704961867683 
@@ -358,8 +358,8 @@ tabItem(tabName = "my_data",
 
 ### Nested module considerations
 
-In case the kitems_server module server function is called from inside a
-module (i.e. as a nested module), then it is not possible to call the UI
+In case the kitems module server function is called from inside a module
+(i.e. as a nested module), then it is not possible to call the UI
 functions from the main app with the nested module id.
 
 From there, two options are available:
