@@ -1,5 +1,5 @@
 Package: kitems
-Title: Framework To Manage Data.frame Items
+Title: A Framework To Manage Data Frame Items
 Version: 0.5.7
 Authors@R: 
     person(given = "philippe",
