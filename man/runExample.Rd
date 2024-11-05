@@ -2,12 +2,18 @@
 % Please edit documentation in R/runExample.R
 \name{runExample}
 \alias{runExample}
-\title{Run the shiny demo app}
+\title{Run Shiny Demo Apps}
 \usage{
 runExample(example = NA)
 }
+\arguments{
+\item{example}{a character value, with the name of the demo to be launched}
+}
 \description{
-Run the shiny demo app
+Run Shiny Demo Apps
+}
+\details{
+When \code{example} is NA, the function will return the names of available apps
 }
 \examples{
 

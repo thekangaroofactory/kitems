@@ -7,10 +7,10 @@ Authors@R:
            role = c("aut", "cre"),
            comment = c(ORCID = "0009-0003-9666-7490"),
            email = "philippe.peret@hotmail.com")
-Description: A framework to manage data frame items and a set of tools to implement it within R Shiny applications
+Description: A framework to manage data frame items and a set of tools 
+    to implement it within R Shiny applications.
 License: GPL (>= 3)
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Depends:
@@ -25,7 +25,8 @@ Imports:
     kfiles,
     ktools,
     stringr,
-    magrittr
+    magrittr,
+    cli
 Suggests: 
     knitr,
     rmarkdown,
