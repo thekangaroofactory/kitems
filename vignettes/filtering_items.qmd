@@ -2,6 +2,11 @@
 title: "Filtering Items"
 format: html
 editor: visual
+
+vignette: >
+  %\VignetteIndexEntry{Vignette's Title}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ## Introduction
@@ -32,7 +37,7 @@ mydata$filter_date()
 
 ### Item table
 
-The *item* table widget is by default a filtered view of the *items*. \
+The *item* table widget is by default a filtered view of the *items*.\
 It displays the content of `filtered_items()` .
 
 It is delivered through the `filtered_view_ui` function.
