@@ -148,7 +148,6 @@ mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data")
 
 # -- get data model
 data_model <- mydata$data_model()
-
 ```
 
 ### Items
@@ -162,7 +161,6 @@ mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data")
 
 # -- get items
 items <- mydata$items()
-
 ```
 
 ### Observe reactive values
