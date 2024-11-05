@@ -98,6 +98,23 @@ Skip is a logical to indicate if the attribute should be skipped to build the in
 
 Items is a data.frame containing the data to be managed.
 
+
+### Path
+
+Both data model & items files will be stored in a specific folder dedicated to that instance of the module.
+The folder is named after the id of the module.
+
+For this reason, unless there is a single instance of the module, it is not recommended to name any of the
+id with same name as the last folder of the provided path.
+
+Example:
+
+-   path = "./path/to/data" & id = "data" will store files in "./path/to/data"
+-   path = "./path/to/data" & id = "data_1" will store files in "./path/to/data/data_1"
+
+It may result in files being stored at different levels.
+
+
 ## Reactive Values
 
 kitems strongly relies on Shiny (shiny and shinydashboard packages are
@@ -136,7 +153,7 @@ list(id,
 library(kitems)
 
 # -- call module
-mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
+mydata <- kitems(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
 
 # -- get data model
 data_model <- mydata$data_model()
@@ -150,7 +167,7 @@ The data model can be accessed **in a reactive context** from the return value l
 ```{r items_name, eval=FALSE}
 
 # -- call module
-mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
+mydata <- kitems(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
 
 # -- get items
 items <- mydata$items()
@@ -189,7 +206,7 @@ the item list:
 library(kitems)
 
 # -- call module
-mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
+mydata <- kitems(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
 
 # -- define inputs and create item (waning! this should be used in a reactive context)
 input_values <- data.frame(id = 1, text = "demo")
@@ -212,7 +229,7 @@ the one in the item list:
 library(kitems)
 
 # -- call module
-mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
+mydata <- kitems(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
 
 # -- define inputs and create item (waning! this should be used in a reactive context)
 input_values <- data.frame(id = 1, text = "demo")
@@ -230,7 +247,7 @@ To delete an item, just pass it's id to the trigger:
 library(kitems)
 
 # -- call module
-mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
+mydata <- kitems(id = "my_data_id", path = "path/to/my/data", create = TRUE, autosave = TRUE)
 
 # -- delete item (waning! this should be used in a reactive context)
 item_id <- 1704961867683 
@@ -370,7 +387,7 @@ tabItem(tabName = "my_data",
 
 ### Nested module considerations
 
-In case the kitems_server module server function is called from
+In case the kitems module server function is called from
 inside a module (i.e. as a nested module), then it is not possible to
 call the UI functions from the main app with the nested module id.
 

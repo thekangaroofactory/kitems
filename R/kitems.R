@@ -25,14 +25,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' kitems_server(id = "mydata", path = "path/to/my/data",
+#' kitems(id = "mydata", path = "path/to/my/data",
 #'               create = TRUE, autosave = TRUE)
 #' }
 
 
 # -- Shiny module server logic -------------------------------------------------
 
-kitems_server <- function(id, path,
+kitems <- function(id, path,
                           create = TRUE, autosave = TRUE, admin = FALSE,
                           shortcut = FALSE) {
 
@@ -53,23 +53,11 @@ kitems_server <- function(id, path,
 
     ## -- Declare objects ----
 
-    # -- Init data (non persistent values to init the module)
-    init_dm <- NULL
-    init_items <- NULL
-
-    # -- Build urls from module id
-    dm_url <- file.path(path, paste0(dm_name(id), ".rds"))
-    items_url <- file.path(path, paste0(items_name(id), ".csv"))
-
     # -- Declare reactive objects (for external use)
     filtered_items <- reactiveVal(NULL)
     selected_items <- reactiveVal(NULL)
     clicked_column <- reactiveVal(NULL)
     filter_date <- reactiveVal(NULL)
-
-    # -- Check path (to avoid connection problems if missing folder)
-    if(!dir.exists(path))
-      dir.create(path)
 
 
     # __________________________________________________________________________
@@ -78,7 +66,57 @@ kitems_server <- function(id, path,
     # -- Notify progress
     withProgress(message = MODULE, value = 0, {
 
+      ## -- Check path ---------------------------------------------------------
+      incProgress(0/4, detail = "Init")
+
+      # -- Build url from module id
+      dm_url <- file.path(path, paste0(dm_name(id), ".rds"))
+      items_url <- file.path(path, paste0(items_name(id), ".csv"))
+
+      # -- Check folder structure
+      # item files are stored in a dedicated folder #356
+      if(basename(path) != id){
+
+        # -- update path
+        path <- file.path(path, id)
+        cli::cli_alert_info(paste("Updating path =", path))
+
+        # -- check updated path
+        if(!dir.exists(path))
+          dir.create(path)
+
+        # -- Build new url
+        new_dm_url <- file.path(path, paste0(dm_name(id), ".rds"))
+        new_items_url <- file.path(path, paste0(items_name(id), ".csv"))
+
+        # -- check for dm migration
+        if(file.exists(dm_url)){
+          cli::cli_alert_info("Moving data model file to updated path")
+          res <- file.copy(dm_url, new_dm_url, overwrite = FALSE, copy.date = TRUE)
+          if(res) unlink(dm_url) else cli::cli_alert_warning("Copy failed, check folder")}
+
+        # -- check for items migration
+        if(file.exists(items_url)){
+          cli::cli_alert_info("Moving items file to updated path")
+          res <- file.copy(items_url, new_items_url, overwrite = FALSE, copy.date = TRUE)
+          if(res) unlink(items_url) else cli::cli_alert_warning("Copy failed, check folder")}
+
+        # -- Update url & cleanup
+        dm_url <- new_dm_url
+        items_url <- new_items_url
+        rm(new_dm_url, new_items_url)
+
+      } else {
+
+        # -- Create path (to avoid connection problems if missing folder)
+        if(!dir.exists(path))
+          dir.create(path)}
+
+
       ## -- Read data model ----------------------------------------------------
+
+      # -- Init (non persistent object)
+      init_dm <- NULL
 
       cat(MODULE, "Checking if data model file exists:\n")
       cat("-- path =", dirname(dm_url), "\n")
@@ -102,6 +140,9 @@ kitems_server <- function(id, path,
 
 
       # -- Read the data (items) ----------------------------------------------
+
+      # -- Init (non persistent object)
+      init_items <- NULL
 
       # -- Check for NULL data model (then no reason to try loading)
       if(!is.null(init_dm))
@@ -612,7 +653,7 @@ kitems_server <- function(id, path,
          filtered_items = filtered_items,
          selected_items = selected_items,
          clicked_column = clicked_column,
-         filter_date <- filter_date)
+         filter_date = filter_date)
 
   })
 }

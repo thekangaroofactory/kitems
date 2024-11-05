@@ -23,7 +23,7 @@ test_that("Server works", {
                  autosave = TRUE)
 
   # -- module server call
-  testServer(kitems_server, args = params, {
+  testServer(kitems, args = params, {
 
     # --------------------------------------------------------------------------
     # Data model

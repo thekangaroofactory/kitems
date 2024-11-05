@@ -213,6 +213,12 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
                  column(width = 10,
                         p("Filtered Table"),
+
+                        # -- when all attributes are filtered #358
+                        conditionalPanel(
+                          condition = (paste0("document.getElementById(\"", ns("masked_table"), "\").children.length==0")),
+                          p("All attributes are filtered, the table is empty.")),
+
                         DT::DTOutput(ns("masked_table"))))
 
       }

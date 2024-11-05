@@ -15,7 +15,15 @@ filtered_view_ui <- function(id){
   # -- namespace
   ns <- NS(id)
 
-  # -- the table
-  DT::DTOutput(ns("filtered_view"))
+  # -- return
+  tagList(
+
+    # -- when all attributes are filtered #362
+    conditionalPanel(
+      condition = (paste0("document.getElementById(\"", ns("filtered_view"), "\").children.length==0")),
+      p("All attributes are filtered, the table is empty.")),
+
+    # -- the table
+    DT::DTOutput(ns("filtered_view")))
 
 }

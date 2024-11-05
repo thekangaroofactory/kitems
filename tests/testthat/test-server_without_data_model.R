@@ -17,7 +17,7 @@ test_that("launch server without data model", {
                  admin = TRUE)
 
   # -- module server call
-  testServer(kitems_server, args = params, {
+  testServer(kitems, args = params, {
 
     # --------------------------------------------------------------------------
     # both data model & items should be NULL
