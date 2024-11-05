@@ -4,7 +4,7 @@
 \alias{runExample}
 \title{Run the shiny demo app}
 \usage{
-runExample()
+runExample(example = NA)
 }
 \description{
 Run the shiny demo app
