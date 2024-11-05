@@ -32,11 +32,12 @@ mydata$filter_date()
 
 ### Item table
 
-The item table widget is by default a filtered view of the items - displaying the content of `filtered_items()` .
+The *item* table widget is by default a filtered view of the *items*. \
+It displays the content of `filtered_items()` .
 
 It is delivered through the `filtered_view_ui` function.
 
-The reason for this is that if the goal is to display the whole list of items without any filtering, then there would be no added value compared to using the renderDT / DTOutput functions directly in the main Shiny application.
+The reason for not having a non filtered *item* table is that if the goal is to display the whole list of *items* without any filtering, then there would be no added value compared to using the renderDT / DTOutput functions directly in the main Shiny application.
 
 As of now, only date filtering support has been implemented.
 
@@ -48,13 +49,13 @@ The date slider widget is automatically enabled when the data model contains an 
 
 Its behavior is driven by two strategies:
 
--   '*this-year*' – automatically selects and extends the range of date belonging to current year upon item operations (this is the default).
+-   '*this-year*' – automatically selects and extends the range of date belonging to current year upon *item* operations (this is the default).
 
--   '*keep-range*' – keeps the selected range no matter if items are added or removed [^1]
+-   '*keep-range*' – keeps the selected range no matter if *items* are added or removed [^1]
 
 [^1]: One exception is if the item that is deleted has its date being equal to the minimum or maximum of the entire range. The reason is that the min and max of the dateSliderInput will be updated when the items data frame is modified, hence it is not possible to have the selected range going beyond its limit.
 
-When the server is initialized, it will scan the items to setup the *dateSliderInput* range to the minimum and maximum of the date column, and the selected range to the values fitting with current year. [^2]
+When the server is initialized, it will scan the *items* to setup the *dateSliderInput* range to the minimum and maximum of the date column, and the selected range to the values fitting with current year. [^2]
 
 [^2]: current year standing for the output of `format(Sys.Date(), "%Y")`
 
@@ -64,7 +65,7 @@ Whenever the date range value is modified in the widget, it will trigger two act
 
 -   `filter_date` will be updated with the value of the slider input [^3]
 
--   `filtered_items` will be updated with the items fitting with the selected date range [^4]
+-   `filtered_items` will be updated with the *items* fitting with the selected date range [^4]
 
 [^3]: those values could also be directly accessed through the main application input argument as `input$id-date_slider` with *id* being the module server namespace
 
