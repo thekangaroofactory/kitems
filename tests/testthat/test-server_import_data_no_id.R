@@ -21,7 +21,7 @@ test_that("Import data without id works", {
                  admin = TRUE)
 
   # -- module server call
-  testServer(kitems_server, args = params, {
+  testServer(kitems, args = params, {
 
     # -- click
     session$setInputs('admin-import' = 1)

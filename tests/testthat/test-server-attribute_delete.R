@@ -24,7 +24,7 @@ test_that("attribute delete works", {
                  admin = TRUE)
 
   # -- module server call
-  testServer(kitems_server, args = params, {
+  testServer(kitems, args = params, {
 
     # -- update input
     session$setInputs('admin-dz_delete_att_name' = "total")

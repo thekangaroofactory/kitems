@@ -39,6 +39,12 @@ devtools::install_github("thekangaroofactory/kitems")
 Demo apps are delivered together with the package and can be accessed
 with:
 
+``` r
+library(kitems)
+
+runExample()
+```
+
 ## Framework Specifications
 
 The kitems framework is based on two main notions - data model and
@@ -97,7 +103,6 @@ return value.
 The return value has the following structure:
 
 ``` r
-
 list(id,
      url,
      items,
@@ -133,7 +138,6 @@ The items for this id can be accessed **in a reactive context** from the
 return value list, as items()
 
 ``` r
-
 # -- call module
 mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data")
 
@@ -148,6 +152,8 @@ values.
 Here is an example how to observe the *items*:
 
 ``` r
+library(kitems)
+
 # -- Call module server
 mydata <- kitems(id = "mydata", path = "./data")
 
@@ -247,6 +253,12 @@ The admin console gives access to all the data models belonging to the
 In case the kitems module server function is called from inside a module
 (i.e. as a nested module), then it is not possible to call the UI
 functions from the main app with the nested module `id`.
+
+### Nested module considerations
+
+In case the kitems module server function is called from inside a module
+(i.e. as a nested module), then it is not possible to call the UI
+functions from the main app with the nested module id.
 
 From there, two options are available:
 

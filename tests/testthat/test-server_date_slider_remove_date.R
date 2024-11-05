@@ -25,7 +25,7 @@ test_that("Date sliderInput remove date attribute works", {
                  admin = TRUE)
 
   # -- module server call
-  testServer(kitems_server, args = params, {
+  testServer(kitems, args = params, {
 
     # --------------------------------------------------------------------------
     # date

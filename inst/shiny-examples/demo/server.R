@@ -15,7 +15,7 @@ shinyServer(
 
     # -- Launch module servers ----
     # autosave = FALSE to keep demo data frozen
-    data_2 <- kitems::kitems_server(id = "data_2", path = demo_dir,
+    data_2 <- kitems::kitems(id = "data_2", path = demo_dir,
                                     create = TRUE, autosave = FALSE, admin = FALSE,
                                     shortcut = TRUE)
 

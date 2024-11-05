@@ -41,7 +41,7 @@ body <- dashboardBody(
                      p("This instance has no corresponding files (data model or items) in the path.", br(),
                        "The administration console will only display the Create and Import data buttons."),
 
-                     tags$pre("# -- start module server: \ndata_3 <- kitems::kitems_server(id = \"data_3\",
+                     tags$pre("# -- start module server: \ndata_3 <- kitems::kitems(id = \"data_3\",
                               path = \"path/to/my/data\", \ncreate = TRUE, autosave = FALSE, admin = TRUE)"),
 
                      p("For details about the nested module implementation, see the server code.
