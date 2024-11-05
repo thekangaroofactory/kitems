@@ -8,9 +8,10 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/thekangaroofactory/kitems/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/thekangaroofactory/kitems/actions/workflows/R-CMD-check.yaml)
-
 [![codecov](https://codecov.io/gh/thekangaroofactory/kitems/graph/badge.svg?token=7P74NK51JJ)](https://codecov.io/gh/thekangaroofactory/kitems)
 
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 The goal of kitems is to provide a framework to manage data frame
