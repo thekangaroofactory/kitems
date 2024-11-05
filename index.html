@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Framework To Manage Data.frame Items • kitems</title>
+<title>A Framework To Manage Data Frame Items • kitems</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Framework To Manage Data.frame Items">
-<meta name="description" content="Set of standard functions to manage data models and corresponding data.frame items.">
-<meta property="og:description" content="Set of standard functions to manage data models and corresponding data.frame items.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="A Framework To Manage Data Frame Items">
+<meta name="description" content="A framework to manage data frame items and a set of tools to implement it within R Shiny applications.">
+<meta property="og:description" content="A framework to manage data frame items and a set of tools to implement it within R Shiny applications.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">kitems</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,6 +107,18 @@
 </h3>
 <p>Items is a data.frame containing the data to be managed.</p>
 </div>
+<div class="section level3">
+<h3 id="path">Path<a class="anchor" aria-label="anchor" href="#path"></a>
+</h3>
+<p>Both data model &amp; items files will be stored in a specific folder dedicated to that instance of the module. The folder is named after the id of the module.</p>
+<p>For this reason, unless there is a single instance of the module, it is not recommended to name any of the id with same name as the last folder of the provided path.</p>
+<p>Example:</p>
+<ul>
+<li>path = “./path/to/data” &amp; id = “data” will store files in “./path/to/data”</li>
+<li>path = “./path/to/data” &amp; id = “data_1” will store files in “./path/to/data/data_1”</li>
+</ul>
+<p>It may result in files being stored at different levels.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="reactive-values">Reactive Values<a class="anchor" aria-label="anchor" href="#reactive-values"></a>
@@ -141,7 +153,7 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thekangaroofactory.github.io/kitems/">kitems</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># -- call module</span></span>
-<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kitems_server.html">kitems_server</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span>, create <span class="op">=</span> <span class="cn">TRUE</span>, autosave <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span>, create <span class="op">=</span> <span class="cn">TRUE</span>, autosave <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># -- get data model</span></span>
 <span><span class="va">data_model</span> <span class="op">&lt;-</span> <span class="va">mydata</span><span class="op">$</span><span class="fu">data_model</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -153,7 +165,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># -- call module</span></span>
-<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kitems_server.html">kitems_server</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span>, create <span class="op">=</span> <span class="cn">TRUE</span>, autosave <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span>, create <span class="op">=</span> <span class="cn">TRUE</span>, autosave <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># -- get items</span></span>
 <span><span class="va">items</span> <span class="op">&lt;-</span> <span class="va">mydata</span><span class="op">$</span><span class="fu">items</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -187,7 +199,7 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thekangaroofactory.github.io/kitems/">kitems</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># -- call module</span></span>
-<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kitems_server.html">kitems_server</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span>, create <span class="op">=</span> <span class="cn">TRUE</span>, autosave <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span>, create <span class="op">=</span> <span class="cn">TRUE</span>, autosave <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># -- define inputs and create item (waning! this should be used in a reactive context)</span></span>
 <span><span class="va">input_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span>, text <span class="op">=</span> <span class="st">"demo"</span><span class="op">)</span></span>
@@ -205,7 +217,7 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thekangaroofactory.github.io/kitems/">kitems</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># -- call module</span></span>
-<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kitems_server.html">kitems_server</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span>, create <span class="op">=</span> <span class="cn">TRUE</span>, autosave <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span>, create <span class="op">=</span> <span class="cn">TRUE</span>, autosave <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># -- define inputs and create item (waning! this should be used in a reactive context)</span></span>
 <span><span class="va">input_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span>, text <span class="op">=</span> <span class="st">"demo"</span><span class="op">)</span></span>
@@ -222,7 +234,7 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thekangaroofactory.github.io/kitems/">kitems</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># -- call module</span></span>
-<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kitems_server.html">kitems_server</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span>, create <span class="op">=</span> <span class="cn">TRUE</span>, autosave <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span>, create <span class="op">=</span> <span class="cn">TRUE</span>, autosave <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># -- delete item (waning! this should be used in a reactive context)</span></span>
 <span><span class="va">item_id</span> <span class="op">&lt;-</span> <span class="fl">1704961867683</span> </span>
@@ -337,7 +349,7 @@
 <div class="section level3">
 <h3 id="nested-module-considerations">Nested module considerations<a class="anchor" aria-label="anchor" href="#nested-module-considerations"></a>
 </h3>
-<p>In case the kitems_server module server function is called from inside a module (i.e. as a nested module), then it is not possible to call the UI functions from the main app with the nested module id.</p>
+<p>In case the kitems module server function is called from inside a module (i.e. as a nested module), then it is not possible to call the UI functions from the main app with the nested module id.</p>
 <p>From there, two options are available:</p>
 <ul>
 <li><p>wrap the package UI functions into functions from the calling module (encapsulation)<br>
@@ -380,7 +392,8 @@ For example, you could create an action_BTN function that would implement create
   </main><aside class="col-md-3"><div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li>GPL (&gt;=3)</li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small>GPL (&gt;= 3)</small></li>
 </ul>
 </div>
 
@@ -395,7 +408,7 @@ For example, you could create an action_BTN function that would implement create
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>philippe peret <br><small class="roles"> Author, maintainer </small>  </li>
+<li>philippe peret <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0009-0003-9666-7490" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
 
