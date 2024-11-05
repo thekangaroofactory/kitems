@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">kitems</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +35,9 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/import-existing-data.html">import-existing-data</a></li>
+<li><a class="dropdown-item" href="articles/filtering_items.html">Filtering Items</a></li>
+    <li><a class="dropdown-item" href="articles/module_server_return_value.html">Module Server Return Value</a></li>
+    <li><a class="dropdown-item" href="articles/motivations.html">motivations</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -58,64 +60,63 @@
 
 
 <!-- badges: end -->
-<p>The goal of kitems is to provide a framework to manage data.frame like items and a set of tools to implement it within a shiny web application. For that reason, it is delivered as a shiny module.</p>
+<p>The goal of kitems is to provide a framework to manage data frame <em>items</em> and a set of tools to implement it within Shiny web applications.</p>
+<p>It is delivered as a Shiny module.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of kitems from <a href="https://github.com/thekangaroofactory/kitems" class="external-link">GitHub</a> with:</p>
+<p>The development (<em>beta</em>) version of kitems can be installed from <a href="https://github.com/thekangaroofactory/kitems" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"thekangaroofactory/kitems"</span><span class="op">)</span></span></code></pre></div>
+<blockquote>
+<p>Note that the package is under development convergence.<br>
+Features may still be modified at this stage, and there is no guaranty that exported functions signature will not change before it is converged.</p>
+</blockquote>
 </div>
 <div class="section level2">
 <h2 id="demo">Demo<a class="anchor" aria-label="anchor" href="#demo"></a>
 </h2>
-<p>A basic shiny demo app which shows you how to use the package is delivered and can be run:</p>
+<p>Demo apps are delivered together with the package and can be accessed with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thekangaroofactory.github.io/kitems/">kitems</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># -- get example demo name</span></span>
+<span><span class="fu"><a href="reference/runExample.html">runExample</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="framework-specifications">Framework Specifications<a class="anchor" aria-label="anchor" href="#framework-specifications"></a>
 </h2>
-<p>The kitems framework is based on two main notions: data model and items.</p>
+<p>The kitems framework is based on two main notions - data model and <em>items</em>.</p>
 <div class="section level3">
 <h3 id="data-model">Data Model<a class="anchor" aria-label="anchor" href="#data-model"></a>
 </h3>
-<p>The data model contains the specifications of the items you want to manage. It includes:</p>
-<ul>
-<li>name</li>
-<li>type</li>
-<li>default value</li>
-<li>default function</li>
-<li>filter</li>
-<li>skip</li>
-</ul>
-<p>Supported types are:</p>
-<ul>
-<li>numeric</li>
-<li>integer</li>
-<li>logical</li>
-<li>character</li>
-<li>factor</li>
-<li>Date</li>
-<li>POSIXct</li>
-</ul>
-<p>Note: class POSIXlt is not supported as it stores datetime values into a list that is not recommended to store into a data.frame.</p>
-<p>Defaults (value and function) are used to setup a value if it’s not provided during the item creation process. For function, the reference of the function should be passed (as a callback), for example “Sys.Date”</p>
-<p>Filter is a logical to indicate if the attribute should be filtered from the item views (for example id) Skip is a logical to indicate if the attribute should be skipped to build the input form (thus will get default value)</p>
+<p>The data model contains the specifications of the <em>items</em> to manage.</p>
+<p>For each attribute, the data model carries information like its name and type, but also a method to determine its default value and logical values to indicate if it should be skipped in forms, filtered from the table view or used to sort the data.</p>
+<p>Supported types are numeric, integer, logical, character, factor, Date and POSIXct.</p>
+<blockquote>
+<p>Note: class POSIXlt is not supported as it stores datetime values into a list<br>
+POSIXct should be used to store datetime attributes.</p>
+</blockquote>
 </div>
 <div class="section level3">
 <h3 id="items">Items<a class="anchor" aria-label="anchor" href="#items"></a>
 </h3>
-<p>Items is a data.frame containing the data to be managed.</p>
+<p><em>Items</em> are stored in a data frame that fits with the data model rules.<br>
+That means the data model is implemented in all functions related to <em>item</em> management.</p>
 </div>
 <div class="section level3">
 <h3 id="path">Path<a class="anchor" aria-label="anchor" href="#path"></a>
 </h3>
-<p>Both data model &amp; items files will be stored in a specific folder dedicated to that instance of the module. The folder is named after the id of the module.</p>
-<p>For this reason, unless there is a single instance of the module, it is not recommended to name any of the id with same name as the last folder of the provided path.</p>
+<p>Both data model &amp; <em>item</em> files are stored in a specific folder dedicated to that instance of the module.<br>
+The folder is named after the <code>id</code> of the module.</p>
+<p>For this reason, unless there is a single instance of the module, it is not recommended to name any of the <code>id</code> with same name as the last folder of the provided path.</p>
 <p>Example:</p>
 <ul>
-<li>path = “./path/to/data” &amp; id = “data” will store files in “./path/to/data”</li>
-<li>path = “./path/to/data” &amp; id = “data_1” will store files in “./path/to/data/data_1”</li>
+<li>
+<code>path = "./path/to/data" &amp; id = "data"</code> will store files in “./path/to/data”</li>
+<li>
+<code>path = "./path/to/data" &amp; id = "data_1"</code> will store files in “./path/to/data/data_1”</li>
 </ul>
 <p>It may result in files being stored at different levels.</p>
 </div>
@@ -123,19 +124,11 @@
 <div class="section level2">
 <h2 id="reactive-values">Reactive Values<a class="anchor" aria-label="anchor" href="#reactive-values"></a>
 </h2>
-<p>kitems strongly relies on Shiny (shiny and shinydashboard packages are set as ‘depends’ dependencies). It provides reactive values (accessible from the module server return value):</p>
-<ul>
-<li>data_model (reactiveVal)</li>
-<li>items (reactiveVal)</li>
-<li>filtered_items (reactiveVal)</li>
-<li>selected_items (reactiveVal)</li>
-<li>clicked_column (reactiveVal)</li>
-<li>filter_date (reactiveVal)</li>
-</ul>
-<p>The module server return value has the following structure:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">id</span>,</span>
+<p>kitems strongly relies on Shiny (both shiny and shinydashboard packages are set as ‘depends’ dependencies).</p>
+<p>It delivers reactive values that are accessible from the module server return value.</p>
+<p>The return value has the following structure:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">id</span>,</span>
 <span>     <span class="va">url</span>,</span>
 <span>     <span class="va">items</span>,</span>
 <span>     <span class="va">data_model</span>,</span>
@@ -144,32 +137,49 @@
 <span>     <span class="va">clicked_column</span>,</span>
 <span>     <span class="va">filter_date</span><span class="op">)</span></span></code></pre></div>
 <blockquote>
-<p>[!CAUTION] Data model and items reactive values should be handled with caution as updating there values will trigger auto save (for items, if autosave = TRUE).</p>
+<p>Data model and <em>items</em> reactive values should be handled with caution as updating there values will trigger auto save (if <code>autosave = TRUE</code>).</p>
 </blockquote>
 <div class="section level3">
 <h3 id="data-model-1">Data Model<a class="anchor" aria-label="anchor" href="#data-model-1"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<p>The data model can be accessed <strong>in a reactive context</strong> from the return value list, as data_model()</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thekangaroofactory.github.io/kitems/">kitems</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># -- call module</span></span>
-<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span>, create <span class="op">=</span> <span class="cn">TRUE</span>, autosave <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems_server</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># -- get data model</span></span>
 <span><span class="va">data_model</span> <span class="op">&lt;-</span> <span class="va">mydata</span><span class="op">$</span><span class="fu">data_model</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>The data model can be accessed <strong>in a reactive context</strong> from the return value list, as data_model()</p>
 </div>
 <div class="section level3">
 <h3 id="items-1">Items<a class="anchor" aria-label="anchor" href="#items-1"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="co"># -- call module</span></span>
-<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span>, create <span class="op">=</span> <span class="cn">TRUE</span>, autosave <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<p>The items for this id can be accessed <strong>in a reactive context</strong> from the return value list, as items()</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># -- call module</span></span>
+<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems_server</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># -- get items</span></span>
 <span><span class="va">items</span> <span class="op">&lt;-</span> <span class="va">mydata</span><span class="op">$</span><span class="fu">items</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>The items for this id can be accessed <strong>in a reactive context</strong> from the return value list, as items()</p>
+</div>
+<div class="section level3">
+<h3 id="observe-reactive-values">Observe reactive values<a class="anchor" aria-label="anchor" href="#observe-reactive-values"></a>
+</h3>
+<p>The module server return value holds references to the reactives values.<br>
+Here is an example how to observe the <em>items</em>:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># -- Call module server</span></span>
+<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span>, path <span class="op">=</span> <span class="st">"./data"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># -- Observe items</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="fu">items</span><span class="op">(</span><span class="op">)</span>, <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Main application server: items object has just been updated. \n"</span><span class="op">)</span></span>
+<span>  <span class="co"># -- do something cool here</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<blockquote>
+<p>Note: when observing the <code>filtered_items</code> from the main application, it’s recommended to add the <code>ignoreInit = TRUE</code> parameter (or use <code>bindEvent</code> for render* functions) in order to avoid multiple computations at start-up.</p>
+</blockquote>
 </div>
 </div>
 <div class="section level2">
@@ -178,91 +188,42 @@
 <div class="section level3">
 <h3 id="initialization">Initialization<a class="anchor" aria-label="anchor" href="#initialization"></a>
 </h3>
-<p>When starting the module with id and path arguments, it will check if the corresponding data model is available (if the file exists).</p>
-<p>If no data model is found, the admin UI will display a create button to start a new data model, as well as an import data button.</p>
+<p>When starting the module with id and path arguments, it will check if the corresponding data model is available in the destination path.</p>
+<p>If no data model is found, the admin UI will display a button to create a new data model, as well as a button to import data (it creates the data model from the data).</p>
 </div>
 <div class="section level3">
 <h3 id="checking-integrity">Checking integrity<a class="anchor" aria-label="anchor" href="#checking-integrity"></a>
 </h3>
-<p>When the module server is launched, it will perform an integrity check to ensure that the data (items) and data model are aligned.</p>
-<p>This is done through the dm_integrity() function. If not aligned, the data model will be updated to match with any missing attribute for example.</p>
+<p>When the module server is launched, it will perform an integrity check to ensure that the <em>items</em> and data model are synchronized.</p>
+<p>If not, the data model will be updated to match with any missing attribute for example.<br>
+Items will be checked as well to make sure attribute types fit with the data model.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="item-management">Item management<a class="anchor" aria-label="anchor" href="#item-management"></a>
 </h2>
-<div class="section level3">
-<h3 id="item-creation">Item creation<a class="anchor" aria-label="anchor" href="#item-creation"></a>
-</h3>
-<p>It’s recommended to use item_create() function to create an item to be added to the item list:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thekangaroofactory.github.io/kitems/">kitems</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># -- call module</span></span>
-<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span>, create <span class="op">=</span> <span class="cn">TRUE</span>, autosave <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># -- define inputs and create item (waning! this should be used in a reactive context)</span></span>
-<span><span class="va">input_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span>, text <span class="op">=</span> <span class="st">"demo"</span><span class="op">)</span></span>
-<span><span class="va">item</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/item_create.html">item_create</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">input_values</span>, data.model <span class="op">=</span> <span class="va">mydata</span><span class="op">$</span><span class="fu">data_model</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># -- add item (waning! this should be used in a reactive context)</span></span>
-<span><span class="fu"><a href="reference/item_add.html">item_add</a></span><span class="op">(</span>items <span class="op">=</span> <span class="va">mydata</span><span class="op">$</span><span class="va">items</span>, <span class="va">item</span><span class="op">)</span></span></code></pre></div>
-<p>Note: if autosave has been turned off, item_save function should be used to make item changes persistent.</p>
-</div>
-<div class="section level3">
-<h3 id="item-update">Item update<a class="anchor" aria-label="anchor" href="#item-update"></a>
-</h3>
-<p>It’s recommended to use item_create() function to create a new item and replace the one in the item list:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thekangaroofactory.github.io/kitems/">kitems</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># -- call module</span></span>
-<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span>, create <span class="op">=</span> <span class="cn">TRUE</span>, autosave <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># -- define inputs and create item (waning! this should be used in a reactive context)</span></span>
-<span><span class="va">input_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span>, text <span class="op">=</span> <span class="st">"demo"</span><span class="op">)</span></span>
-<span><span class="va">item</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/item_create.html">item_create</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">input_values</span>, data.model <span class="op">=</span> <span class="va">mydata</span><span class="op">$</span><span class="fu">data_model</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># -- update item (waning! this should be used in a reactive context)</span></span>
-<span><span class="fu"><a href="reference/item_update.html">item_update</a></span><span class="op">(</span>items <span class="op">=</span> <span class="va">mydata</span><span class="op">$</span><span class="va">items</span>, <span class="va">item</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="item-delete">Item delete<a class="anchor" aria-label="anchor" href="#item-delete"></a>
-</h3>
-<p>To delete an item, just pass it’s id to the trigger:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thekangaroofactory.github.io/kitems/">kitems</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># -- call module</span></span>
-<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span>, create <span class="op">=</span> <span class="cn">TRUE</span>, autosave <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># -- delete item (waning! this should be used in a reactive context)</span></span>
-<span><span class="va">item_id</span> <span class="op">&lt;-</span> <span class="fl">1704961867683</span> </span>
-<span><span class="fu"><a href="reference/item_delete.html">item_delete</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">items</span>, <span class="va">id</span><span class="op">)</span></span></code></pre></div>
-</div>
+<p>The <em>create</em> and <em>update</em> buttons triggers a dynamic form that is built based on the data model.<br>
+Attributes defined as <em>skipped</em> won’t get an input in the form.<br>
+The inputs are initialized with the default values or output of the default functions when defined.<br>
+After the form is completed, a check is performed to make sure values match the attribute types.<br>
+If no value is provided for an attribute, the default is applied.</p>
 </div>
 <div class="section level2">
 <h2 id="views">Views<a class="anchor" aria-label="anchor" href="#views"></a>
 </h2>
 <div class="section level3">
-<h3 id="default-view">Default view<a class="anchor" aria-label="anchor" href="#default-view"></a>
-</h3>
-<p>The default view is provided through items_view_DT(). It is based on the items content (with data model masks applied).</p>
-</div>
-<div class="section level3">
 <h3 id="filtered-view">Filtered view<a class="anchor" aria-label="anchor" href="#filtered-view"></a>
 </h3>
-<p>The filtered view is provided through filtered_view_ui() It is based on the filtered_items content (with data model masks applied).</p>
+<p>A filtered view, based on the filtered_items content is delivered with data model masks applied.<br>
+Filtered attributes will be hidden, and <em>items</em> will be ordered as defined in the data model.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="selected-items">Selected Item(s)<a class="anchor" aria-label="anchor" href="#selected-items"></a>
 </h2>
-<p>Both default and filtered view have row selection enabled. Selecting row(s) in <em>one or the other</em> table will trigger the update of selected_items reactive value.</p>
-<blockquote>
-<p>[!CAUTION] It is not recommended to display both views in the same UI section as only the last selection will be kept in selected_items</p>
-</blockquote>
-<p>Selected item(s) will also trigger which buttons are available (or NULL).</p>
+<p>The filtered view have row selection enabled.<br>
+Selecting row(s) in the table will trigger the update of selected_items reactive value.<br>
+Selected <em>item(s)</em> will also trigger which buttons are available (delete is not visible if no item is selected).</p>
 </div>
 <div class="section level2">
 <h2 id="inputs">Inputs<a class="anchor" aria-label="anchor" href="#inputs"></a>
@@ -270,123 +231,44 @@
 <div class="section level3">
 <h3 id="date-sliderinput">Date sliderInput<a class="anchor" aria-label="anchor" href="#date-sliderinput"></a>
 </h3>
-<p>If the data model has an attribute named ‘date’, a date sliderInput will be created automatically to enable date filtering.</p>
-<p>This sliderInput will trigger a filter on the items to be displayed in the filtered view, i.e. only the matching items will be part of this view.</p>
-<p>If not implemented through date_slider_INPUT() in your application’s UI, then no date filter is applied by default on the filtered view.</p>
-<p>Filter value (the sliderInput range) is available in the filter_date reactive value.</p>
-<p><strong>Note</strong> In case you want to build a reactive object on top of filter_date and filtered_items, it is recommended to test both for NULL to avoid firing computation at startup.</p>
+<p>If the data model has an attribute named ‘<em>date</em>’, a date sliderInput will be created automatically to enable date filtering. If not implemented in the main application UI, it will have no impact on the filtered <em>items</em>.</p>
 </div>
 <div class="section level3">
 <h3 id="buttons">Buttons<a class="anchor" aria-label="anchor" href="#buttons"></a>
 </h3>
+<p>Standard buttons are delivered to trigger the module server actions.<br>
+They are implemented as separate UI functions so that it’s possible to wrap them into a more complex UI function.</p>
 <ul>
-<li>create_BTN: create item</li>
-<li>update_BTN: update selected item (single selection)</li>
-<li>delete_BTN: delete selected item(s) (supports multi-selection)</li>
+<li>create</li>
+<li>update (single item selection)</li>
+<li>delete (supports multi-selection)</li>
 </ul>
-<p>update_BTN and delete_BTN return NULL if no row is selected.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="ui-objects">UI objects<a class="anchor" aria-label="anchor" href="#ui-objects"></a>
+<h2 id="administration">Administration<a class="anchor" aria-label="anchor" href="#administration"></a>
 </h2>
 <div class="section level3">
-<h3 id="admin-ui">Admin UI<a class="anchor" aria-label="anchor" href="#admin-ui"></a>
+<h3 id="admin-console">Admin console<a class="anchor" aria-label="anchor" href="#admin-console"></a>
 </h3>
-<p>In order to avoid code duplication, an admin UI interface is provided by the admin_ui() function.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="co"># -- Inside tabItems</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/tabItems.html" class="external-link">tabItems</a></span><span class="op">(</span><span class="va">...</span>,</span>
-<span></span>
-<span>         <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/tabItem.html" class="external-link">tabItem</a></span><span class="op">(</span>tabName <span class="op">=</span> <span class="st">"mydata"</span>,</span>
-<span>                 </span>
-<span>                 <span class="co"># -- Admin UI</span></span>
-<span>                 <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidRow</a></span><span class="op">(</span></span>
-<span>                   <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/column.html" class="external-link">column</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>                          </span>
-<span>                          <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="reference/admin_ui.html">admin_ui</a></span><span class="op">(</span><span class="st">"mydata"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<p>An admin console is delivered as a standalone Shiny app.<br>
+The reason is that in most cases, it’s not recommended to have the data model(s) management accessible from within the application.</p>
+<p>The admin console gives access to all the data models belonging to the <code>path</code> argument in one place.</p>
 </div>
-<div class="section level3">
-<h3 id="sidebar">Sidebar<a class="anchor" aria-label="anchor" href="#sidebar"></a>
-</h3>
-<p>A sidebarMenu object (menuItem) is also available as an output of the dynamic_sidebar() function. It will contain one menuSubItem object per data model (stored in the r reactive values).</p>
-<p>To implement it in your sidebar UI, it must first be rendered in your application server code:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># -------------------------------------</span></span>
-<span><span class="co"># Generate dynamic sidebar</span></span>
-<span><span class="co"># -------------------------------------</span></span>
-<span></span>
-<span><span class="va">output</span><span class="op">$</span><span class="va">menu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/renderMenu.html" class="external-link">renderMenu</a></span><span class="op">(</span><span class="fu"><a href="reference/dynamic_sidebar.html">dynamic_sidebar</a></span><span class="op">(</span>names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"data"</span>, <span class="st">"data2"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Then you can use this output inside the application UI code:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># -------------------------------------</span></span>
-<span><span class="co"># Define Sidebar UI</span></span>
-<span><span class="co"># -------------------------------------</span></span>
-<span></span>
-<span><span class="va">sidebar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/dashboardSidebar.html" class="external-link">dashboardSidebar</a></span><span class="op">(</span></span>
-<span></span>
-<span>  <span class="co"># -- static section</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/sidebarMenu.html" class="external-link">sidebarMenu</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/sidebarMenu.html" class="external-link">menuItem</a></span><span class="op">(</span><span class="st">"Home"</span>, tabName <span class="op">=</span> <span class="st">"home"</span>, icon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/icon.html" class="external-link">icon</a></span><span class="op">(</span><span class="st">"dashboard"</span><span class="op">)</span>, selected <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
-<span></span>
-<span>  <span class="co"># -- add dynamic section</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/sidebarMenu.html" class="external-link">sidebarMenu</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"tabs"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/sidebarMenuOutput.html" class="external-link">sidebarMenuOutput</a></span><span class="op">(</span><span class="st">"menu"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span></span>
-<span>  collapsed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p>The tabName linked to each menuSubItem should be named after the module id. Here is an example how to access the administration console from the menuSubItem:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># -- kitems admin</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/tabItem.html" class="external-link">tabItem</a></span><span class="op">(</span>tabName <span class="op">=</span> <span class="st">"my_data"</span>,</span>
-<span>        </span>
-<span>        <span class="co"># -- Admin UI</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidRow</a></span><span class="op">(</span></span>
-<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/column.html" class="external-link">column</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>                 </span>
-<span>                 <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="reference/admin_ui.html">admin_ui</a></span><span class="op">(</span><span class="st">"my_data"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="nested-module-considerations">Nested module considerations<a class="anchor" aria-label="anchor" href="#nested-module-considerations"></a>
-</h3>
-<p>In case the kitems module server function is called from inside a module (i.e. as a nested module), then it is not possible to call the UI functions from the main app with the nested module id.</p>
+<div class="section level2">
+<h2 id="nested-module-considerations">Nested module considerations<a class="anchor" aria-label="anchor" href="#nested-module-considerations"></a>
+</h2>
+<p>In case the kitems module server function is called from inside a module (i.e. as a nested module), then it is not possible to call the UI functions from the main app with the nested module <code>id</code>.</p>
 <p>From there, two options are available:</p>
 <ul>
 <li><p>wrap the package UI functions into functions from the calling module (encapsulation)<br>
-For example, you could create an action_BTN function that would implement create_BTN, update_BTN and delete_BTN into a single UI</p></li>
+For example, create a UI function that implements the different buttons into a single UI delivered by the calling module.</p></li>
 <li><p>call the package UI functions directly from the main app using multiple namespaces:<br>
-(as specified in the shiny::NS function)</p></li>
+(as specified in the <code><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">shiny::NS</a></code> function)</p></li>
 </ul>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span> <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="reference/admin_ui.html">admin_ui</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"module_id"</span>, <span class="st">"nested_module_id"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="import--migration">Import &amp; migration<a class="anchor" aria-label="anchor" href="#import--migration"></a>
-</h2>
-<p>When the module server is initialized with data.model = NULL, an import data button is displayed in the data model section of the admin UI. This allows to create a data model from existing data.</p>
-</div>
-<div class="section level2">
-<h2 id="reactivity">Reactivity<a class="anchor" aria-label="anchor" href="#reactivity"></a>
-</h2>
-<div class="section level3">
-<h3 id="observe-items">Observe items<a class="anchor" aria-label="anchor" href="#observe-items"></a>
-</h3>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># -------------------------------------</span></span>
-<span><span class="co"># Observe item lists</span></span>
-<span><span class="co"># -------------------------------------</span></span>
-<span></span>
-<span><span class="va">id</span> <span class="op">&lt;-</span> <span class="st">"mydata"</span></span>
-<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/items_name.html">items_name</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># -- Module id = mydata</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="fu">items</span><span class="op">(</span><span class="op">)</span>, <span class="op">{</span></span>
-<span>  </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Main application server observer: items object has just been updated. \n"</span><span class="op">)</span></span>
-<span>  </span>
-<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
-</div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
