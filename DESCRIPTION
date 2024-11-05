@@ -1,6 +1,6 @@
 Package: kitems
 Title: A Framework To Manage Data Frame Items
-Version: 0.5.7
+Version: 0.5.8
 Authors@R: 
     person(given = "philippe",
            family = "peret",
@@ -30,8 +30,10 @@ Imports:
 Suggests: 
     knitr,
     rmarkdown,
+    quarto,
     testthat (>= 3.0.0)
-VignetteBuilder: knitr
+VignetteBuilder: 
+    quarto
 Config/testthat/edition: 3
 Remotes: 
     thekangaroofactory/kfiles,
