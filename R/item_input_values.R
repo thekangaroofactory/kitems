@@ -14,12 +14,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' values <- input_values(input, colClasses = c("date" = "Date", "text" = "character"))
+#' values <- item_input_values(input, colClasses = c("date" = "Date", "text" = "character"))
 #' }
 
 
 # -- function definition
-input_values <- function(input, colClasses){
+item_input_values <- function(input, colClasses){
 
   # -- get values from input object
   values <- lapply(names(colClasses), function(x) input[[x]])
@@ -29,7 +29,7 @@ input_values <- function(input, colClasses){
   # Need to retrieve additional time & timezone inputs
   if(any(colClasses == "POSIXct")){
 
-    cat("[input_values] Need to retrieve additional time & timezone inputs \n")
+    cat("[item_input_values] Need to retrieve additional time & timezone inputs \n")
 
     # -- get attributes
     att_names <- names(colClasses)[colClasses == "POSIXct"]

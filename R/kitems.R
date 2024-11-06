@@ -22,7 +22,7 @@
 #' To make the data model persistent, use \link[base]{saveRDS} function. The file name should be
 #' consistent with the output of \link[kitems]{dm_name} function used with \code{id} plus .rds extension.
 #'
-#' When admin is FALSE, \link[kitems]{admin_ui} will return an 'empty' layout (tabs with no content)
+#' When admin is FALSE, \link[kitems]{admin_widget} will return an 'empty' layout (tabs with no content)
 #' \link[kitems]{dynamic_sidebar} is not affected by this parameter.
 #' It is expected that those function will not be used when admin = FALSE.
 #'
@@ -296,11 +296,11 @@ kitems <- function(id, path,
 
       # -- get list of input values & name it
       cat("--  Get list of input values \n")
-      input_values <- input_values(input, dm_colClasses(k_data_model()))
+      item_input_values <- item_input_values(input, dm_colClasses(k_data_model()))
 
       # -- create item based on input list
       cat("--  Create item \n")
-      item <- item_create(values = input_values, data.model = k_data_model())
+      item <- item_create(values = item_input_values, data.model = k_data_model())
 
       # -- Secure against errors raised by item_add #351
       tryCatch({
@@ -376,14 +376,14 @@ kitems <- function(id, path,
 
       # -- get list of input values & name it
       cat("--  Get list of input values \n")
-      input_values <- input_values(input, dm_colClasses(k_data_model()))
+      item_input_values <- item_input_values(input, dm_colClasses(k_data_model()))
 
       # -- update id (to replace selected item)
-      input_values$id <- selected_items()
+      item_input_values$id <- selected_items()
 
       # -- create item based on input list
       cat("--  Create replacement item \n")
-      item <- item_create(values = input_values, data.model = k_data_model())
+      item <- item_create(values = item_input_values, data.model = k_data_model())
 
       # -- Secure against errors raised by item_add #351
       tryCatch({
@@ -641,7 +641,7 @@ kitems <- function(id, path,
 
     # -- Call module
     if(admin)
-      admin_server(k_data_model, k_items, path, dm_url, items_url, autosave)
+      kitems_admin(k_data_model, k_items, path, dm_url, items_url, autosave)
 
 
     # __________________________________________________________________________

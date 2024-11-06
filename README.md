@@ -266,5 +266,5 @@ From there, two options are available:
   (as specified in the `shiny::NS` function)
 
 ``` r
- kitems::admin_ui(c("module_id", "nested_module_id"))
+ kitems::admin_widget(c("module_id", "nested_module_id"))
 ```

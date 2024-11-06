@@ -73,7 +73,7 @@ body <- dashboardBody(
             fluidRow(
               column(width = 12,
 
-                     kitems::admin_ui("wrapper-data_3"))))
+                     kitems::admin_widget("wrapper-data_3"))))
 
 
   ) # end tabItems

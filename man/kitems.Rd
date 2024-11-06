@@ -26,6 +26,11 @@ kitems(
 
 \item{shortcut}{a logical should attribute shortcuts be computed when building the item form (default = FALSE)}
 }
+\value{
+the module server returns a list of the references that are accessible outside the module.
+All except id & url are references to reactive values.
+list(id, url, items, data_model, filtered_items, selected_items, clicked_column, filter_date)
+}
 \description{
 Module server
 }
@@ -34,7 +39,7 @@ If autosave is FALSE, the item_save function should be used to make the data per
 To make the data model persistent, use \link[base]{saveRDS} function. The file name should be
 consistent with the output of \link[kitems]{dm_name} function used with \code{id} plus .rds extension.
 
-When admin is FALSE, \link[kitems]{admin_ui} will return an 'empty' layout (tabs with no content)
+When admin is FALSE, \link[kitems]{admin_widget} will return an 'empty' layout (tabs with no content)
 \link[kitems]{dynamic_sidebar} is not affected by this parameter.
 It is expected that those function will not be used when admin = FALSE.
 }
