@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' admin_server(
+#' kitems_admin(
 #' k_data_model = mydata$data_model,
 #' k_items = mydata$items,
 #' path = path,
@@ -25,7 +25,7 @@
 
 # -- Shiny module server logic -------------------------------------------------
 
-admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosave) {
+kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosave) {
 
   # -- force set id to 'admin'
   id <- "admin"

@@ -26,6 +26,11 @@ kitems(
 
 \item{shortcut}{a logical should attribute shortcuts be computed when building the item form (default = FALSE)}
 }
+\value{
+the module server returns a list of the references that are accessible outside the module.
+All except id & url are references to reactive values.
+list(id, url, items, data_model, filtered_items, selected_items, clicked_column, filter_date)
+}
 \description{
 Module server
 }

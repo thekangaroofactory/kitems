@@ -641,7 +641,7 @@ kitems <- function(id, path,
 
     # -- Call module
     if(admin)
-      admin_server(k_data_model, k_items, path, dm_url, items_url, autosave)
+      kitems_admin(k_data_model, k_items, path, dm_url, items_url, autosave)
 
 
     # __________________________________________________________________________
