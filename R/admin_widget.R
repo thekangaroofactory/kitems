@@ -1,6 +1,6 @@
 
 
-#' Admin UI
+#' Admin Widget
 #'
 #' @param id the module id
 #'
@@ -8,9 +8,9 @@
 #' @export
 #'
 #' @examples
-#' admin_ui(id = "mydata")
+#' admin_widget(id = "mydata")
 
-admin_ui <- function(id){
+admin_widget <- function(id){
 
   # -- Get namespace
   ns <- NS(id)

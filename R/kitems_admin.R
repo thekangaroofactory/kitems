@@ -435,7 +435,7 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
       # -- check toggle btn
       if(input$dz_toggle_btn)
-        danger_zone_ui(k_data_model, ns)) %>%
+        danger_zone_widget(k_data_model, ns)) %>%
 
       # -- event
       bindEvent(input$dz_toggle_btn, ignoreInit = TRUE)

@@ -39,7 +39,7 @@ If autosave is FALSE, the item_save function should be used to make the data per
 To make the data model persistent, use \link[base]{saveRDS} function. The file name should be
 consistent with the output of \link[kitems]{dm_name} function used with \code{id} plus .rds extension.
 
-When admin is FALSE, \link[kitems]{admin_ui} will return an 'empty' layout (tabs with no content)
+When admin is FALSE, \link[kitems]{admin_widget} will return an 'empty' layout (tabs with no content)
 \link[kitems]{dynamic_sidebar} is not affected by this parameter.
 It is expected that those function will not be used when admin = FALSE.
 }

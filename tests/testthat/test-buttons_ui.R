@@ -1,9 +1,9 @@
 
 
-test_that("create_BTN works", {
+test_that("create_widget works", {
 
   # -- function call
-  x <- create_BTN(module_id)
+  x <- create_widget(module_id)
 
   # -- test class
   expect_type(x, "list")
@@ -14,10 +14,10 @@ test_that("create_BTN works", {
 })
 
 
-test_that("update_BTN works", {
+test_that("update_widget works", {
 
   # -- function call
-  x <- update_BTN(module_id)
+  x <- update_widget(module_id)
 
   # -- test class
   expect_type(x, "list")
@@ -28,10 +28,10 @@ test_that("update_BTN works", {
 })
 
 
-test_that("delete_BTN works", {
+test_that("delete_widget works", {
 
   # -- function call
-  x <- delete_BTN(module_id)
+  x <- delete_widget(module_id)
 
   # -- test class
   expect_type(x, "list")

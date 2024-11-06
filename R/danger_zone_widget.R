@@ -1,6 +1,6 @@
 
 
-#' Danger zone UI
+#' Danger Zone Widget
 #'
 #' @param k_data_model the reference of the data model reactive value
 #' @param ns the namespace function
@@ -9,10 +9,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' danger_zone_ui(k_data_model, ns)
+#' danger_zone_widget(k_data_model, ns)
 #' }
 
-danger_zone_ui <- function(k_data_model, ns) {
+danger_zone_widget <- function(k_data_model, ns) {
 
   # -- return
   tagList(

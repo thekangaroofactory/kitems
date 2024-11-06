@@ -43,7 +43,7 @@ server <- function(input, output, session) {
     renderUI({
 
       # -- build tabPanels content
-      panels <- lapply(items, function(x) tabPanel(x, kitems::admin_ui(x)))
+      panels <- lapply(items, function(x) tabPanel(x, kitems::admin_widget(x)))
 
       # -- build page & return
       do.call(navbarPage, c(panels,
