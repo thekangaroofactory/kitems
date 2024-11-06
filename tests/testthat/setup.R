@@ -107,7 +107,7 @@ values <- list("id" = c(170539948621),
 
 
 # -- simulate inputs from form
-input_values <- list(name = "myname", quantity = 12, total = 34.8)
+item_input_values <- list(name = "myname", quantity = 12, total = 34.8)
 
 
 # -- item id (to delete)

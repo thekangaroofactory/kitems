@@ -11,10 +11,10 @@ input_values_x <- list("id" = c(170539948621),
             "isvalid" = c(FALSE))
 
 
-test_that("input_values works", {
+test_that("item_input_values works", {
 
   # -- function call
-  x <- input_values(input = input_values_x, colClasses = colClasses)
+  x <- item_input_values(input = input_values_x, colClasses = colClasses)
 
   # -- test output class
   expect_type(x, "list")

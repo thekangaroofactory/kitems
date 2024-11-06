@@ -296,11 +296,11 @@ kitems <- function(id, path,
 
       # -- get list of input values & name it
       cat("--  Get list of input values \n")
-      input_values <- input_values(input, dm_colClasses(k_data_model()))
+      item_input_values <- item_input_values(input, dm_colClasses(k_data_model()))
 
       # -- create item based on input list
       cat("--  Create item \n")
-      item <- item_create(values = input_values, data.model = k_data_model())
+      item <- item_create(values = item_input_values, data.model = k_data_model())
 
       # -- Secure against errors raised by item_add #351
       tryCatch({
@@ -376,14 +376,14 @@ kitems <- function(id, path,
 
       # -- get list of input values & name it
       cat("--  Get list of input values \n")
-      input_values <- input_values(input, dm_colClasses(k_data_model()))
+      item_input_values <- item_input_values(input, dm_colClasses(k_data_model()))
 
       # -- update id (to replace selected item)
-      input_values$id <- selected_items()
+      item_input_values$id <- selected_items()
 
       # -- create item based on input list
       cat("--  Create replacement item \n")
-      item <- item_create(values = input_values, data.model = k_data_model())
+      item <- item_create(values = item_input_values, data.model = k_data_model())
 
       # -- Secure against errors raised by item_add #351
       tryCatch({
