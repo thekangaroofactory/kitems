@@ -13,10 +13,6 @@ create_testdata()
 
 test_that("Server works", {
 
-  cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: reorder data model cols")
-  cat("\n-------------------------------------------------------------------------- \n")
-
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,

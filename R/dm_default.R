@@ -16,7 +16,7 @@
 
 dm_default <- function(data.model, name){
 
-  cat("[dm_default] Get default for attribute:", name, "\n")
+  catl("[dm_default] Default value, attribute =", name)
 
   # -- get defaults from data model
   default_val <- data.model[data.model$name == name, ]$default.val
@@ -26,13 +26,13 @@ dm_default <- function(data.model, name){
   # -- P1: default function
   if(!is.na(default_fun)){
 
-    cat("- strategy: applying default function =", default_fun, "\n")
+    catl("- strategy: default function =", default_fun, level = 2)
 
     # -- check arg
     args <- if(!is.na(default_arg))
       eval(parse(text = default_arg))
     else list()
-    cat("- args: default arguments =", default_arg, "\n")
+    catl("- args: default arguments =", default_arg, level = 2)
 
     # -- wrapping next line into a tryCatch #235
     #value <- eval(do.call(ktools::getNsFunction(default_fun), args = list()))
@@ -42,8 +42,8 @@ dm_default <- function(data.model, name){
                       error = function(e) {
 
                         # -- print error
-                        cat("[WARNING] There was an error when trying to apply the default function =", default_fun, "\n")
-                        print(e)
+                        catl("[WARNING] There was an error when trying to apply the default function =", default_fun, debug = 1)
+                        catl(e$message, debug = 1)
 
                         # -- return NA (default)
                         NA})
@@ -53,15 +53,15 @@ dm_default <- function(data.model, name){
   # -- P2: then default value
   else if(!is.na(default_val)){
     value <- default_val
-    cat("- strategy: applying default value \n")}
+    catl("- strategy: default value", level = 2)}
 
   # -- default: NA
   else{
-    cat("- strategy: no default set, output = NA \n")
+    catl("- strategy: no default set, output = NA", level = 2)
     value <- NA}
 
   # -- return
-  cat("- output: value =", value, "\n")
+  catl("- output: value =", value)
   value
 
 }

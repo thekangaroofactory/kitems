@@ -23,15 +23,14 @@
 
 item_form <- function(data.model, items, update = FALSE, item = NULL, shortcut = FALSE, ns){
 
-  cat("[item_form] Building input list \n")
-  cat("  - update =", update, "\n")
+  catl("[item_form] Building input list", ifelse(update, "(update)", ""))
 
   # -- get parameters from data model
   colClasses <- dm_colClasses(data.model)
   skip <- data.model[data.model$skip, ]$name
 
   # -- Filter out attributes in skip param
-  cat("  - Filter out attributes to skip:", skip, "\n")
+  catl("- Filter out attributes to skip:", skip, level = 2)
   colClasses <- colClasses[!names(colClasses) %in% skip]
 
   # -- check
@@ -47,19 +46,19 @@ item_form <- function(data.model, items, update = FALSE, item = NULL, shortcut =
 
   } else {
 
-    cat("[item_form] get attributes defaults: \n")
+    catl("[item_form] get attributes defaults", level = 2)
     values <- lapply(names(colClasses), function(x) dm_default(data.model, x))
     names(values) <- names(colClasses)
 
   }
 
   # -- apply attribute_input
-  cat("[item_form] Build attribute input: \n")
+  catl("[item_form] Build attribute input", level = 2)
   feedback <- lapply(1:length(colClasses), function(x) attribute_input(colClasses[x], values[[x]], ns))
 
   # -- apply attribute_shortcut
   if(shortcut){
-    cat("[item_form] Build attribute shortcuts: \n")
+    catl("[item_form] Build attribute shortcuts", level = 2)
     shortcuts <- lapply(1:length(colClasses), function(x)
       attribute_shortcut(colClass = colClasses[x],
                          suggestions = attribute_suggestion(values = items[, names(colClasses[x])]),

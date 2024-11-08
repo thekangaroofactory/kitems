@@ -30,7 +30,7 @@ item_save <- function(data, file = NULL){
 
   # -- convert to ISO 8601 character format
   if(length(idx) > 0){
-    cat("[item_save] Convert datetime attribute(s) to ISO-8601 =", names(data[idx]), "\n")
+    catl("[item_save] Convert datetime attribute(s) to ISO-8601 =", names(data[idx]))
     data[idx] <- format(data[idx], "%FT%H:%M:%S%z")}
 
 

@@ -36,9 +36,8 @@ item_integrity <- function(items, data.model){
   cols <- names(items_classes[items_classes != colClasses])
 
   # -- check: return input if nothing to do
-  if(length(cols) == 0){
-    cat("-- success, nothing to do \n")
-    return(items)}
+  if(length(cols) == 0)
+    return(items)
 
   # -- helper function
   helper <- function(att_name){
@@ -46,8 +45,8 @@ item_integrity <- function(items, data.model){
     item_class <- items_classes[att_name]
     dm_class <- colClasses[att_name]
 
-    cat("[WARNING] Attribute", att_name, "class does not match with data model: \n")
-    cat("-- items class =", item_class, "vs data.model type =", dm_class, "\n")
+    catl("[WARNING] Attribute", att_name, "class does not match with data model:", debug = 1)
+    catl("-- items class =", item_class, "vs data.model type =", dm_class, debug = 1)
 
     # -- Wrapp attempt to coerce value
     new_values <- tryCatch(
@@ -69,8 +68,8 @@ item_integrity <- function(items, data.model){
       # -- catch error
       error = function(e){
 
-        cat("[ERROR] Coerce", att_name, "to", dm_class, "did not work! \n")
-        print(e)
+        catl("[ERROR] Coerce", att_name, "to", dm_class, "did not work!", debug = 1)
+        catl(e$message, debug = 1)
 
         # -- setting output (see replace)
         output <- NULL},
@@ -78,12 +77,12 @@ item_integrity <- function(items, data.model){
       # -- catch warnings
       warning = function(w){
 
-        print(w)
+        catl(w$message)
         output <- NULL
 
       })
 
-    cat("   >> Check after conversion:", class(new_values), "\n")
+    catl("   >> Check after conversion:", class(new_values))
 
     # -- return
     if(!is.null(new_values))

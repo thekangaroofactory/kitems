@@ -36,7 +36,7 @@ attribute_shortcut <- function(colClass, suggestions, ns){
   if(is.null(names(colClass)) | !colClass %in% OBJECT_CLASS)
     stop("colClass has either no name or value does not fit with supported class (see OBJECT_CLASS)")
 
-  cat("[attribute_shortcut] attribute :", names(colClass), "/ type =", colClass, "/ suggestions =", length(suggestions), "\n")
+  catl("- [attribute_shortcut] name =", names(colClass), "/ type =", colClass, "/ suggestions =", length(suggestions))
 
   # -- init
   shortcuts <- NULL

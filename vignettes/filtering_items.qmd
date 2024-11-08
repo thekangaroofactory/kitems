@@ -4,7 +4,7 @@ format: html
 editor: visual
 
 vignette: >
-  %\VignetteIndexEntry{Vignette's Title}
+  %\VignetteIndexEntry{Filtering Items}
   %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---

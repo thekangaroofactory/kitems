@@ -23,7 +23,7 @@ attribute_input <- function(colClass, value = NULL, ns){
   if(is.null(names(colClass)) | !colClass %in% OBJECT_CLASS)
     stop("colClass has either no name or value does not fit with supported class (see OBJECT_CLASS)")
 
-  cat("[attribute_input] attribute :", names(colClass), "/ type =", colClass, "/ value =", value, "\n")
+  catl("- [attribute_input] name =", names(colClass), "/ type =", colClass, "/ value =", value)
 
   # -- compute inputId & label
   name <- names(colClass)

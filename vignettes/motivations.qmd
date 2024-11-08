@@ -1,10 +1,10 @@
 ---
-title: "motivations"
+title: "Motivations"
 format: html
 editor: visual
 
 vignette: >
-  %\VignetteIndexEntry{Vignette's Title}
+  %\VignetteIndexEntry{Motivations}
   %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---

@@ -15,6 +15,9 @@ module_id <- "data"
 # Setup test environment
 # --------------------------------------------------------------------------
 
+# -- disable traces
+options("k.debug" = NULL)
+
 # -- create testdata folder
 testdata_path <- file.path(system.file("tests", "testthat", package = "kitems"), "testdata")
 
@@ -119,6 +122,14 @@ date_slider_value <- c(as.POSIXct(as.Date("2024-01-15")), as.POSIXct(as.Date("20
 
 
 # --------------------------------------------------------------------------
+# Declare miscellaneous parameters
+# --------------------------------------------------------------------------
+
+# -- enable traces
+# options("k.debug" = 1)
+
+
+# --------------------------------------------------------------------------
 # Declare helper functions
 # --------------------------------------------------------------------------
 
@@ -202,6 +213,7 @@ create_data_to_import <- function(){
 clean_all <- function(testdata_path){
 
   unlink(testdata_path, recursive = TRUE)
+  options("k.debug" = NULL)
 
 }
 

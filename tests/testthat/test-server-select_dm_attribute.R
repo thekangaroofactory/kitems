@@ -10,10 +10,6 @@ create_testdata()
 
 test_that("Select data model attribute works", {
 
-  cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: select data model attribute")
-  cat("\n-------------------------------------------------------------------------- \n")
-
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,

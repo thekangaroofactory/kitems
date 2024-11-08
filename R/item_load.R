@@ -78,7 +78,7 @@ item_load <- function(data.model, file = NULL, path = NULL, create = TRUE){
         # -- because any is used, clean potential missing attribute(s)
         names_ct <- names_ct[names_ct %in% names(items)]
 
-        cat("[item_load] Converting attribute(s) to POSIXct =", names_ct, "\n")
+        catl("[item_load] Converting attribute(s) to POSIXct =", names_ct)
         items[names_ct] <- lapply(items[names_ct], function(x) as.POSIXct(x, format = "%Y-%m-%dT%H:%M:%S%z", tz = ""))}
 
   }

@@ -25,15 +25,15 @@ shinyServer(
     output$menu <- renderMenu(kitems::dynamic_sidebar(names = list("data_1")))
 
 
-    # -- console log
-    cat("----------------------------------------------------------\n")
-    cat("Main application server ready\n")
-    cat("----------------------------------------------------------\n")
+    # -- log
+    catl("----------------------------------------------------------", debug = 1)
+    catl("Main application server ready", debug = 1)
+    catl("----------------------------------------------------------", debug = 1)
 
 
     # -- Observe item list ----
     observeEvent(data_1$items(),
-      cat("Main app server: data_1 items have just been updated. \n"))
+      catl("Main app server: data_1 items have just been updated."))
 
 
   }

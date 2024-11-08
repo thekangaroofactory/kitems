@@ -10,10 +10,6 @@ create_integrity_testdata()
 
 test_that("Data model integrity works", {
 
-  cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: data model integrity")
-  cat("\n-------------------------------------------------------------------------- \n")
-
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,

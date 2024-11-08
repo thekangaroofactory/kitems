@@ -13,10 +13,6 @@ create_testdata()
 
 test_that("Create works", {
 
-  cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: create item")
-  cat("\n-------------------------------------------------------------------------- \n")
-
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,
