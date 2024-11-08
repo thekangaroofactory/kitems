@@ -52,7 +52,7 @@ backup <- function(id, path, type = "items", max = NULL){
   # -- create backup file
   backup_url <- file.path(backup_path, target_url)
   file.copy(source_url, backup_url, overwrite = TRUE)
-  cat("Backup has been created", backup_url, "\n")
+  catl("Backup has been created", backup_url)
 
   # -- check nb backup
   pattern <- ifelse(type == "dm", dm_name(id), items_name(id))
@@ -65,7 +65,7 @@ backup <- function(id, path, type = "items", max = NULL){
 
   # -- check nb of backups
   if(n > max){
-    cat("Maximum backup files reached, cleaning old file(s)")
+    catl("Maximum backup files reached, cleaning old file(s)")
     unlink(head(backups, n = (n - max)))}
 
 }

@@ -36,7 +36,7 @@ dm_integrity <- function(data.model, items, template = NULL){
     # -- nb attribute to add
     n <- length(missing_att)
 
-    cat("[Warning]", n, "missing attribute(s) in data model:", missing_att, "\n")
+    catl("[Warning]", n, "missing attribute(s) in data model:", missing_att, debug = 1)
     integrity <- FALSE
 
     # -- helper: get unique value for class()
@@ -70,7 +70,7 @@ dm_integrity <- function(data.model, items, template = NULL){
         idx <- match(names(missing_types), template$name)
         idx <- idx[!is.na(idx)]
 
-        cat("-- attribute(s) in template:", template$name[idx], "\n")
+        catl("-- attribute(s) in template:", template$name[idx], level = 2)
 
         # -- update parameters
         missing_types[names(missing_types) %in% template$name][] <- template[idx, ]$type
@@ -100,7 +100,7 @@ dm_integrity <- function(data.model, items, template = NULL){
   extra_att <- data.model$name[!data.model$name %in% colnames(items)]
   if(!identical(extra_att, character(0))){
 
-    cat("[Warning] Extra attribute in data model:", extra_att, "\n")
+    catl("[Warning] Extra attribute in data model:", extra_att, debug = 1)
     integrity <- FALSE
 
     # -- Drop extra rows
@@ -115,7 +115,7 @@ dm_integrity <- function(data.model, items, template = NULL){
   # -- migrate
   if(length(missing_col > 0)){
 
-    cat("[Warning] Data model migration is needed \n")
+    catl("[Info] Data model migration is needed", debug = 1)
     integrity <- FALSE
 
     # -- call migration
@@ -123,7 +123,7 @@ dm_integrity <- function(data.model, items, template = NULL){
 
     # -- check column order
     if(!identical(names(data.model), names(DATA_MODEL_COLCLASSES))){
-      cat("[Warning] Reordering data model columns \n")
+      catl("[Info] Reordering data model columns", level = 2)
       data.model <- data.model[names(DATA_MODEL_COLCLASSES)]}}
 
 

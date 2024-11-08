@@ -24,7 +24,7 @@ runExample <- function(example = NA) {
     appDir <- system.file("shiny-examples", package = "kitems")
     apps <- list.dirs(appDir, recursive = F, full.names = F)
 
-    cat("Available examples:\n")
+    print("Available examples:")
     return(apps)}
 
 

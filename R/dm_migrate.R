@@ -15,7 +15,7 @@
 
 dm_migrate <- function(data.model, name){
 
-  cat("[dm_migrate] Data model migration, missing columns =", name, "\n")
+  catl("[dm_migrate] Data model migration, missing columns =", name)
 
   # -- add missing columns
   # fill with defaults

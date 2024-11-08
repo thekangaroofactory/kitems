@@ -19,7 +19,7 @@ item_sort <- function(items, data.model){
   # -- get sort info
   # ordered & ignore sort.rank = NA
   sorting <- data.model[order(data.model$sort.rank, na.last = NA), c("name", "sort.rank", "sort.desc")]
-  cat("-- Sorting items by =", paste(sorting$name, ifelse(sorting$sort.desc, "desc.", ""), collapse = ", "), "\n")
+  catl("[item_sort] -- Sorting items by =", paste(sorting$name, ifelse(sorting$sort.desc, "desc.", ""), collapse = ", "))
 
   # -- order by column(s)
   items[do.call(order, c(items[sorting$name], list(decreasing = sorting$sort.desc))), ]

@@ -159,7 +159,7 @@ mydata <- kitems(id = "mydata", path = "./data")
 
 # -- Observe items
 observeEvent(mydata$items(), {
-  cat("Main application server: items object has just been updated. \n")
+  print("Main application server: items object has just been updated.")
   # -- do something cool here
   })
 ```

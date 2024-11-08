@@ -29,11 +29,7 @@ item_create <- function(values, data.model){
       value <- NA
 
     # -- summary for debug
-    cat("---------------- \n")
-    cat("Helper function: \n")
-    cat("  - key =", key, "\n")
-    cat("  - value =", value, "\n")
-    cat("  - class =", colClass, "\n")
+    catl("[item_create] attribute: key =", key, " / value =", value, "/ class =", colClass)
 
     # -- test: isTruthy(FALSE) >> FALSE
     # so need to skip for logicals // but include NA (is.logical(NA) >> TRUE)
@@ -41,22 +37,16 @@ item_create <- function(values, data.model){
 
       if(!shiny::isTruthy(value)){
 
-        cat("- Input not Truthy / Setting up default value \n")
-        value <- dm_default(data.model, key)
-
-      } else
-        cat("- Input is Truthy, nothing to do \n")
+        catl("- Input not Truthy / Setting up default value", level = 2)
+        value <- dm_default(data.model, key)}
 
     # -- test: match with target class
     # note: value might have several classes (case POSIX*)
     if(!colClass %in% class(value)){
 
-    cat("- Warning! class", class(value), "does not fit with", colClass, "/ Coerce value to target class \n")
+    catl("- Warning! class", class(value), "does not fit with", colClass, "/ Coerce value to target class")
     value <- eval(call(CLASS_FUNCTIONS[[colClass]], value))
-    cat("  >> output: class =", class(value), "/ value =", value, "\n")
-
-    } else
-      cat("- Input has correct class, nothing to do \n")
+    catl("  >> output: class =", class(value), "/ value =", value)}
 
     # -- return
     c(key = value)

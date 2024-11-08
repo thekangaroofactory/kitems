@@ -10,6 +10,7 @@
 #' @param shortcut a logical should attribute shortcuts be computed when building the item form (default = FALSE)
 #'
 #' @import shiny shinydashboard shinyWidgets
+#' @importFrom ktools catl
 #' @export
 #'
 #' @returns the module server returns a list of the references that are accessible outside the module.
@@ -48,7 +49,7 @@ kitems <- function(id, path,
 
     # -- Build log pattern
     MODULE <- paste0("[", id, "]")
-    cat(MODULE, "Starting kitems module server... \n")
+    catl(MODULE, "Starting kitems module server...", debug = 1)
 
     # -- Get namespace
     ns <- session$ns
@@ -82,7 +83,7 @@ kitems <- function(id, path,
 
         # -- update path
         path <- file.path(path, id)
-        cli::cli_alert_info(paste("Updating path =", path))
+        catl(MODULE, "Update path =", path)
 
         # -- check updated path
         if(!dir.exists(path))
@@ -94,15 +95,15 @@ kitems <- function(id, path,
 
         # -- check for dm migration
         if(file.exists(dm_url)){
-          cli::cli_alert_info("Moving data model file to updated path")
+          catl(MODULE, "Moving data model file to updated path", debug = 1)
           res <- file.copy(dm_url, new_dm_url, overwrite = FALSE, copy.date = TRUE)
-          if(res) unlink(dm_url) else cli::cli_alert_warning("Copy failed, check folder")}
+          if(res) unlink(dm_url) else warning("Copy failed, check folder")}
 
         # -- check for items migration
         if(file.exists(items_url)){
-          cli::cli_alert_info("Moving items file to updated path")
+          catl(MODULE, "Moving items file to updated path", debug = 1)
           res <- file.copy(items_url, new_items_url, overwrite = FALSE, copy.date = TRUE)
-          if(res) unlink(items_url) else cli::cli_alert_warning("Copy failed, check folder")}
+          if(res) unlink(items_url) else warning("Copy failed, check folder")}
 
         # -- Update url & cleanup
         dm_url <- new_dm_url
@@ -121,20 +122,20 @@ kitems <- function(id, path,
       # -- Init (non persistent object)
       init_dm <- NULL
 
-      cat(MODULE, "Checking if data model file exists:\n")
-      cat("-- path =", dirname(dm_url), "\n")
-      cat("-- file =", basename(dm_url), "\n")
+      catl(MODULE, "Checking if data model file exists")
+      catl("-- path =", dirname(dm_url), level = 2)
+      catl("-- file =", basename(dm_url), level = 2)
 
       # -- Check url
       if(file.exists(dm_url)){
 
-        cat(MODULE, "Reading data model from file \n")
+        catl(MODULE, "Reading data model from file")
         init_dm <- readRDS(dm_url)
-        cat("-- output dim =", dim(init_dm),"\n")
+        catl(MODULE, "-- output dim =", dim(init_dm))
 
       } else {
 
-        cat(">> No data model file found. \n")
+        catl(MODULE, ">> No data model file found.")
 
         }
 
@@ -164,7 +165,7 @@ kitems <- function(id, path,
       # -- Check for NULL data model + data.frame
       if(!is.null(init_dm) & !is.null(init_items)){
 
-        cat(MODULE, "Checking data model integrity \n")
+        catl(MODULE, "Checking data model integrity")
         result <- dm_integrity(data.model = init_dm, items = init_items, template = TEMPLATE_DATA_MODEL)
 
         # -- Check feedback (otherwise value is TRUE)
@@ -174,16 +175,16 @@ kitems <- function(id, path,
           init_dm <- result
           if(autosave){
             saveRDS(init_dm, file = dm_url)
-            cat(MODULE, "Data model saved \n")}
+            catl(MODULE, "Data model saved")}
 
           # -- Reload data with updated data model
-          cat(MODULE, "Reloading the item data with updated data model \n")
+          catl(MODULE, "Reloading the item data with updated data model")
           init_items <- item_load(data.model = init_dm,
                              file = items_url,
                              path = path,
                              create = create)
 
-        } else cat("-- success, nothing to do \n")}
+        }}
 
 
       # -- Check items integrity -----------------------------------------------
@@ -191,7 +192,7 @@ kitems <- function(id, path,
       # -- Check classes vs data.model
       if(!is.null(init_dm) & !is.null(init_items)){
 
-        cat(MODULE, "Checking items classes integrity \n")
+        catl(MODULE, "Checking items classes integrity")
         init_items <- item_integrity(items = init_items,
                                      data.model = init_dm)}
 
@@ -226,7 +227,7 @@ kitems <- function(id, path,
 
         # -- Write & notify
         saveRDS(k_data_model(), file = dm_url)
-        cat(MODULE, "[EVENT] Data model has been (auto) saved \n")
+        catl(MODULE, "[EVENT] Data model has been (auto) saved")
 
       }, ignoreInit = TRUE)
 
@@ -241,7 +242,7 @@ kitems <- function(id, path,
         item_save(data = k_items(), file = items_url)
 
         # -- Notify
-        cat(MODULE, "[EVENT] Item list has been (auto) saved \n")
+        catl(MODULE, "[EVENT] Item list has been (auto) saved")
 
       }, ignoreInit = TRUE)
 
@@ -289,17 +290,17 @@ kitems <- function(id, path,
     # -- Observe: actionButton
     observeEvent(input$item_create_confirm, {
 
-      cat(MODULE, "[EVENT] Create item \n")
+      catl(MODULE, "[EVENT] Create item")
 
       # -- close modal
       removeModal()
 
       # -- get list of input values & name it
-      cat("--  Get list of input values \n")
+      catl(MODULE, "--  Get list of input values")
       item_input_values <- item_input_values(input, dm_colClasses(k_data_model()))
 
       # -- create item based on input list
-      cat("--  Create item \n")
+      catl(MODULE, "--  Create item")
       item <- item_create(values = item_input_values, data.model = k_data_model())
 
       # -- Secure against errors raised by item_add #351
@@ -347,8 +348,6 @@ kitems <- function(id, path,
     # -- Observe: actionButton
     observeEvent(input$item_update, {
 
-      cat(MODULE, "[EVENT] Update item \n")
-
       # -- Get selected item
       item <- k_items()[k_items()$id == selected_items(), ]
 
@@ -369,20 +368,20 @@ kitems <- function(id, path,
     # -- Observe: actionButton
     observeEvent(input$item_update_confirm, {
 
-      cat(MODULE, "[EVENT] Confirm update item \n")
+      catl(MODULE, "[EVENT] Update item")
 
       # -- close modal
       removeModal()
 
       # -- get list of input values & name it
-      cat("--  Get list of input values \n")
+      catl(MODULE, "--  Get list of input values")
       item_input_values <- item_input_values(input, dm_colClasses(k_data_model()))
 
       # -- update id (to replace selected item)
       item_input_values$id <- selected_items()
 
       # -- create item based on input list
-      cat("--  Create replacement item \n")
+      catl(MODULE, "--  Create replacement item")
       item <- item_create(values = item_input_values, data.model = k_data_model())
 
       # -- Secure against errors raised by item_add #351
@@ -430,8 +429,6 @@ kitems <- function(id, path,
     # -- Observe: actionButton
     observeEvent(input$item_delete, {
 
-      cat(MODULE, "[EVENT] Delete item(s) \n")
-
       # -- Open dialog for confirmation
       showModal(modalDialog(title = "Delete item(s)",
                             "Danger: deleting item(s) can't be undone! Do you confirm?",
@@ -444,14 +441,14 @@ kitems <- function(id, path,
     # -- Observe: actionButton
     observeEvent(input$item_delete_confirm, {
 
-      cat(MODULE, "[EVENT] Confirm delete item(s) \n")
+      catl(MODULE, "[EVENT] Delete item(s)")
 
       # -- close modal
       removeModal()
 
       # -- get selected items (ids)
       ids <- selected_items()
-      cat("-- Item(s) to be deleted =", as.character(ids), "\n")
+      catl(MODULE, "-- Item(s) to be deleted =", as.character(ids))
 
       # -- Secure against errors raised by item_add #351
       tryCatch({
@@ -502,8 +499,8 @@ kitems <- function(id, path,
       # -- check data model
       if(hasDate(k_data_model()) & !is.null(input$date_slider_strategy)){
 
-        cat(MODULE, "Building date sliderInput \n")
-        cat("- strategy =", input$date_slider_strategy, "\n")
+        catl(MODULE, "Building date sliderInput")
+        catl(MODULE, "- strategy =", input$date_slider_strategy)
 
         # -- Get min/max
         if(dim(k_items())[1] > 0){
@@ -547,8 +544,8 @@ kitems <- function(id, path,
     ## -- Observe date_slider input ----
     observeEvent(input$date_slider, {
 
-      cat(MODULE, "Date sliderInput has been updated: \n")
-      cat("-- values =", input$date_slider, "\n")
+      catl(MODULE, "Date sliderInput has been updated")
+      catl(MODULE, "-- values =", input$date_slider, level = 2)
 
       # -- store
       filter_date(input$date_slider)
@@ -565,7 +562,7 @@ kitems <- function(id, path,
       # -- check
       if(!is.null(filter_date())){
 
-        cat(MODULE, "Updating filtered item view \n")
+        catl(MODULE, "Updating filtered item view")
 
         # -- init
         items <- k_items()
@@ -578,7 +575,7 @@ kitems <- function(id, path,
         if(any(!is.na(dm$sort.rank)))
           items <- item_sort(items, dm)
 
-        cat("-- ouput dim =", dim(items), "\n")
+        catl(MODULE, "-- ouput dim =", dim(items), level = 2)
 
         # -- Return
         items
@@ -605,11 +602,11 @@ kitems <- function(id, path,
 
       else {
 
-        cat(MODULE, "Selected rows (filtered view) =", input$filtered_view_rows_selected, "\n")
+        catl(MODULE, "Selected rows (filtered view) =", input$filtered_view_rows_selected)
 
         # -- Get item ids from the default view
         ids <- filtered_items()[input$filtered_view_rows_selected, ]$id
-        cat("-- ids =", as.character(ids), "\n")
+        catl(MODULE, "-- ids =", as.character(ids), level = 2)
 
       }
 
@@ -627,7 +624,7 @@ kitems <- function(id, path,
 
       # -- Get name of the clicked column
       col_clicked <- cols[input$filtered_view_cell_clicked$col + 1]
-      cat(MODULE, "Clicked column (filtered view) =", col_clicked, "\n")
+      catl(MODULE, "Clicked column (filtered view) =", col_clicked, level = 2)
 
       # -- Store
       clicked_column(col_clicked)

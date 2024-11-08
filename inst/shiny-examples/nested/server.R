@@ -39,14 +39,14 @@ shinyServer(
 
 
     # -- log
-    cat("----------------------------------------------------------\n")
-    cat("Main application server ready\n")
-    cat("----------------------------------------------------------\n")
+    catl("----------------------------------------------------------", debug = 1)
+    catl("Main application server ready", debug = 1)
+    catl("----------------------------------------------------------", debug = 1)
 
 
     # -- Observe item lists ----
     observeEvent(data_3$items(),
-      cat("Main application server: data_3 items have just been updated \n"))
+      catl("Main application server: data_3 items have just been updated"))
 
 
   }

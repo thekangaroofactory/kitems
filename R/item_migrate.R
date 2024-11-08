@@ -37,14 +37,14 @@ item_migrate <- function(items, name, type, fill = NA){
 
     # -- check fill length
     if(length(fill) != nrow(items) & length(fill) != 1){
-      cat("-- Warning! fill length does not match with nrow(items), setting fill = NA \n")
+      catl("-- Warning! fill length does not match with nrow(items), setting fill = NA", debug = 1)
       fill <- NA}
 
     # -- check & coerce fill class
     if(! type %in% class(fill)){
 
       fill <- eval(call(CLASS_FUNCTIONS[[type]], fill))
-      cat("-- Warning! fill type does not match with expected one, coerce value(s):", class(fill), fill, "\n")}
+      catl("-- Warning! fill type does not match with expected one, coerce value(s):", class(fill), fill, debug = 1)}
 
     # -- Add col
     items[name] <- fill
