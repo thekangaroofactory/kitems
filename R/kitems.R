@@ -123,19 +123,19 @@ kitems <- function(id, path,
       init_dm <- NULL
 
       catl(MODULE, "Checking if data model file exists")
-      catl("-- path =", dirname(dm_url), level = 2)
-      catl("-- file =", basename(dm_url), level = 2)
+      catl("- path =", dirname(dm_url), level = 2)
+      catl("- file =", basename(dm_url), level = 2)
 
       # -- Check url
       if(file.exists(dm_url)){
 
         catl(MODULE, "Reading data model from file")
         init_dm <- readRDS(dm_url)
-        catl(MODULE, "-- output dim =", dim(init_dm))
+        catl("- output dim =", dim(init_dm))
 
       } else {
 
-        catl(MODULE, ">> No data model file found.")
+        catl(">> No data model file found.")
 
         }
 
@@ -271,7 +271,9 @@ kitems <- function(id, path,
 
 
     # -- Observe: actionButton
-    observeEvent(input$item_create,
+    observeEvent(input$item_create, {
+
+                 catl(MODULE, "[BTN] Create item")
 
                  showModal(modalDialog(
                    item_form(data.model = k_data_model(),
@@ -283,24 +285,25 @@ kitems <- function(id, path,
                    title = "Create",
                    footer = tagList(
                      modalButton("Cancel"),
-                     actionButton(ns("item_create_confirm"), "Create")))))
+                     actionButton(ns("item_create_confirm"), "Create"))))
 
+    })
 
 
     # -- Observe: actionButton
     observeEvent(input$item_create_confirm, {
 
-      catl(MODULE, "[EVENT] Create item")
+      catl(MODULE, "[BTN] Confirm create item")
 
       # -- close modal
       removeModal()
 
       # -- get list of input values & name it
-      catl(MODULE, "--  Get list of input values")
+      catl("- Get list of input values")
       item_input_values <- item_input_values(input, dm_colClasses(k_data_model()))
 
       # -- create item based on input list
-      catl(MODULE, "--  Create item")
+      catl("- Create item")
       item <- item_create(values = item_input_values, data.model = k_data_model())
 
       # -- Secure against errors raised by item_add #351
@@ -348,6 +351,8 @@ kitems <- function(id, path,
     # -- Observe: actionButton
     observeEvent(input$item_update, {
 
+      catl(MODULE, "[BTN] Update item")
+
       # -- Get selected item
       item <- k_items()[k_items()$id == selected_items(), ]
 
@@ -368,20 +373,20 @@ kitems <- function(id, path,
     # -- Observe: actionButton
     observeEvent(input$item_update_confirm, {
 
-      catl(MODULE, "[EVENT] Update item")
+      catl(MODULE, "[BTN] Confirm update item")
 
       # -- close modal
       removeModal()
 
       # -- get list of input values & name it
-      catl(MODULE, "--  Get list of input values")
+      catl("- Get list of input values")
       item_input_values <- item_input_values(input, dm_colClasses(k_data_model()))
 
       # -- update id (to replace selected item)
       item_input_values$id <- selected_items()
 
       # -- create item based on input list
-      catl(MODULE, "--  Create replacement item")
+      catl("- Create replacement item")
       item <- item_create(values = item_input_values, data.model = k_data_model())
 
       # -- Secure against errors raised by item_add #351
@@ -429,6 +434,8 @@ kitems <- function(id, path,
     # -- Observe: actionButton
     observeEvent(input$item_delete, {
 
+      catl(MODULE, "[BTN] Delete item")
+
       # -- Open dialog for confirmation
       showModal(modalDialog(title = "Delete item(s)",
                             "Danger: deleting item(s) can't be undone! Do you confirm?",
@@ -441,14 +448,14 @@ kitems <- function(id, path,
     # -- Observe: actionButton
     observeEvent(input$item_delete_confirm, {
 
-      catl(MODULE, "[EVENT] Delete item(s)")
+      catl(MODULE, "[BTN] Confirm delete item(s)")
 
       # -- close modal
       removeModal()
 
       # -- get selected items (ids)
       ids <- selected_items()
-      catl(MODULE, "-- Item(s) to be deleted =", as.character(ids))
+      catl("- Item(s) to be deleted =", as.character(ids))
 
       # -- Secure against errors raised by item_add #351
       tryCatch({
@@ -500,7 +507,7 @@ kitems <- function(id, path,
       if(hasDate(k_data_model()) & !is.null(input$date_slider_strategy)){
 
         catl(MODULE, "Building date sliderInput")
-        catl(MODULE, "- strategy =", input$date_slider_strategy)
+        catl("- strategy =", input$date_slider_strategy)
 
         # -- Get min/max
         if(dim(k_items())[1] > 0){
@@ -545,7 +552,7 @@ kitems <- function(id, path,
     observeEvent(input$date_slider, {
 
       catl(MODULE, "Date sliderInput has been updated")
-      catl(MODULE, "-- values =", input$date_slider, level = 2)
+      catl("- values =", input$date_slider, level = 2)
 
       # -- store
       filter_date(input$date_slider)
@@ -575,7 +582,7 @@ kitems <- function(id, path,
         if(any(!is.na(dm$sort.rank)))
           items <- item_sort(items, dm)
 
-        catl(MODULE, "-- ouput dim =", dim(items), level = 2)
+        catl("- ouput dim =", dim(items), level = 2)
 
         # -- Return
         items
@@ -606,7 +613,7 @@ kitems <- function(id, path,
 
         # -- Get item ids from the default view
         ids <- filtered_items()[input$filtered_view_rows_selected, ]$id
-        catl(MODULE, "-- ids =", as.character(ids), level = 2)
+        catl("- ids =", as.character(ids), level = 2)
 
       }
 

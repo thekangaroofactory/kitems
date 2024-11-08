@@ -16,7 +16,7 @@
 
 dm_default <- function(data.model, name){
 
-  catl("[dm_default] Get default for attribute:", name)
+  catl("[dm_default] Default value, attribute =", name)
 
   # -- get defaults from data model
   default_val <- data.model[data.model$name == name, ]$default.val
@@ -26,7 +26,7 @@ dm_default <- function(data.model, name){
   # -- P1: default function
   if(!is.na(default_fun)){
 
-    catl("- strategy: applying default function =", default_fun, level = 2)
+    catl("- strategy: default function =", default_fun, level = 2)
 
     # -- check arg
     args <- if(!is.na(default_arg))
@@ -53,7 +53,7 @@ dm_default <- function(data.model, name){
   # -- P2: then default value
   else if(!is.na(default_val)){
     value <- default_val
-    catl("- strategy: applying default value", level = 2)}
+    catl("- strategy: default value", level = 2)}
 
   # -- default: NA
   else{

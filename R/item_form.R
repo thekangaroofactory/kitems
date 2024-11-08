@@ -30,7 +30,7 @@ item_form <- function(data.model, items, update = FALSE, item = NULL, shortcut =
   skip <- data.model[data.model$skip, ]$name
 
   # -- Filter out attributes in skip param
-  catl("  - Filter out attributes to skip:", skip, level = 2)
+  catl("- Filter out attributes to skip:", skip, level = 2)
   colClasses <- colClasses[!names(colClasses) %in% skip]
 
   # -- check
