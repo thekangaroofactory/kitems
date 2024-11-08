@@ -13,10 +13,6 @@ create_testdata()
 
 test_that("Date sliderInput works", {
 
-  cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: date sliderInput")
-  cat("\n-------------------------------------------------------------------------- \n")
-
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,

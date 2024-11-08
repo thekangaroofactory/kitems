@@ -7,9 +7,8 @@ create_testdata()
 # -- Scenario:
 test_that("Shortcut works", {
 
-  cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: Shortcut")
-  cat("\n-------------------------------------------------------------------------- \n")
+  # -- enable trace
+  options("k.debug" = 1)
 
   # -- declare arguments
   params <- list(id = module_id,

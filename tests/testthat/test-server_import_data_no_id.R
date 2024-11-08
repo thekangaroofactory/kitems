@@ -9,10 +9,6 @@ create_noid_data_to_import()
 
 test_that("Import data without id works", {
 
-  cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: Import data without id works")
-  cat("\n-------------------------------------------------------------------------- \n")
-
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,

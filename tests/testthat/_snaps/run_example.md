@@ -3,6 +3,6 @@
     Code
       runExample()
     Output
-      Available examples:
+      [1] "Available examples:"
       [1] "demo"    "nested"  "scratch"
 

@@ -14,10 +14,6 @@ create_data_to_import()
 
 test_that("Import data works", {
 
-  cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: import data")
-  cat("\n-------------------------------------------------------------------------- \n")
-
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,

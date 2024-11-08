@@ -1,13 +1,12 @@
 
+# -- setup
+dir.create(testdata_path)
+
 # --------------------------------------------------------------------------
 # Scenario: launch server without data model
 # --------------------------------------------------------------------------
 
 test_that("launch server without data model", {
-
-  cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: launch server without data model")
-  cat("\n-------------------------------------------------------------------------- \n")
 
   # -- declare arguments
   params <- list(id = module_id,
