@@ -50,7 +50,7 @@ attribute_delete <- function(k_data_model, k_items, name, MODULE = NULL, autosav
 
       # -- notify
       if(notify)
-        showNotificatlion(paste(MODULE, "Empty data model deleted."), type = "message")}
+        shiny::showNotificatlion(paste(MODULE, "Empty data model deleted."), type = "message")}
 
   } else {
     k_items(items)
@@ -58,6 +58,6 @@ attribute_delete <- function(k_data_model, k_items, name, MODULE = NULL, autosav
 
     # -- notify
     if(notify)
-      showNotificatlion(paste(MODULE, "Attribute deleted."), type = "message")}
+      shiny::showNotificatlion(paste(MODULE, "Attribute deleted."), type = "message")}
 
 }

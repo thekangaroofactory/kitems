@@ -19,7 +19,7 @@ module_id <- "data"
 options("k.debug" = NULL)
 
 # -- create testdata folder
-testdata_path <- file.path(system.file("tests", "testthat", package = "kitems"), "testdata/data")
+testdata_path <- file.path(system.file("tests", "testthat", package = "kitems"), "testdata")
 
 # -- build urls
 dm_url <- file.path(testdata_path, paste0(dm_name(module_id), ".rds"))

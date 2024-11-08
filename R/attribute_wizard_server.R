@@ -376,7 +376,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
 
             # -- try: coerce input to expected class
             catl("[step.2] Eval default value", level = 2)
-            value <- trycatlch(
+            value <- tryCatch(
               eval(call(CLASS_FUNCTIONS[[type]], input$w_default_val)),
               error = function(e) e,
               warning = function(w) w)
@@ -446,7 +446,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
 
               # -- eval input
               catl("[step.2] Eval function arguments", level = 2)
-              args <- trycatlch(eval(parse(text = input$w_default_arg)),
+              args <- tryCatch(eval(parse(text = input$w_default_arg)),
                                error = function(e) e,
                                warning = function(w) w)
 
@@ -468,7 +468,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
 
             # -- try: call given function
             catl("[step.2] Eval function", level = 2)
-            value <-  trycatlch(
+            value <-  tryCatch(
               eval(call(CLASS_FUNCTIONS[[type]], eval(do.call(ktools::getNsFunction(input$w_default_fun), args = args)))),
               error = function(e) e,
               warning = function(w) w)
