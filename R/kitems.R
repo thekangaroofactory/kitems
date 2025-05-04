@@ -564,32 +564,62 @@ kitems <- function(id, path,
     # -- Filtered items --------------------------------------------------------
 
     ## -- Declare filtered_items ----
-    filtered_items <- reactive(
+    observe(
 
-      # -- check
-      if(!is.null(filter_date())){
+      # -- update the reactiveVal
+      filtered_items(
 
-        catl(MODULE, "Updating filtered item view")
+        # -- check
+        if(!is.null(filter_date())){
 
-        # -- init
-        items <- k_items()
-        dm <- k_data_model()
+          catl(MODULE, "Updating filtered item view")
 
-        # -- Apply date filter
-        items <- items[items$date >= filter_date()[1] & items$date <= filter_date()[2], ]
+          # -- init
+          items <- k_items()
+          dm <- k_data_model()
 
-        # -- Apply ordering
-        if(any(!is.na(dm$sort.rank)))
-          items <- item_sort(items, dm)
+          # -- Apply date filter
+          items <- items[items$date >= filter_date()[1] & items$date <= filter_date()[2], ]
 
-        catl("- ouput dim =", dim(items), level = 2)
+          # -- Apply ordering
+          if(any(!is.na(dm$sort.rank)))
+            items <- item_sort(items, dm)
 
-        # -- Return
-        items
+          catl("- ouput dim =", dim(items), level = 2)
 
-      } else k_items()
+          # -- Return
+          items
 
-    )
+        } else k_items()))
+
+
+    ## -- Declare filtered_items ----
+    # filtered_items <- reactive(
+    #
+    #   # -- check
+    #   if(!is.null(filter_date())){
+    #
+    #     catl(MODULE, "Updating filtered item view")
+    #
+    #     # -- init
+    #     items <- k_items()
+    #     dm <- k_data_model()
+    #
+    #     # -- Apply date filter
+    #     items <- items[items$date >= filter_date()[1] & items$date <= filter_date()[2], ]
+    #
+    #     # -- Apply ordering
+    #     if(any(!is.na(dm$sort.rank)))
+    #       items <- item_sort(items, dm)
+    #
+    #     catl("- ouput dim =", dim(items), level = 2)
+    #
+    #     # -- Return
+    #     items
+    #
+    #   } else k_items()
+    #
+    # )
 
 
     ## -- Declare view ----
