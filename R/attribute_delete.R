@@ -5,11 +5,11 @@
 #' @param k_data_model the reference of the data model reactive value
 #' @param k_items the reference of the items reactive value
 #' @param name the name of the attribute to delete
-#' @param MODULE an optional string to be displayed in the notificatlion
+#' @param MODULE an optional string to be displayed in the notification
 #' @param autosave a logical if autosave is ON
 #' @param dm_url the url of the data model file
 #' @param items_url the url of the item file
-#' @param notify a logical if shiny notificatlion should be fired
+#' @param notify a logical if shiny notification should be fired
 #'
 #' @examples
 #' \dontrun{
@@ -50,7 +50,7 @@ attribute_delete <- function(k_data_model, k_items, name, MODULE = NULL, autosav
 
       # -- notify
       if(notify)
-        shiny::showNotificatlion(paste(MODULE, "Empty data model deleted."), type = "message")}
+        shiny::showNotification(paste(MODULE, "Empty data model deleted."), type = "message")}
 
   } else {
     k_items(items)
@@ -58,6 +58,6 @@ attribute_delete <- function(k_data_model, k_items, name, MODULE = NULL, autosav
 
     # -- notify
     if(notify)
-      shiny::showNotificatlion(paste(MODULE, "Attribute deleted."), type = "message")}
+      shiny::showNotification(paste(MODULE, "Attribute deleted."), type = "message")}
 
 }

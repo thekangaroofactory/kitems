@@ -22,7 +22,7 @@ attribute_delete(
 
 \item{name}{the name of the attribute to delete}
 
-\item{MODULE}{an optional string to be displayed in the notificatlion}
+\item{MODULE}{an optional string to be displayed in the notification}
 
 \item{autosave}{a logical if autosave is ON}
 
@@ -30,7 +30,7 @@ attribute_delete(
 
 \item{items_url}{the url of the item file}
 
-\item{notify}{a logical if shiny notificatlion should be fired}
+\item{notify}{a logical if shiny notification should be fired}
 }
 \description{
 Delete attribute
