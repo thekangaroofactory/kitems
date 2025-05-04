@@ -9,8 +9,7 @@
 <url><loc>https://thekangaroofactory.github.io/kitems/index.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/news/index.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/admin.html</loc></url>
-<url><loc>https://thekangaroofactory.github.io/kitems/reference/admin_server.html</loc></url>
-<url><loc>https://thekangaroofactory.github.io/kitems/reference/admin_ui.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/admin_widget.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/attribute_create.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/attribute_delete.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/attribute_input.html</loc></url>
@@ -19,11 +18,11 @@
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/attribute_suggestion.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/attribute_update.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/backup.html</loc></url>
-<url><loc>https://thekangaroofactory.github.io/kitems/reference/create_BTN.html</loc></url>
-<url><loc>https://thekangaroofactory.github.io/kitems/reference/danger_zone_ui.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/create_widget.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/danger_zone_widget.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/data_model.html</loc></url>
-<url><loc>https://thekangaroofactory.github.io/kitems/reference/date_slider_INPUT.html</loc></url>
-<url><loc>https://thekangaroofactory.github.io/kitems/reference/delete_BTN.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/date_slider_widget.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/delete_widget.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/dm_colClasses.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/dm_default.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/dm_delete.html</loc></url>
@@ -34,15 +33,15 @@
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/dm_migrate.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/dm_name.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/dynamic_sidebar.html</loc></url>
-<url><loc>https://thekangaroofactory.github.io/kitems/reference/filtered_view_ui.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/filtered_view_widget.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/hasDate.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/index.html</loc></url>
-<url><loc>https://thekangaroofactory.github.io/kitems/reference/input_values.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/item_add.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/item_chk_str.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/item_create.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/item_delete.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/item_form.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/item_input_values.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/item_integrity.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/item_load.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/item_mask.html</loc></url>
@@ -53,8 +52,9 @@
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/item_update.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/items_name.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/kitems.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/kitems_admin.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/restore.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/runExample.html</loc></url>
-<url><loc>https://thekangaroofactory.github.io/kitems/reference/update_BTN.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/update_widget.html</loc></url>
 </urlset>
 

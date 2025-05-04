@@ -1,11 +1,11 @@
 pandoc: 3.1.11
-pkgdown: 2.1.1
+pkgdown: 2.1.2
 pkgdown_sha: ~
 articles:
   filtering_items: filtering_items.html
   module_server_return_value: module_server_return_value.html
   motivations: motivations.html
-last_built: 2024-11-05T17:52Z
+last_built: 2025-05-04T15:00Z
 urls:
   reference: https://thekangaroofactory.github.io/kitems/reference
   article: https://thekangaroofactory.github.io/kitems/articles
