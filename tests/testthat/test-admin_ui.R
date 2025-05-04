@@ -1,9 +1,9 @@
 
 
-test_that("admin_ui works", {
+test_that("admin_widget works", {
 
   # -- function call
-  x <- admin_ui(module_id)
+  x <- admin_widget(module_id)
 
   # -- test class
   expect_type(x, "list")

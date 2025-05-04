@@ -27,30 +27,30 @@
 attribute_delete <- function(k_data_model, k_items, name, MODULE = NULL, autosave = FALSE, dm_url = NULL, items_url = NULL, notify = FALSE){
 
   # -- drop column!
-  cat(MODULE, "Drop attribute from all items \n")
+  catl(MODULE, "Drop attribute from all items")
   items <- k_items()
   items[name] <- NULL
 
   # -- update data model
-  cat(MODULE, "Drop attribute from data model \n")
+  catl(MODULE, "Drop attribute from data model")
   dm <- k_data_model()
   dm <- dm[dm$name != name, ]
 
 
   # -- check for empty data model & store
   if(nrow(dm) == 0){
-    cat(MODULE, "Warning! Empty Data model, cleaning data model & items \n")
+    catl(MODULE, "Empty Data model, cleaning data model & items")
     k_items(NULL)
     k_data_model(NULL)
 
     if(autosave){
-      cat(MODULE, "Deleting data model & item files \n")
+      catl(MODULE, "Deleting data model & item files")
       unlink(dm_url)
       unlink(items_url)
 
       # -- notify
       if(notify)
-        showNotification(paste(MODULE, "Empty data model deleted."), type = "message")}
+        shiny::showNotification(paste(MODULE, "Empty data model deleted."), type = "message")}
 
   } else {
     k_items(items)
@@ -58,6 +58,6 @@ attribute_delete <- function(k_data_model, k_items, name, MODULE = NULL, autosav
 
     # -- notify
     if(notify)
-      showNotification(paste(MODULE, "Attribute deleted."), type = "message")}
+      shiny::showNotification(paste(MODULE, "Attribute deleted."), type = "message")}
 
 }

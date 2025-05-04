@@ -29,11 +29,11 @@
 
 
 attribute_create <- function(data.model, name, type,
-                          default.val = NULL, default.fun = NULL, default.arg = NULL,
-                          filter = NULL, skip = NULL,
-                          sort.rank = NULL, sort.desc = NULL){
+                             default.val = NULL, default.fun = NULL, default.arg = NULL,
+                             filter = NULL, skip = NULL,
+                             sort.rank = NULL, sort.desc = NULL){
 
-  cat("[attribute_create] Add attribute to data model =", name, "\n")
+  catl("Add attribute to data model =", name)
 
   # -- Init attribute (using data_model to fit with structure)
   new_attribute <- data_model(colClasses = stats::setNames(type, name),

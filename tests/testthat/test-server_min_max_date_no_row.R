@@ -13,10 +13,6 @@ create_testdata()
 
 test_that("Min/max date works", {
 
-  cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: min/max date when items has no row")
-  cat("\n-------------------------------------------------------------------------- \n")
-
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,

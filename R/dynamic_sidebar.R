@@ -1,6 +1,6 @@
 
 
-#' Generate dynamic menuItem
+#' Generate Dynamic menuItem
 #'
 #' @param names a list of the data model names
 #'

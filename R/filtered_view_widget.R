@@ -1,6 +1,6 @@
 
 
-#' Filtered view
+#' Filtered View Widget
 #'
 #' @param id the id of the module server instance
 #'
@@ -8,9 +8,9 @@
 #' @export
 #'
 #' @examples
-#' filtered_view_ui(id = "mydata")
+#' filtered_view_widget(id = "mydata")
 
-filtered_view_ui <- function(id){
+filtered_view_widget <- function(id){
 
   # -- namespace
   ns <- NS(id)

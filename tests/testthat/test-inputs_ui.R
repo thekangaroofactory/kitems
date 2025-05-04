@@ -1,9 +1,9 @@
 
 
-test_that("date_slider_INPUT works", {
+test_that("date_slider_widget works", {
 
   # -- function call
-  x <- date_slider_INPUT(module_id)
+  x <- date_slider_widget(module_id)
 
   # -- test class
   expect_type(x, "list")

@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' admin_server(
+#' kitems_admin(
 #' k_data_model = mydata$data_model,
 #' k_items = mydata$items,
 #' path = path,
@@ -25,7 +25,7 @@
 
 # -- Shiny module server logic -------------------------------------------------
 
-admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosave) {
+kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosave) {
 
   # -- force set id to 'admin'
   id <- "admin"
@@ -39,7 +39,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
     # -- Build log pattern
     MODULE <- paste0("[", substr(ns(""), 1, nchar(ns("")) - 1), "]")
-    cat(MODULE, "Starting kitems admin module server... \n")
+    catl(MODULE, "Starting kitems admin module server...", debug = 1)
 
     # -- Declare internal reactives
     import_callback <- reactiveVal(NULL)
@@ -265,7 +265,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       req(length(input$dm_sort) == dim(k_items())[2],
           !identical(input$dm_sort, k_data_model()$name))
 
-      cat("[BTN] Reorder column \n")
+      catl("[BTN] Reorder column")
 
       # -- Reorder items & store
       k_items(k_items()[input$dm_sort])
@@ -285,7 +285,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       dm <- k_data_model()
       req(!setequal(input$dm_filter,dm[dm$filter, ]$name))
 
-      cat(MODULE, "Set filtered attributes:", input$dm_filter, "\n")
+      catl(MODULE, "Set filtered attributes:", input$dm_filter)
 
       # -- Check NULL data model
       if(!is.null(dm)){
@@ -302,7 +302,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     ## -- Observe: click (start import) ----
     observeEvent(input$import, {
 
-      cat(MODULE, "Import data \n")
+      catl(MODULE, "Import data \n")
 
       # -- call module server
       import_server(id = "import", k_data_model, k_items, callback = import_callback)})
@@ -319,7 +319,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
       # -- reset callback
       import_callback(NULL)
-      cat(MODULE, "Import module cleanup done \n")})
+      catl(MODULE, "Import module cleanup done")})
 
 
     # __________________________________________________________________________
@@ -329,7 +329,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     # -- Observe: actionButton
     observeEvent(input$dm_create, {
 
-      cat("[BTN] Create data \n")
+      catl("[BTN] Create data")
 
       # -- init parameters (id)
       # Implement template #220
@@ -341,7 +341,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       skip <- if(template$skip) template$name else NULL
 
       # -- init data model & store
-      cat(MODULE, "-- Building data model \n")
+      catl(MODULE, "-- Building data model")
       dm <- data_model(colClasses = colClasses,
                        default.val = default_val,
                        default.fun = default_fun,
@@ -353,7 +353,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
       # -- init items
       # create = autosave : so that file won't be created if autosave is FALSE #271
-      cat(MODULE, "-- Init data \n")
+      catl(MODULE, "-- Init data")
       items <- kfiles::read_data(file = items_url,
                                  path = path,
                                  colClasses = colClasses,
@@ -394,7 +394,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     # -- observer callback
     observeEvent(attribute_callback(), {
 
-      cat(MODULE, "Cleanup module observers \n")
+      catl(MODULE, "Cleanup module observers", level = 2)
       session$userData$w_obs1$destroy()
       session$userData$w_obs2$destroy()
       session$userData$w_obs3$destroy()
@@ -435,7 +435,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
       # -- check toggle btn
       if(input$dz_toggle_btn)
-        danger_zone_ui(k_data_model, ns)) %>%
+        danger_zone_widget(k_data_model, ns)) %>%
 
       # -- event
       bindEvent(input$dz_toggle_btn, ignoreInit = TRUE)
@@ -463,7 +463,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
       # -- check & close modal
       req(input$dz_delete_att_name)
-      cat("[BTN] Delete attribute:", input$dz_delete_att_name, "\n")
+      catl("[BTN] Delete attribute:", input$dz_delete_att_name)
       removeModal()
 
       # -- perform delete
@@ -482,7 +482,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     ### -- Observe actionButton ----
     observeEvent(input$dz_delete_dm, {
 
-      cat(MODULE, "Delete data model preview \n")
+      catl(MODULE, "Delete data model preview \n")
 
       # -- Open dialog for confirmation
       showModal(
@@ -500,7 +500,7 @@ admin_server <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       # -- check string & close modal
       req(input$dz_delete_dm_string == paste0("delete_", unlist(strsplit(ns(id), split = "-"))[1]))
       removeModal()
-      cat(MODULE, "Delete data model confirmed! \n")
+      catl(MODULE, "Delete data model confirmed!")
 
       # -- delete data model
       dm_delete(k_data_model, k_items, dm_url, items_url,

@@ -1,8 +1,6 @@
 
 
-# -- BTN: create item
-
-#' Create item button
+#' Create Item Button
 #'
 #' @param id the server module id
 #'
@@ -10,9 +8,9 @@
 #' @export
 #'
 #' @examples
-#' create_BTN(id = "mydata")
+#' create_widget(id = "mydata")
 
-create_BTN <- function(id){
+create_widget <- function(id){
 
   # namespace
   ns <- NS(id)
@@ -23,9 +21,7 @@ create_BTN <- function(id){
 }
 
 
-# -- BTN: update item
-
-#' Update item button
+#' Update Item Button
 #'
 #' @param id the server module id
 #'
@@ -33,9 +29,9 @@ create_BTN <- function(id){
 #' @export
 #'
 #' @examples
-#' update_BTN(id = "mydata")
+#' update_widget(id = "mydata")
 
-update_BTN <- function(id){
+update_widget <- function(id){
 
   # namespace
   ns <- NS(id)
@@ -46,9 +42,7 @@ update_BTN <- function(id){
 }
 
 
-# -- BTN: delete item
-
-#' Delete item button
+#' Delete Item Button
 #'
 #' @param id the server module id
 #'
@@ -56,9 +50,9 @@ update_BTN <- function(id){
 #' @export
 #'
 #' @examples
-#' delete_BTN(id = "mydata")
+#' delete_widget(id = "mydata")
 
-delete_BTN <- function(id){
+delete_widget <- function(id){
 
   # namespace
   ns <- NS(id)

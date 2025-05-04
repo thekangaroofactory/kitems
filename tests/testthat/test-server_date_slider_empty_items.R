@@ -13,10 +13,6 @@ create_empty_items()
 
 test_that("Date sliderInput empty items works", {
 
-  cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: date sliderInput empty items")
-  cat("\n-------------------------------------------------------------------------- \n")
-
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,

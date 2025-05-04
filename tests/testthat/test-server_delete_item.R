@@ -13,10 +13,6 @@ create_testdata()
 
 test_that("Delete works", {
 
-  cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: delete item")
-  cat("\n-------------------------------------------------------------------------- \n")
-
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,

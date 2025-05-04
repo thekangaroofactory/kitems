@@ -25,7 +25,7 @@ attribute_input_update <- function(data.model, shortcut_trigger, MODULE = NULL){
   input_id <- name
   value <- key_value[2]
   type <- data.model()[data.model()$name == name, ]$type
-  cat(MODULE, "Shortcut onclick, attribute =", name, "/ type =", type, "/ value =", value, "\n")
+  catl(MODULE, "Shortcut onclick, attribute =", name, "/ type =", type, "/ value =", value)
 
   # -- character
   if(type == "character")

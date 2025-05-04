@@ -48,11 +48,11 @@ restore <- function(id, path, type = "items"){
     rename <- paste0(base, suffix, extension)
     rename <- file.path(path, rename)
     file.rename(source_url, rename)
-    cat("Source file already exists, it has been renamed =", rename, "\n")}
+    catl("Source file already exists, it has been renamed =", rename, debug = 1)}
 
   # -- create backup file
   # setting overwrite by security
   res <- file.copy(backup_url, source_url)
-  cat("File has been restored", source_url, "\n")
+  catl("File has been restored", source_url)
 
 }

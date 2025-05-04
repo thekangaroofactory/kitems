@@ -64,7 +64,7 @@ body <- dashboardBody(
                      wellPanel(
                        fluidRow(column(width = 1),
                                 column(width = 11,
-                                       kitems::date_slider_INPUT("data_2")))),
+                                       kitems::date_slider_widget("data_2")))),
 
                      p("Strategies:"),
                      tags$ul(
@@ -81,9 +81,9 @@ body <- dashboardBody(
                        tags$li("create will be NULL if the data model is empty"),
                        tags$li("update & delete will be NULL if no row is selected in the filtered table")),
 
-                     kitems::create_BTN("data_2"),
-                     kitems::update_BTN("data_2"),
-                     kitems::delete_BTN("data_2"),
+                     kitems::create_widget("data_2"),
+                     kitems::update_widget("data_2"),
+                     kitems::delete_widget("data_2"),
                      p(""),
 
 
@@ -94,7 +94,7 @@ body <- dashboardBody(
 
                      fluidRow(column(width = 12,
                                      wellPanel(
-                                       kitems::filtered_view_ui("data_2"))))))),
+                                       kitems::filtered_view_widget("data_2"))))))),
 
     # -- Content tab
     tabItem(tabName = "data_2",
@@ -103,7 +103,7 @@ body <- dashboardBody(
             fluidRow(
               column(width = 12,
 
-                     kitems::admin_ui("data_2"))))
+                     kitems::admin_widget("data_2"))))
 
 
   ) # end tabItems

@@ -15,6 +15,9 @@ module_id <- "data"
 # Setup test environment
 # --------------------------------------------------------------------------
 
+# -- disable traces
+options("k.debug" = NULL)
+
 # -- create testdata folder
 testdata_path <- file.path(system.file("tests", "testthat", package = "kitems"), "testdata")
 
@@ -107,7 +110,7 @@ values <- list("id" = c(170539948621),
 
 
 # -- simulate inputs from form
-input_values <- list(name = "myname", quantity = 12, total = 34.8)
+item_input_values <- list(name = "myname", quantity = 12, total = 34.8)
 
 
 # -- item id (to delete)
@@ -116,6 +119,14 @@ item_id <- items$id[1]
 
 # -- date selection
 date_slider_value <- c(as.POSIXct(as.Date("2024-01-15")), as.POSIXct(as.Date("2024-01-17")))
+
+
+# --------------------------------------------------------------------------
+# Declare miscellaneous parameters
+# --------------------------------------------------------------------------
+
+# -- enable traces
+# options("k.debug" = 1)
 
 
 # --------------------------------------------------------------------------
@@ -202,6 +213,7 @@ create_data_to_import <- function(){
 clean_all <- function(testdata_path){
 
   unlink(testdata_path, recursive = TRUE)
+  options("k.debug" = NULL)
 
 }
 

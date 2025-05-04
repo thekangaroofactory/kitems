@@ -34,7 +34,7 @@ item_search <- function(items, pattern){
   if(identical(pattern, ""))
     return(NULL)
 
-  cat("[item_search] Search pattern =", pattern, "\n")
+  catl("[item_search] Search pattern =", pattern)
 
   # -- filter items
   # using .data from rlang to access the id column
@@ -43,7 +43,7 @@ item_search <- function(items, pattern){
     filter(if_any(-("id"), ~ grepl(pattern, .)))
 
   # -- check
-  cat("[item_search] output dim =", dim(result), "\n")
+  catl("[item_search] output dim =", dim(result))
 
   # -- return
   as.data.frame(result)

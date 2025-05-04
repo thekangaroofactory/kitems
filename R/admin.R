@@ -24,11 +24,11 @@
 admin <- function(path = getwd()) {
 
   # -- get app path
-  appDir <- system.file("R", package = "kitems")
+  appDir <- system.file("shiny", package = "kitems")
 
   # -- check30
   if(appDir == "")
-    stop("Could not find R directory. Try re-installing `kitems`.", call. = FALSE)
+    stop("Could not find shiny directory. Try re-installing `kitems`.", call. = FALSE)
 
   # -- set option (the app will get it)
   shiny::shinyOptions(kitems_path = path)

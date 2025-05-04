@@ -29,12 +29,12 @@ dm_filter <- function(data.model, set = NULL){
 
     # -- filter
     if(length(att_set) > 0){
-      cat("-- filter to set =", att_set, "\n")
+      catl("-- filter to set =", att_set)
       data.model[data.model$name %in% att_set, ]$filter <- TRUE}
 
     # -- un-filter
     if(length(att_unset) > 0){
-      cat("-- filter to unset =", att_unset, "\n")
+      catl("-- filter to unset =", att_unset)
       data.model[data.model$name %in% att_unset, ]$filter <- FALSE}
 
     # -- return

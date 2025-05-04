@@ -12,10 +12,6 @@ create_testdata()
 
 test_that("attribute delete works", {
 
-  cat("\n-------------------------------------------------------------------------- \n")
-  cat("Scenario: attribute delete")
-  cat("\n-------------------------------------------------------------------------- \n")
-
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,

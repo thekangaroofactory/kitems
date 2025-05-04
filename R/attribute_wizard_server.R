@@ -10,7 +10,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
 
     # -- Build log pattern
     MODULE <- paste0("[", id, "]")
-    cat(MODULE, "Starting attribute wizard module server... \n")
+    catl(MODULE, "Starting attribute wizard module server...", debug = 1)
 
     # -- Get namespace
     ns <- session$ns
@@ -25,7 +25,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
 
     if(update){
 
-      cat(MODULE, "Update -- skip step.1 \n")
+      catl(MODULE, "Update -- skip step.1")
 
       # -- init values
       isValid$name <- TRUE
@@ -103,7 +103,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
 
       } else {
 
-        # -- duplicate name
+        # -- duplicatle name
         if(input$w_name %in% k_data_model()$name){
 
           name <- "circle-xmark"
@@ -222,7 +222,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
         type <- input$w_type
         selected <- "none"}
 
-      cat("[step.2] init: name =", name, "/ type =", type, "/ selected =", selected, "\n")
+      catl("[step.2] init: name =", name, "/ type =", type, "/ selected =", selected)
 
       # -- display modal
       showModal(modalDialog(
@@ -264,7 +264,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
     # -- Observe radioButtons
     session$userData$w_obs5 <- observeEvent(input$w_default_choice, {
 
-      cat("[step.2] w_default_choice input =", input$w_default_choice, "\n")
+      catl("[step.2] w_default_choice input =", input$w_default_choice, level = 2)
 
       # -- no default
       if(input$w_default_choice == "none"){
@@ -293,7 +293,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
 
             value <- DEFAULT_VALUES[[input$w_type]]}
 
-          cat("[step.2] Set w_default_val: value =", value, "\n")
+          catl("[step.2] Set w_default_val: value =", value, level = 2)
 
           # -- update outputs
           output$w_default_detail <- renderUI(tagList(
@@ -318,7 +318,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
             selected <- NULL
             value <- NULL}
 
-          cat("[step.2] Set w_default_fun: selected =", selected, "\n")
+          catl("[step.2] Set w_default_fun: selected =", selected, level = 2)
 
           # -- update outputs
           output$w_default_detail <- renderUI(tagList(
@@ -356,7 +356,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
         # -- check
         if(input$w_default_choice == "val"){
 
-          cat("[step.2] w_default_val =", input$w_default_val, "\n")
+          catl("[step.2] w_default_val =", input$w_default_val, level = 2)
 
           # -- empty
           if(input$w_default_val == ""){
@@ -375,7 +375,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
               input$w_type
 
             # -- try: coerce input to expected class
-            cat("[step.2] Eval default value \n")
+            catl("[step.2] Eval default value", level = 2)
             value <- tryCatch(
               eval(call(CLASS_FUNCTIONS[[type]], input$w_default_val)),
               error = function(e) e,
@@ -384,7 +384,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
             # -- check output
             if("error" %in% class(value)){
 
-              cat("[Error]", value$message)
+              catl("[Error]", value$message, debug = 1)
               name <- "circle-xmark"
               style <- "color: #ff0000;"
               msg <- paste("Default value is KO, error =", value$message)
@@ -394,7 +394,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
 
               if("warning" %in% class(value)){
 
-                cat("[Warning]", value$message)
+                catl("[Warning]", value$message)
                 name <- "xmark"
                 style <- "color: #FFD43B;"
                 msg <- paste("Default value is KO, warning =", value$message)
@@ -425,8 +425,8 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
         # -- check
         if(input$w_default_choice == "fun"){
 
-          cat("[step.2] w_default_fun =", input$w_default_fun, "\n")
-          cat("[step.2] w_default_arg =", input$w_default_arg, "\n")
+          catl("[step.2] w_default_fun =", input$w_default_fun, level = 2)
+          catl("[step.2] w_default_arg =", input$w_default_arg, level = 2)
 
           # -- empty
           if(input$w_default_fun == ""){
@@ -445,17 +445,17 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
             else {
 
               # -- eval input
-              cat("[step.2] Eval function arguments \n")
+              catl("[step.2] Eval function arguments", level = 2)
               args <- tryCatch(eval(parse(text = input$w_default_arg)),
                                error = function(e) e,
                                warning = function(w) w)
 
               # -- check output
               if("error" %in% class(args))
-                print(args$message)
+                catl(args$message, debug = 1)
 
               else if("warning" %in% class(args))
-                print(args$message)
+                message(args$message)
 
             }
 
@@ -467,7 +467,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
 
 
             # -- try: call given function
-            cat("[step.2] Eval function \n")
+            catl("[step.2] Eval function", level = 2)
             value <-  tryCatch(
               eval(call(CLASS_FUNCTIONS[[type]], eval(do.call(ktools::getNsFunction(input$w_default_fun), args = args)))),
               error = function(e) e,
@@ -476,7 +476,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
             # -- check output
             if("error" %in% class(value)){
 
-              cat("[Error]", value$message)
+              catl("[Error]", value$message, debug = 1)
               name <- "circle-xmark"
               style <- "color: #ff0000;"
               msg <- paste("Default funcion is KO, error =", value$message)
@@ -486,7 +486,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
 
               if("warning" %in% class(value)){
 
-                cat("[Warning]", value$message)
+                catl("[Warning]", value$message)
                 name <- "xmark"
                 style <- "color: #FFD43B;"
                 msg <- paste("Default function is KO, warning =", value$message)
@@ -528,7 +528,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
         value_skip <- FALSE
         value_filter <- FALSE}
 
-      cat("[step.3] init: skip =", value_skip, "/ filter =", value_filter, "\n")
+      catl("[step.3] init: skip =", value_skip, "/ filter =", value_filter)
 
 
       # -- display modal
@@ -588,7 +588,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
       } else
         value <- FALSE
 
-      cat("[step.4] init: ordering =", value, "\n")
+      catl("[step.4] init: ordering =", value)
 
       # -- display modal
       showModal(modalDialog(
@@ -662,7 +662,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
 
       # -- Close window
       removeModal()
-      cat("[step.5] Ask for confirmation \n")
+      catl("[step.5] Ask for confirmation")
 
       # -- display modal
       showModal(modalDialog(
@@ -713,7 +713,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
 
       # -- Close window
       removeModal()
-      cat("[step.6] Confirm, operation =", ifelse(update, "update", "create"), "\n")
+      catl("[step.6] Confirm, operation =", ifelse(update, "update", "create"))
 
       # -- get the data model
       dm <- k_data_model()
@@ -780,7 +780,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
                          sort.desc = if(input$w_sort) stats::setNames(input$w_sort_desc, input$w_name) else NULL)
 
       # -- log
-      cat("[step.6] Update data model \n")
+      catl("[step.6] Update data model", level = 2)
 
       # -- Add column to items (create attribute only)
       if(!update){
@@ -789,7 +789,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
         value <- dm_default(data.model = dm, name = input$w_name)
 
         # -- Add column to items & store
-        cat("[step.6] Add new attribute to existing items \n")
+        catl("[step.6] Add new attribute to existing items", level = 2)
         items <- item_migrate(k_items(), name = input$w_name, type = input$w_type, fill = value)
 
         # -- store #324
@@ -810,7 +810,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
 
       # -- close modal
       removeModal()
-      cat(MODULE, "Dissmis attribute wizard =", input$w_dismiss, "\n")
+      catl(MODULE, "Dissmis attribute wizard =", input$w_dismiss)
 
       callback(TRUE)}, ignoreInit = TRUE)
 

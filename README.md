@@ -159,7 +159,7 @@ mydata <- kitems(id = "mydata", path = "./data")
 
 # -- Observe items
 observeEvent(mydata$items(), {
-  cat("Main application server: items object has just been updated. \n")
+  print("Main application server: items object has just been updated.")
   # -- do something cool here
   })
 ```
@@ -266,5 +266,5 @@ From there, two options are available:
   (as specified in the `shiny::NS` function)
 
 ``` r
- kitems::admin_ui(c("module_id", "nested_module_id"))
+ kitems::admin_widget(c("module_id", "nested_module_id"))
 ```

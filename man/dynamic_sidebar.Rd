@@ -2,7 +2,7 @@
 % Please edit documentation in R/dynamic_sidebar.R
 \name{dynamic_sidebar}
 \alias{dynamic_sidebar}
-\title{Generate dynamic menuItem}
+\title{Generate Dynamic menuItem}
 \usage{
 dynamic_sidebar(names)
 }
@@ -13,7 +13,7 @@ dynamic_sidebar(names)
 a sidebarMenu menuItem object with one menuSubItem per data model
 }
 \description{
-Generate dynamic menuItem
+Generate Dynamic menuItem
 }
 \examples{
 \dontrun{

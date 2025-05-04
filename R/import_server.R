@@ -10,7 +10,7 @@ import_server <- function(id, k_data_model, k_items, callback) {
 
     # -- Build log pattern
     MODULE <- paste0("[", id, "]")
-    cat(MODULE, "Starting import module server... \n")
+    catl(MODULE, "Starting import module server...")
 
     # -- Get namespace
     ns <- session$ns
@@ -58,7 +58,7 @@ import_server <- function(id, k_data_model, k_items, callback) {
       # -- Generate id(s)
       if(!hasId){
 
-        cat(MODULE, "[WARNING] Dataset has no id column, creating one \n")
+        catl(MODULE, "Dataset has no id column, creating one")
 
         # -- compute expected time (based on average time per id) #221
         n <- nrow(items)
@@ -71,7 +71,7 @@ import_server <- function(id, k_data_model, k_items, callback) {
                               footer = NULL))
 
         # -- Compute a vector of ids (should be fixed by #214)
-        cat(MODULE, "Generating id(s) ... \n")
+        catl(MODULE, "Generating id(s) ...", level = 2)
         fill <- ktools::seq_timestamp(n = n)
 
         # -- add attribute & reorder
@@ -108,7 +108,7 @@ import_server <- function(id, k_data_model, k_items, callback) {
 
       # -- Get the data model
       # use dm_integrity with data.model = NULL means all attributes are missing
-      cat(MODULE, "Extract data model from data \n")
+      catl(MODULE, "Extract data model from data")
       dm <- dm_integrity(data.model = NULL, items = cache_items(), template = TEMPLATE_DATA_MODEL)
 
       # -- Store in cache

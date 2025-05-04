@@ -1,6 +1,6 @@
 Package: kitems
 Title: A Framework To Manage Data Frame Items
-Version: 0.5.8
+Version: 0.6.0
 Authors@R: 
     person(given = "philippe",
            family = "peret",
@@ -25,8 +25,7 @@ Imports:
     kfiles,
     ktools,
     stringr,
-    magrittr,
-    cli
+    magrittr
 Suggests: 
     knitr,
     rmarkdown,
