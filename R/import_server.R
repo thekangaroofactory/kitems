@@ -43,11 +43,8 @@ import_server <- function(id, k_data_model, k_items, callback) {
       removeModal()
 
       # -- Load the data
-      file <- input$file
-      items <- kfiles::read_data(file = file$datapath,
-                                 path = NULL,
-                                 colClasses = NA,
-                                 create = FALSE)
+      items <- iker::read_data(path = NULL,
+                               file = input$file$datapath)
 
       # -- Check if dataset has id #208
       hasId <- "id" %in% colnames(items)
