@@ -50,4 +50,4 @@ test_that("Server works", {
 # Cleanup
 # --------------------------------------------------------------------------
 
-clean_all(testdata_path)
+clean_all()

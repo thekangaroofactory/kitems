@@ -48,4 +48,4 @@ test_that("Date sliderInput remove date attribute works", {
 # Cleanup
 # --------------------------------------------------------------------------
 
-clean_all(testdata_path)
+clean_all()

@@ -48,4 +48,4 @@ test_that("Min/max date works", {
 # Cleanup
 # --------------------------------------------------------------------------
 
-clean_all(testdata_path)
+clean_all()

@@ -38,4 +38,4 @@ test_that("[testServer] Delete data model works", {
 
 
 # -- Cleanup
-clean_all(testdata_path)
+clean_all()

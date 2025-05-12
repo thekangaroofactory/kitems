@@ -49,4 +49,4 @@ test_that("Data model integrity works", {
 # Cleanup
 # --------------------------------------------------------------------------
 
-clean_all(testdata_path)
+clean_all()

@@ -56,4 +56,4 @@ test_that("Delete works", {
 # Cleanup
 # --------------------------------------------------------------------------
 
-clean_all(testdata_path)
+clean_all()

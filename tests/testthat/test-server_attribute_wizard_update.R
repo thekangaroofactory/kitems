@@ -45,4 +45,4 @@ test_that("[testServer] Update attribute wizard works", {
 
 
 # -- Cleanup
-clean_all(testdata_path)
+clean_all()

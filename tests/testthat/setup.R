@@ -18,13 +18,16 @@ module_id <- "data"
 # -- disable traces
 options("k.debug" = NULL)
 
-# -- create testdata folder
-testdata_path <- file.path(system.file("tests", "testthat", package = "kitems"), "testdata")
+# -- data folder
+# adding module_id
+testdata_base_path <- file.path(system.file("tests", "testthat", package = "kitems"), "testdata")
+testdata_path <- file.path(testdata_base_path, module_id)
 
 # -- build urls
 dm_url <- file.path(testdata_path, paste0(dm_name(module_id), ".rds"))
 items_url <- file.path(testdata_path, paste0(items_name(module_id), ".csv"))
-import_url <- "data_to_import.csv"
+items_file <- paste0(items_name(module_id), ".csv")
+import_url <- file.path(testdata_path, "data_to_import.csv")
 
 
 # ------------------------------------------------------------------------------
@@ -133,11 +136,20 @@ date_slider_value <- c(as.POSIXct(as.Date("2024-01-15")), as.POSIXct(as.Date("20
 # Declare helper functions
 # --------------------------------------------------------------------------
 
+# -- helper: create folder
+create_folder <- function(){
+
+  # -- create folder
+  dir.create(testdata_path, recursive = TRUE, showWarnings = TRUE)
+
+}
+
+
 # -- helper: create test data
 create_testdata <- function(){
 
   # -- create folder
-  dir.create(testdata_path, showWarnings = FALSE)
+  create_folder()
 
   # -- save data model
   saveRDS(dm, file = dm_url)
@@ -152,7 +164,7 @@ create_testdata <- function(){
 create_empty_items <- function(){
 
   # -- create folder
-  dir.create(testdata_path, showWarnings = FALSE)
+  create_folder()
 
   # -- save data model
   saveRDS(data_model(colClasses = c(id = "numeric", date = "POSIXct")), file = dm_url)
@@ -167,7 +179,7 @@ create_empty_items <- function(){
 create_integrity_testdata <- function(){
 
   # -- create folder
-  dir.create(testdata_path, showWarnings = FALSE)
+  create_folder()
 
   # -- alter data model
   dm <- dm[-3, ]
@@ -185,14 +197,11 @@ create_integrity_testdata <- function(){
 create_noid_data_to_import <- function(){
 
   # -- create folder
-  dir.create(testdata_path, showWarnings = FALSE)
-
-  # -- save data model
-  #saveRDS(dm, file = dm_url)
+  create_folder()
 
   # -- drop id column & save items
   items$id <- NULL
-  item_save(items, file = items_url)
+  item_save(items, file = import_url)
 
 }
 
@@ -201,18 +210,18 @@ create_noid_data_to_import <- function(){
 create_data_to_import <- function(){
 
   # -- create folder
-  dir.create(testdata_path, showWarnings = FALSE)
+  create_folder()
 
   # -- save items
-  item_save(items, file = items_url)
+  item_save(items, file = import_url)
 
 }
 
 
 # -- helper: cleanup function
-clean_all <- function(testdata_path){
+clean_all <- function(){
 
-  unlink(testdata_path, recursive = TRUE)
+  unlink(testdata_base_path, recursive = TRUE)
   options("k.debug" = NULL)
 
 }

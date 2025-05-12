@@ -41,4 +41,4 @@ test_that("Shortcut works", {
 
 
 # -- Cleanup
-clean_all(testdata_path)
+clean_all()

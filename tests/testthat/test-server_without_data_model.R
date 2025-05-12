@@ -1,6 +1,6 @@
 
 # -- setup
-dir.create(testdata_path)
+create_folder()
 
 # --------------------------------------------------------------------------
 # Scenario: launch server without data model
@@ -58,4 +58,4 @@ test_that("launch server without data model", {
 # Cleanup
 # --------------------------------------------------------------------------
 
-clean_all(testdata_path)
+clean_all()

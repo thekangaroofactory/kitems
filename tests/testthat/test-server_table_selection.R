@@ -37,4 +37,4 @@ test_that("[testServer] In table selection works", {
 
 
 # -- Cleanup
-clean_all(testdata_path)
+clean_all()

@@ -38,4 +38,4 @@ test_that("Date sliderInput empty items works", {
 # Cleanup
 # --------------------------------------------------------------------------
 
-clean_all(testdata_path)
+clean_all()

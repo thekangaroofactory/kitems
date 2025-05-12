@@ -11,4 +11,4 @@ test_that("item_save works", {
 })
 
 # -- cleanup data
-clean_all(testdata_path)
+clean_all()

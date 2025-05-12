@@ -32,4 +32,4 @@ test_that("[testServer] Admin UI danger zone works", {
 
 
 # -- Cleanup
-clean_all(testdata_path)
+clean_all()

@@ -38,4 +38,4 @@ test_that("restore items works", {
 })
 
 # --clean
-clean_all(testdata_path)
+clean_all()

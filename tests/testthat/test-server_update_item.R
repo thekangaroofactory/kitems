@@ -71,4 +71,4 @@ test_that("Update works", {
 # Cleanup
 # --------------------------------------------------------------------------
 
-clean_all(testdata_path)
+clean_all()

@@ -84,4 +84,4 @@ test_that("attribute delete works", {
 # Cleanup
 # --------------------------------------------------------------------------
 
-clean_all(testdata_path)
+clean_all()

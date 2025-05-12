@@ -45,4 +45,4 @@ test_that("Date sliderInput works", {
 # Cleanup
 # --------------------------------------------------------------------------
 
-clean_all(testdata_path)
+clean_all()

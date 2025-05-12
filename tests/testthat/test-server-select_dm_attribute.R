@@ -38,4 +38,4 @@ test_that("Select data model attribute works", {
 # Cleanup
 # --------------------------------------------------------------------------
 
-clean_all(testdata_path)
+clean_all()

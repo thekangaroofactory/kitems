@@ -58,4 +58,4 @@ test_that("Create works", {
 # Cleanup
 # --------------------------------------------------------------------------
 
-clean_all(testdata_path)
+clean_all()
