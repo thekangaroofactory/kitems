@@ -39,7 +39,7 @@ item_save <- function(data, file = NULL){
   # ----------------------------------------------------------------------------
 
   if(!is.null(file))
-    kfiles::write_data(data, file)
+    iker::write_data(data, path = NULL, file = file)
 
   # ----------------------------------------------------------------------------
 
