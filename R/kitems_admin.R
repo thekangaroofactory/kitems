@@ -352,12 +352,8 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       k_data_model(dm)
 
       # -- init items
-      # create = autosave : so that file won't be created if autosave is FALSE #271
       catl(MODULE, "-- Init data")
-      items <- kfiles::read_data(file = items_url,
-                                 path = path,
-                                 colClasses = colClasses,
-                                 create = autosave)
+      items <- ktools::create_data(colClasses = colClasses)
 
       # -- store items
       k_items(items)
