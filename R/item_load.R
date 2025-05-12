@@ -48,11 +48,12 @@ item_load <- function(data.model, file = NULL, path = NULL, create = TRUE){
   # ----------------------------------------------------------------------------
   if(!is.null(file))
 
-    # -- Try load (see read_data for details about returns)
-    items <- kfiles::read_data(file = file,
-                               path = path,
-                               colClasses = col.classes,
-                               create = create)
+    # -- read data
+    items <- as.data.frame(iker::read_data(path = path,
+                                           file = file,
+                                           delim = ",",
+                                           col_types = col.classes))
+
 
   # ----------------------------------------------------------------------------
 
