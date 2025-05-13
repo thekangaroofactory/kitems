@@ -6,7 +6,7 @@ create_testdata()
 test_that("item_load works", {
 
   # -- function call
-  x <- item_load(data.model = dm, file = items_file, path = testdata_path, create = FALSE)
+  x <- item_load(data.model = dm, file = items_file, path = testdata_path)
 
   # -- test class
   expect_s3_class(x, "data.frame")

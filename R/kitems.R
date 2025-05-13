@@ -154,8 +154,7 @@ kitems <- function(id, path,
         # path = NULL as temporary workaround (it's contained in items_url)
         init_items <- item_load(data.model = init_dm,
                                 file = items_url,
-                                path = NULL,
-                                create = create)
+                                path = NULL)
 
       # -- Increment the progress bar, and update the detail text.
       incProgress(2/4, detail = "Read items")
@@ -183,8 +182,7 @@ kitems <- function(id, path,
           catl(MODULE, "Reloading the item data with updated data model")
           init_items <- item_load(data.model = init_dm,
                                   file = items_url,
-                                  path = NULL,
-                                  create = create)
+                                  path = NULL)
 
         }}
 
