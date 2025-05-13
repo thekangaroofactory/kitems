@@ -5,7 +5,6 @@
 #' @param data.model a data.frame containing the data model
 #' @param file an optional file name (including .csv extension)
 #' @param path an optional path to the file
-#' @param create a logical (default = TRUE) to indicate if missing file should be created or not
 #'
 #' @return the data (items)
 #' @export
@@ -16,11 +15,11 @@
 #' @examples
 #' \dontrun{
 #' # -- File connector:
-#' item_load(data.model = mydatamodel, file = "mydata.csv", path = "path/to/my/data", create = TRUE)
+#' item_load(data.model = mydatamodel, file = "mydata.csv", path = "path/to/my/data")
 #' }
 
 
-item_load <- function(data.model, file = NULL, path = NULL, create = TRUE){
+item_load <- function(data.model, file = NULL, path = NULL){
 
   # -- Init
   items <- NULL
