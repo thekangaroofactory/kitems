@@ -10,7 +10,6 @@ test_that("[testServer] Create attribute wizard works", {
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,
-                 create = FALSE,
                  autosave = TRUE,
                  admin = TRUE)
 

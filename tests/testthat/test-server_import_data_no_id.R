@@ -12,7 +12,6 @@ test_that("Import data without id works", {
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,
-                 create = FALSE,
                  autosave = TRUE,
                  admin = TRUE)
 

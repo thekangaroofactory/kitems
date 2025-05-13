@@ -35,7 +35,6 @@ server <- function(input, output, session) {
     # -- launch item servers
     res <- lapply(items, function(x) kitems::kitems(id = x,
                                                     path = kitems_path,
-                                                    create = FALSE,
                                                     autosave = TRUE,
                                                     admin = TRUE))
 

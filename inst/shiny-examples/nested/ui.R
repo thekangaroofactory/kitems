@@ -42,7 +42,7 @@ body <- dashboardBody(
                        "The administration console will only display the Create and Import data buttons."),
 
                      tags$pre("# -- start module server: \ndata_3 <- kitems::kitems(id = \"data_3\",
-                              path = \"path/to/my/data\", \ncreate = TRUE, autosave = FALSE, admin = TRUE)"),
+                              path = \"path/to/my/data\", \nautosave = FALSE, admin = TRUE)"),
 
                      p("For details about the nested module implementation, see the server code.
                        If the data need to be available at the main server level, then the wrapper module

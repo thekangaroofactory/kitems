@@ -13,7 +13,6 @@ test_that("Select data model attribute works", {
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,
-                 create = FALSE,
                  autosave = TRUE)
 
   # -- module server call
