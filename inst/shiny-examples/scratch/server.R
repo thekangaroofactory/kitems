@@ -26,14 +26,14 @@ shinyServer(
 
 
     # -- log
-    catl("----------------------------------------------------------", debug = 1)
-    catl("Main application server ready", debug = 1)
-    catl("----------------------------------------------------------", debug = 1)
+    ktools::catl("----------------------------------------------------------", debug = 1)
+    ktools::catl("Main application server ready", debug = 1)
+    ktools::catl("----------------------------------------------------------", debug = 1)
 
 
     # -- Observe item list ----
     observeEvent(data_1$items(),
-      catl("Main app server: data_1 items have just been updated."))
+                 ktools::catl("Main app server: data_1 items have just been updated."))
 
 
   }
