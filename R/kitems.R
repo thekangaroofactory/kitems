@@ -4,7 +4,6 @@
 #'
 #' @param id the id to be used for the module server instance
 #' @param path a path where data model and items will be stored
-#' @param create a logical whether the data file should be created or not if missing (default = TRUE)
 #' @param autosave a logical whether the item auto save should be activated or not (default = TRUE)
 #' @param admin a logical indicating if the admin module server should be launched (default = FALSE)
 #' @param shortcut a logical should attribute shortcuts be computed when building the item form (default = FALSE)
@@ -29,16 +28,13 @@
 #'
 #' @examples
 #' \dontrun{
-#' kitems(id = "mydata", path = "path/to/my/data",
-#'               create = TRUE, autosave = TRUE)
+#' kitems(id = "mydata", path = "path/to/my/data", autosave = TRUE)
 #' }
 
 
 # -- Shiny module server logic -------------------------------------------------
 
-kitems <- function(id, path,
-                          create = TRUE, autosave = TRUE, admin = FALSE,
-                          shortcut = FALSE) {
+kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
 
   moduleServer(id, function(input, output, session) {
 
