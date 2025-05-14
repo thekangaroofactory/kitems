@@ -24,7 +24,7 @@ item_save <- function(data, file = NULL){
   # ----------------------------------------------------------------------------
 
   if(!is.null(file))
-    iker::write_data(data, path = NULL, file = file)
+    iker::save_data(data, path = NULL, file = file)
 
   # ----------------------------------------------------------------------------
 

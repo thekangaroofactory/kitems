@@ -31,7 +31,7 @@ item_load <- function(col.classes, file = NULL, path = NULL){
   if(!is.null(file))
 
     # -- read data
-    items <- as.data.frame(iker::read_data(path = path,
+    items <- as.data.frame(iker::load_data(path = path,
                                            file = file,
                                            delim = ",",
                                            col_types = col.classes))
