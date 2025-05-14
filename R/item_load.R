@@ -2,7 +2,7 @@
 
 #' Load data
 #'
-#' @param data.model a data.frame containing the data model
+#' @param col.classes a vector containing the expected column types
 #' @param file an optional file name (including .csv extension)
 #' @param path an optional path to the file
 #'
@@ -15,17 +15,18 @@
 #' @examples
 #' \dontrun{
 #' # -- File connector:
-#' item_load(data.model = mydatamodel, file = "mydata.csv", path = "path/to/my/data")
+#' item_load(col.classes = c(id = "numeric", date = "Date", comment = "character"),
+#' file = "mydata.csv", path = "path/to/my/data")
 #' }
 
 
-item_load <- function(data.model, file = NULL, path = NULL){
+item_load <- function(col.classes, file = NULL, path = NULL){
 
   # -- Init
   items <- NULL
 
   # -- Extract colClasses from data model
-  col.classes <- dm_colClasses(data.model)
+  #col.classes <- dm_colClasses(data.model)
 
 
   # ----------------------------------------------------------------------------

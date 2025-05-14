@@ -4,10 +4,10 @@
 \alias{item_load}
 \title{Load data}
 \usage{
-item_load(data.model, file = NULL, path = NULL)
+item_load(col.classes, file = NULL, path = NULL)
 }
 \arguments{
-\item{data.model}{a data.frame containing the data model}
+\item{col.classes}{a vector containing the expected column types}
 
 \item{file}{an optional file name (including .csv extension)}
 
@@ -25,6 +25,7 @@ File connector: if file is not NULL, then data are loaded from the given .csv
 \examples{
 \dontrun{
 # -- File connector:
-item_load(data.model = mydatamodel, file = "mydata.csv", path = "path/to/my/data")
+item_load(col.classes = c(id = "numeric", date = "Date", comment = "character"),
+file = "mydata.csv", path = "path/to/my/data")
 }
 }

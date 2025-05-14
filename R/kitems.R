@@ -148,7 +148,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
       if(!is.null(init_dm))
 
         # path = NULL as temporary workaround (it's contained in items_url)
-        init_items <- item_load(data.model = init_dm,
+        init_items <- item_load(col.classes = dm_colClasses(init_dm),
                                 file = items_url,
                                 path = NULL)
 
@@ -176,7 +176,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
           # -- Reload data with updated data model
           # path = NULL as temporary workaround (it's contained in items_url)
           catl(MODULE, "Reloading the item data with updated data model")
-          init_items <- item_load(data.model = init_dm,
+          init_items <- item_load(col.classes = dm_colClasses(init_dm),
                                   file = items_url,
                                   path = NULL)
 
