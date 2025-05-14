@@ -25,10 +25,6 @@ item_load <- function(col.classes, file = NULL, path = NULL){
   # -- Init
   items <- NULL
 
-  # -- Extract colClasses from data model
-  #col.classes <- dm_colClasses(data.model)
-
-
   # ----------------------------------------------------------------------------
   # Connector: file (.csv)
   # ----------------------------------------------------------------------------
