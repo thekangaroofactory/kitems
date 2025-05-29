@@ -37,15 +37,32 @@ item_input_values <- function(input, colClasses){
     # -- helper function
     helper <- function(name){
 
-      # -- retrieve extra inputs
-      att_time <- paste0(name, "_time")
-      att_tz <- paste0(name, "_tz")
+      catl("Attribute =", name, level = 2)
 
-      extra_values <- lapply(c(att_time, att_tz), function(x) input[[x]])
-      names(extra_values) <- c(att_time, att_tz)
+      # -- check NULL
+      # when main/date value is NULL, then time & timzone shoudl be skipped #427
+      value <- if(is.null(values[[name]])){
 
-      # -- compute real value from all inputs
-      value <- eval(call(CLASS_FUNCTIONS[[colClasses[name]]], paste(as.character(values[[name]]), extra_values[[att_time]]), tz = extra_values[[att_tz]]))
+        catl("-- Date value is NULL, skipping time & timezone", level = 2)
+        NULL
+
+      } else {
+
+        # -- retrieve extra inputs
+        att_time <- paste0(name, "_time")
+        att_tz <- paste0(name, "_tz")
+
+        extra_values <- lapply(c(att_time, att_tz), function(x) input[[x]])
+        names(extra_values) <- c(att_time, att_tz)
+
+        catl("-- time =", extra_values[[att_time]], 2)
+        catl("-- timezone =", extra_values[[att_tz]], 2)
+
+        # -- compute real value from all inputs
+        value <- eval(call(CLASS_FUNCTIONS[[colClasses[name]]], paste(as.character(values[[name]]), extra_values[[att_time]]), tz = extra_values[[att_tz]]))
+
+      }
+
       catl("- Attribute =", name, "/ value =", class(value), value)
 
       # -- return
