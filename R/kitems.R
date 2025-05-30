@@ -14,7 +14,8 @@
 #'
 #' @returns the module server returns a list of the references that are accessible outside the module.
 #' All except id & url are references to reactive values.
-#' list(id, url, items, data_model, filtered_items, selected_items, clicked_column, filter_date)
+#' list(id, url, items, data_model, filtered_items, selected_items, clicked_column, filter_date,
+#' triggers = list(update))
 #'
 #' @details
 #'
@@ -58,6 +59,9 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
     selected_items <- reactiveVal(NULL)
     clicked_column <- reactiveVal(NULL)
     filter_date <- reactiveVal(NULL)
+
+    # -- Declare triggers
+    item_update_trigger  <- reactiveVal(NULL)
 
 
     # __________________________________________________________________________
@@ -345,9 +349,19 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
 
 
     # -- Observe: actionButton
-    observeEvent(input$item_update, {
+    # just calls the trigger
+    observeEvent(input$item_update,
+      item_update_trigger(selected_items()))
 
-      catl(MODULE, "[BTN] Update item")
+
+    # -- Observe: trigger
+    # feed the reactiveVal with the id of the item to update
+    observeEvent(item_update_trigger(), {
+
+      # -- Make sure value contains a single item id
+      req(length(item_update_trigger()) == 1)
+      catl(MODULE, "[Trigger] Update item")
+
 
       # -- Get selected item
       item <- k_items()[k_items()$id == selected_items(), ]
@@ -364,7 +378,11 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
                               modalButton("Cancel"),
                               actionButton(ns("item_update_confirm"), "Update"))))
 
+      # -- reset trigger
+      item_update_trigger(NULL)
+
     })
+
 
     # -- Observe: actionButton
     observeEvent(input$item_update_confirm, {
@@ -682,7 +700,8 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
          filtered_items = filtered_items,
          selected_items = selected_items,
          clicked_column = clicked_column,
-         filter_date = filter_date)
+         filter_date = filter_date,
+         triggers = list(update = item_update_trigger))
 
   })
 }
