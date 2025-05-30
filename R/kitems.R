@@ -391,23 +391,19 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
         # -- update item & reactive
         k_items(item_update(k_items(), item))
 
-        # -- prepare notify
-        msg <- "Item updated."
-        type <- "message"},
+        # -- notify
+        if(shiny::isRunning())
+          showNotification(paste(MODULE, "Item updated."), type = "message")},
 
-        # -- failed
+        # -- if fails
         error = function(e) {
 
-          # -- prepare notify
-          msg <- paste("Item has not been updated. \n error =", e$message)
-          type <- "error"
+          # -- notify
+          if(shiny::isRunning())
+            showNotification(paste(MODULE, "Item has not been updated."), type = "error")
 
-          # -- return
-          message(msg)},
-
-        # -- notify
-        finally = if(shiny::isRunning())
-          showNotification(paste(MODULE, msg), type))
+          # -- console
+          message(paste("Item has not been updated. \n error =", e$message))})
 
     })
 
