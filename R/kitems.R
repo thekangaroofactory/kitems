@@ -362,6 +362,9 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
       req(length(item_update_trigger()) == 1)
       catl(MODULE, "[Trigger] Update item")
 
+      # -- force select item
+      # may be NULL or another value if trigger is called outside module
+      selected_items(item_update_trigger())
 
       # -- Get selected item
       item <- k_items()[k_items()$id == selected_items(), ]
