@@ -22,7 +22,7 @@ test_that("Create works", {
   testServer(kitems, args = params, {
 
     # -- click
-    session$setInputs(item_create = 1)
+    session$setInputs(item_create_btn = 1)
 
     # -- update inputs (values to create item)
     session$setInputs(id = NA)

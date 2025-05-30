@@ -266,12 +266,12 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
 
       # -- Check data model #290
       if(!is.null(k_data_model()))
-        actionButton(inputId = ns("item_create"),
+        actionButton(inputId = ns("item_create_btn"),
                      label = "Create"))
 
 
     # -- Observe: actionButton
-    observeEvent(input$item_create, {
+    observeEvent(input$item_create_btn, {
 
                  catl(MODULE, "[BTN] Create item")
 
@@ -344,13 +344,13 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
       if(is.null(selected_items()) | length(selected_items()) != 1)
         NULL
       else
-        actionButton(inputId = ns("item_update"),
+        actionButton(inputId = ns("item_update_btn"),
                      label = "Update"))
 
 
     # -- Observe: actionButton
     # just calls the trigger
-    observeEvent(input$item_update,
+    observeEvent(input$item_update_btn,
       item_update_trigger(selected_items()))
 
 
@@ -440,12 +440,12 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
       if(is.null(selected_items()))
         NULL
       else
-        actionButton(inputId = ns("item_delete"),
+        actionButton(inputId = ns("item_delete_btn"),
                      label = "Delete"))
 
 
     # -- Observe: actionButton
-    observeEvent(input$item_delete, {
+    observeEvent(input$item_delete_btn, {
 
       catl(MODULE, "[BTN] Delete item")
 
