@@ -16,19 +16,19 @@ shinyServer(
     # -- Launch module servers ----
     # autosave = FALSE to keep demo data frozen
     data_2 <- kitems::kitems(id = "data_2", path = demo_dir,
-                                    create = TRUE, autosave = FALSE, admin = FALSE,
-                                    shortcut = TRUE)
+                             autosave = FALSE, admin = FALSE,
+                             shortcut = TRUE)
 
 
     # -- log
-    catl("----------------------------------------------------------", debug = 1)
-    catl("Main application server ready", debug = 1)
-    catl("----------------------------------------------------------", debug = 1)
+    ktools::catl("----------------------------------------------------------", debug = 1)
+    ktools::catl("Main application server ready", debug = 1)
+    ktools::catl("----------------------------------------------------------", debug = 1)
 
 
     # -- Observe item lists ----
     observeEvent(data_2$items(),
-      catl("Main application server: data_2 items have just been updated"))
+                 ktools::catl("Main application server: data_2 items have just been updated"))
 
 
   }

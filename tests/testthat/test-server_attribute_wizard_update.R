@@ -10,7 +10,6 @@ test_that("[testServer] Update attribute wizard works", {
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,
-                 create = FALSE,
                  autosave = TRUE,
                  admin = TRUE)
 
@@ -45,4 +44,4 @@ test_that("[testServer] Update attribute wizard works", {
 
 
 # -- Cleanup
-clean_all(testdata_path)
+clean_all()

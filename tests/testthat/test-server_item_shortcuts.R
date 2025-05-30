@@ -13,7 +13,6 @@ test_that("Shortcut works", {
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,
-                 create = FALSE,
                  autosave = FALSE,
                  shortcut = TRUE)
 
@@ -41,4 +40,4 @@ test_that("Shortcut works", {
 
 
 # -- Cleanup
-clean_all(testdata_path)
+clean_all()

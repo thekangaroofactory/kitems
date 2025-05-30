@@ -17,7 +17,6 @@ test_that("Import data works", {
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,
-                 create = FALSE,
                  autosave = TRUE,
                  admin = TRUE)
 
@@ -31,7 +30,7 @@ test_that("Import data works", {
     value <- data.frame(name = "data_to_import",
                         size = 12,
                         type = "dummy",
-                        datapath = file.path(testdata_path, import_url))
+                        datapath = import_url)
 
     # -- set file input & click
     session$setInputs('admin-import-file' = value)
@@ -52,7 +51,7 @@ test_that("Import data works", {
     expect_s3_class(x, "data.frame")
 
     # -- test dim
-    expect_equal(dim(x), c(1, length(DATA_MODEL_COLCLASSES)))
+    expect_equal(dim(x), c(6, length(DATA_MODEL_COLCLASSES)))
 
 
     # --------------------------------------------------------------------------
@@ -65,7 +64,7 @@ test_that("Import data works", {
     expect_s3_class(x, "data.frame")
 
     # -- test dim
-    expect_equal(dim(x), c(0, 1))
+    expect_equal(dim(x), c(4, 6))
 
 
   })
@@ -77,4 +76,4 @@ test_that("Import data works", {
 # Cleanup
 # --------------------------------------------------------------------------
 
-clean_all(testdata_path)
+clean_all()

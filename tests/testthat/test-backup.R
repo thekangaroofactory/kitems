@@ -71,4 +71,4 @@ test_that("backup items works", {
 })
 
 # --clean
-clean_all(testdata_path)
+clean_all()

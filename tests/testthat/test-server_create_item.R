@@ -16,7 +16,6 @@ test_that("Create works", {
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,
-                 create = FALSE,
                  autosave = TRUE)
 
   # -- module server call
@@ -58,4 +57,4 @@ test_that("Create works", {
 # Cleanup
 # --------------------------------------------------------------------------
 
-clean_all(testdata_path)
+clean_all()

@@ -10,7 +10,6 @@ test_that("[testServer] Admin UI danger zone works", {
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,
-                 create = FALSE,
                  autosave = TRUE,
                  admin = TRUE)
 
@@ -32,4 +31,4 @@ test_that("[testServer] Admin UI danger zone works", {
 
 
 # -- Cleanup
-clean_all(testdata_path)
+clean_all()

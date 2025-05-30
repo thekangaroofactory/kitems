@@ -16,7 +16,6 @@ test_that("Date sliderInput works", {
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,
-                 create = FALSE,
                  autosave = TRUE)
 
   # -- module server call
@@ -45,4 +44,4 @@ test_that("Date sliderInput works", {
 # Cleanup
 # --------------------------------------------------------------------------
 
-clean_all(testdata_path)
+clean_all()

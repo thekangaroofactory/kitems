@@ -28,6 +28,11 @@ item_create <- function(values, data.model){
     if(is.null(value))
       value <- NA
 
+    # -- security check:
+    # 'Date' num(0) will cause next test to fail #428
+    if(length(value) == 0)
+      value <- NA
+
     # -- summary for debug
     catl("[item_create] attribute: key =", key, " / value =", value, "/ class =", colClass)
 

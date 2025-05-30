@@ -10,7 +10,6 @@ test_that("[testServer] In table selection works", {
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,
-                 create = FALSE,
                  autosave = TRUE)
 
   # -- module server call
@@ -37,4 +36,4 @@ test_that("[testServer] In table selection works", {
 
 
 # -- Cleanup
-clean_all(testdata_path)
+clean_all()

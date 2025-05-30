@@ -10,7 +10,6 @@ test_that("[testServer] Delete data model works", {
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,
-                 create = FALSE,
                  autosave = FALSE,
                  admin = TRUE)
 
@@ -38,4 +37,4 @@ test_that("[testServer] Delete data model works", {
 
 
 # -- Cleanup
-clean_all(testdata_path)
+clean_all()

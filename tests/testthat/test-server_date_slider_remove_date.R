@@ -16,7 +16,6 @@ test_that("Date sliderInput remove date attribute works", {
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,
-                 create = FALSE,
                  autosave = TRUE,
                  admin = TRUE)
 
@@ -48,4 +47,4 @@ test_that("Date sliderInput remove date attribute works", {
 # Cleanup
 # --------------------------------------------------------------------------
 
-clean_all(testdata_path)
+clean_all()

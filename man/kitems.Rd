@@ -4,21 +4,12 @@
 \alias{kitems}
 \title{Module server}
 \usage{
-kitems(
-  id,
-  path,
-  create = TRUE,
-  autosave = TRUE,
-  admin = FALSE,
-  shortcut = FALSE
-)
+kitems(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE)
 }
 \arguments{
 \item{id}{the id to be used for the module server instance}
 
 \item{path}{a path where data model and items will be stored}
-
-\item{create}{a logical whether the data file should be created or not if missing (default = TRUE)}
 
 \item{autosave}{a logical whether the item auto save should be activated or not (default = TRUE)}
 
@@ -45,7 +36,6 @@ It is expected that those function will not be used when admin = FALSE.
 }
 \examples{
 \dontrun{
-kitems(id = "mydata", path = "path/to/my/data",
-              create = TRUE, autosave = TRUE)
+kitems(id = "mydata", path = "path/to/my/data", autosave = TRUE)
 }
 }

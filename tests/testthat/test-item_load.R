@@ -6,7 +6,7 @@ create_testdata()
 test_that("item_load works", {
 
   # -- function call
-  x <- item_load(data.model = dm, file = items_url, path = testdata_path, create = FALSE)
+  x <- item_load(col.classes = dm_colClasses(dm), file = items_file, path = testdata_path)
 
   # -- test class
   expect_s3_class(x, "data.frame")
@@ -21,7 +21,7 @@ test_that("item_load works", {
 test_that("item_load NULL dm works", {
 
   # -- function call
-  x <- item_load(data.model = NULL)
+  x <- item_load(col.classes = dm_colClasses(NULL))
 
   # -- test output
   expect_null(x)
@@ -29,4 +29,4 @@ test_that("item_load NULL dm works", {
 })
 
 # -- data cleanup
-clean_all(testdata_path)
+clean_all()

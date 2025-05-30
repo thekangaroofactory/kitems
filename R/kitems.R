@@ -4,7 +4,6 @@
 #'
 #' @param id the id to be used for the module server instance
 #' @param path a path where data model and items will be stored
-#' @param create a logical whether the data file should be created or not if missing (default = TRUE)
 #' @param autosave a logical whether the item auto save should be activated or not (default = TRUE)
 #' @param admin a logical indicating if the admin module server should be launched (default = FALSE)
 #' @param shortcut a logical should attribute shortcuts be computed when building the item form (default = FALSE)
@@ -29,16 +28,13 @@
 #'
 #' @examples
 #' \dontrun{
-#' kitems(id = "mydata", path = "path/to/my/data",
-#'               create = TRUE, autosave = TRUE)
+#' kitems(id = "mydata", path = "path/to/my/data", autosave = TRUE)
 #' }
 
 
 # -- Shiny module server logic -------------------------------------------------
 
-kitems <- function(id, path,
-                          create = TRUE, autosave = TRUE, admin = FALSE,
-                          shortcut = FALSE) {
+kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
 
   moduleServer(id, function(input, output, session) {
 
@@ -151,10 +147,10 @@ kitems <- function(id, path,
       # -- Check for NULL data model (then no reason to try loading)
       if(!is.null(init_dm))
 
-        init_items <- item_load(data.model = init_dm,
-                           file = items_url,
-                           path = path,
-                           create = create)
+        # path = NULL as temporary workaround (it's contained in items_url)
+        init_items <- item_load(col.classes = dm_colClasses(init_dm),
+                                file = items_url,
+                                path = NULL)
 
       # -- Increment the progress bar, and update the detail text.
       incProgress(2/4, detail = "Read items")
@@ -178,11 +174,11 @@ kitems <- function(id, path,
             catl(MODULE, "Data model saved")}
 
           # -- Reload data with updated data model
+          # path = NULL as temporary workaround (it's contained in items_url)
           catl(MODULE, "Reloading the item data with updated data model")
-          init_items <- item_load(data.model = init_dm,
-                             file = items_url,
-                             path = path,
-                             create = create)
+          init_items <- item_load(col.classes = dm_colClasses(init_dm),
+                                  file = items_url,
+                                  path = NULL)
 
         }}
 

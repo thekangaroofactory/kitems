@@ -1,6 +1,6 @@
 
 # -- setup
-dir.create(testdata_path)
+create_folder()
 
 # --------------------------------------------------------------------------
 # Scenario: launch server without data model
@@ -11,7 +11,6 @@ test_that("launch server without data model", {
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,
-                 create = FALSE,
                  autosave = TRUE,
                  admin = TRUE)
 
@@ -58,4 +57,4 @@ test_that("launch server without data model", {
 # Cleanup
 # --------------------------------------------------------------------------
 
-clean_all(testdata_path)
+clean_all()
