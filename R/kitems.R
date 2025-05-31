@@ -62,6 +62,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
 
     # -- Declare triggers
     item_update_trigger  <- reactiveVal(NULL)
+    item_delete_trigger  <- reactiveVal(NULL)
 
 
     # __________________________________________________________________________
@@ -445,9 +446,19 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
 
 
     # -- Observe: actionButton
-    observeEvent(input$item_delete_btn, {
+    # just calls the trigger
+    observeEvent(input$item_delete_btn,
+                 item_delete_trigger(selected_items()))
 
-      catl(MODULE, "[BTN] Delete item")
+
+    # -- Observe: actionButton
+    observeEvent(item_delete_trigger(), {
+
+      catl(MODULE, "[Trigger] Delete item")
+
+      # -- force select item
+      # may be NULL or another value if trigger is called outside module
+      selected_items(item_delete_trigger())
 
       # -- Open dialog for confirmation
       showModal(modalDialog(title = "Delete item(s)",
@@ -704,7 +715,8 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
          selected_items = selected_items,
          clicked_column = clicked_column,
          filter_date = filter_date,
-         triggers = list(update = item_update_trigger))
+         triggers = list(update = item_update_trigger,
+                         delete = item_delete_trigger))
 
   })
 }
