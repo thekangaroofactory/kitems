@@ -16,7 +16,7 @@ create_widget <- function(id){
   ns <- NS(id)
 
   # UI
-  uiOutput(ns("item_create_btn"), inline = TRUE)
+  uiOutput(ns("item_create"), inline = TRUE)
 
 }
 
@@ -37,7 +37,7 @@ update_widget <- function(id){
   ns <- NS(id)
 
   # UI
-  uiOutput(ns("item_update_btn"), inline = TRUE)
+  uiOutput(ns("item_update"), inline = TRUE)
 
 }
 
@@ -58,6 +58,6 @@ delete_widget <- function(id){
   ns <- NS(id)
 
   # UI
-  uiOutput(ns("item_delete_btn"), inline = TRUE)
+  uiOutput(ns("item_delete"), inline = TRUE)
 
 }
