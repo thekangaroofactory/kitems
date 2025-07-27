@@ -267,12 +267,12 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
 
       # -- Check data model #290
       if(!is.null(k_data_model()))
-        actionButton(inputId = ns("item_create_btn"),
+        actionButton(inputId = ns("item_create"),
                      label = "Create"))
 
 
     # -- Observe: actionButton
-    observeEvent(input$item_create_btn, {
+    observeEvent(input$item_create, {
 
                  catl(MODULE, "[BTN] Create item")
 
@@ -345,13 +345,13 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
       if(is.null(selected_items()) | length(selected_items()) != 1)
         NULL
       else
-        actionButton(inputId = ns("item_update_btn"),
+        actionButton(inputId = ns("item_update"),
                      label = "Update"))
 
 
     # -- Observe: actionButton
     # just calls the trigger
-    observeEvent(input$item_update_btn,
+    observeEvent(input$item_update,
       item_update_trigger(selected_items()))
 
 
@@ -441,13 +441,13 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
       if(is.null(selected_items()))
         NULL
       else
-        actionButton(inputId = ns("item_delete_btn"),
+        actionButton(inputId = ns("item_delete"),
                      label = "Delete"))
 
 
     # -- Observe: actionButton
     # just calls the trigger
-    observeEvent(input$item_delete_btn,
+    observeEvent(input$item_delete,
                  item_delete_trigger(selected_items()))
 
 
@@ -590,31 +590,34 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
     ## -- Declare filtered_items ----
     observe(
 
-      # -- update the reactiveVal
       filtered_items(
 
         # -- check
-        if(!is.null(filter_date())){
+        if("date_slider" %in% names(input)){
+          if(!is.null(filter_date())){
 
-          catl(MODULE, "Updating filtered item view")
+            catl(MODULE, "Updating filtered item view")
 
-          # -- init
-          items <- k_items()
-          dm <- k_data_model()
 
-          # -- Apply date filter
-          items <- items[items$date >= filter_date()[1] & items$date <= filter_date()[2], ]
+            # -- init
+            items <- k_items()
+            dm <- k_data_model()
 
-          # -- Apply ordering
-          if(any(!is.na(dm$sort.rank)))
-            items <- item_sort(items, dm)
+            # -- Apply date filter
+            items <- items[items$date >= filter_date()[1] & items$date <= filter_date()[2], ]
 
-          catl("- ouput dim =", dim(items), level = 2)
+            # -- Apply ordering
+            if(any(!is.na(dm$sort.rank)))
+              items <- item_sort(items, dm)
 
-          # -- Return
-          items
+            catl("- ouput dim =", dim(items), level = 2)
 
-        } else k_items()))
+            # -- Return
+            items
+
+          } else NULL
+        } else k_items()))# -- update the reactiveVal
+
 
 
     ## -- Declare filtered_items ----

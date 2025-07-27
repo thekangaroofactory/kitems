@@ -20,7 +20,7 @@ test_that("Shortcut works", {
   testServer(kitems, args = params, {
 
     # -- click
-    session$setInputs(item_create_btn = 1)
+    session$setInputs(item_create = 1)
 
     # -- click shortcut
     suggestion <- paste(module_id, paste("name", "Banana", sep = "_"), sep = "-")
