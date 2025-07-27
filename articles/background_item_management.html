@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Motivations • kitems</title>
+<title>Background Item Management • kitems</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="motivations_files/libs/quarto-html/popper.min.js"></script><script src="motivations_files/libs/quarto-html/tippy.umd.min.js"></script><link href="motivations_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="motivations_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Motivations">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="background_item_management_files/libs/quarto-html/popper.min.js"></script><script src="background_item_management_files/libs/quarto-html/tippy.umd.min.js"></script><link href="background_item_management_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="background_item_management_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Background Item Management">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -56,7 +56,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Motivations</h1>
+      <h1>Background Item Management</h1>
 
 
 
@@ -70,31 +70,44 @@
 
 
 
-    <section class="level2"><h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+    <section class="level2"><h2 id="use-case-motivation">Use case &amp; motivation<a class="anchor" aria-label="anchor" href="#use-case-motivation"></a>
 </h2>
-<p>The goal of <em>kitems</em> is to provide a framework to manage data frame <em>items</em> and a set of tools to implement it within R Shiny web applications.</p>
-</section><section class="level2"><h2 id="motivations">Motivations<a class="anchor" aria-label="anchor" href="#motivations"></a>
+<p>The xxx.</p>
+</section><section class="level2"><h2 id="implementation">Implementation<a class="anchor" aria-label="anchor" href="#implementation"></a>
 </h2>
-<p>When working on a R Shiny project that performs operations based on tabular data, whether it is for data analysis or data visualization, the first milestone in the project is to enable standard data processing.</p>
-<p>Say the purpose of the project is to build a task manager and deliver a dashboard to follow its KPIs.<br>
-It will require to write code to implement the baseline of the project:</p>
-<ul>
-<li><p>a data frame to manage the tasks objects<br>
-(with columns corresponding to the different attributes of a task: date, description, owner…)</p></li>
-<li><p>a data table view to display the tasks to the users</p></li>
-<li><p>inputs to allow data filtering<br>
-(maybe focus on the tasks of the current year)</p></li>
-<li><p>buttons to perform standard operations like create a new task, update or delete existing ones</p></li>
-<li><p>forms to allow user to create or update a task</p></li>
-<li><p>functions to manage those operations in the back end<br>
-(check inputs before creating a new task, ask for a confirmation before another is deleted)</p></li>
-<li><p>functions to ensure data persistence, quality and management in general</p></li>
-</ul>
-<p>Now say that another project is to build a dashboard to follow fruit stock.<br>
-A data frame of fruit objects is needed, a table view, buttons &amp; functions to perform standard operations…</p>
-<p>In many cases, it involves to write code that allows to handle the same set of operations but for different objects, which makes this code hard to reuse in another project.</p>
-<p>The purpose of <em>kitems</em> is to wrap those standard operations into a package that is not dependent on the type of <em>item</em> - <em>something that is part of a list or group of things</em> - to manage.</p>
-<p>So that developers can focus on the specific capabilities of their project.</p>
+<p>– create_widget No impact</p>
+<p>– update_widget Need to select item first milestones$selected_items(id)</p>
+<p>– delete_widget Need to select item(s) first milestones$selected_items(id)</p>
+<p>– trigger item update milestones<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mi>r</mi><mi>i</mi><mi>g</mi><mi>g</mi><mi>e</mi><mi>r</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">triggers</annotation></semantics></math>update(id)</p>
+<p>– trigger item delete milestones<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mi>r</mi><mi>i</mi><mi>g</mi><mi>g</mi><mi>e</mi><mi>r</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">triggers</annotation></semantics></math>delete(id)</p>
+<p>actionLink(inputId = paste0(“update_”, milestone$id), label = “edit”, icon = icon(“pen-to-square”), onclick = sprintf(‘Shiny.setInputValue(“%s”, this.id, {priority: “event”})’, ns(“edit_milestone”)))</p>
+<p>If more than one link, need to compute unique Id otherwise there will be a warning in the browser console for duplicated id.</p>
+<p>In this case, input value must be treated in the observer to get the id</p>
+<pre><code><span><span class="co"># -- update</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">edit_milestone</span>, <span class="op">{</span></span>
+<span></span>
+<span>  <span class="co"># -- get id (pattern = "update_id)</span></span>
+<span>  <span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">edit_milestone</span>, <span class="st">"_"</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Edit milestone ="</span>, <span class="va">id</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span>  <span class="co"># ... do something here</span></span>
+<span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre>
+<p>You could also create a global action observer - setInputValue &gt; ‘actions’ - observeEvent(input$actions … get both action &amp; id from the input value</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># -- Module server return value</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">id</span>,</span>
+<span>     <span class="va">url</span>,</span>
+<span>     <span class="va">items</span>,</span>
+<span>     <span class="va">data_model</span>,</span>
+<span>     <span class="va">filtered_items</span>,</span>
+<span>     <span class="va">selected_items</span>,</span>
+<span>     <span class="va">clicked_column</span>,</span>
+<span>     <span class="va">filter_date</span><span class="op">)</span></span></code></pre></div>
+<p>xxx.</p>
+</section><section class="level2"><h2 id="considerations">Considerations<a class="anchor" aria-label="anchor" href="#considerations"></a>
+</h2>
+<p>Thxxx</p>
 </section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
