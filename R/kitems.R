@@ -14,7 +14,8 @@
 #'
 #' @returns the module server returns a list of the references that are accessible outside the module.
 #' All except id & url are references to reactive values.
-#' list(id, url, items, data_model, filtered_items, selected_items, clicked_column, filter_date)
+#' list(id, url, items, data_model, filtered_items, selected_items, clicked_column, filter_date,
+#' triggers = list(update))
 #'
 #' @details
 #'
@@ -58,6 +59,10 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
     selected_items <- reactiveVal(NULL)
     clicked_column <- reactiveVal(NULL)
     filter_date <- reactiveVal(NULL)
+
+    # -- Declare triggers
+    item_update_trigger  <- reactiveVal(NULL)
+    item_delete_trigger  <- reactiveVal(NULL)
 
 
     # __________________________________________________________________________
@@ -345,9 +350,22 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
 
 
     # -- Observe: actionButton
-    observeEvent(input$item_update, {
+    # just calls the trigger
+    observeEvent(input$item_update,
+      item_update_trigger(selected_items()))
 
-      catl(MODULE, "[BTN] Update item")
+
+    # -- Observe: trigger
+    # feed the reactiveVal with the id of the item to update
+    observeEvent(item_update_trigger(), {
+
+      # -- Make sure value contains a single item id
+      req(length(item_update_trigger()) == 1)
+      catl(MODULE, "[Trigger] Update item")
+
+      # -- force select item
+      # may be NULL or another value if trigger is called outside module
+      selected_items(item_update_trigger())
 
       # -- Get selected item
       item <- k_items()[k_items()$id == selected_items(), ]
@@ -364,7 +382,11 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
                               modalButton("Cancel"),
                               actionButton(ns("item_update_confirm"), "Update"))))
 
+      # -- reset trigger
+      item_update_trigger(NULL)
+
     })
+
 
     # -- Observe: actionButton
     observeEvent(input$item_update_confirm, {
@@ -391,23 +413,19 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
         # -- update item & reactive
         k_items(item_update(k_items(), item))
 
-        # -- prepare notify
-        msg <- "Item updated."
-        type <- "message"},
+        # -- notify
+        if(shiny::isRunning())
+          showNotification(paste(MODULE, "Item updated."), type = "message")},
 
-        # -- failed
+        # -- if fails
         error = function(e) {
 
-          # -- prepare notify
-          msg <- paste("Item has not been updated. \n error =", e$message)
-          type <- "error"
+          # -- notify
+          if(shiny::isRunning())
+            showNotification(paste(MODULE, "Item has not been updated."), type = "error")
 
-          # -- return
-          message(msg)},
-
-        # -- notify
-        finally = if(shiny::isRunning())
-          showNotification(paste(MODULE, msg), type))
+          # -- console
+          message(paste("Item has not been updated. \n error =", e$message))})
 
     })
 
@@ -428,9 +446,19 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
 
 
     # -- Observe: actionButton
-    observeEvent(input$item_delete, {
+    # just calls the trigger
+    observeEvent(input$item_delete,
+                 item_delete_trigger(selected_items()))
 
-      catl(MODULE, "[BTN] Delete item")
+
+    # -- Observe: actionButton
+    observeEvent(item_delete_trigger(), {
+
+      catl(MODULE, "[Trigger] Delete item")
+
+      # -- force select item
+      # may be NULL or another value if trigger is called outside module
+      selected_items(item_delete_trigger())
 
       # -- Open dialog for confirmation
       showModal(modalDialog(title = "Delete item(s)",
@@ -562,31 +590,34 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
     ## -- Declare filtered_items ----
     observe(
 
-      # -- update the reactiveVal
       filtered_items(
 
         # -- check
-        if(!is.null(filter_date())){
+        if("date_slider" %in% names(input)){
+          if(!is.null(filter_date())){
 
-          catl(MODULE, "Updating filtered item view")
+            catl(MODULE, "Updating filtered item view")
 
-          # -- init
-          items <- k_items()
-          dm <- k_data_model()
 
-          # -- Apply date filter
-          items <- items[items$date >= filter_date()[1] & items$date <= filter_date()[2], ]
+            # -- init
+            items <- k_items()
+            dm <- k_data_model()
 
-          # -- Apply ordering
-          if(any(!is.na(dm$sort.rank)))
-            items <- item_sort(items, dm)
+            # -- Apply date filter
+            items <- items[items$date >= filter_date()[1] & items$date <= filter_date()[2], ]
 
-          catl("- ouput dim =", dim(items), level = 2)
+            # -- Apply ordering
+            if(any(!is.na(dm$sort.rank)))
+              items <- item_sort(items, dm)
 
-          # -- Return
-          items
+            catl("- ouput dim =", dim(items), level = 2)
 
-        } else k_items()))
+            # -- Return
+            items
+
+          } else NULL
+        } else k_items()))# -- update the reactiveVal
+
 
 
     ## -- Declare filtered_items ----
@@ -686,7 +717,9 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
          filtered_items = filtered_items,
          selected_items = selected_items,
          clicked_column = clicked_column,
-         filter_date = filter_date)
+         filter_date = filter_date,
+         triggers = list(update = item_update_trigger,
+                         delete = item_delete_trigger))
 
   })
 }
