@@ -45,6 +45,13 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
 
   moduleServer(id, function(input, output, session) {
 
+    # //////////////////////////////////////////////////////////////////////////
+    # -- Check parameters ----
+
+    if(!is.null(trigger))
+      stopifnot("trigger must be a reactive object" = is.reactive(trigger))
+
+
     # __________________________________________________________________________
     # -- Init app environment --------------------------------------------------
 
@@ -274,9 +281,13 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
     if(!is.null(trigger))
       event_manager <- observe({
 
+        # -- get event & check
         event <- trigger()
+        stopifnot("Event should be a list object" = is.list(event))
+        stopifnot("Event should contain workflow & type named elements" = all(c("workflow", "type") %in% names(event)))
         cat("[Event] New event received, workflow =", event$workflow, "/ type =", event$type, "\n")
 
+        # -- fire listeners
         if(event$workflow == "create" && event$type == "dialog")
           trigger_dialog_create(trigger_dialog_create() + 1)
 
