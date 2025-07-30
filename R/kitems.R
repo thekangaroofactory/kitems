@@ -73,16 +73,15 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
     clicked_column <- reactiveVal(NULL)
     filter_date <- reactiveVal(NULL)
 
-    # -- Declare triggers
-    item_delete_trigger  <- reactiveVal(NULL)
-
     # -- Internal dialog triggers
     trigger_dialog_create <- reactiveVal(0)
     trigger_dialog_update <- reactiveVal(NULL)
+    trigger_dialog_delete <- reactiveVal(NULL)
 
     # -- Internal task triggers
     values_create <- reactiveVal(NULL)
     values_update <- reactiveVal(NULL)
+    values_delete <- reactiveVal(NULL)
 
 
     # __________________________________________________________________________
@@ -303,6 +302,12 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
         if(event$workflow == "update" && event$type == "task")
           values_update(event$values)
 
+        if(event$workflow == "delete" && event$type == "dialog")
+          trigger_dialog_delete(event$values)
+
+        if(event$workflow == "delete" && event$type == "task")
+          values_delete(event$values)
+
       }) |> bindEvent(trigger(),
                       ignoreInit = TRUE)
 
@@ -516,7 +521,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
     # __________________________________________________________________________
 
     # -- Declare: output
-    output$item_delete <- renderUI(
+    output$item_delete_btn <- renderUI(
 
       # -- check item selection
       if(is.null(selected_items()))
@@ -526,20 +531,22 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
                      label = "Delete"))
 
 
-    # -- Observe: actionButton
-    # just calls the trigger
-    observeEvent(input$item_delete,
-                 item_delete_trigger(selected_items()))
+    # -- Observe: actionButton & reactiveVal
+    observe({
 
+      # -- secure against double NULL (won't be filtered by bindEvent)
+      if(is.null(input$item_delete) && is.null(trigger_dialog_delete()))
+        return()
+      # -- secure against init (button value not NULL)
+      if(input$item_delete == 0 && is.null(trigger_dialog_delete()))
+        return()
 
-    # -- Observe: actionButton
-    observeEvent(item_delete_trigger(), {
+      catl(MODULE, "[Event] Delete item dialog")
 
-      catl(MODULE, "[Trigger] Delete item")
-
-      # -- force select item
-      # may be NULL or another value if trigger is called outside module
-      selected_items(item_delete_trigger())
+      # -- select item(s)
+      # for when listener is fired by the trigger
+      if(!is.null(trigger_dialog_delete()))
+        selected_items(trigger_dialog_delete())
 
       # -- Open dialog for confirmation
       showModal(modalDialog(title = "Delete item(s)",
@@ -548,15 +555,32 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
                               modalButton("Cancel"),
                               actionButton(ns("item_delete_confirm"), "Delete"))))
 
-    })
+      # -- reset trigger
+      trigger_dialog_delete(NULL)
 
-    # -- Observe: actionButton
-    observeEvent(input$item_delete_confirm, {
+    }) |> bindEvent(input$item_delete, trigger_dialog_delete(),
+                    ignoreInit = TRUE)
 
-      catl(MODULE, "[BTN] Confirm delete item(s)")
 
-      # -- close modal
-      removeModal()
+    # -- Observe: actionButton & trigger
+    observe({
+
+      # -- secure against double NULL (won't be filtered by bindEvent)
+      if(is.null(input$item_delete_confirm) && is.null(values_delete()))
+        return()
+      # -- secure against init (button value not NULL)
+      if(input$item_delete_confirm == 0 && is.null(values_delete()))
+        return()
+
+      catl(MODULE, "[Event] Confirm delete item(s)")
+
+      # when trigger is NULL, listener has been fired by actionButton
+      if(is.null(values_delete()))
+        # -- close modal
+        removeModal()
+      else
+        # -- select items
+        selected_items(values_delete())
 
       # -- get selected items (ids)
       ids <- selected_items()
@@ -586,7 +610,8 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
         finally = if(shiny::isRunning())
           showNotification(paste(MODULE, msg), type))
 
-    })
+    }) |> bindEvent(input$item_delete_confirm, values_delete(),
+                    ignoreInit = TRUE)
 
 
     # __________________________________________________________________________
@@ -798,8 +823,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
          filtered_items = filtered_items,
          selected_items = selected_items,
          clicked_column = clicked_column,
-         filter_date = filter_date,
-         triggers = list(delete = item_delete_trigger))
+         filter_date = filter_date)
 
   })
 }

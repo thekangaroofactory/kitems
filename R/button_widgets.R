@@ -58,6 +58,6 @@ delete_widget <- function(id){
   ns <- NS(id)
 
   # UI
-  uiOutput(ns("item_delete"), inline = TRUE)
+  uiOutput(ns("item_delete_btn"), inline = TRUE)
 
 }
