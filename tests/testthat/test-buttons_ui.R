@@ -9,7 +9,7 @@ test_that("create_widget works", {
   expect_type(x, "list")
 
   # -- test output
-  expect_equal(unlist(x), c(name = "span", attribs.id = "data-item_create", attribs.class = "shiny-html-output"))
+  expect_equal(unlist(x), c(name = "span", attribs.id = "data-item_create_btn", attribs.class = "shiny-html-output"))
 
 })
 
