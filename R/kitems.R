@@ -7,6 +7,7 @@
 #' @param autosave a logical whether the item auto save should be activated or not (default = TRUE)
 #' @param admin a logical indicating if the admin module server should be launched (default = FALSE)
 #' @param shortcut a logical should attribute shortcuts be computed when building the item form (default = FALSE)
+#' @param trigger a reactive object to pass events to the module (see details)
 #'
 #' @import shiny shinydashboard shinyWidgets
 #' @importFrom ktools catl
@@ -27,6 +28,11 @@
 #' \link[kitems]{dynamic_sidebar} is not affected by this parameter.
 #' It is expected that those function will not be used when admin = FALSE.
 #'
+#' Triggers are the way to send events for the module to execute dedicated actions.
+#' trigger must be a reactive (or NULL, the default). An event is defined as a named list of the form
+#' list(workflow = "create", type = "dialog") or list(workflow = "create", type = "task", values = list(...))
+#' If NULL, the trigger manager observer will not be initialized.
+#'
 #' @examples
 #' \dontrun{
 #' kitems(id = "mydata", path = "path/to/my/data", autosave = TRUE)
@@ -35,7 +41,7 @@
 
 # -- Shiny module server logic -------------------------------------------------
 
-kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
+kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, trigger = NULL) {
 
   moduleServer(id, function(input, output, session) {
 
@@ -63,6 +69,10 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
     # -- Declare triggers
     item_update_trigger  <- reactiveVal(NULL)
     item_delete_trigger  <- reactiveVal(NULL)
+
+    # -- Internal triggers
+    trigger_dialog_create <- reactiveVal(0)
+    values_create <- reactiveVal(NULL)
 
 
     # __________________________________________________________________________
@@ -249,7 +259,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
 
 
     # __________________________________________________________________________
-    # -- Item management ----
+    # -- Item workflows ----
     # __________________________________________________________________________
 
     ## -- declare shortcut observer ----
@@ -258,12 +268,31 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
                    attribute_input_update(k_data_model, input$shortcut_trigger, MODULE))
 
 
+    # //////////////////////////////////////////////////////////////////////////
+    ## -- Event manager (trigger) ----
+
+    if(!is.null(trigger))
+      event_manager <- observe({
+
+        event <- trigger()
+        cat("[Event] New event received, workflow =", event$workflow, "/ type =", event$type, "\n")
+
+        if(event$workflow == "create" && event$type == "dialog")
+          trigger_dialog_create(trigger_dialog_create() + 1)
+
+        if(event$workflow == "create" && event$type == "task")
+          values_create(event$values)
+
+      }) |> bindEvent(trigger(),
+                      ignoreInit = TRUE)
+
+
     # __________________________________________________________________________
-    ## -- Create item ----
+    ## -- Create item workflow ----
     # __________________________________________________________________________
 
     # -- Declare: output
-    output$item_create <- renderUI(
+    output$item_create_btn <- renderUI(
 
       # -- Check data model #290
       if(!is.null(k_data_model()))
@@ -271,67 +300,73 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE) {
                      label = "Create"))
 
 
-    # -- Observe: actionButton
-    observeEvent(input$item_create, {
+    # -- Observe: actionButton & trigger
+    observe({
 
-                 catl(MODULE, "[BTN] Create item")
+      # -- secure against init (button value not NULL)
+      if(input$item_create == 0 && trigger_dialog_create() == 0)
+        return()
 
-                 showModal(modalDialog(
-                   item_form(data.model = k_data_model(),
-                             items = k_items(),
-                             update = FALSE,
-                             item = NULL,
-                             shortcut = shortcut,
-                             ns = ns),
-                   title = "Create",
-                   footer = tagList(
-                     modalButton("Cancel"),
-                     actionButton(ns("item_create_confirm"), "Create"))))
-
-    })
+      # -- fire dialog
+      catl(MODULE, "[Event] Create item dialog")
+      item_create_modal(data.model = k_data_model(),
+                        items = k_items(),
+                        shortcut = shortcut,
+                        ns = ns)}) |> bindEvent(input$item_create, trigger_dialog_create(),
+                                                ignoreInit = TRUE)
 
 
     # -- Observe: actionButton
-    observeEvent(input$item_create_confirm, {
+    observe({
 
-      catl(MODULE, "[BTN] Confirm create item")
-
-      # -- close modal
+      catl(MODULE, "[Event] Confirm create item")
       removeModal()
 
-      # -- get list of input values & name it
+      # -- get named list of input values & store
       catl("- Get list of input values")
-      item_input_values <- item_input_values(input, dm_colClasses(k_data_model()))
+      values_create(item_input_values(input, dm_colClasses(k_data_model())))
 
-      # -- create item based on input list
+    }) |> bindEvent(input$item_create_confirm,
+                    ignoreInit = TRUE)
+
+
+    # -- Observe: reactiveVal
+    observe({
+
+      # -- create item based on values
       catl("- Create item")
-      item <- item_create(values = item_input_values, data.model = k_data_model())
+      item <- item_create(values = values_create(), data.model = k_data_model())
 
-      # -- Secure against errors raised by item_add #351
+      # -- add item to the items list
+      # Secure against errors raised by item_add #351
       tryCatch({
 
         # -- add to items & update reactive
         k_items(item_add(k_items(), item))
 
-        # -- prepare notify
-        msg <- "Item created."
-        type <- "message"},
+        # -- notify
+        if(shiny::isRunning())
+          showNotification(paste(MODULE, "Item created."), type = "message")},
 
         # -- failed
         error = function(e) {
 
-          # -- prepare notify
+          # -- compute message
           msg <- paste("Item has not been created. \n error =", e$message)
-          type <- "error"
 
-          # -- return
-          message(msg)},
+          # -- notify
+          warning(msg)
+          if(shiny::isRunning())
+            showNotification(paste(MODULE, msg), type = "error")
 
-        # -- notify
-        finally = if(shiny::isRunning())
-          showNotification(paste(MODULE, msg), type))
+        }) # tryCatch
 
-    })
+      # -- reset values
+      # otherwise you can't create same object twice
+      values_create(NULL)
+
+    }) |> bindEvent(values_create(),
+                    ignoreInit = TRUE)
 
 
     # __________________________________________________________________________

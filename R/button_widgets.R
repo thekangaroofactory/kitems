@@ -16,7 +16,7 @@ create_widget <- function(id){
   ns <- NS(id)
 
   # UI
-  uiOutput(ns("item_create"), inline = TRUE)
+  uiOutput(ns("item_create_btn"), inline = TRUE)
 
 }
 
