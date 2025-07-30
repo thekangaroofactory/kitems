@@ -37,7 +37,7 @@ update_widget <- function(id){
   ns <- NS(id)
 
   # UI
-  uiOutput(ns("item_update"), inline = TRUE)
+  uiOutput(ns("item_update_btn"), inline = TRUE)
 
 }
 

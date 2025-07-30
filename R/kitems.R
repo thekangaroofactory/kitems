@@ -74,12 +74,15 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
     filter_date <- reactiveVal(NULL)
 
     # -- Declare triggers
-    item_update_trigger  <- reactiveVal(NULL)
     item_delete_trigger  <- reactiveVal(NULL)
 
-    # -- Internal triggers
+    # -- Internal dialog triggers
     trigger_dialog_create <- reactiveVal(0)
+    trigger_dialog_update <- reactiveVal(NULL)
+
+    # -- Internal task triggers
     values_create <- reactiveVal(NULL)
+    values_update <- reactiveVal(NULL)
 
 
     # __________________________________________________________________________
@@ -294,6 +297,12 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
         if(event$workflow == "create" && event$type == "task")
           values_create(event$values)
 
+        if(event$workflow == "update" && event$type == "dialog")
+          trigger_dialog_update(event$values$id)
+
+        if(event$workflow == "update" && event$type == "task")
+          values_update(event$values)
+
       }) |> bindEvent(trigger(),
                       ignoreInit = TRUE)
 
@@ -385,7 +394,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
     # __________________________________________________________________________
 
     # -- Declare: output
-    output$item_update <- renderUI(
+    output$item_update_btn <- renderUI(
 
       # -- check item selection + single row
       if(is.null(selected_items()) | length(selected_items()) != 1)
@@ -395,63 +404,73 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
                      label = "Update"))
 
 
-    # -- Observe: actionButton
-    # just calls the trigger
-    observeEvent(input$item_update,
-      item_update_trigger(selected_items()))
+    # -- Observe: actionButton & reactiveVal
+    observe({
 
+      # -- secure against double NULL (won't be filtered by bindEvent)
+      if(is.null(input$item_update) && is.null(trigger_dialog_update()))
+        return()
+      # -- secure against init (button value not NULL)
+      if(input$item_update == 0 && is.null(trigger_dialog_update()))
+        return()
 
-    # -- Observe: trigger
-    # feed the reactiveVal with the id of the item to update
-    observeEvent(item_update_trigger(), {
+      catl(MODULE, "[Event] Update item dialog")
 
-      # -- Make sure value contains a single item id
-      req(length(item_update_trigger()) == 1)
-      catl(MODULE, "[Trigger] Update item")
+      # -- When fired by trigger
+      if(!is.null(trigger_dialog_update())){
 
-      # -- force select item
-      # may be NULL or another value if trigger is called outside module
-      selected_items(item_update_trigger())
+        # -- Make sure value contains a single item id
+        req(length(trigger_dialog_update()) == 1)
+
+        # -- Select item to update
+        selected_items(trigger_dialog_update())}
 
       # -- Get selected item
       item <- k_items()[k_items()$id == selected_items(), ]
 
       # -- Dialog
-      showModal(modalDialog(item_form(data.model = k_data_model(),
-                                      items = k_items(),
-                                      update = TRUE,
-                                      item = item,
-                                      shortcut = shortcut,
-                                      ns = ns),
-                            title = "Update",
-                            footer = tagList(
-                              modalButton("Cancel"),
-                              actionButton(ns("item_update_confirm"), "Update"))))
+      showModal(
+        modalDialog(
+          item_form(data.model = k_data_model(),
+                    items = k_items(),
+                    update = TRUE,
+                    item = item,
+                    shortcut = shortcut,
+                    ns = ns),
+          title = "Update",
+          footer = tagList(
+            modalButton("Cancel"),
+            actionButton(ns("item_update_confirm"), "Update"))))
 
       # -- reset trigger
-      item_update_trigger(NULL)
+      trigger_dialog_update(NULL)
 
-    })
+    }) |> bindEvent(input$item_update, trigger_dialog_update(),
+                    ignoreInit = TRUE)
 
 
     # -- Observe: actionButton
     observeEvent(input$item_update_confirm, {
 
-      catl(MODULE, "[BTN] Confirm update item")
-
       # -- close modal
+      catl(MODULE, "[Event] Confirm update item")
       removeModal()
 
-      # -- get list of input values & name it
+      # -- get named list of input values & store
       catl("- Get list of input values")
-      item_input_values <- item_input_values(input, dm_colClasses(k_data_model()))
+      input_values <- item_input_values(input, dm_colClasses(k_data_model()))
+      input_values$id <- selected_items()
+      values_update(input_values)
 
-      # -- update id (to replace selected item)
-      item_input_values$id <- selected_items()
+    })
+
+
+    # -- Observe: reactiveVal
+    observe({
 
       # -- create item based on input list
       catl("- Create replacement item")
-      item <- item_create(values = item_input_values, data.model = k_data_model())
+      item <- item_create(values = values_update(), data.model = k_data_model())
 
       # -- Secure against errors raised by item_add #351
       tryCatch({
@@ -466,14 +485,19 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
         # -- if fails
         error = function(e) {
 
-          # -- notify
+          # -- print & notify
+          warning(paste("Item has not been updated. \n error =", e$message))
           if(shiny::isRunning())
             showNotification(paste(MODULE, "Item has not been updated."), type = "error")
 
-          # -- console
-          message(paste("Item has not been updated. \n error =", e$message))})
+        })
 
-    })
+      # -- reset values
+      # otherwise you can't create same object twice
+      values_update(NULL)
+
+    }) |> bindEvent(values_update(),
+                    ignoreInit = TRUE)
 
 
     # __________________________________________________________________________
@@ -764,8 +788,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
          selected_items = selected_items,
          clicked_column = clicked_column,
          filter_date = filter_date,
-         triggers = list(update = item_update_trigger,
-                         delete = item_delete_trigger))
+         triggers = list(delete = item_delete_trigger))
 
   })
 }
