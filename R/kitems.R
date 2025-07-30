@@ -329,11 +329,22 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
 
       # -- fire dialog
       catl(MODULE, "[Event] Create item dialog")
-      item_create_modal(data.model = k_data_model(),
-                        items = k_items(),
-                        shortcut = shortcut,
-                        ns = ns)}) |> bindEvent(input$item_create, trigger_dialog_create(),
-                                                ignoreInit = TRUE)
+
+      # -- show dialog
+      showModal(modalDialog(
+        item_form(data.model = k_data_model(),
+                  items = k_items(),
+                  update = FALSE,
+                  item = NULL,
+                  shortcut = shortcut,
+                  ns = ns),
+        title = "Create",
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton(ns("item_create_confirm"), "Create"))))
+
+    }) |> bindEvent(input$item_create, trigger_dialog_create(),
+                    ignoreInit = TRUE)
 
 
     # -- Observe: actionButton
