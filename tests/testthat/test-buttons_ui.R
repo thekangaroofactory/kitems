@@ -37,6 +37,6 @@ test_that("delete_widget works", {
   expect_type(x, "list")
 
   # -- test output
-  expect_equal(unlist(x), c(name = "span", attribs.id = "data-item_delete", attribs.class = "shiny-html-output"))
+  expect_equal(unlist(x), c(name = "span", attribs.id = "data-item_delete_btn", attribs.class = "shiny-html-output"))
 
 })
