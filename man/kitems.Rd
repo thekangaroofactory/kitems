@@ -4,7 +4,14 @@
 \alias{kitems}
 \title{Module server}
 \usage{
-kitems(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE)
+kitems(
+  id,
+  path,
+  autosave = TRUE,
+  admin = FALSE,
+  shortcut = FALSE,
+  trigger = NULL
+)
 }
 \arguments{
 \item{id}{the id to be used for the module server instance}
@@ -16,6 +23,8 @@ kitems(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE)
 \item{admin}{a logical indicating if the admin module server should be launched (default = FALSE)}
 
 \item{shortcut}{a logical should attribute shortcuts be computed when building the item form (default = FALSE)}
+
+\item{trigger}{a reactive object to pass events to the module (see details)}
 }
 \value{
 the module server returns a list of the references that are accessible outside the module.
@@ -34,6 +43,11 @@ consistent with the output of \link[kitems]{dm_name} function used with \code{id
 When admin is FALSE, \link[kitems]{admin_widget} will return an 'empty' layout (tabs with no content)
 \link[kitems]{dynamic_sidebar} is not affected by this parameter.
 It is expected that those function will not be used when admin = FALSE.
+
+Triggers are the way to send events for the module to execute dedicated actions.
+trigger must be a reactive (or NULL, the default). An event is defined as a named list of the form
+list(workflow = "create", type = "dialog") or list(workflow = "create", type = "task", values = list(...))
+If NULL, the trigger manager observer will not be initialized.
 }
 \examples{
 \dontrun{
