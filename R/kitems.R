@@ -776,8 +776,8 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
     # -- the reference (not the value!)
     list(id = id,
          url = items_url,
-         items = k_items,
-         data_model = k_data_model,
+         items = reactive(k_items()),
+         data_model = reactive(k_data_model()),
          filtered_items = filtered_items,
          selected_items = selected_items,
          clicked_column = clicked_column,
