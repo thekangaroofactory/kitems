@@ -52,8 +52,8 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
       stopifnot("trigger must be a reactive object" = is.reactive(trigger))
 
 
-    # __________________________________________________________________________
-    # -- Init app environment --------------------------------------------------
+    # //////////////////////////////////////////////////////////////////////////
+    # -- Init environment ----
 
     ## -- Declare config parameters ----
 
@@ -65,7 +65,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
     ns <- session$ns
 
 
-    ## -- Declare objects ----
+    ## -- Declare reactive objects ----
 
     # -- Internal create workflow triggers
     trigger_create_dialog <- reactiveVal(0)
@@ -80,8 +80,8 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
     trigger_delete_values <- reactiveVal(NULL)
 
 
-    # __________________________________________________________________________
-    # -- Initialize data model and items ---------------------------------------
+    # //////////////////////////////////////////////////////////////////////////
+    # -- Initialize data model and items ----
 
     # -- Notify progress
     withProgress(message = MODULE, value = 0, {
@@ -232,8 +232,8 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
     }) #end withProgress
 
 
-    # __________________________________________________________________________
-    # -- Auto save -------------------------------------------------------------
+    # //////////////////////////////////////////////////////////////////////////
+    # -- Auto save ----
 
     ## -- Data model ----
 
@@ -263,9 +263,8 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
       }, ignoreInit = TRUE)
 
 
-    # __________________________________________________________________________
+    # //////////////////////////////////////////////////////////////////////////
     # -- Item workflows ----
-    # __________________________________________________________________________
 
     ## -- declare shortcut observer ----
     if(shortcut)
@@ -659,8 +658,8 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
                       ignoreInit = TRUE)
 
 
-    # __________________________________________________________________________
-    # -- Date slider -----------------------------------------------------------
+    # //////////////////////////////////////////////////////////////////////////
+    # -- Date slider ----
 
     ## -- Date slider strategy ----
     output$date_slider_strategy <- renderUI(
@@ -671,8 +670,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
                      label = "Strategy",
                      choices = c("this-year", "keep-range"),
                      selected = "this-year",
-                     inline = TRUE)
-      else NULL)
+                     inline = TRUE))
 
 
     ## -- Date slider ----
@@ -816,18 +814,16 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
     })
 
 
-    # __________________________________________________________________________
+    # //////////////////////////////////////////////////////////////////////////
     # -- Admin ----
-    # __________________________________________________________________________
 
     # -- Call module
     if(admin)
       kitems_admin(k_data_model, k_items, path, dm_url, items_url, autosave)
 
 
-    # __________________________________________________________________________
+    # //////////////////////////////////////////////////////////////////////////
     # -- Module server return value ----
-    # __________________________________________________________________________
 
     # -- the reference (not the value!)
     list(id = id,
