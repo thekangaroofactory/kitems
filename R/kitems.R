@@ -269,7 +269,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
     ## -- declare shortcut observer ----
     if(shortcut)
       observeEvent(input$shortcut_trigger,
-                   attribute_input_update(k_data_model, input$shortcut_trigger, MODULE))
+                   attribute_input_update(k_data_model(), input$shortcut_trigger, MODULE))
 
 
     # //////////////////////////////////////////////////////////////////////////
