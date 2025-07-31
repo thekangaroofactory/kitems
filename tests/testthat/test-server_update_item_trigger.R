@@ -32,8 +32,7 @@ test_that("Update works [trigger dialog]", {
     # -- select item
     trigger(list(workflow = "update", type = "dialog", values = list(id = x$id[1])))
 
-    # -- update inputs (values to create item)
-    session$setInputs(id = x$id[1])
+    # -- update inputs
     session$setInputs(date = x$date[1] + 1)
     session$setInputs(date_time = "17:17:17")
     session$setInputs(date_tz = "UTC")

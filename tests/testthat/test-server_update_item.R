@@ -29,7 +29,7 @@ test_that("Update works", {
     session$flushReact()
 
     # -- select item
-    selected_items(x$id[1])
+    session$setInputs(filtered_view_rows_selected = 1)
 
     # -- click
     session$setInputs(item_update = 1)
