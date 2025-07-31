@@ -73,7 +73,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
     trigger_dialog_delete <- reactiveVal(NULL)
 
     # -- Internal task triggers
-    values_create <- reactiveVal(NULL)
+    trigger_create_values <- reactiveVal(NULL)
     values_update <- reactiveVal(NULL)
     values_delete <- reactiveVal(NULL)
 
@@ -288,7 +288,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
           trigger_create_dialog(trigger_create_dialog() + 1)
 
         if(event$workflow == "create" && event$type == "task")
-          values_create(event$values)
+          trigger_create_values(event$values)
 
         if(event$workflow == "update" && event$type == "dialog")
           trigger_dialog_update(event$values$id)
@@ -347,33 +347,38 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
       }) |> bindEvent(trigger_create_dialog())
 
 
+    # -- Observe: create item from actionButton
+    observeEvent(input$item_create_confirm, {
 
-    # -- Observe: actionButton
-    observe({
-
-      catl(MODULE, "[Event] Confirm create item")
+      catl(MODULE, "[Event] Confirm create item button")
       removeModal()
 
-      # -- get named list of input values & store
+      # -- get named list of input values
       catl("- Get list of input values")
-      values_create(item_input_values(input, dm_colClasses(k_data_model())))
-
-    }) |> bindEvent(input$item_create_confirm,
-                    ignoreInit = TRUE)
-
-
-    # -- Observe: reactiveVal
-    observe({
+      values <- item_input_values(input, dm_colClasses(k_data_model()))
 
       # -- create item based on values
       catl("- Create item")
-      item <- item_create(values = values_create(), data.model = k_data_model())
+      item <- item_create(values = values, data.model = k_data_model())
+
+      # -- add to items & store
+      catl("- add to items")
+      k_items(item_add(k_items(), item))})
+
+
+    # -- Observe: create item from trigger values
+    observe({
 
       # -- add item to the items list
       # Secure against errors raised by item_add #351
       tryCatch({
 
-        # -- add to items & update reactive
+        # -- create item based on values
+        catl("- Create item")
+        item <- item_create(values = trigger_create_values(), data.model = k_data_model())
+
+        # -- add to items & store
+        catl("- add to items")
         k_items(item_add(k_items(), item))
 
         # -- notify
@@ -395,9 +400,9 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
 
       # -- reset values
       # otherwise you can't create same object twice
-      values_create(NULL)
+      trigger_create_values(NULL)
 
-    }) |> bindEvent(values_create(),
+    }) |> bindEvent(trigger_create_values(),
                     ignoreInit = TRUE)
 
 

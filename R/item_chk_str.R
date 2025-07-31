@@ -18,6 +18,10 @@
 
 item_chk_str <- function(items, item){
 
+  .Deprecated(new = "Use case is removed since items can't be added from the outside of the module",
+              package = "kitems",
+              msg = "This function has been deprecated and will be removed in a future version.")
+
   # -- check item structure #345
   ifelse(
     ncol(item) != ncol(items),
