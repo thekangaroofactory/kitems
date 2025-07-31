@@ -4,7 +4,7 @@
 #'
 #' @param data.model a data.frame of the data model
 #' @param items a data.frame of the items
-#' @param update a logical (default FALSE) if the intent it to update an item
+#' @param workflow a character string to indicate workflow (see details)
 #' @param item a data.frame of the item to update (when update = TRUE)
 #' @param shortcut a logical (default FALSE) if shortcuts should be activated
 #' @param ns the intented namespace function to use in the dialog
@@ -12,25 +12,54 @@
 #' @returns a modal dialog
 #' @export
 #'
+#' @details
+#' Possible values for workflow are c("create", "update", "delete")
+#' "create" is the default
+#'
 #' @examples
 #' \notrun{
 #' item_dialog(data.model, items, update = FALSE, item = NULL, shortcut = FALSE, ns)
 #' }
 
-item_dialog <- function(data.model, items, update = FALSE, item = NULL, shortcut = FALSE, ns){
+item_dialog <- function(data.model = NULL, items = NULL, workflow = c("create", "update", "delete"), item = NULL, shortcut = FALSE, ns){
 
-  # -- return
-  modalDialog(
-    item_form(data.model = data.model,
-              items = items,
-              update = update,
-              item = item,
-              shortcut = shortcut,
-              ns = ns),
-    title = ifelse(update, "Update item", "Create item"),
-    footer = tagList(
-      modalButton("Cancel"),
-      actionButton(inputId = ns(paste0("item_", ifelse(update, "update", "create"), "_confirm")),
-                   label = ifelse(update, "Update", "Create"))))
+  # -- check argument
+  workflow <- match.arg(workflow)
+
+  # -- create
+  if(workflow == "create")
+    modalDialog(
+      item_form(data.model = data.model,
+                items = items,
+                shortcut = shortcut,
+                ns = ns),
+      title = "Create item",
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton(inputId = ns(("item_create_confirm")),
+                     label = "Create")))
+
+  # -- update
+  if(workflow == "update")
+    modalDialog(
+      item_form(data.model = data.model,
+                items = items,
+                update = TRUE,
+                item = item,
+                shortcut = shortcut,
+                ns = ns),
+      title = "Update item",
+      footer = tagList(
+        modalButton("Cancel"),
+        actionButton(inputId = ns(("item_update_confirm")),
+                     label = "Update")))
+
+  # -- delete
+  if(workflow == "delete")
+    modalDialog(title = "Delete item(s)",
+                "Danger: deleting item(s) can't be undone! Do you confirm?",
+                footer = tagList(
+                  modalButton("Cancel"),
+                  actionButton(ns("item_delete_confirm"), "Delete")))
 
 }
