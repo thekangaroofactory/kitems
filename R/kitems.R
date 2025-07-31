@@ -68,7 +68,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
     ## -- Declare objects ----
 
     # -- Internal dialog triggers
-    trigger_dialog_create <- reactiveVal(0)
+    trigger_create_dialog <- reactiveVal(0)
     trigger_dialog_update <- reactiveVal(NULL)
     trigger_dialog_delete <- reactiveVal(NULL)
 
@@ -285,7 +285,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
 
         # -- fire listeners
         if(event$workflow == "create" && event$type == "dialog")
-          trigger_dialog_create(trigger_dialog_create() + 1)
+          trigger_create_dialog(trigger_create_dialog() + 1)
 
         if(event$workflow == "create" && event$type == "task")
           values_create(event$values)
@@ -306,11 +306,10 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
                       ignoreInit = TRUE)
 
 
-    # __________________________________________________________________________
+    # //////////////////////////////////////////////////////////////////////////
     ## -- Create item workflow ----
-    # __________________________________________________________________________
 
-    # -- Declare: output
+    # -- Declare: actionButton output
     output$item_create_btn <- renderUI(
 
       # -- Check data model #290
@@ -319,31 +318,34 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
                      label = "Create"))
 
 
-    # -- Observe: actionButton & trigger
-    observe({
+    # -- Observe: fire dialog from actionButton
+    observeEvent(input$item_create, {
 
-      # -- secure against init (button value not NULL)
-      if(input$item_create == 0 && trigger_dialog_create() == 0)
-        return()
+      catl(MODULE, "[Event] Create item button")
 
-      # -- fire dialog
-      catl(MODULE, "[Event] Create item dialog")
+      # -- show create dialog
+      showModal(
+        item_dialog(data.model = k_data_model(),
+                    items = k_items(),
+                    shortcut = shortcut,
+                    ns = ns))})
 
-      # -- show dialog
-      showModal(modalDialog(
-        item_form(data.model = k_data_model(),
-                  items = k_items(),
-                  update = FALSE,
-                  item = NULL,
-                  shortcut = shortcut,
-                  ns = ns),
-        title = "Create",
-        footer = tagList(
-          modalButton("Cancel"),
-          actionButton(ns("item_create_confirm"), "Create"))))
 
-    }) |> bindEvent(input$item_create, trigger_dialog_create(),
-                    ignoreInit = TRUE)
+    # -- Observe: fire dialog from trigger
+    if(!is.null(trigger))
+      observe({
+
+        catl(MODULE, "[Event] Create item dialog trigger")
+
+        # -- show create dialog
+        showModal(
+          item_dialog(data.model = k_data_model(),
+                      items = k_items(),
+                      shortcut = shortcut,
+                      ns = ns))
+
+      }) |> bindEvent(trigger_create_dialog())
+
 
 
     # -- Observe: actionButton
