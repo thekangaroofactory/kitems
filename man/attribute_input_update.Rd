@@ -7,7 +7,7 @@
 attribute_input_update(data.model, shortcut_trigger, MODULE = NULL)
 }
 \arguments{
-\item{data.model}{the reference of the data model reactiveVal}
+\item{data.model}{a data.frame of the data model}
 
 \item{shortcut_trigger}{basically the value of input$shortcut_trigger}
 

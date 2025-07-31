@@ -17,7 +17,7 @@
 #' "create" is the default
 #'
 #' @examples
-#' \notrun{
+#' \dontrun{
 #' item_dialog(data.model, items, update = FALSE, item = NULL, shortcut = FALSE, ns)
 #' }
 
