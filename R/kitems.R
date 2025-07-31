@@ -75,13 +75,9 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
     trigger_update_dialog <- reactiveVal(NULL)
     trigger_update_values <- reactiveVal(NULL)
 
-
-
-    trigger_dialog_delete <- reactiveVal(NULL)
-
-    # -- Internal task triggers
-
-    values_delete <- reactiveVal(NULL)
+    # -- Internal delete workflow triggers
+    trigger_delete_dialog <- reactiveVal(NULL)
+    trigger_delete_values <- reactiveVal(NULL)
 
 
     # __________________________________________________________________________
@@ -303,10 +299,10 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
           trigger_update_values(event$values)
 
         if(event$workflow == "delete" && event$type == "dialog")
-          trigger_dialog_delete(event$values)
+          trigger_delete_dialog(event$values)
 
         if(event$workflow == "delete" && event$type == "task")
-          values_delete(event$values)
+          trigger_delete_values(event$values)
 
       }) |> bindEvent(trigger(),
                       ignoreInit = TRUE)
@@ -377,43 +373,44 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
 
 
     # -- Observe: create item from trigger values
-    observe({
+    if(!is.null(trigger))
+      observe({
 
-      # -- add item to the items list
-      # Secure against errors raised by item_add #351
-      tryCatch({
+        # -- add item to the items list
+        # Secure against errors raised by item_add #351
+        tryCatch({
 
-        # -- create item based on values
-        catl("- Create item")
-        item <- item_create(values = trigger_create_values(), data.model = k_data_model())
+          # -- create item based on values
+          catl("- Create item")
+          item <- item_create(values = trigger_create_values(), data.model = k_data_model())
 
-        # -- add to items & store
-        catl("- add to items")
-        k_items(item_add(k_items(), item))
-
-        # -- notify
-        if(shiny::isRunning())
-          showNotification(paste(MODULE, "Item created."), type = "message")},
-
-        # -- failed
-        error = function(e) {
-
-          # -- compute message
-          msg <- paste("Item has not been created. \n error =", e$message)
+          # -- add to items & store
+          catl("- add to items")
+          k_items(item_add(k_items(), item))
 
           # -- notify
-          warning(msg)
           if(shiny::isRunning())
-            showNotification(paste(MODULE, msg), type = "error")
+            showNotification(paste(MODULE, "Item created."), type = "message")},
 
-        }) # tryCatch
+          # -- failed
+          error = function(e) {
 
-      # -- reset values
-      # otherwise you can't create same object twice
-      trigger_create_values(NULL)
+            # -- compute message
+            msg <- paste("Item has not been created. \n error =", e$message)
 
-    }) |> bindEvent(trigger_create_values(),
-                    ignoreInit = TRUE)
+            # -- notify
+            warning(msg)
+            if(shiny::isRunning())
+              showNotification(paste(MODULE, msg), type = "error")
+
+          }) # tryCatch
+
+        # -- reset values
+        # otherwise you can't create same object twice
+        trigger_create_values(NULL)
+
+      }) |> bindEvent(trigger_create_values(),
+                      ignoreInit = TRUE)
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -442,34 +439,35 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
       showModal(
         item_dialog(data.model = k_data_model(),
                     items = k_items(),
-                    update = TRUE,
+                    workflow = "update",
                     item = item,
                     shortcut = shortcut,
                     ns = ns))})
 
 
     # -- Observe: fire update dialog from trigger
-    observe({
+    if(!is.null(trigger))
+      observe({
 
-      catl(MODULE, "[Event] Update item dialog trigger")
+        catl(MODULE, "[Event] Update item dialog trigger")
 
-      # -- Make sure value contains a single id
-      req(length(trigger_update_dialog()) == 1)
+        # -- Make sure value contains a single id
+        req(length(trigger_update_dialog()) == 1)
 
-      # -- Get selected item
-      item <- k_items()[k_items()$id == selected_items(), ]
+        # -- Get selected item
+        item <- k_items()[k_items()$id == selected_items(), ]
 
-      # -- show update dialog
-      showModal(
-        item_dialog(data.model = k_data_model(),
-                    items = k_items(),
-                    update = TRUE,
-                    item = item,
-                    shortcut = shortcut,
-                    ns = ns))
+        # -- show update dialog
+        showModal(
+          item_dialog(data.model = k_data_model(),
+                      items = k_items(),
+                      workflow = "update",
+                      item = item,
+                      shortcut = shortcut,
+                      ns = ns))
 
-    }) |> bindEvent(trigger_update_dialog(),
-                    ignoreInit = TRUE)
+      }) |> bindEvent(trigger_update_dialog(),
+                      ignoreInit = TRUE)
 
 
     # -- Observe: update item from dialog
@@ -506,47 +504,47 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
 
 
     # -- Observe: update item from trigger values
-    observe({
+    if(!is.null(trigger))
+      observe({
 
-      # -- create item based on trigger values & force id
-      catl("- Create replacement item")
-      item <- item_create(values = trigger_update_values(), data.model = k_data_model())
-      item$id <- trigger_update_values()$id
+        # -- create item based on trigger values & force id
+        catl("- Create replacement item")
+        item <- item_create(values = trigger_update_values(), data.model = k_data_model())
+        item$id <- trigger_update_values()$id
 
-      # -- Secure against errors raised by item_update #351
-      tryCatch({
+        # -- Secure against errors raised by item_update #351
+        tryCatch({
 
-        # -- update item & reactive
-        catl("- Replace item")
-        k_items(item_update(k_items(), item))
+          # -- update item & reactive
+          catl("- Replace item")
+          k_items(item_update(k_items(), item))
 
-        # -- notify
-        if(shiny::isRunning())
-          showNotification(paste(MODULE, "Item updated."), type = "message")},
-
-        # -- if fails
-        error = function(e) {
-
-          # -- print & notify
-          warning(paste("Item has not been updated. \n error =", e$message))
+          # -- notify
           if(shiny::isRunning())
-            showNotification(paste(MODULE, "Item has not been updated."), type = "error")
+            showNotification(paste(MODULE, "Item updated."), type = "message")},
 
-        })
+          # -- if fails
+          error = function(e) {
 
-      # -- reset values
-      # otherwise you can't update same object twice
-      trigger_update_values(NULL)
+            # -- print & notify
+            warning(paste("Item has not been updated. \n error =", e$message))
+            if(shiny::isRunning())
+              showNotification(paste(MODULE, "Item has not been updated."), type = "error")
 
-    }) |> bindEvent(trigger_update_values(),
-                    ignoreInit = TRUE)
+          })
+
+        # -- reset values
+        # otherwise you can't update same object twice
+        trigger_update_values(NULL)
+
+      }) |> bindEvent(trigger_update_values(),
+                      ignoreInit = TRUE)
 
 
-    # __________________________________________________________________________
-    ## -- Delete item(s) ----
-    # __________________________________________________________________________
+    # //////////////////////////////////////////////////////////////////////////
+    ## -- Delete item workflow ----
 
-    # -- Declare: output
+    # -- Declare: actionButton output
     output$item_delete_btn <- renderUI(
 
       # -- check item selection
@@ -557,56 +555,31 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
                      label = "Delete"))
 
 
-    # -- Observe: actionButton & reactiveVal
-    observe({
+    # -- Observe: fire dialog from actionButton
+    observeEvent(input$item_delete, {
 
-      # -- secure against double NULL (won't be filtered by bindEvent)
-      if(is.null(input$item_delete) && is.null(trigger_dialog_delete()))
-        return()
-      # -- secure against init (button value not NULL)
-      if(input$item_delete == 0 && is.null(trigger_dialog_delete()))
-        return()
-
-      catl(MODULE, "[Event] Delete item dialog")
-
-      # -- select item(s)
-      # for when listener is fired by the trigger
-      if(!is.null(trigger_dialog_delete()))
-        selected_items(trigger_dialog_delete())
-
-      # -- Open dialog for confirmation
-      showModal(modalDialog(title = "Delete item(s)",
-                            "Danger: deleting item(s) can't be undone! Do you confirm?",
-                            footer = tagList(
-                              modalButton("Cancel"),
-                              actionButton(ns("item_delete_confirm"), "Delete"))))
-
-      # -- reset trigger
-      trigger_dialog_delete(NULL)
-
-    }) |> bindEvent(input$item_delete, trigger_dialog_delete(),
-                    ignoreInit = TRUE)
+      catl(MODULE, "[Event] Delete item button")
+      showModal(item_dialog(workflow = "delete", ns = ns))})
 
 
-    # -- Observe: actionButton & trigger
-    observe({
+    # -- Observe: fire dialog from trigger
+    if(!is.null(trigger))
+      observe({
 
-      # -- secure against double NULL (won't be filtered by bindEvent)
-      if(is.null(input$item_delete_confirm) && is.null(values_delete()))
-        return()
-      # -- secure against init (button value not NULL)
-      if(input$item_delete_confirm == 0 && is.null(values_delete()))
-        return()
+        catl(MODULE, "[Event] Delete item dialog trigger")
+        showModal(item_dialog(workflow = "delete", ns = ns))
 
-      catl(MODULE, "[Event] Confirm delete item(s)")
+      }) |> bindEvent(trigger_delete_dialog(),
+                      ignoreInit = TRUE)
 
-      # when trigger is NULL, listener has been fired by actionButton
-      if(is.null(values_delete()))
-        # -- close modal
-        removeModal()
-      else
-        # -- select items
-        selected_items(values_delete())
+
+    # -- Observe: delete item from actionButton
+    observeEvent(input$item_delete_confirm, {
+
+      catl(MODULE, "[Event] Confirm delete item(s) button")
+
+      # -- close modal
+      removeModal()
 
       # -- get selected items (ids)
       ids <- selected_items()
@@ -636,8 +609,54 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
         finally = if(shiny::isRunning())
           showNotification(paste(MODULE, msg), type))
 
-    }) |> bindEvent(input$item_delete_confirm, values_delete(),
-                    ignoreInit = TRUE)
+      # -- reset trigger
+      # can't be performed before otherwise selected_items are lost
+      if(!is.null(trigger_delete_dialog()))
+        trigger_delete_dialog(NULL)
+
+    })
+
+
+    # -- Observe: delete item from trigger
+    if(!is.null(trigger))
+      observe({
+
+        catl(MODULE, "[Event] delete item(s) trigger")
+
+        # -- get selected items (ids)
+        ids <- trigger_delete_values()
+        catl("- Item(s) to be deleted =", as.character(ids))
+
+        # -- Secure against errors raised by item_add #351
+        tryCatch({
+
+          # -- delete item & update reactive
+          k_items(item_delete(k_items(), ids))
+
+          # -- prepare notify
+          msg <- "Item(s) deleted."
+          type <- "message"},
+
+          # -- failed
+          error = function(e) {
+
+            # -- prepare notify
+            msg <- paste("Item(s) has not been deleted. \n error =", e$message)
+            type <- "error"
+
+            # -- return
+            message(msg)},
+
+          # -- notify
+          finally = if(shiny::isRunning())
+            showNotification(paste(MODULE, msg), type))
+
+        # -- reset values
+        # otherwise you can't update same object twice
+        trigger_delete_values(NULL)
+
+      }) |> bindEvent(trigger_delete_values(),
+                      ignoreInit = TRUE)
 
 
     # __________________________________________________________________________
@@ -769,8 +788,8 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
         ids <- trigger_update_dialog()
 
       # -- select by delete trigger
-      # if(!is.null(trigger_delete_dialog()))
-      #   ids <- trigger_delete_dialog()
+      if(!is.null(trigger_delete_dialog()))
+        ids <- trigger_delete_dialog()
 
       catl(MODULE, "Selected items =", as.character(ids), level = 2)
 
