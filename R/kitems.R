@@ -716,15 +716,16 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
 
 
     ## -- Declare filter date ----
-    filter_date <- reactive({
+    filter_date <- reactive(
 
-      catl(MODULE, "Date sliderInput has been updated")
-      catl("- values =", input$date_slider, level = 2)
+      # -- check data model (otherwise return NULL)
+      if(hasDate(k_data_model())){
 
-      # -- return
-      input$date_slider
+        catl(MODULE, "Date sliderInput has been updated")
+        catl("- values =", input$date_slider, level = 2)
 
-    })
+        # -- return
+        input$date_slider})
 
 
     # //////////////////////////////////////////////////////////////////////////
