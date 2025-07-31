@@ -68,7 +68,6 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
     ## -- Declare objects ----
 
     # -- Declare reactive objects (for external use)
-    clicked_column <- reactiveVal(NULL)
     filter_date <- reactiveVal(NULL)
 
     # -- Internal dialog triggers
@@ -729,9 +728,10 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
                                         selection = list(mode = 'multiple', target = "row", selected = NULL))
 
 
-    ## -- Manage in table selection ----
+    # //////////////////////////////////////////////////////////////////////////
+    # -- In table selection ----
 
-    ### -- Declare selected items ----
+    ## -- Declare selected items ----
     selected_items <- reactive(
 
       # -- Check to allow unselect all
@@ -752,20 +752,21 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
       })
 
 
-    ### -- Cell clicked / clicked_column ----
-    observeEvent(input$filtered_view_cell_clicked$col, {
+    ## -- Declare clicked column ----
+    clicked_column <- reactive({
 
-      # -- Get table col names (need to apply masks to get correct columns, hence sending only first row)
+      # -- Get table col names
+      # need to apply masks to get correct columns, hence sending only first row
       cols <- colnames(item_mask(k_data_model(), utils::head(filtered_items(), n = 1)))
 
       # -- Get name of the clicked column
       col_clicked <- cols[input$filtered_view_cell_clicked$col + 1]
-      catl(MODULE, "Clicked column (filtered view) =", col_clicked, level = 2)
+      catl(MODULE, "Clicked column =", col_clicked, level = 2)
 
-      # -- Store
-      clicked_column(col_clicked)
+      # -- return
+      col_clicked
 
-    }, ignoreNULL = TRUE)
+    })
 
 
     # __________________________________________________________________________
