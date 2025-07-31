@@ -32,7 +32,7 @@ test_that("Delete works", {
     # -- create event
     event <- list(workflow = "delete",
                   type = "task",
-                  values = k_items()$id[[1]])
+                  values = x$id[[1]])
 
     # -- fire dialog
     session$flushReact()
