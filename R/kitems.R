@@ -67,9 +67,6 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
 
     ## -- Declare objects ----
 
-    # -- Declare reactive objects (for external use)
-    filter_date <- reactiveVal(NULL)
-
     # -- Internal dialog triggers
     trigger_dialog_create <- reactiveVal(0)
     trigger_dialog_update <- reactiveVal(NULL)
@@ -664,25 +661,19 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
                     max = max,
                     value = value)
 
-      } else {
-
-        # -- cleanup after remove date attribute
-        if(!is.null(filter_date()))
-          filter_date(NULL)
-
-        NULL}
+      }
 
     })
 
 
-    ## -- Observe date_slider input ----
-    observeEvent(input$date_slider, {
+    ## -- Declare filter date ----
+    filter_date <- reactive({
 
       catl(MODULE, "Date sliderInput has been updated")
       catl("- values =", input$date_slider, level = 2)
 
-      # -- store
-      filter_date(input$date_slider)
+      # -- return
+      input$date_slider
 
     })
 
