@@ -68,7 +68,6 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
     ## -- Declare objects ----
 
     # -- Declare reactive objects (for external use)
-    selected_items <- reactiveVal(NULL)
     clicked_column <- reactiveVal(NULL)
     filter_date <- reactiveVal(NULL)
 
@@ -732,27 +731,25 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
 
     ## -- Manage in table selection ----
 
-    ### -- Selected row / selected_items ----
-    observeEvent(input$filtered_view_rows_selected, {
+    ### -- Declare selected items ----
+    selected_items <- reactive(
 
-      # -- Setting ignoreNULL to FALSE + check to allow unselect all (then selected_items will be NULL)
-      if(is.null(input$filtered_view_rows_selected))
-        ids <- NULL
+      # -- Check to allow unselect all
+      if(is.null(input$filtered_view_rows_selected)){
 
-      else {
+        catl(MODULE, "Clear selected items")
+        NULL
 
-        catl(MODULE, "Selected rows (filtered view) =", input$filtered_view_rows_selected)
+      } else {
 
-        # -- Get item ids from the default view
+        # -- Get item ids from the selected rows
         ids <- filtered_items()[input$filtered_view_rows_selected, ]$id
-        catl("- ids =", as.character(ids), level = 2)
+        catl(MODULE, "Selected items =", as.character(ids), level = 2)
 
-      }
+        # -- return
+        ids
 
-      # -- Store
-      selected_items(ids)
-
-    }, ignoreNULL = FALSE)
+      })
 
 
     ### -- Cell clicked / clicked_column ----
