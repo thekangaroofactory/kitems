@@ -14,7 +14,8 @@ test_that("Shortcut works", {
   params <- list(id = module_id,
                  path = testdata_path,
                  autosave = FALSE,
-                 shortcut = TRUE)
+                 options = list(
+                   shortcut = TRUE))
 
   # -- module server call
   testServer(kitems, args = params, {
