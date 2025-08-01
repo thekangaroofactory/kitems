@@ -6,7 +6,7 @@
 #' @param path a path where data model and items will be stored
 #' @param autosave a logical whether the item auto save should be activated or not (default = TRUE)
 #' @param admin a logical indicating if the admin module server should be launched (default = FALSE)
-#' @param shortcut a logical should attribute shortcuts be computed when building the item form (default = FALSE)
+#' @param options a list of options (see details)
 #' @param trigger a reactive object to pass events to the module (see details)
 #'
 #' @import shiny shinydashboard shinyWidgets
@@ -28,6 +28,9 @@
 #' \link[kitems]{dynamic_sidebar} is not affected by this parameter.
 #' It is expected that those function will not be used when admin = FALSE.
 #'
+#' Behavior of the module server can be tuned using a list of options
+#' shortcut option is a logical to activate shortcut mechanism within item forms
+#'
 #' Triggers are the way to send events for the module to execute dedicated actions.
 #' trigger must be a reactive (or NULL, the default). An event is defined as a named list of the form
 #' list(workflow = "create", type = "dialog") or list(workflow = "create", type = "task", values = list(...))
@@ -41,15 +44,36 @@
 
 # -- Shiny module server logic -------------------------------------------------
 
-kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, trigger = NULL) {
+kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, options = list(shortcut = FALSE)) {
 
   moduleServer(id, function(input, output, session) {
 
     # //////////////////////////////////////////////////////////////////////////
     # -- Check parameters ----
 
+    # -- check autosave & admin
+    stopifnot("autosave argument must be a logical" = is.logical(autosave))
+    stopifnot("admin argument must be a logical" = is.logical(admin))
+
+
+    # -- check trigger
     if(!is.null(trigger))
       stopifnot("trigger must be a reactive object" = is.reactive(trigger))
+
+
+    # -- check options
+    stopifnot("options argument must be a list" = is.list(options))
+
+    # -- helper: most probably expected to go into {ktools}
+    helper <- function(fun, arg, value){
+      def_val <- eval(formals(fun)[[arg]])
+      missing <- def_val[!names(def_val) %in% names(value)]
+      value <- value[names(value) %in% names(def_val)]
+      c(value, missing)}
+
+    # -- check elements in option list
+    options <- helper(fun = kitems, arg = "options", value = options)
+    stopifnot("shortcut option must be a logical" = is.logical(options$shortcut))
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -267,7 +291,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
     # -- Item workflows ----
 
     ## -- declare shortcut observer ----
-    if(shortcut)
+    if(options$shortcut)
       observeEvent(input$shortcut_trigger,
                    attribute_input_update(k_data_model(), input$shortcut_trigger, MODULE))
 
@@ -328,7 +352,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
       showModal(
         item_dialog(data.model = k_data_model(),
                     items = k_items(),
-                    shortcut = shortcut,
+                    shortcut = options$shortcut,
                     ns = ns))})
 
 
@@ -342,7 +366,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
         showModal(
           item_dialog(data.model = k_data_model(),
                       items = k_items(),
-                      shortcut = shortcut,
+                      shortcut = options$shortcut,
                       ns = ns))
 
       }) |> bindEvent(trigger_create_dialog())
@@ -440,7 +464,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
                     items = k_items(),
                     workflow = "update",
                     item = item,
-                    shortcut = shortcut,
+                    shortcut = options$shortcut,
                     ns = ns))})
 
 
@@ -462,7 +486,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, shortcut = FALSE, t
                       items = k_items(),
                       workflow = "update",
                       item = item,
-                      shortcut = shortcut,
+                      shortcut = options$shortcut,
                       ns = ns))
 
       }) |> bindEvent(trigger_update_dialog(),
