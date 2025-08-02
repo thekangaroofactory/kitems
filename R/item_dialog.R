@@ -28,7 +28,7 @@ item_dialog <- function(data.model = NULL, items = NULL, workflow = c("create", 
 
   # -- create
   if(workflow == "create")
-    modalDialog(
+    dialog <- modalDialog(
       item_form(data.model = data.model,
                 items = items,
                 shortcut = shortcut,
@@ -41,7 +41,7 @@ item_dialog <- function(data.model = NULL, items = NULL, workflow = c("create", 
 
   # -- update
   if(workflow == "update")
-    modalDialog(
+    dialog <- modalDialog(
       item_form(data.model = data.model,
                 items = items,
                 update = TRUE,
@@ -56,10 +56,13 @@ item_dialog <- function(data.model = NULL, items = NULL, workflow = c("create", 
 
   # -- delete
   if(workflow == "delete")
-    modalDialog(title = "Delete item(s)",
+    dialog <- modalDialog(title = "Delete item(s)",
                 "Danger: deleting item(s) can't be undone! Do you confirm?",
                 footer = tagList(
                   modalButton("Cancel"),
                   actionButton(ns("item_delete_confirm"), "Delete")))
+
+  # -- return
+  dialog
 
 }
