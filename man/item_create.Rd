@@ -2,7 +2,7 @@
 % Please edit documentation in R/item_create.R
 \name{item_create}
 \alias{item_create}
-\title{Create new item}
+\title{Create item(s)}
 \usage{
 item_create(values, data.model)
 }
@@ -15,13 +15,19 @@ item_create(values, data.model)
 a data.frame of the new item
 }
 \description{
-Create new item
+Create item(s)
 }
 \details{
 Names in values must fit with the data.model - no attribute should
-be missing (extra ones would be ignored). When used in the context
-of trigger creation workflow, it means that even skipped attributes
-need to have an entry in the list.
+be missing (extra ones would be ignored).
+
+Case single item
+Values should be submitted as a list of elements with length 1 or 0.
+This means NULL, or length(0) values are accepted.
+
+Case multiple items
+Values can be a data.frame or a list of elements with length > 1
+The provided list must be convertible into a data.frame
 }
 \examples{
 \dontrun{
