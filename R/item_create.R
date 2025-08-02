@@ -1,12 +1,18 @@
 
 
-#' Create a new item
+#' Create new item
 #'
-#' @param values a list of values, most likely output values coming from UI inputs
+#' @param values a named list of values, matching with the data.model
 #' @param data.model a data.frame, defining the data model
 #'
-#' @return a data.frame of the new item, coerced to match with colClasses
+#' @return a data.frame of the new item
 #' @export
+#'
+#' @details
+#' Names in values must fit with the data.model - no attribute should
+#' be missing (extra ones would be ignored). When used in the context
+#' of trigger creation workflow, it means that even skipped attributes
+#' need to have an entry in the list.
 #'
 #' @examples
 #' \dontrun{
@@ -17,8 +23,16 @@
 # -- function definition
 item_create <- function(values, data.model){
 
-  # -- init params from data.model
+  # -- get colClasses from data.model
   colClasses <- dm_colClasses(data.model)
+
+  # -- check parameter
+  # abort if some attribute is missing from values
+  if(any(!names(colClasses) %in% names(values))){
+    warning("The item cannot be created:", "\nmissing attribute(s) = ",
+            paste(names(colClasses)[!names(colClasses) %in% names(values)], collapse = ", "))
+    return()}
+
 
   # -- helper function (takes single values)
   helper <- function(key, value, colClass){
@@ -59,13 +73,14 @@ item_create <- function(values, data.model){
   }
 
 
-  # -- apply helper values & rename output
-  item <- lapply(names(values), function(x) helper(key = x,
+  # -- apply helper
+  # on colClasses so as to ignore any additional entry in values
+  item <- lapply(names(colClasses), function(x) helper(key = x,
                                                    value = values[[x]],
                                                    colClass = colClasses[[x]]))
 
   # -- rename & return as df
-  names(item) <- names(values)
+  names(item) <- names(colClasses)
   item <- as.data.frame(item)
 
 }
