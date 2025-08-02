@@ -94,16 +94,7 @@ body <- dashboardBody(
 
                      fluidRow(column(width = 12,
                                      wellPanel(
-                                       kitems::filtered_view_widget("data_2"))))))),
-
-    # -- Content tab
-    tabItem(tabName = "data_2",
-
-            # -- Admin
-            fluidRow(
-              column(width = 12,
-
-                     kitems::admin_widget("data_2"))))
+                                       kitems::filtered_view_widget("data_2")))))))
 
 
   ) # end tabItems
