@@ -97,6 +97,7 @@ items_no_row2 <- data.frame("id" = as.numeric(numeric()),
 # -- items to test triggers
 new_item <- item_create(list(id = NA, date = NA, name = "Raspberry", quantity = 34, total = 86.4, isvalid = TRUE), dm)
 update_item <- item_create(list(id = items$id[1], date = NA, name = "Apple-update", quantity = 100, total = 0.1, isvalid = FALSE), dm)
+update_item_2 <- item_create(list(id = items$id[2], date = NA, name = "Banana-update", quantity = 10, total = 0.1, isvalid = TRUE), dm)
 
 
 # --------------------------------------------------------------------------
