@@ -693,7 +693,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
     # -- Date slider ----
 
     ## -- Date slider strategy ----
-    output$date_slider_strategy <- renderUI(
+    output$date_slider_strategy_btn <- renderUI(
 
       # -- check data model
       if(hasDate(k_data_model()))
@@ -705,7 +705,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
 
 
     ## -- Date slider ----
-    output$date_slider <- renderUI({
+    output$date_slider_btn <- renderUI({
 
       # -- check data model
       if(hasDate(k_data_model()) & !is.null(input$date_slider_strategy)){
