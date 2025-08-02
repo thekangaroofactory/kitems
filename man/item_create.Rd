@@ -2,20 +2,26 @@
 % Please edit documentation in R/item_create.R
 \name{item_create}
 \alias{item_create}
-\title{Create a new item}
+\title{Create new item}
 \usage{
 item_create(values, data.model)
 }
 \arguments{
-\item{values}{a list of values, most likely output values coming from UI inputs}
+\item{values}{a named list of values, matching with the data.model}
 
 \item{data.model}{a data.frame, defining the data model}
 }
 \value{
-a data.frame of the new item, coerced to match with colClasses
+a data.frame of the new item
 }
 \description{
-Create a new item
+Create new item
+}
+\details{
+Names in values must fit with the data.model - no attribute should
+be missing (extra ones would be ignored). When used in the context
+of trigger creation workflow, it means that even skipped attributes
+need to have an entry in the list.
 }
 \examples{
 \dontrun{
