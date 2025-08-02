@@ -343,7 +343,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
                      label = "Create"))
 
 
-    # -- Observe: fire dialog from actionButton
+    # -- Observe: fire dialog from UI
     observeEvent(input$item_create, {
 
       catl(MODULE, "[Event] Create item button")
@@ -372,70 +372,49 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
       }) |> bindEvent(trigger_create_dialog())
 
 
-    # -- Observe: create item from actionButton
+    # -- Observe: create item from dialog values
     observeEvent(input$item_create_confirm, {
 
-      catl(MODULE, "[Event] Confirm create item button")
+      catl(MODULE, "[Event] Confirm create dialog item")
       removeModal()
 
       # -- get named list of input values
       catl("- Get list of input values")
       values <- item_input_values(input, dm_colClasses(k_data_model()))
 
-      # -- create item based on values
-      catl("- Create item")
-      item <- item_create(values = values, data.model = k_data_model())
+      # -- call create workflow
+      new_items <- item_create_workflow(items = k_items(),
+                                        data.model = k_data_model(),
+                                        values = values,
+                                        module = MODULE)
+      # -- store
+      k_items(new_items)
 
-      # -- add to items & store
-      catl("- add to items")
-      k_items(item_add(k_items(), item))
-
-      # -- notify
-      if(shiny::isRunning())
-        showNotification(paste(MODULE, "Item created."), type = "message")})
+    })
 
 
     # -- Observe: create item from trigger values
     if(!is.null(trigger))
       observe({
 
-        # -- add item to the items list
-        # Secure against errors raised by item_add #351
-        tryCatch({
+        catl(MODULE, "[Event] Create item(s) trigger")
 
-          # -- check for missing entries
-          # support partial values #475
-          catl("- Check values")
-          colClasses <- dm_colClasses(k_data_model())
-          values <- lapply(names(colClasses), function(x) trigger_create_values()[[x]])
-          names(values) <- names(colClasses)
+        # -- check for missing entries
+        # support partial values #475
+        catl("- Check trigger values")
+        colClasses <- dm_colClasses(k_data_model())
+        values <- lapply(names(colClasses), function(x) trigger_create_values()[[x]])
+        names(values) <- names(colClasses)
 
-          # -- create item based on values
-          catl("- Create item")
-          item <- item_create(values = values, data.model = k_data_model())
+        # -- call create workflow
+        new_items <- item_create_workflow(items = k_items(),
+                                          data.model = k_data_model(),
+                                          values = values,
+                                          module = MODULE)
+        # -- store
+        k_items(new_items)
 
-          # -- add to items & store
-          catl("- add to items")
-          k_items(item_add(k_items(), item))
-
-          # -- notify
-          if(shiny::isRunning())
-            showNotification(paste(MODULE, "Item created."), type = "message")},
-
-          # -- failed
-          error = function(e) {
-
-            # -- compute message
-            msg <- paste("Item has not been created. \n error =", e$message)
-
-            # -- notify
-            warning(msg)
-            if(shiny::isRunning())
-              showNotification(paste(MODULE, msg), type = "error")
-
-          }) # tryCatch
-
-        # -- reset values
+        # -- reset trigger values
         # otherwise you can't create same object twice
         trigger_create_values(NULL)
 
