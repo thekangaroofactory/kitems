@@ -403,9 +403,16 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
         # Secure against errors raised by item_add #351
         tryCatch({
 
+          # -- check for missing entries
+          # support partial values #475
+          catl("- Check values")
+          colClasses <- dm_colClasses(k_data_model())
+          values <- lapply(names(colClasses), function(x) trigger_create_values()[[x]])
+          names(values) <- names(colClasses)
+
           # -- create item based on values
           catl("- Create item")
-          item <- item_create(values = trigger_create_values(), data.model = k_data_model())
+          item <- item_create(values = values, data.model = k_data_model())
 
           # -- add to items & store
           catl("- add to items")
