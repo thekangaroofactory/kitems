@@ -7,18 +7,19 @@
 item_update(items, item)
 }
 \arguments{
-\item{items}{the data.frame of the items}
+\item{items}{a data.frame of the items}
 
-\item{item}{the item to be updated}
+\item{item}{a data.frame of the item(s) to be updated}
 }
 \value{
-the new data.frame of the items
+the updated data.frame of the items
 }
 \description{
 Update item
 }
 \details{
-The item$id value will be used to replace the corresponding item in the items data.frame
+The item$id value will be used to replace the corresponding item(s) in the items data.frame
+Item rows with id(s) not matching with id(s) in items will be dropped
 }
 \examples{
 \dontrun{
