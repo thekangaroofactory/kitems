@@ -82,7 +82,7 @@ item1 <- item_create(list(id = NA, date = NA, name = "Apple", quantity = 1, tota
 item2 <- item_create(list(id = NA, date = "2024-01-14", name = "Banana", quantity = 12, total = 106.3, isvalid = FALSE), dm)
 item3 <- item_create(list(id = NA, date = "2024-01-16", name = "Mango", quantity = 3, total = 45.7, isvalid = TRUE), dm)
 item4 <- item_create(list(id = NA, date = "2024-01-17", name = "Orange", quantity = 7, total = 17.5, isvalid = FALSE), dm)
-items <- rbind(item1, item2, item3, item4)
+items <- dplyr::bind_rows(item1, item2, item3, item4)
 
 # -- items with additional attribute
 items_extra_att <- items

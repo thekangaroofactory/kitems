@@ -19,7 +19,7 @@ test_that("item_update works", {
 test_that("item_update multiple works", {
 
   # -- function call
-  x <- item_update(items, rbind(update_item, update_item_2))
+  x <- item_update(items, dplyr::bind_rows(update_item, update_item_2))
 
   # -- test class
   expect_s3_class(x, "data.frame")

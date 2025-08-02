@@ -19,7 +19,7 @@ item_add <- function(items, item){
   if(item$id %in% items$id)
     stop("Can't add item to the items data.frame \n id is not unique")
 
-  # -- rbind & return
-  rbind(items, item)
+  # -- bind & return
+  dplyr::bind_rows(items, item)
 
 }

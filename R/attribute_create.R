@@ -46,6 +46,6 @@ attribute_create <- function(data.model, name, type,
                               sort.desc = sort.desc)
 
   # -- Merge to data.model (return)
-  data.model <- rbind(data.model, new_attribute)
+  data.model <- dplyr::bind_rows(data.model, new_attribute)
 
 }
