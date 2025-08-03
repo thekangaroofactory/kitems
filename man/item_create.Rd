@@ -28,6 +28,9 @@ This means NULL, or length(0) values are accepted.
 Case multiple items
 Values can be a data.frame or a list of elements with length > 1
 The provided list must be convertible into a data.frame
+
+It is strongly advised to wrap calls to this function inside tryCatch
+expressions as it will throw error rather than return a corrupted item.
 }
 \examples{
 \dontrun{

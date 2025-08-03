@@ -4,7 +4,7 @@
 \alias{item_create_workflow}
 \title{Item Create Workflow}
 \usage{
-item_create_workflow(items, data.model, values, module = "")
+item_create_workflow(items, data.model, values)
 }
 \arguments{
 \item{items}{a data.frame of the existing items}
@@ -12,8 +12,6 @@ item_create_workflow(items, data.model, values, module = "")
 \item{data.model}{a data.frame of the data model}
 
 \item{values}{a list or data.frame of values to create new item(s)}
-
-\item{module}{an optional string to prefix notifications}
 }
 \value{
 the new data.frame of the items
