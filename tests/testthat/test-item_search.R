@@ -1,26 +1,26 @@
 
 # -- test
-test_that("item_sort works", {
+test_that("item_search works", {
 
   # -- function call
   x <- item_search(items, pattern = "Banana")
 
-  # -- test class
-  expect_s3_class(x, "data.frame")
-  expect_equal(dim(x), c(1, 6))
+  # -- default checks
+  expect_items(x)
+  expect_colclasses(x, colClasses)
 
   # -- function call
   x <- item_search(items, pattern = "an")
 
-  # -- test class
-  expect_s3_class(x, "data.frame")
-  expect_equal(dim(x), c(3, 6))
+  # -- default checks
+  expect_items(x, n = 3)
+  expect_colclasses(x, colClasses)
 
   # -- function call
   x <- item_search(items, pattern = 2)
 
-  # -- test class
-  expect_s3_class(x, "data.frame")
-  expect_equal(dim(x), c(4, 6))
+  # -- default checks
+  expect_items(x, n = 4)
+  expect_colclasses(x, colClasses)
 
 })
