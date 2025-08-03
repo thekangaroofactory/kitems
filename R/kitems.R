@@ -403,7 +403,9 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
         # support partial values #475
         catl("- Check trigger values")
         colClasses <- dm_colClasses(k_data_model())
-        values <- lapply(names(colClasses), function(x) trigger_create_values()[[x]])
+
+        # -- get values (as per data.model)
+        values <- trigger_create_values()[names(colClasses)]
         names(values) <- names(colClasses)
 
         # -- call create workflow
@@ -529,11 +531,15 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
     if(!is.null(trigger))
       observe({
 
+        # -- get values (as per data.model)
+        values <- trigger_update_values()[names(colClasses)]
+        names(values) <- names(colClasses)
+
         # -- Secure against errors raised by item_update #351
         tryCatch({
 
           # -- call workflow
-          new_items <- item_update_workflow(values = trigger_update_values(),
+          new_items <- item_update_workflow(values = values,
                                             items = k_items(),
                                             data.model = k_data_model())
 

@@ -22,6 +22,7 @@
 item_input_values <- function(input, colClasses){
 
   # -- get values from input object
+  # input is a reactive object, can't use input[names(colClasses)]
   values <- lapply(names(colClasses), function(x) input[[x]])
   names(values) <- names(colClasses)
 
