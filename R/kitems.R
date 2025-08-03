@@ -382,13 +382,32 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
       catl("- Get list of input values")
       values <- item_input_values(input, dm_colClasses(k_data_model()))
 
-      # -- call create workflow
-      new_items <- item_create_workflow(items = k_items(),
-                                        data.model = k_data_model(),
-                                        values = values,
-                                        module = MODULE)
-      # -- store
-      k_items(new_items)
+      # -- Secure workflow
+      tryCatch({
+
+        # -- call create workflow
+        new_items <- item_create_workflow(items = k_items(),
+                                          data.model = k_data_model(),
+                                          values = values,
+                                          module = MODULE)
+        # -- store
+        k_items(new_items)
+
+        # -- notify
+        if(shiny::isRunning())
+          showNotification(paste(module, "Item created."), type = "message")
+
+      },
+
+      # -- failed
+      error = function(e) {
+
+        # -- print & notify
+        warning(paste("Item has not been created. \n error =", e$message))
+        if(shiny::isRunning())
+          showNotification(paste(MODULE, "Item has not been created."), type = "error")
+
+      })
 
     })
 
@@ -408,13 +427,27 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
         values <- trigger_create_values()[names(colClasses)]
         names(values) <- names(colClasses)
 
-        # -- call create workflow
-        new_items <- item_create_workflow(items = k_items(),
-                                          data.model = k_data_model(),
-                                          values = values,
-                                          module = MODULE)
-        # -- store
-        k_items(new_items)
+        # -- Secure against errors raised by item_update #351
+        tryCatch({
+
+          # -- call create workflow
+          new_items <- item_create_workflow(items = k_items(),
+                                            data.model = k_data_model(),
+                                            values = values,
+                                            module = MODULE)
+          # -- store
+          k_items(new_items)
+
+          # -- notify
+          catl(MODULE, "Item created")},
+
+          # -- failed
+          error = function(e) {
+
+            # -- notify
+            warning(paste("Item has not been created. \n error =", e$message))
+
+          })
 
         # -- reset trigger values
         # otherwise you can't create same object twice
