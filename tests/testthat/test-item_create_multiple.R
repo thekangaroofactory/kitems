@@ -3,24 +3,11 @@
 test_that("item_create multiple items works", {
 
   # -- function call
-  values <-  list("id" = c(170539948621, 170539948622),
-                  "date" = c(Sys.Date(), Sys.Date()),
-                  "name" = c("name_1", "name_2"),
-                  "quantity" = c(4, 5),
-                  "total" = c(78.9, 80.6),
-                  "isvalid" = c(FALSE, TRUE))
+  x <- item_create(values_multiple, data.model = dm)
 
-  # -- function call
-  x <- item_create(values, data.model = dm)
-
-  # -- test class
-  expect_s3_class(x, "data.frame")
-
-  # -- test dim
-  expect_equal(dim(x), c(2, length(colClasses)))
-
-  # -- test date
-  expect_true(inherits(x$date, "POSIXct"))
+  # -- default checks
+  expect_items(x, n = max(lengths(values_multiple)))
+  expect_colclasses(x, colClasses)
 
 })
 
@@ -29,23 +16,10 @@ test_that("item_create multiple items works", {
 test_that("item_create multiple items works", {
 
   # -- function call
-  values <-  list("id" = c(170539948621, 170539948622),
-                  "date" = Sys.Date(),
-                  "name" = c("name_1", NA),
-                  "quantity" = c(4, 5),
-                  "total" = c(78.9, 12),
-                  "isvalid" = FALSE)
+  x <- item_create(values_multiple_lengths, data.model = dm)
 
-  # -- function call
-  x <- item_create(values, data.model = dm)
-
-  # -- test class
-  expect_s3_class(x, "data.frame")
-
-  # -- test dim
-  expect_equal(dim(x), c(2, length(colClasses)))
-
-  # -- test date
-  expect_true(inherits(x$date, "POSIXct"))
+  # -- default checks
+  expect_items(x, n = max(lengths(values_multiple_lengths)))
+  expect_colclasses(x, colClasses)
 
 })

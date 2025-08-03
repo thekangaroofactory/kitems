@@ -6,11 +6,11 @@ test_that("item_add works", {
   # -- function call
   x <- item_add(items, new_item)
 
-  # -- test class & dim
-  expect_s3_class(x, "data.frame")
-  expect_equal(dim(x), dim(items) + c(1, 0))
+  # -- default checks
+  expect_items(x, n = nrow(items) + 1)
+  expect_colclasses(x, colClasses)
 
-  # -- test added attribute
-  expect_equal(x[x$name == new_item$name, ]$total, new_item$total)
+  # -- check added item
+  expect_equal(x[nrow(x), ]$total, new_item$total)
 
 })

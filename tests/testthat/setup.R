@@ -72,6 +72,7 @@ dm_no_skip <- data_model(colClasses = colClasses, default.val = default_val, def
 dm_extra_att <- data_model(colClasses = colClasses_extra_att, default.val = default_val, default.fun = default_fun, filter = filter, skip = skip)
 dm_no_date <- data_model(colClasses = colClasses_no_date)
 dm_id_only <- data_model(colClasses = colClasses_id_only, skip = "id")
+dm_sort <- data_model(colClasses = colClasses, sort.rank = c("date" = 1), sort.desc = c("date" = TRUE))
 
 # ------------------------------------------------------------------------------
 # Build items
@@ -112,6 +113,21 @@ values <- list("id" = c(170539948621),
                "total" = "78.9",
                "isvalid" = c(FALSE))
 
+# -- values to create multiple items (same lengths)
+values_multiple <-  list("id" = c(170539948621, 170539948622),
+                         "date" = c(Sys.Date(), Sys.Date()),
+                         "name" = c("name_1", "name_2"),
+                         "quantity" = c(4, 5),
+                         "total" = c(78.9, 80.6),
+                         "isvalid" = c(FALSE, TRUE))
+
+# -- values to create multiple items (different lengths)
+values_multiple_lengths <-  list("id" = c(170539948621, 170539948622),
+                                 "date" = Sys.Date(),
+                                 "name" = c("name_1", NA),
+                                 "quantity" = c(4, 5),
+                                 "total" = c(78.9, 12),
+                                 "isvalid" = FALSE)
 
 # -- simulate inputs from form
 item_input_values <- list(name = "myname", quantity = 12, total = 34.8)

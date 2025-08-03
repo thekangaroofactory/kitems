@@ -5,13 +5,11 @@ test_that("item_create works", {
   # -- function call
   x <- item_create(values = values, data.model = dm)
 
-  # -- test class
-  expect_s3_class(x, "data.frame")
+  # -- default checks
+  expect_items(x)
+  expect_colclasses(x, colClasses)
 
-  # -- test dim
-  expect_equal(dim(x), c(1, length(colClasses)))
-
-  # -- test logical: #176
+  # -- specific check: test logical #176
   expect_false(x$isvalid)
 
 })
@@ -19,15 +17,8 @@ test_that("item_create works", {
 
 test_that("item_create fails with missing value", {
 
-  # -- init
-  values <- list("id" = c(170539948621),
-                 "date" = c(as.Date("2024-01-25", origin = "01-01-1970")),
-                 "quantity" = 4,
-                 "total" = "78.9",
-                 "isvalid" = c(FALSE))
-
   # -- function call
-  expect_warning(item_create(values, data.model = dm))
+  expect_error(item_create(values[!names(values) %in% "name"], data.model = dm))
 
 })
 
@@ -35,25 +26,18 @@ test_that("item_create fails with missing value", {
 # -- adding coverage #428
 test_that("item_create works with length(0) value", {
 
-  # -- function call
-  values <-  list("id" = c(170539948621),
-                  "date" = as.Date(numeric(0)),
-                  "name" = "name",
-                  "quantity" = 4,
-                  "total" = "78.9",
-                  "isvalid" = c(FALSE))
+  # -- prepare values
+  values_0 <- values
+  values_0$date <- as.Date(numeric(0))
 
   # -- function call
-  x <- item_create(values, data.model = dm)
+  x <- item_create(values_0, data.model = dm)
 
-  # -- test class
-  expect_s3_class(x, "data.frame")
+  # -- default checks
+  expect_items(x)
+  expect_colclasses(x, colClasses)
 
-  # -- test dim
-  expect_equal(dim(x), c(1, length(colClasses)))
-
-  # -- test logical: #176
-  expect_false(x$isvalid)
+  # -- specific check
   expect_true(inherits(x$date, "POSIXct"))
 
 })
