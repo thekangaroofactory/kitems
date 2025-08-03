@@ -12,6 +12,9 @@
 #' The item$id value will be used to replace the corresponding item(s) in the items data.frame
 #' Item rows with id(s) not matching with id(s) in items will be dropped
 #'
+#' It is strongly advised to wrap calls to this function inside tryCatch
+#' expressions.
+#'
 #' @examples
 #' \dontrun{
 #' item_update(items = myitems, item = myupdateditem)
@@ -27,7 +30,7 @@ item_update <- function(items, item){
 
   # -- check dim
   if(nrow(item) == 0)
-    return(items)
+    stop("Nothing to update: no id matching with existing item.")
 
   # -- replace item(s)
   items[items$id %in% item$id, ] <- item

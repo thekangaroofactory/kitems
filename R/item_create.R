@@ -20,6 +20,9 @@
 #' Values can be a data.frame or a list of elements with length > 1
 #' The provided list must be convertible into a data.frame
 #'
+#' It is strongly advised to wrap calls to this function inside tryCatch
+#' expressions as it will throw error rather than return a corrupted item.
+#'
 #' @examples
 #' \dontrun{
 #' item_create(values, data.model = mydatamodel)
@@ -37,10 +40,9 @@ item_create <- function(values, data.model){
 
   # -- check parameter
   # abort if some attribute is missing from values
-  if(any(!names(colClasses) %in% names(values))){
-    warning("The item(s) cannot be created:", "\nmissing attribute(s) = ",
-            paste(names(colClasses)[!names(colClasses) %in% names(values)], collapse = ", "))
-    return()}
+  if(any(!names(colClasses) %in% names(values)))
+    stop("The item(s) cannot be created:", "\nmissing attribute(s) = ",
+         paste(names(colClasses)[!names(colClasses) %in% names(values)], collapse = ", "))
 
   # -- helper function
   # turn single value into attribute
@@ -116,9 +118,7 @@ item_create <- function(values, data.model){
   if(!is.data.frame(values))
     values <- tryCatch(
       as.data.frame(values),
-      error = function(e) {
-        warning("The items cannot be created:\n", e$message)
-        return()})
+      error = function(e) stop("The items cannot be created:\n", e$message))
 
   # -- apply helper
   # turn data.frame of values into a list of item(s)
