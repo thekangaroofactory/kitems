@@ -388,8 +388,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
         # -- call create workflow
         new_items <- item_create_workflow(items = k_items(),
                                           data.model = k_data_model(),
-                                          values = values,
-                                          module = MODULE)
+                                          values = values)
         # -- store
         k_items(new_items)
 
@@ -433,8 +432,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
           # -- call create workflow
           new_items <- item_create_workflow(items = k_items(),
                                             data.model = k_data_model(),
-                                            values = values,
-                                            module = MODULE)
+                                            values = values)
           # -- store
           k_items(new_items)
 
