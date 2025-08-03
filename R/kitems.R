@@ -800,8 +800,8 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
     filtered_items <- reactive(
 
       # -- check
-      # disabled otherwise it fires update each time input is modified (it's a reactive)
-      # >> implement intermediate layer or another solution
+      # dependency on input (reactive) is disabled by bindEvent #483
+      # otherwise it would fire update too many times
       if("date_slider" %in% names(input)){
         if(!is.null(filter_date())){
 
@@ -824,7 +824,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
           items
 
         } else NULL
-      } else k_items())
+      } else k_items()) |> bindEvent(filter_date(), k_items(), k_data_model())
 
 
     # //////////////////////////////////////////////////////////////////////////
