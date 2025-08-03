@@ -394,7 +394,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
 
         # -- notify
         if(shiny::isRunning())
-          showNotification(paste(module, "Item created."), type = "message")
+          showNotification(paste(MODULE, "Item created."), type = "message")
 
       },
 
@@ -563,6 +563,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
       observe({
 
         # -- get values (as per data.model)
+        colClasses <- dm_colClasses(k_data_model())
         values <- trigger_update_values()[names(colClasses)]
         names(values) <- names(colClasses)
 
