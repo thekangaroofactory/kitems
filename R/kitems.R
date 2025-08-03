@@ -462,7 +462,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
     output$item_update_btn <- renderUI(
 
       # -- check item selection + single row
-      if(is.null(selected_items()) | length(selected_items()) != 1)
+      if(is.null(input$filtered_view_rows_selected) | length(input$filtered_view_rows_selected) != 1)
         NULL
       else
         actionButton(inputId = ns("item_update"),
@@ -497,7 +497,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
         req(length(trigger_update_dialog()) == 1)
 
         # -- Get selected item
-        item <- k_items()[k_items()$id == selected_items(), ]
+        item <- k_items()[k_items()$id == trigger_update_dialog(), ]
 
         # -- show update dialog
         showModal(
@@ -610,7 +610,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
     output$item_delete_btn <- renderUI(
 
       # -- check item selection
-      if(is.null(selected_items()))
+      if(is.null(input$filtered_view_rows_selected))
         NULL
       else
         actionButton(inputId = ns("item_delete"),
@@ -782,7 +782,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
 
 
     ## -- Declare filter date ----
-    filter_date <- eventReactive(input$date_slider,
+    filter_date <- reactive(
 
       # -- check data model (otherwise return NULL)
       if(hasDate(k_data_model())){
@@ -791,7 +791,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
         catl("- values =", input$date_slider, level = 2)
 
         # -- return
-        input$date_slider}, ignoreInit = TRUE)
+        input$date_slider})
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -802,7 +802,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
       # -- check
       # disabled otherwise it fires update each time input is modified (it's a reactive)
       # >> implement intermediate layer or another solution
-      #if("date_slider" %in% names(input)){
+      if("date_slider" %in% names(input)){
         if(!is.null(filter_date())){
 
           catl(MODULE, "Updating filtered item view")
@@ -824,8 +824,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
           items
 
         } else NULL
-      #} else k_items()
-      )
+      } else k_items())
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -841,18 +840,8 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
     # -- In table selection ----
 
     ## -- Declare selected items ----
-    selected_items <- eventReactive(input$filtered_view_rows_selected, {
-
-      # -- Check in table selection
-      ids <- if(!is.null(input$filtered_view_rows_selected))
-        filtered_items()[input$filtered_view_rows_selected, ]$id
-
-      catl(MODULE, "Selected items =", as.character(ids), level = 2)
-
-      # -- return
-      ids
-
-    }, ignoreInit = TRUE)
+    selected_items <- reactive(
+      filtered_items()[input$filtered_view_rows_selected, ]$id)
 
 
     ## -- Declare clicked column ----
