@@ -519,10 +519,16 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
       catl(MODULE, "[Event] Confirm update item button")
       removeModal()
 
-      # -- get named list of input values + force id
+      # -- get named list of input values
       catl("- Get list of input values")
       values <- item_input_values(input, dm_colClasses(k_data_model()))
-      values$id <- selected_items()
+
+      # -- force id to update
+      # as it's missing in the dialog input, it should be NULL in values
+      values$id <- if(!is.null(trigger_update_dialog()))
+        trigger_update_dialog()
+      else
+        selected_items()
 
       # -- Secure against errors
       tryCatch({
@@ -551,7 +557,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
 
       # -- reset trigger
       # otherwise same object cannot be updated twice
-      # it can't be reset before otherwise selected_items() will be lost
+      # it can't be reset before otherwise id will be lost
       if(!is.null(trigger_update_dialog()))
         trigger_update_dialog(NULL)
 
@@ -638,7 +644,10 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
       removeModal()
 
       # -- get selected items (ids)
-      ids <- selected_items()
+      ids <- if(!is.null(trigger_delete_dialog()))
+        trigger_delete_dialog()
+      else
+        selected_items()
       catl("- Item(s) to be deleted =", as.character(ids))
 
       # -- Secure against errors raised by item_add #351
@@ -663,10 +672,10 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
 
         # -- notify
         finally = if(shiny::isRunning())
-          showNotification(paste(MODULE, msg), type))
+          showNotification(paste(MODULE, msg), type = type))
 
       # -- reset trigger
-      # can't be performed before otherwise selected_items are lost
+      # can't be performed before otherwise ids are lost
       if(!is.null(trigger_delete_dialog()))
         trigger_delete_dialog(NULL)
 
@@ -705,7 +714,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
 
           # -- notify
           finally = if(shiny::isRunning())
-            showNotification(paste(MODULE, msg), type))
+            showNotification(paste(MODULE, msg), type = type))
 
         # -- reset values
         # otherwise you can't update same object twice
@@ -773,7 +782,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
 
 
     ## -- Declare filter date ----
-    filter_date <- reactive(
+    filter_date <- eventReactive(input$date_slider,
 
       # -- check data model (otherwise return NULL)
       if(hasDate(k_data_model())){
@@ -782,7 +791,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
         catl("- values =", input$date_slider, level = 2)
 
         # -- return
-        input$date_slider})
+        input$date_slider}, ignoreInit = TRUE)
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -791,11 +800,12 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
     filtered_items <- reactive(
 
       # -- check
-      if("date_slider" %in% names(input)){
+      # disabled otherwise it fires update each time input is modified (it's a reactive)
+      # >> implement intermediate layer or another solution
+      #if("date_slider" %in% names(input)){
         if(!is.null(filter_date())){
 
           catl(MODULE, "Updating filtered item view")
-
 
           # -- init
           items <- k_items()
@@ -814,7 +824,8 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
           items
 
         } else NULL
-      } else k_items())
+      #} else k_items()
+      )
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -830,29 +841,18 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
     # -- In table selection ----
 
     ## -- Declare selected items ----
-    selected_items <- reactive({
-
-      # -- init (nothing selected)
-      ids <- NULL
+    selected_items <- eventReactive(input$filtered_view_rows_selected, {
 
       # -- Check in table selection
-      if(!is.null(input$filtered_view_rows_selected))
-        ids <- filtered_items()[input$filtered_view_rows_selected, ]$id
-
-      # -- select by update trigger
-      if(!is.null(trigger_update_dialog()))
-        ids <- trigger_update_dialog()
-
-      # -- select by delete trigger
-      if(!is.null(trigger_delete_dialog()))
-        ids <- trigger_delete_dialog()
+      ids <- if(!is.null(input$filtered_view_rows_selected))
+        filtered_items()[input$filtered_view_rows_selected, ]$id
 
       catl(MODULE, "Selected items =", as.character(ids), level = 2)
 
       # -- return
       ids
 
-    })
+    }, ignoreInit = TRUE)
 
 
     ## -- Declare clicked column ----
