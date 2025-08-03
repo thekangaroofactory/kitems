@@ -22,7 +22,7 @@ the new data.frame of the items
 Item Create Workflow
 }
 \examples{
-dontrun{
+\dontrun{
 item_create_workflow(items, data.model, values)
 }
 }

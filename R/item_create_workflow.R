@@ -10,7 +10,7 @@
 #' @returns the new data.frame of the items
 #'
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' item_create_workflow(items, data.model, values)
 #' }
 
