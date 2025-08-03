@@ -436,7 +436,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
                      label = "Update"))
 
 
-    # -- Observe: fire update dialog from actionButton
+    # -- Observe: fire update dialog from UI
     observeEvent(input$item_update, {
 
       catl(MODULE, "[Event] Update item button")
@@ -486,28 +486,41 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
       catl(MODULE, "[Event] Confirm update item button")
       removeModal()
 
-      # -- get named list of input values & store
+      # -- get named list of input values + force id
       catl("- Get list of input values")
       values <- item_input_values(input, dm_colClasses(k_data_model()))
+      values$id <- selected_items()
 
-      # -- create item based on input list & force id
-      catl("- Create replacement item")
-      item <- item_create(values = values, data.model = k_data_model())
-      item$id <- selected_items()
+      # -- Secure against errors
+      tryCatch({
 
-      # -- update item & store
-      catl("- Replace item")
-      k_items(item_update(k_items(), item))
+        # -- call workflow
+        new_items <- item_update_workflow(values = values,
+                                          items = k_items(),
+                                          data.model = k_data_model())
+
+        # -- store
+        k_items(new_items)
+
+        # -- notify
+        if(shiny::isRunning())
+          showNotification(paste(MODULE, "Item updated."), type = "message")},
+
+        # -- failed
+        error = function(e) {
+
+          # -- print & notify
+          warning(paste("Item has not been updated. \n error =", e$message))
+          if(shiny::isRunning())
+            showNotification(paste(MODULE, "Item has not been updated."), type = "error")
+
+        })
 
       # -- reset trigger
       # otherwise same object cannot be updated twice
       # it can't be reset before otherwise selected_items() will be lost
       if(!is.null(trigger_update_dialog()))
         trigger_update_dialog(NULL)
-
-      # -- notify
-      if(shiny::isRunning())
-        showNotification(paste(MODULE, "Item updated."), type = "message")
 
     })
 
@@ -516,29 +529,25 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
     if(!is.null(trigger))
       observe({
 
-        # -- create item based on trigger values & force id
-        catl("- Create replacement item")
-        item <- item_create(values = trigger_update_values(), data.model = k_data_model())
-        item$id <- trigger_update_values()$id
-
         # -- Secure against errors raised by item_update #351
         tryCatch({
 
-          # -- update item & reactive
-          catl("- Replace item")
-          k_items(item_update(k_items(), item))
+          # -- call workflow
+          new_items <- item_update_workflow(values = trigger_update_values(),
+                                            items = k_items(),
+                                            data.model = k_data_model())
+
+          # -- store
+          k_items(new_items)
 
           # -- notify
-          if(shiny::isRunning())
-            showNotification(paste(MODULE, "Item updated."), type = "message")},
+          catl(MODULE, "Item updated")},
 
-          # -- if fails
+          # -- failed
           error = function(e) {
 
-            # -- print & notify
+            # -- notify
             warning(paste("Item has not been updated. \n error =", e$message))
-            if(shiny::isRunning())
-              showNotification(paste(MODULE, "Item has not been updated."), type = "error")
 
           })
 
