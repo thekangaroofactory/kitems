@@ -306,7 +306,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
         event <- trigger()
         stopifnot("Event should be a list object" = is.list(event))
         stopifnot("Event should contain workflow & type named elements" = all(c("workflow", "type") %in% names(event)))
-        cat("[Event] New event received, workflow =", event$workflow, "/ type =", event$type, "\n")
+        catl(MODULE, "[Event] New event received, workflow =", event$workflow, "/ type =", event$type, "\n")
 
         # -- fire listeners
         if(event$workflow == "create" && event$type == "dialog")
