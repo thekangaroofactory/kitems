@@ -15,6 +15,14 @@
 
 item_update_workflow <- function(values, items, data.model){
 
+  # ////////////////////////////////////////////////////////////////////////////
+
+  .Deprecated(
+    new = "rows_update",
+    package = "kitems")
+
+  # ////////////////////////////////////////////////////////////////////////////
+
   # -- create item
   catl("- Create replacement item")
   item <- item_create(values, data.model)

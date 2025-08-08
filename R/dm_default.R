@@ -61,7 +61,7 @@ dm_default <- function(data.model, name){
     value <- NA}
 
   # -- return
-  catl("- output: value =", value)
+  catl("- output: value =", as.character(value))
   value
 
 }

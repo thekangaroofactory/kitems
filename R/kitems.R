@@ -533,13 +533,11 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
       # -- Secure against errors
       tryCatch({
 
-        # -- call workflow
-        new_items <- item_update_workflow(values = values,
-                                          items = k_items(),
-                                          data.model = k_data_model())
-
-        # -- store
-        k_items(new_items)
+        # -- store updated item list
+        k_items(
+          rows_update(items = k_items(),
+                      values = values,
+                      data.model = k_data_model()))
 
         # -- notify
         if(shiny::isRunning())
@@ -549,7 +547,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
         error = function(e) {
 
           # -- print & notify
-          warning(paste("Item has not been updated. \n error =", e$message))
+          warning(paste("Item update has failed. \n error =", e$message))
           if(shiny::isRunning())
             showNotification(paste(MODULE, "Item has not been updated."), type = "error")
 
@@ -568,32 +566,22 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
     if(!is.null(trigger))
       observe({
 
-        # -- get values (as per data.model)
-        colClasses <- dm_colClasses(k_data_model())
-        values <- trigger_update_values()[names(colClasses)]
-        names(values) <- names(colClasses)
-
-        # -- Secure against errors raised by item_update #351
+        # -- Secure against errors
         tryCatch({
 
-          # -- call workflow
-          new_items <- item_update_workflow(values = values,
-                                            items = k_items(),
-                                            data.model = k_data_model())
-
-          # -- store
-          k_items(new_items)
+          # -- store updated item list
+          k_items(
+            rows_update(items = k_items(),
+                        values = trigger_update_values(),
+                        data.model = k_data_model()))
 
           # -- notify
-          catl(MODULE, "Item updated")},
+          catl(MODULE, "Item(s) updated")},
 
           # -- failed
-          error = function(e) {
+          error = function(e)
+            warning(paste("Item has not been updated. \n error =", e$message)))
 
-            # -- notify
-            warning(paste("Item has not been updated. \n error =", e$message))
-
-          })
 
         # -- reset values
         # otherwise you can't update same object twice

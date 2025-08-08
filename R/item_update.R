@@ -23,6 +23,14 @@
 
 item_update <- function(items, item){
 
+  # ////////////////////////////////////////////////////////////////////////////
+
+  .Deprecated(
+    new = "rows_update",
+    package = "kitems")
+
+  # ////////////////////////////////////////////////////////////////////////////
+
   # -- drop rows not matching with existing id
   if(any(!item$id %in% items$id)){
     message("Removing not matching item(s), id(s) = " , item$id[!item$id %in% items$id])
