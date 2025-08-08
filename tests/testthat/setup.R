@@ -44,7 +44,7 @@ colClasses_id_only <- c(id = "numeric")
 default_val <- c("name" = "fruit", "isvalid" = TRUE)
 
 # -- declare default.fun & arg
-default_fun <- c("id" = "ktools::getTimestamp", "date" = "Sys.Date")
+default_fun <- c("id" = "ktools::getTimestamp", "date" = "Sys.time")
 default_arg <- c("id" = "list(k = 10)")
 
 # -- declare filter
@@ -128,6 +128,13 @@ values_multiple_lengths <-  list("id" = c(170539948621, 170539948622),
                                  "quantity" = c(4, 5),
                                  "total" = c(78.9, 12),
                                  "isvalid" = FALSE)
+
+# -- values with extra column
+values_extra_col <- list("id" = item1$id,
+                         "name" = c("update"),
+                         "quantity" = 400,
+                         "dummy" = NA)
+
 
 # -- simulate inputs from form
 item_input_values <- list(name = "myname", quantity = 12, total = 34.8)

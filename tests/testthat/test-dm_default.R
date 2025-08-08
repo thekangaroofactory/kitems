@@ -6,10 +6,10 @@ test_that("dm_default: default.fun", {
   x <- dm_default(data.model = dm, name = "date")
 
   # -- test class
-  expect_equal(class(x), "Date")
+  expect_equal(class(x), c("POSIXct", "POSIXt"))
 
   # -- test value
-  expect_equal(x, as.Date(Sys.Date()))
+  expect_equal(as.Date(x), as.Date(Sys.Date()))
 
 })
 
