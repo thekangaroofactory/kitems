@@ -625,31 +625,26 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
         trigger_delete_dialog()
       else
         selected_items()
-      catl("- Item(s) to be deleted =", as.character(ids))
 
-      # -- Secure against errors raised by item_add #351
+      # -- Secure against errors
       tryCatch({
 
-        # -- delete item & update reactive
-        k_items(item_delete(k_items(), ids))
+        # -- store new items table
+        k_items(
+          rows_delete(items = k_items(),
+                      id = ids))
 
-        # -- prepare notify
-        msg <- "Item(s) deleted."
-        type <- "message"},
+        if(shiny::isRunning())
+          showNotification(paste(MODULE, "Item(s) deleted."), type = "message")},
 
         # -- failed
         error = function(e) {
 
-          # -- prepare notify
-          msg <- paste("Item(s) has not been deleted. \n error =", e$message)
-          type <- "error"
+          warning(paste("Item(s) has not been deleted. \n error =", e$message))
+          if(shiny::isRunning())
+            showNotification(paste(MODULE, "Item(s) not deleted."), type = "error")
 
-          # -- return
-          message(msg)},
-
-        # -- notify
-        finally = if(shiny::isRunning())
-          showNotification(paste(MODULE, msg), type = type))
+        })
 
       # -- reset trigger
       # can't be performed before otherwise ids are lost
@@ -665,33 +660,25 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
 
         catl(MODULE, "[Event] delete item(s) trigger")
 
-        # -- get selected items (ids)
-        ids <- trigger_delete_values()
-        catl("- Item(s) to be deleted =", as.character(ids))
-
-        # -- Secure against errors raised by item_add #351
+        # -- Secure against errors
         tryCatch({
 
-          # -- delete item & update reactive
-          k_items(item_delete(k_items(), ids))
+          # -- store new items table
+          k_items(
+            rows_delete(items = k_items(),
+                        id = trigger_delete_values()))
 
-          # -- prepare notify
-          msg <- "Item(s) deleted."
-          type <- "message"},
+          if(shiny::isRunning())
+            showNotification(paste(MODULE, "Item(s) deleted."), type = "message")},
 
           # -- failed
           error = function(e) {
 
-            # -- prepare notify
-            msg <- paste("Item(s) has not been deleted. \n error =", e$message)
-            type <- "error"
+            warning(paste("Item(s) has not been deleted. \n error =", e$message))
+            if(shiny::isRunning())
+              showNotification(paste(MODULE, "Item(s) not deleted."), type = "error")
 
-            # -- return
-            message(msg)},
-
-          # -- notify
-          finally = if(shiny::isRunning())
-            showNotification(paste(MODULE, msg), type = type))
+          })
 
         # -- reset values
         # otherwise you can't update same object twice
