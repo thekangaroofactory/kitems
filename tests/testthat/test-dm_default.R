@@ -1,57 +1,62 @@
 
 
-test_that("dm_default: default.fun", {
+test_that("dm_default works", {
+
+  # ////////////////////////////////////////////////////////////////////////////
+  # default.fun
 
   # -- function call
   x <- dm_default(data.model = dm, name = "date")
 
-  # -- test class
+  # -- tests
   expect_equal(class(x), c("POSIXct", "POSIXt"))
-
-  # -- test value
   expect_equal(as.Date(x), as.Date(Sys.Date()))
 
-})
 
-
-test_that("dm_default: default.val", {
-
-  # -- function call
-  x <- dm_default(data.model = dm, name = "name")
-
-  # -- test class
-  expect_type(x, "character")
-
-  # -- test value
-  expect_equal(x, "fruit")
-
-})
-
-
-test_that("dm_default: NA", {
+  # ////////////////////////////////////////////////////////////////////////////
+  # default.fun with default.arg
 
   # -- function call
   x <- dm_default(data.model = dm, name = "id")
 
-  # -- test value is NA
+  # -- tests
   expect_true(is.numeric(x))
 
-})
 
-
-# ------------------------------------------------------------------------------
-# Negative tests
-# ------------------------------------------------------------------------------
-
-test_that("dm_default / default.fun error", {
-
-  # -- alter data model
-  dm[dm$name == "date", ]$default.fun <- "as.Date"
+  # ////////////////////////////////////////////////////////////////////////////
+  # default.fun multiple values
 
   # -- function call
-  x <- dm_default(data.model = dm, name = "date")
+  x <- dm_default(data.model = dm, name = "id", 10)
 
-  # -- test value is NA
+  # -- tests
+  expect_true(is.numeric(x))
+  expect_false(any(duplicated(x)))
+
+
+  # ////////////////////////////////////////////////////////////////////////////
+  # default.val
+
+  # -- function call
+  x <- dm_default(data.model = dm, name = "name")
+
+  # -- tests
+  expect_type(x, "character")
+  expect_equal(x, "fruit")
+
+
+  # ------------------------------------------------------------------------------
+  # Negative tests
+  # ------------------------------------------------------------------------------
+
+  # -- alter data model
+  dm_alter <- dm
+  dm_alter[dm_alter$name == "date", ]$default.fun <- "dummy"
+
+  # -- function call
+  expect_warning(x <- dm_default(data.model = dm_alter, name = "date"))
+
+  # -- test
   expect_true(is.na(x))
 
 })

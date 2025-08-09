@@ -45,7 +45,7 @@ default_val <- c("name" = "fruit", "isvalid" = TRUE)
 
 # -- declare default.fun & arg
 default_fun <- c("id" = "ktools::getTimestamp", "date" = "Sys.time")
-default_arg <- c("id" = "list(k = 10)")
+default_arg <- c("id" = "list(k = 1000000)")
 
 # -- declare filter
 filter <- c("id")
@@ -63,7 +63,8 @@ sort_desc <- c("date" = TRUE)
 # ------------------------------------------------------------------------------
 
 # -- build base data model
-dm <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun,
+dm <- data_model(colClasses = colClasses,
+                 default.val = default_val, default.fun = default_fun, default.arg = default_arg,
                  filter = filter, skip = skip, sort.rank = sort_rank, sort.desc = sort_desc)
 
 # -- build specific data models
@@ -79,10 +80,10 @@ dm_sort <- data_model(colClasses = colClasses, sort.rank = c("date" = 1), sort.d
 # ------------------------------------------------------------------------------
 
 # -- build base items
-item1 <- item_create(list(id = NA, date = NA, name = "Apple", quantity = 1, total = 12.5, isvalid = TRUE), dm)
-item2 <- item_create(list(id = NA, date = "2024-01-14", name = "Banana", quantity = 12, total = 106.3, isvalid = FALSE), dm)
-item3 <- item_create(list(id = NA, date = "2024-01-16", name = "Mango", quantity = 3, total = 45.7, isvalid = TRUE), dm)
-item4 <- item_create(list(id = NA, date = "2024-01-17", name = "Orange", quantity = 7, total = 17.5, isvalid = FALSE), dm)
+item1 <- rows_insert(NULL, list(id = NA, date = NA, name = "Apple", quantity = 1, total = 12.5, isvalid = TRUE), dm)
+item2 <- rows_insert(NULL, list(id = NA, date = "2024-01-14", name = "Banana", quantity = 12, total = 106.3, isvalid = FALSE), dm)
+item3 <- rows_insert(NULL, list(id = NA, date = "2024-01-16", name = "Mango", quantity = 3, total = 45.7, isvalid = TRUE), dm)
+item4 <- rows_insert(NULL, list(id = NA, date = "2024-01-17", name = "Orange", quantity = 7, total = 17.5, isvalid = FALSE), dm)
 items <- dplyr::bind_rows(item1, item2, item3, item4)
 
 # -- items with additional attribute
@@ -96,9 +97,9 @@ items_no_row2 <- data.frame("id" = as.numeric(numeric()),
                             "date" = as.character(character()))
 
 # -- items to test triggers
-new_item <- item_create(list(id = NA, date = NA, name = "Raspberry", quantity = 34, total = 86.4, isvalid = TRUE), dm)
-update_item <- item_create(list(id = items$id[1], date = NA, name = "Apple-update", quantity = 100, total = 0.1, isvalid = FALSE), dm)
-update_item_2 <- item_create(list(id = items$id[2], date = NA, name = "Banana-update", quantity = 10, total = 0.1, isvalid = TRUE), dm)
+new_item <- rows_insert(NULL, list(id = NA, date = NA, name = "Raspberry", quantity = 34, total = 86.4, isvalid = TRUE), dm)
+update_item <- rows_insert(NULL, list(id = items$id[1], date = NA, name = "Apple-update", quantity = 100, total = 0.1, isvalid = FALSE), dm)
+update_item_2 <- rows_insert(NULL, list(id = items$id[2], date = NA, name = "Banana-update", quantity = 10, total = 0.1, isvalid = TRUE), dm)
 
 
 # --------------------------------------------------------------------------
