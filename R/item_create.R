@@ -32,6 +32,14 @@
 # -- function definition
 item_create <- function(values, data.model){
 
+  # ////////////////////////////////////////////////////////////////////////////
+
+  .Deprecated(
+    new = "rows_insert",
+    package = "kitems")
+
+  # ////////////////////////////////////////////////////////////////////////////
+
   # -- check parameter
   stopifnot("values argument must be a list or a data.frame" = is.list(values))
 

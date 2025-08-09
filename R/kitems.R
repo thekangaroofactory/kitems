@@ -385,12 +385,11 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
       # -- Secure workflow
       tryCatch({
 
-        # -- call create workflow
-        new_items <- item_create_workflow(items = k_items(),
-                                          data.model = k_data_model(),
-                                          values = values)
-        # -- store
-        k_items(new_items)
+        # -- store new item table
+        k_items(
+          rows_insert(items = k_items(),
+                      values = values,
+                      data.model = k_data_model()))
 
         # -- notify
         if(shiny::isRunning())
@@ -417,33 +416,23 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
 
         catl(MODULE, "[Event] Create item(s) trigger")
 
-        # -- check for missing entries
-        # support partial values #475
-        catl("- Check trigger values")
-        colClasses <- dm_colClasses(k_data_model())
-
-        # -- get values (as per data.model)
-        values <- trigger_create_values()[names(colClasses)]
-        names(values) <- names(colClasses)
-
-        # -- Secure against errors raised by item_update #351
+        # -- Secure against errors
         tryCatch({
 
-          # -- call create workflow
-          new_items <- item_create_workflow(items = k_items(),
-                                            data.model = k_data_model(),
-                                            values = values)
-          # -- store
-          k_items(new_items)
+          # -- store new item table
+          k_items(
+            rows_insert(items = k_items(),
+                        values = trigger_create_values(),
+                        data.model = k_data_model()))
 
           # -- notify
-          catl(MODULE, "Item created")},
+          catl(MODULE, "Item(s) created")},
 
           # -- failed
           error = function(e) {
 
             # -- notify
-            warning(paste("Item has not been created. \n error =", e$message))
+            warning(paste("Item(s) not created. \n error =", e$message))
 
           })
 

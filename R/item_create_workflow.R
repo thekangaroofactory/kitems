@@ -15,6 +15,14 @@
 
 item_create_workflow <- function(items, data.model, values){
 
+  # ////////////////////////////////////////////////////////////////////////////
+
+  .Deprecated(
+    new = "rows_insert",
+    package = "kitems")
+
+  # ////////////////////////////////////////////////////////////////////////////
+
   # -- create item
   catl("- create item(s)")
   item <- item_create(values, data.model)

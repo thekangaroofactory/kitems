@@ -42,10 +42,9 @@ attribute_value <- function(key, value, data.model){
     # -- replace invalid ones by default
     if(any(!is_valid)){
       catl("> Attribute has invalid input(s) / set default", level = 2)
-      value[!is_valid] <- dm_default(data.model, key)}
+      value[!is_valid] <- dm_default(data.model, key, n = length(value[!is_valid]))}
 
   }
-
 
   # ////////////////////////////////////////////////////////////////////////////
   # -- check vs target class
