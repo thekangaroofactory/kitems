@@ -2,20 +2,29 @@
 % Please edit documentation in R/dm_default.R
 \name{dm_default}
 \alias{dm_default}
-\title{Compute default value for an attribute}
+\title{Compute Default Value(s)}
 \usage{
-dm_default(data.model, name)
+dm_default(data.model, name, n = 1)
 }
 \arguments{
 \item{data.model}{a data.frame containing the data model}
 
 \item{name}{a character string with the attribute name}
+
+\item{n}{an integer (default 1) to use when a vector is expected
+for default function case}
 }
 \value{
-the default value or computed output of the default function
+a n length vector
 }
 \description{
-Compute default value for an attribute
+Compute Default Value(s)
+}
+\details{
+Whenever a default function is set for an attribute of the data.model,
+it is possible to generate a vector of default values instead of a single
+default value by using n parameter. This is usefull when the function
+generates single values (time or unique id for example)
 }
 \examples{
 \dontrun{
