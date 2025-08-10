@@ -2,6 +2,7 @@
 title: "Background Item Management"
 format: html
 editor: visual
+draft: true
 
 vignette: >
   %\VignetteIndexEntry{Background Item Management}
