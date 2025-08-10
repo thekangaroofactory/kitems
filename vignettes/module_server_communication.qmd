@@ -4,7 +4,7 @@ format: html
 editor: visual
 
 vignette: >
-  %\VignetteIndexEntry{Module Server Return Value}
+  %\VignetteIndexEntry{Communication with the Module Server}
   %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---
