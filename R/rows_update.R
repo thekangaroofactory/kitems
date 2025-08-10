@@ -32,6 +32,11 @@ rows_update <- function(items, values, data.model){
   # before projection to avoid potential duplicated rows
   values <- values[names(values) %in% data.model$name]
 
+  # -- secure against length 0 (NULL, numeric(0)...)
+  # otherwise as.data.frame will fail
+  if(any(lengths(values) == 0))
+    values <- values[lengths(values) != 0]
+
   # -- make rectangular
   # elements must have length 1 or same as the id element
   values <- as.data.frame(values)

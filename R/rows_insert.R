@@ -32,10 +32,10 @@ rows_insert <- function(items, values, data.model){
   # before projection to avoid potential duplicated rows
   values <- values[names(values) %in% data.model$name]
 
-  # -- secure against NULL
-  # otherwise as.data.frame will fail: length(NULL) = 0
-  if(list(NULL) %in% values)
-    values <- Filter(Negate(is.null), values)
+  # -- secure against length 0 (NULL, numeric(0)...)
+  # otherwise as.data.frame will fail
+  if(any(lengths(values) == 0))
+    values <- values[lengths(values) != 0]
 
   # -- make rectangular
   # elements must have length 1 or same as the id element
