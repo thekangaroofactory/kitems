@@ -35,14 +35,16 @@ body <- dashboardBody(
               column(width = 8,
 
                      h1("Introduction"),
-                     p("This application demonstrates how to implement kitems module from scracth (no data)."),
+                     p("This application demonstrates how to implement {kitems} module from scracth (no data)."),
 
                      h3("Data"),
-                     p("This instance has no corresponding files (data model or items) in the path.", br(),
+                     p("This instance has no corresponding files (data model or items) in the given path.", br(),
                        "The administration console will only display the Create and Import data buttons."),
                      tags$pre("# -- start module server: \ndata_1 <- kitems::kitems(id = \"data_1\",
-                              path = \"path/to/my/data\", \nautosave = FALSE, admin = TRUE)"),
-                     p("Because autosave is FALSE (to keep demo app in frozen state), nothing will be saved if
+                              path = \"path/to/my/data\",
+                              autosave = FALSE,
+                              admin = TRUE)"),
+                     p("Because autosave is FALSE (to keep this demo in frozen state), nothing will be saved if
                        data are created or imported."),
 
                      # -- admin
