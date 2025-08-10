@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kitems</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,7 +20,9 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/background_item_management.html">Background Item Management</a></li>
     <li><a class="dropdown-item" href="../articles/filtering_items.html">Filtering Items</a></li>
-    <li><a class="dropdown-item" href="../articles/module_server_return_value.html">Module Server Return Value</a></li>
+    <li><a class="dropdown-item" href="../articles/item_workflows.html">Item Workflows</a></li>
+    <li><a class="dropdown-item" href="../articles/known_limitations.html">Known Limitations</a></li>
+    <li><a class="dropdown-item" href="../articles/module_server_communication.html">Communication with the Module Server</a></li>
     <li><a class="dropdown-item" href="../articles/motivations.html">Motivations</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -45,7 +47,14 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">kitems</span><span class="op">(</span><span class="va">id</span>, <span class="va">path</span>, autosave <span class="op">=</span> <span class="cn">TRUE</span>, admin <span class="op">=</span> <span class="cn">FALSE</span>, shortcut <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">kitems</span><span class="op">(</span></span>
+<span>  <span class="va">id</span>,</span>
+<span>  <span class="va">path</span>,</span>
+<span>  autosave <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  admin <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  trigger <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shortcut <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -68,8 +77,12 @@
 <dd><p>a logical indicating if the admin module server should be launched (default = FALSE)</p></dd>
 
 
-<dt id="arg-shortcut">shortcut<a class="anchor" aria-label="anchor" href="#arg-shortcut"></a></dt>
-<dd><p>a logical should attribute shortcuts be computed when building the item form (default = FALSE)</p></dd>
+<dt id="arg-trigger">trigger<a class="anchor" aria-label="anchor" href="#arg-trigger"></a></dt>
+<dd><p>a reactive object to pass events to the module (see details)</p></dd>
+
+
+<dt id="arg-options">options<a class="anchor" aria-label="anchor" href="#arg-options"></a></dt>
+<dd><p>a list of options (see details)</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -87,6 +100,12 @@ consistent with the output of <a href="dm_name.html">dm_name</a> function used w
 <p>When admin is FALSE, <a href="admin_widget.html">admin_widget</a> will return an 'empty' layout (tabs with no content)
 <a href="dynamic_sidebar.html">dynamic_sidebar</a> is not affected by this parameter.
 It is expected that those function will not be used when admin = FALSE.</p>
+<p>Behavior of the module server can be tuned using a list of options
+shortcut option is a logical to activate shortcut mechanism within item forms</p>
+<p>Triggers are the way to send events for the module to execute dedicated actions.
+trigger must be a reactive (or NULL, the default). An event is defined as a named list of the form
+list(workflow = "create", type = "dialog") or list(workflow = "create", type = "task", values = list(...))
+If NULL, the trigger manager observer will not be initialized.</p>
     </div>
 
     <div class="section level2">

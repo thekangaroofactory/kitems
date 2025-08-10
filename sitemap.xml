@@ -4,7 +4,9 @@
 <url><loc>https://thekangaroofactory.github.io/kitems/articles/background_item_management.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/articles/filtering_items.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/articles/index.html</loc></url>
-<url><loc>https://thekangaroofactory.github.io/kitems/articles/module_server_return_value.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/articles/item_workflows.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/articles/known_limitations.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/articles/module_server_communication.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/articles/motivations.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/authors.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/index.html</loc></url>
@@ -18,6 +20,7 @@
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/attribute_shortcut.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/attribute_suggestion.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/attribute_update.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/attribute_value.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/backup.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/create_widget.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/danger_zone_widget.html</loc></url>
@@ -37,10 +40,8 @@
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/filtered_view_widget.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/hasDate.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/index.html</loc></url>
-<url><loc>https://thekangaroofactory.github.io/kitems/reference/item_add.html</loc></url>
-<url><loc>https://thekangaroofactory.github.io/kitems/reference/item_chk_str.html</loc></url>
-<url><loc>https://thekangaroofactory.github.io/kitems/reference/item_create.html</loc></url>
-<url><loc>https://thekangaroofactory.github.io/kitems/reference/item_delete.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/is_truthy.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/item_dialog.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/item_form.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/item_input_values.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/item_integrity.html</loc></url>
@@ -50,11 +51,13 @@
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/item_save.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/item_search.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/item_sort.html</loc></url>
-<url><loc>https://thekangaroofactory.github.io/kitems/reference/item_update.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/items_name.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/kitems.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/kitems_admin.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/restore.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/rows_delete.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/rows_insert.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/rows_update.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/runExample.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/update_widget.html</loc></url>
 </urlset>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kitems</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,7 +20,9 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/background_item_management.html">Background Item Management</a></li>
     <li><a class="dropdown-item" href="../articles/filtering_items.html">Filtering Items</a></li>
-    <li><a class="dropdown-item" href="../articles/module_server_return_value.html">Module Server Return Value</a></li>
+    <li><a class="dropdown-item" href="../articles/item_workflows.html">Item Workflows</a></li>
+    <li><a class="dropdown-item" href="../articles/known_limitations.html">Known Limitations</a></li>
+    <li><a class="dropdown-item" href="../articles/module_server_communication.html">Communication with the Module Server</a></li>
     <li><a class="dropdown-item" href="../articles/motivations.html">Motivations</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -38,6 +40,112 @@
 
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.7.0" id="kitems-v070-beta">kitems v0.7.0-beta<a class="anchor" aria-label="anchor" href="#kitems-v070-beta"></a></h2>
+<p>The milestone focuses on the communication strategy &amp; item workflows This is a major milestone (would be a major version if not beta)</p>
+<div class="section level3">
+<h3 id="communication--workdlows-0-7-0">Communication &amp; workdlows<a class="anchor" aria-label="anchor" href="#communication--workdlows-0-7-0"></a></h3>
+<ul><li>Implement item create workflow (#457)</li>
+<li>Implement item update workflow (#459)</li>
+<li>Implement internal item workflow functions (#472)</li>
+<li>Implement module server options (#447)</li>
+<li>Implement options parameter (#465)</li>
+<li>Drop item_create_modal function (#460)</li>
+<li>Improve item selection to support triggers (#469)</li>
+<li>Improve item_dialog to cover all workflows (#471)</li>
+<li>Align item create workflow with update workflow (#489)</li>
+<li>Create / Update workflows should be secured against failure (#477)</li>
+<li>Rename item_delete into rows_delete (#492)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="misc-0-7-0">Misc<a class="anchor" aria-label="anchor" href="#misc-0-7-0"></a></h3>
+<ul><li>Implement parameter check (#458)</li>
+<li>Check how to avoid filtered items to be initialized with all items (#357)</li>
+<li>Duplicated input / output IDs for date_slider (#485)</li>
+<li>Remove item_chk_str function (#470)</li>
+<li>Should filter_date be replaced by input$date_slider (#466)</li>
+<li>First in table selection is not kept (#483)</li>
+<li>Check that functions don’t get reactive values (#468)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="test-coverage-0-7-0">Test coverage<a class="anchor" aria-label="anchor" href="#test-coverage-0-7-0"></a></h3>
+<ul><li>Implement expect functions (#476)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-0-7-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-7-0"></a></h3>
+<ul><li>Upgrade existing documentation</li>
+<li>Upgrade module server communication article</li>
+<li>Deliver item workflows article</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.1" id="kitems-v061-beta">kitems v0.6.1-beta<a class="anchor" aria-label="anchor" href="#kitems-v061-beta"></a></h2>
+<p>The milestone focuses on the migration to {iker} package instead of {kfiles}</p>
+<div class="section level3">
+<h3 id="migration-to-iker-0-6-1">Migration to {iker}<a class="anchor" aria-label="anchor" href="#migration-to-iker-0-6-1"></a></h3>
+<ul><li>Migrate item_load to {iker} (#412)</li>
+<li>Migrate item_save function to {iker} (#411)</li>
+<li>Migrate import_server function to {iker} (#414)</li>
+<li>Delegate ISO-8601 datetime continuity to {iker} (#409)</li>
+<li>Item load and save functions should now rely on connector wrapper functions (#424)</li>
+<li>item_load function should take col.classes argument instead of data.model (#421)</li>
+<li>Drop create parameter from item_load function signature (#419)</li>
+<li>Drop create parameter from kitems function signature (#420)</li>
+<li>Manage item_load impacts in kitems (#415)</li>
+<li>Remove {kfile} from the package dependencies (#418)</li>
+<li>kitems_admin should use {ktools} to create data (#413)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fix-0-6-1">Bug Fix<a class="anchor" aria-label="anchor" href="#bug-fix-0-6-1"></a></h3>
+<ul><li>Item create fails when date attribute is left empty in the input form (#428)</li>
+<li>Fatal error when creating an item with empty value for POSIXct attribute (#427)</li>
+<li>Demo apps fail to start with error (#422)</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.0" id="kitems-v060-beta">kitems v0.6.0-beta<a class="anchor" aria-label="anchor" href="#kitems-v060-beta"></a></h2>
+<p>The milestone focuses on package architecture &amp; cleanup. Also a new trace mechanism is implemented to reduce outputs &amp; improve performance.</p>
+<div class="section level3">
+<h3 id="misc-0-6-0">Misc<a class="anchor" aria-label="anchor" href="#misc-0-6-0"></a></h3>
+<ul><li>Check &amp; cleanup exported functions (#354)</li>
+<li>Rename widget functions (#382)</li>
+<li>Rename admin_server into kitems_admin (#385)</li>
+<li>Improve trace mechanism</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fix-0-6-0">Bug Fix<a class="anchor" aria-label="anchor" href="#bug-fix-0-6-0"></a></h3>
+<ul><li>Admin standalone app needs to be delivered in inst directory (#404)</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5.7" id="kitems-v057-beta">kitems v0.5.7-beta<a class="anchor" aria-label="anchor" href="#kitems-v057-beta"></a></h2>
+<p>The milestone focuses on the admin console, demo apps, documentation.</p>
+<div class="section level3">
+<h3 id="new-features-0-5-7">New features<a class="anchor" aria-label="anchor" href="#new-features-0-5-7"></a></h3>
+<div class="section level4">
+<h4 id="items-0-5-7">Items<a class="anchor" aria-label="anchor" href="#items-0-5-7"></a></h4>
+<ul><li>Filtered view should display a message when the table is empty (#362)</li>
+</ul></div>
+<div class="section level4">
+<h4 id="misc-0-5-7">Misc<a class="anchor" aria-label="anchor" href="#misc-0-5-7"></a></h4>
+<ul><li>Implement a specific app for the admin console (#355)</li>
+<li>View tab should display a message when the table is empty (#358)</li>
+<li>Split demo app into single use cases (#371)</li>
+<li>Implement sub-folders to group item related files (#356)</li>
+<li>Test coverage convergence (#353)</li>
+</ul></div>
+<div class="section level4">
+<h4 id="documentation-0-5-7">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-5-7"></a></h4>
+<ul><li>Implement module server return value vignette (#381)</li>
+<li>Add motivations vignette (#379)</li>
+</ul></div>
+</div>
+<div class="section level3">
+<h3 id="bug-fix-0-5-7">Bug Fix<a class="anchor" aria-label="anchor" href="#bug-fix-0-5-7"></a></h3>
+<ul><li>Error in if la condition est de longueur &gt; 1 in item_load (#359)</li>
+<li>The module server return value filter_date is always NULLbug (#375)</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.6" id="kitems-v056-beta">kitems v0.5.6-beta<a class="anchor" aria-label="anchor" href="#kitems-v056-beta"></a></h2>
 <p>The milestone focuses on item operations and introduces shortcuts for item creation</p>

@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">kitems</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +37,9 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="articles/background_item_management.html">Background Item Management</a></li>
     <li><a class="dropdown-item" href="articles/filtering_items.html">Filtering Items</a></li>
-    <li><a class="dropdown-item" href="articles/module_server_return_value.html">Module Server Return Value</a></li>
+    <li><a class="dropdown-item" href="articles/item_workflows.html">Item Workflows</a></li>
+    <li><a class="dropdown-item" href="articles/known_limitations.html">Known Limitations</a></li>
+    <li><a class="dropdown-item" href="articles/module_server_communication.html">Communication with the Module Server</a></li>
     <li><a class="dropdown-item" href="articles/motivations.html">Motivations</a></li>
   </ul>
 </li>
@@ -60,8 +62,12 @@
 <!-- badges: start -->
 
 <p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a> <!-- badges: end --></p>
-<p>The goal of kitems is to provide a framework to manage data frame <em>items</em> and a set of tools to implement it within Shiny web applications.</p>
+<p>The goal of kitems is to provide a framework to manage data frame <em>items</em> and a set of tools to implement it within R Shiny applications.</p>
 <p>It is delivered as a Shiny module.</p>
+<blockquote>
+<p>Note that the package is under development convergence (lifecycle = experimental).<br>
+Core features may still be modified at this stage, and there is no guaranty that exported functions signature will not change before it is converged.</p>
+</blockquote>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -69,15 +75,11 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"thekangaroofactory/kitems"</span><span class="op">)</span></span></code></pre></div>
-<blockquote>
-<p>Note that the package is under development convergence.<br>
-Features may still be modified at this stage, and there is no guaranty that exported functions signature will not change before it is converged.</p>
-</blockquote>
 </div>
 <div class="section level2">
 <h2 id="demo">Demo<a class="anchor" aria-label="anchor" href="#demo"></a>
 </h2>
-<p>Demo apps are delivered together with the package and can be accessed with:</p>
+<p>Demo apps are delivered along with the package and can be accessed with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thekangaroofactory.github.io/kitems/">kitems</a></span><span class="op">)</span></span>
 <span></span>
@@ -87,7 +89,7 @@ Features may still be modified at this stage, and there is no guaranty that expo
 <div class="section level2">
 <h2 id="framework-specifications">Framework Specifications<a class="anchor" aria-label="anchor" href="#framework-specifications"></a>
 </h2>
-<p>The kitems framework is based on two main notions - data model and <em>items</em>.</p>
+<p>The framework is based on two main notions - data model and <em>items</em>.</p>
 <div class="section level3">
 <h3 id="data-model">Data Model<a class="anchor" aria-label="anchor" href="#data-model"></a>
 </h3>
@@ -122,10 +124,9 @@ The folder is named after the <code>id</code> of the module.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="reactive-values">Reactive Values<a class="anchor" aria-label="anchor" href="#reactive-values"></a>
+<h2 id="return-values">Return Value(s)<a class="anchor" aria-label="anchor" href="#return-values"></a>
 </h2>
-<p>kitems strongly relies on Shiny (both shiny and shinydashboard packages are set as ‘depends’ dependencies).</p>
-<p>It delivers reactive values that are accessible from the module server return value.</p>
+<p>kitems strongly relies on Shiny’s reactivity and delivers reactive objects that are accessible from the module server return value.</p>
 <p>The return value has the following structure:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">id</span>,</span>
@@ -136,8 +137,9 @@ The folder is named after the <code>id</code> of the module.</p>
 <span>     <span class="va">selected_items</span>,</span>
 <span>     <span class="va">clicked_column</span>,</span>
 <span>     <span class="va">filter_date</span><span class="op">)</span></span></code></pre></div>
+<p>Elements items, data_model, filtered_items, selected_items, clicked_column, filter_date are reactive objects on which listeners (observers) can take dependency to trigger actions at a higher level.</p>
 <blockquote>
-<p>Data model and <em>items</em> reactive values should be handled with caution as updating there values will trigger auto save (if <code>autosave = TRUE</code>).</p>
+<p>Those reactive objects are defined with the reactive() function inside the module server so that it is not possible to updated them from the outside. Item’s management should stick to the module server (using the trigger parameter).</p>
 </blockquote>
 <div class="section level3">
 <h3 id="data-model-1">Data Model<a class="anchor" aria-label="anchor" href="#data-model-1"></a>
@@ -147,7 +149,7 @@ The folder is named after the <code>id</code> of the module.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thekangaroofactory.github.io/kitems/">kitems</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># -- call module</span></span>
-<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems_server</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># -- get data model</span></span>
 <span><span class="va">data_model</span> <span class="op">&lt;-</span> <span class="va">mydata</span><span class="op">$</span><span class="fu">data_model</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -158,7 +160,7 @@ The folder is named after the <code>id</code> of the module.</p>
 <p>The items for this id can be accessed <strong>in a reactive context</strong> from the return value list, as items()</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># -- call module</span></span>
-<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems_server</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># -- get items</span></span>
 <span><span class="va">items</span> <span class="op">&lt;-</span> <span class="va">mydata</span><span class="op">$</span><span class="fu">items</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -170,7 +172,7 @@ The folder is named after the <code>id</code> of the module.</p>
 Here is an example how to observe the <em>items</em>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># -- Call module server</span></span>
-<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span>, path <span class="op">=</span> <span class="st">"./data"</span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span>, path <span class="op">=</span> <span class="st">"./data"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># -- Observe items</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="fu">items</span><span class="op">(</span><span class="op">)</span>, <span class="op">{</span></span>
@@ -189,7 +191,7 @@ Here is an example how to observe the <em>items</em>:</p>
 <h3 id="initialization">Initialization<a class="anchor" aria-label="anchor" href="#initialization"></a>
 </h3>
 <p>When starting the module with id and path arguments, it will check if the corresponding data model is available in the destination path.</p>
-<p>If no data model is found, the admin UI will display a button to create a new data model, as well as a button to import data (it creates the data model from the data).</p>
+<p>If no data model is found, the admin console UI will display a button to create a new data model, as well as a button to import data (it creates the data model from the data).</p>
 </div>
 <div class="section level3">
 <h3 id="checking-integrity">Checking integrity<a class="anchor" aria-label="anchor" href="#checking-integrity"></a>
