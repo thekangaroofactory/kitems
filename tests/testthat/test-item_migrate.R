@@ -1,15 +1,16 @@
 
 
-test_that("item_migrate", {
+test_that("item_migrate works", {
 
   # -- function call
   x <- item_migrate(items = items, name = "new_attribute", type = "logical", fill = TRUE)
 
-  # -- test class
-  expect_s3_class(x, "data.frame")
+  # -- default checks
+  expect_items(x, n = nrow(items))
+  expect_colclasses(x, c(colClasses, new_attribute = "logical"))
 
-  # -- test dim
-  expect_equal(dim(x), dim(items) + c(0, 1))
+  # -- test nb cols
+  expect_equal(ncol(x), ncol(items) + 1)
 
   # -- test added attribute
   expect_equal(x$new_attribute, rep(TRUE,4))
@@ -22,11 +23,11 @@ test_that("item_migrate: items without row", {
   # -- function call
   x <- item_migrate(items = items_no_row, name = "new_attribute", type = "logical", fill = TRUE)
 
-  # -- test class
-  expect_s3_class(x, "data.frame")
+  # -- default checks
+  expect_items(x, n = nrow(items_no_row))
 
-  # -- test dim
-  expect_equal(dim(x), c(0,3))
+  # -- test nb cols
+  expect_equal(ncol(x), ncol(items_no_row) + 1)
 
 })
 
@@ -36,9 +37,11 @@ test_that("item_migrate: wrong fill length", {
   # -- function call
   x <- item_migrate(items = items, name = "new_attribute", type = "logical", fill = c(TRUE, FALSE))
 
-  # -- tests
-  expect_s3_class(x, "data.frame")
-  expect_equal(dim(x), c(4, 7))
+  # -- default checks
+  expect_items(x, n = nrow(items))
+
+  # -- test nb cols
+  expect_equal(ncol(x), ncol(items) + 1)
 
 })
 
@@ -48,9 +51,11 @@ test_that("item_migrate: wrong fill type", {
   # -- function call
   x <- item_migrate(items = items, name = "new_attribute", type = "logical", fill = 1)
 
-  # -- tests
-  expect_s3_class(x, "data.frame")
-  expect_equal(dim(x), c(4, 7))
+  # -- default checks
+  expect_items(x, n = nrow(items))
+
+  # -- test nb cols
+  expect_equal(ncol(x), ncol(items) + 1)
 
 })
 

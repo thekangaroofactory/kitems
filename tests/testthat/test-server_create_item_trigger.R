@@ -1,0 +1,61 @@
+
+
+# --------------------------------------------------------------------------
+# Setup
+# --------------------------------------------------------------------------
+
+create_testdata()
+
+
+# --------------------------------------------------------------------------
+# Scenario: create item
+# --------------------------------------------------------------------------
+
+test_that("Create item [dialog trigger]", {
+
+  # -- declare arguments
+  params <- list(id = module_id,
+                 path = testdata_path,
+                 autosave = TRUE,
+                 trigger = reactiveVal(NULL))
+
+  # -- module server call
+  testServer(kitems, args = params, {
+
+    # -- hit trigger
+    event <- list(workflow = "create", type = "dialog")
+    trigger(event)
+
+    # -- update inputs (values to create item)
+    session$setInputs(id = NA)
+    session$setInputs(date = Sys.Date())
+    session$setInputs(date_time = "14:50:42")
+    session$setInputs(date_tz = "CET")
+    session$setInputs(name = "Orange")
+    session$setInputs(quantity = 4)
+    session$setInputs(total = 78.9)
+    session$setInputs(isvalid = FALSE)
+
+    # -- click
+    session$setInputs(item_create_confirm = 1)
+
+    # --------------------------------------------------------------------------
+    # Items
+    # --------------------------------------------------------------------------
+
+    x <- k_items()
+
+    # -- test class & dim
+    expect_s3_class(x, "data.frame")
+    expect_equal(dim(x), dim(items) + c(1, 0))
+
+  })
+
+})
+
+
+# --------------------------------------------------------------------------
+# Cleanup
+# --------------------------------------------------------------------------
+
+clean_all()

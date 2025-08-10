@@ -29,13 +29,12 @@ test_that("Update works", {
     session$flushReact()
 
     # -- select item
-    selected_items(x$id[1])
+    session$setInputs(filtered_view_rows_selected = 1)
 
     # -- click
     session$setInputs(item_update = 1)
 
     # -- update inputs (values to create item)
-    session$setInputs(id = x$id[1])
     session$setInputs(date = x$date[1] + 1)
     session$setInputs(date_time = "17:17:17")
     session$setInputs(date_tz = "UTC")

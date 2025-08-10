@@ -1,6 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 <!-- You need to render `README.Rmd` to keep `README.md` up-to-date. -->
+
 <!-- use`devtools::build_readme()` for this.  -->
 
 # kitems
@@ -15,10 +17,15 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 <!-- badges: end -->
 
 The goal of kitems is to provide a framework to manage data frame
-*items* and a set of tools to implement it within Shiny web
-applications.
+*items* and a set of tools to implement it within R Shiny applications.
 
 It is delivered as a Shiny module.
+
+> Note that the package is under development convergence (lifecycle =
+> experimental).  
+> Core features may still be modified at this stage, and there is no
+> guaranty that exported functions signature will not change before it
+> is converged.
 
 ## Installation
 
@@ -30,15 +37,9 @@ The development (*beta*) version of kitems can be installed from
 devtools::install_github("thekangaroofactory/kitems")
 ```
 
-> Note that the package is under development convergence.  
-> Features may still be modified at this stage, and there is no guaranty
-> that exported functions signature will not change before it is
-> converged.
-
 ## Demo
 
-Demo apps are delivered together with the package and can be accessed
-with:
+Demo apps are delivered along with the package and can be accessed with:
 
 ``` r
 library(kitems)
@@ -49,8 +50,7 @@ runExample()
 
 ## Framework Specifications
 
-The kitems framework is based on two main notions - data model and
-*items*.
+The framework is based on two main notions - data model and *items*.
 
 ### Data Model
 
@@ -94,13 +94,10 @@ Example:
 
 It may result in files being stored at different levels.
 
-## Reactive Values
+## Return Value(s)
 
-kitems strongly relies on Shiny (both shiny and shinydashboard packages
-are set as ‘depends’ dependencies).
-
-It delivers reactive values that are accessible from the module server
-return value.
+kitems strongly relies on Shiny’s reactivity and delivers reactive
+objects that are accessible from the module server return value.
 
 The return value has the following structure:
 
@@ -115,9 +112,14 @@ list(id,
      filter_date)
 ```
 
-> Data model and *items* reactive values should be handled with caution
-> as updating there values will trigger auto save (if
-> `autosave = TRUE`).
+Elements items, data_model, filtered_items, selected_items,
+clicked_column, filter_date are reactive objects on which listeners
+(observers) can take dependency to trigger actions at a higher level.
+
+> Those reactive objects are defined with the reactive() function inside
+> the module server so that it is not possible to updated them from the
+> outside. Item’s management should stick to the module server (using
+> the trigger parameter).
 
 ### Data Model
 
@@ -128,7 +130,7 @@ value list, as data_model()
 library(kitems)
 
 # -- call module
-mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data")
+mydata <- kitems::kitems(id = "my_data_id", path = "path/to/my/data")
 
 # -- get data model
 data_model <- mydata$data_model()
@@ -141,7 +143,7 @@ return value list, as items()
 
 ``` r
 # -- call module
-mydata <- kitems_server(id = "my_data_id", path = "path/to/my/data")
+mydata <- kitems::kitems(id = "my_data_id", path = "path/to/my/data")
 
 # -- get items
 items <- mydata$items()
@@ -155,7 +157,7 @@ Here is an example how to observe the *items*:
 
 ``` r
 # -- Call module server
-mydata <- kitems(id = "mydata", path = "./data")
+mydata <- kitems::kitems(id = "mydata", path = "./data")
 
 # -- Observe items
 observeEvent(mydata$items(), {
@@ -176,9 +178,9 @@ observeEvent(mydata$items(), {
 When starting the module with id and path arguments, it will check if
 the corresponding data model is available in the destination path.
 
-If no data model is found, the admin UI will display a button to create
-a new data model, as well as a button to import data (it creates the
-data model from the data).
+If no data model is found, the admin console UI will display a button to
+create a new data model, as well as a button to import data (it creates
+the data model from the data).
 
 ### Checking integrity
 

@@ -1,3 +1,114 @@
+
+# kitems v0.7.0-beta
+
+The milestone focuses on the communication strategy & item workflows
+This is a major milestone (would be a major version if not beta)
+
+## Communication & workdlows
+
+* Implement item create workflow (#457)
+* Implement item update workflow (#459)
+* Implement internal item workflow functions (#472)
+* Implement module server options (#447)
+* Implement options parameter (#465)
+* Drop item_create_modal function (#460)
+* Improve item selection to support triggers (#469)
+* Improve item_dialog to cover all workflows (#471)
+* Align item create workflow with update workflow (#489)
+* Create / Update workflows should be secured against failure (#477)
+* Rename item_delete into rows_delete (#492)
+
+## Misc
+
+* Implement parameter check (#458)
+* Check how to avoid filtered items to be initialized with all items (#357)
+* Duplicated input / output IDs for date_slider (#485)
+* Remove item_chk_str function (#470)
+* Should filter_date be replaced by input$date_slider (#466)
+* First in table selection is not kept (#483)
+* Check that functions don't get reactive values (#468)
+
+## Test coverage
+
+* Implement expect functions (#476)
+
+## Documentation
+
+* Upgrade existing documentation
+* Upgrade module server communication article
+* Deliver item workflows article
+
+
+# kitems v0.6.1-beta
+
+The milestone focuses on the migration to {iker} package instead of {kfiles}
+
+## Migration to {iker}
+
+* Migrate item_load to {iker} (#412)
+* Migrate item_save function to {iker} (#411)
+* Migrate import_server function to {iker} (#414)
+* Delegate ISO-8601 datetime continuity to {iker} (#409)
+* Item load and save functions should now rely on connector wrapper functions (#424)
+* item_load function should take col.classes argument instead of data.model (#421)
+* Drop create parameter from item_load function signature (#419)
+* Drop create parameter from kitems function signature (#420)
+* Manage item_load impacts in kitems (#415)
+* Remove {kfile} from the package dependencies (#418)
+* kitems_admin should use {ktools} to create data (#413)
+
+## Bug Fix
+
+* Item create fails when date attribute is left empty in the input form (#428)
+* Fatal error when creating an item with empty value for POSIXct attribute (#427)
+* Demo apps fail to start with error (#422)
+
+
+# kitems v0.6.0-beta
+
+The milestone focuses on package architecture & cleanup.
+Also a new trace mechanism is implemented to reduce outputs & improve performance.
+
+## Misc
+
+* Check & cleanup exported functions (#354)
+* Rename widget functions (#382)
+* Rename admin_server into kitems_admin (#385)
+* Improve trace mechanism
+
+## Bug Fix
+
+* Admin standalone app needs to be delivered in inst directory (#404)
+
+
+# kitems v0.5.7-beta
+
+The milestone focuses on the admin console, demo apps, documentation.
+
+## New features
+
+### Items
+* Filtered view should display a message when the table is empty (#362)
+
+### Misc
+
+* Implement a specific app for the admin console (#355)
+* View tab should display a message when the table is empty (#358)
+* Split demo app into single use cases (#371)
+* Implement sub-folders to group item related files (#356)
+* Test coverage convergence (#353)
+
+### Documentation
+
+* Implement module server return value vignette (#381)
+* Add motivations vignette (#379)
+
+## Bug Fix
+
+* Error in if la condition est de longueur > 1 in item_load (#359)
+* The module server return value filter_date is always NULLbug (#375)
+
+
 # kitems v0.5.6-beta
 
 The milestone focuses on item operations and introduces shortcuts for item creation

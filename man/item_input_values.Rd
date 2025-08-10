@@ -12,7 +12,7 @@ item_input_values(input, colClasses)
 \item{colClasses}{a named vector of classes, defining the data model}
 }
 \value{
-a list of values
+a named list of values
 }
 \description{
 Build list of input values

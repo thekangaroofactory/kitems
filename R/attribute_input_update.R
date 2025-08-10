@@ -2,7 +2,7 @@
 
 #' Update Attribute Input
 #'
-#' @param data.model the reference of the data model reactiveVal
+#' @param data.model a data.frame of the data model
 #' @param shortcut_trigger basically the value of input$shortcut_trigger
 #' @param MODULE an optional character string for the trace
 #'
@@ -24,7 +24,7 @@ attribute_input_update <- function(data.model, shortcut_trigger, MODULE = NULL){
   name <- key_value[1]
   input_id <- name
   value <- key_value[2]
-  type <- data.model()[data.model()$name == name, ]$type
+  type <- data.model[data.model$name == name, ]$type
   catl(MODULE, "Shortcut onclick, attribute =", name, "/ type =", type, "/ value =", value)
 
   # -- character

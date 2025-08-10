@@ -31,8 +31,8 @@ test_that("Delete works", {
     # -- update input (click)
     session$setInputs(item_delete = 1)
 
-    # -- simulate selection
-    selected_items(k_items()$id[[1]])
+    # -- select item
+    session$setInputs(filtered_view_rows_selected = 1)
 
     # -- update input (click)
     session$setInputs(item_delete_confirm = 1)

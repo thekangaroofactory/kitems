@@ -5,7 +5,7 @@
 #' @param input the input object from the shiny module
 #' @param colClasses a named vector of classes, defining the data model
 #'
-#' @return a list of values
+#' @return a named list of values
 #' @export
 #'
 #' @details the output list will contain as many entries as the colClasses named vector.
@@ -22,6 +22,7 @@
 item_input_values <- function(input, colClasses){
 
   # -- get values from input object
+  # input is a reactive object, can't use input[names(colClasses)]
   values <- lapply(names(colClasses), function(x) input[[x]])
   names(values) <- names(colClasses)
 

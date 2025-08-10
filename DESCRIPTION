@@ -1,6 +1,6 @@
 Package: kitems
 Title: A Framework To Manage Data Frame Items
-Version: 0.6.1
+Version: 0.7.0
 Authors@R: 
     person(given = "philippe",
            family = "peret",
@@ -12,7 +12,7 @@ Description: A framework to manage data frame items and a set of tools
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Depends:
     R (>= 3.5.0),
     shiny,

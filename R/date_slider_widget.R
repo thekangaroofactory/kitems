@@ -19,7 +19,7 @@ date_slider_widget <- function(id){
 
   # UI
   fluidRow(
-    column(width = 6, uiOutput(ns("date_slider"))),
-    column(width = 6, uiOutput(ns("date_slider_strategy"))))
+    column(width = 6, uiOutput(ns("date_slider_btn"))),
+    column(width = 6, uiOutput(ns("date_slider_strategy_btn"))))
 
 }

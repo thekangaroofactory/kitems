@@ -1,11 +1,20 @@
 
 
-#' Compute default value for an attribute
+#' Compute Default Value(s)
 #'
 #' @param data.model a data.frame containing the data model
 #' @param name a character string with the attribute name
+#' @param n an integer (default 1) to use when a vector is expected
+#' for default function case
 #'
-#' @return the default value or computed output of the default function
+#' @details
+#' Whenever a default function is set for an attribute of the data.model,
+#' it is possible to generate a vector of default values instead of a single
+#' default value by using n parameter. This is usefull when the function
+#' generates single values (time or unique id for example)
+#'
+#'
+#' @return a n length vector
 #' @export
 #'
 #' @examples
@@ -14,7 +23,7 @@
 #' }
 
 
-dm_default <- function(data.model, name){
+dm_default <- function(data.model, name, n = 1){
 
   catl("[dm_default] Default value, attribute =", name)
 
@@ -34,21 +43,27 @@ dm_default <- function(data.model, name){
     else list()
     catl("- args: default arguments =", default_arg, level = 2)
 
-    # -- wrapping next line into a tryCatch #235
-    #value <- eval(do.call(ktools::getNsFunction(default_fun), args = list()))
-    value <- tryCatch(eval(do.call(ktools::getNsFunction(default_fun), args = args)),
+    # -- wrapping into a tryCatch #235
+    value <- tryCatch(
 
-                      # -- if error
-                      error = function(e) {
+      # -- Support multiple values #489
+      # replicate calls default_fun n times (simplify = F to get a list)
+      # do.call convert list into vector AND keep class!
+      do.call("c",
+              replicate(n,
+                        eval(do.call(ktools::getNsFunction(default_fun), args = args)),
+                        simplify = F)),
 
-                        # -- print error
-                        catl("[WARNING] There was an error when trying to apply the default function =", default_fun, debug = 1)
-                        catl(e$message, debug = 1)
+      # -- failed
+      error = function(e) {
 
-                        # -- return NA (default)
-                        NA})
+        # -- print error
+        warning("Error when trying to apply default function =", default_fun, "\n", e$message, debug = 1)
 
-    }
+        # -- return NA (as default)
+        NA})
+
+  }
 
   # -- P2: then default value
   else if(!is.na(default_val)){
@@ -61,7 +76,7 @@ dm_default <- function(data.model, name){
     value <- NA}
 
   # -- return
-  catl("- output: value =", value)
+  catl("- output: value =", as.character(value))
   value
 
 }
