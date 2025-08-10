@@ -25,7 +25,7 @@ The module server returns a composite value that includes references to reactive
 
 ``` {#return_value .R}
 # -- call module server
-mydata <- kitems(id = "myid")
+mydata <- kitems::kitems(id = "myid")
 
 # -- access the data
 mydata$items()
