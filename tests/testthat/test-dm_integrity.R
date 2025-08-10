@@ -64,7 +64,7 @@ test_that("dm_integrity: migrate data model", {
   dm$default.arg <- NULL
 
   # -- function call
-  x <- dm_integrity(data.model = dm, items = items, template = NULL)
+  expect_warning(x <- dm_integrity(data.model = dm, items = items, template = NULL))
 
   # -- checks:
   expect_s3_class(x, "data.frame")
