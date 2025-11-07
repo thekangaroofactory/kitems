@@ -92,7 +92,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
     ## -- Declare reactive objects ----
 
     # -- Internal create workflow triggers
-    trigger_create_dialog <- reactiveVal(0)
+    trigger_create_dialog <- reactiveVal(NULL)
     trigger_create_values <- reactiveVal(NULL)
 
     # -- Internal update workflow triggers
@@ -310,7 +310,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
 
         # -- fire listeners
         if(event$workflow == "create" && event$type == "dialog")
-          trigger_create_dialog(trigger_create_dialog() + 1)
+          trigger_create_dialog(ifelse(is.null(trigger_create_dialog()), 0, trigger_create_dialog()) + 1)
 
         if(event$workflow == "create" && event$type == "task")
           trigger_create_values(event$values)
