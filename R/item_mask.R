@@ -10,7 +10,7 @@
 #'
 #' @details
 #' Two masks are applied:
-#' - the data model masks (filter = TRUE)
+#' - the data model masks (display = TRUE)
 #' - a default mask (replace . and _ by a space in the attribute names, plus capitalize first letter)
 #'
 #' @examples
@@ -20,12 +20,12 @@
 
 item_mask <- function(data.model, items){
 
-  # -- Get filter from data model
-  filter_cols <- dm_filter(data.model)
+  # -- Get display from data model
+  display_cols <- dm_display(data.model)
 
-  # -- Apply attribute filter
-  if(!is.null(filter_cols))
-    items <- items[-which(names(items) %in% filter_cols)]
+  # -- Apply attribute display
+  if(!is.null(display_cols))
+    items <- items[-which(names(items) %in% display_cols)]
 
 
   # -- Apply attribute/column name mask

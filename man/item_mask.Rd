@@ -20,7 +20,7 @@ Apply mask
 \details{
 Two masks are applied:
 \itemize{
-\item the data model masks (filter = TRUE)
+\item the data model masks (display = TRUE)
 \item a default mask (replace . and _ by a space in the attribute names, plus capitalize first letter)
 }
 }

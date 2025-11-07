@@ -8,7 +8,7 @@ create_testdata()
 
 
 # --------------------------------------------------------------------------
-# Scenario: filter data model cols
+# Scenario: display data model cols
 # --------------------------------------------------------------------------
 
 test_that("Server works", {
@@ -23,13 +23,13 @@ test_that("Server works", {
   testServer(kitems, args = params, {
 
     # --------------------------------------------------------------------------
-    # filter cols
+    # display cols
     # --------------------------------------------------------------------------
     # -- flush reactive values
     session$flushReact()
 
     # -- update input
-    session$setInputs('admin-dm_filter' = c("id", "total"))
+    session$setInputs('admin-dm_display' = c("id", "total"))
 
 
 
@@ -47,7 +47,7 @@ test_that("Server works", {
     expect_equal(dim(x), dim(dm))
 
     # -- test names
-    expect_equal(x$name[x$filter], c("id", "total"))
+    expect_equal(x$name[x$display], c("id", "total"))
 
 
   })

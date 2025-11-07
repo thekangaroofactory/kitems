@@ -508,7 +508,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
       }, ignoreInit = TRUE)
 
 
-    # -- Step.3: skip & filter ------------------------------------------------
+    # -- Step.3: skip & display ------------------------------------------------
 
     # -- observer actionButton
     session$userData$w_obs8 <- observeEvent(input$w_set_sf, {
@@ -521,14 +521,14 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
       if(update){
 
         value_skip <- attribute$skip
-        value_filter <- attribute$filter
+        value_display <- attribute$display
 
       } else {
 
         value_skip <- FALSE
-        value_filter <- FALSE}
+        value_display <- FALSE}
 
-      catl("[step.3] init: skip =", value_skip, "/ filter =", value_filter)
+      catl("[step.3] init: skip =", value_skip, "/ display =", value_display)
 
 
       # -- display modal
@@ -538,7 +538,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
         tagList(
 
           h4("Step 3:"),
-          p("Setup skip & filter."),
+          p("Setup skip & display."),
 
           # -- skip
           p("Should the attribute be skipped from the item creation form", br(), "(default strategy will be applied to fill the value)"),
@@ -546,11 +546,11 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
                         label = "Skip",
                         value = value_skip),
 
-          # -- filter
-          p("Should the attribute be filtered from the item view"),
-          checkboxInput(inputId = ns("w_filter"),
-                        label = "Filter",
-                        value = value_filter)),
+          # -- display
+          p("Should the attribute be displayed in the item view"),
+          checkboxInput(inputId = ns("w_display"),
+                        label = "Display",
+                        value = value_display)),
 
         # -- params
         title = "Attribute setup assistant",
@@ -600,7 +600,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
           p("Setup ordering options."),
 
           # -- set ordering
-          p("Should the attribute be filtered from the item view"),
+          p("Should the attribute be displayed from the item view"),
           checkboxInput(inputId = ns("w_sort"),
                         label = "Ordering",
                         value = value),
@@ -686,7 +686,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
                 tags$li("Function =", input$w_default_fun),
                 tags$li("Arguments =", ifelse(input$w_default_arg == "", "(empty)", input$w_default_arg))),
             tags$li("skip =", input$w_skip),
-            tags$li("filter =", input$w_filter),
+            tags$li("display =", input$w_display),
             tags$li("Ordering =", input$w_sort),
             if(input$w_sort)
               tags$ul(
@@ -741,9 +741,9 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
           if(!identical(input$w_default_arg, attribute$default.arg))
             default_arg <- input$w_default_arg}
 
-        # -- skip & filter
+        # -- skip & display
         skip <- if(input$w_skip != attribute$skip) input$w_skip else NULL
-        filter <- if(input$w_filter != attribute$filter) input$w_filter else NULL
+        display <- if(input$w_display != attribute$display) input$w_display else NULL
 
         # -- ordering
         sort_rank <- NULL
@@ -761,7 +761,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
                          default.fun = default_fun,
                          default.arg = default_arg,
                          skip = skip,
-                         filter = filter,
+                         display = display,
                          sort.rank = sort_rank,
                          sort.desc = sort_desc)
 
@@ -775,7 +775,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
                          default.fun = if(input$w_default_choice == "fun") stats::setNames(input$w_default_fun, input$w_name) else NULL,
                          default.arg = if(input$w_default_choice == "fun") stats::setNames(input$w_default_arg, input$w_name) else NULL,
                          skip = if(input$w_skip) input$w_name else NULL,
-                         filter = if(input$w_filter) input$w_name else NULL,
+                         display = if(input$w_display) input$w_name else NULL,
                          sort.rank = if(input$w_sort) stats::setNames(input$w_sort_rank, input$w_name) else NULL,
                          sort.desc = if(input$w_sort) stats::setNames(input$w_sort_desc, input$w_name) else NULL)
 

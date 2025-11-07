@@ -11,7 +11,7 @@ attribute_create(
   default.val = NULL,
   default.fun = NULL,
   default.arg = NULL,
-  filter = NULL,
+  display = NULL,
   skip = NULL,
   sort.rank = NULL,
   sort.desc = NULL
@@ -30,7 +30,7 @@ attribute_create(
 
 \item{default.arg}{an optional named vector of arguments, to pass along with the default function.}
 
-\item{filter}{an optional character vector, with the name(s) of the attribute(s) to filter}
+\item{display}{an optional character vector, with the name(s) of the attribute(s) to display}
 
 \item{skip}{an optional character vector, with the name(s) of the attribute(s) to skip}
 
@@ -50,7 +50,7 @@ attribute_create(data.model = mydatamodel, name = "new_attribute", type = "chara
 attribute_create(data.model = mydatamodel, name = "total", type = "numeric", default.val = 0)
 attribute_create(data.model = mydatamodel, name = "date", type = "Date", default.fun = "Sys.Date")
 attribute_create(data.model = mydatamodel, name = "progress", type = "integer", skip = "progress")
-attribute_create(data.model = mydatamodel, name = "internal", type = "logical", filter = "internal")
+attribute_create(data.model = mydatamodel, name = "internal", type = "logical", display = "internal")
 }
 }
 \seealso{

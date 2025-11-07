@@ -8,7 +8,7 @@
 #' @param default.fun a character string, the new default function name
 #' @param default.arg an optional named vector of arguments, to pass along with the default function.
 #' @param skip a logical to set the skip value
-#' @param filter a logical to set the filter value
+#' @param display a logical to set the display value
 #' @param sort.rank a numeric, used to define sort rank
 #' @param sort.desc a logical, to define if sorting should be in descending order
 #'
@@ -37,11 +37,10 @@
 
 attribute_update <- function(data.model, name,
                              default.val = NULL, default.fun = NULL, default.arg = NULL,
-                             skip = NULL, filter = NULL,
+                             skip = NULL, display = NULL,
                              sort.rank = NULL, sort.desc = NULL){
 
   # -- update row
-  # removed filter: #225
   # adding tests to update only if not NULL #226
   if(!is.null(default.val)){
     data.model[match(name, data.model$name), ]$default.val <- default.val
@@ -58,8 +57,8 @@ attribute_update <- function(data.model, name,
   if(!is.null(skip))
     data.model[match(name, data.model$name), ]$skip <- skip
 
-  if(!is.null(filter))
-    data.model[match(name, data.model$name), ]$filter <- filter
+  if(!is.null(display))
+    data.model[match(name, data.model$name), ]$display <- display
 
   if(!is.null(sort.rank))
     data.model[match(name, data.model$name), ]$sort.rank <- sort.rank

@@ -47,10 +47,10 @@ default_val <- c("name" = "fruit", "isvalid" = TRUE)
 default_fun <- c("id" = "ktools::getTimestamp", "date" = "Sys.time")
 default_arg <- c("id" = "list(k = 1000000)")
 
-# -- declare filter
-filter <- c("id")
+# -- declare display
+display <- c("id")
 
-# -- declare filter
+# -- declare skip
 skip <- c("isvalid")
 
 # -- declare sort
@@ -65,12 +65,12 @@ sort_desc <- c("date" = TRUE)
 # -- build base data model
 dm <- data_model(colClasses = colClasses,
                  default.val = default_val, default.fun = default_fun, default.arg = default_arg,
-                 filter = filter, skip = skip, sort.rank = sort_rank, sort.desc = sort_desc)
+                 display = display, skip = skip, sort.rank = sort_rank, sort.desc = sort_desc)
 
 # -- build specific data models
-dm_nofilter <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, filter = NULL, skip = skip)
-dm_no_skip <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, filter = filter, skip = NULL)
-dm_extra_att <- data_model(colClasses = colClasses_extra_att, default.val = default_val, default.fun = default_fun, filter = filter, skip = skip)
+dm_nodisplay <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, display = NULL, skip = skip)
+dm_no_skip <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, display = display, skip = NULL)
+dm_extra_att <- data_model(colClasses = colClasses_extra_att, default.val = default_val, default.fun = default_fun, display = display, skip = skip)
 dm_no_date <- data_model(colClasses = colClasses_no_date)
 dm_id_only <- data_model(colClasses = colClasses_id_only, skip = "id")
 dm_sort <- data_model(colClasses = colClasses, sort.rank = c("date" = 1), sort.desc = c("date" = TRUE))

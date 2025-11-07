@@ -91,8 +91,8 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
                          multiple = TRUE))})
 
 
-    ## -- Filter inputs ----
-    output$dm_filter <- renderUI(
+    ## -- display inputs ----
+    output$dm_att_display <- renderUI(
 
       # -- check NULL data model
       if(is.null(k_data_model()))
@@ -101,7 +101,7 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       else {
 
         # -- init params
-        filter_cols <- dm_filter(k_data_model())
+        filter_cols <- dm_display(k_data_model())
 
         onInitialize <- if(is.null(filter_cols))
           I('function() { this.setValue(""); }')
@@ -109,7 +109,7 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
           NULL
 
         # -- define input
-        selectizeInput(inputId = ns("dm_filter"),
+        selectizeInput(inputId = ns("dm_display"),
                        label = "Filter columns",
                        choices = k_data_model()$name,
                        selected = filter_cols,
@@ -206,7 +206,7 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
         # -- display view table
         fluidRow(column(width = 2,
                         p("Actions"),
-                        uiOutput(ns("dm_filter")),
+                        uiOutput(ns("dm_att_display")),
                         p("Column name mask applied by default:",br(),
                           "- replace dot, underscore with space",br(),
                           "- capitalize first letters")),
@@ -279,17 +279,17 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
 
     ## -- Filter attributes ----
-    observeEvent(input$dm_filter, {
+    observeEvent(input$dm_display, {
 
       # -- check to avoid useless updates
       dm <- k_data_model()
-      req(!setequal(input$dm_filter,dm[dm$filter, ]$name))
+      req(!setequal(input$dm_display, dm[dm$display, ]$name))
 
-      catl(MODULE, "Set filtered attributes:", input$dm_filter)
+      catl(MODULE, "Set filtered attributes:", input$dm_display)
 
       # -- Check NULL data model
       if(!is.null(dm)){
-        dm <- dm_filter(data.model = dm, set = input$dm_filter)
+        dm <- dm_display(data.model = dm, set = input$dm_display)
         k_data_model(dm)}
 
     }, ignoreInit = TRUE, ignoreNULL = FALSE)
@@ -337,7 +337,7 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       colClasses <- stats::setNames(template$type, template$name)
       default_val <- stats::setNames(template$default.val, template$name)
       default_fun <- stats::setNames(template$default.fun, template$name)
-      filter <- if(template$filter) template$name else NULL
+      display <- if(template$display) template$name else NULL
       skip <- if(template$skip) template$name else NULL
 
       # -- init data model & store
@@ -345,7 +345,7 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       dm <- data_model(colClasses = colClasses,
                        default.val = default_val,
                        default.fun = default_fun,
-                       filter = filter,
+                       display = display,
                        skip = skip)
 
       # -- store

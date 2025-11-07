@@ -3,7 +3,7 @@
 test_that("data_model: colClasses argument only", {
 
   # -- function call
-  x <- data_model(colClasses = colClasses, default.val = NULL, default.fun = NULL, filter = NULL, skip = NULL)
+  x <- data_model(colClasses = colClasses, default.val = NULL, default.fun = NULL, display = NULL, skip = NULL)
 
   # -- check: output is data.frame
   expect_s3_class(x, "data.frame")
@@ -17,7 +17,7 @@ test_that("data_model: colClasses argument only", {
 test_that("data_model: default.val", {
 
   # -- function call
-  x <- data_model(colClasses = colClasses, default.val = default_val, default.fun = NULL, filter = NULL, skip = NULL)
+  x <- data_model(colClasses = colClasses, default.val = default_val, default.fun = NULL, display = NULL, skip = NULL)
 
   # -- check: output is data.frame
   expect_s3_class(x, "data.frame")
@@ -31,7 +31,7 @@ test_that("data_model: default.val", {
 test_that("data_model: default.fun", {
 
   # -- function call
-  x <- data_model(colClasses = colClasses, default.val = NULL, default.fun = default_fun, filter = NULL, skip = NULL)
+  x <- data_model(colClasses = colClasses, default.val = NULL, default.fun = default_fun, display = NULL, skip = NULL)
 
   # -- check: output is data.frame
   expect_s3_class(x, "data.frame")
