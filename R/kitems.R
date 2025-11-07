@@ -691,56 +691,41 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
     # //////////////////////////////////////////////////////////////////////////
     # -- Date slider ----
 
-    ## -- Date slider strategy ----
-    output$date_slider_strategy_btn <- renderUI(
-
-      # -- check data model
-      if(hasDate(k_data_model()))
-        radioButtons(inputId = ns("date_slider_strategy"),
-                     label = "Strategy",
-                     choices = c("this-year", "keep-range"),
-                     selected = "this-year",
-                     inline = TRUE))
-
-
     ## -- Date slider ----
-    output$date_slider_btn <- renderUI({
+    observeEvent(input$date_slider_strategy, {
 
       # -- check data model
-      if(hasDate(k_data_model()) & !is.null(input$date_slider_strategy)){
+      req(hasDate(k_data_model()))
 
-        catl(MODULE, "Building date sliderInput")
-        catl("- strategy =", input$date_slider_strategy)
+      catl(MODULE, "Building date sliderInput")
+      catl("- strategy =", input$date_slider_strategy)
 
-        # -- Get min/max
-        if(dim(k_items())[1] > 0){
+      # -- Get min/max
+      if(dim(k_items())[1] > 0){
 
-          min <- min(k_items()$date)
-          max <- max(k_items()$date)
+        min <- min(k_items()$date)
+        max <- max(k_items()$date)
 
-        } else {
+      } else {
 
-          min <- as.Date(Sys.Date())
-          max <- min
-
-        }
-
-        # -- Set value
-        # implement this_year strategy by default #211
-        # keep this year after item is added #223 & #242
-        value <- if(is.null(input$date_slider_strategy) || input$date_slider_strategy == "this-year")
-          ktools::date_range(min, max, type = "this_year")
-        else
-          value <- filter_date()
-
-        # -- date slider
-        sliderInput(inputId = ns("date_slider"),
-                    label = "Date",
-                    min = min,
-                    max = max,
-                    value = value)
+        min <- as.Date(Sys.Date())
+        max <- min
 
       }
+
+      # -- Set value
+      # implement this_year strategy by default #211
+      # keep this year after item is added #223 & #242
+      value <- if(is.null(input$date_slider_strategy) || input$date_slider_strategy == "this-year")
+        ktools::date_range(min, max, type = "this_year")
+      else
+        value <- filter_date()
+
+      # -- date slider
+      updateSliderInput(inputId = "date_slider",
+                        min = min,
+                        max = max,
+                        value = value)
 
     })
 
