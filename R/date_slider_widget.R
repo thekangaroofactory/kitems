@@ -18,11 +18,11 @@ date_slider_widget <- function(id){
   ns <- NS(id)
 
   # UI
-  fluidRow(
+  tagList(
 
     # -- slider input
-    column(
-      width = 6,
+    div(
+      style = "display: inline-block; vertical-align:middle; margin-right:40px;",
       sliderInput(inputId = ns("date_slider"),
                   label = "Date",
                   width = "300px",
@@ -31,8 +31,8 @@ date_slider_widget <- function(id){
                   value = c(Sys.Date(), Sys.Date()))),
 
     # -- strategies
-    column(
-      width = 6,
+    div(
+      style = "display: inline-block; vertical-align:middle;",
       radioButtons(inputId = ns("date_slider_strategy"),
                    label = "Strategy",
                    choices = c("this-year", "keep-range"),
