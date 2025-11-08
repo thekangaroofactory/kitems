@@ -110,7 +110,7 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
         # -- define input
         selectizeInput(inputId = ns("dm_display"),
-                       label = "Filter columns",
+                       label = "Hide columns",
                        choices = k_data_model()$name,
                        selected = filter_cols,
                        multiple = TRUE,
@@ -164,7 +164,7 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
           # -- info
           fluidRow(column(width = 12,
-                          p(icon(name = "circle-info"), "Filter can also be changed in the 'view' tab."))),
+                          p(icon(name = "circle-info"), "Display can also be changed in the 'view' tab."))),
 
           # -- danger zone
           fluidRow(column(width = 12,
