@@ -1,18 +1,17 @@
 
 
-# -- setup
+# -- setup (basic test to see if version is updated)
 data.model <- data.frame(name = c("id", "name"),
                          type = c("numeric", "character"))
-
-missing_col <- names(DATA_MODEL_COLCLASSES[!names(DATA_MODEL_COLCLASSES) %in% names(data.model)])
+attr(data.model, "version") <- "0.7.0"
 
 
 test_that("dm_migrate works", {
 
   # -- function call
-  x <- dm_migrate(data.model, missing_col)
+  x <- dm_migrate(data.model)
 
   # -- check
-  expect_equal(names(x), names(DATA_MODEL_COLCLASSES))
+  expect_true(attributes(x)$version == as.character(packageVersion("kitems")))
 
 })
