@@ -108,23 +108,25 @@ dm_integrity <- function(data.model, items, template = NULL){
 
   }
 
-  # -- Check for data model version
-  dm_colClasses <- lapply(data.model, class)
-  missing_col <- DATA_MODEL_COLCLASSES[!names(DATA_MODEL_COLCLASSES) %in% names(dm_colClasses)]
 
-  # -- migrate
-  if(length(missing_col > 0)){
+  # -- Data model migration ----------------------------------------------------
 
-    catl("[Info] Data model migration is needed", debug = 1)
-    integrity <- FALSE
+  # -- Check if data.model has a version
+  if(!"version" %in% names(attributes(data.model))){
 
-    # -- call migration
-    data.model <- dm_migrate(data.model, names(missing_col))
+    message("Version is added to the data model")
+    attr(data.model, "version") <- "0.0.0"
+    integrity <- FALSE}
 
-    # -- check column order
-    if(!identical(names(data.model), names(DATA_MODEL_COLCLASSES))){
-      catl("[Info] Reordering data model columns", level = 2)
-      data.model <- data.model[names(DATA_MODEL_COLCLASSES)]}}
+
+  # -- Check data.model version (vs package version)
+  if(attributes(data.model)$version != as.character(packageVersion("kitems"))){
+
+    # -- migrate data model
+    # note: function will never return NA here because of above test, so testing
+    # return value is skipped
+    data.model <- dm_migrate(data.model)
+    integrity <- FALSE}
 
 
   # -- Return
