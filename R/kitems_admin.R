@@ -278,14 +278,14 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     })
 
 
-    ## -- Filter attributes ----
+    ## -- Display/hide attributes ----
     observeEvent(input$dm_display, {
 
       # -- check to avoid useless updates
       dm <- k_data_model()
       req(!setequal(input$dm_display, dm[dm$display, ]$name))
 
-      catl(MODULE, "Set filtered attributes:", input$dm_display)
+      catl(MODULE, "Set hidden attributes:", input$dm_display)
 
       # -- Check NULL data model
       if(!is.null(dm)){
