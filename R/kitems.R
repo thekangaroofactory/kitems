@@ -660,13 +660,18 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
 
         catl(MODULE, "[Event] delete item(s) trigger")
 
+        # -- get ids to delete
+        ids <- trigger_delete_values()
+        if(is.list(ids))
+          ids <- unlist(ids)
+
         # -- Secure against errors
         tryCatch({
 
           # -- store new items table
           k_items(
             rows_delete(items = k_items(),
-                        id = trigger_delete_values()))
+                        id = ids))
 
           if(shiny::isRunning())
             showNotification(paste(MODULE, "Item(s) deleted."), type = "message")},
