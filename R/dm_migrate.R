@@ -63,14 +63,6 @@ dm_migrate <- function(data.model){
     attr(data.model, "version") <- v}
 
 
-  # -- force data.model version
-  # so that migration is done once per package update
-  if(attributes(data.model)$version != as.character(packageVersion("kitems"))){
-    attr(data.model, "version") <- as.character(packageVersion("kitems"))
-    message("[dm_migrate] Data model version updated to ", attributes(data.model)$version)
-    dirty <- TRUE}
-
-
   # -- return
   if(dirty) data.model else NA
 

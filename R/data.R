@@ -6,8 +6,6 @@
 # https://r-pkgs.org/data.html#sec-data-sysdata
 # --------------------------------------------------------------------------
 
-
-
 # --------------------------------------------------------------------------
 # Declare supported types:
 # --------------------------------------------------------------------------
@@ -67,6 +65,10 @@ DEFAULT_FUNCTIONS <- list("numeric" = NULL,
 # --------------------------------------------------------------------------
 # Declare data model structure:
 # --------------------------------------------------------------------------
+
+# -- version
+# this is the latest package version introducing a data model upgrade
+DATA_MODEL_VERSION <- "0.7.1"
 
 # -- colClasses
 DATA_MODEL_COLCLASSES <- list(name = "character",
