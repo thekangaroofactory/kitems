@@ -4,13 +4,13 @@ test_that("dm_migrate works", {
 
   # -- alter data model
   dm2 <- dm
-  attr(dm2, "version") <- "0.7.0"
+  attr(dm2, "version") <- as.character(packageVersion("kitems"))
 
   # -- function call
-  expect_message(x <- dm_migrate(dm2))
+  expect_no_message(x <- dm_migrate(dm2))
 
   # -- check
-  expect_true(attributes(x)$version == as.character(packageVersion("kitems")))
+  expect_true(is.na(x))
 
 })
 
@@ -32,7 +32,7 @@ test_that("dm_migrate: migration @v0.5.2", {
   expect_true("default.arg" %in% names(x))
   expect_true("sort.rank" %in% names(x))
   expect_true("sort.desc" %in% names(x))
-  expect_true(attributes(x)$version == as.character(packageVersion("kitems")))
+  expect_true(attributes(x)$version == "0.5.2")
 
 })
 
@@ -52,6 +52,6 @@ test_that("dm_migrate: migration @v0.7.1", {
   # -- check: x dim
   expect_true("display" %in% names(x))
   expect_false("filter" %in% names(x))
-  expect_true(attributes(x)$version == as.character(packageVersion("kitems")))
+  expect_true(attributes(x)$version == "0.7.1")
 
 })
