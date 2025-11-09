@@ -173,11 +173,34 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
         init_dm <- readRDS(dm_url)
         catl("- output dim =", dim(init_dm))
 
+        # -- Data model version
+        # note: only when admin == FALSE, otherwise admin console
+        # would stop when migration is needed!
+        if(!admin){
+
+          # -- check
+          rv <- dm_version(init_dm)
+
+          # -- when migration is needed
+          if(rv['migration']){
+
+            # -- display message
+            showModal(
+              modalDialog(
+                title = "Data Model",
+                p("Data model requires a migration"),
+                p("Reason:", rv['comment']),
+                p("Run admin() to fix it."),
+                footer = actionButton(inputId = ns("dm_version_warning"), label = "Close app")))
+
+            # -- listen to modal close button
+            observeEvent(input$dm_version_warning, stopApp())}}
+
       } else {
 
         catl(">> No data model file found.")
 
-        }
+      }
 
       # -- Increment the progress bar, and update the detail text.
       incProgress(1/4, detail = "Read data model")

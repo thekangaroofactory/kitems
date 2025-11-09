@@ -46,6 +46,66 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     attribute_callback <- reactiveVal(NULL)
 
 
+    # -- Migration -------------------------------------------------------------
+
+    # -- output
+    output$migration <- renderUI({
+
+      # -- get dm
+      data.model <- k_data_model()
+
+      # -- Check if data.model has a version
+      if(!"version" %in% names(attributes(data.model))){
+
+        message("Data model version is missing")
+        actionButton(inputId = ns("add_version"),
+                     class = "btn-warning",
+                     label = "Add version",
+                     icon = icon("triangle-exclamation"))
+
+      } else
+
+        # -- Check data.model version (vs package version)
+        if(attributes(data.model)$version != as.character(packageVersion("kitems"))){
+
+          warning("Data model migration is required!")
+          actionButton(inputId = ns("migrate"),
+                       class = "btn-warning",
+                       label = "Migrate",
+                       icon = icon("triangle-exclamation"))}
+
+    })
+
+
+    # -- add data model version
+    observeEvent(input$add_version, {
+
+      # -- get dm
+      data.model <- k_data_model()
+
+      # -- add version attribute
+      message("Version is added to the data model")
+      attr(data.model, "version") <- "0.0.0"
+
+      # -- store
+      k_data_model(data.model)
+
+    })
+
+
+    # -- migrate data model
+    observeEvent(input$migrate, {
+
+      # -- migrate data model
+      data.model <- dm_migrate(k_data_model())
+
+      # -- store
+      if(is.data.frame(data.model))
+        k_data_model(data.model)
+
+    })
+
+
     # -- Admin tables ---------------------------------------------------------
 
     ## -- Data model table ----
@@ -159,6 +219,7 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
           # -- actions
           fluidRow(column(width = 12,
                           h3("Actions"),
+                          uiOutput(ns("migration")),
                           actionButton(inputId = ns("create_attribute"), label = "New attribute"),
                           uiOutput(ns("update_attribute")))),
 

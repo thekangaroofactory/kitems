@@ -109,26 +109,6 @@ dm_integrity <- function(data.model, items, template = NULL){
   }
 
 
-  # -- Data model migration ----------------------------------------------------
-
-  # -- Check if data.model has a version
-  if(!"version" %in% names(attributes(data.model))){
-
-    message("Version is added to the data model")
-    attr(data.model, "version") <- "0.0.0"
-    integrity <- FALSE}
-
-
-  # -- Check data.model version (vs package version)
-  if(attributes(data.model)$version != as.character(packageVersion("kitems"))){
-
-    # -- migrate data model
-    # note: function will never return NA here because of above test, so testing
-    # return value is skipped
-    data.model <- dm_migrate(data.model)
-    integrity <- FALSE}
-
-
   # -- Return
   if(!integrity)
     data.model
