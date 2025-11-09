@@ -2,7 +2,7 @@
 
 #' Check Data Model Version
 #'
-#' @param dm a data.frame of the data model
+#' @param data.model a data.frame of the data model
 #'
 #' @details
 #' Data model version is required from v.0.7.1
@@ -18,13 +18,13 @@
 #'
 #' @examples
 #' \dontrun{
-#' dm_version(dm = mydatamodel)
+#' dm_version(data.model = mydatamodel)
 #' }
 
-dm_version <- function(dm){
+dm_version <- function(data.model){
 
   # -- Check if has a version
-  if(!"version" %in% names(attributes(dm))){
+  if(!"version" %in% names(attributes(data.model))){
 
     warning("Data model has no version \nRun admin() to fix it")
     return(c(migration = TRUE, comment = "Data model has no version"))
@@ -32,7 +32,7 @@ dm_version <- function(dm){
   } else
 
     # -- Check data.model version (vs package version)
-    if(attributes(dm)$version != as.character(packageVersion("kitems"))){
+    if(attributes(data.model)$version != as.character(packageVersion("kitems"))){
 
       warning("Data model requires migration! \nRun admin() to fix it")
       return(c(migration = TRUE, comment = "Data model version is obsolete"))

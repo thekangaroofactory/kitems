@@ -15,13 +15,13 @@
 dm_migrate <- function(data.model){
 
   # -- data model version
-  dm_version <- attributes(data.model)$version
-  catl("[dm_migrate] Data model input version =", dm_version, debug = 1)
+  version <- attributes(data.model)$version
+  catl("[dm_migrate] Data model input version =", version, debug = 1)
   dirty <- FALSE
 
   # -- migration @v0.5.2
   # add default.arg, sort.rank, sort.desc
-  if(dm_version < "0.5.2"){
+  if(version < "0.5.2"){
 
     catl("[dm_migrate] Data model migration @v0.5.2", debug = 1)
 
@@ -41,7 +41,7 @@ dm_migrate <- function(data.model){
 
   # -- migration @v0.7.1
   # rename filter into display
-  if(dm_version < "0.7.1"){
+  if(version < "0.7.1"){
 
     catl("[dm_migrate] Data model migration @v0.7.1", debug = 1)
 
