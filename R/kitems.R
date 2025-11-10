@@ -773,7 +773,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
       } else {
 
-        min <- as.Date(Sys.Date())
+        min <- Sys.Date()
         max <- min
 
       }
@@ -787,45 +787,107 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
         value <- input$date_slider
 
       # -- date slider
+      # adding as.Date() to ensure they all have same format #521
       updateSliderInput(inputId = "date_slider",
-                        min = min,
-                        max = max,
-                        value = value)
+                        min = as.Date(min),
+                        max = as.Date(max),
+                        value = as.Date(value))
 
     })
 
 
     # //////////////////////////////////////////////////////////////////////////
+    # -- Pre-filtering layer ----
+    # Only custom filter is applied at this level
+
+    prefiltered_items <- reactive(
+
+      # -- check custom filter
+      if(!is.null(trigger_filter_pre())){
+
+        # -- apply filter
+        catl(MODULE, "Apply custom pre-filtering on items \n")
+        items <- k_items() %>%
+          filter(!!!trigger_filter_pre())
+        catl("- ouput dim =", dim(items), level = 2)
+
+        # -- return
+        items
+
+      } else k_items()) |> bindEvent(k_items(), trigger_filter_pre())
+
+
+    # //////////////////////////////////////////////////////////////////////////
+    # -- Filtering layer (main) ----
+
+    filtered_items <- reactive({
+
+      catl(MODULE, "Apply custom filter(s) on items")
+
+      # -- check date slider
+      date_expr <- if(!is.null(input$date_slider)){
+        catl("- Date slider =", input$date_slider, level = 2)
+        dplyr::expr(date >= input$date_slider[1] & date <= input$date_slider[2])}
+
+      # -- check custom filter
+      if(!is.null(trigger_filter_main()))
+        catl("- Custom filter =", as.character(trigger_filter_main()), level = 2)
+
+      # -- merge expression(s)
+      # NULLs will be supported, output is NULL, one expr or several exprs
+      filter_exprs <- c(trigger_filter_main(), date_expr)
+
+      # -- init
+      items <- prefiltered_items()
+
+      # -- apply filter(s)
+      if(!is.null(filter_exprs)){
+        items <- items %>%
+          filter(!!!filter_exprs)
+        catl("- ouput dim =", dim(items), level = 2)}
+
+      # -- Apply ordering
+      dm <- k_data_model()
+      if(any(!is.na(dm$sort.rank)))
+        items <- item_sort(items, dm)
+
+      # -- Return
+      items
+
+    }) |> bindEvent(prefiltered_items(), trigger_filter_main(), input$date_slider, k_data_model())
+
+
+    # //////////////////////////////////////////////////////////////////////////
     # -- Filtered items ----
 
-    filtered_items <- reactive(
-
-      # -- check
-      # dependency on input (reactive) is disabled by bindEvent #483
-      # otherwise it would fire update too many times
-      if("date_slider" %in% names(input)){
-        if(!is.null(input$date_slider)){
-
-          catl(MODULE, "Updating filtered item view")
-
-          # -- init
-          items <- k_items()
-          dm <- k_data_model()
-
-          # -- Apply date filter
-          items <- items[items$date >= input$date_slider[1] & items$date <= input$date_slider[2], ]
-
-          # -- Apply ordering
-          if(any(!is.na(dm$sort.rank)))
-            items <- item_sort(items, dm)
-
-          catl("- ouput dim =", dim(items), level = 2)
-
-          # -- Return
-          items
-
-        } else NULL
-      } else k_items()) |> bindEvent(input$date_slider, k_items(), k_data_model())
+    # filtered_items <- reactive(
+    #
+    #   # -- check
+    #   # dependency on input (reactive) is disabled by bindEvent #483
+    #   # otherwise it would fire update too many times
+    #   if("date_slider" %in% names(input)){
+    #     if(!is.null(input$date_slider)){
+    #
+    #       catl(MODULE, "Updating filtered item view")
+    #
+    #       # -- init
+    #       items <- k_items()
+    #       dm <- k_data_model()
+    #
+    #       # -- Apply date filter
+    #       items <- items[items$date >= input$date_slider[1] & items$date <= input$date_slider[2], ]
+    #
+    #       # -- Apply ordering
+    #       if(any(!is.na(dm$sort.rank)))
+    #         items <- item_sort(items, dm)
+    #
+    #       catl("- ouput dim =", dim(items), level = 2)
+    #
+    #       # -- Return
+    #       items
+    #
+    #     } else NULL
+    #   } else k_items()) |> bindEvent(input$date_slider, k_items(), k_data_model())
 
 
     # //////////////////////////////////////////////////////////////////////////
