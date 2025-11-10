@@ -784,7 +784,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
       value <- if(is.null(input$date_slider_strategy) || input$date_slider_strategy == "this-year")
         ktools::date_range(min, max, type = "this_year")
       else
-        value <- filter_date()
+        value <- input$date_slider
 
       # -- date slider
       updateSliderInput(inputId = "date_slider",
@@ -796,16 +796,16 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
 
     ## -- Declare filter date ----
-    filter_date <- reactive(
-
-      # -- check data model (otherwise return NULL)
-      if(hasDate(k_data_model())){
-
-        catl(MODULE, "Date sliderInput has been updated")
-        catl("- values =", input$date_slider, level = 2)
-
-        # -- return
-        input$date_slider})
+    # filter_date <- reactive(
+    #
+    #   # -- check data model (otherwise return NULL)
+    #   if(hasDate(k_data_model())){
+    #
+    #     catl(MODULE, "Date sliderInput has been updated")
+    #     catl("- values =", input$date_slider, level = 2)
+    #
+    #     # -- return
+    #     input$date_slider})
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -817,7 +817,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
       # dependency on input (reactive) is disabled by bindEvent #483
       # otherwise it would fire update too many times
       if("date_slider" %in% names(input)){
-        if(!is.null(filter_date())){
+        if(!is.null(input$date_slider)){
 
           catl(MODULE, "Updating filtered item view")
 
@@ -826,7 +826,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
           dm <- k_data_model()
 
           # -- Apply date filter
-          items <- items[items$date >= filter_date()[1] & items$date <= filter_date()[2], ]
+          items <- items[items$date >= input$date_slider[1] & items$date <= input$date_slider[2], ]
 
           # -- Apply ordering
           if(any(!is.na(dm$sort.rank)))
@@ -838,7 +838,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
           items
 
         } else NULL
-      } else k_items()) |> bindEvent(filter_date(), k_items(), k_data_model())
+      } else k_items()) |> bindEvent(input$date_slider, k_items(), k_data_model())
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -894,7 +894,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
          filtered_items = filtered_items,
          selected_items = selected_items,
          clicked_column = clicked_column,
-         filter_date = filter_date)
+         filter_date = reactive(input$date_slider))
 
   })
 }

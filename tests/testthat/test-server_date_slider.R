@@ -30,9 +30,6 @@ test_that("Date sliderInput works", {
     session$setInputs(date_slider = date_slider_value)
 
     # -- check
-    expect_equal(filter_date(), date_slider_value)
-
-    # -- check filter
     expect_equal(dim(filtered_items()), c(2, 6))
 
   })
