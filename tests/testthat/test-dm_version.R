@@ -4,7 +4,7 @@ test_that("dm_version works", {
 
   # -- alter data model
   dm2 <- dm
-  attr(dm2, "version") <- as.character(packageVersion("kitems"))
+  attr(dm2, "version") <- as.character(utils::packageVersion("kitems"))
 
   # -- tests
   expect_no_warning(x <- dm_version(data.model = dm2))

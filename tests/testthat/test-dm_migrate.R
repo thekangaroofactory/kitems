@@ -4,7 +4,7 @@ test_that("dm_migrate works", {
 
   # -- alter data model
   dm2 <- dm
-  attr(dm2, "version") <- as.character(packageVersion("kitems"))
+  attr(dm2, "version") <- as.character(utils::packageVersion("kitems"))
 
   # -- function call
   expect_no_message(x <- dm_migrate(dm2))

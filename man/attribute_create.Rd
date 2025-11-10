@@ -50,7 +50,8 @@ attribute_create(data.model = mydatamodel, name = "new_attribute", type = "chara
 attribute_create(data.model = mydatamodel, name = "total", type = "numeric", default.val = 0)
 attribute_create(data.model = mydatamodel, name = "date", type = "Date", default.fun = "Sys.Date")
 attribute_create(data.model = mydatamodel, name = "progress", type = "integer", skip = "progress")
-attribute_create(data.model = mydatamodel, name = "internal", type = "logical", display = "internal")
+attribute_create(data.model = mydatamodel, name = "internal",
+type = "logical", display = "internal")
 }
 }
 \seealso{

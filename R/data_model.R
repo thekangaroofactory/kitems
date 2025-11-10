@@ -106,7 +106,7 @@ data_model <- function(colClasses, default.val = NULL, default.fun = NULL, defau
     dm$sort.desc <- NA
 
   # -- Add version
-  attr(dm, "version") <- as.character(packageVersion("kitems"))
+  attr(dm, "version") <- as.character(utils::packageVersion("kitems"))
 
   # -- Return
   dm
