@@ -8,6 +8,7 @@
 #' @param admin a logical indicating if the admin module server should be launched (default = FALSE)
 #' @param options a list of options (see details)
 #' @param trigger a reactive object to pass events to the module (see details)
+#' @param filter a reactive object to pass filters to the module (see details)
 #'
 #' @import shiny shinydashboard shinyWidgets
 #' @importFrom ktools catl
@@ -34,7 +35,11 @@
 #' Triggers are the way to send events for the module to execute dedicated actions.
 #' trigger must be a reactive (or NULL, the default). An event is defined as a named list of the form
 #' list(workflow = "create", type = "dialog") or list(workflow = "create", type = "task", values = list(...))
-#' If NULL, the trigger manager observer will not be initialized.
+#' If NULL, the trigger manager will not be initialized.
+#'
+#' Filter is a reactive object to pass filter expression(s) to the module server
+#' A filter is defined as a named list: list(layer = c("pre", "main"), expr = ...)
+#' If NULL, the filter manager will not be initialized.
 #'
 #' @examples
 #' \dontrun{
@@ -44,7 +49,7 @@
 
 # -- Shiny module server logic -------------------------------------------------
 
-kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, options = list(shortcut = FALSE)) {
+kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, filter = NULL, options = list(shortcut = FALSE)) {
 
   moduleServer(id, function(input, output, session) {
 
@@ -59,6 +64,11 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
     # -- check trigger
     if(!is.null(trigger))
       stopifnot("trigger must be a reactive object" = is.reactive(trigger))
+
+
+    # -- check filter
+    if(!is.null(filter))
+      stopifnot("filter must be a reactive object" = is.reactive(filter))
 
 
     # -- check options
@@ -102,6 +112,10 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
     # -- Internal delete workflow triggers
     trigger_delete_dialog <- reactiveVal(NULL)
     trigger_delete_values <- reactiveVal(NULL)
+
+    # -- Internal filter triggers
+    trigger_filter_pre <- reactiveVal(NULL)
+    trigger_filter_main <- reactiveVal(NULL)
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -351,6 +365,29 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
           trigger_delete_values(event$values)
 
       }) |> bindEvent(trigger(),
+                      ignoreInit = TRUE)
+
+
+    # //////////////////////////////////////////////////////////////////////////
+    ## -- Event manager (filter) ----
+
+    if(!is.null(filter))
+      event_manager <- observe({
+
+        # -- get event & check
+        event <- filter()
+        stopifnot("Event should be a list object" = is.list(event))
+        stopifnot("Event should contain layer & expr named elements" = all(c("layer", "expr") %in% names(event)))
+        catl(MODULE, "[Event] New filter received, layer =", event$layer, "/ expr =", event$expr, "\n")
+
+        # -- fire listeners
+        if(event$layer == "pre")
+          trigger_filter_pre(event$expr)
+
+        if(event$layer == "main")
+          trigger_filter_main(event$expr)
+
+      }) |> bindEvent(filter(),
                       ignoreInit = TRUE)
 
 
