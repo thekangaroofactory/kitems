@@ -795,19 +795,6 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
     })
 
 
-    ## -- Declare filter date ----
-    # filter_date <- reactive(
-    #
-    #   # -- check data model (otherwise return NULL)
-    #   if(hasDate(k_data_model())){
-    #
-    #     catl(MODULE, "Date sliderInput has been updated")
-    #     catl("- values =", input$date_slider, level = 2)
-    #
-    #     # -- return
-    #     input$date_slider})
-
-
     # //////////////////////////////////////////////////////////////////////////
     # -- Filtered items ----
 
