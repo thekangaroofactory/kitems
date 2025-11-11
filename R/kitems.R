@@ -914,7 +914,11 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
          filtered_items = filtered_items,
          selected_items = selected_items,
          clicked_column = clicked_column,
-         filter_date = reactive(input$date_slider))
+         filters = reactive(
+           list(
+             pre = trigger_filter_pre(),
+             main = trigger_filter_main(),
+             date = input$date_slider)))
 
   })
 }
