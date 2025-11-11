@@ -755,21 +755,23 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
     # //////////////////////////////////////////////////////////////////////////
     # -- Date slider ----
+    # As of v0.7.1 the date slider min / max are computed based
+    # on prefiltered_items() instead of k_items() #496
 
     ## -- Date slider ----
-    observeEvent(input$date_slider_strategy, {
+    observe({
 
       # -- check data model
       req(hasDate(k_data_model()))
 
-      catl(MODULE, "Building date sliderInput")
-      catl("- strategy =", input$date_slider_strategy)
+      catl(MODULE, "Update date sliderInput")
+      catl("- strategy =", input$date_slider_strategy, level = 2)
 
       # -- Get min/max
-      if(dim(k_items())[1] > 0){
+      if(nrow(prefiltered_items()) > 0){
 
-        min <- min(k_items()$date)
-        max <- max(k_items()$date)
+        min <- min(prefiltered_items()$date)
+        max <- max(prefiltered_items()$date)
 
       } else {
 
