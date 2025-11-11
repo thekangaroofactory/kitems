@@ -378,7 +378,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
         event <- filter()
         stopifnot("Event should be a list object" = is.list(event))
         stopifnot("Event should contain layer & expr named elements" = all(c("layer", "expr") %in% names(event)))
-        catl(MODULE, "[Event] New filter received, layer =", event$layer, "/ expr =", event$expr, "\n")
+        catl(MODULE, "[Event] New filter received, layer =", event$layer, "/ expr =", as.character(event$expr))
 
         # -- fire listeners
         if(event$layer == "pre")
@@ -797,7 +797,9 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
 
     # //////////////////////////////////////////////////////////////////////////
-    # -- Pre-filtering layer ----
+    # -- Filtering layers ----
+
+    ## -- Pre-filtering layer ----
     # Only custom filter is applied at this level
 
     prefiltered_items <- reactive(
@@ -806,9 +808,9 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
       if(!is.null(trigger_filter_pre())){
 
         # -- apply filter
-        catl(MODULE, "Apply custom pre-filtering on items \n")
+        catl(MODULE, "Apply custom pre-filtering on items")
         items <- k_items() %>%
-          filter(!!!trigger_filter_pre())
+          dplyr::filter(!!!trigger_filter_pre())
         catl("- ouput dim =", dim(items), level = 2)
 
         # -- return
@@ -817,8 +819,8 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
       } else k_items()) |> bindEvent(k_items(), trigger_filter_pre())
 
 
-    # //////////////////////////////////////////////////////////////////////////
-    # -- Filtering layer (main) ----
+    ## -- Main-filtering layer ----
+    # Custom filter + date filter / + ordering
 
     filtered_items <- reactive({
 
@@ -843,7 +845,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
       # -- apply filter(s)
       if(!is.null(filter_exprs)){
         items <- items %>%
-          filter(!!!filter_exprs)
+          dplyr::filter(!!!filter_exprs)
         catl("- ouput dim =", dim(items), level = 2)}
 
       # -- Apply ordering
@@ -855,39 +857,6 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
       items
 
     }) |> bindEvent(prefiltered_items(), trigger_filter_main(), input$date_slider, k_data_model())
-
-
-    # //////////////////////////////////////////////////////////////////////////
-    # -- Filtered items ----
-
-    # filtered_items <- reactive(
-    #
-    #   # -- check
-    #   # dependency on input (reactive) is disabled by bindEvent #483
-    #   # otherwise it would fire update too many times
-    #   if("date_slider" %in% names(input)){
-    #     if(!is.null(input$date_slider)){
-    #
-    #       catl(MODULE, "Updating filtered item view")
-    #
-    #       # -- init
-    #       items <- k_items()
-    #       dm <- k_data_model()
-    #
-    #       # -- Apply date filter
-    #       items <- items[items$date >= input$date_slider[1] & items$date <= input$date_slider[2], ]
-    #
-    #       # -- Apply ordering
-    #       if(any(!is.na(dm$sort.rank)))
-    #         items <- item_sort(items, dm)
-    #
-    #       catl("- ouput dim =", dim(items), level = 2)
-    #
-    #       # -- Return
-    #       items
-    #
-    #     } else NULL
-    #   } else k_items()) |> bindEvent(input$date_slider, k_items(), k_data_model())
 
 
     # //////////////////////////////////////////////////////////////////////////
