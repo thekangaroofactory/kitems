@@ -810,7 +810,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
         # -- apply filter
         catl(MODULE, "Apply custom pre-filtering on items")
         items <- k_items() %>%
-          dplyr::filter(!!!trigger_filter_pre())
+          dplyr::filter(if(is.list(trigger_filter_pre())) !!!trigger_filter_pre() else !!trigger_filter_pre())
         catl("- ouput dim =", dim(items), level = 2)
 
         # -- return
@@ -845,7 +845,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
       # -- apply filter(s)
       if(!is.null(filter_exprs)){
         items <- items %>%
-          dplyr::filter(!!!filter_exprs)
+          dplyr::filter(if(is.list(filter_exprs)) !!!filter_exprs else !!filter_exprs)
         catl("- ouput dim =", dim(items), level = 2)}
 
       # -- Apply ordering
