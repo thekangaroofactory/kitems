@@ -342,6 +342,43 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
         # -- get event & check
         event <- trigger()
         stopifnot("Event should be a list object" = is.list(event))
+
+        # -- check for multiple events
+        if(all(sapply(event, is.list))){
+
+          catl(MODULE, "Multiple events received")
+
+          # -- init
+          events <- reactiveVal(event)
+
+          # ///////////////////////
+          # quand on recoit une liste, ne jouer que le premier
+          # ajouter un listener qui supprime le 1er element
+          # et hop ça relance la boucle trigger
+
+
+
+          # -- fire event & listen
+          observeEvent(events, {
+
+            # -- listen for the items to be updated
+            observeEvent(k_items(), {
+
+              # -- drop first element or set NULL
+              events(
+                if(length(events()) > 1) events()[-1] else NULL)
+
+            }, ignoreInit = TRUE, once = TRUE)
+
+            # -- run event
+            run_event(events()[[1]])
+
+          })
+
+        } else run_event(event)
+
+
+        # -- check
         stopifnot("Event should contain workflow & type named elements" = all(c("workflow", "type") %in% names(event)))
         catl(MODULE, "[Event] New event received, workflow =", event$workflow, "/ type =", event$type, "\n")
 
@@ -372,7 +409,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
     ## -- Event manager (filter) ----
 
     if(!is.null(filter))
-      event_manager <- observe({
+      filter_manager <- observe({
 
         # -- get event & check
         event <- filter()
