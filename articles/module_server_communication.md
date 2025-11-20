@@ -1,0 +1,103 @@
+# Communication with the Module Server
+
+## Introduction
+
+The communication strategy has been implemented based on this work:  
+[Communication between shiny
+modules](https://thekangaroofactory.github.io/communication-between-shiny-modules/)
+
+Basically, communication to the module server relies on the server
+function parameters, while communication from the module server (to its
+parent) relies on the server function return value(s).
+
+## Parameters
+
+Among the parameters that can be passed to the server function to tune
+its internal behaviors is a specific reactive parameter named `trigger`
+that can be used to pass instructions to the module.
+
+Whenever `trigger` receives a reactive object reference as value, the
+module will take a dependency on it and declare a listener to react to
+specific events for the module to execute dedicated actions.
+
+An event is defined as a named list of the form:
+
+``` r
+list(workflow = "create", type = "dialog")
+list(workflow = "create", type = "task", values = list(...))
+```
+
+When the first event is received for example, the module will fire the
+create item modal window with the input form for the user to create a
+new item.  
+The second event will directly create a new item given the provided
+values.
+
+Triggers are a key feature for the module to be used within different
+implementations.
+
+## Return value(s)
+
+The module server returns a list of the references that are accessible
+outside the module.
+
+``` r
+# -- Module server return value
+list(id,
+     url,
+     items,
+     data_model,
+     filtered_items,
+     selected_items,
+     clicked_column,
+     filter_date)
+```
+
+- `id` the id used to call the module (it’s also the id of the *items*
+  and linked files)
+
+- `url` the url to the *item* file - it’s needed to call the save
+  function when `autosave = FALSE`
+
+- `items` the data frame of the *items* (reference of the `reactive`
+  object)
+
+- `data_model` the data frame of the data model (reference of the
+  `reactive` object)
+
+- `filtered_items` the data frame of the filtered *items* (reference of
+  the `reactive` object)
+
+- `selected_items` a vector of *item* `id`(s) from the selected rows in
+  the filtered view table (reference of the `reactive` object)
+
+- `clicked_column` a numeric value, indicating which column of the
+  filtered view has been clicked (reference of the `reactive` object)
+
+- `filter_date` a numeric vector, with the value of the date slider
+  input range (reference of the `reactive` object)
+
+All except id & url are references to reactive values that needs to be
+accessed in a reactive context.
+
+## Considerations
+
+The magic with passing references is that the value itself is not copied
+or duplicated.[¹](#fn1)
+
+All the reactive objects of the return value are created with the
+[`reactive()`](https://rdrr.io/pkg/shiny/man/reactive.html) function, so
+that it is not possible to update them from outside of the module server
+function.
+
+It makes the framework more robust against data.model or item
+corruption.
+
+It also allows to use the exported functions of the package from outside
+of the module server, which provides more flexible implementation
+options.
+
+------------------------------------------------------------------------
+
+1.  See *Advanced R*
+    <https://adv-r.hadley.nz/names-values.html#names-values>

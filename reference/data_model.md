@@ -1,0 +1,119 @@
+# Build data model
+
+Build data model
+
+## Usage
+
+``` r
+data_model(
+  colClasses,
+  default.val = NULL,
+  default.fun = NULL,
+  default.arg = NULL,
+  display = NULL,
+  skip = NULL,
+  sort.rank = NULL,
+  sort.desc = NULL
+)
+```
+
+## Arguments
+
+- colClasses:
+
+  a *mandatory* named vector of classes, defining the data model.
+
+- default.val:
+
+  an optional named vector of values, defining the default values.
+
+- default.fun:
+
+  an optional named vector of functions, defining the default functions
+  to be used to generate default values.
+
+- default.arg:
+
+  an optional named vector of arguments, to pass along with the default
+  function.
+
+- display:
+
+  an optional character vector, indicating which attribute names should
+  be displayed in the table view.
+
+- skip:
+
+  an optional character vector, indicating which attribute names should
+  be skipped from the user input form.
+
+- sort.rank:
+
+  an optional named numeric vector, to define sort orders.
+
+- sort.desc:
+
+  an optional named logical vector, to define if sort should be
+  descending.
+
+## Value
+
+a data.frame containing the data model.
+
+## Details
+
+colClasses will be used to create the data.frame: names will define the
+attributes of the data model, and values will define the class (type) of
+the attributes.
+
+All default.\* parameters are optional. When provided, they will be used
+to match with names defined in colClasses:
+
+- order in those vectors doesn't matter
+
+- there is no need to set values for all attributes (see examples)
+
+- names in vectors not matching with colClasses names will be ignored
+
+default.fun and default.val are mutual exclusive, with priority on
+default.fun (default.val will be forced to NA) default.arg requires
+default.fun not to be NULL (will be forced to NA otherwise)
+
+display and skip directly contains the names of the attributes to set to
+TRUE
+
+If not provided, defaults will be applied:
+
+- NA for default.val, default.fun and default.arg
+
+- FALSE for display and skip
+
+## Examples
+
+``` r
+# -- order in vectors doesn't matter:
+default.val <- c("name" = "test", "total" = 2)
+default.val <- c("total" = 2, "name" = "test")
+
+# -- no need to set all values
+colClasses <- c("id" = "numeric", "name" = "character", "total" = "numeric")
+default.val <- c("name" = "test", "total" = 2)
+
+# -- display and skip
+display <- "id"
+skip <- c("id", "date")
+
+# -- sort
+sort.rank = c("date" = 1, "total" = 2, "name" = 3)
+sort.desc = c("date" = TRUE, "total" = FALSE)
+
+data_model(colClasses, default.val, display = display, skip = skip)
+#>    name      type default.val default.fun default.arg display  skip sort.rank
+#> 1    id   numeric        <NA>          NA          NA    TRUE  TRUE        NA
+#> 2  name character        test          NA          NA   FALSE FALSE        NA
+#> 3 total   numeric           2          NA          NA   FALSE FALSE        NA
+#>   sort.desc
+#> 1        NA
+#> 2        NA
+#> 3        NA
+```

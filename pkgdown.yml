@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.1.3
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   background_item_management: background_item_management.html
@@ -8,7 +8,7 @@ articles:
   known_limitations: known_limitations.html
   module_server_communication: module_server_communication.html
   motivations: motivations.html
-last_built: 2025-08-10T21:02Z
+last_built: 2025-11-20T10:01Z
 urls:
   reference: https://thekangaroofactory.github.io/kitems/reference
   article: https://thekangaroofactory.github.io/kitems/articles

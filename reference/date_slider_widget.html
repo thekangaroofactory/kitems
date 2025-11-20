@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kitems</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,12 +66,25 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">date_slider_widget</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="row"&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;div class="col-sm-6"&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;div id="mydata-date_slider_btn" class="shiny-html-output"&gt;&lt;/div&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div style="display: inline-block; vertical-align:middle; margin-right:40px;"&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;div class="form-group shiny-input-container" style="width:300px;"&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;label class="control-label" id="mydata-date_slider-label" for="mydata-date_slider"&gt;Date&lt;/label&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;input class="js-range-slider" id="mydata-date_slider" data-skin="shiny" data-type="double" data-min="1763596800000" data-max="1763596800000" data-from="1763596800000" data-to="1763596800000" data-step="86400000" data-grid="true" data-grid-num="NaN" data-grid-snap="false" data-prettify-separator="," data-prettify-enabled="true" data-keyboard="true" data-drag-interval="true" data-data-type="date" data-time-format="%F"/&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/div&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;div class="col-sm-6"&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;div id="mydata-date_slider_strategy_btn" class="shiny-html-output"&gt;&lt;/div&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div style="display: inline-block; vertical-align:middle;"&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;div id="mydata-date_slider_strategy" class="form-group shiny-input-radiogroup shiny-input-container shiny-input-container-inline" role="radiogroup" aria-labelledby="mydata-date_slider_strategy-label"&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;label class="control-label" id="mydata-date_slider_strategy-label" for="mydata-date_slider_strategy"&gt;Strategy&lt;/label&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;div class="shiny-options-group"&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;label class="radio-inline"&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;input type="radio" name="mydata-date_slider_strategy" value="this-year" checked="checked"/&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;span&gt;this-year&lt;/span&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;/label&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;label class="radio-inline"&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;input type="radio" name="mydata-date_slider_strategy" value="keep-range"/&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;span&gt;keep-range&lt;/span&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;/label&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;/div&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/div&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/div&gt;</span>
 </code></pre></div>
@@ -85,7 +98,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

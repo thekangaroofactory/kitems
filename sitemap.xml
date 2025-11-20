@@ -31,12 +31,14 @@
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/dm_default.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/dm_delete.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/dm_delete_preview.html</loc></url>
-<url><loc>https://thekangaroofactory.github.io/kitems/reference/dm_filter.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/dm_display.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/dm_integrity.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/dm_mask.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/dm_migrate.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/dm_name.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/dm_version.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/dynamic_sidebar.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/filter_event.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/filtered_view_widget.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/hasDate.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/index.html</loc></url>
@@ -59,6 +61,7 @@
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/rows_insert.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/rows_update.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/runExample.html</loc></url>
+<url><loc>https://thekangaroofactory.github.io/kitems/reference/trigger_event.html</loc></url>
 <url><loc>https://thekangaroofactory.github.io/kitems/reference/update_widget.html</loc></url>
 </urlset>
 

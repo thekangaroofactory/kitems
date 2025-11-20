@@ -1,0 +1,122 @@
+# Filtering Items
+
+## Introduction
+
+Kitems provides standard features to enable automatic data filtering.
+
+## Reminder
+
+The module server returns a composite value that includes references to
+reactive values:
+
+- items
+
+- filtered_items
+
+- filter_date
+
+``` R
+# -- call module server
+mydata <- kitems::kitems(id = "myid")
+
+# -- access the data
+mydata$items()
+mydata$filtered_items()
+mydata$filter_date()
+```
+
+## Widgets
+
+### Item table
+
+The *item* table widget is by default a filtered view of the *items*.  
+It displays the content of `filtered_items()` .
+
+It is delivered through the `filtered_view_widget` function.
+
+The reason for not having a non filtered *item* table is that if the
+goal is to display the whole list of *items* without any filtering, then
+there would be no added value compared to using the renderDT / DTOutput
+functions directly in the main Shiny application.
+
+As of now, only date filtering support has been implemented.
+
+### Date slider
+
+The date slider widget is automatically enabled when the data model
+contains an attribute that is named ‘*date*’ (strictly) and accessible
+through the `date_slider_widget` function.
+
+![Screenshot of the widget](images/screenshot_date_slider_widget.png)
+
+Its behavior is driven by two strategies:
+
+- ‘*this-year*’ – automatically selects and extends the range of date
+  belonging to current year upon *item* operations (this is the
+  default).
+
+- ‘*keep-range*’ – keeps the selected range no matter if *items* are
+  added or removed [¹](#fn1)
+
+When the server is initialized, it will scan the *items* to setup the
+*dateSliderInput* range to the minimum and maximum of the date column,
+and the selected range to the values fitting with current year.
+[²](#fn2)
+
+## Reactive lifecycle
+
+Whenever the date range value is modified in the widget, it will trigger
+two actions in the reactive lifecycle of the module server:
+
+- `filter_date` will be updated with the value of the slider input
+  [³](#fn3)
+
+- `filtered_items` will be updated with the *items* fitting with the
+  selected date range [⁴](#fn4)
+
+## Considerations
+
+### Initialization
+
+The most important notion to understand when it comes to the
+initialization of the `filtered_items` (and its view) is that when the
+module server is launched, there is no way to determine if the main
+application will implement the date slider widget.
+
+The module server checks the data model for a ‘*date*’ attribute and
+creates an output that will be accessible through the
+`date_slider_widget` function. But it can’t guess if it’s actually going
+to be implemented of not.
+
+For this reason, the `filtered_items` reactive value is initialized with
+the same value as `items`.
+
+This means, if the content of `filtered_items` is reused within the main
+application - for example to build a plot - it is strongly advised to
+check if `filter_date` is `NULL` or not to avoid computing the plot
+twice.
+
+It can be done by implementing one of the following options in the
+*renderPlot* expression:
+
+- check if the filter input is “truthy” with `req(mydata$filter_date())`
+
+- use `bindEvent` function on the `filtered_items` with
+  `ignoreInit = FALSE`
+
+------------------------------------------------------------------------
+
+1.  One exception is if the item that is deleted has its date being
+    equal to the minimum or maximum of the entire range. The reason is
+    that the min and max of the dateSliderInput will be updated when the
+    items data frame is modified, hence it is not possible to have the
+    selected range going beyond its limit.
+
+2.  current year standing for the output of `format(Sys.Date(), "%Y")`
+
+3.  those values could also be directly accessed through the main
+    application input argument as `input$id-date_slider` with *id* being
+    the module server namespace
+
+4.  if sorting feature is enabled in the data model, it will also be
+    sorted
