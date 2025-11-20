@@ -346,41 +346,27 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
         # -- check for multiple events
         if(all(sapply(event, is.list))){
 
-          catl(MODULE, "Multiple events received")
+          catl(MODULE, "Multiple events received, nb =", length(event))
 
-          # -- init
-          events <- reactiveVal(event)
+          # -- only 1st element in event is kept
+          event <- event[[1]]
 
-          # ///////////////////////
-          # quand on recoit une liste, ne jouer que le premier
-          # ajouter un listener qui supprime le 1er element
-          # et hop ça relance la boucle trigger
+          # -- listen for the items to be updated
+          # then update trigger() without first element to fire again event_manager
+          # run once!
+          observeEvent(k_items(), {
 
+            # -- drop first element or set NULL
+            trigger(
+              if(length(trigger()) > 1) trigger()[-1] else NULL)
 
+          }, ignoreInit = TRUE, once = TRUE)
 
-          # -- fire event & listen
-          observeEvent(events, {
-
-            # -- listen for the items to be updated
-            observeEvent(k_items(), {
-
-              # -- drop first element or set NULL
-              events(
-                if(length(events()) > 1) events()[-1] else NULL)
-
-            }, ignoreInit = TRUE, once = TRUE)
-
-            # -- run event
-            run_event(events()[[1]])
-
-          })
-
-        } else run_event(event)
-
+        }
 
         # -- check
         stopifnot("Event should contain workflow & type named elements" = all(c("workflow", "type") %in% names(event)))
-        catl(MODULE, "[Event] New event received, workflow =", event$workflow, "/ type =", event$type, "\n")
+        catl(MODULE, "[Event] received, workflow =", event$workflow, "/ type =", event$type, "\n")
 
         # -- fire listeners
         if(event$workflow == "create" && event$type == "dialog")
