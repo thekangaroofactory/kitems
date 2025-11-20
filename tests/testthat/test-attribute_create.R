@@ -9,7 +9,7 @@ test_that("attribute_create works", {
                         default.val = NA,
                         default.fun = NA,
                         skip = FALSE,
-                        filter = FALSE)
+                        display = FALSE)
 
   # -- checks:
   expect_s3_class(x, "data.frame")
@@ -29,7 +29,7 @@ test_that("attribute_create: empty default.val", {
                         default.val = "",
                         default.fun = NA,
                         skip = FALSE,
-                        filter = FALSE)
+                        display = FALSE)
 
   # -- checks:
   expect_s3_class(x, "data.frame")
@@ -49,7 +49,7 @@ test_that("attribute_create: empty default.fun", {
                         default.val = NA,
                         default.fun = "",
                         skip = FALSE,
-                        filter = FALSE)
+                        display = FALSE)
 
   # -- checks:
   expect_s3_class(x, "data.frame")
@@ -69,7 +69,7 @@ test_that("attribute_create: skip NULL", {
                         default.val = NA,
                         default.fun = NA,
                         skip = NULL,
-                        filter = FALSE)
+                        display = FALSE)
 
   # -- checks:
   expect_s3_class(x, "data.frame")
@@ -80,7 +80,7 @@ test_that("attribute_create: skip NULL", {
 })
 
 
-test_that("attribute_create: filter NULL", {
+test_that("attribute_create: display NULL", {
 
   # -- test:
   x <- attribute_create(data.model = dm,
@@ -89,7 +89,7 @@ test_that("attribute_create: filter NULL", {
                         default.val = NA,
                         default.fun = NA,
                         skip = FALSE,
-                        filter = NULL)
+                        display = NULL)
 
   # -- checks:
   expect_s3_class(x, "data.frame")

@@ -10,6 +10,7 @@ kitems(
   autosave = TRUE,
   admin = FALSE,
   trigger = NULL,
+  filter = NULL,
   options = list(shortcut = FALSE)
 )
 }
@@ -23,6 +24,8 @@ kitems(
 \item{admin}{a logical indicating if the admin module server should be launched (default = FALSE)}
 
 \item{trigger}{a reactive object to pass events to the module (see details)}
+
+\item{filter}{a reactive object to pass filters to the module (see details)}
 
 \item{options}{a list of options (see details)}
 }
@@ -50,7 +53,11 @@ shortcut option is a logical to activate shortcut mechanism within item forms
 Triggers are the way to send events for the module to execute dedicated actions.
 trigger must be a reactive (or NULL, the default). An event is defined as a named list of the form
 list(workflow = "create", type = "dialog") or list(workflow = "create", type = "task", values = list(...))
-If NULL, the trigger manager observer will not be initialized.
+If NULL, the trigger manager will not be initialized.
+
+Filter is a reactive object to pass filter expression(s) to the module server
+A filter is defined as a named list: list(layer = c("pre", "main"), expr = ...)
+If NULL, the filter manager will not be initialized.
 }
 \examples{
 \dontrun{

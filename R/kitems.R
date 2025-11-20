@@ -8,6 +8,7 @@
 #' @param admin a logical indicating if the admin module server should be launched (default = FALSE)
 #' @param options a list of options (see details)
 #' @param trigger a reactive object to pass events to the module (see details)
+#' @param filter a reactive object to pass filters to the module (see details)
 #'
 #' @import shiny shinydashboard shinyWidgets
 #' @importFrom ktools catl
@@ -34,7 +35,11 @@
 #' Triggers are the way to send events for the module to execute dedicated actions.
 #' trigger must be a reactive (or NULL, the default). An event is defined as a named list of the form
 #' list(workflow = "create", type = "dialog") or list(workflow = "create", type = "task", values = list(...))
-#' If NULL, the trigger manager observer will not be initialized.
+#' If NULL, the trigger manager will not be initialized.
+#'
+#' Filter is a reactive object to pass filter expression(s) to the module server
+#' A filter is defined as a named list: list(layer = c("pre", "main"), expr = ...)
+#' If NULL, the filter manager will not be initialized.
 #'
 #' @examples
 #' \dontrun{
@@ -44,7 +49,7 @@
 
 # -- Shiny module server logic -------------------------------------------------
 
-kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, options = list(shortcut = FALSE)) {
+kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, filter = NULL, options = list(shortcut = FALSE)) {
 
   moduleServer(id, function(input, output, session) {
 
@@ -59,6 +64,11 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
     # -- check trigger
     if(!is.null(trigger))
       stopifnot("trigger must be a reactive object" = is.reactive(trigger))
+
+
+    # -- check filter
+    if(!is.null(filter))
+      stopifnot("filter must be a reactive object" = is.reactive(filter))
 
 
     # -- check options
@@ -92,7 +102,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
     ## -- Declare reactive objects ----
 
     # -- Internal create workflow triggers
-    trigger_create_dialog <- reactiveVal(0)
+    trigger_create_dialog <- reactiveVal(NULL)
     trigger_create_values <- reactiveVal(NULL)
 
     # -- Internal update workflow triggers
@@ -102,6 +112,10 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
     # -- Internal delete workflow triggers
     trigger_delete_dialog <- reactiveVal(NULL)
     trigger_delete_values <- reactiveVal(NULL)
+
+    # -- Internal filter triggers
+    trigger_filter_pre <- reactiveVal(NULL)
+    trigger_filter_main <- reactiveVal(NULL)
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -173,11 +187,34 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
         init_dm <- readRDS(dm_url)
         catl("- output dim =", dim(init_dm))
 
+        # -- Data model version
+        # note: only when admin == FALSE, otherwise admin console
+        # would stop when migration is needed!
+        if(!admin){
+
+          # -- check
+          rv <- dm_version(init_dm)
+
+          # -- when migration is needed
+          if(rv['migration']){
+
+            # -- display message
+            showModal(
+              modalDialog(
+                title = "Data Model",
+                p("Data model requires a migration"),
+                p("Reason:", rv['comment']),
+                p("Run admin() to fix it."),
+                footer = actionButton(inputId = ns("dm_version_warning"), label = "Close app")))
+
+            # -- listen to modal close button
+            observeEvent(input$dm_version_warning, stopApp())}}
+
       } else {
 
         catl(">> No data model file found.")
 
-        }
+      }
 
       # -- Increment the progress bar, and update the detail text.
       incProgress(1/4, detail = "Read data model")
@@ -305,12 +342,35 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
         # -- get event & check
         event <- trigger()
         stopifnot("Event should be a list object" = is.list(event))
+
+        # -- check for multiple events
+        if(all(sapply(event, is.list))){
+
+          catl(MODULE, "Multiple events received, nb =", length(event))
+
+          # -- only 1st element in event is kept
+          event <- event[[1]]
+
+          # -- listen for the items to be updated
+          # then update trigger() without first element to fire again event_manager
+          # run once!
+          observeEvent(k_items(), {
+
+            # -- drop first element or set NULL
+            trigger(
+              if(length(trigger()) > 1) trigger()[-1] else NULL)
+
+          }, ignoreInit = TRUE, once = TRUE)
+
+        }
+
+        # -- check
         stopifnot("Event should contain workflow & type named elements" = all(c("workflow", "type") %in% names(event)))
-        catl(MODULE, "[Event] New event received, workflow =", event$workflow, "/ type =", event$type, "\n")
+        catl(MODULE, "[Event] received, workflow =", event$workflow, "/ type =", event$type, "\n")
 
         # -- fire listeners
         if(event$workflow == "create" && event$type == "dialog")
-          trigger_create_dialog(trigger_create_dialog() + 1)
+          trigger_create_dialog(ifelse(is.null(trigger_create_dialog()), 0, trigger_create_dialog()) + 1)
 
         if(event$workflow == "create" && event$type == "task")
           trigger_create_values(event$values)
@@ -328,6 +388,29 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
           trigger_delete_values(event$values)
 
       }) |> bindEvent(trigger(),
+                      ignoreInit = TRUE)
+
+
+    # //////////////////////////////////////////////////////////////////////////
+    ## -- Event manager (filter) ----
+
+    if(!is.null(filter))
+      filter_manager <- observe({
+
+        # -- get event & check
+        event <- filter()
+        stopifnot("Event should be a list object" = is.list(event))
+        stopifnot("Event should contain layer & expr named elements" = all(c("layer", "expr") %in% names(event)))
+        catl(MODULE, "[Event] New filter received, layer =", event$layer, "/ expr =", as.character(event$expr))
+
+        # -- fire listeners
+        if(event$layer == "pre")
+          trigger_filter_pre(event$expr)
+
+        if(event$layer == "main")
+          trigger_filter_main(event$expr)
+
+      }) |> bindEvent(filter(),
                       ignoreInit = TRUE)
 
 
@@ -660,13 +743,18 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
 
         catl(MODULE, "[Event] delete item(s) trigger")
 
+        # -- get ids to delete
+        ids <- trigger_delete_values()
+        if(is.list(ids))
+          ids <- unlist(ids)
+
         # -- Secure against errors
         tryCatch({
 
           # -- store new items table
           k_items(
             rows_delete(items = k_items(),
-                        id = trigger_delete_values()))
+                        id = ids))
 
           if(shiny::isRunning())
             showNotification(paste(MODULE, "Item(s) deleted."), type = "message")},
@@ -690,105 +778,110 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
 
     # //////////////////////////////////////////////////////////////////////////
     # -- Date slider ----
-
-    ## -- Date slider strategy ----
-    output$date_slider_strategy_btn <- renderUI(
-
-      # -- check data model
-      if(hasDate(k_data_model()))
-        radioButtons(inputId = ns("date_slider_strategy"),
-                     label = "Strategy",
-                     choices = c("this-year", "keep-range"),
-                     selected = "this-year",
-                     inline = TRUE))
-
+    # As of v0.7.1 the date slider min / max are computed based
+    # on prefiltered_items() instead of k_items() #496
 
     ## -- Date slider ----
-    output$date_slider_btn <- renderUI({
+    observe({
 
       # -- check data model
-      if(hasDate(k_data_model()) & !is.null(input$date_slider_strategy)){
+      req(hasDate(k_data_model()))
 
-        catl(MODULE, "Building date sliderInput")
-        catl("- strategy =", input$date_slider_strategy)
+      catl(MODULE, "Update date sliderInput")
+      catl("- strategy =", input$date_slider_strategy, level = 2)
 
-        # -- Get min/max
-        if(dim(k_items())[1] > 0){
+      # -- Get min/max
+      if(nrow(prefiltered_items()) > 0){
 
-          min <- min(k_items()$date)
-          max <- max(k_items()$date)
+        min <- min(prefiltered_items()$date)
+        max <- max(prefiltered_items()$date)
 
-        } else {
+      } else {
 
-          min <- as.Date(Sys.Date())
-          max <- min
-
-        }
-
-        # -- Set value
-        # implement this_year strategy by default #211
-        # keep this year after item is added #223 & #242
-        value <- if(is.null(input$date_slider_strategy) || input$date_slider_strategy == "this-year")
-          ktools::date_range(min, max, type = "this_year")
-        else
-          value <- filter_date()
-
-        # -- date slider
-        sliderInput(inputId = ns("date_slider"),
-                    label = "Date",
-                    min = min,
-                    max = max,
-                    value = value)
+        min <- Sys.Date()
+        max <- min
 
       }
+
+      # -- Set value
+      # implement this_year strategy by default #211
+      # keep this year after item is added #223 & #242
+      value <- if(is.null(input$date_slider_strategy) || input$date_slider_strategy == "this-year")
+        ktools::date_range(min, max, type = "this_year")
+      else
+        value <- input$date_slider
+
+      # -- date slider
+      # adding as.Date() to ensure they all have same format #521
+      updateSliderInput(inputId = "date_slider",
+                        min = as.Date(min),
+                        max = as.Date(max),
+                        value = as.Date(value))
 
     })
 
 
-    ## -- Declare filter date ----
-    filter_date <- reactive(
+    # //////////////////////////////////////////////////////////////////////////
+    # -- Filtering layers ----
 
-      # -- check data model (otherwise return NULL)
-      if(hasDate(k_data_model())){
+    ## -- Pre-filtering layer ----
+    # Only custom filter is applied at this level
 
-        catl(MODULE, "Date sliderInput has been updated")
-        catl("- values =", input$date_slider, level = 2)
+    prefiltered_items <- reactive(
+
+      # -- check custom filter
+      if(!is.null(trigger_filter_pre())){
+
+        # -- apply filter
+        catl(MODULE, "Apply custom pre-filtering on items")
+        items <- k_items() %>%
+          dplyr::filter(if(is.list(trigger_filter_pre())) !!!trigger_filter_pre() else !!trigger_filter_pre())
+        catl("- ouput dim =", dim(items), level = 2)
 
         # -- return
-        input$date_slider})
+        items
+
+      } else k_items()) |> bindEvent(k_items(), trigger_filter_pre())
 
 
-    # //////////////////////////////////////////////////////////////////////////
-    # -- Filtered items ----
+    ## -- Main-filtering layer ----
+    # Custom filter + date filter / + ordering
 
-    filtered_items <- reactive(
+    filtered_items <- reactive({
 
-      # -- check
-      # dependency on input (reactive) is disabled by bindEvent #483
-      # otherwise it would fire update too many times
-      if("date_slider" %in% names(input)){
-        if(!is.null(filter_date())){
+      catl(MODULE, "Apply custom filter(s) on items")
 
-          catl(MODULE, "Updating filtered item view")
+      # -- check date slider
+      date_expr <- if(!is.null(input$date_slider)){
+        catl("- Date slider =", input$date_slider, level = 2)
+        dplyr::expr(date >= input$date_slider[1] & date <= input$date_slider[2])}
 
-          # -- init
-          items <- k_items()
-          dm <- k_data_model()
+      # -- check custom filter
+      if(!is.null(trigger_filter_main()))
+        catl("- Custom filter =", as.character(trigger_filter_main()), level = 2)
 
-          # -- Apply date filter
-          items <- items[items$date >= filter_date()[1] & items$date <= filter_date()[2], ]
+      # -- merge expression(s)
+      # NULLs will be supported, output is NULL, one expr or several exprs
+      filter_exprs <- c(trigger_filter_main(), date_expr)
 
-          # -- Apply ordering
-          if(any(!is.na(dm$sort.rank)))
-            items <- item_sort(items, dm)
+      # -- init
+      items <- prefiltered_items()
 
-          catl("- ouput dim =", dim(items), level = 2)
+      # -- apply filter(s)
+      if(!is.null(filter_exprs)){
+        items <- items %>%
+          dplyr::filter(if(is.list(filter_exprs)) !!!filter_exprs else !!filter_exprs)
+        catl("- ouput dim =", dim(items), level = 2)}
 
-          # -- Return
-          items
+      # -- Apply ordering
+      dm <- k_data_model()
+      if(any(!is.na(dm$sort.rank)))
+        items <- item_sort(items, dm)
 
-        } else NULL
-      } else k_items()) |> bindEvent(filter_date(), k_items(), k_data_model())
+      # -- Return
+      items
+
+    }) |> bindEvent(prefiltered_items(), trigger_filter_main(), input$date_slider, k_data_model())
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -844,7 +937,11 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, opt
          filtered_items = filtered_items,
          selected_items = selected_items,
          clicked_column = clicked_column,
-         filter_date = filter_date)
+         filters = reactive(
+           list(
+             pre = trigger_filter_pre(),
+             main = trigger_filter_main(),
+             date = input$date_slider)))
 
   })
 }

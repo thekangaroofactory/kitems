@@ -6,7 +6,7 @@
 #' @param default.val an optional named vector of values, defining the default values.
 #' @param default.fun an optional named vector of functions, defining the default functions to be used to generate default values.
 #' @param default.arg an optional named vector of arguments, to pass along with the default function.
-#' @param filter an optional character vector, indicating which attribute names should be filtered from the table view.
+#' @param display an optional character vector, indicating which attribute names should be displayed in the table view.
 #' @param skip an optional character vector, indicating which attribute names should be skipped from the user input form.
 #' @param sort.rank an optional named numeric vector, to define sort orders.
 #' @param sort.desc an optional named logical vector, to define if sort should be descending.
@@ -27,11 +27,11 @@
 #' default.fun and default.val are mutual exclusive, with priority on default.fun (default.val will be forced to NA)
 #' default.arg requires default.fun not to be NULL (will be forced to NA otherwise)
 #'
-#' filter and skip directly contains the names of the attributes to set to TRUE
+#' display and skip directly contains the names of the attributes to set to TRUE
 #'
 #' If not provided, defaults will be applied:
 #' - NA for default.val, default.fun and default.arg
-#' - FALSE for filter and skip
+#' - FALSE for display and skip
 #'
 #' @examples
 #' # -- order in vectors doesn't matter:
@@ -42,19 +42,19 @@
 #' colClasses <- c("id" = "numeric", "name" = "character", "total" = "numeric")
 #' default.val <- c("name" = "test", "total" = 2)
 #'
-#' # -- filter and skip
-#' filter <- "id"
+#' # -- display and skip
+#' display <- "id"
 #' skip <- c("id", "date")
 #'
 #' # -- sort
 #' sort.rank = c("date" = 1, "total" = 2, "name" = 3)
 #' sort.desc = c("date" = TRUE, "total" = FALSE)
 #'
-#' data_model(colClasses, default.val, filter = filter, skip = skip)
+#' data_model(colClasses, default.val, display = display, skip = skip)
 #'
 
 data_model <- function(colClasses, default.val = NULL, default.fun = NULL, default.arg = NULL,
-                       filter = NULL, skip = NULL,
+                       display = NULL, skip = NULL,
                        sort.rank = NULL, sort.desc = NULL){
 
   # -- check arg #217
@@ -87,8 +87,8 @@ data_model <- function(colClasses, default.val = NULL, default.fun = NULL, defau
   else
     dm$default.arg <- NA
 
-  # -- Add filter (match input with names)
-  dm$filter <- dm$name %in% filter
+  # -- Add display (match input with names)
+  dm$display <- dm$name %in% display
 
   # -- Add skip (match input with names)
   dm$skip <- dm$name %in% skip
@@ -104,6 +104,9 @@ data_model <- function(colClasses, default.val = NULL, default.fun = NULL, defau
     dm$sort.desc <- as.logical(sort.desc[match(dm$name, names(sort.desc))])
   else
     dm$sort.desc <- NA
+
+  # -- Add version
+  attr(dm, "version") <- as.character(utils::packageVersion("kitems"))
 
   # -- Return
   dm

@@ -53,7 +53,7 @@ dm_integrity <- function(data.model, items, template = NULL){
     missing_default_fun <- rep(NA, n)
     missing_default_arg <- rep(NA, n)
     missing_skip <- character()
-    missing_filter <- character()
+    missing_display <- character()
 
     # -- Set names
     names(missing_default_val) <- missing_att
@@ -80,7 +80,7 @@ dm_integrity <- function(data.model, items, template = NULL){
 
 
         missing_skip <- template[idx, ][template[idx, ]$skip, 'name']
-        missing_filter <- template[idx, ][template[idx, ]$filter, 'name']
+        missing_display <- template[idx, ][template[idx, ]$display, 'name']
 
       }}
 
@@ -92,7 +92,7 @@ dm_integrity <- function(data.model, items, template = NULL){
                                    default.fun = missing_default_fun,
                                    default.arg = missing_default_arg,
                                    skip = missing_skip,
-                                   filter = missing_filter)
+                                   display = missing_display)
 
   }
 
@@ -107,24 +107,6 @@ dm_integrity <- function(data.model, items, template = NULL){
     data.model <- data.model[!data.model$name %in% extra_att, ]
 
   }
-
-  # -- Check for data model version
-  dm_colClasses <- lapply(data.model, class)
-  missing_col <- DATA_MODEL_COLCLASSES[!names(DATA_MODEL_COLCLASSES) %in% names(dm_colClasses)]
-
-  # -- migrate
-  if(length(missing_col > 0)){
-
-    catl("[Info] Data model migration is needed", debug = 1)
-    integrity <- FALSE
-
-    # -- call migration
-    data.model <- dm_migrate(data.model, names(missing_col))
-
-    # -- check column order
-    if(!identical(names(data.model), names(DATA_MODEL_COLCLASSES))){
-      catl("[Info] Reordering data model columns", level = 2)
-      data.model <- data.model[names(DATA_MODEL_COLCLASSES)]}}
 
 
   # -- Return

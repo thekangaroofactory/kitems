@@ -8,10 +8,10 @@ create_testdata()
 
 
 # --------------------------------------------------------------------------
-# Scenario: date sliderInput remove date attribute
+# Scenario: display data model cols
 # --------------------------------------------------------------------------
 
-test_that("Date sliderInput remove date attribute works", {
+test_that("Server works", {
 
   # -- declare arguments
   params <- list(id = module_id,
@@ -23,20 +23,32 @@ test_that("Date sliderInput remove date attribute works", {
   testServer(kitems, args = params, {
 
     # --------------------------------------------------------------------------
-    # date
+    # display cols
     # --------------------------------------------------------------------------
+    # -- flush reactive values
+    session$flushReact()
 
     # -- update input
-    session$setInputs(date_slider_strategy = "this-year")
-    session$setInputs(date_slider = date_slider_value)
+    session$setInputs('admin-dm_display' = c("id", "total"))
 
-    # -- update input & click
-    session$setInputs('admin-dz_delete_att_name' = "date")
-    session$setInputs('admin-dz_delete_att' = 1)
-    session$setInputs('admin-dz_delete_att_confirm' = 1)
 
-    # -- check
-    expect_null(filter_date())
+
+    # --------------------------------------------------------------------------
+    # Data model
+    # --------------------------------------------------------------------------
+
+    r_data_model <- dm_name(module_id)
+    x <- k_data_model()
+
+    # -- test class
+    expect_s3_class(x, "data.frame")
+
+    # -- test dim
+    expect_equal(dim(x), dim(dm))
+
+    # -- test names
+    expect_equal(x$name[x$display], c("id", "total"))
+
 
   })
 

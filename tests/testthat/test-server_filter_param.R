@@ -1,38 +1,24 @@
 
-
 # --------------------------------------------------------------------------
 # Setup
 # --------------------------------------------------------------------------
 
 create_testdata()
 
-
 # --------------------------------------------------------------------------
 # Scenario: date sliderInput
 # --------------------------------------------------------------------------
 
-test_that("Date sliderInput works", {
+test_that("Filter reactive check works", {
 
   # -- declare arguments
   params <- list(id = module_id,
                  path = testdata_path,
-                 autosave = TRUE)
+                 autosave = TRUE,
+                 filter = 12)
 
   # -- module server call
-  testServer(kitems, args = params, {
-
-    # --------------------------------------------------------------------------
-    # date
-    # --------------------------------------------------------------------------
-
-    # -- update input
-    session$setInputs(date_slider_strategy = "this-year")
-    session$setInputs(date_slider = date_slider_value)
-
-    # -- check
-    expect_equal(dim(filtered_items()), c(2, 6))
-
-  })
+  expect_error(testServer(kitems, args = params), "filter must be a reactive object")
 
 })
 

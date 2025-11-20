@@ -9,7 +9,7 @@
 #' @param default.fun an optional named vector of functions, defining the default functions to be used to generate default values.
 #' @param default.arg an optional named vector of arguments, to pass along with the default function.
 #' @param skip an optional character vector, with the name(s) of the attribute(s) to skip
-#' @param filter an optional character vector, with the name(s) of the attribute(s) to filter
+#' @param display an optional character vector, with the name(s) of the attribute(s) to display
 #' @param sort.rank an optional named numeric vector, to define sort orders
 #' @param sort.desc an optional named logical vector, to define if sort should be descending
 #'
@@ -24,13 +24,14 @@
 #' attribute_create(data.model = mydatamodel, name = "total", type = "numeric", default.val = 0)
 #' attribute_create(data.model = mydatamodel, name = "date", type = "Date", default.fun = "Sys.Date")
 #' attribute_create(data.model = mydatamodel, name = "progress", type = "integer", skip = "progress")
-#' attribute_create(data.model = mydatamodel, name = "internal", type = "logical", filter = "internal")
+#' attribute_create(data.model = mydatamodel, name = "internal",
+#' type = "logical", display = "internal")
 #' }
 
 
 attribute_create <- function(data.model, name, type,
                              default.val = NULL, default.fun = NULL, default.arg = NULL,
-                             filter = NULL, skip = NULL,
+                             display = NULL, skip = NULL,
                              sort.rank = NULL, sort.desc = NULL){
 
   catl("Add attribute to data model =", name)
@@ -40,7 +41,7 @@ attribute_create <- function(data.model, name, type,
                               default.val = default.val,
                               default.fun = default.fun,
                               default.arg = default.arg,
-                              filter = filter,
+                              display = display,
                               skip = skip,
                               sort.rank = sort.rank,
                               sort.desc = sort.desc)

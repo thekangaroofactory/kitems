@@ -46,6 +46,66 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     attribute_callback <- reactiveVal(NULL)
 
 
+    # -- Migration -------------------------------------------------------------
+
+    # -- output
+    output$migration <- renderUI({
+
+      # -- get dm
+      data.model <- k_data_model()
+
+      # -- Check if data.model has a version
+      if(!"version" %in% names(attributes(data.model))){
+
+        message("Data model version is missing")
+        actionButton(inputId = ns("add_version"),
+                     class = "btn-warning",
+                     label = "Add version",
+                     icon = icon("triangle-exclamation"))
+
+      } else
+
+        # -- Check data.model version (vs package version)
+        if(attributes(data.model)$version != DATA_MODEL_VERSION){
+
+          warning("Data model migration is required!")
+          actionButton(inputId = ns("migrate"),
+                       class = "btn-warning",
+                       label = "Migrate",
+                       icon = icon("triangle-exclamation"))}
+
+    })
+
+
+    # -- add data model version
+    observeEvent(input$add_version, {
+
+      # -- get dm
+      data.model <- k_data_model()
+
+      # -- add version attribute
+      message("Version is added to the data model")
+      attr(data.model, "version") <- "0.0.0"
+
+      # -- store
+      k_data_model(data.model)
+
+    })
+
+
+    # -- migrate data model
+    observeEvent(input$migrate, {
+
+      # -- migrate data model
+      data.model <- dm_migrate(k_data_model())
+
+      # -- store
+      if(is.data.frame(data.model))
+        k_data_model(data.model)
+
+    })
+
+
     # -- Admin tables ---------------------------------------------------------
 
     ## -- Data model table ----
@@ -91,8 +151,8 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
                          multiple = TRUE))})
 
 
-    ## -- Filter inputs ----
-    output$dm_filter <- renderUI(
+    ## -- display inputs ----
+    output$dm_att_display <- renderUI(
 
       # -- check NULL data model
       if(is.null(k_data_model()))
@@ -101,7 +161,7 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       else {
 
         # -- init params
-        filter_cols <- dm_filter(k_data_model())
+        filter_cols <- dm_display(k_data_model())
 
         onInitialize <- if(is.null(filter_cols))
           I('function() { this.setValue(""); }')
@@ -109,8 +169,8 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
           NULL
 
         # -- define input
-        selectizeInput(inputId = ns("dm_filter"),
-                       label = "Filter columns",
+        selectizeInput(inputId = ns("dm_display"),
+                       label = "Hide columns",
                        choices = k_data_model()$name,
                        selected = filter_cols,
                        multiple = TRUE,
@@ -159,12 +219,13 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
           # -- actions
           fluidRow(column(width = 12,
                           h3("Actions"),
+                          uiOutput(ns("migration")),
                           actionButton(inputId = ns("create_attribute"), label = "New attribute"),
                           uiOutput(ns("update_attribute")))),
 
           # -- info
           fluidRow(column(width = 12,
-                          p(icon(name = "circle-info"), "Filter can also be changed in the 'view' tab."))),
+                          p(icon(name = "circle-info"), "Display can also be changed in the 'view' tab."))),
 
           # -- danger zone
           fluidRow(column(width = 12,
@@ -206,7 +267,7 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
         # -- display view table
         fluidRow(column(width = 2,
                         p("Actions"),
-                        uiOutput(ns("dm_filter")),
+                        uiOutput(ns("dm_att_display")),
                         p("Column name mask applied by default:",br(),
                           "- replace dot, underscore with space",br(),
                           "- capitalize first letters")),
@@ -278,18 +339,18 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
     })
 
 
-    ## -- Filter attributes ----
-    observeEvent(input$dm_filter, {
+    ## -- Display/hide attributes ----
+    observeEvent(input$dm_display, {
 
       # -- check to avoid useless updates
       dm <- k_data_model()
-      req(!setequal(input$dm_filter,dm[dm$filter, ]$name))
+      req(!setequal(input$dm_display, dm[dm$display, ]$name))
 
-      catl(MODULE, "Set filtered attributes:", input$dm_filter)
+      catl(MODULE, "Set hidden attributes:", input$dm_display)
 
       # -- Check NULL data model
       if(!is.null(dm)){
-        dm <- dm_filter(data.model = dm, set = input$dm_filter)
+        dm <- dm_display(data.model = dm, set = input$dm_display)
         k_data_model(dm)}
 
     }, ignoreInit = TRUE, ignoreNULL = FALSE)
@@ -337,7 +398,7 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       colClasses <- stats::setNames(template$type, template$name)
       default_val <- stats::setNames(template$default.val, template$name)
       default_fun <- stats::setNames(template$default.fun, template$name)
-      filter <- if(template$filter) template$name else NULL
+      display <- if(template$display) template$name else NULL
       skip <- if(template$skip) template$name else NULL
 
       # -- init data model & store
@@ -345,7 +406,7 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       dm <- data_model(colClasses = colClasses,
                        default.val = default_val,
                        default.fun = default_fun,
-                       filter = filter,
+                       display = display,
                        skip = skip)
 
       # -- store

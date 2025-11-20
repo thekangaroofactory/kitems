@@ -2,23 +2,21 @@
 % Please edit documentation in R/dm_migrate.R
 \name{dm_migrate}
 \alias{dm_migrate}
-\title{Migrate data model}
+\title{Migrate Data Model}
 \usage{
-dm_migrate(data.model, name)
+dm_migrate(data.model)
 }
 \arguments{
 \item{data.model}{a data.frame of the data model}
-
-\item{name}{a named list of the missing columns (most probably a subset of the target colClasses)}
 }
 \value{
-the migrated data.model
+the migrated data.model or NA if no migration is required
 }
 \description{
-Migrate data model
+Migrate Data Model
 }
 \examples{
 \dontrun{
-dm_migrate(data.model, name = list(default.arg = "character"))
+dm_migrate(data.model)
 }
 }

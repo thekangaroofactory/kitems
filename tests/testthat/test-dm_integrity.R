@@ -39,7 +39,7 @@ test_that("dm_integrity: missing id", {
   # -- check: id params
   expect_equal(x[x$name == "id", ]$default.fun, TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == "id", ]$default.fun)
   expect_true(x[x$name == "id", ]$skip)
-  expect_true(x[x$name == "id", ]$filter)
+  expect_true(x[x$name == "id", ]$display)
 
 })
 
@@ -54,23 +54,6 @@ test_that("dm_integrity: extra attribute in data model", {
 
   # -- check: x dim
   expect_equal(dim(x), c(dim(dm_extra_att)[1] - 1, length(DATA_MODEL_COLCLASSES)))
-
-})
-
-
-test_that("dm_integrity: migrate data model", {
-
-  # -- alter data model
-  dm$default.arg <- NULL
-
-  # -- function call
-  expect_warning(x <- dm_integrity(data.model = dm, items = items, template = NULL))
-
-  # -- checks:
-  expect_s3_class(x, "data.frame")
-
-  # -- check: x dim
-  expect_equal(dim(x), c(dim(dm)[1], length(DATA_MODEL_COLCLASSES)))
 
 })
 

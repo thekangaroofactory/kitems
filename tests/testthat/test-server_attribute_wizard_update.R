@@ -28,7 +28,7 @@ test_that("[testServer] Update attribute wizard works", {
     session$setInputs('admin-wizard-w_default_choice' = "none")
     session$setInputs('admin-wizard-w_set_sf' = 1)
     session$setInputs('admin-wizard-w_skip' = FALSE)
-    session$setInputs('admin-wizard-w_filter' = FALSE)
+    session$setInputs('admin-wizard-w_display' = FALSE)
     session$setInputs('admin-wizard-w_set_sort' = 1)
     session$setInputs('admin-wizard-w_sort' = FALSE)
     session$setInputs('admin-wizard-w_ask_confirm' = 1)

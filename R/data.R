@@ -1,6 +1,12 @@
 
 
 # --------------------------------------------------------------------------
+# Package internal data
+# This file is created based on description for internal data:
+# https://r-pkgs.org/data.html#sec-data-sysdata
+# --------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------
 # Declare supported types:
 # --------------------------------------------------------------------------
 
@@ -60,13 +66,17 @@ DEFAULT_FUNCTIONS <- list("numeric" = NULL,
 # Declare data model structure:
 # --------------------------------------------------------------------------
 
+# -- version
+# this is the latest package version introducing a data model upgrade
+DATA_MODEL_VERSION <- "0.7.1"
+
 # -- colClasses
 DATA_MODEL_COLCLASSES <- list(name = "character",
                               type = "character",
                               default.val = "character",
                               default.fun = "character",
                               default.arg = "character",
-                              filter = "logical",
+                              display = "logical",
                               skip = "logical",
                               sort.rank = "numeric",
                               sort.desc = "logical")
@@ -77,7 +87,7 @@ DATA_MODEL_DEFAULTS <- list(name = NA,
                             default.val = NA,
                             default.fun = NA,
                             default.arg = NA,
-                            filter = FALSE,
+                            display = FALSE,
                             skip = FALSE,
                             sort.rank = NA,
                             sort.desc = NA)
@@ -115,7 +125,7 @@ TEMPLATE_DATA_MODEL <- data.frame(name = c("date",
                                   default.arg = rep(NA, 16),
 
                                   # -- added #220
-                                  filter = c(FALSE,
+                                  display = c(FALSE,
                                              rep(FALSE, 7),
                                              TRUE, rep(FALSE, 5),
                                              rep(FALSE, 2)),

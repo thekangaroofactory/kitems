@@ -55,16 +55,16 @@ test_that("attribute_update / default.fun + default.arg", {
 })
 
 
-test_that("attribute_update / filter", {
+test_that("attribute_update / display", {
 
   # -- function call
-  x <- attribute_update(data.model = dm, name = "name", filter = TRUE)
+  x <- attribute_update(data.model = dm, name = "name", display = TRUE)
 
   # -- test class
   expect_s3_class(x, "data.frame")
 
   # -- test output value
-  expect_true(x[x$name == "name", ]$filter)
+  expect_true(x[x$name == "name", ]$display)
 
 })
 

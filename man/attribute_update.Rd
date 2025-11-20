@@ -11,7 +11,7 @@ attribute_update(
   default.fun = NULL,
   default.arg = NULL,
   skip = NULL,
-  filter = NULL,
+  display = NULL,
   sort.rank = NULL,
   sort.desc = NULL
 )
@@ -29,7 +29,7 @@ attribute_update(
 
 \item{skip}{a logical to set the skip value}
 
-\item{filter}{a logical to set the filter value}
+\item{display}{a logical to set the display value}
 
 \item{sort.rank}{a numeric, used to define sort rank}
 

@@ -2,13 +2,10 @@
 
 # -- Setup
 create_testdata()
-
+ktools::trace_level(1)
 
 # -- Scenario:
 test_that("Shortcut works", {
-
-  # -- enable trace
-  options("k.debug" = 1)
 
   # -- declare arguments
   params <- list(id = module_id,
@@ -42,3 +39,4 @@ test_that("Shortcut works", {
 
 # -- Cleanup
 clean_all()
+ktools::trace_level(0)
