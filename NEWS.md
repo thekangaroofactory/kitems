@@ -1,10 +1,56 @@
 
+# kitems v0.7.1-beta
+
+## New features
+
+### Communication & workflows
+
+#### Trigger
+
+* Allow trigger to get multiple events in one shot (#507)
+* Implement an event helper function (#506)
+
+#### Filter
+
+* Implement filter reactive parameter (#320)
+* Remove filter_date reactive object (#531)
+* Implement filter layers (#496)
+* Replace filter_date element by filters in module server return value (#533)
+* Improve date_slider widget (#486)
+* date_slider_widget should return a basic ui object (#397)
+* Implement filter helper function (#530)
+
+### Data-model
+
+* Rename filter into display (#392)
+* Improve data model migration procedure (#519)
+* Data model migration should be performed by the admin console (#524)
+* Implement package constant with latest data model migration required (#525)
+
+## Misc
+
+* Upgrade demo app data model to version 0.7.1 (#520)
+
+## Test coverage
+
+* Warning in test-server_attribute_wizard_update (#522)
+* Warning in test-server_date_slider (#521)
+
+## Bug Fix
+
+* Passing reactiveVal to trigger will fire create dialog on start (#502)
+* A create item modal window is displayed upon module server startup (#511)
+* Remove date attribute test fails (#518)
+* Warning displayed in the console when sliderInput value is greater than max (#423)
+* Error when trying to delete an item with trigger (#517)
+
+
 # kitems v0.7.0-beta
 
 The milestone focuses on the communication strategy & item workflows
 This is a major milestone (would be a major version if not beta)
 
-## Communication & workdlows
+## Communication & workflows
 
 * Implement item create workflow (#457)
 * Implement item update workflow (#459)
