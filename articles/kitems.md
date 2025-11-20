@@ -4,7 +4,7 @@ The goal of *kitems* is to provide a framework to manage data frame
 *items* and a set of tools to implement it within R Shiny web
 applications.
 
-## Motivations xxx
+## Motivations
 
 When working on a R Shiny project that performs operations based on
 tabular data, whether it is for data analysis or data visualization, the
