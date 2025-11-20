@@ -1,4 +1,23 @@
 url: https://thekangaroofactory.github.io/kitems/
+
 template:
   bootstrap: 5
   light-switch: true
+
+articles:
+- title: Main verbs
+  navbar: ~
+  contents:
+  - background_item_management
+  - module_server_communication
+
+- title: Features
+  desc: Vignettes aimed at package developers
+  contents:
+  - filtering_items
+  - item_workflows
+
+- title: Additional
+  desc: Vignettes xxx
+  contents:
+  - known_limitations
