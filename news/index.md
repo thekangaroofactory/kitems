@@ -2,6 +2,9 @@
 
 ## kitems v0.7.1-beta
 
+**Important!**  
+This version requires a data model update.
+
 ### New features
 
 #### Communication & workflows
@@ -262,6 +265,9 @@ The milestone focus is on code architecture
 - Test coverage (#299)
 
 ## kitems v0.5.2-beta
+
+**Important!**  
+This version requires a data model update.
 
 The milestone focus is on data-model
 
