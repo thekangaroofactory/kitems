@@ -117,7 +117,7 @@ Data model migration is performed through the admin console. It will detect when
 ::: callout-tip
 It is recommended to run the admin console after a package upgrade to check whether a migration is needed or not.
 
-It is also recommended to check the [Changelog](./news/index.html) page.
+It is also recommended to check the [Changelog](../news/index.html) page.
 :::
 
 ## Behind the scene
