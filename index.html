@@ -94,23 +94,10 @@ Core features may still be modified at this stage, and there is no guaranty that
 <span></span>
 <span><span class="co"># -- run 'demo' app</span></span>
 <span><span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="reference/runExample.html">runExample</a></span><span class="op">(</span><span class="st">"demo"</span><span class="op">)</span></span></code></pre></div>
-<p>Path</p>
-<p>Both data model &amp; item files are stored in a specific folder dedicated to that instance of the module.The folder is named after the id of the module.</p>
-<p>For this reason, unless there is a single instance of the module, it is not recommended to name any of the id with same name as the last folder of the provided path.</p>
-<p>Example:</p>
-<p>path = “./path/to/data” &amp; id = “data” will store files in “./path/to/data”</p>
-<p>path = “./path/to/data” &amp; id = “data_1” will store files in “./path/to/data/data_1”</p>
-<p>It may result in files being stored at different levels.</p>
 </div>
 <div class="section level2">
 <h2 id="data-model">Data model<a class="anchor" aria-label="anchor" href="#data-model"></a>
 </h2>
-<div class="section level3">
-<h3 id="initialization">Initialization<a class="anchor" aria-label="anchor" href="#initialization"></a>
-</h3>
-<p>When starting the module with id and path arguments, it will check if the corresponding data model is available in the destination path.</p>
-<p>If no data model is found, the admin console UI will display a button to create a new data model, as well as a button to import data (it creates the data model from the data).</p>
-</div>
 <div class="section level3">
 <h3 id="checking-integrity">Checking integrity<a class="anchor" aria-label="anchor" href="#checking-integrity"></a>
 </h3>

@@ -36,36 +36,7 @@ kitems::runExample()
 kitems::runExample("demo")
 ```
 
-Path
-
-Both data model & item files are stored in a specific folder dedicated
-to that instance of the module.The folder is named after the id of the
-module.
-
-For this reason, unless there is a single instance of the module, it is
-not recommended to name any of the id with same name as the last folder
-of the provided path.
-
-Example:
-
-path = “./path/to/data” & id = “data” will store files in
-“./path/to/data”
-
-path = “./path/to/data” & id = “data_1” will store files in
-“./path/to/data/data_1”
-
-It may result in files being stored at different levels.
-
 ## Data model
-
-### Initialization
-
-When starting the module with id and path arguments, it will check if
-the corresponding data model is available in the destination path.
-
-If no data model is found, the admin console UI will display a button to
-create a new data model, as well as a button to import data (it creates
-the data model from the data).
 
 ### Checking integrity
 
