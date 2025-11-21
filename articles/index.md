@@ -23,5 +23,6 @@ Detailed articles about specific features
 
 ### Other
 
+- [Environment](https://thekangaroofactory.github.io/kitems/articles/environment.md):
 - [Known
   Limitations](https://thekangaroofactory.github.io/kitems/articles/known_limitations.md):
