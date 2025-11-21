@@ -2,6 +2,7 @@ pandoc: 3.1.11
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
+  admin: admin.html
   background_item_management: background_item_management.html
   core-concepts: core-concepts.html
   filtering_items: filtering_items.html
@@ -10,7 +11,7 @@ articles:
   known_limitations: known_limitations.html
   module_server_communication: module_server_communication.html
   shiny-module: shiny-module.html
-last_built: 2025-11-21T14:03Z
+last_built: 2025-11-21T15:47Z
 urls:
   reference: https://thekangaroofactory.github.io/kitems/reference
   article: https://thekangaroofactory.github.io/kitems/articles
