@@ -2,9 +2,10 @@
 
 ### Main Stuff
 
-- [core-concepts](https://thekangaroofactory.github.io/kitems/articles/core-concepts.md):
+- [Core
+  concepts](https://thekangaroofactory.github.io/kitems/articles/core-concepts.md):
 - [Shiny
-  Module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.md):
+  module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.md):
 
 ### Features
 

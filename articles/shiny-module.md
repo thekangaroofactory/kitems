@@ -1,4 +1,4 @@
-# Shiny Module
+# Shiny module
 
 Although basic features are delivered as standard package functions, the
 main component of the framework is a delivered as a Shiny module.

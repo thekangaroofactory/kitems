@@ -1,4 +1,4 @@
-# core-concepts
+# Core concepts
 
 The framework is based on two main concepts – *data model* and *items*.
 
