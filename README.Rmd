@@ -54,135 +54,31 @@ devtools::install_github("thekangaroofactory/kitems")
 Demo apps are delivered along with the package and can be accessed with:
 
 ```{r demo, eval=FALSE, include=TRUE}
-library(kitems)
+# -- get demo names
+kitems::runExample()
 
-# -- get example demo name
-runExample()
-
+# -- run 'demo' app
+kitems::runExample("demo")
 ```
 
-## Framework Specifications
 
-The framework is based on two main notions - data model and *items*.
 
-### Data Model
+Path
 
-The data model contains the specifications of the *items* to manage.
+Both data model & item files are stored in a specific folder dedicated to that instance of the module.The folder is named after the id of the module.
 
-For each attribute, the data model carries information like its name and
-type, but also a method to determine its default value and logical
-values to indicate if it should be skipped in forms, filtered from the
-table view or used to sort the data.
-
-Supported types are numeric, integer, logical, character, factor, Date
-and POSIXct.
-
-> Note: class POSIXlt is not supported as it stores datetime values into
-> a list\
-> POSIXct should be used to store datetime attributes.
-
-### Items
-
-*Items* are stored in a data frame that fits with the data model rules.\
-That means the data model is implemented in all functions related to
-*item* management.
-
-### Path
-
-Both data model & *item* files are stored in a specific folder dedicated
-to that instance of the module.\
-The folder is named after the `id` of the module.
-
-For this reason, unless there is a single instance of the module, it is
-not recommended to name any of the `id` with same name as the last
-folder of the provided path.
+For this reason, unless there is a single instance of the module, it is not recommended to name any of the id with same name as the last folder of the provided path.
 
 Example:
 
--   `path = "./path/to/data" & id = "data"` will store files in
-    "./path/to/data"
--   `path = "./path/to/data" & id = "data_1"` will store files in
-    "./path/to/data/data_1"
+path = "./path/to/data" & id = "data" will store files in "./path/to/data"
+
+path = "./path/to/data" & id = "data_1" will store files in "./path/to/data/data_1"
 
 It may result in files being stored at different levels.
 
-## Return Value(s)
 
-kitems strongly relies on Shiny's reactivity and delivers reactive 
-objects that are accessible from the module server return value.
 
-The return value has the following structure:
-
-```{r return_value, eval=FALSE}
-list(id,
-     url,
-     items,
-     data_model,
-     filtered_items,
-     selected_items,
-     clicked_column,
-     filter_date)
-
-```
-
-Elements items, data_model, filtered_items, selected_items, clicked_column, 
-filter_date are reactive objects on which listeners (observers) can take
-dependency to trigger actions at a higher level.
-
-> Those reactive objects are defined with the reactive() function inside the module
-> server so that it is not possible to updated them from the outside.
-> Item's management should stick to the module server (using the trigger parameter).
-
-### Data Model
-
-The data model can be accessed **in a reactive context** from the return
-value list, as data_model()
-
-```{r data_model, eval=FALSE}
-library(kitems)
-
-# -- call module
-mydata <- kitems::kitems(id = "my_data_id", path = "path/to/my/data")
-
-# -- get data model
-data_model <- mydata$data_model()
-
-```
-
-### Items
-
-The items for this id can be accessed **in a reactive context** from the
-return value list, as items()
-
-```{r items_name, eval=FALSE}
-# -- call module
-mydata <- kitems::kitems(id = "my_data_id", path = "path/to/my/data")
-
-# -- get items
-items <- mydata$items()
-
-```
-
-### Observe reactive values
-
-The module server return value holds references to the reactives values.\
-Here is an example how to observe the *items*:
-
-```{r observer_items, eval=FALSE}
-# -- Call module server
-mydata <- kitems::kitems(id = "mydata", path = "./data")
-
-# -- Observe items
-observeEvent(mydata$items(), {
-  print("Main application server: items object has just been updated.")
-  # -- do something cool here
-  })
-```
-
-> Note: when observing the `filtered_items` from the main application,
-> it's recommended to add the `ignoreInit = TRUE` parameter (or use
-> `bindEvent` for render\* functions) in order to avoid multiple
-> computations at start-up.
 
 ## Data model
 
@@ -216,41 +112,9 @@ After the form is completed, a check is performed to make sure values
 match the attribute types.\
 If no value is provided for an attribute, the default is applied.
 
-## Views
 
-### Filtered view
 
-A filtered view, based on the filtered_items content is delivered with
-data model masks applied.\
-Filtered attributes will be hidden, and *items* will be ordered as
-defined in the data model.
 
-## Selected Item(s)
-
-The filtered view have row selection enabled.\
-Selecting row(s) in the table will trigger the update of selected_items
-reactive value.\
-Selected *item(s)* will also trigger which buttons are available (delete
-is not visible if no item is selected).
-
-## Inputs
-
-### Date sliderInput
-
-If the data model has an attribute named '*date*', a date sliderInput
-will be created automatically to enable date filtering. If not
-implemented in the main application UI, it will have no impact on the
-filtered *items*.
-
-### Buttons
-
-Standard buttons are delivered to trigger the module server actions.\
-They are implemented as separate UI functions so that it's possible to
-wrap them into a more complex UI function.
-
--   create
--   update (single item selection)
--   delete (supports multi-selection)
 
 ## Administration
 
