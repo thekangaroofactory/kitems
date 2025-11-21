@@ -86,9 +86,8 @@ The magic with passing references is that the value itself is not copied
 or duplicated.[¹](#fn1)
 
 All the reactive objects of the return value are created with the
-[`reactive()`](https://rdrr.io/pkg/shiny/man/reactive.html) function, so
-that it is not possible to update them from outside of the module server
-function.
+`reactive()` function, so that it is not possible to update them from
+outside of the module server function.
 
 It makes the framework more robust against data.model or item
 corruption.

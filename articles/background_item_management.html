@@ -36,8 +36,8 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/background_item_management.html">Background Item Management</a></li>
-    <li><a class="dropdown-item" href="../articles/module_server_communication.html">Communication with the Module Server</a></li>
+<li><a class="dropdown-item" href="../articles/core-concepts.html">core-concepts</a></li>
+    <li><a class="dropdown-item" href="../articles/shiny-module.html">Shiny Module</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul>
@@ -93,7 +93,7 @@
 <p>If more than one link, need to compute unique Id otherwise there will be a warning in the browser console for duplicated id.</p>
 <p>In this case, input value must be treated in the observer to get the id</p>
 <pre><code><span><span class="co"># -- update</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">edit_milestone</span>, <span class="op">{</span></span>
+<span><span class="fu">observeEvent</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">edit_milestone</span>, <span class="op">{</span></span>
 <span></span>
 <span>  <span class="co"># -- get id (pattern = "update_id)</span></span>
 <span>  <span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">edit_milestone</span>, <span class="st">"_"</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
@@ -206,7 +206,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by philippe peret.</p>
+  <p>Developed by <a href="https://www.linkedin.com/in/philippeperet/" class="external-link">Philippe Peret</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

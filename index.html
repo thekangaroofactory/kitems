@@ -36,8 +36,8 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/background_item_management.html">Background Item Management</a></li>
-    <li><a class="dropdown-item" href="articles/module_server_communication.html">Communication with the Module Server</a></li>
+<li><a class="dropdown-item" href="articles/core-concepts.html">core-concepts</a></li>
+    <li><a class="dropdown-item" href="articles/shiny-module.html">Shiny Module</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="articles/index.html">More articles...</a></li>
   </ul>
@@ -88,111 +88,21 @@ Core features may still be modified at this stage, and there is no guaranty that
 </h2>
 <p>Demo apps are delivered along with the package and can be accessed with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thekangaroofactory.github.io/kitems/">kitems</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># -- get demo names</span></span>
+<span><span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="reference/runExample.html">runExample</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># -- get example demo name</span></span>
-<span><span class="fu"><a href="reference/runExample.html">runExample</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="framework-specifications">Framework Specifications<a class="anchor" aria-label="anchor" href="#framework-specifications"></a>
-</h2>
-<p>The framework is based on two main notions - data model and <em>items</em>.</p>
-<div class="section level3">
-<h3 id="data-model">Data Model<a class="anchor" aria-label="anchor" href="#data-model"></a>
-</h3>
-<p>The data model contains the specifications of the <em>items</em> to manage.</p>
-<p>For each attribute, the data model carries information like its name and type, but also a method to determine its default value and logical values to indicate if it should be skipped in forms, filtered from the table view or used to sort the data.</p>
-<p>Supported types are numeric, integer, logical, character, factor, Date and POSIXct.</p>
-<blockquote>
-<p>Note: class POSIXlt is not supported as it stores datetime values into a list<br>
-POSIXct should be used to store datetime attributes.</p>
-</blockquote>
-</div>
-<div class="section level3">
-<h3 id="items">Items<a class="anchor" aria-label="anchor" href="#items"></a>
-</h3>
-<p><em>Items</em> are stored in a data frame that fits with the data model rules.<br>
-That means the data model is implemented in all functions related to <em>item</em> management.</p>
-</div>
-<div class="section level3">
-<h3 id="path">Path<a class="anchor" aria-label="anchor" href="#path"></a>
-</h3>
-<p>Both data model &amp; <em>item</em> files are stored in a specific folder dedicated to that instance of the module.<br>
-The folder is named after the <code>id</code> of the module.</p>
-<p>For this reason, unless there is a single instance of the module, it is not recommended to name any of the <code>id</code> with same name as the last folder of the provided path.</p>
+<span><span class="co"># -- run 'demo' app</span></span>
+<span><span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="reference/runExample.html">runExample</a></span><span class="op">(</span><span class="st">"demo"</span><span class="op">)</span></span></code></pre></div>
+<p>Path</p>
+<p>Both data model &amp; item files are stored in a specific folder dedicated to that instance of the module.The folder is named after the id of the module.</p>
+<p>For this reason, unless there is a single instance of the module, it is not recommended to name any of the id with same name as the last folder of the provided path.</p>
 <p>Example:</p>
-<ul>
-<li>
-<code>path = "./path/to/data" &amp; id = "data"</code> will store files in “./path/to/data”</li>
-<li>
-<code>path = "./path/to/data" &amp; id = "data_1"</code> will store files in “./path/to/data/data_1”</li>
-</ul>
+<p>path = “./path/to/data” &amp; id = “data” will store files in “./path/to/data”</p>
+<p>path = “./path/to/data” &amp; id = “data_1” will store files in “./path/to/data/data_1”</p>
 <p>It may result in files being stored at different levels.</p>
 </div>
-</div>
 <div class="section level2">
-<h2 id="return-values">Return Value(s)<a class="anchor" aria-label="anchor" href="#return-values"></a>
-</h2>
-<p>kitems strongly relies on Shiny’s reactivity and delivers reactive objects that are accessible from the module server return value.</p>
-<p>The return value has the following structure:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">id</span>,</span>
-<span>     <span class="va">url</span>,</span>
-<span>     <span class="va">items</span>,</span>
-<span>     <span class="va">data_model</span>,</span>
-<span>     <span class="va">filtered_items</span>,</span>
-<span>     <span class="va">selected_items</span>,</span>
-<span>     <span class="va">clicked_column</span>,</span>
-<span>     <span class="va">filter_date</span><span class="op">)</span></span></code></pre></div>
-<p>Elements items, data_model, filtered_items, selected_items, clicked_column, filter_date are reactive objects on which listeners (observers) can take dependency to trigger actions at a higher level.</p>
-<blockquote>
-<p>Those reactive objects are defined with the reactive() function inside the module server so that it is not possible to updated them from the outside. Item’s management should stick to the module server (using the trigger parameter).</p>
-</blockquote>
-<div class="section level3">
-<h3 id="data-model-1">Data Model<a class="anchor" aria-label="anchor" href="#data-model-1"></a>
-</h3>
-<p>The data model can be accessed <strong>in a reactive context</strong> from the return value list, as data_model()</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://thekangaroofactory.github.io/kitems/">kitems</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># -- call module</span></span>
-<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># -- get data model</span></span>
-<span><span class="va">data_model</span> <span class="op">&lt;-</span> <span class="va">mydata</span><span class="op">$</span><span class="fu">data_model</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="items-1">Items<a class="anchor" aria-label="anchor" href="#items-1"></a>
-</h3>
-<p>The items for this id can be accessed <strong>in a reactive context</strong> from the return value list, as items()</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># -- call module</span></span>
-<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data_id"</span>, path <span class="op">=</span> <span class="st">"path/to/my/data"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># -- get items</span></span>
-<span><span class="va">items</span> <span class="op">&lt;-</span> <span class="va">mydata</span><span class="op">$</span><span class="fu">items</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="observe-reactive-values">Observe reactive values<a class="anchor" aria-label="anchor" href="#observe-reactive-values"></a>
-</h3>
-<p>The module server return value holds references to the reactives values.<br>
-Here is an example how to observe the <em>items</em>:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># -- Call module server</span></span>
-<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span>, path <span class="op">=</span> <span class="st">"./data"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># -- Observe items</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="fu">items</span><span class="op">(</span><span class="op">)</span>, <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Main application server: items object has just been updated."</span><span class="op">)</span></span>
-<span>  <span class="co"># -- do something cool here</span></span>
-<span>  <span class="op">}</span><span class="op">)</span></span></code></pre></div>
-<blockquote>
-<p>Note: when observing the <code>filtered_items</code> from the main application, it’s recommended to add the <code>ignoreInit = TRUE</code> parameter (or use <code>bindEvent</code> for render* functions) in order to avoid multiple computations at start-up.</p>
-</blockquote>
-</div>
-</div>
-<div class="section level2">
-<h2 id="data-model-2">Data model<a class="anchor" aria-label="anchor" href="#data-model-2"></a>
+<h2 id="data-model">Data model<a class="anchor" aria-label="anchor" href="#data-model"></a>
 </h2>
 <div class="section level3">
 <h3 id="initialization">Initialization<a class="anchor" aria-label="anchor" href="#initialization"></a>
@@ -218,43 +128,6 @@ After the form is completed, a check is performed to make sure values match the 
 If no value is provided for an attribute, the default is applied.</p>
 </div>
 <div class="section level2">
-<h2 id="views">Views<a class="anchor" aria-label="anchor" href="#views"></a>
-</h2>
-<div class="section level3">
-<h3 id="filtered-view">Filtered view<a class="anchor" aria-label="anchor" href="#filtered-view"></a>
-</h3>
-<p>A filtered view, based on the filtered_items content is delivered with data model masks applied.<br>
-Filtered attributes will be hidden, and <em>items</em> will be ordered as defined in the data model.</p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="selected-items">Selected Item(s)<a class="anchor" aria-label="anchor" href="#selected-items"></a>
-</h2>
-<p>The filtered view have row selection enabled.<br>
-Selecting row(s) in the table will trigger the update of selected_items reactive value.<br>
-Selected <em>item(s)</em> will also trigger which buttons are available (delete is not visible if no item is selected).</p>
-</div>
-<div class="section level2">
-<h2 id="inputs">Inputs<a class="anchor" aria-label="anchor" href="#inputs"></a>
-</h2>
-<div class="section level3">
-<h3 id="date-sliderinput">Date sliderInput<a class="anchor" aria-label="anchor" href="#date-sliderinput"></a>
-</h3>
-<p>If the data model has an attribute named ‘<em>date</em>’, a date sliderInput will be created automatically to enable date filtering. If not implemented in the main application UI, it will have no impact on the filtered <em>items</em>.</p>
-</div>
-<div class="section level3">
-<h3 id="buttons">Buttons<a class="anchor" aria-label="anchor" href="#buttons"></a>
-</h3>
-<p>Standard buttons are delivered to trigger the module server actions.<br>
-They are implemented as separate UI functions so that it’s possible to wrap them into a more complex UI function.</p>
-<ul>
-<li>create</li>
-<li>update (single item selection)</li>
-<li>delete (supports multi-selection)</li>
-</ul>
-</div>
-</div>
-<div class="section level2">
 <h2 id="administration">Administration<a class="anchor" aria-label="anchor" href="#administration"></a>
 </h2>
 <div class="section level3">
@@ -276,7 +149,7 @@ For example, create a UI function that implements the different buttons into a s
 <li><p>call the package UI functions directly from the main app using multiple namespaces:<br>
 (as specified in the <code><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">shiny::NS</a></code> function)</p></li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span> <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="reference/admin_widget.html">admin_widget</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"module_id"</span>, <span class="st">"nested_module_id"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -299,7 +172,8 @@ For example, create a UI function that implements the different buttons into a s
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>philippe peret <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0009-0003-9666-7490" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>
+<a href="https://www.linkedin.com/in/philippeperet/" class="external-link">Philippe Peret</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0009-0003-9666-7490" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 </ul>
 </div>
 
@@ -316,7 +190,7 @@ For example, create a UI function that implements the different buttons into a s
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by philippe peret.</p>
+  <p>Developed by <a href="https://www.linkedin.com/in/philippeperet/" class="external-link">Philippe Peret</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

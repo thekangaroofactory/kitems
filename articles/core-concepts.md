@@ -1,0 +1,36 @@
+# core-concepts
+
+The framework is based on two main concepts – *data model* and *items*.
+
+## Data Model
+
+The data model contains the specifications of the *items* to manage.
+
+For each attribute, the data model carries information like its name and
+type, but also a method to determine its default value as well as
+logical values to indicate if it should be skipped in forms, displayed
+in the table view or used to sort the data.
+
+Supported types are numeric, integer, logical, character, Date and
+POSIXct.
+
+> Note: class POSIXlt is not supported as it stores datetime values into
+> a list  
+> POSIXct should be used to store datetime attributes.
+
+## Items
+
+*Items* are stored in a data frame that fits with the data model
+rules.  
+That means the data model is implemented in all functions related to
+*item* management.
+
+## Useful Links
+
+- access to the data model & items: xxx
+
+- initialization & integrity: xxx
+
+- item workflows: xxx
+
+- data model governance & migration: xxx

@@ -36,8 +36,8 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/background_item_management.html">Background Item Management</a></li>
-    <li><a class="dropdown-item" href="../articles/module_server_communication.html">Communication with the Module Server</a></li>
+<li><a class="dropdown-item" href="../articles/core-concepts.html">core-concepts</a></li>
+    <li><a class="dropdown-item" href="../articles/shiny-module.html">Shiny Module</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul>
@@ -121,7 +121,7 @@ The second event will directly create a new item given the provided values.</p>
 </section><section class="level2"><h2 id="considerations">Considerations<a class="anchor" aria-label="anchor" href="#considerations"></a>
 </h2>
 <p>The magic with passing references is that the value itself is not copied or duplicated.<a class="footnote-ref" role="doc-noteref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;See &lt;em&gt;Advanced R&lt;/em&gt; &lt;a href="https://adv-r.hadley.nz/names-values.html#names-values" class="external-link uri"&gt;https://adv-r.hadley.nz/names-values.html#names-values&lt;/a&gt;&lt;/p&gt;'><sup>1</sup></a></p>
-<p>All the reactive objects of the return value are created with the <code><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive()</a></code> function, so that it is not possible to update them from outside of the module server function.</p>
+<p>All the reactive objects of the return value are created with the <code>reactive()</code> function, so that it is not possible to update them from outside of the module server function.</p>
 <p>It makes the framework more robust against data.model or item corruption.</p>
 <p>It also allows to use the exported functions of the package from outside of the module server, which provides more flexible implementation options.</p>
 </section><script id="quarto-html-after-body" type="application/javascript">
@@ -213,7 +213,7 @@ The second event will directly create a new item given the provided values.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by philippe peret.</p>
+  <p>Developed by <a href="https://www.linkedin.com/in/philippeperet/" class="external-link">Philippe Peret</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
