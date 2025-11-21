@@ -6,7 +6,8 @@ only) cover data model tasks.
 ## Admin console
 
 An administration console is delivered as a standalone Shiny app within
-the package.  
+the package.
+
 The main reason is that in most cases, it’s not recommended to have the
 data model(s) management accessible from within the application. Another
 reason is that administration tasks are not expected to be performed on
@@ -23,8 +24,8 @@ kitems::admin(path = "path/to/data")
 ```
 
 The admin console gives access to all the data models belonging to the
-`path` argument in one place.  
-One tab per data model will be displayed inside the UI.
+`path` argument in one place. One tab per data model will be displayed
+inside the UI.
 
 ### Features
 
@@ -124,6 +125,30 @@ data model) through a wizard.
 >
 > See issue [Generate unique ids is slow during data
 > import](https://github.com/thekangaroofactory/kitems/issues/552)
+
+### Migration
+
+As of version
+[v0.7.1](https://github.com/thekangaroofactory/kitems/releases/tag/v0.7.1-beta),
+data models now carry a version that corresponds to the latest data
+model structure update.
+
+Whenever the module server detects either a data model without any
+version or with an obsolete version number, it will raise a warning
+dialog and ask for the app to be closed.
+
+Data model migration is performed through the admin console. It will
+detect when a migration is required and display a button to run the
+migration procedure.
+
+> **Tip**
+>
+> It is recommended to run the admin console after a package upgrade to
+> check whether a migration is needed or not.
+>
+> It is also recommended to check the
+> [Changelog](https://thekangaroofactory.github.io/kitems/articles/news/index.md)
+> page.
 
 ## Behind the scene
 
