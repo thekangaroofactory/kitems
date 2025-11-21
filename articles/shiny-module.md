@@ -13,14 +13,15 @@ But that would still require a lot of work to capture user inputs for
 example to create a new item or manage the data persistence.
 
 For this reason, the core functions are wrapped into a Shiny module that
-handles all the reactive work.  
-The module is meant to be very flexible so that there is no need to code
-anything for basic use cases, but it will let you take back control for
-more complex use cases (see xxx).
+handles all the reactive work. The module is meant to be very flexible
+so that there is no need to code anything for basic use cases, but it
+will let you take back control for more complex use cases (see xxx).
 
 ## Server
 
-The module server is delivered through the kitems() function.
+The module server is delivered through the
+[`kitems()`](https://thekangaroofactory.github.io/kitems/reference/kitems.md)
+function.
 
 ### Arguments
 
@@ -100,9 +101,11 @@ Elements items, data_model, filtered_items, selected_items,
 clicked_column and filters are reactive objects on which listeners
 (observers) can take dependency to trigger actions at a higher level.
 
-> Those reactive objects are defined with the reactive() function inside
-> the module server so that it is not possible to updated them from the
-> outside. Item’s management should stick to the module server.
+> Those reactive objects are defined with the
+> [`shiny::reactive()`](https://rdrr.io/pkg/shiny/man/reactive.html)
+> function inside the module server so that it is not possible to
+> updated them from the outside. Item’s management should stick to the
+> module server.
 
 #### Data Model
 
@@ -170,7 +173,14 @@ data model masks applied.
 Attributes with `display = FALSE` will be hidden, and *items* will be
 ordered as defined in the data model.
 
-It is based on the DT::renderDT() / DT::DTOutput() functions.
+It is based on the
+[`DT::renderDT()`](https://rdrr.io/pkg/DT/man/dataTableOutput.html) /
+[`DT::DTOutput()`](https://rdrr.io/pkg/DT/man/dataTableOutput.html)
+functions.
+
+See
+[`filtered_view_widget()`](https://thekangaroofactory.github.io/kitems/reference/filtered_view_widget.md)
+function.
 
 #### Selected Item(s)
 
@@ -185,9 +195,11 @@ visible.
 #### Date sliderInput
 
 If the data model has an attribute named ‘*date*’ (literally), a date
-sliderInput will be created automatically to enable date filtering. If
-not implemented in the main application UI, it will have no impact on
-the filtered *items*.
+sliderInput will be created automatically to enable date filtering.
+
+See
+[`date_slider_widget()`](https://thekangaroofactory.github.io/kitems/reference/date_slider_widget.md)
+function.
 
 (see xxx)
 
@@ -203,6 +215,13 @@ wrap them into a more complex UI functions.
 
 Create button is always visible, but update and delete buttons are only
 displayed when selected rows fit with above conditions.
+
+See
+[`create_widget()`](https://thekangaroofactory.github.io/kitems/reference/create_widget.md),
+[`update_widget()`](https://thekangaroofactory.github.io/kitems/reference/update_widget.md)
+and
+[`delete_widget()`](https://thekangaroofactory.github.io/kitems/reference/delete_widget.md)
+functions.
 
 ### Dialogs
 
@@ -231,7 +250,7 @@ pattern), it is necessary to follow the namespace tree.
 
 If you don’t want to wrap the widget function output into another UI
 function at the main module level, you need to use the namespace
-shiny::NS() function:
+[`shiny::NS()`](https://rdrr.io/pkg/shiny/man/NS.html) function:
 
 ``` r
 # -- call module (as child of a module with id = "module")
@@ -241,5 +260,5 @@ mydata <- kitems::kitems(id = "mydata", path = "path/to/my/data")
 filtered_view_widget(id = shiny::NS(namespace = "module", id = "mydata"))
 ```
 
-This works with any depth (see ?shiny::NS()) for details about the
+This works with any depth (see `?shiny::NS()`) for details about the
 namespace argument.

@@ -84,14 +84,13 @@
 </h2>
 <p>All the data model and item related functions delivered in the package can be implemented in a Shiny App to manage your data model, create or update items, display a table and so on.</p>
 <p>But that would still require a lot of work to capture user inputs for example to create a new item or manage the data persistence.</p>
-<p>For this reason, the core functions are wrapped into a Shiny module that handles all the reactive work.<br>
-The module is meant to be very flexible so that there is no need to code anything for basic use cases, but it will let you take back control for more complex use cases (see <span style="color: yellow">xxx</span>).</p>
+<p>For this reason, the core functions are wrapped into a Shiny module that handles all the reactive work. The module is meant to be very flexible so that there is no need to code anything for basic use cases, but it will let you take back control for more complex use cases (see <span style="color: yellow">xxx</span>).</p>
 </section><section class="level2"><h2 id="server">Server<a class="anchor" aria-label="anchor" href="#server"></a>
 </h2>
-<p>The module server is delivered through the kitems() function.</p>
+<p>The module server is delivered through the <code><a href="../reference/kitems.html">kitems()</a></code> function.</p>
 <section class="level3"><h3 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a>
 </h3>
-<p>The module server function accepts arguments to tune its behavior but also reactive objects to communicate with the module (based on <a href="https://thekangaroofactory.github.io/communication-between-shiny-modules/" class="external-link">Mastering Communication Between Shiny Modules</a>).</p>
+<p>The module server function accepts arguments to tune its behavior but also reactive objects to communicate with the module (based on <a href="https://thekangaroofactory.github.io/communication-between-shiny-modules/" target="_blank" class="external-link">Mastering Communication Between Shiny Modules</a>).</p>
 <section class="level4"><h4 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
 </h4>
 <section class="level5"><h5 id="autosave">Autosave<a class="anchor" aria-label="anchor" href="#autosave"></a>
@@ -142,7 +141,7 @@ This is the basis of the communication workflow (see <span style="color: yellow"
 </div>
 <p>Elements items, data_model, filtered_items, selected_items, clicked_column and filters are reactive objects on which listeners (observers) can take dependency to trigger actions at a higher level.</p>
 <blockquote>
-<p>Those reactive objects are defined with the reactive() function inside the module server so that it is not possible to updated them from the outside. Item’s management should stick to the module server.</p>
+<p>Those reactive objects are defined with the <code><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">shiny::reactive()</a></code> function inside the module server so that it is not possible to updated them from the outside. Item’s management should stick to the module server.</p>
 </blockquote>
 <section class="level4"><h4 id="data-model">Data Model<a class="anchor" aria-label="anchor" href="#data-model"></a>
 </h4>
@@ -194,7 +193,8 @@ Here is an example how to observe the <em>items</em>:</p>
 </h4>
 <p>A filtered view, based on the filtered_items content is delivered with data model masks applied.<br>
 Attributes with <code>display = FALSE</code> will be hidden, and <em>items</em> will be ordered as defined in the data model.</p>
-<p>It is based on the DT::renderDT() / DT::DTOutput() functions.</p>
+<p>It is based on the <code><a href="https://rdrr.io/pkg/DT/man/dataTableOutput.html" class="external-link">DT::renderDT()</a></code> / <code><a href="https://rdrr.io/pkg/DT/man/dataTableOutput.html" class="external-link">DT::DTOutput()</a></code> functions.</p>
+<p>See <code><a href="../reference/filtered_view_widget.html">filtered_view_widget()</a></code> function.</p>
 </section><section class="level4"><h4 id="selected-items">Selected Item(s)<a class="anchor" aria-label="anchor" href="#selected-items"></a>
 </h4>
 <p>The filtered view has row selection enabled.<br>
@@ -204,7 +204,8 @@ Selected <em>item(s)</em> will also trigger which buttons are available / visibl
 </h3>
 <section class="level4"><h4 id="date-sliderinput">Date sliderInput<a class="anchor" aria-label="anchor" href="#date-sliderinput"></a>
 </h4>
-<p>If the data model has an attribute named ‘<em>date</em>’ (literally), a date sliderInput will be created automatically to enable date filtering. If not implemented in the main application UI, it will have no impact on the filtered <em>items</em>.</p>
+<p>If the data model has an attribute named ‘<em>date</em>’ (literally), a date sliderInput will be created automatically to enable date filtering.</p>
+<p>See <code><a href="../reference/date_slider_widget.html">date_slider_widget()</a></code> function.</p>
 <p>(see <span style="color: yellow">xxx</span>)</p>
 </section><section class="level4"><h4 id="buttons">Buttons<a class="anchor" aria-label="anchor" href="#buttons"></a>
 </h4>
@@ -216,6 +217,7 @@ They are implemented as separate UI functions so that it’s possible to wrap th
 <li>delete (supports multi-selection)</li>
 </ul>
 <p>Create button is always visible, but update and delete buttons are only displayed when selected rows fit with above conditions.</p>
+<p>See <code><a href="../reference/create_widget.html">create_widget()</a></code>, <code><a href="../reference/update_widget.html">update_widget()</a></code> and <code><a href="../reference/delete_widget.html">delete_widget()</a></code> functions.</p>
 </section></section><section class="level3"><h3 id="dialogs">Dialogs<a class="anchor" aria-label="anchor" href="#dialogs"></a>
 </h3>
 <section class="level4"><h4 id="item-forms">Item Forms<a class="anchor" aria-label="anchor" href="#item-forms"></a>
@@ -234,7 +236,7 @@ This form is generated dynamically based on the data model specifications (attri
 <span><span class="fu"><a href="../reference/filtered_view_widget.html">filtered_view_widget</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <p>But when the module server is implemented as a sub-module (nested module pattern), it is necessary to follow the namespace tree.</p>
-<p>If you don’t want to wrap the widget function output into another UI function at the main module level, you need to use the namespace shiny::NS() function:</p>
+<p>If you don’t want to wrap the widget function output into another UI function at the main module level, you need to use the namespace <code><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">shiny::NS()</a></code> function:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># -- call module (as child of a module with id = "module")</span></span>
@@ -243,7 +245,7 @@ This form is generated dynamically based on the data model specifications (attri
 <span><span class="co"># -- call item view</span></span>
 <span><span class="fu"><a href="../reference/filtered_view_widget.html">filtered_view_widget</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span>namespace <span class="op">=</span> <span class="st">"module"</span>, id <span class="op">=</span> <span class="st">"mydata"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>This works with any depth (see ?shiny::NS()) for details about the namespace argument.</p>
+<p>This works with any depth (see <code>?shiny::NS()</code>) for details about the namespace argument.</p>
 </section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
