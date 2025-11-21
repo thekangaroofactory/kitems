@@ -128,31 +128,6 @@ The inputs are initialized with the default values or output of the default func
 After the form is completed, a check is performed to make sure values match the attribute types.<br>
 If no value is provided for an attribute, the default is applied.</p>
 </div>
-<div class="section level2">
-<h2 id="administration">Administration<a class="anchor" aria-label="anchor" href="#administration"></a>
-</h2>
-<div class="section level3">
-<h3 id="admin-console">Admin console<a class="anchor" aria-label="anchor" href="#admin-console"></a>
-</h3>
-<p>An admin console is delivered as a standalone Shiny app.<br>
-The reason is that in most cases, it’s not recommended to have the data model(s) management accessible from within the application.</p>
-<p>The admin console gives access to all the data models belonging to the <code>path</code> argument in one place.</p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="nested-module-considerations">Nested module considerations<a class="anchor" aria-label="anchor" href="#nested-module-considerations"></a>
-</h2>
-<p>In case the kitems module server function is called from inside a module (i.e. as a nested module), then it is not possible to call the UI functions from the main app with the nested module <code>id</code>.</p>
-<p>From there, two options are available:</p>
-<ul>
-<li><p>wrap the package UI functions into functions from the calling module (encapsulation)<br>
-For example, create a UI function that implements the different buttons into a single UI delivered by the calling module.</p></li>
-<li><p>call the package UI functions directly from the main app using multiple namespaces:<br>
-(as specified in the <code><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">shiny::NS</a></code> function)</p></li>
-</ul>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span> <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="reference/admin_widget.html">admin_widget</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"module_id"</span>, <span class="st">"nested_module_id"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-</div>
 </div>
   </main><aside class="col-md-3"><div class="license">
 <h2 data-toc-skip>License</h2>

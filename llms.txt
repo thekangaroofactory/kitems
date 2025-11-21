@@ -88,39 +88,6 @@ After the form is completed, a check is performed to make sure values
 match the attribute types.  
 If no value is provided for an attribute, the default is applied.
 
-## Administration
-
-### Admin console
-
-An admin console is delivered as a standalone Shiny app.  
-The reason is that in most cases, it’s not recommended to have the data
-model(s) management accessible from within the application.
-
-The admin console gives access to all the data models belonging to the
-`path` argument in one place.
-
-## Nested module considerations
-
-In case the kitems module server function is called from inside a module
-(i.e. as a nested module), then it is not possible to call the UI
-functions from the main app with the nested module `id`.
-
-From there, two options are available:
-
-- wrap the package UI functions into functions from the calling module
-  (encapsulation)  
-  For example, create a UI function that implements the different
-  buttons into a single UI delivered by the calling module.
-
-- call the package UI functions directly from the main app using
-  multiple namespaces:  
-  (as specified in the
-  [`shiny::NS`](https://rdrr.io/pkg/shiny/man/NS.html) function)
-
-``` r
- kitems::admin_widget(c("module_id", "nested_module_id"))
-```
-
 # Package index
 
 ## All functions
