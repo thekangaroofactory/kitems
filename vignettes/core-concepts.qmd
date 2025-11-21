@@ -2,6 +2,11 @@
 title: "core-concepts"
 format: html
 editor: visual
+
+vignette: >
+  %\VignetteIndexEntry{Core Concepts}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
 ---
 
 The framework is based on two main concepts – *data model* and *items*.
