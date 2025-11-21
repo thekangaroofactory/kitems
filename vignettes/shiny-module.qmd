@@ -1,0 +1,212 @@
+---
+title: "Shiny Module"
+format: html
+editor: visual
+
+vignette: >
+  %\VignetteIndexEntry{Shiny Module}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+Although basic features are delivered as standard package functions, the main component of the framework is a delivered as a Shiny module.
+
+## Motivation
+
+All the data model and item related functions delivered in the package can be implemented in a Shiny App to manage your data model, create or update items, display a table and so on.
+
+But that would still require a lot of work to capture user inputs for example to create a new item or manage the data persistence.
+
+For this reason, the core functions are wrapped into a Shiny module that handles all the reactive work.\
+The module is meant to be very flexible so that there is no need to code anything for basic use cases, but it will let you take back control for more complex use cases (see [xxx]{style="color: yellow"}).
+
+## Server
+
+The module server is delivered through the kitems() function.
+
+### Arguments
+
+The module server function accepts arguments to tune its behavior but also reactive objects to communicate with the module (based on [Mastering Communication Between Shiny Modules](https://thekangaroofactory.github.io/communication-between-shiny-modules/)).
+
+#### Features
+
+##### Autosave
+
+By default, the module server will take care of the data persistence, meaning any update of the data model or items will trigger a save.
+
+This feature can be turned off:
+
+```{r, eval=FALSE}
+kitems::kitems(id = "mydata", path = "./", autosave = FALSE)
+```
+
+This is useful when using "frozen" data that you don't want to alter or when your app needs to perform extra operations.
+
+##### Admin
+
+The admin tasks are delivered in a dedicated module server (see [xxx]{style="color: yellow"}).
+
+```{r, eval=FALSE}
+kitems::kitems(id = "mydata", path = "./", admin = FALSE)
+```
+
+When the main module is used in an admin context (mostly within the Admin Console), the mode is turned ON.
+
+#### Options
+
+##### Shortcuts
+
+The shortcut option activates the corresponding behavior (see [xxx]{style="color: yellow"}).
+
+```{r, eval=FALSE}
+kitems::kitems(id = "mydata", path = "./", options = list(shortcut = TRUE))
+```
+
+When it is activated, use will get shortcut values (suggestions) next to the inputs in the item form.
+
+#### Reactive parameters
+
+Some of the arguments (only) accept reactive objects as input.\
+This is the basis of the communication workflow (see [xxx]{style="color: yellow"}).
+
+##### Trigger
+
+This is the entry point to pass workflow events to the module server to perform create / update / delete tasks or get the corresponding dialog.
+
+(see [xxx]{style="color: yellow"})
+
+##### Filter
+
+This is the entry point to pass filter events to the module server.
+
+(see [xxx]{style="color: yellow"})
+
+### Return Values
+
+The module server function returns a list of elements that can be accessed from the outside.
+
+```{r, eval=FALSE}
+my_data <- kitems::kitems(id = "mydata", path = "./")
+```
+
+Elements items, data_model, filtered_items, selected_items, clicked_column and filters are reactive objects on which listeners (observers) can take dependency to trigger actions at a higher level.
+
+> Those reactive objects are defined with the reactive() function inside the module server so that it is not possible to updated them from the outside. Item's management should stick to the module server.
+
+#### Data Model
+
+The data model can be accessed **in a reactive context** from the return value list:
+
+```{r, eval=FALSE}
+
+# -- call module
+mydata <- kitems::kitems(id = "mydata", path = "path/to/my/data")
+
+# -- get data model (in a reactive context!)
+data_model <- mydata$data_model()
+
+```
+
+#### Items
+
+The items can be accessed **in a reactive context** from the return value list:
+
+```{r, eval=FALSE}
+# -- call module
+mydata <- kitems::kitems(id = "mydata", path = "path/to/my/data")
+
+# -- get items (in a reactive context!)
+items <- mydata$items()
+
+```
+
+Items contains the full data frame of items, while filtered_items is the output of the filtering layers and selected_items contains the ids of the selected rows in the table.
+
+#### Observe reactive values
+
+The module server return value holds **references** to the reactives values.\
+Here is an example how to observe the *items*:
+
+```{r, eval=FALSE}
+# -- Call module server
+mydata <- kitems::kitems(id = "mydata", path = "./data")
+
+# -- Observe items
+observeEvent(mydata$items(), {
+  print("Main application server: items object has just been updated.")
+  # -- do something cool here
+  })
+```
+
+> [Note: when observing the `filtered_items` from the main application, it's recommended to add the `ignoreInit = TRUE` parameter (or use `bindEvent` for render\* functions) in order to avoid multiple computations at start-up.]{style="color:yellow"}
+
+## UI
+
+To go along and communicate with the module server, a set of UI components is delivered into dedicated functions.
+
+### Views
+
+#### Item view
+
+A filtered view, based on the filtered_items content is delivered with data model masks applied.\
+Attributes with `display = FALSE` will be hidden, and *items* will be ordered as defined in the data model.
+
+It is based on the DT::renderDT() / DT::DTOutput() functions.
+
+#### Selected Item(s)
+
+The filtered view has row selection enabled.\
+Selecting row(s) in the table will trigger the update of selected_items reactive value.\
+Selected *item(s)* will also trigger which buttons are available / visible.
+
+### Inputs
+
+#### Date sliderInput
+
+If the data model has an attribute named '*date*' (literally), a date sliderInput will be created automatically to enable date filtering. If not implemented in the main application UI, it will have no impact on the filtered *items*.
+
+(see [xxx]{style="color: yellow"})
+
+#### Buttons
+
+Standard buttons are delivered to trigger the module server actions.\
+They are implemented as separate UI functions so that it's possible to wrap them into a more complex UI functions.
+
+-   create
+-   update (single item selection)
+-   delete (supports multi-selection)
+
+Create button is always visible, but update and delete buttons are only displayed when selected rows fit with above conditions.
+
+### Dialogs
+
+#### Item Forms
+
+The create & update workflows rely on a form to capture user inputs.\
+This form is generated dynamically based on the data model specifications (attribute type, default values, skip option) so that it saves a lot of time & code.
+
+## Nested module considerations
+
+By default, the UI / widget functions are called with the id that was defined at the module server function level.
+
+```{r, eval=FALSE}
+# -- call module
+mydata <- kitems::kitems(id = "mydata", path = "path/to/my/data")
+
+# -- call item view
+filtered_view_widget(id = "mydata")
+```
+
+But when the module server is implemented as a sub-module (nested module pattern), it is necessary to follow the namespace tree.
+
+If you don't want to wrap the widget function output into another UI function at the main module level, you need to use the namespace shiny::NS() function:
+
+```{r, eval=FALSE}
+# -- call module (as child of a module with id = "module")
+mydata <- kitems::kitems(id = "mydata", path = "path/to/my/data")
+
+# -- call item view
+filtered_view_widget(id = shiny::NS(namespace = "module", id = "mydata"))
+```
+
+This works with any depth (see ?shiny::NS()) for details about the namespace argument.
