@@ -1,5 +1,9 @@
 url: https://thekangaroofactory.github.io/kitems/
 
+authors:
+  Philippe Peret:
+    href: https://www.linkedin.com/in/philippeperet/
+
 template:
   bootstrap: 5
   light-switch: true
