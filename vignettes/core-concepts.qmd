@@ -1,5 +1,5 @@
 ---
-title: "core-concepts"
+title: "Core concepts"
 format: html
 editor: visual
 
