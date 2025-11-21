@@ -147,7 +147,7 @@ migration procedure.
 > check whether a migration is needed or not.
 >
 > It is also recommended to check the
-> [Changelog](https://thekangaroofactory.github.io/kitems/articles/news/index.md)
+> [Changelog](https://thekangaroofactory.github.io/kitems/news/index.md)
 > page.
 
 ## Behind the scene
