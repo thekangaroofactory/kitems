@@ -9,19 +9,20 @@ template:
   light-switch: true
 
 articles:
-- title: Main verbs
+- title: Main Stuff
   navbar: ~
   contents:
-  - background_item_management
-  - module_server_communication
+  - core-concepts
+  - shiny-module
 
 - title: Features
-  desc: Vignettes aimed at package developers
+  desc: Detailed articles about specific features
   contents:
   - filtering_items
   - item_workflows
+  - background_item_management
+  - module_server_communication
 
-- title: Additional
-  desc: Vignettes xxx
+- title: Other
   contents:
   - known_limitations
