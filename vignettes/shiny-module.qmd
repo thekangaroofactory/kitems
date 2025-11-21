@@ -17,16 +17,15 @@ All the data model and item related functions delivered in the package can be im
 
 But that would still require a lot of work to capture user inputs for example to create a new item or manage the data persistence.
 
-For this reason, the core functions are wrapped into a Shiny module that handles all the reactive work.\
-The module is meant to be very flexible so that there is no need to code anything for basic use cases, but it will let you take back control for more complex use cases (see [xxx]{style="color: yellow"}).
+For this reason, the core functions are wrapped into a Shiny module that handles all the reactive work. The module is meant to be very flexible so that there is no need to code anything for basic use cases, but it will let you take back control for more complex use cases (see [xxx]{style="color: yellow"}).
 
 ## Server
 
-The module server is delivered through the kitems() function.
+The module server is delivered through the `kitems()` function.
 
 ### Arguments
 
-The module server function accepts arguments to tune its behavior but also reactive objects to communicate with the module (based on [Mastering Communication Between Shiny Modules](https://thekangaroofactory.github.io/communication-between-shiny-modules/)).
+The module server function accepts arguments to tune its behavior but also reactive objects to communicate with the module (based on [Mastering Communication Between Shiny Modules](https://thekangaroofactory.github.io/communication-between-shiny-modules/){target="_blank"}).
 
 #### Features
 
@@ -91,7 +90,7 @@ my_data <- kitems::kitems(id = "mydata", path = "./")
 
 Elements items, data_model, filtered_items, selected_items, clicked_column and filters are reactive objects on which listeners (observers) can take dependency to trigger actions at a higher level.
 
-> Those reactive objects are defined with the reactive() function inside the module server so that it is not possible to updated them from the outside. Item's management should stick to the module server.
+> Those reactive objects are defined with the `shiny::reactive()` function inside the module server so that it is not possible to updated them from the outside. Item's management should stick to the module server.
 
 #### Data Model
 
@@ -151,7 +150,9 @@ To go along and communicate with the module server, a set of UI components is de
 A filtered view, based on the filtered_items content is delivered with data model masks applied.\
 Attributes with `display = FALSE` will be hidden, and *items* will be ordered as defined in the data model.
 
-It is based on the DT::renderDT() / DT::DTOutput() functions.
+It is based on the `DT::renderDT()` / `DT::DTOutput()` functions.
+
+See `filtered_view_widget()` function.
 
 #### Selected Item(s)
 
@@ -163,7 +164,9 @@ Selected *item(s)* will also trigger which buttons are available / visible.
 
 #### Date sliderInput
 
-If the data model has an attribute named '*date*' (literally), a date sliderInput will be created automatically to enable date filtering. If not implemented in the main application UI, it will have no impact on the filtered *items*.
+If the data model has an attribute named '*date*' (literally), a date sliderInput will be created automatically to enable date filtering.
+
+See `date_slider_widget()` function.
 
 (see [xxx]{style="color: yellow"})
 
@@ -177,6 +180,8 @@ They are implemented as separate UI functions so that it's possible to wrap them
 -   delete (supports multi-selection)
 
 Create button is always visible, but update and delete buttons are only displayed when selected rows fit with above conditions.
+
+See `create_widget()`, `update_widget()` and `delete_widget()` functions.
 
 ### Dialogs
 
@@ -199,7 +204,7 @@ filtered_view_widget(id = "mydata")
 
 But when the module server is implemented as a sub-module (nested module pattern), it is necessary to follow the namespace tree.
 
-If you don't want to wrap the widget function output into another UI function at the main module level, you need to use the namespace shiny::NS() function:
+If you don't want to wrap the widget function output into another UI function at the main module level, you need to use the namespace `shiny::NS()` function:
 
 ```{r, eval=FALSE}
 # -- call module (as child of a module with id = "module")
@@ -209,4 +214,4 @@ mydata <- kitems::kitems(id = "mydata", path = "path/to/my/data")
 filtered_view_widget(id = shiny::NS(namespace = "module", id = "mydata"))
 ```
 
-This works with any depth (see ?shiny::NS()) for details about the namespace argument.
+This works with any depth (see `?shiny::NS()`) for details about the namespace argument.
