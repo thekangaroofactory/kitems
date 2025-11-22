@@ -52,14 +52,3 @@ kitems::runExample()
 # -- run 'demo' app
 kitems::runExample("demo")
 ```
-
-## Item management
-
-The *create* and *update* buttons triggers a dynamic form that is built
-based on the data model.  
-Attributes defined as *skipped* won’t get an input in the form.  
-The inputs are initialized with the default values or output of the
-default functions when defined.  
-After the form is completed, a check is performed to make sure values
-match the attribute types.  
-If no value is provided for an attribute, the default is applied.
