@@ -13,7 +13,7 @@ vignette: >
 
 ::: callout-note
 The communication strategy has been implemented based on this work:\
-[Communication between shiny modules](https://thekangaroofactory.github.io/communication-between-shiny-modules/)
+[Communication between shiny modules](https://thekangaroofactory.github.io/communication-between-shiny-modules/){target="_blank"}
 :::
 
 Basically, communication **to** the module server relies on the server function arguments and UI-Server interactions, while communication **from** the module server (to its parent) relies on the server function return value(s).
