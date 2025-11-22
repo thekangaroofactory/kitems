@@ -85,12 +85,25 @@ attribute is skipped.
 > Make sure the default can be converted to the expected type or an
 > error will be generated.
 
+### Integrity
+
+When the module server is launched, it will perform an integrity check
+to ensure that the *items* and data model are synchronized.
+
+If not, the data model will be updated to match with any missing
+attribute for example (it is used during the import process to extract
+the data model from the loaded data).
+
 ## Items
 
 *Items* are stored in a data frame that fits with the data model
 rules.  
-That means the data model is implemented in all functions related to
-*item* management.
+This means the data model is implemented in all functions related to
+*item* management and any authoring operation on the items should be
+performed within the module server.
+
+When the module server is started, items will be checked to make sure
+attribute types fit with the data model.
 
 ## Useful Links
 
@@ -101,3 +114,5 @@ That means the data model is implemented in all functions related to
 - item workflows: (see xxx)
 
 - data model governance & migration: (see xxx)
+
+- import data: (see xxx)

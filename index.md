@@ -42,18 +42,6 @@ kitems::runExample()
 kitems::runExample("demo")
 ```
 
-## Data model
-
-### Checking integrity
-
-When the module server is launched, it will perform an integrity check
-to ensure that the *items* and data model are synchronized.
-
-If not, the data model will be updated to match with any missing
-attribute for example.  
-Items will be checked as well to make sure attribute types fit with the
-data model.
-
 ## Item management
 
 The *create* and *update* buttons triggers a dynamic form that is built

@@ -130,10 +130,15 @@ You can pass another function as long as it generates unique ids (other wise ite
 <p>Make sure the default can be converted to the expected type or an error will be generated.</p>
 </blockquote>
 </div>
+</section><section class="level3"><h3 id="integrity">Integrity<a class="anchor" aria-label="anchor" href="#integrity"></a>
+</h3>
+<p>When the module server is launched, it will perform an integrity check to ensure that the <em>items</em> and data model are synchronized.</p>
+<p>If not, the data model will be updated to match with any missing attribute for example (it is used during the import process to extract the data model from the loaded data).</p>
 </section></section><section class="level2"><h2 id="items">Items<a class="anchor" aria-label="anchor" href="#items"></a>
 </h2>
 <p><em>Items</em> are stored in a data frame that fits with the data model rules.<br>
-That means the data model is implemented in all functions related to <em>item</em> management.</p>
+This means the data model is implemented in all functions related to <em>item</em> management and any authoring operation on the items should be performed within the module server.</p>
+<p>When the module server is started, items will be checked to make sure attribute types fit with the data model.</p>
 </section><section class="level2"><h2 id="useful-links">Useful Links<a class="anchor" aria-label="anchor" href="#useful-links"></a>
 </h2>
 <ul>
@@ -141,6 +146,7 @@ That means the data model is implemented in all functions related to <em>item</e
 <li><p>initialization &amp; integrity: (see <span style="color: yellow">xxx</span>)</p></li>
 <li><p>item workflows: (see <span style="color: yellow">xxx</span>)</p></li>
 <li><p>data model governance &amp; migration: (see <span style="color: yellow">xxx</span>)</p></li>
+<li><p>import data: (see <span style="color: yellow">xxx</span>)</p></li>
 </ul></section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
