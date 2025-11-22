@@ -160,7 +160,7 @@ observeEvent(input$foo, {
     list(workflow = "create", 
          type = "task", 
          values = list(date = Sys.Date(),
-                       name = "North Curl Rockpool",
+                       name = "North Curl Curl Rockpool",
                        address = "Huston Parade, NSW 2099, Australia",
                        lat = -33.767445014347935,
                        lon = 151.30197071564936)))
