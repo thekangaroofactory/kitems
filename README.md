@@ -28,7 +28,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 > guaranty that exported functions signature will not change before it
 > is converged.
 
-See [roadmap](./articles/specs/roadmap.pdf) to get more information
+See [roadmap](./articles/specs/roadmap.html) to get more information
 about the package convergence.
 
 ## Installation
