@@ -16,9 +16,8 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 > guaranty that exported functions signature will not change before it
 > is converged.
 
-See
-[roadmap](https://thekangaroofactory.github.io/kitems/articles/specs/roadmap.pdf)
-to get more information about the package convergence.
+See [roadmap](https://thekangaroofactory.github.io/kitems/) article to
+get more information about the package convergence.
 
 ## Installation
 
@@ -41,17 +40,6 @@ kitems::runExample()
 # -- run 'demo' app
 kitems::runExample("demo")
 ```
-
-## Item management
-
-The *create* and *update* buttons triggers a dynamic form that is built
-based on the data model.  
-Attributes defined as *skipped* won’t get an input in the form.  
-The inputs are initialized with the default values or output of the
-default functions when defined.  
-After the form is completed, a check is performed to make sure values
-match the attribute types.  
-If no value is provided for an attribute, the default is applied.
 
 # Package index
 
@@ -192,3 +180,5 @@ Detailed articles about specific features
 ### Specifications
 
 These documents cover specifications and roadmap.
+
+- [Roadmap](https://thekangaroofactory.github.io/kitems/articles/roadmap.md):

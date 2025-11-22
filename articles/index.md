@@ -30,3 +30,5 @@ Detailed articles about specific features
 ### Specifications
 
 These documents cover specifications and roadmap.
+
+- [Roadmap](https://thekangaroofactory.github.io/kitems/articles/roadmap.md):
