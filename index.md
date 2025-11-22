@@ -16,7 +16,9 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 > guaranty that exported functions signature will not change before it
 > is converged.
 
-See xxx to get more information about the package roadmap.
+See
+[roadmap](https://thekangaroofactory.github.io/kitems/articles/specs/roadmap.pdf)
+to get more information about the package convergence.
 
 ## Installation
 
