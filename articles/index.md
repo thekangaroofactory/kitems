@@ -26,3 +26,7 @@ Detailed articles about specific features
 - [Environment](https://thekangaroofactory.github.io/kitems/articles/environment.md):
 - [Known
   Limitations](https://thekangaroofactory.github.io/kitems/articles/known_limitations.md):
+
+### Specifications
+
+These documents cover specifications and roadmap.
