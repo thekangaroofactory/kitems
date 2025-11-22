@@ -33,4 +33,4 @@ articles:
   desc: >
     These documents cover specifications and roadmap.
   contents:
-  - specs/roadmap
+  - roadmap
