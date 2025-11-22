@@ -15,20 +15,20 @@ As the package is still under convergence at the time of this version (lifecycle
 
 The motivations behind this package and the whole framework approach came in 2020, but code exploration really started early 2022.
 
-![](images/Slide1.JPG)
+![](images/roadmap_slide_1.jpg)
 
 Once the proof of concept phase was closed, many development were delivered throughout 2024 as more time could be spent on the project.
 
-![](images/Slide2.JPG)
+![](images/roadmap_slide_2.jpg)
 
 ## Where we are
 
 Since 2025, focus has been put on deep work to improve the architecture, communication, workflows & performances. Also long time expected features (like filtering) are delivered.
 
-![](images/Slide3.JPG)
+![](images/roadmap_slide_3.jpg)
 
 ## What's next
 
 As the package gets more strength and has been widely tested in real life use cases, it is now time to deliver all the necessary materials to support its promotion.
 
-![](images/Slide4.JPG)
+![](images/roadmap_slide_4.jpg)
