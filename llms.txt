@@ -1,18 +1,22 @@
 # kitems
 
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-
 The goal of kitems is to provide a framework to manage data frame
 *items* and a set of tools to implement it within R Shiny applications.
 
 It is delivered as a Shiny module.
+
+## Lifecycle
+
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 
 > Note that the package is under development convergence (lifecycle =
 > experimental).  
 > Core features may still be modified at this stage, and there is no
 > guaranty that exported functions signature will not change before it
 > is converged.
+
+See xxx to get more information about the package roadmap.
 
 ## Installation
 
