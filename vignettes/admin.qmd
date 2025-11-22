@@ -31,17 +31,17 @@ The admin console gives access to all the data models belonging to the `path` ar
 
 The data model section displays a table of the attributes:
 
-![](images/clipboard-1743640024.png)
+![](images/admin_data_model.png)
 
 From here, it's possible to create or update (after row selection) an attribute thanks to the attribute wizard:
 
-![](images/clipboard-3492866359.png)
+![](images/admin_att_wizard.png)
 
 It is meant to guide you through the attribute creation and perform checks (in particular at the default value step).
 
 The danger zone toggle allows to access to actions that cannot be undone:
 
-![](images/clipboard-2844162807.png)
+![](images/admin_danger.png)
 
 ::: callout-caution
 -   Deleting an argument will delete the corresponding column in the item table!
@@ -55,7 +55,7 @@ These actions cannot be undone...
 
 The raw table section displays the item table as-is (hidden attributes are displayed).
 
-![](images/clipboard-782477025.png)
+![](images/admin_raw_table.png)
 
 It's possible to reorder the attributes (hence the items columns) from here.
 
@@ -63,7 +63,7 @@ It's possible to reorder the attributes (hence the items columns) from here.
 
 The view section displays the item table as it will be available from the `filtered_view_widget()` function:
 
-![](images/clipboard-960785214.png)
+![](images/admin_view.png)
 
 -   only attributes with `display = TRUE` are visible
 
@@ -75,7 +75,7 @@ You can add or remove attributes to be hidden from this view (or update the attr
 
 When the console detects an empty folder inside the provided path, it will allow you to create a new data model:
 
-![](images/clipboard-1817371698.png)
+![](images/admin_scratch.png)
 
 You can create one from scratch or import existing data (see next section).
 
@@ -85,15 +85,15 @@ It is possible to import existing data (and create the corresponding data model)
 
 -   Select the file to import (.csv)
 
-![](images/clipboard-2488840666.png)
+![](images/admin_import_1.png)
 
 -   Check the items preview
 
-![](images/clipboard-2987859859.png)
+![](images/admin_import_2.png)
 
 -   Check the extracted data model
 
-![](images/clipboard-1311334760.png)
+![](images/admin_import_3.png)
 
 -   Validate import
 
