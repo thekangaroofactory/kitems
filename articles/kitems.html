@@ -84,8 +84,8 @@
 <section class="level2"><h2 id="motivations">Motivations<a class="anchor" aria-label="anchor" href="#motivations"></a>
 </h2>
 <p>When working on a R Shiny project that performs operations based on tabular data, whether it is for data analysis or data visualization, the first milestone in the project is to enable standard data processing.</p>
-<p>Say the purpose of the project is to build a task manager and deliver a dashboard to follow its KPIs.<br>
-It will require to write code to implement the baseline of the project:</p>
+<p>Say the purpose of the project is to build a task manager and deliver a dashboard to follow its KPIs.</p>
+<p>It will require to write code to implement the baseline of the project:</p>
 <ul>
 <li><p>a data frame to manage the tasks objects<br>
 (with columns corresponding to the different attributes of a task: date, description, owner…)</p></li>
@@ -103,6 +103,22 @@ A data frame of fruit objects is needed, a table view, buttons &amp; functions t
 <p>In many cases, it involves to write code that allows to handle the same set of operations but for different objects, which makes this code hard to reuse in another project.</p>
 <p>The purpose of <em>kitems</em> is to wrap those standard operations into a package that is not dependent on the type of <em>item</em> - <em>something that is part of a list or group of things</em> - to manage.</p>
 <p>So that developers can focus on the specific capabilities of their project.</p>
+</section><section class="level2"><h2 id="shiny-module">Shiny module<a class="anchor" aria-label="anchor" href="#shiny-module"></a>
+</h2>
+<p>The package is deeply correlated with the development of Shiny applications, so that it has been quite obvious that the best approach would be to deliver a module.</p>
+<p>To start the module server, just call the <code><a href="../reference/kitems.html">kitems()</a></code> function from the app server:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span>, path <span class="op">=</span> <span class="st">"./"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<p>Components to interact with the module server can be integrated inside the UI of your app.<br>
+For example, the <code><a href="../reference/filtered_view_widget.html">filtered_view_widget()</a></code> function will output the item table:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/filtered_view_widget.html">filtered_view_widget</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<p>See the xxx article to get more information about the module.</p>
+<p><code><a href="../articles/shiny-module.html">vignette("shiny-module")</a></code></p>
 </section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
@@ -186,7 +202,8 @@ A data frame of fruit objects is needed, a table view, buttons &amp; functions t
       }
     }
   });
-  </script></main>
+  </script></main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
