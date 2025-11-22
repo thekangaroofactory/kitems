@@ -12,12 +12,12 @@ Articles to understand the main concepts & components of the package.
 
 ### Specifications & features
 
-Detailed articles about advanced concepts & features
+Detailed articles about advanced concepts & features.
 
 - [Implementations](https://thekangaroofactory.github.io/kitems/articles/implementations.md):
 - [Communication](https://thekangaroofactory.github.io/kitems/articles/communication.md):
 - [Item
-  Workflows](https://thekangaroofactory.github.io/kitems/articles/item_workflows.md):
+  workflows](https://thekangaroofactory.github.io/kitems/articles/workflows.md):
 - [Filtering
   Items](https://thekangaroofactory.github.io/kitems/articles/filtering_items.md):
 

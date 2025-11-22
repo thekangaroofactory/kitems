@@ -8,12 +8,12 @@ articles:
   environment: environment.html
   filtering_items: filtering_items.html
   implementations: implementations.html
-  item_workflows: item_workflows.html
   kitems: kitems.html
   limitations: limitations.html
   roadmap: roadmap.html
   shiny-module: shiny-module.html
-last_built: 2025-11-22T16:02Z
+  workflows: workflows.html
+last_built: 2025-11-22T16:46Z
 urls:
   reference: https://thekangaroofactory.github.io/kitems/reference
   article: https://thekangaroofactory.github.io/kitems/articles
