@@ -211,14 +211,14 @@ events (instead of a single event).
 > [`vignette("limitations")`](https://thekangaroofactory.github.io/kitems/articles/limitations.md)
 > ).
 
-Single event examples:
+Single event:
 
 ``` r
 list(workflow = "create", type = "task", values = list(name = "foo"))
 list(workflow = "update", type = "task", values = list(id = 1234, name = "bar"))
 ```
 
-Multiple events
+Multiple events:
 
 ``` r
 list(
