@@ -102,7 +102,7 @@ A `filter_event()` helper function is delivered to build the filtering events pa
 
 The reason is that passing expressions to the module server function involves some meta-programming notions that may be too complicated for less experimented users.
 
-If you want to know more about meta-programming with R, see [Advanced R](https://adv-r.hadley.nz/metaprogramming.html) by Hadley Wickham.
+If you want to know more about meta-programming with R, see [Advanced R](https://adv-r.hadley.nz/metaprogramming.html){target="_blank"} by Hadley Wickham.
 
 ## Workflow
 
