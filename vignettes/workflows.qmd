@@ -156,6 +156,31 @@ This is particularly true when the autosave is set to `TRUE` as the item table w
 
 ![](images/workflows-delete.jpg)
 
+## Multiple events
+
+Module server function `trigger` argument supports to get a list of events (instead of a single event).
+
+::: callout-note
+The motivation behind this feature is explained in the known limitations (see `vignette("limitations")` ).
+:::
+
+Single event examples:
+
+``` r
+list(workflow = "create", type = "task", values = list(name = "foo"))
+list(workflow = "update", type = "task", values = list(id = 1234, name = "bar"))
+```
+
+Multiple events
+
+``` r
+list(
+  list(workflow = "create", type = "task", values = list(name = "foo")),
+  list(workflow = "update", type = "task", values = list(id = 1234, name = "bar"))))
+```
+
+The module server will take care of the events' orchestration.
+
 ## Useful links
 
 -   default values: core concept / data model / default
