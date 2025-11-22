@@ -27,7 +27,7 @@ articles:
 - title: Other
   contents:
   - environment
-  - known_limitations
+  - limitations
 
 - title: Specifications
   desc: >
