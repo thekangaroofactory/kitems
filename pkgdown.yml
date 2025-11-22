@@ -6,14 +6,14 @@ articles:
   communication: communication.html
   core-concepts: core-concepts.html
   environment: environment.html
-  filtering_items: filtering_items.html
+  filtering: filtering.html
   implementations: implementations.html
   kitems: kitems.html
   limitations: limitations.html
   roadmap: roadmap.html
   shiny-module: shiny-module.html
   workflows: workflows.html
-last_built: 2025-11-22T17:10Z
+last_built: 2025-11-22T18:07Z
 urls:
   reference: https://thekangaroofactory.github.io/kitems/reference
   article: https://thekangaroofactory.github.io/kitems/articles

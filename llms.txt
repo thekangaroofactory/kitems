@@ -169,7 +169,7 @@ Detailed articles about advanced concepts & features.
 - [Item
   workflows](https://thekangaroofactory.github.io/kitems/articles/workflows.md):
 - [Filtering
-  Items](https://thekangaroofactory.github.io/kitems/articles/filtering_items.md):
+  Items](https://thekangaroofactory.github.io/kitems/articles/filtering.md):
 
 ### Other
 
