@@ -164,14 +164,14 @@ Module server function `trigger` argument supports to get a list of events (inst
 The motivation behind this feature is explained in the known limitations (see `vignette("limitations")` ).
 :::
 
-Single event examples:
+Single event:
 
 ``` r
 list(workflow = "create", type = "task", values = list(name = "foo"))
 list(workflow = "update", type = "task", values = list(id = 1234, name = "bar"))
 ```
 
-Multiple events
+Multiple events:
 
 ``` r
 list(
