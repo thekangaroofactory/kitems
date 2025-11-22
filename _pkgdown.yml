@@ -33,4 +33,4 @@ articles:
   desc: >
     These documents cover specifications and roadmap.
   contents:
-  - starts_with("specs/kitems")
+  - starts_with("specs/")
