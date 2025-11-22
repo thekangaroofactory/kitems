@@ -21,7 +21,7 @@ articles:
   desc: Detailed articles about advanced concepts & features
   contents:
   - implementations
-  - module_server_communication
+  - communication
   - item_workflows
   - filtering_items
 
