@@ -3,6 +3,7 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   admin: admin.html
+  communication: communication.html
   core-concepts: core-concepts.html
   environment: environment.html
   filtering_items: filtering_items.html
@@ -10,10 +11,9 @@ articles:
   item_workflows: item_workflows.html
   kitems: kitems.html
   limitations: limitations.html
-  module_server_communication: module_server_communication.html
   roadmap: roadmap.html
   shiny-module: shiny-module.html
-last_built: 2025-11-22T14:38Z
+last_built: 2025-11-22T15:55Z
 urls:
   reference: https://thekangaroofactory.github.io/kitems/reference
   article: https://thekangaroofactory.github.io/kitems/articles

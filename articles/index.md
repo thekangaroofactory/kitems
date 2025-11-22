@@ -15,8 +15,7 @@ Articles to understand the main concepts & components of the package.
 Detailed articles about advanced concepts & features
 
 - [Implementations](https://thekangaroofactory.github.io/kitems/articles/implementations.md):
-- [Communication with the Module
-  Server](https://thekangaroofactory.github.io/kitems/articles/module_server_communication.md):
+- [Communication](https://thekangaroofactory.github.io/kitems/articles/communication.md):
 - [Item
   Workflows](https://thekangaroofactory.github.io/kitems/articles/item_workflows.md):
 - [Filtering
