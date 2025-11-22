@@ -18,11 +18,11 @@ articles:
   - admin
 
 - title: Specifications & features
-  desc: Detailed articles about advanced concepts & features
+  desc: Detailed articles about advanced concepts & features.
   contents:
   - implementations
   - communication
-  - item_workflows
+  - workflows
   - filtering_items
 
 - title: Other
