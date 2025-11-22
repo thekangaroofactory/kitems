@@ -28,3 +28,9 @@ articles:
   contents:
   - environment
   - known_limitations
+
+- title: Specifications
+  desc: >
+    These documents cover specifications and roadmap.
+  contents:
+  - starts_with("specs/kitems")
