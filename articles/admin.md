@@ -33,12 +33,12 @@ inside the UI.
 
 The data model section displays a table of the attributes:
 
-![](images/clipboard-1743640024.png)
+![](images/admin_data_model.png)
 
 From here, it’s possible to create or update (after row selection) an
 attribute thanks to the attribute wizard:
 
-![](images/clipboard-3492866359.png)
+![](images/admin_att_wizard.png)
 
 It is meant to guide you through the attribute creation and perform
 checks (in particular at the default value step).
@@ -46,7 +46,7 @@ checks (in particular at the default value step).
 The danger zone toggle allows to access to actions that cannot be
 undone:
 
-![](images/clipboard-2844162807.png)
+![](images/admin_danger.png)
 
 > **Caution**
 >
@@ -62,7 +62,7 @@ undone:
 The raw table section displays the item table as-is (hidden attributes
 are displayed).
 
-![](images/clipboard-782477025.png)
+![](images/admin_raw_table.png)
 
 It’s possible to reorder the attributes (hence the items columns) from
 here.
@@ -74,7 +74,7 @@ the
 [`filtered_view_widget()`](https://thekangaroofactory.github.io/kitems/reference/filtered_view_widget.md)
 function:
 
-![](images/clipboard-960785214.png)
+![](images/admin_view.png)
 
 - only attributes with `display = TRUE` are visible
 
@@ -89,7 +89,7 @@ the attribute in the data model section).
 When the console detects an empty folder inside the provided path, it
 will allow you to create a new data model:
 
-![](images/clipboard-1817371698.png)
+![](images/admin_scratch.png)
 
 You can create one from scratch or import existing data (see next
 section).
@@ -101,15 +101,15 @@ data model) through a wizard.
 
 - Select the file to import (.csv)
 
-![](images/clipboard-2488840666.png)
+![](images/admin_import_1.png)
 
 - Check the items preview
 
-![](images/clipboard-2987859859.png)
+![](images/admin_import_2.png)
 
 - Check the extracted data model
 
-![](images/clipboard-1311334760.png)
+![](images/admin_import_3.png)
 
 - Validate import
 
