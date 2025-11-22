@@ -1,19 +1,12 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 <!-- You need to render `README.Rmd` to keep `README.md` up-to-date. -->
-
-<!-- use`devtools::build_readme()` for this.  -->
 
 # kitems
 
-<!-- badges: start -->
+<!-- badges: start / keep here because it's not displayed the same way in GitHub & pkgdown -->
 
 [![R-CMD-check](https://github.com/thekangaroofactory/kitems/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/thekangaroofactory/kitems/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/thekangaroofactory/kitems/graph/badge.svg?token=7P74NK51JJ)](https://codecov.io/gh/thekangaroofactory/kitems)
-
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 The goal of kitems is to provide a framework to manage data frame
@@ -21,11 +14,21 @@ The goal of kitems is to provide a framework to manage data frame
 
 It is delivered as a Shiny module.
 
+## Lifecycle
+
+<!-- badge: start -->
+
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badge: end -->
+
 > Note that the package is under development convergence (lifecycle =
 > experimental).  
 > Core features may still be modified at this stage, and there is no
 > guaranty that exported functions signature will not change before it
 > is converged.
+
+See xxx to get more information about the package roadmap.
 
 ## Installation
 
