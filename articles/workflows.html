@@ -184,7 +184,25 @@ Of course if some id(s) are not retrieved, they will be ignored.</p>
 </section><section class="level3"><h3 id="schema-2">Schema<a class="anchor" aria-label="anchor" href="#schema-2"></a>
 </h3>
 <p><img src="images/workflows-delete.jpg"></p>
-</section></section><section class="level2"><h2 id="useful-links">Useful links<a class="anchor" aria-label="anchor" href="#useful-links"></a>
+</section></section><section class="level2"><h2 id="multiple-events">Multiple events<a class="anchor" aria-label="anchor" href="#multiple-events"></a>
+</h2>
+<p>Module server function <code>trigger</code> argument supports to get a list of events (instead of a single event).</p>
+<div>
+<blockquote>
+<p><strong>Note</strong></p>
+<p>The motivation behind this feature is explained in the known limitations (see <code><a href="../articles/limitations.html">vignette("limitations")</a></code> ).</p>
+</blockquote>
+</div>
+<p>Single event examples:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="st">"create"</span>, type <span class="op">=</span> <span class="st">"task"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"foo"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="st">"update"</span>, type <span class="op">=</span> <span class="st">"task"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1234</span>, name <span class="op">=</span> <span class="st">"bar"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Multiple events</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">workflow =</span> <span class="st">"create"</span>, <span class="at">type =</span> <span class="st">"task"</span>, <span class="at">values =</span> <span class="fu">list</span>(<span class="at">name =</span> <span class="st">"foo"</span>)),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">workflow =</span> <span class="st">"update"</span>, <span class="at">type =</span> <span class="st">"task"</span>, <span class="at">values =</span> <span class="fu">list</span>(<span class="at">id =</span> <span class="dv">1234</span>, <span class="at">name =</span> <span class="st">"bar"</span>)))<span class="er">)</span></span></code></pre></div>
+<p>The module server will take care of the events’ orchestration.</p>
+</section><section class="level2"><h2 id="useful-links">Useful links<a class="anchor" aria-label="anchor" href="#useful-links"></a>
 </h2>
 <ul>
 <li><p>default values: core concept / data model / default</p></li>

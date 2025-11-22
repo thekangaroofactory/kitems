@@ -199,6 +199,35 @@ Of course if some id(s) are not retrieved, they will be ignored.
 
 ![](images/workflows-delete.jpg)
 
+## Multiple events
+
+Module server function `trigger` argument supports to get a list of
+events (instead of a single event).
+
+> **Note**
+>
+> The motivation behind this feature is explained in the known
+> limitations (see
+> [`vignette("limitations")`](https://thekangaroofactory.github.io/kitems/articles/limitations.md)
+> ).
+
+Single event examples:
+
+``` r
+list(workflow = "create", type = "task", values = list(name = "foo"))
+list(workflow = "update", type = "task", values = list(id = 1234, name = "bar"))
+```
+
+Multiple events
+
+``` r
+list(
+  list(workflow = "create", type = "task", values = list(name = "foo")),
+  list(workflow = "update", type = "task", values = list(id = 1234, name = "bar"))))
+```
+
+The module server will take care of the events’ orchestration.
+
 ## Useful links
 
 - default values: core concept / data model / default
