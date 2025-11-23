@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Core concepts • kitems</title>
+<title>Shortcuts • kitems</title>
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="core-concepts_files/libs/quarto-html/popper.min.js"></script><script src="core-concepts_files/libs/quarto-html/tippy.umd.min.js"></script><link href="core-concepts_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="core-concepts_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Core concepts">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="shortcuts_files/libs/quarto-html/popper.min.js"></script><script src="shortcuts_files/libs/quarto-html/tippy.umd.min.js"></script><link href="shortcuts_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="shortcuts_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Shortcuts">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -74,7 +74,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Core concepts</h1>
+      <h1>Shortcuts</h1>
 
 
 
@@ -88,76 +88,31 @@
 
 
 
-    <p>The framework is based on two main concepts – <em>data model</em> and <em>items</em>.</p>
-<section class="level2"><h2 id="data-model">Data Model<a class="anchor" aria-label="anchor" href="#data-model"></a>
+    <p>Shortcuts are suggestion values that are displayed next to the inputs in the item form.</p>
+<section class="level2"><h2 id="activation">Activation<a class="anchor" aria-label="anchor" href="#activation"></a>
 </h2>
-<p>The data model contains the specifications of the <a href="#items">Items</a> to manage.</p>
-<p>For each attribute of the item, the data model carries information like its name and type, but also a method to determine its default value as well as logical values to indicate if it should be skipped in forms, displayed in the table view or used to sort the data.</p>
-<p>Supported types are numeric, integer, logical, character, Date and POSIXct.</p>
-<blockquote>
-<p>Note: class POSIXlt is not supported as it stores datetime values into a list<br>
-POSIXct should be used to store datetime attributes.</p>
-</blockquote>
-<section class="level3"><h3 id="structure">Structure<a class="anchor" aria-label="anchor" href="#structure"></a>
-</h3>
-<p>Data models have the following structure:</p>
-<ul>
-<li><p>Name – the name of the attribute</p></li>
-<li><p>Type – the type of the attribute</p></li>
-<li><p>Default value – a default value for the attribute (optional)</p></li>
-<li><p>Default function – a function name (optional, <strong>without ()</strong>)</p></li>
-<li><p>Default arg – a list of arguments to pass to the default function (optional)</p></li>
-<li><p>Display – whether or not the attribute should be displayed in the item table</p></li>
-<li><p>Skip – whether or not the attribute should be skipped in the item form</p></li>
-<li><p>Sort rank – a number to indicate that the attribute is used to sort the data</p></li>
-<li><p>Sort desc – a logical if the attribute should be used in descending order</p></li>
-</ul></section><section class="level3"><h3 id="mandatory-attribute">Mandatory attribute<a class="anchor" aria-label="anchor" href="#mandatory-attribute"></a>
-</h3>
-<p>Data models have a mandatory <em>id</em> attribute.<br>
-This <em>id</em> is the primary key of the item table, here to ensure the uniqueness of the items.</p>
-<p>By default, the attribute gets a value that is generated by the <code><a href="https://rdrr.io/pkg/ktools/man/getTimestamp.html" class="external-link">ktools::getTimestamp()</a></code> function.<br>
-You can pass another function as long as it generates unique ids (otherwise item creation will fail).</p>
-</section><section class="level3"><h3 id="defaults">Defaults<a class="anchor" aria-label="anchor" href="#defaults"></a>
-</h3>
-<p>In many cases, an item may have attributes that do not require an input from the user:</p>
-<ul>
-<li><p>to generate a primary key</p></li>
-<li><p>to set a default state or date</p></li>
-<li><p>because the attribute is internal / hidden</p></li>
-</ul>
-<p>Two mechanisms are available to tune the default behavior:</p>
-<ul>
-<li><p>default value – a value that fits with the attribute type</p></li>
-<li><p>default function – a function to generate the default value (optional arguments can be passed to the function)</p></li>
-</ul>
-<p>Those defaults will be used to initialize the item input form and set the attribute value in case the user lets the input empty or if the attribute is skipped.</p>
+<p>Shortcuts are optional (and turned off by default).</p>
+<p>They are set active at the module server function level, by using the <code>options</code> arguments:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span>, path <span class="op">=</span> <span class="st">"./"</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shortcut <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</section><section class="level2"><h2 id="principle">Principle<a class="anchor" aria-label="anchor" href="#principle"></a>
+</h2>
+<p>The suggested values are computed based on the attribute type and the values in the items table, so that it’s easier to reuse the most common values to set an attribute value.</p>
+<p>Here is an example:</p>
+<p><img src="images/item_shortcuts.png"></p>
 <div>
 <blockquote>
-<p><strong>Important</strong></p>
-<p>Whenever an item is created or updated, the input values from the item form will be coerced to the type defined in the data model.</p>
-<p>Make sure the default can be converted to the expected type or an error will be generated.</p>
+<p><strong>Note</strong></p>
+<p>For now, there is no way to set / unset the shortcut suggestion at the attribute level.<br>
+It is on or off for all the data model attributes.</p>
+<p>Strategies to compute those values are quite basic at the moment.</p>
 </blockquote>
 </div>
-</section><section class="level3"><h3 id="integrity">Integrity<a class="anchor" aria-label="anchor" href="#integrity"></a>
-</h3>
-<p>When the module server is launched, it will perform an integrity check to ensure that the <em>items</em> and the data model are synchronized.</p>
-<p>If not, the data model will be updated to match with any missing attribute for example (it is used during the import process to extract the data model from the loaded data).</p>
-</section></section><section class="level2"><h2 id="items">Items<a class="anchor" aria-label="anchor" href="#items"></a>
-</h2>
-<p>An <em>item</em> is defined as – <em>something that is part of a list or group of things.</em></p>
-<p>That is basically the purpose of the package / framework. An item is by definition anything that belongs to a group of things <strong>defined</strong> by their data model. This means all the item related functions inside this package <strong>dynamically</strong> work on the items in the context of their data model.</p>
-<p>As an example, the <code><a href="../reference/item_form.html">item_form()</a></code> function dynamically generates an input form based on the attribute list contained in the data model (the type of input, the default value of the input or if no input should be created for the attribute).</p>
-<p><em>Items</em> are stored (as a data.frame) in a reactive object that fits with the data model rules.<br>
-This means any authoring operation on the items should be performed <strong>within</strong> the module server.</p>
-<p>When the module server is started, items will be checked to make sure attribute types fit with the data model.</p>
-</section><section class="level2"><h2 id="useful-links">Useful Links<a class="anchor" aria-label="anchor" href="#useful-links"></a>
+</section><section class="level2"><h2 id="useful-links">Useful links<a class="anchor" aria-label="anchor" href="#useful-links"></a>
 </h2>
 <ul>
-<li><p>Initialization – see <a href="./admin.html#initialization">admin</a></p></li>
-<li><p>Data model migration – see <a href="./admin.html#migration">admin</a></p></li>
-<li><p>Data import – see <a href="./admin.html#data-import">admin</a></p></li>
-<li><p>Item workflows – see <a href="./workflows.html">workflows</a></p></li>
-<li><p>Access the data model &amp; items – see <a href="./shiny-module.html#return-values">shiny-module</a></p></li>
+<li>Module server options – <a href="./shiny-module.html#shortcuts">shiny module</a>
+</li>
 </ul></section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);

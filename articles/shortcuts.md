@@ -1,0 +1,38 @@
+# Shortcuts
+
+Shortcuts are suggestion values that are displayed next to the inputs in
+the item form.
+
+## Activation
+
+Shortcuts are optional (and turned off by default).
+
+They are set active at the module server function level, by using the
+`options` arguments:
+
+``` r
+kitems::kitems(id = "mydata", path = "./", options = list(shortcut = TRUE))
+```
+
+## Principle
+
+The suggested values are computed based on the attribute type and the
+values in the items table, so that it’s easier to reuse the most common
+values to set an attribute value.
+
+Here is an example:
+
+![](images/item_shortcuts.png)
+
+> **Note**
+>
+> For now, there is no way to set / unset the shortcut suggestion at the
+> attribute level.  
+> It is on or off for all the data model attributes.
+>
+> Strategies to compute those values are quite basic at the moment.
+
+## Useful links
+
+- Module server options – [shiny
+  module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.html#shortcuts)

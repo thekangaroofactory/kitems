@@ -21,6 +21,7 @@ Detailed articles about advanced concepts & features.
 - [Filtering
   Items](https://thekangaroofactory.github.io/kitems/articles/filtering.md):
 - [Ordering](https://thekangaroofactory.github.io/kitems/articles/ordering.md):
+- [Shortcuts](https://thekangaroofactory.github.io/kitems/articles/shortcuts.md):
 
 ### Other
 
