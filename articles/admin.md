@@ -11,9 +11,9 @@ the package.
 The main reason is that in most cases, it’s not recommended to have the
 data model(s) management accessible from within the application. Another
 reason is that administration tasks are not expected to be performed on
-regular bases. Hence there is no need to have the main module server and
-the session overloaded with reactives & observers that won’t be called
-in the daily scenarios.
+regular basis. Therefore there is no need to have the main module server
+and the session overloaded with reactives & observers that won’t be
+called in the daily scenarios.
 
 To run the app, use the
 [`admin()`](https://thekangaroofactory.github.io/kitems/reference/admin.md)
@@ -43,8 +43,7 @@ attribute thanks to the attribute wizard:
 It is meant to guide you through the attribute creation and perform
 checks (in particular at the default value step).
 
-The danger zone toggle allows to access to actions that cannot be
-undone:
+The danger zone toggle allows access to actions that cannot be undone:
 
 ![](images/admin_danger.png)
 
@@ -64,8 +63,7 @@ are displayed).
 
 ![](images/admin_raw_table.png)
 
-It’s possible to reorder the attributes (hence the items columns) from
-here.
+It’s possible to reorder the attributes (the items columns) from here.
 
 #### View
 
@@ -120,7 +118,7 @@ data model) through a wizard.
 > the data. This needs to be done manually in a second step.
 >
 > There is a known bug / problem after the select file step:  
-> In case the data does not contain an “id” column, unique ids will be
+> In case the data does not contain an `id` column, unique ids will be
 > generated but performances are poor when data contains many rows.
 >
 > See issue [Generate unique ids is slow during data
@@ -130,8 +128,8 @@ data model) through a wizard.
 
 As of version
 [v0.7.1](https://github.com/thekangaroofactory/kitems/releases/tag/v0.7.1-beta),
-data models now carry a version that corresponds to the latest data
-model structure update.
+data models now carry a version number that corresponds to the latest
+data model structure upgrade.
 
 Whenever the module server detects either a data model without any
 version or with an obsolete version number, it will raise a warning
@@ -147,7 +145,7 @@ migration procedure.
 > check whether a migration is needed or not.
 >
 > It is also recommended to check the
-> [Changelog](https://thekangaroofactory.github.io/kitems/news/index.md)
+> [changelog](https://thekangaroofactory.github.io/kitems/news/index.md)
 > page.
 
 ## Behind the scene
@@ -158,7 +156,7 @@ possible to access the admin components from exported functions.
 > **Caution**
 >
 > That being said, it is not recommended to wrap the admin console
-> inside your app as it should be kept out of the users.
+> inside your app as it should be kept away from the users.
 
 ### Admin module server
 
@@ -174,5 +172,7 @@ function.
 
 ## Useful Links
 
-- admin parameter: [Shiny
+- Admin argument – [shiny
   module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.html#admin)
+- Data model – [core
+  concepts](https://thekangaroofactory.github.io/kitems/articles/core-concepts.html#data-model)
