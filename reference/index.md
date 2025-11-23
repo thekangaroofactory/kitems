@@ -3,7 +3,7 @@
 ## All functions
 
 - [`admin()`](https://thekangaroofactory.github.io/kitems/reference/admin.md)
-  : Kitems Admin Console
+  : Admin Console
 - [`admin_widget()`](https://thekangaroofactory.github.io/kitems/reference/admin_widget.md)
   : Admin Widget
 - [`attribute_create()`](https://thekangaroofactory.github.io/kitems/reference/attribute_create.md)

@@ -1,4 +1,4 @@
-# Kitems Admin Console
+# Admin Console
 
 Launches the administration console (Shiny App)
 
@@ -12,14 +12,14 @@ admin(path = getwd())
 
 - path:
 
-  the path where to find item folder(s)
+  the path where to find the item folder(s)
 
 ## Details
 
-The app will scan the path to detect sub folders that are expected to be
-item folders named after the id used to create them.
+The app will scan the `path` to detect sub folders that are expected to
+be item folders named after the id used to create them.
 
-It will build the ui from this list.
+It will build the ui tabs from this list.
 
 ## Examples
 
