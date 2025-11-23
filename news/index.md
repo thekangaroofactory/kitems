@@ -2,8 +2,8 @@
 
 ## kitems v0.7.1-beta
 
-**Important!**  
-This version requires a data model update.
+> **Important!**  
+> This version requires a data model upgrade.
 
 ### New features
 
@@ -266,8 +266,8 @@ The milestone focus is on code architecture
 
 ## kitems v0.5.2-beta
 
-**Important!**  
-This version requires a data model update.
+> **Important!**  
+> This version requires a data model upgrade.
 
 The milestone focus is on data-model
 
