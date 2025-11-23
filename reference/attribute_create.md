@@ -97,7 +97,7 @@ attribute_create(name = "progress", type = "integer", skip = "progress")
 attribute_create(name = "internal", type = "logical", display = "internal")
 
 # -- create multiple attributes
-
+attribute_create(name = c("foo", "bar"), type = c("character", "numeric"))
 
 } # }
 ```
