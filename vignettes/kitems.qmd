@@ -69,4 +69,4 @@ Because the package is not 'just' a set of functions, it has some concepts that 
 
 As it may be confusing where to start, the order of the articles is a proposal of a learning path to guide you through the documentation.
 
-See articles' [index](./articles/index.html) to follow this path.
+See articles' [index](./index.html) to follow this path.
