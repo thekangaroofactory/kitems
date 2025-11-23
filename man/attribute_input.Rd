@@ -2,7 +2,7 @@
 % Please edit documentation in R/attribute_input.R
 \name{attribute_input}
 \alias{attribute_input}
-\title{Build Attribute Input}
+\title{Attribute Input}
 \usage{
 attribute_input(colClass, value = NULL, ns)
 }
@@ -12,16 +12,20 @@ and \code{colClass} is the type (class) of the attribute.}
 
 \item{value}{the value used to initialize the input}
 
-\item{ns}{the module namespace function reference}
+\item{ns}{the namespace function reference}
 }
 \value{
-an input based on colClass
+An input that can be added to the UI definition.
 }
 \description{
-Build Attribute Input
+Build input for an attribute
 }
 \examples{
 \dontrun{
+# -- namespace
+ns <- shiny::NS("my_data")
+
+# -- create inputs
 attribute_input(colClass = c(name = "character"), ns)
 attribute_input(colClass = c(total = "numeric"), value = 10, ns)
 }

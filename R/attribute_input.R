@@ -1,22 +1,28 @@
 
 
-#' Build Attribute Input
+#' Attribute Input
+#'
+#' @description
+#' Build input for an attribute
 #'
 #' @param colClass a length-one named vector. \code{names(colClass)} is the name of the attribute,
 #' and \code{colClass} is the type (class) of the attribute.
 #' @param value the value used to initialize the input
-#' @param ns the module namespace function reference
+#' @param ns the namespace function reference
 #'
-#' @return an input based on colClass
+#' @return An input that can be added to the UI definition.
 #' @export
 #'
 #' @examples
 #' \dontrun{
+#' # -- namespace
+#' ns <- shiny::NS("my_data")
+#'
+#' # -- create inputs
 #' attribute_input(colClass = c(name = "character"), ns)
 #' attribute_input(colClass = c(total = "numeric"), value = 10, ns)
 #' }
 
-# -- function
 attribute_input <- function(colClass, value = NULL, ns){
 
   # -- check colClass
