@@ -215,7 +215,7 @@ See:
   function to implement it in the UI
 
 - [filtering](https://thekangaroofactory.github.io/kitems/articles/filtering.html#date-slider)
-  article to understand about filtering layers
+  article
 
 #### Buttons
 
