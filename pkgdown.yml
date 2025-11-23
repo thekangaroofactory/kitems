@@ -10,10 +10,11 @@ articles:
   implementations: implementations.html
   kitems: kitems.html
   limitations: limitations.html
+  ordering: ordering.html
   roadmap: roadmap.html
   shiny-module: shiny-module.html
   workflows: workflows.html
-last_built: 2025-11-23T14:33Z
+last_built: 2025-11-23T14:55Z
 urls:
   reference: https://thekangaroofactory.github.io/kitems/reference
   article: https://thekangaroofactory.github.io/kitems/articles

@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Roadmap • kitems</title>
+<title>Ordering • kitems</title>
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="roadmap_files/libs/quarto-html/popper.min.js"></script><script src="roadmap_files/libs/quarto-html/tippy.umd.min.js"></script><link href="roadmap_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="roadmap_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Roadmap">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="ordering_files/libs/quarto-html/popper.min.js"></script><script src="ordering_files/libs/quarto-html/tippy.umd.min.js"></script><link href="ordering_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="ordering_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Ordering">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -73,7 +73,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Roadmap</h1>
+      <h1>Ordering</h1>
 
 
 
@@ -87,22 +87,31 @@
 
 
 
-    <p>As the package is still under convergence at the time of this version (lifecycle = experimental), the roadmap here shows the progress that were made as well as the next step.</p>
-<section class="level2"><h2 id="history">History<a class="anchor" aria-label="anchor" href="#history"></a>
+    <p>Basic ordering capabilities are available in the package module server.</p>
+<p>They rely on the data model attributes:</p>
+<ul>
+<li><p><code>sort_rank</code></p></li>
+<li><p><code>sort_desc</code></p></li>
+</ul>
+<p>Defining the ordering of the items is done from the admin console (in the data model section):</p>
+<p><img src="images/admin_ordering.png"></p>
+<p>It is done with the attribute wizard (when creating or updating an attribute).</p>
+<ul>
+<li><p><code>sort_rank</code> defines in which order the attributes are used to sort the items</p></li>
+<li><p><code>sort_desc</code> is whether an attribute should be used in descending order</p></li>
+</ul>
+<div>
+<blockquote>
+<p><strong>Note</strong></p>
+<p>The ordering is applied at the main filtering layer level.</p>
+</blockquote>
+</div>
+<section class="level2"><h2 id="useful-links">Useful links<a class="anchor" aria-label="anchor" href="#useful-links"></a>
 </h2>
-<p>The motivations behind this package and the whole framework approach came in 2020, but code exploration really started early 2022.</p>
-<p><img src="images/roadmap_slide_1.jpg"></p>
-<p>Once the proof of concept phase was closed, many development were delivered throughout 2024 as more time could be spent on the project.</p>
-<p><img src="images/roadmap_slide_2.jpg"></p>
-</section><section class="level2"><h2 id="where-we-are">Where we are<a class="anchor" aria-label="anchor" href="#where-we-are"></a>
-</h2>
-<p>Since 2025, focus has been put on deep work to improve the architecture, communication, workflows &amp; performances. Also long time expected features (like filtering) are delivered.</p>
-<p><img src="images/roadmap_slide_3.jpg"></p>
-</section><section class="level2"><h2 id="whats-next">What’s next<a class="anchor" aria-label="anchor" href="#whats-next"></a>
-</h2>
-<p>As the package gets more strength and has been widely tested in real life use cases, it is now time to deliver all the necessary materials to support its promotion.</p>
-<p><img src="images/roadmap_slide_4.jpg"></p>
-</section><script id="quarto-html-after-body" type="application/javascript">
+<ul>
+<li><p>Data model structure – <a href="./core-concepts.html#structure">core concepts</a></p></li>
+<li><p>Admin console – <a href="./admin.html#data-model">admin</a></p></li>
+</ul></section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
@@ -185,8 +194,7 @@
       }
     }
   });
-  </script></main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
-    </nav></aside>
+  </script></main>
 </div>
 
 

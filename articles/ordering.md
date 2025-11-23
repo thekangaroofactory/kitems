@@ -1,0 +1,34 @@
+# Ordering
+
+Basic ordering capabilities are available in the package module server.
+
+They rely on the data model attributes:
+
+- `sort_rank`
+
+- `sort_desc`
+
+Defining the ordering of the items is done from the admin console (in
+the data model section):
+
+![](images/admin_ordering.png)
+
+It is done with the attribute wizard (when creating or updating an
+attribute).
+
+- `sort_rank` defines in which order the attributes are used to sort the
+  items
+
+- `sort_desc` is whether an attribute should be used in descending order
+
+> **Note**
+>
+> The ordering is applied at the main filtering layer level.
+
+## Useful links
+
+- Data model structure – [core
+  concepts](https://thekangaroofactory.github.io/kitems/articles/core-concepts.html#structure)
+
+- Admin console –
+  [admin](https://thekangaroofactory.github.io/kitems/articles/admin.html#data-model)
