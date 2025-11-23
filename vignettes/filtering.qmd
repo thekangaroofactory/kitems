@@ -16,22 +16,24 @@ Kitems provides features to enable automatic data filtering at the module server
 Filtering mechanism in the module server relies on `dplyr::filter()` function.
 
 ``` r
-starwars %>%
+data %>%
   filter(name == "foo", 
          value == 12)
 ```
 
--   condition(s) are passed as expression(s) to the module server function using the `filter` reactive argument
+It is based on the following principles:
 
--   two filtering layers are implemented
+-   Condition(s) are passed as expression(s) to the module server function using the `filter` reactive argument
 
--   date slider widget is provided with several strategies
+-   Two filtering layers are implemented
 
--   helper function is available to build filtering events
+-   Date slider widget is provided with several strategies
+
+-   A helper function is available to build filtering events
 
 ## Filtering layers
 
-The filtering mechanism relies on the notion of filtering layers.
+Data filtering in the module server relies on the notion of filtering *layers*.
 
 ### Pre-filtering layer
 
@@ -57,7 +59,7 @@ This way, filters applied at the pre-filtering layer won’t need to be computed
 ## Filtered view
 
 The *item* table widget is by default a filtered view of the *items*.\
-It displays the content of the `filtered_items` element of the module server function return value.
+It displays the content of the `filtered_items` element of the module server function return value (with mask applied).
 
 It is delivered through the `filtered_view_widget()` function.
 
@@ -130,21 +132,23 @@ It can be done by implementing one of the following options in the *renderPlot* 
 
 The filtering capabilities are delivered to provide more flexibility to manage the items and serve them throughout the app.
 
-That being said, there is a choice to make for when it's better to do filtering at the module server level or at the main app level.\
+That being said, there is a choice to be made for when it's better to do filtering at the module level or at the main app level.\
 Because the module server return value is made of reactive objects, any update will affect the whole app wherever the return value is passed and code is taking dependency on its elements.
 
--   do filter at the module server level when the output data is meant to be used throughout the app
+Do filter:
 
--   do filter at the main app level when it is meant to be used at a local level (for example prepare data for a specific plot)
+-   at the module level when the output data is meant to be used throughout the app
+
+-   at the main app level when it is meant to be used at a local level (for example prepare data for a specific plot)
 
 ## Useful links
 
--   communication
+-   Module server arguments & return value(s) – [shiny-module](./shiny-module.htmll#server)
 
--   shiny module
+-   Read about communication principles – [communication](./communication.html){data-heading="Useful links"}
 
--   kitems()
+-   The module server function – `kitems()`
 
--   dplyr::filter
+-   Helper function – `filter_event()`
 
--   helper function
+-   Behind the scene – `dplyr::filter()`
