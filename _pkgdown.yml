@@ -19,6 +19,7 @@ articles:
 
 - title: Specifications & features
   desc: Detailed articles about advanced concepts & features.
+  navbar: ~
   contents:
   - implementations
   - communication
@@ -26,12 +27,12 @@ articles:
   - filtering
 
 - title: Other
+  desc: Miscellaneous topics
   contents:
   - environment
   - limitations
 
 - title: Specifications
-  desc: >
-    These documents cover specifications and roadmap.
+  desc: These documents cover specifications and roadmap.
   contents:
   - roadmap
