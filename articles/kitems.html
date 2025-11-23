@@ -85,23 +85,25 @@
 </h2>
 <p>When working on a R Shiny project that performs operations based on tabular data, whether it is for data analysis or data visualization, the first milestone in the project is to enable standard data processing.</p>
 <p>Say the purpose of the project is to build a task manager and deliver a dashboard to follow its KPIs.</p>
-<p>It will require to write code to implement the baseline of the project:</p>
+<p>Before being able to work on the dashboard itself, it will require to write code to implement the baseline of the project:</p>
 <ul>
-<li><p>a data frame to manage the tasks objects<br>
-(with columns corresponding to the different attributes of a task: date, description, owner…)</p></li>
-<li><p>a data table view to display the tasks to the users</p></li>
-<li><p>inputs to allow data filtering<br>
-(maybe focus on the tasks of the current year)</p></li>
-<li><p>buttons to perform standard operations like create a new task, update or delete existing ones</p></li>
-<li><p>forms to allow user to create or update a task</p></li>
-<li><p>functions to manage those operations in the back end<br>
-(check inputs before creating a new task, ask for a confirmation before another is deleted)</p></li>
-<li><p>functions to ensure data persistence, quality and management in general</p></li>
+<li><p>a data frame to manage the tasks attributes (date, description, owner…)</p></li>
+<li><p>a table view to display the tasks to the users</p></li>
+<li><p>inputs to allow data filtering (ex. current year)</p></li>
+<li><p>buttons to perform standard operations like create a task, update or delete existing ones</p></li>
+<li><p>forms to capture user inputs</p></li>
+<li><p>functions to manage those operations in the background</p></li>
+<li><p>functions to ensure data persistence, quality and management / governance</p></li>
 </ul>
-<p>Now say that another project is to build a dashboard to follow fruit stock.<br>
+<p>Now say that another project is to build a dashboard to follow fruit stocks.<br>
 A data frame of fruit objects is needed, a table view, buttons &amp; functions to perform standard operations…</p>
-<p>In many cases, it involves to write code that allows to handle the same set of operations but for different objects, which makes this code hard to reuse in another project.</p>
-<p>The purpose of <em>kitems</em> is to wrap those standard operations into a package that is not dependent on the type of <em>item</em> - <em>something that is part of a list or group of things</em> - to manage.</p>
+<p>In many cases, it involves to write code that allows to handle the <strong>same</strong> set of operations but for different objects, which makes this code hard to reuse in another project.</p>
+<div>
+<blockquote>
+<p><strong>Note</strong></p>
+<p>The purpose of <em>kitems</em> is to wrap those standard operations into a package that is not dependent on the type of <em>item</em> – <em>something that is part of a list or group of things</em> – to manage.</p>
+</blockquote>
+</div>
 <p>So that developers can focus on the specific capabilities of their project.</p>
 </section><section class="level2"><h2 id="shiny-module">Shiny module<a class="anchor" aria-label="anchor" href="#shiny-module"></a>
 </h2>
@@ -118,6 +120,11 @@ For example, the <code><a href="../reference/filtered_view_widget.html">filtered
 <code class="sourceCode R"><span><span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/filtered_view_widget.html">filtered_view_widget</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <p>See the <code><a href="../articles/shiny-module.html">vignette("shiny-module")</a></code> article to get more information about the module.</p>
+</section><section class="level2"><h2 id="learning-path">Learning path<a class="anchor" aria-label="anchor" href="#learning-path"></a>
+</h2>
+<p>Because the package is not ‘just’ a set of functions, it has some concepts that have been defined either as starting points or after deep explorations &amp; convergence.</p>
+<p>As it may be confusing where to start, the order of the articles is a proposal of a learning path to guide you through the documentation.</p>
+<p>See articles’ <a href="./articles/index.html">index</a> to follow this path.</p>
 </section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);

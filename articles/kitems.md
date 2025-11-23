@@ -13,41 +13,40 @@ first milestone in the project is to enable standard data processing.
 Say the purpose of the project is to build a task manager and deliver a
 dashboard to follow its KPIs.
 
-It will require to write code to implement the baseline of the project:
+Before being able to work on the dashboard itself, it will require to
+write code to implement the baseline of the project:
 
-- a data frame to manage the tasks objects  
-  (with columns corresponding to the different attributes of a task:
-  date, description, owner…)
+- a data frame to manage the tasks attributes (date, description,
+  owner…)
 
-- a data table view to display the tasks to the users
+- a table view to display the tasks to the users
 
-- inputs to allow data filtering  
-  (maybe focus on the tasks of the current year)
+- inputs to allow data filtering (ex. current year)
 
-- buttons to perform standard operations like create a new task, update
-  or delete existing ones
+- buttons to perform standard operations like create a task, update or
+  delete existing ones
 
-- forms to allow user to create or update a task
+- forms to capture user inputs
 
-- functions to manage those operations in the back end  
-  (check inputs before creating a new task, ask for a confirmation
-  before another is deleted)
+- functions to manage those operations in the background
 
-- functions to ensure data persistence, quality and management in
-  general
+- functions to ensure data persistence, quality and management /
+  governance
 
 Now say that another project is to build a dashboard to follow fruit
-stock.  
+stocks.  
 A data frame of fruit objects is needed, a table view, buttons &
 functions to perform standard operations…
 
-In many cases, it involves to write code that allows to handle the same
-set of operations but for different objects, which makes this code hard
-to reuse in another project.
+In many cases, it involves to write code that allows to handle the
+**same** set of operations but for different objects, which makes this
+code hard to reuse in another project.
 
-The purpose of *kitems* is to wrap those standard operations into a
-package that is not dependent on the type of *item* - *something that is
-part of a list or group of things* - to manage.
+> **Note**
+>
+> The purpose of *kitems* is to wrap those standard operations into a
+> package that is not dependent on the type of *item* – *something that
+> is part of a list or group of things* – to manage.
 
 So that developers can focus on the specific capabilities of their
 project.
@@ -79,3 +78,16 @@ kitems::filtered_view_widget(id = "mydata")
 See the
 [`vignette("shiny-module")`](https://thekangaroofactory.github.io/kitems/articles/shiny-module.md)
 article to get more information about the module.
+
+## Learning path
+
+Because the package is not ‘just’ a set of functions, it has some
+concepts that have been defined either as starting points or after deep
+explorations & convergence.
+
+As it may be confusing where to start, the order of the articles is a
+proposal of a learning path to guide you through the documentation.
+
+See articles’
+[index](https://thekangaroofactory.github.io/kitems/articles/articles/index.md)
+to follow this path.
