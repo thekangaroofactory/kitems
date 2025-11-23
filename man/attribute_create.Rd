@@ -2,10 +2,10 @@
 % Please edit documentation in R/attribute_create.R
 \name{attribute_create}
 \alias{attribute_create}
-\title{Add attribute to a data model}
+\title{Add Attribute}
 \usage{
 attribute_create(
-  data.model,
+  data.model = NULL,
   name,
   type,
   default.val = NULL,
@@ -18,11 +18,11 @@ attribute_create(
 )
 }
 \arguments{
-\item{data.model}{a \emph{mandatory} data model, structured as an output of data_model() function}
+\item{data.model}{a data model data.frame, structured as an output of the \code{data_model()} function}
 
-\item{name}{a \emph{mandatory} character string for the new attribute name}
+\item{name}{a character vector for the new attribute name}
 
-\item{type}{a \emph{mandatory} character string for the new attribute type}
+\item{type}{a character vector for the new attribute type}
 
 \item{default.val}{an optional named vector of values, defining the default values.}
 
@@ -39,19 +39,29 @@ attribute_create(
 \item{sort.desc}{an optional named logical vector, to define if sort should be descending}
 }
 \value{
-the updated data model
+The updated data model data.frame
 }
 \description{
-Add attribute to a data model
+Add an attribute to a data model
+}
+\details{
+Multiple attribute creation is supported, in this case make sure all vectors have same length.
+
+When \code{data.model} is omitted, the function will return a data model containing the created attributes.
 }
 \examples{
 \dontrun{
-attribute_create(data.model = mydatamodel, name = "new_attribute", type = "character")
-attribute_create(data.model = mydatamodel, name = "total", type = "numeric", default.val = 0)
-attribute_create(data.model = mydatamodel, name = "date", type = "Date", default.fun = "Sys.Date")
-attribute_create(data.model = mydatamodel, name = "progress", type = "integer", skip = "progress")
-attribute_create(data.model = mydatamodel, name = "internal",
-type = "logical", display = "internal")
+
+# -- create single attribute
+attribute_create(name = "new_attribute", type = "character")
+attribute_create(name = "total", type = "numeric", default.val = 0)
+attribute_create(name = "date", type = "Date", default.fun = "Sys.Date")
+attribute_create(name = "progress", type = "integer", skip = "progress")
+attribute_create(name = "internal", type = "logical", display = "internal")
+
+# -- create multiple attributes
+
+
 }
 }
 \seealso{

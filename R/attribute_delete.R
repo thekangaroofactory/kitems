@@ -1,6 +1,6 @@
 
 
-#' Delete attribute
+#' Delete Attribute
 #'
 #' @param k_data_model the reference of the data model reactive value
 #' @param k_items the reference of the items reactive value
@@ -10,6 +10,8 @@
 #' @param dm_url the url of the data model file
 #' @param items_url the url of the item file
 #' @param notify a logical if shiny notification should be fired
+#'
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{

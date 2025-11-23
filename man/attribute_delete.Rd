@@ -2,7 +2,7 @@
 % Please edit documentation in R/attribute_delete.R
 \name{attribute_delete}
 \alias{attribute_delete}
-\title{Delete attribute}
+\title{Delete Attribute}
 \usage{
 attribute_delete(
   k_data_model,
@@ -33,7 +33,7 @@ attribute_delete(
 \item{notify}{a logical if shiny notification should be fired}
 }
 \description{
-Delete attribute
+Delete Attribute
 }
 \examples{
 \dontrun{
@@ -48,3 +48,4 @@ notify = TRUE)
 }
 
 }
+\keyword{internal}
