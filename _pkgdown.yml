@@ -11,7 +11,7 @@ template:
 articles:
 - title: Framework concepts & components
   desc: Articles to understand the main concepts & components of the package.
-  navbar: Concepts & components
+  navbar: ~
   contents:
   - core-concepts
   - shiny-module
