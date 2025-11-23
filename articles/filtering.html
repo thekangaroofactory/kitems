@@ -91,17 +91,18 @@
 </h2>
 <p>Filtering mechanism in the module server relies on <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter()</a></code> function.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">starwars</span> <span class="op">%&gt;%</span></span>
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">==</span> <span class="st">"foo"</span>, </span>
 <span>         <span class="va">value</span> <span class="op">==</span> <span class="fl">12</span><span class="op">)</span></span></code></pre></div>
+<p>It is based on the following principles:</p>
 <ul>
-<li><p>condition(s) are passed as expression(s) to the module server function using the <code>filter</code> reactive argument</p></li>
-<li><p>two filtering layers are implemented</p></li>
-<li><p>date slider widget is provided with several strategies</p></li>
-<li><p>helper function is available to build filtering events</p></li>
+<li><p>Condition(s) are passed as expression(s) to the module server function using the <code>filter</code> reactive argument</p></li>
+<li><p>Two filtering layers are implemented</p></li>
+<li><p>Date slider widget is provided with several strategies</p></li>
+<li><p>A helper function is available to build filtering events</p></li>
 </ul></section><section class="level2"><h2 id="filtering-layers">Filtering layers<a class="anchor" aria-label="anchor" href="#filtering-layers"></a>
 </h2>
-<p>The filtering mechanism relies on the notion of filtering layers.</p>
+<p>Data filtering in the module server relies on the notion of filtering <em>layers</em>.</p>
 <section class="level3"><h3 id="pre-filtering-layer">Pre-filtering layer<a class="anchor" aria-label="anchor" href="#pre-filtering-layer"></a>
 </h3>
 <p>To work on a subset of the data across the app (ex. a given user).</p>
@@ -118,7 +119,7 @@ If the widget is implemented in the UI, it will be automatically added to the ma
 </section></section><section class="level2"><h2 id="filtered-view">Filtered view<a class="anchor" aria-label="anchor" href="#filtered-view"></a>
 </h2>
 <p>The <em>item</em> table widget is by default a filtered view of the <em>items</em>.<br>
-It displays the content of the <code>filtered_items</code> element of the module server function return value.</p>
+It displays the content of the <code>filtered_items</code> element of the module server function return value (with mask applied).</p>
 <p>It is delivered through the <code><a href="../reference/filtered_view_widget.html">filtered_view_widget()</a></code> function.</p>
 <div>
 <blockquote>
@@ -168,19 +169,20 @@ It displays the content of the <code>filtered_items</code> element of the module
 </ul></section><section class="level3"><h3 id="filtering-or-not-filtering">Filtering or not filtering<a class="anchor" aria-label="anchor" href="#filtering-or-not-filtering"></a>
 </h3>
 <p>The filtering capabilities are delivered to provide more flexibility to manage the items and serve them throughout the app.</p>
-<p>That being said, there is a choice to make for when it’s better to do filtering at the module server level or at the main app level.<br>
+<p>That being said, there is a choice to be made for when it’s better to do filtering at the module level or at the main app level.<br>
 Because the module server return value is made of reactive objects, any update will affect the whole app wherever the return value is passed and code is taking dependency on its elements.</p>
+<p>Do filter:</p>
 <ul>
-<li><p>do filter at the module server level when the output data is meant to be used throughout the app</p></li>
-<li><p>do filter at the main app level when it is meant to be used at a local level (for example prepare data for a specific plot)</p></li>
+<li><p>at the module level when the output data is meant to be used throughout the app</p></li>
+<li><p>at the main app level when it is meant to be used at a local level (for example prepare data for a specific plot)</p></li>
 </ul></section></section><section class="level2"><h2 id="useful-links">Useful links<a class="anchor" aria-label="anchor" href="#useful-links"></a>
 </h2>
 <ul>
-<li><p>communication</p></li>
-<li><p>shiny module</p></li>
-<li><p>kitems()</p></li>
-<li><p>dplyr::filter</p></li>
-<li><p>helper function</p></li>
+<li><p>Module server arguments &amp; return value(s) – <a href="./shiny-module.htmll#server">shiny-module</a></p></li>
+<li><p>Read about communication principles – <a href="./communication.html" data-heading="Useful links">communication</a></p></li>
+<li><p>The module server function – <code><a href="../reference/kitems.html">kitems()</a></code></p></li>
+<li><p>Helper function – <code><a href="../reference/filter_event.html">filter_event()</a></code></p></li>
+<li><p>Behind the scene – <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter()</a></code></p></li>
 </ul></section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);

@@ -10,23 +10,26 @@ Filtering mechanism in the module server relies on
 function.
 
 ``` r
-starwars %>%
+data %>%
   filter(name == "foo", 
          value == 12)
 ```
 
-- condition(s) are passed as expression(s) to the module server function
+It is based on the following principles:
+
+- Condition(s) are passed as expression(s) to the module server function
   using the `filter` reactive argument
 
-- two filtering layers are implemented
+- Two filtering layers are implemented
 
-- date slider widget is provided with several strategies
+- Date slider widget is provided with several strategies
 
-- helper function is available to build filtering events
+- A helper function is available to build filtering events
 
 ## Filtering layers
 
-The filtering mechanism relies on the notion of filtering layers.
+Data filtering in the module server relies on the notion of filtering
+*layers*.
 
 ### Pre-filtering layer
 
@@ -66,7 +69,7 @@ computation time).
 
 The *item* table widget is by default a filtered view of the *items*.  
 It displays the content of the `filtered_items` element of the module
-server function return value.
+server function return value (with mask applied).
 
 It is delivered through the
 [`filtered_view_widget()`](https://thekangaroofactory.github.io/kitems/reference/filtered_view_widget.md)
@@ -174,29 +177,36 @@ It can be done by implementing one of the following options in the
 The filtering capabilities are delivered to provide more flexibility to
 manage the items and serve them throughout the app.
 
-That being said, there is a choice to make for when it’s better to do
-filtering at the module server level or at the main app level.  
+That being said, there is a choice to be made for when it’s better to do
+filtering at the module level or at the main app level.  
 Because the module server return value is made of reactive objects, any
 update will affect the whole app wherever the return value is passed and
 code is taking dependency on its elements.
 
-- do filter at the module server level when the output data is meant to
-  be used throughout the app
+Do filter:
 
-- do filter at the main app level when it is meant to be used at a local
-  level (for example prepare data for a specific plot)
+- at the module level when the output data is meant to be used
+  throughout the app
+
+- at the main app level when it is meant to be used at a local level
+  (for example prepare data for a specific plot)
 
 ## Useful links
 
-- communication
+- Module server arguments & return value(s) –
+  [shiny-module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.htmll#server)
 
-- shiny module
+- Read about communication principles –
+  [communication](https://thekangaroofactory.github.io/kitems/articles/communication.md)
 
-- kitems()
+- The module server function –
+  [`kitems()`](https://thekangaroofactory.github.io/kitems/reference/kitems.md)
 
-- dplyr::filter
+- Helper function –
+  [`filter_event()`](https://thekangaroofactory.github.io/kitems/reference/filter_event.md)
 
-- helper function
+- Behind the scene –
+  [`dplyr::filter()`](https://dplyr.tidyverse.org/reference/filter.html)
 
 ------------------------------------------------------------------------
 

@@ -24,34 +24,34 @@ a tagList() object to admin the data model
 admin_widget(id = "mydata")
 #> <div class="row">
 #>   <div class="col-sm-2 well">
-#>     <ul class="nav nav-pills nav-stacked" data-tabsetid="3637">
+#>     <ul class="nav nav-pills nav-stacked" data-tabsetid="4252">
 #>       <li class="navbar-brand">Administration console</li>
 #>       <li class="active">
-#>         <a href="#tab-3637-2" data-toggle="tab" data-bs-toggle="tab" data-value="Data model">Data model</a>
+#>         <a href="#tab-4252-2" data-toggle="tab" data-bs-toggle="tab" data-value="Data model">Data model</a>
 #>       </li>
 #>       <li>
-#>         <a href="#tab-3637-3" data-toggle="tab" data-bs-toggle="tab" data-value="Raw table">Raw table</a>
+#>         <a href="#tab-4252-3" data-toggle="tab" data-bs-toggle="tab" data-value="Raw table">Raw table</a>
 #>       </li>
 #>       <li>
-#>         <a href="#tab-3637-4" data-toggle="tab" data-bs-toggle="tab" data-value="View">View</a>
+#>         <a href="#tab-4252-4" data-toggle="tab" data-bs-toggle="tab" data-value="View">View</a>
 #>       </li>
 #>     </ul>
 #>   </div>
 #>   <div class="col-sm-10">
-#>     <div class="tab-content" data-tabsetid="3637">
-#>       <div class="tab-pane active" data-value="Data model" id="tab-3637-2">
+#>     <div class="tab-content" data-tabsetid="4252">
+#>       <div class="tab-pane active" data-value="Data model" id="tab-4252-2">
 #>         <div class="well">
 #>           <h3>Name:  mydata</h3>
 #>           <div id="mydata-admin-dm_tab" class="shiny-html-output"></div>
 #>         </div>
 #>       </div>
-#>       <div class="tab-pane" data-value="Raw table" id="tab-3637-3">
+#>       <div class="tab-pane" data-value="Raw table" id="tab-4252-3">
 #>         <div class="well">
 #>           <h3>Name:  mydata</h3>
 #>           <div id="mydata-admin-raw_tab" class="shiny-html-output"></div>
 #>         </div>
 #>       </div>
-#>       <div class="tab-pane" data-value="View" id="tab-3637-4">
+#>       <div class="tab-pane" data-value="View" id="tab-4252-4">
 #>         <div class="well">
 #>           <h3>Name:  mydata</h3>
 #>           <div id="mydata-admin-masked_tab" class="shiny-html-output"></div>
