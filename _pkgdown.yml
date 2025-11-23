@@ -17,7 +17,7 @@ articles:
   - shiny-module
   - admin
 
-- title: Specifications & features
+- title: Implementation & features
   desc: Detailed articles about advanced concepts & features.
   navbar: Implementation & features
   contents:
