@@ -37,8 +37,8 @@ Files will be stored in “./path/to/data/data_1”
 
 ## Debug
 
-For debugging purpose, the package implements many traces through
-outputs to the console.
+For debugging purpose, the package implements traces through outputs to
+the console.
 
 But because printing to the console has serious impact on the overall
 app performance, it has been decided to wrap the trace mechanism into a
