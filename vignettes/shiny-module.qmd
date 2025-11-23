@@ -72,7 +72,7 @@ See [shortcuts](./shortcuts.html) article for more detail.
 #### Reactive parameters
 
 Some of the arguments (only) accept reactive objects as input.\
-This is the basis of the communication architecture (see \[communication\]).
+This is the basis of the communication architecture (see [communication](./communication.html)).
 
 ##### Trigger
 
