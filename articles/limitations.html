@@ -91,21 +91,21 @@
 <p>This article is dedicated to listing known limitations that are not - <em>at this time</em> - expected to be fixed.</p>
 <ul>
 <li>
-<p>Prior to kitems v0.7.1, there is challenge to pass multiple workflow events to the module server.</p>
+<p>Prior to kitems <a href="../news/index.html#kitems-v071-beta">v0.7.1</a>, there is challenge to pass multiple workflow events to the module server.</p>
 <p>When the reactive <code>trigger</code> passed to the module server function is updated (from outside the module), there is a little delay (in Shiny) before the observer / listener is fired.</p>
 <p>The consequence of that is, if the reactive object is updated twice in a short period of time, only the second value will fire the observer inside the module server.</p>
 <p>To avoid this, user needs to listen to the first event to be completed before sending the second one.</p>
 <p>Example:</p>
 <ul>
 <li><p>user wants to create / update some items</p></li>
-<li><p>update reactive with event to create items</p></li>
-<li><p>listen to the items’ update (observeEvent with once = TRUE)</p></li>
-<li><p>update reactive with event to update items</p></li>
+<li><p>update reactive <code>trigger</code> with event to create items</p></li>
+<li><p>listen to the items’ update (<code>observeEvent</code> with <code>once = TRUE</code>)</p></li>
+<li><p>update reactive <code>trigger</code> with event to update items</p></li>
 </ul>
-<p>Multiple events support solves this issue by letting the module server handle the orchestration.</p>
+<p>Multiple <a href="./workflows.html#multiple-events">events</a> support solves this issue by letting the module server handle the orchestration.</p>
 </li>
 <li>
-<p>Prior to R-4.3.0, <code><a href="../reference/attribute_value.html">attribute_value()</a></code> function may raise an error when the first element of a POSIXct vector set as <code>value</code> parameter is NA. This is due to missing origin in the call to as.POSIXct.</p>
+<p>Prior to R-4.3.0, <code><a href="../reference/attribute_value.html">attribute_value()</a></code> function may raise an error when the first element of a POSIXct vector set as <code>value</code> parameter is <code>NA</code>. This is due to missing origin in the call to as.POSIXct.</p>
 <p>From R-4.3.0, origin is no longer a required parameter:<br><a href="https://stackoverflow.com/questions/37690722/how-to-get-origin-from-posixct-object" class="external-link uri">how-to-get-origin-from-posixct-object</a></p>
 <p>This impacts the create &amp; update trigger workflows (see <a href="./workflows.html">workflows</a>).</p>
 <p>To bypass this issue, make sure the values sent to the trigger for POSIXct attributes fits with the expected class (at least the first element of the vector):</p>

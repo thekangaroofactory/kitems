@@ -5,8 +5,10 @@
 This article is dedicated to listing known limitations that are not -
 *at this time* - expected to be fixed.
 
-- Prior to kitems v0.7.1, there is challenge to pass multiple workflow
-  events to the module server.
+- Prior to kitems
+  [v0.7.1](https://thekangaroofactory.github.io/kitems/news/index.html#kitems-v071-beta),
+  there is challenge to pass multiple workflow events to the module
+  server.
 
   When the reactive `trigger` passed to the module server function is
   updated (from outside the module), there is a little delay (in Shiny)
@@ -23,19 +25,21 @@ This article is dedicated to listing known limitations that are not -
 
   - user wants to create / update some items
 
-  - update reactive with event to create items
+  - update reactive `trigger` with event to create items
 
-  - listen to the items’ update (observeEvent with once = TRUE)
+  - listen to the items’ update (`observeEvent` with `once = TRUE`)
 
-  - update reactive with event to update items
+  - update reactive `trigger` with event to update items
 
-  Multiple events support solves this issue by letting the module server
-  handle the orchestration.
+  Multiple
+  [events](https://thekangaroofactory.github.io/kitems/articles/workflows.html#multiple-events)
+  support solves this issue by letting the module server handle the
+  orchestration.
 
 - Prior to R-4.3.0,
   [`attribute_value()`](https://thekangaroofactory.github.io/kitems/reference/attribute_value.md)
   function may raise an error when the first element of a POSIXct vector
-  set as `value` parameter is NA. This is due to missing origin in the
+  set as `value` parameter is `NA`. This is due to missing origin in the
   call to as.POSIXct.
 
   From R-4.3.0, origin is no longer a required parameter:  
