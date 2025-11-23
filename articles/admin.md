@@ -127,7 +127,7 @@ data model) through a wizard.
 ### Migration
 
 As of version
-[v0.7.1](https://github.com/thekangaroofactory/kitems/releases/tag/v0.7.1-beta),
+[v0.7.1](https://thekangaroofactory.github.io/kitems/news/index.html#kitems-v071-beta),
 data models now carry a version number that corresponds to the latest
 data model structure upgrade.
 
