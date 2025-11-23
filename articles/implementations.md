@@ -186,9 +186,11 @@ observeEvent(input$foo, {
 >
 > It is important to read / understand about the
 > [workflows](https://thekangaroofactory.github.io/kitems/articles/workflows.md)
-> & \[communication\] topics before using it – especially when using
-> **existing** data – as the module server will not ask for confirmation
-> to perform delete operations for example.
+> &
+> [communication](https://thekangaroofactory.github.io/kitems/articles/communication.md)
+> topics before using it – especially when using **existing** data – as
+> the module server will not ask for confirmation to perform delete
+> operations for example.
 
 ## Useful links
 
@@ -198,4 +200,5 @@ observeEvent(input$foo, {
 - Arguments & return value(s) –
   [shiny-module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.md)
 
-- Communication principles – \[communication\]
+- Communication principles –
+  [communication](https://thekangaroofactory.github.io/kitems/articles/communication.md)
