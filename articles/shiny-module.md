@@ -78,11 +78,15 @@ kitems::kitems(id = "mydata", path = "./", options = list(shortcut = TRUE))
 When it is activated, user will get shortcut values (suggestions) next
 to the inputs in the item form.
 
+See
+[shortcuts](https://thekangaroofactory.github.io/kitems/articles/shortcuts.md)
+article for more detail.
+
 #### Reactive parameters
 
 Some of the arguments (only) accept reactive objects as input.  
 This is the basis of the communication architecture (see
-\[communication\]).
+[communication](https://thekangaroofactory.github.io/kitems/articles/communication.md)).
 
 ##### Trigger
 
