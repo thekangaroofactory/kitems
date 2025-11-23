@@ -171,7 +171,7 @@ See:
 
 -   `date_slider_widget()` function to implement it in the UI
 
--   [filtering](./filtering.html#date-slider) article to understand about filtering layers
+-   [filtering](./filtering.html#date-slider) article
 
 #### Buttons
 
