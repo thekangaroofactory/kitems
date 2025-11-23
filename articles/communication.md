@@ -2,20 +2,23 @@
 
 ## Introduction
 
-> **Note**
->
-> The communication strategy has been implemented based on this work:  
-> [Communication between shiny
-> modules](https://thekangaroofactory.github.io/communication-between-shiny-modules/)
-
 Basically, communication **to** the module server relies on the server
 function arguments and UI-Server interactions, while communication
 **from** the module server (to its parent) relies on the server function
 return value(s).
 
+> **Note**
+>
+> The framework communication strategy has been implemented based on the
+> research & exploration work captured in this eBook: [Communication
+> between shiny
+> modules](https://thekangaroofactory.github.io/communication-between-shiny-modules/).
+>
+> It is expected that the package will be used in this context.
+
 ## Arguments
 
-Among the parameters that can be passed to the server function to tune
+Among the arguments that can be passed to the server function to tune
 its internal behaviors are the reactive parameters named `trigger` &
 `filter` that behave like event managers.
 
@@ -29,7 +32,8 @@ items.
 - `filter` is used to set / unset filters
 
 Reactive arguments are a key feature for the module to be used within
-more advanced implementations.
+more advanced
+[implementations](https://thekangaroofactory.github.io/kitems/articles/implementations.md).
 
 ## Return value(s)
 
@@ -43,14 +47,27 @@ objects to trigger further actions in your app.
 A typical example is a plot that will be updated as soon as the items
 are modified.
 
+``` r
+# -- call the module server
+mydata <- kitems::kitems(id = "my_data", path = "./data")
+
+# -- plot
+output$plot <- renderPlot({
+  
+  # -- do something here
+  
+}) |> bindEvent(mydata$items())
+```
+
 ## Considerations
 
 The magic with passing references is that the value itself is not copied
 or duplicated.[¹](#fn1)
 
 All the reactive objects of the return value are created with the
-`reactive()` function, so that it is not possible to update them from
-outside of the module server function.
+[`shiny::reactive()`](https://rdrr.io/pkg/shiny/man/reactive.html)
+function, so that it is not possible to update them from outside of the
+module server function.
 
 It makes the framework more robust against data model or *item*
 corruption.
@@ -61,10 +78,17 @@ options.
 
 ## Useful links
 
-- implementations:
+- Scenarios & use cases –
+  [implementations](https://thekangaroofactory.github.io/kitems/articles/implementations.md)
 
-- module server function:
+- Module server function –
   [`kitems()`](https://thekangaroofactory.github.io/kitems/reference/kitems.md)
+
+- Arguments & return value(s) –
+  [shiny-module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.md)
+
+- Item workflows –
+  [workflows](https://thekangaroofactory.github.io/kitems/articles/workflows.md)
 
 ------------------------------------------------------------------------
 

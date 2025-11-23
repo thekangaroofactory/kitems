@@ -88,38 +88,51 @@
 
     <section class="level2"><h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
+<p>Basically, communication <strong>to</strong> the module server relies on the server function arguments and UI-Server interactions, while communication <strong>from</strong> the module server (to its parent) relies on the server function return value(s).</p>
 <div>
 <blockquote>
 <p><strong>Note</strong></p>
-<p>The communication strategy has been implemented based on this work:<br><a href="https://thekangaroofactory.github.io/communication-between-shiny-modules/" target="_blank" class="external-link">Communication between shiny modules</a></p>
+<p>The framework communication strategy has been implemented based on the research &amp; exploration work captured in this eBook: <a href="https://thekangaroofactory.github.io/communication-between-shiny-modules/" target="_blank" class="external-link">Communication between shiny modules</a>.</p>
+<p>It is expected that the package will be used in this context.</p>
 </blockquote>
 </div>
-<p>Basically, communication <strong>to</strong> the module server relies on the server function arguments and UI-Server interactions, while communication <strong>from</strong> the module server (to its parent) relies on the server function return value(s).</p>
 </section><section class="level2"><h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a>
 </h2>
-<p>Among the parameters that can be passed to the server function to tune its internal behaviors are the reactive parameters named <code>trigger</code> &amp; <code>filter</code> that behave like event managers.</p>
+<p>Among the arguments that can be passed to the server function to tune its internal behaviors are the reactive parameters named <code>trigger</code> &amp; <code>filter</code> that behave like event managers.</p>
 <p>Whenever they receive a reactive object <strong>reference</strong> as input value, the module will take a dependency on it and declare a listener to react to specific events for the module to execute dedicated actions on the items.</p>
 <ul>
 <li><p><code>trigger</code> is used to pass create / update / delete actions</p></li>
 <li><p><code>filter</code> is used to set / unset filters</p></li>
 </ul>
-<p>Reactive arguments are a key feature for the module to be used within more advanced implementations.</p>
+<p>Reactive arguments are a key feature for the module to be used within more advanced <a href="./implementations.html">implementations</a>.</p>
 </section><section class="level2"><h2 id="return-values">Return value(s)<a class="anchor" aria-label="anchor" href="#return-values"></a>
 </h2>
 <p>The module server function returns a list of elements that are accessible outside the module.</p>
 <p>Among these elements are reactive object’s <strong>references</strong> that are used as communication objects. You can take a dependency / listen to those objects to trigger further actions in your app.</p>
 <p>A typical example is a plot that will be updated as soon as the items are modified.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># -- call the module server</span></span>
+<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my_data"</span>, path <span class="op">=</span> <span class="st">"./data"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># -- plot</span></span>
+<span><span class="va">output</span><span class="op">$</span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu">renderPlot</span><span class="op">(</span><span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="co"># -- do something here</span></span>
+<span>  </span>
+<span><span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">bindEvent</span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="fu">items</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </section><section class="level2"><h2 id="considerations">Considerations<a class="anchor" aria-label="anchor" href="#considerations"></a>
 </h2>
 <p>The magic with passing references is that the value itself is not copied or duplicated.<a class="footnote-ref" role="doc-noteref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;See &lt;em&gt;Advanced R&lt;/em&gt; &lt;a href="https://adv-r.hadley.nz/names-values.html#names-values" class="external-link uri"&gt;https://adv-r.hadley.nz/names-values.html#names-values&lt;/a&gt;&lt;/p&gt;'><sup>1</sup></a></p>
-<p>All the reactive objects of the return value are created with the <code>reactive()</code> function, so that it is not possible to update them from outside of the module server function.</p>
+<p>All the reactive objects of the return value are created with the <code><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">shiny::reactive()</a></code> function, so that it is not possible to update them from outside of the module server function.</p>
 <p>It makes the framework more robust against data model or <em>item</em> corruption.</p>
 <p>It also allows to use the exported functions of the package from outside of the module server, which provides more flexible implementation options.</p>
 </section><section class="level2"><h2 id="useful-links">Useful links<a class="anchor" aria-label="anchor" href="#useful-links"></a>
 </h2>
 <ul>
-<li><p>implementations:</p></li>
-<li><p>module server function: <code><a href="../reference/kitems.html">kitems()</a></code></p></li>
+<li><p>Scenarios &amp; use cases – <a href="./implementations.html">implementations</a></p></li>
+<li><p>Module server function – <code><a href="../reference/kitems.html">kitems()</a></code></p></li>
+<li><p>Arguments &amp; return value(s) – <a href="./shiny-module.html">shiny-module</a></p></li>
+<li><p>Item workflows – <a href="./workflows.html">workflows</a></p></li>
 </ul></section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
