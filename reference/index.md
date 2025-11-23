@@ -7,9 +7,7 @@
 - [`admin_widget()`](https://thekangaroofactory.github.io/kitems/reference/admin_widget.md)
   : Admin Widget
 - [`attribute_create()`](https://thekangaroofactory.github.io/kitems/reference/attribute_create.md)
-  : Add attribute to a data model
-- [`attribute_delete()`](https://thekangaroofactory.github.io/kitems/reference/attribute_delete.md)
-  : Delete attribute
+  : Add Attribute
 - [`attribute_input()`](https://thekangaroofactory.github.io/kitems/reference/attribute_input.md)
   : Build Attribute Input
 - [`attribute_input_update()`](https://thekangaroofactory.github.io/kitems/reference/attribute_input_update.md)

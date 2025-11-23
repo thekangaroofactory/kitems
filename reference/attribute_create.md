@@ -1,12 +1,12 @@
-# Add attribute to a data model
+# Add Attribute
 
-Add attribute to a data model
+Add an attribute to a data model
 
 ## Usage
 
 ``` r
 attribute_create(
-  data.model,
+  data.model = NULL,
   name,
   type,
   default.val = NULL,
@@ -23,16 +23,17 @@ attribute_create(
 
 - data.model:
 
-  a *mandatory* data model, structured as an output of data_model()
+  a data model data.frame, structured as an output of the
+  [`data_model()`](https://thekangaroofactory.github.io/kitems/reference/data_model.md)
   function
 
 - name:
 
-  a *mandatory* character string for the new attribute name
+  a character vector for the new attribute name
 
 - type:
 
-  a *mandatory* character string for the new attribute type
+  a character vector for the new attribute type
 
 - default.val:
 
@@ -69,7 +70,15 @@ attribute_create(
 
 ## Value
 
-the updated data model
+The updated data model data.frame
+
+## Details
+
+Multiple attribute creation is supported, in this case make sure all
+vectors have same length.
+
+When `data.model` is omitted, the function will return a data model
+containing the created attributes.
 
 ## See also
 
@@ -79,11 +88,16 @@ the updated data model
 
 ``` r
 if (FALSE) { # \dontrun{
-attribute_create(data.model = mydatamodel, name = "new_attribute", type = "character")
-attribute_create(data.model = mydatamodel, name = "total", type = "numeric", default.val = 0)
-attribute_create(data.model = mydatamodel, name = "date", type = "Date", default.fun = "Sys.Date")
-attribute_create(data.model = mydatamodel, name = "progress", type = "integer", skip = "progress")
-attribute_create(data.model = mydatamodel, name = "internal",
-type = "logical", display = "internal")
+
+# -- create single attribute
+attribute_create(name = "new_attribute", type = "character")
+attribute_create(name = "total", type = "numeric", default.val = 0)
+attribute_create(name = "date", type = "Date", default.fun = "Sys.Date")
+attribute_create(name = "progress", type = "integer", skip = "progress")
+attribute_create(name = "internal", type = "logical", display = "internal")
+
+# -- create multiple attributes
+
+
 } # }
 ```

@@ -1,6 +1,6 @@
-# Delete attribute
+# Delete Attribute
 
-Delete attribute
+Delete Attribute
 
 ## Usage
 
