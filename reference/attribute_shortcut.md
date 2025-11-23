@@ -1,6 +1,6 @@
-# Build Attribute Shortcuts
+# Attribute Shortcuts
 
-Build Attribute Shortcuts
+Build attribute shortcuts list
 
 ## Usage
 
@@ -18,11 +18,11 @@ attribute_shortcut(colClass, suggestions, ns)
 - suggestions:
 
   a list of suggestions, output of
-  [attribute_suggestion](https://thekangaroofactory.github.io/kitems/reference/attribute_suggestion.md)
+  [`attribute_suggestion()`](https://thekangaroofactory.github.io/kitems/reference/attribute_suggestion.md)
 
 - ns:
 
-  the module namespace function reference
+  the namespace function reference
 
 ## Value
 
@@ -37,7 +37,7 @@ The actionLink has an `onclick` property that will trigger
 `input$shortcut_trigger` (`ns(shortcut_trigger)`) Its value is of the
 form `[ns]-[attribute]_[value]` Basically, applying
 `tail(unlist(strsplit(input$shortcut_trigger, split = "-")), 1)` will
-access attribute_value
+access attribute_value.
 
 Note that for POSIXct attribute, the shortcut_trigger input will not
 carry the timezone information. Clicking on the corresponding actionLink
