@@ -143,7 +143,7 @@ Do filter:
 
 ## Useful links
 
--   Module server arguments & return value(s) – [shiny-module](./shiny-module.htmll#server)
+-   Module server arguments & return value(s) – [shiny-module](./shiny-module.html#server)
 
 -   Read about communication principles – [communication](./communication.html){data-heading="Useful links"}
 
