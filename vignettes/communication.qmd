@@ -11,16 +11,17 @@ vignette: >
 
 ## Introduction
 
-::: callout-note
-The communication strategy has been implemented based on this work:\
-[Communication between shiny modules](https://thekangaroofactory.github.io/communication-between-shiny-modules/){target="_blank"}
-:::
-
 Basically, communication **to** the module server relies on the server function arguments and UI-Server interactions, while communication **from** the module server (to its parent) relies on the server function return value(s).
+
+::: callout-note
+The framework communication strategy has been implemented based on the research & exploration work captured in this eBook: [Communication between shiny modules](https://thekangaroofactory.github.io/communication-between-shiny-modules/){target="_blank"}.
+
+It is expected that the package will be used in this context.
+:::
 
 ## Arguments
 
-Among the parameters that can be passed to the server function to tune its internal behaviors are the reactive parameters named `trigger` & `filter` that behave like event managers.
+Among the arguments that can be passed to the server function to tune its internal behaviors are the reactive parameters named `trigger` & `filter` that behave like event managers.
 
 Whenever they receive a reactive object **reference** as input value, the module will take a dependency on it and declare a listener to react to specific events for the module to execute dedicated actions on the items.
 
@@ -28,7 +29,7 @@ Whenever they receive a reactive object **reference** as input value, the module
 
 -   `filter` is used to set / unset filters
 
-Reactive arguments are a key feature for the module to be used within more advanced implementations.
+Reactive arguments are a key feature for the module to be used within more advanced [implementations](./implementations.html).
 
 ## Return value(s)
 
@@ -38,13 +39,25 @@ Among these elements are reactive object's **references** that are used as commu
 
 A typical example is a plot that will be updated as soon as the items are modified.
 
+``` r
+# -- call the module server
+mydata <- kitems::kitems(id = "my_data", path = "./data")
+
+# -- plot
+output$plot <- renderPlot({
+  
+  # -- do something here
+  
+}) |> bindEvent(mydata$items())
+```
+
 ## Considerations
 
 The magic with passing references is that the value itself is not copied or duplicated.[^1]
 
 [^1]: See *Advanced R* <https://adv-r.hadley.nz/names-values.html#names-values>
 
-All the reactive objects of the return value are created with the `reactive()` function, so that it is not possible to update them from outside of the module server function.
+All the reactive objects of the return value are created with the `shiny::reactive()` function, so that it is not possible to update them from outside of the module server function.
 
 It makes the framework more robust against data model or *item* corruption.
 
@@ -52,6 +65,10 @@ It also allows to use the exported functions of the package from outside of the 
 
 ## Useful links
 
--   implementations:
+-   Scenarios & use cases – [implementations](./implementations.html)
 
--   module server function: `kitems()`
+-   Module server function – `kitems()`
+
+-   Arguments & return value(s) – [shiny-module](./shiny-module.html)
+
+-   Item workflows – [workflows](./workflows.html)
