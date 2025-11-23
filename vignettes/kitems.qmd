@@ -61,7 +61,7 @@ For example, the `filtered_view_widget()` function will output the item table:
 kitems::filtered_view_widget(id = "mydata")
 ```
 
-See the `vignette("shiny-module")` article to get more information about the module.
+See the [shiny-module](./shiny-module.html) article to get more information about the module.
 
 ## Learning path
 

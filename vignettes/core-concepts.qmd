@@ -97,12 +97,12 @@ When the module server is started, items will be checked to make sure attribute 
 
 ## Useful Links
 
--   Initialization – see `vignette("admin")`
+-   Initialization – see [admin](./admin.html#initialization)
 
--   Data model governance & migration – see `vignette("admin")`
+-   Data model migration – see [admin](./admin.html#migration)
 
--   Data import – see `vignette("admin")`
+-   Data import – see [admin](./admin.html#data-import)
 
--   Item workflows – see `vignette("workflows")`
+-   Item workflows – see [workflows](./workflows.html)
 
--   Access the data model & items – see `vignette("shiny-module")`
+-   Access the data model & items – see [shiny-module](./shiny-module.html#return-values)

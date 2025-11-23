@@ -161,7 +161,7 @@ This is particularly true when the autosave is set to `TRUE` as the item table w
 Module server function `trigger` argument supports to get a list of events (instead of a single event).
 
 ::: callout-note
-The motivation behind this feature is explained in the known limitations (see `vignette("limitations")` ).
+The motivation behind this feature is explained in the known limitations (see [limitations](./limitations.html)).
 :::
 
 Single event:
