@@ -86,59 +86,65 @@
 
 
 
-    <p>Although basic features are delivered as standard package functions, the main component of the framework is a delivered as a Shiny module.</p>
+    <p>Although basic features are delivered as standard package functions, the main component of the framework is a Shiny <em>module</em>.</p>
 <section class="level2"><h2 id="motivation">Motivation<a class="anchor" aria-label="anchor" href="#motivation"></a>
 </h2>
-<p>All the data model and item related functions delivered in the package can be implemented in a Shiny App to manage your data model, create or update items, display a table and so on.</p>
-<p>But that would still require a lot of work to capture user inputs for example to create a new item or manage the data persistence.</p>
-<p>For this reason, the core functions are wrapped into a Shiny module that handles all the reactive work. The module is meant to be very flexible so that there is no need to code anything for basic use cases, but it will let you take back control for more complex use cases (see <span style="color: yellow">xxx</span>).</p>
+<p>All the data model and <em>item</em> related functions of the package can be implemented in a Shiny App to manage your data model, create or update <em>items</em>, display a table and so on.</p>
+<p>But that would still require a lot of work to capture user inputs for example to create a new <em>item</em> or manage the data persistence.</p>
+<p>For this reason, the core functions are wrapped into a Shiny module that handles all the reactive work. The module is meant to be very flexible so that there is no need to code anything for basic use cases, but it will let you take back control for more complex use cases (see <a href="./implementations.html">implementations</a>).</p>
 </section><section class="level2"><h2 id="server">Server<a class="anchor" aria-label="anchor" href="#server"></a>
 </h2>
 <p>The module server is delivered through the <code><a href="../reference/kitems.html">kitems()</a></code> function.</p>
 <section class="level3"><h3 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a>
 </h3>
-<p>The module server function accepts arguments to tune its behavior but also reactive objects to communicate with the module (based on <a href="https://thekangaroofactory.github.io/communication-between-shiny-modules/" target="_blank" class="external-link">Mastering Communication Between Shiny Modules</a>).</p>
+<p>The module server function accepts arguments to tune its behavior but also reactive objects to communicate with the module (see <a href="./communication.html" data-heading="Useful links">communication</a>).</p>
+<div>
+<blockquote>
+<p><strong>Note</strong></p>
+<p>The whole module server approach is based on researches &amp; work captured in the <a href="https://thekangaroofactory.github.io/communication-between-shiny-modules/" target="_blank" class="external-link">Mastering Communication Between Shiny Modules</a> eBook.</p>
+</blockquote>
+</div>
 <section class="level4"><h4 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
 </h4>
 <section class="level5"><h5 id="autosave">Autosave<a class="anchor" aria-label="anchor" href="#autosave"></a>
 </h5>
-<p>By default, the module server will take care of the data persistence, meaning any update of the data model or items will trigger a save.</p>
+<p>By default, the module server will take care of the data persistence, meaning any update of the data model or <em>items</em> will trigger a save.</p>
 <p>This feature can be turned off:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span>, path <span class="op">=</span> <span class="st">"./"</span>, autosave <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>This is useful when using “frozen” data that you don’t want to alter or when your app needs to perform extra operations.</p>
+<p>This is useful when using <em>frozen</em> data that you don’t want to alter or when your app needs to perform extra operations before save.</p>
 </section><section class="level5"><h5 id="admin">Admin<a class="anchor" aria-label="anchor" href="#admin"></a>
 </h5>
-<p>The admin tasks are delivered in a dedicated module server (see <span style="color: yellow">xxx</span>).</p>
+<p>The admin tasks are wrapped into a dedicated module server (see <a href="./admin.html" data-heading="Useful links">admin</a>).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span>, path <span class="op">=</span> <span class="st">"./"</span>, admin <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>When the main module is used in an admin context (mostly within the Admin Console), the mode is turned ON.</p>
+<p>When the main module server is used in an admin context (mostly within the Admin Console), this mode is turned ON.</p>
 </section></section><section class="level4"><h4 id="options">Options<a class="anchor" aria-label="anchor" href="#options"></a>
 </h4>
 <section class="level5"><h5 id="shortcuts">Shortcuts<a class="anchor" aria-label="anchor" href="#shortcuts"></a>
 </h5>
-<p>The shortcut option activates the corresponding behavior (see <span style="color: yellow">xxx</span>).</p>
+<p>The shortcut option activates the corresponding behavior.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span>, path <span class="op">=</span> <span class="st">"./"</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shortcut <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>When it is activated, use will get shortcut values (suggestions) next to the inputs in the item form.</p>
+<p>When it is activated, user will get shortcut values (suggestions) next to the inputs in the item form.</p>
 </section></section><section class="level4"><h4 id="reactive-parameters">Reactive parameters<a class="anchor" aria-label="anchor" href="#reactive-parameters"></a>
 </h4>
 <p>Some of the arguments (only) accept reactive objects as input.<br>
-This is the basis of the communication workflow (see <span style="color: yellow">xxx</span>).</p>
+This is the basis of the communication architecture (see [communication]).</p>
 <section class="level5"><h5 id="trigger">Trigger<a class="anchor" aria-label="anchor" href="#trigger"></a>
 </h5>
-<p>This is the entry point to pass workflow events to the module server to perform create / update / delete tasks or get the corresponding dialog.</p>
-<p>(see <span style="color: yellow">xxx</span>)</p>
+<p>This is the entry point to pass <em>item</em> workflow events to the module server to perform create / update / delete tasks or get the corresponding dialog.</p>
+<p>See <a href="./workflows.html">workflows</a> to get a detailed description about how to use this argument.</p>
 </section><section class="level5"><h5 id="filter">Filter<a class="anchor" aria-label="anchor" href="#filter"></a>
 </h5>
-<p>This is the entry point to pass filter events to the module server.</p>
-<p>(see <span style="color: yellow">xxx</span>)</p>
+<p>This is the entry point to pass filtering events to the module server.</p>
+<p>See <a href="./filtering.html">filtering</a> article to learn about the filters and how to set them.</p>
 </section></section></section><section class="level3"><h3 id="return-values">Return Values<a class="anchor" aria-label="anchor" href="#return-values"></a>
 </h3>
 <p>The module server function returns a list of elements that can be accessed from the outside.</p>
@@ -163,7 +169,7 @@ This is the basis of the communication workflow (see <span style="color: yellow"
 </div>
 </section><section class="level4"><h4 id="items">Items<a class="anchor" aria-label="anchor" href="#items"></a>
 </h4>
-<p>The items can be accessed <strong>in a reactive context</strong> from the return value list:</p>
+<p>The <em>items</em> can be accessed <strong>in a reactive context</strong> from the return value list:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># -- call module</span></span>
@@ -172,7 +178,7 @@ This is the basis of the communication workflow (see <span style="color: yellow"
 <span><span class="co"># -- get items (in a reactive context!)</span></span>
 <span><span class="va">items</span> <span class="op">&lt;-</span> <span class="va">mydata</span><span class="op">$</span><span class="fu">items</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>Items contains the full data frame of items, while filtered_items is the output of the filtering layers and selected_items contains the ids of the selected rows in the table.</p>
+<p>Items contains the full data frame of <em>items</em>, while filtered_items is the output of the filtering layers and selected_items contains the ids of the selected rows in the table.</p>
 </section><section class="level4"><h4 id="observe-reactive-values">Observe reactive values<a class="anchor" aria-label="anchor" href="#observe-reactive-values"></a>
 </h4>
 <p>The module server return value holds <strong>references</strong> to the reactives values.<br>
@@ -188,9 +194,7 @@ Here is an example how to observe the <em>items</em>:</p>
 <span>  <span class="co"># -- do something cool here</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span></code></pre></div>
 </div>
-<blockquote>
-<p><span style="color:yellow">Note: when observing the <code>filtered_items</code> from the main application, it’s recommended to add the <code>ignoreInit = TRUE</code> parameter (or use <code>bindEvent</code> for render* functions) in order to avoid multiple computations at start-up.</span></p>
-</blockquote>
+<p>See filtering <a href="./filtering.html#considerations">considerations</a> about listening to the <code>filtered_items</code> object.</p>
 </section></section></section><section class="level2"><h2 id="ui">UI<a class="anchor" aria-label="anchor" href="#ui"></a>
 </h2>
 <p>To go along and communicate with the module server, a set of UI components is delivered into dedicated functions.</p>
@@ -198,26 +202,26 @@ Here is an example how to observe the <em>items</em>:</p>
 </h3>
 <section class="level4"><h4 id="item-view">Item view<a class="anchor" aria-label="anchor" href="#item-view"></a>
 </h4>
-<p>A filtered view, based on the filtered_items content is delivered with data model masks applied.<br>
-Attributes with <code>display = FALSE</code> will be hidden, and <em>items</em> will be ordered as defined in the data model.</p>
-<p>It is based on the <code><a href="https://rdrr.io/pkg/DT/man/dataTableOutput.html" class="external-link">DT::renderDT()</a></code> / <code><a href="https://rdrr.io/pkg/DT/man/dataTableOutput.html" class="external-link">DT::DTOutput()</a></code> functions.</p>
+<p>A filtered view, based on the <code>filtered_items</code> object content is delivered with data model masks applied. Attributes with <code>display = FALSE</code> will be hidden, and <em>items</em> will be ordered as defined in the data model. It is based on the <code><a href="https://rdrr.io/pkg/DT/man/dataTableOutput.html" class="external-link">DT::renderDT()</a></code> / <code><a href="https://rdrr.io/pkg/DT/man/dataTableOutput.html" class="external-link">DT::DTOutput()</a></code> functions.</p>
 <p>See <code><a href="../reference/filtered_view_widget.html">filtered_view_widget()</a></code> function.</p>
 </section><section class="level4"><h4 id="selected-items">Selected Item(s)<a class="anchor" aria-label="anchor" href="#selected-items"></a>
 </h4>
 <p>The filtered view has row selection enabled.<br>
-Selecting row(s) in the table will trigger the update of selected_items reactive value.<br>
+Selecting row(s) in the table will trigger the update of <code>selected_items</code> reactive value entry.<br>
 Selected <em>item(s)</em> will also trigger which buttons are available / visible.</p>
 </section></section><section class="level3"><h3 id="inputs">Inputs<a class="anchor" aria-label="anchor" href="#inputs"></a>
 </h3>
 <section class="level4"><h4 id="date-sliderinput">Date sliderInput<a class="anchor" aria-label="anchor" href="#date-sliderinput"></a>
 </h4>
-<p>If the data model has an attribute named ‘<em>date</em>’ (literally), a date sliderInput will be created automatically to enable date filtering.</p>
-<p>See <code><a href="../reference/date_slider_widget.html">date_slider_widget()</a></code> function.</p>
-<p>(see <span style="color: yellow">xxx</span>)</p>
-</section><section class="level4"><h4 id="buttons">Buttons<a class="anchor" aria-label="anchor" href="#buttons"></a>
+<p>If the data model has an attribute named ‘<em>date</em>’ (literally), a date <code><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">shiny::sliderInput()</a></code> will be created automatically to enable date filtering.</p>
+<p>See:</p>
+<ul>
+<li><p><code><a href="../reference/date_slider_widget.html">date_slider_widget()</a></code> function to implement it in the UI</p></li>
+<li><p><a href="./filtering.html#date-slider">filtering</a> article to understand about filtering layers</p></li>
+</ul></section><section class="level4"><h4 id="buttons">Buttons<a class="anchor" aria-label="anchor" href="#buttons"></a>
 </h4>
 <p>Standard buttons are delivered to trigger the module server actions.<br>
-They are implemented as separate UI functions so that it’s possible to wrap them into a more complex UI functions.</p>
+They are implemented as separate UI functions so that it’s possible to wrap them into more complex UI functions.</p>
 <ul>
 <li>create</li>
 <li>update (single item selection)</li>
@@ -231,9 +235,10 @@ They are implemented as separate UI functions so that it’s possible to wrap th
 </h4>
 <p>The create &amp; update workflows rely on a form to capture user inputs.<br>
 This form is generated dynamically based on the data model specifications (attribute type, default values, skip option) so that it saves a lot of time &amp; code.</p>
+<p>See <code><a href="../reference/item_form.html">item_form()</a></code> function.</p>
 </section></section></section><section class="level2"><h2 id="nested-module-considerations">Nested module considerations<a class="anchor" aria-label="anchor" href="#nested-module-considerations"></a>
 </h2>
-<p>By default, the UI / widget functions are called with the id that was defined at the module server function level.</p>
+<p>By default, the UI / widget functions are called with the <code>id</code> that was defined at the module server function level.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># -- call module</span></span>
@@ -252,8 +257,13 @@ This form is generated dynamically based on the data model specifications (attri
 <span><span class="co"># -- call item view</span></span>
 <span><span class="fu"><a href="../reference/filtered_view_widget.html">filtered_view_widget</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span>namespace <span class="op">=</span> <span class="st">"module"</span>, id <span class="op">=</span> <span class="st">"mydata"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>This works with any depth (see <code>?shiny::NS()</code>) for details about the namespace argument.</p>
-</section><script id="quarto-html-after-body" type="application/javascript">
+<p>This works with any depth – see <code><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">shiny::NS()</a></code> for details about the <code>namespace</code> argument.</p>
+</section><section class="level2"><h2 id="useful-links">Useful links<a class="anchor" aria-label="anchor" href="#useful-links"></a>
+</h2>
+<ul>
+<li><p>Module server use cases – see <a href="./implementations.html">implementations</a></p></li>
+<li><p>Arguments &amp; return value(s) – see <a href="./communication.html">communication</a></p></li>
+</ul></section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
