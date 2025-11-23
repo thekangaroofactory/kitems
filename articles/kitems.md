@@ -89,5 +89,5 @@ As it may be confusing where to start, the order of the articles is a
 proposal of a learning path to guide you through the documentation.
 
 See articles’
-[index](https://thekangaroofactory.github.io/kitems/articles/articles/index.md)
+[index](https://thekangaroofactory.github.io/kitems/articles/index.md)
 to follow this path.

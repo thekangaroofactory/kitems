@@ -10,7 +10,7 @@ Articles to understand the main concepts & components of the package.
   module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.md):
 - [Administration](https://thekangaroofactory.github.io/kitems/articles/admin.md):
 
-### Specifications & features
+### Implementation & features
 
 Detailed articles about advanced concepts & features.
 
