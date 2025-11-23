@@ -124,16 +124,16 @@ attribute types fit with the data model.
 ## Useful Links
 
 - Initialization – see
-  [`vignette("admin")`](https://thekangaroofactory.github.io/kitems/articles/admin.md)
+  [admin](https://thekangaroofactory.github.io/kitems/articles/admin.html#initialization)
 
-- Data model governance & migration – see
-  [`vignette("admin")`](https://thekangaroofactory.github.io/kitems/articles/admin.md)
+- Data model migration – see
+  [admin](https://thekangaroofactory.github.io/kitems/articles/admin.html#migration)
 
 - Data import – see
-  [`vignette("admin")`](https://thekangaroofactory.github.io/kitems/articles/admin.md)
+  [admin](https://thekangaroofactory.github.io/kitems/articles/admin.html#data-import)
 
 - Item workflows – see
-  [`vignette("workflows")`](https://thekangaroofactory.github.io/kitems/articles/workflows.md)
+  [workflows](https://thekangaroofactory.github.io/kitems/articles/workflows.md)
 
 - Access the data model & items – see
-  [`vignette("shiny-module")`](https://thekangaroofactory.github.io/kitems/articles/shiny-module.md)
+  [shiny-module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.html#return-values)

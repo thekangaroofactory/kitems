@@ -208,8 +208,7 @@ events (instead of a single event).
 >
 > The motivation behind this feature is explained in the known
 > limitations (see
-> [`vignette("limitations")`](https://thekangaroofactory.github.io/kitems/articles/limitations.md)
-> ).
+> [limitations](https://thekangaroofactory.github.io/kitems/articles/limitations.md)).
 
 Single event:
 

@@ -76,7 +76,7 @@ kitems::filtered_view_widget(id = "mydata")
 ```
 
 See the
-[`vignette("shiny-module")`](https://thekangaroofactory.github.io/kitems/articles/shiny-module.md)
+[shiny-module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.md)
 article to get more information about the module.
 
 ## Learning path

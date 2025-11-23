@@ -39,10 +39,10 @@ This article is dedicated to listing known limitations that are not -
   call to as.POSIXct.
 
   From R-4.3.0, origin is no longer a required parameter:  
-  <https://stackoverflow.com/questions/37690722/how-to-get-origin-from-posixct-object>
+  [how-to-get-origin-from-posixct-object](https://stackoverflow.com/questions/37690722/how-to-get-origin-from-posixct-object)
 
   This impacts the create & update trigger workflows (see
-  [`vignette("workflows")`](https://thekangaroofactory.github.io/kitems/articles/workflows.md)).
+  [workflows](https://thekangaroofactory.github.io/kitems/articles/workflows.md)).
 
   To bypass this issue, make sure the values sent to the trigger for
   POSIXct attributes fits with the expected class (at least the first

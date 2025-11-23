@@ -106,8 +106,8 @@
 </li>
 <li>
 <p>Prior to R-4.3.0, <code><a href="../reference/attribute_value.html">attribute_value()</a></code> function may raise an error when the first element of a POSIXct vector set as <code>value</code> parameter is NA. This is due to missing origin in the call to as.POSIXct.</p>
-<p>From R-4.3.0, origin is no longer a required parameter:<br><a href="https://stackoverflow.com/questions/37690722/how-to-get-origin-from-posixct-object" class="external-link uri">https://stackoverflow.com/questions/37690722/how-to-get-origin-from-posixct-object</a></p>
-<p>This impacts the create &amp; update trigger workflows (see <code><a href="../articles/workflows.html">vignette("workflows")</a></code>).</p>
+<p>From R-4.3.0, origin is no longer a required parameter:<br><a href="https://stackoverflow.com/questions/37690722/how-to-get-origin-from-posixct-object" class="external-link uri">how-to-get-origin-from-posixct-object</a></p>
+<p>This impacts the create &amp; update trigger workflows (see <a href="./workflows.html">workflows</a>).</p>
 <p>To bypass this issue, make sure the values sent to the trigger for POSIXct attributes fits with the expected class (at least the first element of the vector):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
