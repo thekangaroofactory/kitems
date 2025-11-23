@@ -1,6 +1,6 @@
-# Build Attribute Input
+# Attribute Input
 
-Build Attribute Input
+Build input for an attribute
 
 ## Usage
 
@@ -21,16 +21,20 @@ attribute_input(colClass, value = NULL, ns)
 
 - ns:
 
-  the module namespace function reference
+  the namespace function reference
 
 ## Value
 
-an input based on colClass
+An input that can be added to the UI definition.
 
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
+# -- namespace
+ns <- shiny::NS("my_data")
+
+# -- create inputs
 attribute_input(colClass = c(name = "character"), ns)
 attribute_input(colClass = c(total = "numeric"), value = 10, ns)
 } # }

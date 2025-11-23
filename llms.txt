@@ -52,7 +52,7 @@ kitems::runExample("demo")
 - [`attribute_create()`](https://thekangaroofactory.github.io/kitems/reference/attribute_create.md)
   : Add Attribute
 - [`attribute_input()`](https://thekangaroofactory.github.io/kitems/reference/attribute_input.md)
-  : Build Attribute Input
+  : Attribute Input
 - [`attribute_input_update()`](https://thekangaroofactory.github.io/kitems/reference/attribute_input_update.md)
   : Update Attribute Input
 - [`attribute_shortcut()`](https://thekangaroofactory.github.io/kitems/reference/attribute_shortcut.md)
