@@ -194,7 +194,7 @@ Do filter:
 ## Useful links
 
 - Module server arguments & return value(s) –
-  [shiny-module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.htmll#server)
+  [shiny-module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.html#server)
 
 - Read about communication principles –
   [communication](https://thekangaroofactory.github.io/kitems/articles/communication.md)

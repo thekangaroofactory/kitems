@@ -6,11 +6,11 @@ place.
 ## Path
 
 Both data model & item files are stored in a specific folder dedicated
-to given instance instance of the module server.
+to a given instance of the module server.
 
-- the folder is named after the `id` of the module
+- The folder is named after the `id` of the module
 
-- it is located under the path given to the `path` argument
+- It is located under the path given to the `path` argument
 
 ``` r
 kitems::kitems(id = "mydata", path = "./data")
