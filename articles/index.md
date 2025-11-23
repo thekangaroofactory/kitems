@@ -23,6 +23,8 @@ Detailed articles about advanced concepts & features.
 
 ### Other
 
+Miscellaneous topics
+
 - [Environment](https://thekangaroofactory.github.io/kitems/articles/environment.md):
 - [Known
   Limitations](https://thekangaroofactory.github.io/kitems/articles/limitations.md):
