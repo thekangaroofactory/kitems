@@ -33,7 +33,7 @@ This article is dedicated to listing known limitations that are not - *at this t
 
     Multiple [events](./workflows.html#multiple-events) support solves this issue by letting the module server handle the orchestration.
 
--   Prior to R-4.3.0, `attribute_value()` function may raise an error when the first element of a POSIXct vector set as `value` parameter is NA. This is due to missing origin in the call to as.POSIXct.
+-   Prior to R-4.3.0, `attribute_value()` function may raise an error when the first element of a POSIXct vector set as `value` parameter is `NA`. This is due to missing origin in the call to as.POSIXct.
 
     From R-4.3.0, origin is no longer a required parameter:\
     [how-to-get-origin-from-posixct-object](https://stackoverflow.com/questions/37690722/how-to-get-origin-from-posixct-object){.uri}
