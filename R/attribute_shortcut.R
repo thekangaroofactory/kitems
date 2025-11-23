@@ -1,11 +1,14 @@
 
 
-#' Build Attribute Shortcuts
+#' Attribute Shortcuts
+#'
+#' @description
+#' Build attribute shortcuts list
 #'
 #' @param colClass a length-one named vector. \code{names(colClass)} is the name of the attribute,
 #' and \code{colClass} is the type (class) of the attribute.
-#' @param suggestions a list of suggestions, output of \link[kitems]{attribute_suggestion}
-#' @param ns the module namespace function reference
+#' @param suggestions a list of suggestions, output of [attribute_suggestion()]
+#' @param ns the namespace function reference
 #'
 #' @seealso [attribute_suggestion()] [item_form()]
 #'
@@ -15,7 +18,7 @@
 #'
 #' The actionLink has an \code{onclick} property that will trigger \code{input$shortcut_trigger} (\code{ns(shortcut_trigger)})
 #' Its value is of the form \code{[ns]-[attribute]_[value]}
-#' Basically, applying \code{tail(unlist(strsplit(input$shortcut_trigger, split = "-")), 1)} will access attribute_value
+#' Basically, applying \code{tail(unlist(strsplit(input$shortcut_trigger, split = "-")), 1)} will access attribute_value.
 #'
 #' Note that for POSIXct attribute, the shortcut_trigger input will not carry the timezone information.
 #' Clicking on the corresponding actionLink will only trigger date & time inputs update.

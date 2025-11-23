@@ -2,7 +2,7 @@
 % Please edit documentation in R/attribute_shortcut.R
 \name{attribute_shortcut}
 \alias{attribute_shortcut}
-\title{Build Attribute Shortcuts}
+\title{Attribute Shortcuts}
 \usage{
 attribute_shortcut(colClass, suggestions, ns)
 }
@@ -10,9 +10,9 @@ attribute_shortcut(colClass, suggestions, ns)
 \item{colClass}{a length-one named vector. \code{names(colClass)} is the name of the attribute,
 and \code{colClass} is the type (class) of the attribute.}
 
-\item{suggestions}{a list of suggestions, output of \link[kitems]{attribute_suggestion}}
+\item{suggestions}{a list of suggestions, output of \code{\link[=attribute_suggestion]{attribute_suggestion()}}}
 
-\item{ns}{the module namespace function reference}
+\item{ns}{the namespace function reference}
 }
 \value{
 a list of actionLink objects
@@ -21,13 +21,13 @@ The return value is the output of \link[base]{lapply} applying \link[shiny]{acti
 
 The actionLink has an \code{onclick} property that will trigger \code{input$shortcut_trigger} (\code{ns(shortcut_trigger)})
 Its value is of the form \code{[ns]-[attribute]_[value]}
-Basically, applying \code{tail(unlist(strsplit(input$shortcut_trigger, split = "-")), 1)} will access attribute_value
+Basically, applying \code{tail(unlist(strsplit(input$shortcut_trigger, split = "-")), 1)} will access attribute_value.
 
 Note that for POSIXct attribute, the shortcut_trigger input will not carry the timezone information.
 Clicking on the corresponding actionLink will only trigger date & time inputs update.
 }
 \description{
-Build Attribute Shortcuts
+Build attribute shortcuts list
 }
 \examples{
 \dontrun{
