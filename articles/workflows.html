@@ -99,13 +99,13 @@ A confirmation button in this dialog is used to launch the creation process base
 </section><section class="level3"><h3 id="mixed-implementation">Mixed implementation<a class="anchor" aria-label="anchor" href="#mixed-implementation"></a>
 </h3>
 <p>Another way is to fire the create item dialog directly from the main application server (it’s useful when you don’t want to implement the create button in the application UI).</p>
-<p>An event can be sent to the module trigger reactive argument:</p>
+<p>An event can be sent to the module <code>trigger</code> reactive argument:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="st">"create"</span>, type <span class="op">=</span> <span class="st">"dialog"</span><span class="op">)</span></span></code></pre></div>
-<p>From there, the creation process will work the same way as it does after the create button is clicked.</p>
+<p>From there, the creation process will work the same way as it does after the create button is clicked (see <a href="#schema-create">Schema</a>).</p>
 </section><section class="level3"><h3 id="full-control">Full control<a class="anchor" aria-label="anchor" href="#full-control"></a>
 </h3>
-<p>The third and last option is to rely on a full server-side process.</p>
+<p>The third and last option to create item(s) is to rely on a full server-side process.</p>
 <p>This is particularly useful when the item creation does not rely on user input, or when you want to implement your own input form.</p>
 <p>A specific event is used to trigger this back-end creation process:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -120,10 +120,22 @@ A confirmation button in this dialog is used to launch the creation process base
 <blockquote>
 <p><strong>Important</strong></p>
 <p>If so, elements in the list <em>must</em> have either length 1 (all items will get same value for this attribute) or same length as the expected number of items. If not, the process will fail as it is not safe to guess whats the intention behind such a list.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="st">"create"</span>, </span>
+<span>     type <span class="op">=</span> <span class="st">"task"</span>, </span>
+<span>     values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Apple"</span>, <span class="st">"Banana"</span><span class="op">)</span>,</span>
+<span>                   date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Will create two items with different names and same date value.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="st">"create"</span>, </span>
+<span>     type <span class="op">=</span> <span class="st">"task"</span>, </span>
+<span>     values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Apple"</span>, <span class="st">"Banana"</span>, <span class="st">"Mango"</span><span class="op">)</span>,</span>
+<span>                   date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Will fail because there is no way to guess what the intention is (2 dates for 3 items)!</p>
 </blockquote>
 </div>
-<p>In case existing ids are sent along the list, the corresponding items will be skipped to avoid item duplication (it’s better to send a list without id and let the data model generate them!).</p>
-</section><section class="level3"><h3 id="schema">Schema<a class="anchor" aria-label="anchor" href="#schema"></a>
+<p>In case existing ids are sent along the list, the corresponding items will be skipped to avoid item duplication (it’s better to send a list without <code>id</code> and let the data model generate them!).</p>
+</section><section class="level3"><h3 id="schema-create">Schema<a class="anchor" aria-label="anchor" href="#schema-create"></a>
 </h3>
 <p><img src="images/workflows-create.jpg"></p>
 </section></section><section class="level2"><h2 id="update-items">Update item(s)<a class="anchor" aria-label="anchor" href="#update-items"></a>
@@ -138,26 +150,29 @@ A confirmation button in this dialog is used to launch the creation process base
 </h3>
 <p>When the item table is not implemented in the application UI, the update button cannot be used as it directly relies on the selected item.</p>
 <p>In this case, it’s possible to use the server function <code>trigger</code> argument to fire the update dialog for a specific item:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="st">"update"</span>, type <span class="op">=</span> <span class="st">"dialog"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">...</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>From there, the update process will be same as in the first implementation.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="st">"update"</span>, type <span class="op">=</span> <span class="st">"dialog"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">123</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>From there, the update process will be same as in the first implementation (see <a href="#schema-update">Schema</a>).</p>
 </section><section class="level3"><h3 id="full-control-1">Full control<a class="anchor" aria-label="anchor" href="#full-control-1"></a>
 </h3>
-<p>If the update process does not rely on user input (for example to update an attribute linked to the lifecycle of the item such as progress or state), or if you want to implement your own custom input form, then it is possible to use the <code>trigger</code> in a full back-end update process.</p>
+<p>If the update process does not rely on user inputs (for example to update an attribute linked to the lifecycle of the item such as a progress or state), or if you want to implement your own custom input form, then it is possible to use the <code>trigger</code> argument in a full back-end update process.</p>
 <p>The event is similar to the one used to create items, only the workflow is different:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="st">"update"</span>, type <span class="op">=</span> <span class="st">"task"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="st">"update"</span>, </span>
+<span>     type <span class="op">=</span> <span class="st">"task"</span>, </span>
+<span>     values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">123</span>, <span class="fl">456</span><span class="op">)</span>, </span>
+<span>                   name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pear"</span>, <span class="st">"Lemon"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The module will use the provided values to update the corresponding items.</p>
-<p>Again, partial values are supported, meaning that if you provide an id with a single attribute, only this attribute will be updated for the corresponding item.</p>
+<p>Partial values are supported, meaning that if you provide an <code>id</code> with a single attribute, only this attribute will be updated for the corresponding item.</p>
 <p>It is possible to force the update of a computed value attribute by including the name in the list, and set the value to <code>NA</code>. In this case, the data model will be used to define the default value.</p>
 <p>Multiple items update is supported as well, with same rules as for the create workflow.</p>
 <div>
 <blockquote>
 <p><strong>Note</strong></p>
-<p>Note that this back-end process is the only way to update multiple items at once.</p>
+<p>This back-end process is the only way to update multiple items at once.</p>
 </blockquote>
 </div>
-</section><section class="level3"><h3 id="schema-1">Schema<a class="anchor" aria-label="anchor" href="#schema-1"></a>
+</section><section class="level3"><h3 id="schema-update">Schema<a class="anchor" aria-label="anchor" href="#schema-update"></a>
 </h3>
 <p><img src="images/workflows-update.jpg"></p>
 </section></section><section class="level2"><h2 id="delete-items">Delete item(s)<a class="anchor" aria-label="anchor" href="#delete-items"></a>
@@ -170,24 +185,24 @@ A confirmation button in this dialog is used to launch the creation process base
 </section><section class="level3"><h3 id="mixed-implementation-2">Mixed implementation<a class="anchor" aria-label="anchor" href="#mixed-implementation-2"></a>
 </h3>
 <p>Again here, when the item table is not implemented or if you want to have the delete operation available from a contextual element attached to a specific item (for example a marker’s popup on a map), the <code>trigger</code> argument can be used to fire the delete confirmation dialog.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="st">"delete"</span>, type <span class="op">=</span> <span class="st">"dialog"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="st">"delete"</span>, type <span class="op">=</span> <span class="st">"dialog"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">123</span>, <span class="fl">456</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>User will hit the confirmation button and items will be removed from the item table.</p>
 </section><section class="level3"><h3 id="full-control-2">Full control<a class="anchor" aria-label="anchor" href="#full-control-2"></a>
 </h3>
-<p>In case you don’t want the confirmation dialog to pop up or need to use a server side process that is not directly linked to the UI, the trigger accepts a specific event that can be used to delete one or several items:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="st">"delete"</span>, type <span class="op">=</span> <span class="st">"task"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>In case you don’t want the confirmation dialog to pop up or need to use a server side process that is not directly linked to the UI, the <code>trigger</code> accepts a specific event that can be used to delete one or several items:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="st">"delete"</span>, type <span class="op">=</span> <span class="st">"task"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">123</span>, <span class="fl">456</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The module server will delete the items with corresponding ids.<br>
 Of course if some id(s) are not retrieved, they will be ignored.</p>
 <div>
 <blockquote>
 <p><strong>Caution</strong></p>
-<p>It is recommended that your application will secure delete with some confirmation process as the module server will not ask for any confirmation!</p>
-<p>This is particularly true when the autosave is set to <code>TRUE</code> as the item table will be saved as soon as it is modified.</p>
+<p>It is recommended that your application will secure delete with some confirmation process as the module server will <strong>not</strong> ask for any confirmation!</p>
+<p>This is particularly true when the <code>autosave</code> is set to <code>TRUE</code> as the item table will be saved as soon as it is modified.</p>
 </blockquote>
 </div>
-</section><section class="level3"><h3 id="schema-2">Schema<a class="anchor" aria-label="anchor" href="#schema-2"></a>
+</section><section class="level3"><h3 id="schema-delete">Schema<a class="anchor" aria-label="anchor" href="#schema-delete"></a>
 </h3>
 <p><img src="images/workflows-delete.jpg"></p>
 </section></section><section class="level2"><h2 id="multiple-events">Multiple events<a class="anchor" aria-label="anchor" href="#multiple-events"></a>
@@ -200,21 +215,23 @@ Of course if some id(s) are not retrieved, they will be ignored.</p>
 </blockquote>
 </div>
 <p>Single event:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="st">"create"</span>, type <span class="op">=</span> <span class="st">"task"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"foo"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="st">"update"</span>, type <span class="op">=</span> <span class="st">"task"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1234</span>, name <span class="op">=</span> <span class="st">"bar"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Multiple events:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">workflow =</span> <span class="st">"create"</span>, <span class="at">type =</span> <span class="st">"task"</span>, <span class="at">values =</span> <span class="fu">list</span>(<span class="at">name =</span> <span class="st">"foo"</span>)),</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">workflow =</span> <span class="st">"update"</span>, <span class="at">type =</span> <span class="st">"task"</span>, <span class="at">values =</span> <span class="fu">list</span>(<span class="at">id =</span> <span class="dv">1234</span>, <span class="at">name =</span> <span class="st">"bar"</span>)))<span class="er">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="st">"create"</span>, type <span class="op">=</span> <span class="st">"task"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"foo"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>workflow <span class="op">=</span> <span class="st">"update"</span>, type <span class="op">=</span> <span class="st">"task"</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1234</span>, name <span class="op">=</span> <span class="st">"bar"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The module server will take care of the events’ orchestration.</p>
 </section><section class="level2"><h2 id="useful-links">Useful links<a class="anchor" aria-label="anchor" href="#useful-links"></a>
 </h2>
 <ul>
-<li><p>default values: core concept / data model / default</p></li>
-<li><p>communication</p></li>
-<li><p>kitems()</p></li>
-<li><p>implementations</p></li>
+<li><p>Module server arguments – <a href="./shiny-module.html#arguments">shiny-module</a></p></li>
+<li><p>Attribute default values – <a href="./core-concepts.html#defaults">core concepts</a></p></li>
+<li><p>Scenarios &amp; use cases – <a href="./implementations.html">implementations</a></p></li>
+<li><p>Communicating with the module server – <a href="./communication.html" data-heading="Useful links">communication</a></p></li>
+<li><p>Module server function – <code><a href="../reference/kitems.html">kitems()</a></code></p></li>
 </ul></section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);

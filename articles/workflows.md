@@ -26,18 +26,19 @@ Another way is to fire the create item dialog directly from the main
 application server (it’s useful when you don’t want to implement the
 create button in the application UI).
 
-An event can be sent to the module trigger reactive argument:
+An event can be sent to the module `trigger` reactive argument:
 
 ``` r
 list(workflow = "create", type = "dialog")
 ```
 
 From there, the creation process will work the same way as it does after
-the create button is clicked.
+the create button is clicked (see [Schema](#schema-create)).
 
 ### Full control
 
-The third and last option is to rely on a full server-side process.
+The third and last option to create item(s) is to rely on a full
+server-side process.
 
 This is particularly useful when the item creation does not rely on user
 input, or when you want to implement your own input form.
@@ -65,10 +66,29 @@ This back-end process also supports creating multiple items at once.
 > will get same value for this attribute) or same length as the expected
 > number of items. If not, the process will fail as it is not safe to
 > guess whats the intention behind such a list.
+>
+> ``` r
+> list(workflow = "create", 
+>      type = "task", 
+>      values = list(name = c("Apple", "Banana"),
+>                    date = Sys.Date()))
+> ```
+>
+> Will create two items with different names and same date value.
+>
+> ``` r
+> list(workflow = "create", 
+>      type = "task", 
+>      values = list(name = c("Apple", "Banana", "Mango"),
+>                    date = c(Sys.Date(), Sys.Date()-1)))
+> ```
+>
+> Will fail because there is no way to guess what the intention is (2
+> dates for 3 items)!
 
 In case existing ids are sent along the list, the corresponding items
 will be skipped to avoid item duplication (it’s better to send a list
-without id and let the data model generate them!).
+without `id` and let the data model generate them!).
 
 ### Schema
 
@@ -102,31 +122,35 @@ In this case, it’s possible to use the server function `trigger`
 argument to fire the update dialog for a specific item:
 
 ``` r
-list(workflow = "update", type = "dialog", values = list(id = ...))
+list(workflow = "update", type = "dialog", values = list(id = 123))
 ```
 
 From there, the update process will be same as in the first
-implementation.
+implementation (see [Schema](#schema-update)).
 
 ### Full control
 
-If the update process does not rely on user input (for example to update
-an attribute linked to the lifecycle of the item such as progress or
-state), or if you want to implement your own custom input form, then it
-is possible to use the `trigger` in a full back-end update process.
+If the update process does not rely on user inputs (for example to
+update an attribute linked to the lifecycle of the item such as a
+progress or state), or if you want to implement your own custom input
+form, then it is possible to use the `trigger` argument in a full
+back-end update process.
 
 The event is similar to the one used to create items, only the workflow
 is different:
 
 ``` r
-list(workflow = "update", type = "task", values = list(...))
+list(workflow = "update", 
+     type = "task", 
+     values = list(id = c(123, 456), 
+                   name = c("Pear", "Lemon")))
 ```
 
 The module will use the provided values to update the corresponding
 items.
 
-Again, partial values are supported, meaning that if you provide an id
-with a single attribute, only this attribute will be updated for the
+Partial values are supported, meaning that if you provide an `id` with a
+single attribute, only this attribute will be updated for the
 corresponding item.
 
 It is possible to force the update of a computed value attribute by
@@ -138,8 +162,8 @@ create workflow.
 
 > **Note**
 >
-> Note that this back-end process is the only way to update multiple
-> items at once.
+> This back-end process is the only way to update multiple items at
+> once.
 
 ### Schema
 
@@ -166,7 +190,7 @@ to a specific item (for example a marker’s popup on a map), the
 `trigger` argument can be used to fire the delete confirmation dialog.
 
 ``` r
-list(workflow = "delete", type = "dialog", values = list(id = c(...)))
+list(workflow = "delete", type = "dialog", values = list(id = c(123, 456)))
 ```
 
 User will hit the confirmation button and items will be removed from the
@@ -175,12 +199,12 @@ item table.
 ### Full control
 
 In case you don’t want the confirmation dialog to pop up or need to use
-a server side process that is not directly linked to the UI, the trigger
-accepts a specific event that can be used to delete one or several
-items:
+a server side process that is not directly linked to the UI, the
+`trigger` accepts a specific event that can be used to delete one or
+several items:
 
 ``` r
-list(workflow = "delete", type = "task", values = list(id = c(...)))
+list(workflow = "delete", type = "task", values = list(id = c(123, 456)))
 ```
 
 The module server will delete the items with corresponding ids.  
@@ -189,10 +213,10 @@ Of course if some id(s) are not retrieved, they will be ignored.
 > **Caution**
 >
 > It is recommended that your application will secure delete with some
-> confirmation process as the module server will not ask for any
+> confirmation process as the module server will **not** ask for any
 > confirmation!
 >
-> This is particularly true when the autosave is set to `TRUE` as the
+> This is particularly true when the `autosave` is set to `TRUE` as the
 > item table will be saved as soon as it is modified.
 
 ### Schema
@@ -222,17 +246,24 @@ Multiple events:
 ``` r
 list(
   list(workflow = "create", type = "task", values = list(name = "foo")),
-  list(workflow = "update", type = "task", values = list(id = 1234, name = "bar"))))
+  list(workflow = "update", type = "task", values = list(id = 1234, name = "bar")))
 ```
 
 The module server will take care of the events’ orchestration.
 
 ## Useful links
 
-- default values: core concept / data model / default
+- Module server arguments –
+  [shiny-module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.html#arguments)
 
-- communication
+- Attribute default values – [core
+  concepts](https://thekangaroofactory.github.io/kitems/articles/core-concepts.html#defaults)
 
-- kitems()
+- Scenarios & use cases –
+  [implementations](https://thekangaroofactory.github.io/kitems/articles/implementations.md)
 
-- implementations
+- Communicating with the module server –
+  [communication](https://thekangaroofactory.github.io/kitems/articles/communication.md)
+
+- Module server function –
+  [`kitems()`](https://thekangaroofactory.github.io/kitems/reference/kitems.md)
