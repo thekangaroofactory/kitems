@@ -2,21 +2,21 @@
 % Please edit documentation in R/admin.R
 \name{admin}
 \alias{admin}
-\title{Kitems Admin Console}
+\title{Admin Console}
 \usage{
 admin(path = getwd())
 }
 \arguments{
-\item{path}{the path where to find item folder(s)}
+\item{path}{the path where to find the item folder(s)}
 }
 \description{
 Launches the administration console (Shiny App)
 }
 \details{
-The app will scan the path to detect sub folders that are expected to be
+The app will scan the \code{path} to detect sub folders that are expected to be
 item folders named after the id used to create them.
 
-It will build the ui from this list.
+It will build the ui tabs from this list.
 }
 \examples{
 \dontrun{
