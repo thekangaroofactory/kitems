@@ -4,14 +4,21 @@ The framework is meant to be flexible, which means that several
 implementations (in other words levels of delegation / control) have
 been defined.
 
+> **Tip**
+>
+> It is recommended to read about these implementations to carefully
+> chose the best approach given the project use case as some
+> implementations require more advanced knowledge of R / Shiny.
+
 ## Full delegation
 
 In this scenario / implementation, the *item* management is only
-performed through the module server & UI. This is the default mode.
+performed through the module internal server-UI interactions. This is
+the default and most intuitive mode.
 
-- module server is launched without the `trigger` argument
+- Module server is launched without setting the `trigger` argument
 
-- actions are performed using the UI components
+- Actions are performed using the UI components
 
 Server example:
 
@@ -65,6 +72,10 @@ From there, you will use the `mydata` object (containing the module
 server function return value) to perform your own tasks (build a plot on
 the data for example).
 
+See
+[shiny-module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.html#return-values)
+to read about the module server return value(s).
+
 ## Mixed implementation
 
 In this scenario, you may not want to implement the action buttons
@@ -73,7 +84,7 @@ module. An example is when *item* creation will be launched as a side
 effect of an observer in your app.
 
 The module server will be launched using the `trigger` reactive argument
-so that an event can be passed to fire the expected dialog.
+so that an event can be passed to fire the expected dialogs.
 
 Server example:
 
@@ -126,8 +137,8 @@ Another – maybe easier – example is a dashboard that would display a map
 and user would create markers just by clicking on it.
 
 The code implementation itself is not very different from the mixed
-implementation as you will use the trigger to communicate to the module
-server from the main / parent server.
+implementation as you will use the `trigger` to communicate to the
+module server from the main / parent server.
 
 Server example:
 
@@ -145,9 +156,9 @@ shinyServer(
   })
 ```
 
-But the *item* operations will no longer rely on the dialog, so you need
-to pass all required information for the module server to perform the
-task in the background.
+But the *item* operations will no longer rely on the dialogs, so you
+need to pass all required information for the module server to perform
+the task in the background.
 
 Create item example:
 
@@ -173,15 +184,18 @@ observeEvent(input$foo, {
 > This implementation is considered as an advanced scenario that is
 > available to cover more complex use cases.
 >
-> It is important to read / understand about the workflows &
-> communication topics before using it – especially when using
+> It is important to read / understand about the
+> [workflows](https://thekangaroofactory.github.io/kitems/articles/workflows.md)
+> & \[communication\] topics before using it – especially when using
 > **existing** data – as the module server will not ask for confirmation
 > to perform delete operations for example.
 
 ## Useful links
 
-- workflows
+- Create / update / delete items –
+  [workflows](https://thekangaroofactory.github.io/kitems/articles/workflows.md)
 
-- shiny module
+- Arguments & return value(s) –
+  [shiny-module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.md)
 
-- communication
+- Communication principles – \[communication\]
