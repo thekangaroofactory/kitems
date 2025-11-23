@@ -38,7 +38,7 @@ A data frame of fruit objects is needed, a table view, buttons & functions to pe
 
 In many cases, it involves to write code that allows to handle the **same** set of operations but for different objects, which makes this code hard to reuse in another project.
 
-::: {.callout-note icon="false"}
+::: {.callout-note appearance="simple" icon="false"}
 The purpose of *kitems* is to wrap those standard operations into a package that is not dependent on the type of *item* – *something that is part of a list or group of things* – to manage.
 :::
 
