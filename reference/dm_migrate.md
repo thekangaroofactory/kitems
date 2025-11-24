@@ -1,6 +1,6 @@
 # Data Model Migration
 
-Executhe the migration procedure on a data model.
+Execute the migration procedure on a data model.
 
 ## Usage
 
