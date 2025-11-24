@@ -54,9 +54,74 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="basic-use-case-full-delegation-">Basic Use Case (Full delegation)<a class="anchor" aria-label="anchor" href="#basic-use-case-full-delegation-"></a></h2>
+
+      <div class="section-desc"><p>These functions are the core features you need to start using the framework.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+      <h3 id="shiny-module-server">Shiny Module Server<a class="anchor" aria-label="anchor" href="#shiny-module-server"></a></h3>
+      <div class="section-desc"><p>The main component of the package.</p></div>
+
+      <dl></dl></div><div class="section level2">
 
 
+
+
+      <dl><dt>
+
+          <code><a href="kitems.html">kitems()</a></code>
+
+        </dt>
+        <dd>Kitems Module Server</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="shiny-module-ui-components">Shiny Module UI Components<a class="anchor" aria-label="anchor" href="#shiny-module-ui-components"></a></h3>
+      <div class="section-desc"><p>The UI functions to include to your app.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="create_widget.html">create_widget()</a></code>
+
+        </dt>
+        <dd>Create Item Button</dd>
+
+        <dt>
+
+          <code><a href="update_widget.html">update_widget()</a></code>
+
+        </dt>
+        <dd>Update Item Button</dd>
+
+        <dt>
+
+          <code><a href="delete_widget.html">delete_widget()</a></code>
+
+        </dt>
+        <dd>Delete Item Button</dd>
+
+        <dt>
+
+          <code><a href="date_slider_widget.html">date_slider_widget()</a></code>
+
+        </dt>
+        <dd>Date Slider Widget</dd>
+
+        <dt>
+
+          <code><a href="filtered_view_widget.html">filtered_view_widget()</a></code>
+
+        </dt>
+        <dd>Filtered View Widget</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="admin">Admin<a class="anchor" aria-label="anchor" href="#admin"></a></h3>
+      <div class="section-desc"><p>The functions to perform admin tasks.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -72,55 +137,6 @@
 
         <dt>
 
-          <code><a href="admin_widget.html">admin_widget()</a></code>
-
-        </dt>
-        <dd>Admin Widget</dd>
-
-        <dt>
-
-          <code><a href="attribute_create.html">attribute_create()</a></code>
-
-        </dt>
-        <dd>Add Attribute</dd>
-
-        <dt>
-
-          <code><a href="attribute_input.html">attribute_input()</a></code>
-
-        </dt>
-        <dd>Attribute Input</dd>
-
-        <dt>
-
-          <code><a href="attribute_shortcut.html">attribute_shortcut()</a></code>
-
-        </dt>
-        <dd>Attribute Shortcuts</dd>
-
-        <dt>
-
-          <code><a href="attribute_suggestion.html">attribute_suggestion()</a></code>
-
-        </dt>
-        <dd>Attribute Suggestions</dd>
-
-        <dt>
-
-          <code><a href="attribute_update.html">attribute_update()</a></code>
-
-        </dt>
-        <dd>Update Attribute</dd>
-
-        <dt>
-
-          <code><a href="attribute_value.html">attribute_value()</a></code>
-
-        </dt>
-        <dd>Turn Value(s) into Attribute</dd>
-
-        <dt>
-
           <code><a href="backup.html">backup()</a></code>
 
         </dt>
@@ -128,31 +144,93 @@
 
         <dt>
 
-          <code><a href="create_widget.html">create_widget()</a></code>
+          <code><a href="restore.html">restore()</a></code>
 
         </dt>
-        <dd>Create Item Button</dd>
+        <dd>Restore Files</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="demos">Demos<a class="anchor" aria-label="anchor" href="#demos"></a></h3>
+      <div class="section-desc"><p>Function to list and launch the demo apps.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="runExample.html">runExample()</a></code>
+
+        </dt>
+        <dd>Run Shiny Demo Apps</dd>
+      </dl></div><div class="section level2">
+      <h2 id="advanced-scenarios-mixed-or-full-control-">Advanced Scenarios (Mixed or Full control)<a class="anchor" aria-label="anchor" href="#advanced-scenarios-mixed-or-full-control-"></a></h2>
+
+      <div class="section-desc"><p>These helper functions can be used to create events to pass to the module server reactive arguments.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="filter_event.html">filter_event()</a></code>
+
+        </dt>
+        <dd>Filter Event</dd>
 
         <dt>
+
+          <code><a href="trigger_event.html">trigger_event()</a></code>
+
+        </dt>
+        <dd>Trigger Event</dd>
+      </dl></div><div class="section level2">
+      <h2 id="behind-the-scene">Behind the scene<a class="anchor" aria-label="anchor" href="#behind-the-scene"></a></h2>
+
+      <div class="section-desc"><p>These functions are made available (exported) for advanced users who would like to go beyond the usage of the module server.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+      <h3 id="admin-1">Admin<a class="anchor" aria-label="anchor" href="#admin-1"></a></h3>
+      <div class="section-desc"><p>The server/UI functions behind the admin console app.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="kitems_admin.html">kitems_admin()</a></code>
+
+        </dt>
+        <dd>kitems Admin Module Server</dd>
+
+        <dt>
+
+          <code><a href="admin_widget.html">admin_widget()</a></code>
+
+        </dt>
+        <dd>Admin Widget</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="data-model">Data model<a class="anchor" aria-label="anchor" href="#data-model"></a></h3>
+      <div class="section-desc"><p>The functions related to data model management.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="data_model.html">data_model()</a></code>
 
         </dt>
         <dd>Data Model</dd>
-
-        <dt>
-
-          <code><a href="date_slider_widget.html">date_slider_widget()</a></code>
-
-        </dt>
-        <dd>Date Slider Widget</dd>
-
-        <dt>
-
-          <code><a href="delete_widget.html">delete_widget()</a></code>
-
-        </dt>
-        <dd>Delete Item Button</dd>
 
         <dt>
 
@@ -209,43 +287,68 @@
 
         </dt>
         <dd>Data Model Version</dd>
+      </dl></div><div class="section level2">
 
-        <dt>
+      <h3 id="attribute">Attribute<a class="anchor" aria-label="anchor" href="#attribute"></a></h3>
+      <div class="section-desc"><p>The functions related to attrbute management.</p></div>
 
-          <code><a href="dynamic_sidebar.html">dynamic_sidebar()</a></code>
+      <dl></dl></div><div class="section level2">
 
-        </dt>
-        <dd>Generate Dynamic menuItem</dd>
 
-        <dt>
 
-          <code><a href="filter_event.html">filter_event()</a></code>
 
-        </dt>
-        <dd>Filter Event</dd>
+      <dl><dt>
 
-        <dt>
-
-          <code><a href="filtered_view_widget.html">filtered_view_widget()</a></code>
+          <code><a href="attribute_create.html">attribute_create()</a></code>
 
         </dt>
-        <dd>Filtered View Widget</dd>
+        <dd>Add Attribute</dd>
 
         <dt>
 
-          <code><a href="hasDate.html">hasDate()</a></code>
+          <code><a href="attribute_input.html">attribute_input()</a></code>
 
         </dt>
-        <dd>Test Date Attribute</dd>
+        <dd>Attribute Input</dd>
 
         <dt>
 
-          <code><a href="is_truthy.html">is_truthy()</a></code>
+          <code><a href="attribute_shortcut.html">attribute_shortcut()</a></code>
 
         </dt>
-        <dd>Truthy Value</dd>
+        <dd>Attribute Shortcuts</dd>
 
         <dt>
+
+          <code><a href="attribute_suggestion.html">attribute_suggestion()</a></code>
+
+        </dt>
+        <dd>Attribute Suggestions</dd>
+
+        <dt>
+
+          <code><a href="attribute_update.html">attribute_update()</a></code>
+
+        </dt>
+        <dd>Update Attribute</dd>
+
+        <dt>
+
+          <code><a href="attribute_value.html">attribute_value()</a></code>
+
+        </dt>
+        <dd>Turn Value(s) into Attribute</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="item">Item<a class="anchor" aria-label="anchor" href="#item"></a></h3>
+      <div class="section-desc"><p>The functions related to item management.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="item_dialog.html">item_dialog()</a></code>
 
@@ -324,27 +427,6 @@
 
         <dt>
 
-          <code><a href="kitems.html">kitems()</a></code>
-
-        </dt>
-        <dd>Kitems Module Server</dd>
-
-        <dt>
-
-          <code><a href="kitems_admin.html">kitems_admin()</a></code>
-
-        </dt>
-        <dd>kitems Admin Module Server</dd>
-
-        <dt>
-
-          <code><a href="restore.html">restore()</a></code>
-
-        </dt>
-        <dd>Restore Files</dd>
-
-        <dt>
-
           <code><a href="rows_delete.html">rows_delete()</a></code>
 
         </dt>
@@ -363,29 +445,48 @@
 
         </dt>
         <dd>Update Item(s)</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="helpers">Helpers<a class="anchor" aria-label="anchor" href="#helpers"></a></h3>
+      <div class="section-desc"><p>These functions are internal helpers used by the module server.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="hasDate.html">hasDate()</a></code>
+
+        </dt>
+        <dd>Test Date Attribute</dd>
 
         <dt>
 
-          <code><a href="runExample.html">runExample()</a></code>
+          <code><a href="is_truthy.html">is_truthy()</a></code>
 
         </dt>
-        <dd>Run Shiny Demo Apps</dd>
+        <dd>Truthy Value</dd>
+      </dl></div><div class="section level2">
 
-        <dt>
+      <h3 id="deprecated-function">Deprecated function<a class="anchor" aria-label="anchor" href="#deprecated-function"></a></h3>
 
-          <code><a href="trigger_event.html">trigger_event()</a></code>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="dynamic_sidebar.html">dynamic_sidebar()</a></code>
 
         </dt>
-        <dd>Trigger Event</dd>
-
-        <dt>
-
-          <code><a href="update_widget.html">update_widget()</a></code>
-
-        </dt>
-        <dd>Update Item Button</dd>
+        <dd>Generate Dynamic menuItem</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

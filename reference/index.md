@@ -1,33 +1,80 @@
 # Package index
 
-## All functions
+## Basic Use Case (Full delegation)
+
+These functions are the core features you need to start using the
+framework.
+
+### Shiny Module Server
+
+The main component of the package.
+
+- [`kitems()`](https://thekangaroofactory.github.io/kitems/reference/kitems.md)
+  : Kitems Module Server
+
+### Shiny Module UI Components
+
+The UI functions to include to your app.
+
+- [`create_widget()`](https://thekangaroofactory.github.io/kitems/reference/create_widget.md)
+  : Create Item Button
+- [`update_widget()`](https://thekangaroofactory.github.io/kitems/reference/update_widget.md)
+  : Update Item Button
+- [`delete_widget()`](https://thekangaroofactory.github.io/kitems/reference/delete_widget.md)
+  : Delete Item Button
+- [`date_slider_widget()`](https://thekangaroofactory.github.io/kitems/reference/date_slider_widget.md)
+  : Date Slider Widget
+- [`filtered_view_widget()`](https://thekangaroofactory.github.io/kitems/reference/filtered_view_widget.md)
+  : Filtered View Widget
+
+### Admin
+
+The functions to perform admin tasks.
 
 - [`admin()`](https://thekangaroofactory.github.io/kitems/reference/admin.md)
   : Admin Console
-- [`admin_widget()`](https://thekangaroofactory.github.io/kitems/reference/admin_widget.md)
-  : Admin Widget
-- [`attribute_create()`](https://thekangaroofactory.github.io/kitems/reference/attribute_create.md)
-  : Add Attribute
-- [`attribute_input()`](https://thekangaroofactory.github.io/kitems/reference/attribute_input.md)
-  : Attribute Input
-- [`attribute_shortcut()`](https://thekangaroofactory.github.io/kitems/reference/attribute_shortcut.md)
-  : Attribute Shortcuts
-- [`attribute_suggestion()`](https://thekangaroofactory.github.io/kitems/reference/attribute_suggestion.md)
-  : Attribute Suggestions
-- [`attribute_update()`](https://thekangaroofactory.github.io/kitems/reference/attribute_update.md)
-  : Update Attribute
-- [`attribute_value()`](https://thekangaroofactory.github.io/kitems/reference/attribute_value.md)
-  : Turn Value(s) into Attribute
 - [`backup()`](https://thekangaroofactory.github.io/kitems/reference/backup.md)
   : Backup Files
-- [`create_widget()`](https://thekangaroofactory.github.io/kitems/reference/create_widget.md)
-  : Create Item Button
+- [`restore()`](https://thekangaroofactory.github.io/kitems/reference/restore.md)
+  : Restore Files
+
+### Demos
+
+Function to list and launch the demo apps.
+
+- [`runExample()`](https://thekangaroofactory.github.io/kitems/reference/runExample.md)
+  : Run Shiny Demo Apps
+
+## Advanced Scenarios (Mixed or Full control)
+
+These helper functions can be used to create events to pass to the
+module server reactive arguments.
+
+- [`filter_event()`](https://thekangaroofactory.github.io/kitems/reference/filter_event.md)
+  : Filter Event
+- [`trigger_event()`](https://thekangaroofactory.github.io/kitems/reference/trigger_event.md)
+  : Trigger Event
+
+## Behind the scene
+
+These functions are made available (exported) for advanced users who
+would like to go beyond the usage of the module server.
+
+### Admin
+
+The server/UI functions behind the admin console app.
+
+- [`kitems_admin()`](https://thekangaroofactory.github.io/kitems/reference/kitems_admin.md)
+  : kitems Admin Module Server
+- [`admin_widget()`](https://thekangaroofactory.github.io/kitems/reference/admin_widget.md)
+  : Admin Widget
+
+### Data model
+
+The functions related to data model management.
+
 - [`data_model()`](https://thekangaroofactory.github.io/kitems/reference/data_model.md)
   : Data Model
-- [`date_slider_widget()`](https://thekangaroofactory.github.io/kitems/reference/date_slider_widget.md)
-  : Date Slider Widget
-- [`delete_widget()`](https://thekangaroofactory.github.io/kitems/reference/delete_widget.md)
-  : Delete Item Button
 - [`dm_colClasses()`](https://thekangaroofactory.github.io/kitems/reference/dm_colClasses.md)
   : Data Model colClasses
 - [`dm_default()`](https://thekangaroofactory.github.io/kitems/reference/dm_default.md)
@@ -44,16 +91,28 @@
   : Data Model Name
 - [`dm_version()`](https://thekangaroofactory.github.io/kitems/reference/dm_version.md)
   : Data Model Version
-- [`dynamic_sidebar()`](https://thekangaroofactory.github.io/kitems/reference/dynamic_sidebar.md)
-  : Generate Dynamic menuItem
-- [`filter_event()`](https://thekangaroofactory.github.io/kitems/reference/filter_event.md)
-  : Filter Event
-- [`filtered_view_widget()`](https://thekangaroofactory.github.io/kitems/reference/filtered_view_widget.md)
-  : Filtered View Widget
-- [`hasDate()`](https://thekangaroofactory.github.io/kitems/reference/hasDate.md)
-  : Test Date Attribute
-- [`is_truthy()`](https://thekangaroofactory.github.io/kitems/reference/is_truthy.md)
-  : Truthy Value
+
+### Attribute
+
+The functions related to attrbute management.
+
+- [`attribute_create()`](https://thekangaroofactory.github.io/kitems/reference/attribute_create.md)
+  : Add Attribute
+- [`attribute_input()`](https://thekangaroofactory.github.io/kitems/reference/attribute_input.md)
+  : Attribute Input
+- [`attribute_shortcut()`](https://thekangaroofactory.github.io/kitems/reference/attribute_shortcut.md)
+  : Attribute Shortcuts
+- [`attribute_suggestion()`](https://thekangaroofactory.github.io/kitems/reference/attribute_suggestion.md)
+  : Attribute Suggestions
+- [`attribute_update()`](https://thekangaroofactory.github.io/kitems/reference/attribute_update.md)
+  : Update Attribute
+- [`attribute_value()`](https://thekangaroofactory.github.io/kitems/reference/attribute_value.md)
+  : Turn Value(s) into Attribute
+
+### Item
+
+The functions related to item management.
+
 - [`item_dialog()`](https://thekangaroofactory.github.io/kitems/reference/item_dialog.md)
   : Item Modal Dialog(s)
 - [`item_form()`](https://thekangaroofactory.github.io/kitems/reference/item_form.md)
@@ -76,21 +135,23 @@
   : Sort Items
 - [`items_name()`](https://thekangaroofactory.github.io/kitems/reference/items_name.md)
   : Items Name
-- [`kitems()`](https://thekangaroofactory.github.io/kitems/reference/kitems.md)
-  : Kitems Module Server
-- [`kitems_admin()`](https://thekangaroofactory.github.io/kitems/reference/kitems_admin.md)
-  : kitems Admin Module Server
-- [`restore()`](https://thekangaroofactory.github.io/kitems/reference/restore.md)
-  : Restore Files
 - [`rows_delete()`](https://thekangaroofactory.github.io/kitems/reference/rows_delete.md)
   : Delete Item(s)
 - [`rows_insert()`](https://thekangaroofactory.github.io/kitems/reference/rows_insert.md)
   : Insert Item(s)
 - [`rows_update()`](https://thekangaroofactory.github.io/kitems/reference/rows_update.md)
   : Update Item(s)
-- [`runExample()`](https://thekangaroofactory.github.io/kitems/reference/runExample.md)
-  : Run Shiny Demo Apps
-- [`trigger_event()`](https://thekangaroofactory.github.io/kitems/reference/trigger_event.md)
-  : Trigger Event
-- [`update_widget()`](https://thekangaroofactory.github.io/kitems/reference/update_widget.md)
-  : Update Item Button
+
+### Helpers
+
+These functions are internal helpers used by the module server.
+
+- [`hasDate()`](https://thekangaroofactory.github.io/kitems/reference/hasDate.md)
+  : Test Date Attribute
+- [`is_truthy()`](https://thekangaroofactory.github.io/kitems/reference/is_truthy.md)
+  : Truthy Value
+
+### Deprecated function
+
+- [`dynamic_sidebar()`](https://thekangaroofactory.github.io/kitems/reference/dynamic_sidebar.md)
+  : Generate Dynamic menuItem
