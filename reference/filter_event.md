@@ -1,4 +1,4 @@
-# Create Filter Event
+# Filter Event
 
 Helper function to create filter events to be passed to kitems module
 server with the filter argument.
@@ -13,19 +13,20 @@ filter_event(layer = c("pre", "main"), ...)
 
 - layer:
 
-  the filter layer ("pre" or "main")
+  the filter layer ("pre" or "main").
 
 - ...:
 
-  the expression(s) to pass to the filter
+  the expression(s) to pass to the filter.
 
 ## Value
 
-an event (list)
+An event [`list()`](https://rdrr.io/r/base/list.html).
 
 ## Details
 
-When no expression is passed to ... then the filter layer will be reset
+When no expression is passed to `...` then the filter layer will be
+reset.
 
 ## Examples
 

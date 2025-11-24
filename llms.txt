@@ -90,11 +90,11 @@ kitems::runExample("demo")
 - [`dynamic_sidebar()`](https://thekangaroofactory.github.io/kitems/reference/dynamic_sidebar.md)
   : Generate Dynamic menuItem
 - [`filter_event()`](https://thekangaroofactory.github.io/kitems/reference/filter_event.md)
-  : Create Filter Event
+  : Filter Event
 - [`filtered_view_widget()`](https://thekangaroofactory.github.io/kitems/reference/filtered_view_widget.md)
   : Filtered View Widget
 - [`hasDate()`](https://thekangaroofactory.github.io/kitems/reference/hasDate.md)
-  : Test date attribute
+  : Test Date Attribute
 - [`is_truthy()`](https://thekangaroofactory.github.io/kitems/reference/is_truthy.md)
   : Truthy Value
 - [`item_dialog()`](https://thekangaroofactory.github.io/kitems/reference/item_dialog.md)
