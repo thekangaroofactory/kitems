@@ -3,7 +3,7 @@
 #' Data Model Migration
 #'
 #' @description
-#' Executhe the migration procedure on a data model.
+#' Execute the migration procedure on a data model.
 #'
 #' @param data.model a data.frame of the data model.
 #'

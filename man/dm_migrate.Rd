@@ -13,7 +13,7 @@ dm_migrate(data.model)
 The migrated data model or \code{NA} if no migration is required.
 }
 \description{
-Executhe the migration procedure on a data model.
+Execute the migration procedure on a data model.
 }
 \examples{
 \dontrun{
