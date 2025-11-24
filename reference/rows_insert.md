@@ -12,15 +12,15 @@ rows_insert(items, values, data.model)
 
 - items:
 
-  a data.frame of the items
+  a data.frame of the items.
 
 - values:
 
-  a list of named values
+  a list of named values.
 
 - data.model:
 
-  a data.frame of the data.model
+  a data.frame of the data.model.
 
 ## Value
 

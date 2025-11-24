@@ -12,15 +12,15 @@ rows_delete(items, id)
 
 - items:
 
-  the data.frame of the items
+  the data.frame of the items.
 
 - id:
 
-  a vector of id(s) for the item to delete
+  a vector of id(s) for the item(s) to delete.
 
 ## Value
 
-the new data.frame of the items
+The updated data.frame of the items.
 
 ## Examples
 

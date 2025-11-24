@@ -1,6 +1,6 @@
-# Restore Data Model & Items Files
+# Restore Files
 
-Restore Data Model & Items Files
+Restores the data model & items files.
 
 ## Usage
 
@@ -12,15 +12,15 @@ restore(id, path, type = "items")
 
 - id:
 
-  the kitems id used to create the data model
+  the id used to create the data model.
 
 - path:
 
-  the path to the data model
+  the path to the data model.
 
 - type:
 
-  the type of file to backup. `items` (default) or `dm`
+  the type of file to backup. `items` (default) or `dm`.
 
 ## Examples
 

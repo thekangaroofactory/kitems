@@ -1,6 +1,6 @@
-# kitems Admin Server
+# kitems Admin Module Server
 
-kitems Admin Server
+The admin module server is the back end of the admin console app.
 
 ## Usage
 
@@ -12,27 +12,27 @@ kitems_admin(k_data_model, k_items, path, dm_url, items_url, autosave)
 
 - k_data_model:
 
-  the reference of the data model reactive value
+  the reference of the data model reactive value.
 
 - k_items:
 
-  the reference of the item reactive value
+  the reference of the item reactive value.
 
 - path:
 
-  the path provided to the kitems server
+  the path provided to the kitems server.
 
 - dm_url:
 
-  the url of the data model file
+  the url of the data model file.
 
 - items_url:
 
-  the url of the item file
+  the url of the item file.
 
 - autosave:
 
-  the autosave value passed to the kitems server
+  the autosave value passed to the kitems server.
 
 ## Examples
 

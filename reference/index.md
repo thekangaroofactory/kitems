@@ -79,15 +79,15 @@
 - [`kitems()`](https://thekangaroofactory.github.io/kitems/reference/kitems.md)
   : Kitems Module Server
 - [`kitems_admin()`](https://thekangaroofactory.github.io/kitems/reference/kitems_admin.md)
-  : kitems Admin Server
+  : kitems Admin Module Server
 - [`restore()`](https://thekangaroofactory.github.io/kitems/reference/restore.md)
-  : Restore Data Model & Items Files
+  : Restore Files
 - [`rows_delete()`](https://thekangaroofactory.github.io/kitems/reference/rows_delete.md)
   : Delete Item(s)
 - [`rows_insert()`](https://thekangaroofactory.github.io/kitems/reference/rows_insert.md)
   : Insert Item(s)
 - [`rows_update()`](https://thekangaroofactory.github.io/kitems/reference/rows_update.md)
-  : Update Item Rows
+  : Update Item(s)
 - [`runExample()`](https://thekangaroofactory.github.io/kitems/reference/runExample.md)
   : Run Shiny Demo Apps
 - [`trigger_event()`](https://thekangaroofactory.github.io/kitems/reference/trigger_event.md)
