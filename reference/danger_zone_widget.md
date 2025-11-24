@@ -12,15 +12,15 @@ danger_zone_widget(k_data_model, ns)
 
 - k_data_model:
 
-  the reference of the data model reactive value
+  the reference of the data model reactive object.
 
 - ns:
 
-  the namespace function
+  the namespace function.
 
 ## Value
 
-a tagList object
+A tagList object to include in the UI.
 
 ## Examples
 

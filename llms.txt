@@ -65,10 +65,8 @@ kitems::runExample("demo")
   : Backup Files
 - [`create_widget()`](https://thekangaroofactory.github.io/kitems/reference/create_widget.md)
   : Create Item Button
-- [`danger_zone_widget()`](https://thekangaroofactory.github.io/kitems/reference/danger_zone_widget.md)
-  : Danger Zone Widget
 - [`data_model()`](https://thekangaroofactory.github.io/kitems/reference/data_model.md)
-  : Build data model
+  : Data Model
 - [`date_slider_widget()`](https://thekangaroofactory.github.io/kitems/reference/date_slider_widget.md)
   : Date slider Widget
 - [`delete_widget()`](https://thekangaroofactory.github.io/kitems/reference/delete_widget.md)

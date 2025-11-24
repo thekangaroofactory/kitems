@@ -1,6 +1,6 @@
-# Build data model
+# Data Model
 
-Build data model
+Build a data model
 
 ## Usage
 
@@ -58,16 +58,16 @@ data_model(
 
 ## Value
 
-a data.frame containing the data model.
+A data.frame containing the data model.
 
 ## Details
 
-colClasses will be used to create the data.frame: names will define the
-attributes of the data model, and values will define the class (type) of
-the attributes.
+`colClasses` will be used to create the data.frame: names will define
+the attributes of the data model, and values will define the class
+(type) of the attributes.
 
-All default.\* parameters are optional. When provided, they will be used
-to match with names defined in colClasses:
+All `default.*` parameters are optional. When provided, they will be
+used to match with names defined in colClasses:
 
 - order in those vectors doesn't matter
 
@@ -75,18 +75,18 @@ to match with names defined in colClasses:
 
 - names in vectors not matching with colClasses names will be ignored
 
-default.fun and default.val are mutual exclusive, with priority on
-default.fun (default.val will be forced to NA) default.arg requires
-default.fun not to be NULL (will be forced to NA otherwise)
+`default.fun` and `default.val` are mutual exclusive, with priority on
+`default.fun` (`default.val` will be forced to `NA`) `default.arg`
+requires `default.fun` not to be NULL (will be forced to `NA` otherwise)
 
-display and skip directly contains the names of the attributes to set to
-TRUE
+`display` and `skip` directly contains the names of the attributes to
+set to TRUE
 
 If not provided, defaults will be applied:
 
-- NA for default.val, default.fun and default.arg
+- `NA` for `default.val`, `default.fun` and `default.arg`
 
-- FALSE for display and skip
+- `FALSE` for `display` and `skip`
 
 ## Examples
 
