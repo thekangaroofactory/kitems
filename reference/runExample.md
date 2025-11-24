@@ -12,12 +12,12 @@ runExample(example = NA)
 
 - example:
 
-  a character value, with the name of the demo to be launched
+  a character value, with the name of the demo to be launched.
 
 ## Details
 
-When `example` is NA, the function will return the names of available
-apps
+When `example` is `NA`, the function will return the names of available
+apps.
 
 ## Examples
 

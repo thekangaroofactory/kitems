@@ -1,7 +1,7 @@
-# Create Event
+# Trigger Event
 
 Helper function to create events to be passed to kitems module server
-with the trigger argument.
+with the `trigger` argument.
 
 ## Usage
 
@@ -17,19 +17,19 @@ trigger_event(
 
 - workflow:
 
-  the name of the workflow
+  the name of the workflow (create, update or delete).
 
 - type:
 
-  the name of the action to be performed
+  the name of the action to be performed (dialog or task).
 
 - values:
 
-  optional values to create, update or delete an item
+  optional values to create, update or delete an item.
 
 ## Value
 
-a event (list)
+An event object (list).
 
 ## Examples
 

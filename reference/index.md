@@ -91,6 +91,6 @@
 - [`runExample()`](https://thekangaroofactory.github.io/kitems/reference/runExample.md)
   : Run Shiny Demo Apps
 - [`trigger_event()`](https://thekangaroofactory.github.io/kitems/reference/trigger_event.md)
-  : Create Event
+  : Trigger Event
 - [`update_widget()`](https://thekangaroofactory.github.io/kitems/reference/update_widget.md)
   : Update Item Button
