@@ -70,15 +70,13 @@ reference:
   - runExample
 
 - title: Advanced Scenarios (Mixed or Full control)
-  desc: These helper functions can be used to create events to pass to the module
-  server reactive arguments.
+  desc: These helper functions can be used to create events to pass to the module server reactive arguments.
   contents:
   - filter_event
   - trigger_event
 
 - title: Behind the scene
-  desc: These functions are made available (exported) for advanced users who would
-  like to go beyond the usage of the module server.
+  desc: These functions are made available (exported) for advanced users who would like to go beyond the usage of the module server.
 
 - subtitle: Admin
   desc: The server/UI functions behind the admin console app.
