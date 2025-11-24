@@ -2,11 +2,11 @@
 
 #' Turn Value(s) into Attribute
 #'
-#' @param key the name of the attribute
-#' @param value a vector of input values
-#' @param data.model the data.frame of the data.model
+#' @param key the name of the attribute.
+#' @param value a vector of input values.
+#' @param data.model the data.frame of the data model.
 #'
-#' @returns a vector, with values checked against the data.model
+#' @returns A vector of values checked against the data model.
 #' @export
 #'
 #' @examples
