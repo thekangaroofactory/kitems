@@ -1,39 +1,42 @@
 
 
-#' Update data model attribute
+#' Update Attribute
+#'
+#' @description
+#' Update a data model attribute
 #'
 #' @param data.model a data.frame containing the data model
 #' @param name a character string of the attribute name
 #' @param default.val a character string, the new default value
 #' @param default.fun a character string, the new default function name
-#' @param default.arg an optional named vector of arguments, to pass along with the default function.
+#' @param default.arg a named vector of arguments, to pass along with the default function.
 #' @param skip a logical to set the skip value
 #' @param display a logical to set the display value
 #' @param sort.rank a numeric, used to define sort rank
 #' @param sort.desc a logical, to define if sorting should be in descending order
 #'
-#' @return the updated data model
+#' @return The updated data model data.frame
 #' @export
 #'
 #' @details
 #' Updating attribute class is not supported by this function (as it requires data migration).
 #'
-#' Use of vector to update several attributes is supported as long as length of the different parameters
-#' is either same as name or 1 (then all rows gets same value).
+#' The use of vectors to update several attributes is supported as long as the `length()` of the different
+#' parameters is either same as `name` or 1 (then all rows gets same value).
 #'
 #' @seealso [data_model()]
 #'
 #' @examples
-#' \dontrun{
-#' #Use of vector to update several attributes:
+#'
+#' # -- define dm
+#' dm <- data_model(colClasses = c(name = "character", total = "numeric"))
+#'
+#' # -- Use of vectors to update several attributes
 #' attribute_update(data.model = dm,
 #'                  name = c("name","total"),
 #'                  default.val = c("test", 2),
-#'                  default.fun = NULL,
-#'                  default.arg = NULL,
 #'                  skip = TRUE)
-#' }
-
+#'
 
 attribute_update <- function(data.model, name,
                              default.val = NULL, default.fun = NULL, default.arg = NULL,

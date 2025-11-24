@@ -2,7 +2,7 @@
 % Please edit documentation in R/attribute_update.R
 \name{attribute_update}
 \alias{attribute_update}
-\title{Update data model attribute}
+\title{Update Attribute}
 \usage{
 attribute_update(
   data.model,
@@ -25,7 +25,7 @@ attribute_update(
 
 \item{default.fun}{a character string, the new default function name}
 
-\item{default.arg}{an optional named vector of arguments, to pass along with the default function.}
+\item{default.arg}{a named vector of arguments, to pass along with the default function.}
 
 \item{skip}{a logical to set the skip value}
 
@@ -36,27 +36,28 @@ attribute_update(
 \item{sort.desc}{a logical, to define if sorting should be in descending order}
 }
 \value{
-the updated data model
+The updated data model data.frame
 }
 \description{
-Update data model attribute
+Update a data model attribute
 }
 \details{
 Updating attribute class is not supported by this function (as it requires data migration).
 
-Use of vector to update several attributes is supported as long as length of the different parameters
-is either same as name or 1 (then all rows gets same value).
+The use of vectors to update several attributes is supported as long as the \code{length()} of the different
+parameters is either same as \code{name} or 1 (then all rows gets same value).
 }
 \examples{
-\dontrun{
-#Use of vector to update several attributes:
+
+# -- define dm
+dm <- data_model(colClasses = c(name = "character", total = "numeric"))
+
+# -- Use of vectors to update several attributes
 attribute_update(data.model = dm,
                  name = c("name","total"),
                  default.val = c("test", 2),
-                 default.fun = NULL,
-                 default.arg = NULL,
                  skip = TRUE)
-}
+
 }
 \seealso{
 \code{\link[=data_model]{data_model()}}
