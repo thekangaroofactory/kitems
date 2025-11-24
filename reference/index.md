@@ -19,7 +19,7 @@
 - [`attribute_value()`](https://thekangaroofactory.github.io/kitems/reference/attribute_value.md)
   : Turn Value(s) into Attribute
 - [`backup()`](https://thekangaroofactory.github.io/kitems/reference/backup.md)
-  : Backup Data Model & Items Files
+  : Backup Files
 - [`create_widget()`](https://thekangaroofactory.github.io/kitems/reference/create_widget.md)
   : Create Item Button
 - [`danger_zone_widget()`](https://thekangaroofactory.github.io/kitems/reference/danger_zone_widget.md)

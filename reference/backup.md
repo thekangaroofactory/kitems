@@ -1,6 +1,6 @@
-# Backup Data Model & Items Files
+# Backup Files
 
-Backup Data Model & Items Files
+Backup data model & items files
 
 ## Usage
 
@@ -12,27 +12,28 @@ backup(id, path, type = "items", max = NULL)
 
 - id:
 
-  the kitems id used to create the data model
+  the id used to create the data model.
 
 - path:
 
-  the path to the data model
+  the path to the data model.
 
 - type:
 
-  the type of file to backup. `items` (default) or `dm`
+  the type of file to backup: "items" (default) or "dm".
 
 - max:
 
-  an integer to indicate how many backup files are allowed
+  an integer to indicate how many backup files are allowed.
 
 ## Details
 
-Backup file will be named as *id_data_model_YYYY-MM-DD.rds* If same file
-already exists, it will be overwritten.
+Backup file will be named as *id_data_model_YYYY-MM-DD.rds* or
+*id_items_YYYY-MM-DD.csv* If same file already exists, it will be
+overwritten.
 
 If the number of backup files exceeds `max` then the oldest will be
-deleted. Whenever `max = NULL` (default), it will be replaced by 1
+deleted. Whenever `max = NULL` (default), it will be replaced by 1.
 
 ## Examples
 
