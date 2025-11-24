@@ -38,3 +38,97 @@ articles:
   desc: These documents cover specifications and roadmap.
   contents:
   - roadmap
+
+reference:
+- title: Basic Use Case (Full delegation)
+  desc: These functions are the core features you need to start using the framework.
+
+- subtitle: Shiny Module Server
+  desc: The main component of the package.
+  contents:
+  - kitems
+
+- subtitle: Shiny Module UI Components
+  desc: The UI functions to include to your app.
+  contents:
+  - create_widget
+  - update_widget
+  - delete_widget
+  - date_slider_widget
+  - filtered_view_widget
+
+- subtitle: Admin
+  desc: The functions to perform admin tasks.
+  contents:
+  - admin
+  - backup
+  - restore
+
+- subtitle: Demos
+  desc: Function to list and launch the demo apps.
+  contents:
+  - runExample
+
+- title: Advanced Scenarios (Mixed or Full control)
+  desc: These helper functions can be used to create events to pass to the module
+  server reactive arguments.
+  contents:
+  - filter_event
+  - trigger_event
+
+- title: Behind the scene
+  desc: These functions are made available (exported) for advanced users who would
+  like to go beyond the usage of the module server.
+
+- subtitle: Admin
+  desc: The server/UI functions behind the admin console app.
+  contents:
+  - kitems_admin
+  - admin_widget
+
+- subtitle: Data model
+  desc: The functions related to data model management.
+  contents:
+  - data_model
+  - dm_colClasses
+  - dm_default
+  - dm_display
+  - dm_integrity
+  - dm_mask
+  - dm_migrate
+  - dm_name
+  - dm_version
+
+- subtitle: Attribute
+  desc: The functions related to attrbute management.
+  contents:
+  - attribute_create
+  - attribute_input
+  - attribute_shortcut
+  - attribute_suggestion
+  - attribute_update
+  - attribute_value
+
+- subtitle: Item
+  desc: The functions related to item management.
+  contents:
+  - item_dialog
+  - item_form
+  - item_input_values
+  - item_integrity
+  - item_load
+  - item_mask
+  - item_migrate
+  - item_save
+  - item_search
+  - item_sort
+  - items_name
+  - rows_delete
+  - rows_insert
+  - rows_update
+
+- subtitle: Helpers
+  desc: These functions are internal helpers used by the module server.
+  contents:
+  - hasDate
+  - is_truthy
