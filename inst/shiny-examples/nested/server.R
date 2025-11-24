@@ -8,7 +8,6 @@
 shinyServer(
   function(input, output, session){
 
-
     # -- Get path to demo app data
     demo_dir <- system.file("shiny-examples", "nested", package = "kitems")
 
@@ -31,23 +30,11 @@ shinyServer(
     }
 
     # -- call the wrapper module
-    # make sure it returns the output of kitems
+    # make sure it returns the output of kitems() function
     data_3 <- wrapper_server(id = "wrapper", demo_dir)
 
     # -- Generate dynamic sidebar ----
     output$menu <- renderMenu(kitems::dynamic_sidebar(names = list("data_3")))
-
-
-    # -- log
-    ktools::catl("----------------------------------------------------------", debug = 1)
-    ktools::catl("Main application server ready", debug = 1)
-    ktools::catl("----------------------------------------------------------", debug = 1)
-
-
-    # -- Observe item lists ----
-    observeEvent(data_3$items(),
-                 ktools::catl("Main application server: data_3 items have just been updated"))
-
 
   }
 )
