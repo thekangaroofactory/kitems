@@ -2,28 +2,28 @@
 % Please edit documentation in R/backup.R
 \name{backup}
 \alias{backup}
-\title{Backup Data Model & Items Files}
+\title{Backup Files}
 \usage{
 backup(id, path, type = "items", max = NULL)
 }
 \arguments{
-\item{id}{the kitems id used to create the data model}
+\item{id}{the id used to create the data model.}
 
-\item{path}{the path to the data model}
+\item{path}{the path to the data model.}
 
-\item{type}{the type of file to backup. \code{items} (default) or \code{dm}}
+\item{type}{the type of file to backup: "items" (default) or "dm".}
 
-\item{max}{an integer to indicate how many backup files are allowed}
+\item{max}{an integer to indicate how many backup files are allowed.}
 }
 \description{
-Backup Data Model & Items Files
+Backup data model & items files
 }
 \details{
-Backup file will be named as \emph{id_data_model_YYYY-MM-DD.rds}
+Backup file will be named as \emph{id_data_model_YYYY-MM-DD.rds} or \emph{id_items_YYYY-MM-DD.csv}
 If same file already exists, it will be overwritten.
 
 If the number of backup files exceeds \code{max} then the oldest will be deleted.
-Whenever \code{max = NULL} (default), it will be replaced by 1
+Whenever \code{max = NULL} (default), it will be replaced by 1.
 }
 \examples{
 \dontrun{
