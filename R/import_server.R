@@ -1,6 +1,17 @@
 
 
-# -- Shiny module server logic -------------------------------------------------
+#' Import Module Server
+#'
+#' @description
+#' The import module server is used as a child of the admin module server.
+#'
+#' @param id the id of the module.
+#' @param k_data_model the reference of the data model reactive.
+#' @param k_items the reference of the items reactive.
+#' @param callback a reactive to call once import is finished.
+#'
+#' @keywords internal
+#'
 
 import_server <- function(id, k_data_model, k_items, callback) {
 

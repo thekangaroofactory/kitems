@@ -7,15 +7,15 @@
 is_truthy(x)
 }
 \arguments{
-\item{x}{an object to test}
+\item{x}{an object to test.}
 }
 \value{
-a logical
+A logical.
 }
 \description{
-Inspired by Shiny::isTruthy, the purpose here is to determine if a value
-is considered as valid to be an attribute value
-(or if it will need to be replaced by the attribute defaults)
+Inspired by \code{Shiny::isTruthy()}, the purpose here is to determine if a value
+is considered as valid to be an attribute value.
+(or if it will need to be replaced by the attribute defaults).
 }
 \examples{
 is_truthy(12)

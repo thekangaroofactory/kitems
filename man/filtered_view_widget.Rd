@@ -7,14 +7,16 @@
 filtered_view_widget(id)
 }
 \arguments{
-\item{id}{the id of the module server instance}
+\item{id}{the id of the module server instance.}
 }
 \value{
-a rendered DT data table
+An HTML object (tagList) to include in the UI.
 }
 \description{
-Filtered View Widget
+Creates an HTML container for the filtered item table.
 }
 \examples{
+\dontrun{
 filtered_view_widget(id = "mydata")
+}
 }

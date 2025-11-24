@@ -2,13 +2,18 @@
 
 #' Filtered View Widget
 #'
-#' @param id the id of the module server instance
+#' @description
+#' Creates an HTML container for the filtered item table.
 #'
-#' @return a rendered DT data table
+#' @param id the id of the module server instance.
+#'
+#' @return An HTML object (tagList) to include in the UI.
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' filtered_view_widget(id = "mydata")
+#' }
 
 filtered_view_widget <- function(id){
 
