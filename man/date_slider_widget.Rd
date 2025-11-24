@@ -2,19 +2,21 @@
 % Please edit documentation in R/date_slider_widget.R
 \name{date_slider_widget}
 \alias{date_slider_widget}
-\title{Date slider Widget}
+\title{Date Slider Widget}
 \usage{
 date_slider_widget(id)
 }
 \arguments{
-\item{id}{the server module id}
+\item{id}{the server module id.}
 }
 \value{
-a ui object (output of fluidRow)
+an HTML component to include on UI side.
 }
 \description{
-Date slider Widget
+The date slider UI component to drive the date filter
 }
 \examples{
+\dontrun{
 date_slider_widget(id = "mydata")
+}
 }
