@@ -1,6 +1,6 @@
 # Update Item Button
 
-Update Item Button
+Button to fire the update item dialog.
 
 ## Usage
 
@@ -12,15 +12,16 @@ update_widget(id)
 
 - id:
 
-  the server module id
+  the server module id.
 
 ## Value
 
-a rendered actionButton
+An HTML element that can be included in the UI.
 
 ## Examples
 
 ``` r
+if (FALSE) { # \dontrun{
 update_widget(id = "mydata")
-#> <span id="mydata-item_update_btn" class="shiny-html-output"></span>
+} # }
 ```

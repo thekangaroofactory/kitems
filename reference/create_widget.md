@@ -1,6 +1,6 @@
 # Create Item Button
 
-Create Item Button
+Button to fire the create item dialog.
 
 ## Usage
 
@@ -12,15 +12,16 @@ create_widget(id)
 
 - id:
 
-  the server module id
+  the server module id.
 
 ## Value
 
-a rendered actionButton
+An HTML element that can be included in the UI.
 
 ## Examples
 
 ``` r
+if (FALSE) { # \dontrun{
 create_widget(id = "mydata")
-#> <span id="mydata-item_create_btn" class="shiny-html-output"></span>
+} # }
 ```

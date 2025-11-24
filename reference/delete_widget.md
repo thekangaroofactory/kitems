@@ -1,6 +1,6 @@
 # Delete Item Button
 
-Delete Item Button
+Button to fire the delete item dialog.
 
 ## Usage
 
@@ -12,15 +12,16 @@ delete_widget(id)
 
 - id:
 
-  the server module id
+  the server module id.
 
 ## Value
 
-a rendered actionButton
+An HTML element that can be included in the UI.
 
 ## Examples
 
 ``` r
+if (FALSE) { # \dontrun{
 delete_widget(id = "mydata")
-#> <span id="mydata-item_delete_btn" class="shiny-html-output"></span>
+} # }
 ```
