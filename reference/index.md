@@ -25,7 +25,7 @@
 - [`data_model()`](https://thekangaroofactory.github.io/kitems/reference/data_model.md)
   : Data Model
 - [`date_slider_widget()`](https://thekangaroofactory.github.io/kitems/reference/date_slider_widget.md)
-  : Date slider Widget
+  : Date Slider Widget
 - [`delete_widget()`](https://thekangaroofactory.github.io/kitems/reference/delete_widget.md)
   : Delete Item Button
 - [`dm_colClasses()`](https://thekangaroofactory.github.io/kitems/reference/dm_colClasses.md)
