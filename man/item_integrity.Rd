@@ -2,20 +2,20 @@
 % Please edit documentation in R/item_integrity.R
 \name{item_integrity}
 \alias{item_integrity}
-\title{Check items integrity}
+\title{Items Integrity}
 \usage{
 item_integrity(items, data.model)
 }
 \arguments{
-\item{items}{a data.frame of the items}
+\item{items}{a data.frame of the items.}
 
-\item{data.model}{a data.frame of the data model}
+\item{data.model}{a data.frame of the data model.}
 }
 \value{
-a data.frame of the items, with corrected attribute types
+A data.frame of the items, with corrected attribute types.
 }
 \description{
-Check items integrity
+Check items integrity vs the data model.
 }
 \details{
 The function checks if the class of the attributes in items matches with

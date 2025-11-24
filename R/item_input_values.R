@@ -1,15 +1,18 @@
 
 
-#' Build list of input values
+#' Input Values
 #'
-#' @param input the input object from the shiny module
-#' @param colClasses a named vector of classes, defining the data model
+#' @description
+#' Build a list of values from the input.
 #'
-#' @return a named list of values
+#' @param input the input object from the shiny module.
+#' @param colClasses a named vector of classes, defining the data model.
+#'
+#' @return a named list of values.
 #' @export
 #'
-#' @details the output list will contain as many entries as the colClasses named vector.
-#' In case some names have no corresponding item in the input parameter, they will get NULL as value
+#' @details the output list will contain as many entries as the `colClasses` named vector.
+#' In case some names have no corresponding item in the input parameter, they will get `NULL` as value
 #' in the output list.
 #'
 #' @examples
@@ -17,8 +20,6 @@
 #' values <- item_input_values(input, colClasses = c("date" = "Date", "text" = "character"))
 #' }
 
-
-# -- function definition
 item_input_values <- function(input, colClasses){
 
   # -- get values from input object

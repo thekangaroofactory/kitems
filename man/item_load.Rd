@@ -2,25 +2,25 @@
 % Please edit documentation in R/item_load.R
 \name{item_load}
 \alias{item_load}
-\title{Load data}
+\title{Load Items}
 \usage{
 item_load(col.classes, file = NULL, path = NULL)
 }
 \arguments{
-\item{col.classes}{a vector containing the expected column types}
+\item{col.classes}{a named vector containing the expected column types.}
 
-\item{file}{an optional file name (including .csv extension)}
+\item{file}{an optional file name (including .csv extension).}
 
-\item{path}{an optional path to the file}
+\item{path}{an optional path to the file.}
 }
 \value{
-the data (items)
+The data.frame of the items.
 }
 \description{
-Load data
+Load Items
 }
 \details{
-File connector: if file is not NULL, then data are loaded from the given .csv
+File connector: if file is not \code{NULL}, then data are loaded from the given .csv file.
 }
 \examples{
 \dontrun{

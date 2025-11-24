@@ -1,11 +1,15 @@
 
 
-#' Check items integrity
+#' Items Integrity
 #'
-#' @param items a data.frame of the items
-#' @param data.model a data.frame of the data model
+#' @description
+#' Check items integrity vs the data model.
 #'
-#' @return a data.frame of the items, with corrected attribute types
+#'
+#' @param items a data.frame of the items.
+#' @param data.model a data.frame of the data model.
+#'
+#' @return A data.frame of the items, with corrected attribute types.
 #' @export
 #'
 #' @details
@@ -17,7 +21,6 @@
 #' \dontrun{
 #' items <- item_integrity(items, data.model)
 #' }
-
 
 item_integrity <- function(items, data.model){
 

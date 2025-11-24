@@ -2,20 +2,20 @@
 % Please edit documentation in R/item_sort.R
 \name{item_sort}
 \alias{item_sort}
-\title{Sort items}
+\title{Sort Items}
 \usage{
 item_sort(items, data.model)
 }
 \arguments{
-\item{items}{a data.frame of the items}
+\item{items}{a data.frame of the items.}
 
-\item{data.model}{a data.frame, defining the data model}
+\item{data.model}{a data.frame of the data model.}
 }
 \value{
-a data.frame of the items, sorted based on the data model
+A data.frame of the items, sorted based on the data model.
 }
 \description{
-Sort items
+Sort Items
 }
 \examples{
 \dontrun{

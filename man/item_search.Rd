@@ -7,15 +7,15 @@
 item_search(items, pattern)
 }
 \arguments{
-\item{items}{a data.frame of items}
+\item{items}{a data.frame of items.}
 
-\item{pattern}{the search pattern}
+\item{pattern}{the search pattern.}
 }
 \value{
-a filtered data.frame
+A filtered data.frame.
 }
 \description{
-A simple wrapper around \link[dplyr]{filter} function
+A simple wrapper around \link[dplyr]{filter} function.
 }
 \details{
 The function is not intended to perform any smart or advanced search. \cr

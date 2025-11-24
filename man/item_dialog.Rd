@@ -2,7 +2,7 @@
 % Please edit documentation in R/item_dialog.R
 \name{item_dialog}
 \alias{item_dialog}
-\title{Item Modal Dialog}
+\title{Item Modal Dialog(s)}
 \usage{
 item_dialog(
   data.model = NULL,
@@ -14,27 +14,27 @@ item_dialog(
 )
 }
 \arguments{
-\item{data.model}{a data.frame of the data model}
+\item{data.model}{a data.frame of the data model.}
 
-\item{items}{a data.frame of the items}
+\item{items}{a data.frame of the items.}
 
-\item{workflow}{a character string to indicate workflow (see details)}
+\item{workflow}{a character string to indicate workflow (see details).}
 
-\item{item}{a data.frame of the item to update (when update = TRUE)}
+\item{item}{a data.frame of the item to update (when \code{workflow} = "update").}
 
-\item{shortcut}{a logical (default FALSE) if shortcuts should be activated}
+\item{shortcut}{a logical (default \code{FALSE}) if shortcuts should be activated.}
 
-\item{ns}{the intented namespace function to use in the dialog}
+\item{ns}{the intended namespace function to use in the dialog.}
 }
 \value{
-a modal dialog
+a modal dialog to display using \code{shiny::showModal()}.
 }
 \description{
-Item Modal Dialog
+Produces a create / update / delete modal dialog to display.
 }
 \details{
-Possible values for workflow are c("create", "update", "delete")
-"create" is the default
+Possible values for workflow are "create", "update" or "delete".
+"create" is the default.
 }
 \examples{
 \dontrun{

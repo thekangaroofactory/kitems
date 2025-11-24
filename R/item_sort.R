@@ -1,11 +1,11 @@
 
 
-#' Sort items
+#' Sort Items
 #'
-#' @param items a data.frame of the items
-#' @param data.model a data.frame, defining the data model
+#' @param items a data.frame of the items.
+#' @param data.model a data.frame of the data model.
 #'
-#' @return a data.frame of the items, sorted based on the data model
+#' @return A data.frame of the items, sorted based on the data model.
 #' @export
 #'
 #' @examples

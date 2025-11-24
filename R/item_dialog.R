@@ -1,20 +1,23 @@
 
 
-#' Item Modal Dialog
+#' Item Modal Dialog(s)
 #'
-#' @param data.model a data.frame of the data model
-#' @param items a data.frame of the items
-#' @param workflow a character string to indicate workflow (see details)
-#' @param item a data.frame of the item to update (when update = TRUE)
-#' @param shortcut a logical (default FALSE) if shortcuts should be activated
-#' @param ns the intented namespace function to use in the dialog
+#' @description
+#' Produces a create / update / delete modal dialog to display.
 #'
-#' @returns a modal dialog
+#' @param data.model a data.frame of the data model.
+#' @param items a data.frame of the items.
+#' @param workflow a character string to indicate workflow (see details).
+#' @param item a data.frame of the item to update (when `workflow` = "update").
+#' @param shortcut a logical (default `FALSE`) if shortcuts should be activated.
+#' @param ns the intended namespace function to use in the dialog.
+#'
+#' @returns a modal dialog to display using `shiny::showModal()`.
 #' @export
 #'
 #' @details
-#' Possible values for workflow are c("create", "update", "delete")
-#' "create" is the default
+#' Possible values for workflow are "create", "update" or "delete".
+#' "create" is the default.
 #'
 #' @examples
 #' \dontrun{

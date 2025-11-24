@@ -1,19 +1,22 @@
 
 
-#' Build Item Form
+#' Item Form
 #'
-#' @param data.model the data.frame of the data model
-#' @param items the data.frame of the items
-#' @param update an optional logical (default = FALSE) to trigger update behavior
-#' @param item an optional item (used to set default input values if update = TRUE)
-#' @param shortcut a logical to indicate if shortcuts should be displayed
-#' @param ns the namespace function, output of shiny::NS()
+#' @description
+#' Builds the create or update item form.
 #'
-#' @return a tagList() object containing the attribute inputs
+#' @param data.model the data.frame of the data model.
+#' @param items the data.frame of the items.
+#' @param update an optional logical (default = `FALSE`) to trigger update behavior.
+#' @param item an optional item (used to set default input values if update = `TRUE`).
+#' @param shortcut a logical to indicate if shortcuts should be displayed.
+#' @param ns the namespace function, output of `shiny::NS()`.
+#'
+#' @return An HTML object `tagList()` containing the attribute inputs.
 #' @export
 #'
 #' @details
-#' Data model skip feature will be used to return inputs only for the skip = FALSE attributes
+#' Data model skip feature will be used to return inputs only for the skip = `FALSE` attributes
 #'
 #' @examples
 #' \dontrun{

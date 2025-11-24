@@ -1,16 +1,19 @@
 
 
-#' Apply mask
+#' Item Mask
 #'
-#' @param data.model a data.frame of the data model
-#' @param items a data.frame of the items
+#' @description
+#' Apply a mask on the data.frame of the items.
 #'
-#' @return a data.frame of the items with applied masks
+#' @param data.model a data.frame of the data model.
+#' @param items a data.frame of the items.
+#'
+#' @return A data.frame of the items with applied masks.
 #' @export
 #'
 #' @details
 #' Two masks are applied:
-#' - the data model masks (display = TRUE)
+#' - the data model masks (attributes with display = `TRUE` are kept)
 #' - a default mask (replace . and _ by a space in the attribute names, plus capitalize first letter)
 #'
 #' @examples

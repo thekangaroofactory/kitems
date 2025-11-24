@@ -2,29 +2,29 @@
 % Please edit documentation in R/item_migrate.R
 \name{item_migrate}
 \alias{item_migrate}
-\title{Add attribute to existing items}
+\title{Item Migration}
 \usage{
 item_migrate(items, name, type, fill = NA)
 }
 \arguments{
-\item{items}{a data.frame of the items}
+\item{items}{a data.frame of the items.}
 
-\item{name}{a character string of the attribute name}
+\item{name}{a character string of the attribute name.}
 
-\item{type}{a character string of the attribute type}
+\item{type}{a character string of the attribute type.}
 
-\item{fill}{the value (default = NA) to be used to fill the existing rows (see details)}
+\item{fill}{the value (default = \code{NA}) to be used to fill the existing rows (see details).}
 }
 \value{
-the updated items data.frame
+The updated items data.frame.
 }
 \description{
-Add attribute to existing items
+Add attribute to existing items.
 }
 \details{
-fill will be coerced to the class name provided in type
-If a vector is given as input for fill, it will be used: items\link{name} <- value
-Make sure the vector length is same as the number of rows, otherwise an error will be raised by R
+\code{fill} will be coerced to the class name provided in \code{type}.
+If a vector is given as input for \code{fill}, it will be used to feed the created column.
+Make sure the vector length is same as the number of rows, otherwise an error will be raised by R.
 }
 \examples{
 \dontrun{
