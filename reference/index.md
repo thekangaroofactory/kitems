@@ -14,7 +14,7 @@ The main component of the package.
 
 ### Shiny Module UI Components
 
-The UI functions to include to your app.
+The UI functions to include into your app.
 
 - [`create_widget()`](https://thekangaroofactory.github.io/kitems/reference/create_widget.md)
   : Create Item Button
@@ -94,7 +94,7 @@ The functions related to data model management.
 
 ### Attribute
 
-The functions related to attrbute management.
+The functions related to attribute management.
 
 - [`attribute_create()`](https://thekangaroofactory.github.io/kitems/reference/attribute_create.md)
   : Add Attribute
