@@ -2,7 +2,7 @@
 % Please edit documentation in R/kitems.R
 \name{kitems}
 \alias{kitems}
-\title{Module server}
+\title{Kitems Module Server}
 \usage{
 kitems(
   id,
@@ -15,49 +15,58 @@ kitems(
 )
 }
 \arguments{
-\item{id}{the id to be used for the module server instance}
+\item{id}{the id to be used for the module server instance.}
 
-\item{path}{a path where data model and items will be stored}
+\item{path}{a path where data model and items are stored.}
 
-\item{autosave}{a logical whether the item auto save should be activated or not (default = TRUE)}
+\item{autosave}{a logical whether the item auto save should be activated or not (default = \code{TRUE}).}
 
-\item{admin}{a logical indicating if the admin module server should be launched (default = FALSE)}
+\item{admin}{a logical indicating if the admin module server should be launched (default = \code{FALSE}).}
 
-\item{trigger}{a reactive object to pass events to the module (see details)}
+\item{trigger}{a reactive object to pass workflow events to the module (see details).}
 
-\item{filter}{a reactive object to pass filters to the module (see details)}
+\item{filter}{a reactive object to pass filters to the module (see details).}
 
-\item{options}{a list of options (see details)}
+\item{options}{a list of options (see details).}
 }
 \value{
-the module server returns a list of the references that are accessible outside the module.
-All except id & url are references to reactive values.
-list(id, url, items, data_model, filtered_items, selected_items, clicked_column, filter_date,
-triggers = list(update))
+the module server function returns a list of the reactive references that are accessible outside the module.
+All elements except \code{id} & \code{url} are references to reactive values.
+\itemize{
+\item id = the \code{id} of the module (same as the input argument)
+\item url = the url of the items
+\item items = the reference of the items reactive
+\item data_model = the reference of the data model reactive
+\item filtered_items = the reference of the filtered items reactive
+\item selected_items = the reference of the selected items (ids)
+\item clicked_column = the reference of the clicked column reactive
+\item filters = the reference of the reactive list with filter expressions.
+}
 }
 \description{
-Module server
+This is the main component of the package.
 }
 \details{
-If autosave is FALSE, the item_save function should be used to make the data persistent.
+If autosave is \code{FALSE}, the \code{item_save()} function should be used to make the data persistent.
 To make the data model persistent, use \link[base]{saveRDS} function. The file name should be
 consistent with the output of \link[kitems]{dm_name} function used with \code{id} plus .rds extension.
 
-When admin is FALSE, \link[kitems]{admin_widget} will return an 'empty' layout (tabs with no content)
-\link[kitems]{dynamic_sidebar} is not affected by this parameter.
-It is expected that those function will not be used when admin = FALSE.
+When admin is \code{FALSE}, \link[kitems]{admin_widget} will return an 'empty' layout (tabs with no content)
+It is expected that this function will not be used when admin = \code{FALSE}.
 
-Behavior of the module server can be tuned using a list of options
-shortcut option is a logical to activate shortcut mechanism within item forms
+Behavior of the module server can be tuned using a list of options:
+\itemize{
+\item \code{shortcut} option is a logical to activate shortcut mechanism within item forms.
+}
 
 Triggers are the way to send events for the module to execute dedicated actions.
-trigger must be a reactive (or NULL, the default). An event is defined as a named list of the form
-list(workflow = "create", type = "dialog") or list(workflow = "create", type = "task", values = list(...))
-If NULL, the trigger manager will not be initialized.
+\code{trigger} must be a reactive (or \code{NULL}, the default). An event is defined as a named list of the form
+\code{list(workflow = "create", type = "dialog")} or \code{list(workflow = "create", type = "task", values = list(...))}
+If \code{NULL}, the trigger manager will not be initialized.
 
-Filter is a reactive object to pass filter expression(s) to the module server
-A filter is defined as a named list: list(layer = c("pre", "main"), expr = ...)
-If NULL, the filter manager will not be initialized.
+\code{filter} is a reactive object reference to pass filter expression(s) to the module server
+A filter is defined as a named list: \code{list(layer = c("pre", "main"), expr = ...)}.
+If \code{NULL}, the filter manager will not be initialized.
 }
 \examples{
 \dontrun{
