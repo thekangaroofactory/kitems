@@ -7,12 +7,12 @@
 rows_delete(items, id)
 }
 \arguments{
-\item{items}{the data.frame of the items}
+\item{items}{the data.frame of the items.}
 
-\item{id}{a vector of id(s) for the item to delete}
+\item{id}{a vector of id(s) for the item(s) to delete.}
 }
 \value{
-the new data.frame of the items
+The updated data.frame of the items.
 }
 \description{
 Delete Item(s)

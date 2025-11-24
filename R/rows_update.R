@@ -1,10 +1,10 @@
 
 
-#' Update Item Rows
+#' Update Item(s)
 #'
-#' @param items a data.frame of the items
-#' @param values a list of named values
-#' @param data.model a data.frame of the data.model
+#' @param items a data.frame of the items.
+#' @param values a list of named values.
+#' @param data.model a data.frame of the data.model.
 #'
 #' @details
 #' values is a named list. The names are used to check the corresponding values

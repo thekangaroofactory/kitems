@@ -2,19 +2,19 @@
 % Please edit documentation in R/restore.R
 \name{restore}
 \alias{restore}
-\title{Restore Data Model & Items Files}
+\title{Restore Files}
 \usage{
 restore(id, path, type = "items")
 }
 \arguments{
-\item{id}{the kitems id used to create the data model}
+\item{id}{the id used to create the data model.}
 
-\item{path}{the path to the data model}
+\item{path}{the path to the data model.}
 
-\item{type}{the type of file to backup. \code{items} (default) or \code{dm}}
+\item{type}{the type of file to backup. \code{items} (default) or \code{dm}.}
 }
 \description{
-Restore Data Model & Items Files
+Restores the data model & items files.
 }
 \examples{
 \dontrun{

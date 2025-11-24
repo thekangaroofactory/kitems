@@ -2,22 +2,22 @@
 % Please edit documentation in R/rows_update.R
 \name{rows_update}
 \alias{rows_update}
-\title{Update Item Rows}
+\title{Update Item(s)}
 \usage{
 rows_update(items, values, data.model)
 }
 \arguments{
-\item{items}{a data.frame of the items}
+\item{items}{a data.frame of the items.}
 
-\item{values}{a list of named values}
+\item{values}{a list of named values.}
 
-\item{data.model}{a data.frame of the data.model}
+\item{data.model}{a data.frame of the data.model.}
 }
 \value{
 a data.frame of the items
 }
 \description{
-Update Item Rows
+Update Item(s)
 }
 \details{
 values is a named list. The names are used to check the corresponding values

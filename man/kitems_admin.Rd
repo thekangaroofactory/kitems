@@ -2,25 +2,25 @@
 % Please edit documentation in R/kitems_admin.R
 \name{kitems_admin}
 \alias{kitems_admin}
-\title{kitems Admin Server}
+\title{kitems Admin Module Server}
 \usage{
 kitems_admin(k_data_model, k_items, path, dm_url, items_url, autosave)
 }
 \arguments{
-\item{k_data_model}{the reference of the data model reactive value}
+\item{k_data_model}{the reference of the data model reactive value.}
 
-\item{k_items}{the reference of the item reactive value}
+\item{k_items}{the reference of the item reactive value.}
 
-\item{path}{the path provided to the kitems server}
+\item{path}{the path provided to the kitems server.}
 
-\item{dm_url}{the url of the data model file}
+\item{dm_url}{the url of the data model file.}
 
-\item{items_url}{the url of the item file}
+\item{items_url}{the url of the item file.}
 
-\item{autosave}{the autosave value passed to the kitems server}
+\item{autosave}{the autosave value passed to the kitems server.}
 }
 \description{
-kitems Admin Server
+The admin module server is the back end of the admin console app.
 }
 \examples{
 \dontrun{
