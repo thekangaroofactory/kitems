@@ -49,7 +49,7 @@ reference:
   - kitems
 
 - subtitle: Shiny Module UI Components
-  desc: The UI functions to include to your app.
+  desc: The UI functions to include into your app.
   contents:
   - create_widget
   - update_widget
@@ -98,7 +98,7 @@ reference:
   - dm_version
 
 - subtitle: Attribute
-  desc: The functions related to attrbute management.
+  desc: The functions related to attribute management.
   contents:
   - attribute_create
   - attribute_input
