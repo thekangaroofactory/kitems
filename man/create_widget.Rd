@@ -7,14 +7,16 @@
 create_widget(id)
 }
 \arguments{
-\item{id}{the server module id}
+\item{id}{the server module id.}
 }
 \value{
-a rendered actionButton
+An HTML element that can be included in the UI.
 }
 \description{
-Create Item Button
+Button to fire the create item dialog.
 }
 \examples{
+\dontrun{
 create_widget(id = "mydata")
+}
 }
