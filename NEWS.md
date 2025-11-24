@@ -1,3 +1,54 @@
+# kitems v0.7.2-beta
+
+The milestone focuses on the package documentation & website.\
+Many articles have been added to cover the core concepts of the framework as well as the features.
+
+## Documentation
+
+-   Implement get started page (#539)
+
+-   Update & cleanup readme (#550)
+
+-   Update changelog with data model upgrades (#554)
+
+-   Review functions documentation (#560)
+
+## Articles
+
+-   Update limitations article (#559)
+
+-   Update filtering article to fit with v0.7.1 concepts (#495)
+
+-   Add article to cover core concepts (#523)
+
+-   Add article to cover shiny module delivery (#545)
+
+-   Implement admin article (#527)
+
+-   Add article to describe the different implementations (#435)
+
+-   Add article to describe workflows (#512)
+
+-   Add article to describe communication architecture (#513)
+
+-   Add ordering article (#561)
+
+-   Add an article to cover shortcuts (#547)
+
+-   Add an environment article (#555)
+
+-   Add roadmap article (#558)
+
+## Miscellaneous
+
+-   Implement light / dark mode in package documentation (#541)
+
+-   Add author link to footer (#543)
+
+-   Organize articles per sections (#538)
+
+-   Group function reference into sections (#387)
+
 # kitems v0.7.1-beta
 
 > **Important!**\
