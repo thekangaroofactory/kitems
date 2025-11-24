@@ -1,6 +1,6 @@
-# Update data model attribute
+# Update Attribute
 
-Update data model attribute
+Update a data model attribute
 
 ## Usage
 
@@ -38,8 +38,7 @@ attribute_update(
 
 - default.arg:
 
-  an optional named vector of arguments, to pass along with the default
-  function.
+  a named vector of arguments, to pass along with the default function.
 
 - skip:
 
@@ -59,16 +58,17 @@ attribute_update(
 
 ## Value
 
-the updated data model
+The updated data model data.frame
 
 ## Details
 
 Updating attribute class is not supported by this function (as it
 requires data migration).
 
-Use of vector to update several attributes is supported as long as
-length of the different parameters is either same as name or 1 (then all
-rows gets same value).
+The use of vectors to update several attributes is supported as long as
+the [`length()`](https://rdrr.io/r/base/length.html) of the different
+parameters is either same as `name` or 1 (then all rows gets same
+value).
 
 ## See also
 
@@ -77,13 +77,18 @@ rows gets same value).
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
-#Use of vector to update several attributes:
+# -- define dm
+dm <- data_model(colClasses = c(name = "character", total = "numeric"))
+
+# -- Use of vectors to update several attributes
 attribute_update(data.model = dm,
                  name = c("name","total"),
                  default.val = c("test", 2),
-                 default.fun = NULL,
-                 default.arg = NULL,
                  skip = TRUE)
-} # }
+#>    name      type default.val default.fun default.arg display skip sort.rank
+#> 1  name character        test          NA          NA   FALSE TRUE        NA
+#> 2 total   numeric           2          NA          NA   FALSE TRUE        NA
+#>   sort.desc
+#> 1        NA
+#> 2        NA
 ```

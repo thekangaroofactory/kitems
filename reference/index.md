@@ -15,7 +15,7 @@
 - [`attribute_suggestion()`](https://thekangaroofactory.github.io/kitems/reference/attribute_suggestion.md)
   : Attribute Suggestions
 - [`attribute_update()`](https://thekangaroofactory.github.io/kitems/reference/attribute_update.md)
-  : Update data model attribute
+  : Update Attribute
 - [`attribute_value()`](https://thekangaroofactory.github.io/kitems/reference/attribute_value.md)
   : Turn Value(s) into Attribute
 - [`backup()`](https://thekangaroofactory.github.io/kitems/reference/backup.md)
