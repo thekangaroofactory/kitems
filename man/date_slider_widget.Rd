@@ -10,10 +10,10 @@ date_slider_widget(id)
 \item{id}{the server module id.}
 }
 \value{
-an HTML component to include on UI side.
+An HTML component to include on UI side.
 }
 \description{
-The date slider UI component to drive the date filter
+The date slider UI component to drive the date filter.
 }
 \examples{
 \dontrun{

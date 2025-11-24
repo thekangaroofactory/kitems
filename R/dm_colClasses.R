@@ -1,10 +1,13 @@
 
 
-#' Extract colClasses from data model
+#' Data Model colClasses
 #'
-#' @param data.model a data.frame containing the data model
+#' @description
+#' Extract attribute classes from the data model.
 #'
-#' @return a named vector of the attribute types
+#' @param data.model a data.frame containing the data model.
+#'
+#' @return A named vector of the attribute types.
 #' @export
 #'
 #' @examples

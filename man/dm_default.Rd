@@ -2,23 +2,23 @@
 % Please edit documentation in R/dm_default.R
 \name{dm_default}
 \alias{dm_default}
-\title{Compute Default Value(s)}
+\title{Default Value(s)}
 \usage{
 dm_default(data.model, name, n = 1)
 }
 \arguments{
-\item{data.model}{a data.frame containing the data model}
+\item{data.model}{a data.frame containing the data model.}
 
-\item{name}{a character string with the attribute name}
+\item{name}{a character string with the attribute name.}
 
 \item{n}{an integer (default 1) to use when a vector is expected
-for default function case}
+for default function case.}
 }
 \value{
-a n length vector
+A vector of length \code{n}.
 }
 \description{
-Compute Default Value(s)
+Compute the default value(s).
 }
 \details{
 Whenever a default function is set for an attribute of the data.model,

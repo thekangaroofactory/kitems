@@ -1,19 +1,22 @@
 
 
-#' Check Data Model Version
+#' Data Model Version
 #'
-#' @param data.model a data.frame of the data model
+#' @description
+#' Check data model version
+#'
+#' @param data.model a data.frame of the data model.
 #'
 #' @details
 #' Data model version is required from v.0.7.1
 #' This function will check whether the data model has a version (attribute) or not
-#' as well as if the data model requires a migration
+#' as well as if the data model requires a migration.
 #'
 #' It works both within a Shiny app context or at the console
 #' It is recommended that this check is performed after installing a new version of
 #' the package.
 #'
-#' @return a vector c(migration = TRUE/FALSE, comment = "message")
+#' @return A vector `c(migration = TRUE/FALSE, comment = "message")`.
 #' @export
 #'
 #' @examples

@@ -2,20 +2,19 @@
 
 #' Data Model Display
 #'
-#' @param data.model a data.frame containing the data model
-#' @param set an optional character vector with the name of the attributes to set as hidden
+#' @description
+#' A getter/setter function to manage data model display.
 #'
-#' @return either the list of attributes that are hidden or an updated data model if set is not NULL
+#' @param data.model a data.frame containing the data model.
+#' @param set an optional character vector with the name of the attributes to set as hidden.
+#'
+#' @return Either the list of attributes that are hidden or an updated data model if `set` is not `NULL`
 #' @export
-#'
-#' @details
-#' If set is NULL, then the data model passed as data.model is returned
 #'
 #' @examples
 #' \dontrun{
 #' dm_display(data.model = mydatamodel, set = c("id", "internal"))
 #' }
-
 
 dm_display <- function(data.model, set = NULL){
 

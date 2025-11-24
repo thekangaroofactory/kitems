@@ -1,10 +1,13 @@
 
 
-#' Migrate Data Model
+#' Data Model Migration
 #'
-#' @param data.model a data.frame of the data model
+#' @description
+#' Executhe the migration procedure on a data model.
 #'
-#' @return the migrated data.model or NA if no migration is required
+#' @param data.model a data.frame of the data model.
+#'
+#' @return The migrated data model or `NA` if no migration is required.
 #' @export
 #'
 #' @examples

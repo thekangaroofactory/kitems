@@ -1,11 +1,14 @@
 
 
-#' Compute Default Value(s)
+#' Default Value(s)
 #'
-#' @param data.model a data.frame containing the data model
-#' @param name a character string with the attribute name
+#' @description
+#' Compute the default value(s).
+#'
+#' @param data.model a data.frame containing the data model.
+#' @param name a character string with the attribute name.
 #' @param n an integer (default 1) to use when a vector is expected
-#' for default function case
+#' for default function case.
 #'
 #' @details
 #' Whenever a default function is set for an attribute of the data.model,
@@ -13,15 +16,13 @@
 #' default value by using n parameter. This is usefull when the function
 #' generates single values (time or unique id for example)
 #'
-#'
-#' @return a n length vector
+#' @return A vector of length `n`.
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' value <- dm_default(data.model = mydatamodel, name = "date")
 #' }
-
 
 dm_default <- function(data.model, name, n = 1){
 

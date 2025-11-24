@@ -2,7 +2,7 @@
 % Please edit documentation in R/dm_delete_preview.R
 \name{dm_delete_preview}
 \alias{dm_delete_preview}
-\title{Data model delete preview modal}
+\title{Data Model Delete Modal}
 \usage{
 dm_delete_preview(
   hasItems = FALSE,
@@ -14,7 +14,7 @@ dm_delete_preview(
 )
 }
 \arguments{
-\item{hasItems}{a logical if there are items (items data frame not NULL)}
+\item{hasItems}{a logical if there are items (items data.frame not \code{NULL}).}
 
 \item{dm.file}{a logical if data model file exists}
 
@@ -27,10 +27,10 @@ dm_delete_preview(
 \item{ns}{the namespace function to be used}
 }
 \value{
-a modalDialog
+A modalDialog object.
 }
 \description{
-Data model delete preview modal
+Definition of the data model delete preview modal dialog.
 }
 \examples{
 \dontrun{
@@ -43,3 +43,4 @@ ns = ns)
 }
 
 }
+\keyword{internal}

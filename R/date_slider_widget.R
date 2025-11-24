@@ -3,11 +3,11 @@
 #' Date Slider Widget
 #'
 #' @description
-#' The date slider UI component to drive the date filter
+#' The date slider UI component to drive the date filter.
 #'
 #' @param id the server module id.
 #'
-#' @return an HTML component to include on UI side.
+#' @return An HTML component to include on UI side.
 #' @export
 #'
 #' @examples

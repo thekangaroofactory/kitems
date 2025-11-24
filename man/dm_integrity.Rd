@@ -2,28 +2,28 @@
 % Please edit documentation in R/dm_integrity.R
 \name{dm_integrity}
 \alias{dm_integrity}
-\title{Check data model integrity}
+\title{Data Model Integrity}
 \usage{
 dm_integrity(data.model, items, template = NULL)
 }
 \arguments{
-\item{data.model}{a \emph{mandatory} data model}
+\item{data.model}{a \emph{mandatory} data model.}
 
-\item{items}{a \emph{mandatory} item data.frame}
+\item{items}{a \emph{mandatory} data.frame of the items.}
 
-\item{template}{an optional data.frame(name = c(...), type = c(...)) to be used to force attribute classes}
+\item{template}{an optional data.frame(name = c(...), type = c(...)) to be used to force attribute classes.}
 }
 \value{
-if data model matches with the data, TRUE will be returned. Otherwise an updated data model will be returned.
+if \code{data.model} matches with the \code{items}, \code{TRUE} will be returned. Otherwise an updated data model will be returned.
 }
 \description{
-Check data model integrity
+Check the data model integrity.
 }
 \details{
-In case an attribute is missing from the data model, it will be added with either a type matching the template
-one or a guessed one (using the class() function).
+In case an attribute of the \code{items} is missing from the \code{data.model}, it will be added with either a type matching the template
+one or a guessed one (using the \code{class()} function).
 
-In case an extra attribute is found in the data model as compared to the items, it will be dropped from the
+In case an extra attribute is found in the \code{data.model} as compared to the \code{items}, it will be dropped from the
 data model.
 }
 \examples{

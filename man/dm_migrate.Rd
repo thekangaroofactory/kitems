@@ -2,18 +2,18 @@
 % Please edit documentation in R/dm_migrate.R
 \name{dm_migrate}
 \alias{dm_migrate}
-\title{Migrate Data Model}
+\title{Data Model Migration}
 \usage{
 dm_migrate(data.model)
 }
 \arguments{
-\item{data.model}{a data.frame of the data model}
+\item{data.model}{a data.frame of the data model.}
 }
 \value{
-the migrated data.model or NA if no migration is required
+The migrated data model or \code{NA} if no migration is required.
 }
 \description{
-Migrate Data Model
+Executhe the migration procedure on a data model.
 }
 \examples{
 \dontrun{
