@@ -25,7 +25,7 @@ date_slider_widget(id = "mydata")
 #> <div style="display: inline-block; vertical-align:middle; margin-right:40px;">
 #>   <div class="form-group shiny-input-container" style="width:300px;">
 #>     <label class="control-label" id="mydata-date_slider-label" for="mydata-date_slider">Date</label>
-#>     <input class="js-range-slider" id="mydata-date_slider" data-skin="shiny" data-type="double" data-min="1763856000000" data-max="1763856000000" data-from="1763856000000" data-to="1763856000000" data-step="86400000" data-grid="true" data-grid-num="NaN" data-grid-snap="false" data-prettify-separator="," data-prettify-enabled="true" data-keyboard="true" data-drag-interval="true" data-data-type="date" data-time-format="%F"/>
+#>     <input class="js-range-slider" id="mydata-date_slider" data-skin="shiny" data-type="double" data-min="1763942400000" data-max="1763942400000" data-from="1763942400000" data-to="1763942400000" data-step="86400000" data-grid="true" data-grid-num="NaN" data-grid-snap="false" data-prettify-separator="," data-prettify-enabled="true" data-keyboard="true" data-drag-interval="true" data-data-type="date" data-time-format="%F"/>
 #>   </div>
 #> </div>
 #> <div style="display: inline-block; vertical-align:middle;">

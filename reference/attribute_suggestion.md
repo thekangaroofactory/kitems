@@ -12,28 +12,27 @@ attribute_suggestion(values, type = class(values), n = 3, floor = 10)
 
 - values:
 
-  a vector of values, most probably a vector corresponding to one of the
-  item data frame columns
+  a vector of values, most probably corresponding to one of the item's
+  data frame columns.
 
 - type:
 
   an optional character vector, the type (class) of values. If not
-  provided, class(values) will be used
+  provided, `class(values)` will be used.
 
 - n:
 
   the desired number of suggestions. This applies only on character,
-  factor, numeric & integer types
+  factor, numeric & integer types.
 
 - floor:
 
-  a numeric value. This applies only for numeric & integer types. If
-  none of the value frequency (in %) reaches `floor`, then basic
-  suggestions are returned (see details)
+  a numeric value to indicate a floor frequency. This applies only for
+  numeric & integer types (see details).
 
 ## Value
 
-a list of suggestions This list depends on the `type` of values
+A list of suggestions that depends on the `type` of values:
 
 - character, factor: the most frequent values ;
   `list(value1 = frequency, value_2, = frequency)`
@@ -51,12 +50,14 @@ a list of suggestions This list depends on the `type` of values
 
 For numeric & integer values, the default strategy is to compute the `n`
 most frequent occurrences. If no occurrence reaches the `floor` level (%
-of all items), then the standard list is returned.
+of all items), then a standard list is returned.
 
 ## Examples
 
 ``` r
+# -- define values
 foo <- c(rep("banana", 5), rep("mango", 3), rep("orange", 2))
+
 attribute_suggestion(values = foo, type = "character")
 #> $banana
 #> [1] 50

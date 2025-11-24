@@ -69,26 +69,24 @@
 
 
 <dl><dt id="arg-values">values<a class="anchor" aria-label="anchor" href="#arg-values"></a></dt>
-<dd><p>a vector of values, most probably a vector corresponding to one of the item data frame columns</p></dd>
+<dd><p>a vector of values, most probably corresponding to one of the item's data frame columns.</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p>an optional character vector, the type (class) of values. If not provided, class(values) will be used</p></dd>
+<dd><p>an optional character vector, the type (class) of values. If not provided, <code>class(values)</code> will be used.</p></dd>
 
 
 <dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
-<dd><p>the desired number of suggestions. This applies only on character, factor, numeric &amp; integer types</p></dd>
+<dd><p>the desired number of suggestions. This applies only on character, factor, numeric &amp; integer types.</p></dd>
 
 
 <dt id="arg-floor">floor<a class="anchor" aria-label="anchor" href="#arg-floor"></a></dt>
-<dd><p>a numeric value. This applies only for numeric &amp; integer types. If none of the value frequency (in %)
-reaches <code>floor</code>, then basic suggestions are returned (see details)</p></dd>
+<dd><p>a numeric value to indicate a floor frequency. This applies only for numeric &amp; integer types (see details).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a list of suggestions
-This list depends on the <code>type</code> of values</p><ul><li><p>character, factor:
+    <p>A list of suggestions that depends on the <code>type</code> of values:</p><ul><li><p>character, factor:
 the most frequent values ; <code>list(value1 = frequency, value_2, = frequency)</code></p></li>
 <li><p>numeric, integer:
 the most frequent values ; <code>list(value1 = frequency, value_2, = frequency)</code>, or
@@ -101,12 +99,14 @@ a standard list ; <code>list(min, max)</code></p></li>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>For numeric &amp; integer values, the default strategy is to compute the <code>n</code> most frequent occurrences.
-If no occurrence reaches the <code>floor</code> level (% of all items), then the standard list is returned.</p>
+If no occurrence reaches the <code>floor</code> level (% of all items), then a standard list is returned.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"banana"</span>, <span class="fl">5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"mango"</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"orange"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># -- define values</span></span></span>
+<span class="r-in"><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"banana"</span>, <span class="fl">5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"mango"</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"orange"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">attribute_suggestion</span><span class="op">(</span>values <span class="op">=</span> <span class="va">foo</span>, type <span class="op">=</span> <span class="st">"character"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $banana</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 50</span>
