@@ -120,7 +120,7 @@ kitems::runExample("demo")
 - [`items_name()`](https://thekangaroofactory.github.io/kitems/reference/items_name.md)
   : Items Name
 - [`kitems()`](https://thekangaroofactory.github.io/kitems/reference/kitems.md)
-  : Module server
+  : Kitems Module Server
 - [`kitems_admin()`](https://thekangaroofactory.github.io/kitems/reference/kitems_admin.md)
   : kitems Admin Server
 - [`restore()`](https://thekangaroofactory.github.io/kitems/reference/restore.md)
