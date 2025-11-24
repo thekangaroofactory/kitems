@@ -130,3 +130,7 @@ reference:
   contents:
   - hasDate
   - is_truthy
+
+- subtitle: Deprecated function
+  contents:
+  - dynamic_sidebar
