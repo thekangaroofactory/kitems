@@ -8,12 +8,12 @@
 ## Citation
 
 Peret P (2025). *kitems: A Framework To Manage Data Frame Items*. R
-package version 0.7.1, <https://thekangaroofactory.github.io/kitems/>.
+package version 0.7.2, <https://thekangaroofactory.github.io/kitems/>.
 
     @Manual{,
       title = {kitems: A Framework To Manage Data Frame Items},
       author = {Philippe Peret},
       year = {2025},
-      note = {R package version 0.7.1},
+      note = {R package version 0.7.2},
       url = {https://thekangaroofactory.github.io/kitems/},
     }
