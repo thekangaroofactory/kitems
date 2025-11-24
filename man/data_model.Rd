@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_model.R
 \name{data_model}
 \alias{data_model}
-\title{Build data model}
+\title{Data Model}
 \usage{
 data_model(
   colClasses,
@@ -33,31 +33,31 @@ data_model(
 \item{sort.desc}{an optional named logical vector, to define if sort should be descending.}
 }
 \value{
-a data.frame containing the data model.
+A data.frame containing the data model.
 }
 \description{
-Build data model
+Build a data model
 }
 \details{
-colClasses will be used to create the data.frame: names will define the attributes of the data model,
+\code{colClasses} will be used to create the data.frame: names will define the attributes of the data model,
 and values will define the class (type) of the attributes.
 
-All default.* parameters are optional. When provided, they will be used to match with names defined in colClasses:
+All \verb{default.*} parameters are optional. When provided, they will be used to match with names defined in colClasses:
 \itemize{
 \item order in those vectors doesn't matter
 \item there is no need to set values for all attributes (see examples)
 \item names in vectors not matching with colClasses names will be ignored
 }
 
-default.fun and default.val are mutual exclusive, with priority on default.fun (default.val will be forced to NA)
-default.arg requires default.fun not to be NULL (will be forced to NA otherwise)
+\code{default.fun} and \code{default.val} are mutual exclusive, with priority on \code{default.fun} (\code{default.val} will be forced to \code{NA})
+\code{default.arg} requires \code{default.fun} not to be NULL (will be forced to \code{NA} otherwise)
 
-display and skip directly contains the names of the attributes to set to TRUE
+\code{display} and \code{skip} directly contains the names of the attributes to set to TRUE
 
 If not provided, defaults will be applied:
 \itemize{
-\item NA for default.val, default.fun and default.arg
-\item FALSE for display and skip
+\item \code{NA} for \code{default.val}, \code{default.fun} and \code{default.arg}
+\item \code{FALSE} for \code{display} and \code{skip}
 }
 }
 \examples{

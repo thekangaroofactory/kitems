@@ -2,10 +2,12 @@
 
 #' Danger Zone Widget
 #'
-#' @param k_data_model the reference of the data model reactive value
-#' @param ns the namespace function
+#' @param k_data_model the reference of the data model reactive object.
+#' @param ns the namespace function.
 #'
-#' @return a tagList object
+#' @keywords internal
+#'
+#' @return A tagList object to include in the UI.
 #'
 #' @examples
 #' \dontrun{

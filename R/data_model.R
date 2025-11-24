@@ -1,6 +1,9 @@
 
 
-#' Build data model
+#' Data Model
+#'
+#' @description
+#' Build a data model
 #'
 #' @param colClasses a \emph{mandatory} named vector of classes, defining the data model.
 #' @param default.val an optional named vector of values, defining the default values.
@@ -11,27 +14,27 @@
 #' @param sort.rank an optional named numeric vector, to define sort orders.
 #' @param sort.desc an optional named logical vector, to define if sort should be descending.
 #'
-#' @return a data.frame containing the data model.
+#' @return A data.frame containing the data model.
 #'
 #' @export
 #'
 #' @details
-#' colClasses will be used to create the data.frame: names will define the attributes of the data model,
+#' `colClasses` will be used to create the data.frame: names will define the attributes of the data model,
 #' and values will define the class (type) of the attributes.
 #'
-#' All default.* parameters are optional. When provided, they will be used to match with names defined in colClasses:
+#' All `default.*` parameters are optional. When provided, they will be used to match with names defined in colClasses:
 #' - order in those vectors doesn't matter
 #' - there is no need to set values for all attributes (see examples)
 #' - names in vectors not matching with colClasses names will be ignored
 #'
-#' default.fun and default.val are mutual exclusive, with priority on default.fun (default.val will be forced to NA)
-#' default.arg requires default.fun not to be NULL (will be forced to NA otherwise)
+#' `default.fun` and `default.val` are mutual exclusive, with priority on `default.fun` (`default.val` will be forced to \code{NA})
+#' `default.arg` requires `default.fun` not to be NULL (will be forced to \code{NA} otherwise)
 #'
-#' display and skip directly contains the names of the attributes to set to TRUE
+#' `display` and `skip` directly contains the names of the attributes to set to TRUE
 #'
 #' If not provided, defaults will be applied:
-#' - NA for default.val, default.fun and default.arg
-#' - FALSE for display and skip
+#' - \code{NA} for `default.val`, `default.fun` and `default.arg`
+#' - \code{FALSE} for `display` and `skip`
 #'
 #' @examples
 #' # -- order in vectors doesn't matter:
