@@ -1,6 +1,6 @@
-# Add attribute to existing items
+# Item Migration
 
-Add attribute to existing items
+Add attribute to existing items.
 
 ## Usage
 
@@ -12,32 +12,31 @@ item_migrate(items, name, type, fill = NA)
 
 - items:
 
-  a data.frame of the items
+  a data.frame of the items.
 
 - name:
 
-  a character string of the attribute name
+  a character string of the attribute name.
 
 - type:
 
-  a character string of the attribute type
+  a character string of the attribute type.
 
 - fill:
 
-  the value (default = NA) to be used to fill the existing rows (see
-  details)
+  the value (default = `NA`) to be used to fill the existing rows (see
+  details).
 
 ## Value
 
-the updated items data.frame
+The updated items data.frame.
 
 ## Details
 
-fill will be coerced to the class name provided in type If a vector is
-given as input for fill, it will be used:
-items[name](https://rdrr.io/r/base/name.html) \<- value Make sure the
-vector length is same as the number of rows, otherwise an error will be
-raised by R
+`fill` will be coerced to the class name provided in `type`. If a vector
+is given as input for `fill`, it will be used to feed the created
+column. Make sure the vector length is same as the number of rows,
+otherwise an error will be raised by R.
 
 ## Examples
 

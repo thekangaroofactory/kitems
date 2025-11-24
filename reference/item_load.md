@@ -1,6 +1,6 @@
-# Load data
+# Load Items
 
-Load data
+Load Items
 
 ## Usage
 
@@ -12,24 +12,24 @@ item_load(col.classes, file = NULL, path = NULL)
 
 - col.classes:
 
-  a vector containing the expected column types
+  a named vector containing the expected column types.
 
 - file:
 
-  an optional file name (including .csv extension)
+  an optional file name (including .csv extension).
 
 - path:
 
-  an optional path to the file
+  an optional path to the file.
 
 ## Value
 
-the data (items)
+The data.frame of the items.
 
 ## Details
 
-File connector: if file is not NULL, then data are loaded from the given
-.csv
+File connector: if file is not `NULL`, then data are loaded from the
+given .csv file.
 
 ## Examples
 

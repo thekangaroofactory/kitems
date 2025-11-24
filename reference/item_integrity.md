@@ -1,6 +1,6 @@
-# Check items integrity
+# Items Integrity
 
-Check items integrity
+Check items integrity vs the data model.
 
 ## Usage
 
@@ -12,15 +12,15 @@ item_integrity(items, data.model)
 
 - items:
 
-  a data.frame of the items
+  a data.frame of the items.
 
 - data.model:
 
-  a data.frame of the data model
+  a data.frame of the data model.
 
 ## Value
 
-a data.frame of the items, with corrected attribute types
+A data.frame of the items, with corrected attribute types.
 
 ## Details
 

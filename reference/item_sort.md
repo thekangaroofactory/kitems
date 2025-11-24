@@ -1,6 +1,6 @@
-# Sort items
+# Sort Items
 
-Sort items
+Sort Items
 
 ## Usage
 
@@ -12,15 +12,15 @@ item_sort(items, data.model)
 
 - items:
 
-  a data.frame of the items
+  a data.frame of the items.
 
 - data.model:
 
-  a data.frame, defining the data model
+  a data.frame of the data model.
 
 ## Value
 
-a data.frame of the items, sorted based on the data model
+A data.frame of the items, sorted based on the data model.
 
 ## Examples
 

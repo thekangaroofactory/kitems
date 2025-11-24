@@ -1,6 +1,6 @@
-# Build Item Form
+# Item Form
 
-Build Item Form
+Builds the create or update item form.
 
 ## Usage
 
@@ -12,36 +12,38 @@ item_form(data.model, items, update = FALSE, item = NULL, shortcut = FALSE, ns)
 
 - data.model:
 
-  the data.frame of the data model
+  the data.frame of the data model.
 
 - items:
 
-  the data.frame of the items
+  the data.frame of the items.
 
 - update:
 
-  an optional logical (default = FALSE) to trigger update behavior
+  an optional logical (default = `FALSE`) to trigger update behavior.
 
 - item:
 
-  an optional item (used to set default input values if update = TRUE)
+  an optional item (used to set default input values if update =
+  `TRUE`).
 
 - shortcut:
 
-  a logical to indicate if shortcuts should be displayed
+  a logical to indicate if shortcuts should be displayed.
 
 - ns:
 
-  the namespace function, output of shiny::NS()
+  the namespace function, output of
+  [`shiny::NS()`](https://rdrr.io/pkg/shiny/man/NS.html).
 
 ## Value
 
-a tagList() object containing the attribute inputs
+An HTML object `tagList()` containing the attribute inputs.
 
 ## Details
 
 Data model skip feature will be used to return inputs only for the skip
-= FALSE attributes
+= `FALSE` attributes
 
 ## Examples
 

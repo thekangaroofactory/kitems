@@ -1,6 +1,6 @@
-# Build list of input values
+# Input Values
 
-Build list of input values
+Build a list of values from the input.
 
 ## Usage
 
@@ -12,21 +12,21 @@ item_input_values(input, colClasses)
 
 - input:
 
-  the input object from the shiny module
+  the input object from the shiny module.
 
 - colClasses:
 
-  a named vector of classes, defining the data model
+  a named vector of classes, defining the data model.
 
 ## Value
 
-a named list of values
+a named list of values.
 
 ## Details
 
-the output list will contain as many entries as the colClasses named
+the output list will contain as many entries as the `colClasses` named
 vector. In case some names have no corresponding item in the input
-parameter, they will get NULL as value in the output list.
+parameter, they will get `NULL` as value in the output list.
 
 ## Examples
 

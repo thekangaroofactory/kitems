@@ -1,7 +1,7 @@
 # Search Items
 
 A simple wrapper around
-[filter](https://dplyr.tidyverse.org/reference/filter.html) function
+[filter](https://dplyr.tidyverse.org/reference/filter.html) function.
 
 ## Usage
 
@@ -13,15 +13,15 @@ item_search(items, pattern)
 
 - items:
 
-  a data.frame of items
+  a data.frame of items.
 
 - pattern:
 
-  the search pattern
+  the search pattern.
 
 ## Value
 
-a filtered data.frame
+A filtered data.frame.
 
 ## Details
 

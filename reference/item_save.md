@@ -1,6 +1,6 @@
-# Save data
+# Save Items
 
-Save data
+Saves the items data.frame.
 
 ## Usage
 
@@ -12,15 +12,15 @@ item_save(data, file = NULL)
 
 - data:
 
-  a data.frame containing the data to be saved
+  a data.frame containing the data to be saved.
 
 - file:
 
-  the url of the file (including path & .csv extension)
+  the url of the file (including path & .csv extension).
 
 ## Details
 
-File connector: if file is not NULL, then data is saved to .csv
+File connector: if file is not `NULL`, then data is saved to .csv
 
 ## Examples
 

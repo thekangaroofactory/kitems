@@ -55,25 +55,25 @@
 - [`is_truthy()`](https://thekangaroofactory.github.io/kitems/reference/is_truthy.md)
   : Truthy Value
 - [`item_dialog()`](https://thekangaroofactory.github.io/kitems/reference/item_dialog.md)
-  : Item Modal Dialog
+  : Item Modal Dialog(s)
 - [`item_form()`](https://thekangaroofactory.github.io/kitems/reference/item_form.md)
-  : Build Item Form
+  : Item Form
 - [`item_input_values()`](https://thekangaroofactory.github.io/kitems/reference/item_input_values.md)
-  : Build list of input values
+  : Input Values
 - [`item_integrity()`](https://thekangaroofactory.github.io/kitems/reference/item_integrity.md)
-  : Check items integrity
+  : Items Integrity
 - [`item_load()`](https://thekangaroofactory.github.io/kitems/reference/item_load.md)
-  : Load data
+  : Load Items
 - [`item_mask()`](https://thekangaroofactory.github.io/kitems/reference/item_mask.md)
-  : Apply mask
+  : Item Mask
 - [`item_migrate()`](https://thekangaroofactory.github.io/kitems/reference/item_migrate.md)
-  : Add attribute to existing items
+  : Item Migration
 - [`item_save()`](https://thekangaroofactory.github.io/kitems/reference/item_save.md)
-  : Save data
+  : Save Items
 - [`item_search()`](https://thekangaroofactory.github.io/kitems/reference/item_search.md)
   : Search Items
 - [`item_sort()`](https://thekangaroofactory.github.io/kitems/reference/item_sort.md)
-  : Sort items
+  : Sort Items
 - [`items_name()`](https://thekangaroofactory.github.io/kitems/reference/items_name.md)
   : Items Name
 - [`kitems()`](https://thekangaroofactory.github.io/kitems/reference/kitems.md)

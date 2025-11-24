@@ -1,6 +1,6 @@
-# Item Modal Dialog
+# Item Modal Dialog(s)
 
-Item Modal Dialog
+Produces a create / update / delete modal dialog to display.
 
 ## Usage
 
@@ -19,36 +19,37 @@ item_dialog(
 
 - data.model:
 
-  a data.frame of the data model
+  a data.frame of the data model.
 
 - items:
 
-  a data.frame of the items
+  a data.frame of the items.
 
 - workflow:
 
-  a character string to indicate workflow (see details)
+  a character string to indicate workflow (see details).
 
 - item:
 
-  a data.frame of the item to update (when update = TRUE)
+  a data.frame of the item to update (when `workflow` = "update").
 
 - shortcut:
 
-  a logical (default FALSE) if shortcuts should be activated
+  a logical (default `FALSE`) if shortcuts should be activated.
 
 - ns:
 
-  the intented namespace function to use in the dialog
+  the intended namespace function to use in the dialog.
 
 ## Value
 
-a modal dialog
+a modal dialog to display using
+[`shiny::showModal()`](https://rdrr.io/pkg/shiny/man/showModal.html).
 
 ## Details
 
-Possible values for workflow are c("create", "update", "delete")
-"create" is the default
+Possible values for workflow are "create", "update" or "delete".
+"create" is the default.
 
 ## Examples
 
