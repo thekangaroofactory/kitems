@@ -1,6 +1,6 @@
-# Extract colClasses from data model
+# Data Model colClasses
 
-Extract colClasses from data model
+Extract attribute classes from the data model.
 
 ## Usage
 
@@ -12,11 +12,11 @@ dm_colClasses(data.model = NULL)
 
 - data.model:
 
-  a data.frame containing the data model
+  a data.frame containing the data model.
 
 ## Value
 
-a named vector of the attribute types
+A named vector of the attribute types.
 
 ## Examples
 

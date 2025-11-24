@@ -1,6 +1,6 @@
-# Apply mask on data model table
+# Data Model Mask
 
-Apply mask on data model table
+Apply mask on the data model.
 
 ## Usage
 
@@ -12,11 +12,11 @@ dm_mask(data.model)
 
 - data.model:
 
-  a data.frame of the data model
+  a data.frame of the data model.
 
 ## Value
 
-a data.frame with renamed columns
+A data.frame with renamed columns.
 
 ## Examples
 

@@ -1,6 +1,6 @@
-# Check data model integrity
+# Data Model Integrity
 
-Check data model integrity
+Check the data model integrity.
 
 ## Usage
 
@@ -12,30 +12,30 @@ dm_integrity(data.model, items, template = NULL)
 
 - data.model:
 
-  a *mandatory* data model
+  a *mandatory* data model.
 
 - items:
 
-  a *mandatory* item data.frame
+  a *mandatory* data.frame of the items.
 
 - template:
 
   an optional data.frame(name = c(...), type = c(...)) to be used to
-  force attribute classes
+  force attribute classes.
 
 ## Value
 
-if data model matches with the data, TRUE will be returned. Otherwise an
-updated data model will be returned.
+if `data.model` matches with the `items`, `TRUE` will be returned.
+Otherwise an updated data model will be returned.
 
 ## Details
 
-In case an attribute is missing from the data model, it will be added
-with either a type matching the template one or a guessed one (using the
-class() function).
+In case an attribute of the `items` is missing from the `data.model`, it
+will be added with either a type matching the template one or a guessed
+one (using the [`class()`](https://rdrr.io/r/base/class.html) function).
 
-In case an extra attribute is found in the data model as compared to the
-items, it will be dropped from the data model.
+In case an extra attribute is found in the `data.model` as compared to
+the `items`, it will be dropped from the data model.
 
 ## Examples
 

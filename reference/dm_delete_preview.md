@@ -1,6 +1,6 @@
-# Data model delete preview modal
+# Data Model Delete Modal
 
-Data model delete preview modal
+Definition of the data model delete preview modal dialog.
 
 ## Usage
 
@@ -19,7 +19,7 @@ dm_delete_preview(
 
 - hasItems:
 
-  a logical if there are items (items data frame not NULL)
+  a logical if there are items (items data.frame not `NULL`).
 
 - dm.file:
 
@@ -43,7 +43,7 @@ dm_delete_preview(
 
 ## Value
 
-a modalDialog
+A modalDialog object.
 
 ## Examples
 

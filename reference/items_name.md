@@ -1,6 +1,6 @@
-# Items name
+# Items Name
 
-Items name
+Helper function to compute the items name.
 
 ## Usage
 
@@ -16,7 +16,7 @@ items_name(id)
 
 ## Value
 
-the name of the corresponding reactive value
+The name of the corresponding items.
 
 ## Examples
 

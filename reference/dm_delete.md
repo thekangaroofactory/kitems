@@ -1,6 +1,6 @@
-# Delete data model
+# Delete Data Model
 
-Delete data model
+Delete Data Model
 
 ## Usage
 
@@ -12,27 +12,27 @@ dm_delete(data.model, items, dm_url, items_url, autosave, item.file)
 
 - data.model:
 
-  the reference of the data model reactive value
+  the reference of the data model reactive value.
 
 - items:
 
-  the reference of the items reactive value
+  the reference of the items reactive value.
 
 - dm_url:
 
-  the url (path + filename) of the data model
+  the url (path + filename) of the data model.
 
 - items_url:
 
-  the url (path + filename) of the items
+  the url (path + filename) of the items.
 
 - autosave:
 
-  logical if the data should be saved
+  a logical if the data should be saved.
 
 - item.file:
 
-  a logical if the item file should be deleted
+  a logical if the item file should be deleted.
 
 ## Examples
 

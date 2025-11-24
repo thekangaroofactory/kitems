@@ -1,6 +1,6 @@
 # Date Slider Widget
 
-The date slider UI component to drive the date filter
+The date slider UI component to drive the date filter.
 
 ## Usage
 
@@ -16,7 +16,7 @@ date_slider_widget(id)
 
 ## Value
 
-an HTML component to include on UI side.
+An HTML component to include on UI side.
 
 ## Examples
 

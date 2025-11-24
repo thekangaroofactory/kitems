@@ -1,6 +1,6 @@
-# Compute Default Value(s)
+# Default Value(s)
 
-Compute Default Value(s)
+Compute the default value(s).
 
 ## Usage
 
@@ -12,20 +12,20 @@ dm_default(data.model, name, n = 1)
 
 - data.model:
 
-  a data.frame containing the data model
+  a data.frame containing the data model.
 
 - name:
 
-  a character string with the attribute name
+  a character string with the attribute name.
 
 - n:
 
   an integer (default 1) to use when a vector is expected for default
-  function case
+  function case.
 
 ## Value
 
-a n length vector
+A vector of length `n`.
 
 ## Details
 

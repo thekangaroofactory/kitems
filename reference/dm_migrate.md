@@ -1,6 +1,6 @@
-# Migrate Data Model
+# Data Model Migration
 
-Migrate Data Model
+Executhe the migration procedure on a data model.
 
 ## Usage
 
@@ -12,11 +12,11 @@ dm_migrate(data.model)
 
 - data.model:
 
-  a data.frame of the data model
+  a data.frame of the data model.
 
 ## Value
 
-the migrated data.model or NA if no migration is required
+The migrated data model or `NA` if no migration is required.
 
 ## Examples
 

@@ -1,6 +1,6 @@
 # Data Model Display
 
-Data Model Display
+A getter/setter function to manage data model display.
 
 ## Usage
 
@@ -12,21 +12,17 @@ dm_display(data.model, set = NULL)
 
 - data.model:
 
-  a data.frame containing the data model
+  a data.frame containing the data model.
 
 - set:
 
   an optional character vector with the name of the attributes to set as
-  hidden
+  hidden.
 
 ## Value
 
-either the list of attributes that are hidden or an updated data model
-if set is not NULL
-
-## Details
-
-If set is NULL, then the data model passed as data.model is returned
+Either the list of attributes that are hidden or an updated data model
+if `set` is not `NULL`
 
 ## Examples
 

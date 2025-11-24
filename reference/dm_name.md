@@ -1,6 +1,6 @@
-# Data model name
+# Data Model Name
 
-Data model name
+Helper function to compute the data model name.
 
 ## Usage
 
@@ -12,11 +12,11 @@ dm_name(id)
 
 - id:
 
-  the id of the module server instance
+  the id of the module server instance.
 
 ## Value
 
-the name of the corresponding reactive value
+The name of the corresponding data model.
 
 ## Examples
 
