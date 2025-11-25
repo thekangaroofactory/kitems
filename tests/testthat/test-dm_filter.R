@@ -17,7 +17,7 @@ test_that("dm_display: get displays", {
   x <- dm_display(data.model = dm)
 
   # -- check
-  expect_equal(x, c("id"))
+  expect_equal(x, dm$name[!dm$name %in% "id"])
 
 })
 
@@ -40,7 +40,7 @@ test_that("dm_display: set / unset displays", {
 
   # -- test class & display
   expect_s3_class(x, "data.frame")
-  expect_true(x[x$name == "id", ]$display)
+  expect_false(x[x$name == "id", ]$display)
 
   # -- function call
   x <-dm_display(data.model = x, set = "date")
