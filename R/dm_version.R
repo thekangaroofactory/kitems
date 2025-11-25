@@ -34,7 +34,7 @@ dm_version <- function(data.model){
   } else
 
     # -- Check data.model version (vs package version)
-    if(attributes(data.model)$version != DATA_MODEL_VERSION){
+    if(attributes(data.model)$version < DATA_MODEL_VERSION){
 
       warning("Data model requires migration! \nRun admin() to fix it")
       return(c(migration = TRUE, comment = "Data model version is obsolete"))

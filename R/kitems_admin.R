@@ -68,7 +68,7 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       } else
 
         # -- Check data.model version (vs package version)
-        if(attributes(data.model)$version != DATA_MODEL_VERSION){
+        if(attributes(data.model)$version < DATA_MODEL_VERSION){
 
           warning("Data model migration is required!")
           actionButton(inputId = ns("migrate"),
