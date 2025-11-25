@@ -211,7 +211,7 @@ visible.
 
 If the data model has an attribute named ‘*date*’ (literally), a date
 [`shiny::sliderInput()`](https://rdrr.io/pkg/shiny/man/sliderInput.html)
-will be created automatically to enable date filtering.
+can be used to enable date filtering.
 
 See:
 

@@ -139,6 +139,12 @@ It displays the content of the <code>filtered_items</code> element of the module
 <li><p>‘<em>keep-range</em>’ – keeps the selected range no matter if <em>items</em> are added or removed <a class="footnote-ref" role="doc-noteref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;One exception is if the item that is deleted has its date being equal to the minimum or maximum of the entire range. The reason is that the min and max of the dateSliderInput will be updated when the items data frame is modified, hence it is not possible to have the selected range going beyond its limit.&lt;/p&gt;"><sup>1</sup></a></p></li>
 </ul>
 <p>When the server is initialized, it will scan the <em>items</em> to setup the range to the minimum and maximum of the date column, and the selected range to the values fitting with current year. <a class="footnote-ref" role="doc-noteref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;current year standing for the output of &lt;code&gt;format(Sys.Date(), "%Y")&lt;/code&gt;&lt;/p&gt;'><sup>2</sup></a></p>
+<div>
+<blockquote>
+<p><strong>Note</strong></p>
+<p>If the data model has no attribute named ‘date’ (literally) and the date slider widget is implemented in the UI, it will only display the current date and have no effect on the server side.</p>
+</blockquote>
+</div>
 </section><section class="level2"><h2 id="return-value">Return value<a class="anchor" aria-label="anchor" href="#return-value"></a>
 </h2>
 <p>To keep track of the filters applied to the items at a given time, the module server function includes a <code>filters</code> reactive element in its return value list.</p>

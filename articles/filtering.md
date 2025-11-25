@@ -107,6 +107,12 @@ When the server is initialized, it will scan the *items* to setup the
 range to the minimum and maximum of the date column, and the selected
 range to the values fitting with current year. [²](#fn2)
 
+> **Note**
+>
+> If the data model has no attribute named ‘date’ (literally) and the
+> date slider widget is implemented in the UI, it will only display the
+> current date and have no effect on the server side.
+
 ## Return value
 
 To keep track of the filters applied to the items at a given time, the
