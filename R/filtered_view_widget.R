@@ -24,9 +24,10 @@ filtered_view_widget <- function(id){
   tagList(
 
     # -- when all attributes are filtered #362
+    # or item table is empty #581
     conditionalPanel(
       condition = (paste0("document.getElementById(\"", ns("filtered_view"), "\").children.length==0")),
-      p("All attributes are filtered, the table is empty.")),
+      p("The item table is empty (all attributes are filtered or there is no item).")),
 
     # -- the table
     DT::DTOutput(ns("filtered_view")))
