@@ -4,5 +4,5 @@
       runExample()
     Output
       [1] "Available examples:"
-      [1] "demo"    "nested"  "scratch"
+      [1] "demo"    "scratch"
 
