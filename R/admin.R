@@ -1,17 +1,17 @@
 
 
-#' Kitems Admin Console
+#' Admin Console
 #'
 #' @description
 #' Launches the administration console (Shiny App)
 #'
-#' @param path the path where to find item folder(s)
+#' @param path the path where to find the item folder(s)
 #'
 #' @details
-#' The app will scan the path to detect sub folders that are expected to be
+#' The app will scan the `path` to detect sub folders that are expected to be
 #' item folders named after the id used to create them.
 #'
-#' It will build the ui from this list.
+#' It will build the ui tabs from this list.
 #'
 #' @export
 #'

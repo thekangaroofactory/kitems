@@ -2,31 +2,31 @@
 % Please edit documentation in R/item_form.R
 \name{item_form}
 \alias{item_form}
-\title{Build Item Form}
+\title{Item Form}
 \usage{
 item_form(data.model, items, update = FALSE, item = NULL, shortcut = FALSE, ns)
 }
 \arguments{
-\item{data.model}{the data.frame of the data model}
+\item{data.model}{the data.frame of the data model.}
 
-\item{items}{the data.frame of the items}
+\item{items}{the data.frame of the items.}
 
-\item{update}{an optional logical (default = FALSE) to trigger update behavior}
+\item{update}{an optional logical (default = \code{FALSE}) to trigger update behavior.}
 
-\item{item}{an optional item (used to set default input values if update = TRUE)}
+\item{item}{an optional item (used to set default input values if update = \code{TRUE}).}
 
-\item{shortcut}{a logical to indicate if shortcuts should be displayed}
+\item{shortcut}{a logical to indicate if shortcuts should be displayed.}
 
-\item{ns}{the namespace function, output of shiny::NS()}
+\item{ns}{the namespace function, output of \code{shiny::NS()}.}
 }
 \value{
-a tagList() object containing the attribute inputs
+An HTML object \code{tagList()} containing the attribute inputs.
 }
 \description{
-Build Item Form
+Builds the create or update item form.
 }
 \details{
-Data model skip feature will be used to return inputs only for the skip = FALSE attributes
+Data model skip feature will be used to return inputs only for the skip = \code{FALSE} attributes
 }
 \examples{
 \dontrun{

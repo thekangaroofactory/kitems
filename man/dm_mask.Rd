@@ -2,18 +2,18 @@
 % Please edit documentation in R/dm_mask.R
 \name{dm_mask}
 \alias{dm_mask}
-\title{Apply mask on data model table}
+\title{Data Model Mask}
 \usage{
 dm_mask(data.model)
 }
 \arguments{
-\item{data.model}{a data.frame of the data model}
+\item{data.model}{a data.frame of the data model.}
 }
 \value{
-a data.frame with renamed columns
+A data.frame with renamed columns.
 }
 \description{
-Apply mask on data model table
+Apply mask on the data model.
 }
 \examples{
 \dontrun{

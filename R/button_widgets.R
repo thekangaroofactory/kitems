@@ -2,13 +2,18 @@
 
 #' Create Item Button
 #'
-#' @param id the server module id
+#' @description
+#' Button to fire the create item dialog.
 #'
-#' @return a rendered actionButton
+#' @param id the server module id.
+#'
+#' @return An HTML element that can be included in the UI.
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' create_widget(id = "mydata")
+#' }
 
 create_widget <- function(id){
 
@@ -23,13 +28,18 @@ create_widget <- function(id){
 
 #' Update Item Button
 #'
-#' @param id the server module id
+#' @description
+#' Button to fire the update item dialog.
 #'
-#' @return a rendered actionButton
+#' @param id the server module id.
+#'
+#' @return An HTML element that can be included in the UI.
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' update_widget(id = "mydata")
+#' }
 
 update_widget <- function(id){
 
@@ -44,13 +54,18 @@ update_widget <- function(id){
 
 #' Delete Item Button
 #'
-#' @param id the server module id
+#' @description
+#' Button to fire the delete item dialog.
 #'
-#' @return a rendered actionButton
+#' @param id the server module id.
+#'
+#' @return An HTML element that can be included in the UI.
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' delete_widget(id = "mydata")
+#' }
 
 delete_widget <- function(id){
 

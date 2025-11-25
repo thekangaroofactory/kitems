@@ -2,7 +2,7 @@
 % Please edit documentation in R/trigger_event.R
 \name{trigger_event}
 \alias{trigger_event}
-\title{Create Event}
+\title{Trigger Event}
 \usage{
 trigger_event(
   workflow = c("create", "update", "delete"),
@@ -11,18 +11,18 @@ trigger_event(
 )
 }
 \arguments{
-\item{workflow}{the name of the workflow}
+\item{workflow}{the name of the workflow (create, update or delete).}
 
-\item{type}{the name of the action to be performed}
+\item{type}{the name of the action to be performed (dialog or task).}
 
-\item{values}{optional values to create, update or delete an item}
+\item{values}{optional values to create, update or delete an item.}
 }
 \value{
-a event (list)
+An event object (list).
 }
 \description{
 Helper function to create events to be passed to kitems module server
-with the trigger argument.
+with the \code{trigger} argument.
 }
 \examples{
 \dontrun{

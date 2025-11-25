@@ -1,17 +1,17 @@
 
 
-#' Create Event
-#'
-#' @param workflow the name of the workflow
-#' @param type the name of the action to be performed
-#' @param values optional values to create, update or delete an item
-#'
-#' @returns a event (list)
-#' @export
+#' Trigger Event
 #'
 #' @description
 #' Helper function to create events to be passed to kitems module server
-#' with the trigger argument.
+#' with the `trigger` argument.
+#'
+#' @param workflow the name of the workflow (create, update or delete).
+#' @param type the name of the action to be performed (dialog or task).
+#' @param values optional values to create, update or delete an item.
+#'
+#' @returns An event object (list).
+#' @export
 #'
 #' @examples
 #' \dontrun{

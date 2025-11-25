@@ -1,19 +1,22 @@
 
 
-#' Add attribute to existing items
+#' Item Migration
 #'
-#' @param items a data.frame of the items
-#' @param name a character string of the attribute name
-#' @param type a character string of the attribute type
-#' @param fill the value (default = NA) to be used to fill the existing rows (see details)
+#' @description
+#' Add attribute to existing items.
 #'
-#' @return the updated items data.frame
+#' @param items a data.frame of the items.
+#' @param name a character string of the attribute name.
+#' @param type a character string of the attribute type.
+#' @param fill the value (default = `NA`) to be used to fill the existing rows (see details).
+#'
+#' @return The updated items data.frame.
 #' @export
 #'
 #' @details
-#' fill will be coerced to the class name provided in type
-#' If a vector is given as input for fill, it will be used: items[name] <- value
-#' Make sure the vector length is same as the number of rows, otherwise an error will be raised by R
+#' `fill` will be coerced to the class name provided in `type`.
+#' If a vector is given as input for `fill`, it will be used to feed the created column.
+#' Make sure the vector length is same as the number of rows, otherwise an error will be raised by R.
 #'
 #' @examples
 #' \dontrun{

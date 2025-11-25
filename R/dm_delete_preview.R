@@ -1,15 +1,20 @@
 
 
-#' Data model delete preview modal
+#' Data Model Delete Modal
 #'
-#' @param hasItems a logical if there are items (items data frame not NULL)
+#' @description
+#' Definition of the data model delete preview modal dialog.
+#'
+#' @param hasItems a logical if there are items (items data.frame not `NULL`).
 #' @param dm.file a logical if data model file exists
 #' @param item.file a logical if item file exists
 #' @param autosave a logical if autosave is ON
 #' @param id the id if the module
 #' @param ns the namespace function to be used
 #'
-#' @return a modalDialog
+#' @keywords internal
+#'
+#' @return A modalDialog object.
 #'
 #' @examples
 #' \dontrun{
@@ -22,7 +27,6 @@
 #' }
 #'
 
-# -- function definition
 dm_delete_preview <- function(hasItems = FALSE, dm.file = FALSE, item.file = FALSE, autosave = FALSE, id = NULL, ns) {
 
   # -- return

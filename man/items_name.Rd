@@ -2,7 +2,7 @@
 % Please edit documentation in R/names.R
 \name{items_name}
 \alias{items_name}
-\title{Items name}
+\title{Items Name}
 \usage{
 items_name(id)
 }
@@ -10,10 +10,10 @@ items_name(id)
 \item{id}{the id of the module server instance}
 }
 \value{
-the name of the corresponding reactive value
+The name of the corresponding items.
 }
 \description{
-Items name
+Helper function to compute the items name.
 }
 \examples{
 items_name(id = "mydata")

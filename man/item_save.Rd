@@ -2,20 +2,20 @@
 % Please edit documentation in R/item_save.R
 \name{item_save}
 \alias{item_save}
-\title{Save data}
+\title{Save Items}
 \usage{
 item_save(data, file = NULL)
 }
 \arguments{
-\item{data}{a data.frame containing the data to be saved}
+\item{data}{a data.frame containing the data to be saved.}
 
-\item{file}{the url of the file (including path & .csv extension)}
+\item{file}{the url of the file (including path & .csv extension).}
 }
 \description{
-Save data
+Saves the items data.frame.
 }
 \details{
-File connector: if file is not NULL, then data is saved to .csv
+File connector: if file is not \code{NULL}, then data is saved to .csv
 }
 \examples{
 \dontrun{

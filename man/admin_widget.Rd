@@ -7,14 +7,16 @@
 admin_widget(id)
 }
 \arguments{
-\item{id}{the module id}
+\item{id}{the id used to launch the admin module server}
 }
 \value{
-a tagList() object to admin the data model
+A \code{htmltools::tagList()} object containing the admin UI
 }
 \description{
 Admin Widget
 }
 \examples{
+\dontrun{
 admin_widget(id = "mydata")
+}
 }

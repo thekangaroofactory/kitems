@@ -3,12 +3,12 @@
 #' Search Items
 #'
 #' @description
-#' A simple wrapper around \link[dplyr]{filter} function
+#' A simple wrapper around \link[dplyr]{filter} function.
 #'
-#' @param items a data.frame of items
-#' @param pattern the search pattern
+#' @param items a data.frame of items.
+#' @param pattern the search pattern.
 #'
-#' @return a filtered data.frame
+#' @return A filtered data.frame.
 #' @export
 #'
 #' @importFrom dplyr %>%

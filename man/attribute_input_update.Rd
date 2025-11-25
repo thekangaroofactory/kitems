@@ -24,3 +24,4 @@ shortcut_trigger = "name_banana",
 MODULE = "(mydata)")
 }
 }
+\keyword{internal}

@@ -2,18 +2,18 @@
 % Please edit documentation in R/hasDate.R
 \name{hasDate}
 \alias{hasDate}
-\title{Test date attribute}
+\title{Test Date Attribute}
 \usage{
 hasDate(data.model)
 }
 \arguments{
-\item{data.model}{a data.frame containing the data model}
+\item{data.model}{a data.frame containing the data model.}
 }
 \value{
-a logical, TRUE if data model has an attribute 'date' (exact match)
+A logical, \code{TRUE} if \code{data.model} has an attribute "date" (exact match).
 }
 \description{
-Test date attribute
+Test Date Attribute
 }
 \examples{
 \dontrun{

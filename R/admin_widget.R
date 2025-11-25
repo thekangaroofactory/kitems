@@ -2,13 +2,15 @@
 
 #' Admin Widget
 #'
-#' @param id the module id
+#' @param id the id used to launch the admin module server
 #'
-#' @return a tagList() object to admin the data model
+#' @return A `htmltools::tagList()` object containing the admin UI
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' admin_widget(id = "mydata")
+#' }
 
 admin_widget <- function(id){
 

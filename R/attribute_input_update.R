@@ -7,6 +7,7 @@
 #' @param MODULE an optional character string for the trace
 #'
 #' @importFrom utils tail
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{

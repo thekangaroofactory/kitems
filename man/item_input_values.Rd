@@ -2,24 +2,24 @@
 % Please edit documentation in R/item_input_values.R
 \name{item_input_values}
 \alias{item_input_values}
-\title{Build list of input values}
+\title{Input Values}
 \usage{
 item_input_values(input, colClasses)
 }
 \arguments{
-\item{input}{the input object from the shiny module}
+\item{input}{the input object from the shiny module.}
 
-\item{colClasses}{a named vector of classes, defining the data model}
+\item{colClasses}{a named vector of classes, defining the data model.}
 }
 \value{
-a named list of values
+a named list of values.
 }
 \description{
-Build list of input values
+Build a list of values from the input.
 }
 \details{
-the output list will contain as many entries as the colClasses named vector.
-In case some names have no corresponding item in the input parameter, they will get NULL as value
+the output list will contain as many entries as the \code{colClasses} named vector.
+In case some names have no corresponding item in the input parameter, they will get \code{NULL} as value
 in the output list.
 }
 \examples{

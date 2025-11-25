@@ -2,18 +2,18 @@
 % Please edit documentation in R/dm_colClasses.R
 \name{dm_colClasses}
 \alias{dm_colClasses}
-\title{Extract colClasses from data model}
+\title{Data Model colClasses}
 \usage{
 dm_colClasses(data.model = NULL)
 }
 \arguments{
-\item{data.model}{a data.frame containing the data model}
+\item{data.model}{a data.frame containing the data model.}
 }
 \value{
-a named vector of the attribute types
+A named vector of the attribute types.
 }
 \description{
-Extract colClasses from data model
+Extract attribute classes from the data model.
 }
 \examples{
 \dontrun{

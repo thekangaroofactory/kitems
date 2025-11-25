@@ -2,24 +2,24 @@
 % Please edit documentation in R/filter_event.R
 \name{filter_event}
 \alias{filter_event}
-\title{Create Filter Event}
+\title{Filter Event}
 \usage{
 filter_event(layer = c("pre", "main"), ...)
 }
 \arguments{
-\item{layer}{the filter layer ("pre" or "main")}
+\item{layer}{the filter layer ("pre" or "main").}
 
-\item{...}{the expression(s) to pass to the filter}
+\item{...}{the expression(s) to pass to the filter.}
 }
 \value{
-an event (list)
+An event \code{list()}.
 }
 \description{
 Helper function to create filter events to be passed to kitems module server
 with the filter argument.
 }
 \details{
-When no expression is passed to ... then the filter layer will be reset
+When no expression is passed to \code{...} then the filter layer will be reset.
 }
 \examples{
 \dontrun{

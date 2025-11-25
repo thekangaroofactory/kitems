@@ -2,10 +2,10 @@
 
 #' Run Shiny Demo Apps
 #'
-#' @param example a character value, with the name of the demo to be launched
+#' @param example a character value, with the name of the demo to be launched.
 #'
 #' @details
-#' When \code{example} is NA, the function will return the names of available apps
+#' When \code{example} is `NA`, the function will return the names of available apps.
 #'
 #' @export
 #'

@@ -1,13 +1,16 @@
 
 
-#' kitems Admin Server
+#' kitems Admin Module Server
 #'
-#' @param k_data_model the reference of the data model reactive value
-#' @param k_items the reference of the item reactive value
-#' @param path the path provided to the kitems server
-#' @param dm_url the url of the data model file
-#' @param items_url the url of the item file
-#' @param autosave the autosave value passed to the kitems server
+#' @description
+#' The admin module server is the back end of the admin console app.
+#'
+#' @param k_data_model the reference of the data model reactive value.
+#' @param k_items the reference of the item reactive value.
+#' @param path the path provided to the kitems server.
+#' @param dm_url the url of the data model file.
+#' @param items_url the url of the item file.
+#' @param autosave the autosave value passed to the kitems server.
 #'
 #' @importFrom magrittr %>%
 #'
@@ -21,7 +24,6 @@
 #' items_url = items_url,
 #' autosave = autosave)
 #' }
-
 
 # -- Shiny module server logic -------------------------------------------------
 
@@ -66,7 +68,7 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
       } else
 
         # -- Check data.model version (vs package version)
-        if(attributes(data.model)$version != DATA_MODEL_VERSION){
+        if(attributes(data.model)$version < DATA_MODEL_VERSION){
 
           warning("Data model migration is required!")
           actionButton(inputId = ns("migrate"),
@@ -170,7 +172,7 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
         # -- define input
         selectizeInput(inputId = ns("dm_display"),
-                       label = "Hide columns",
+                       label = "Display columns",
                        choices = k_data_model()$name,
                        selected = filter_cols,
                        multiple = TRUE,

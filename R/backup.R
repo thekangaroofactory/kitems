@@ -1,26 +1,28 @@
 
 
-#' Backup Data Model & Items Files
+#' Backup Files
 #'
-#' @param id the kitems id used to create the data model
-#' @param path the path to the data model
-#' @param type the type of file to backup. \code{items} (default) or \code{dm}
-#' @param max an integer to indicate how many backup files are allowed
+#' @description
+#' Backup data model & items files
+#'
+#' @param id the id used to create the data model.
+#' @param path the path to the data model.
+#' @param type the type of file to backup: "items" (default) or "dm".
+#' @param max an integer to indicate how many backup files are allowed.
 #'
 #' @export
 #'
 #' @details
-#' Backup file will be named as \emph{id_data_model_YYYY-MM-DD.rds}
+#' Backup file will be named as \emph{id_data_model_YYYY-MM-DD.rds} or \emph{id_items_YYYY-MM-DD.csv}
 #' If same file already exists, it will be overwritten.
 #'
 #' If the number of backup files exceeds \code{max} then the oldest will be deleted.
-#' Whenever \code{max = NULL} (default), it will be replaced by 1
+#' Whenever \code{max = NULL} (default), it will be replaced by 1.
 #'
 #' @examples
 #' \dontrun{
 #' backup(id = "mydata", path = "path/to/my/data", max = 2)
 #' }
-
 
 backup <- function(id, path, type = "items", max = NULL){
 

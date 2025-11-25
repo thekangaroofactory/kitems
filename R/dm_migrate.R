@@ -1,10 +1,13 @@
 
 
-#' Migrate Data Model
+#' Data Model Migration
 #'
-#' @param data.model a data.frame of the data model
+#' @description
+#' Execute the migration procedure on a data model.
 #'
-#' @return the migrated data.model or NA if no migration is required
+#' @param data.model a data.frame of the data model.
+#'
+#' @return The migrated data model or `NA` if no migration is required.
 #' @export
 #'
 #' @examples
@@ -45,10 +48,12 @@ dm_migrate <- function(data.model){
 
     catl("[dm_migrate] Data model migration @v0.7.1", debug = 1)
 
-    # -- rename column
+    # -- rename column & update value
+    # need to invert values otherwise wrong columns will be shown! #577
     if("filter" %in% names(data.model)){
       message("[dm_migrate] Data model migration to v0.7.1, rename column filter into display")
       names(data.model)[names(data.model) == "filter"] <- "display"
+      data.model$display <- !data.model$display
       attr(data.model, "version") <- "0.7.1"
       dirty <- TRUE}
 

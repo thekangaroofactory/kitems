@@ -2,18 +2,18 @@
 % Please edit documentation in R/names.R
 \name{dm_name}
 \alias{dm_name}
-\title{Data model name}
+\title{Data Model Name}
 \usage{
 dm_name(id)
 }
 \arguments{
-\item{id}{the id of the module server instance}
+\item{id}{the id of the module server instance.}
 }
 \value{
-the name of the corresponding reactive value
+The name of the corresponding data model.
 }
 \description{
-Data model name
+Helper function to compute the data model name.
 }
 \examples{
 dm_name(id = "mydata")

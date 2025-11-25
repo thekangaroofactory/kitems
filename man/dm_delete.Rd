@@ -2,25 +2,25 @@
 % Please edit documentation in R/dm_delete.R
 \name{dm_delete}
 \alias{dm_delete}
-\title{Delete data model}
+\title{Delete Data Model}
 \usage{
 dm_delete(data.model, items, dm_url, items_url, autosave, item.file)
 }
 \arguments{
-\item{data.model}{the reference of the data model reactive value}
+\item{data.model}{the reference of the data model reactive value.}
 
-\item{items}{the reference of the items reactive value}
+\item{items}{the reference of the items reactive value.}
 
-\item{dm_url}{the url (path + filename) of the data model}
+\item{dm_url}{the url (path + filename) of the data model.}
 
-\item{items_url}{the url (path + filename) of the items}
+\item{items_url}{the url (path + filename) of the items.}
 
-\item{autosave}{logical if the data should be saved}
+\item{autosave}{a logical if the data should be saved.}
 
-\item{item.file}{a logical if the item file should be deleted}
+\item{item.file}{a logical if the item file should be deleted.}
 }
 \description{
-Delete data model
+Delete Data Model
 }
 \examples{
 \dontrun{
@@ -32,3 +32,4 @@ autosave = TRUE,
 item.file = TRUE)
 }
 }
+\keyword{internal}

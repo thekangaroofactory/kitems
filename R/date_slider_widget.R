@@ -1,17 +1,20 @@
 
 
-#' Date slider Widget
+#' Date Slider Widget
 #'
-#' @param id the server module id
+#' @description
+#' The date slider UI component to drive the date filter.
 #'
-#' @return a ui object (output of fluidRow)
+#' @param id the server module id.
+#'
+#' @return An HTML component to include on UI side.
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' date_slider_widget(id = "mydata")
+#' }
 
-
-# -- INPUT: date slider
 date_slider_widget <- function(id){
 
   # namespace

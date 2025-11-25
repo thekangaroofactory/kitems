@@ -1,20 +1,23 @@
 
 
-#' Check data model integrity
+#' Data Model Integrity
 #'
-#' @param data.model a \emph{mandatory} data model
-#' @param items a \emph{mandatory} item data.frame
-#' @param template an optional data.frame(name = c(...), type = c(...)) to be used to force attribute classes
+#' @description
+#' Check the data model integrity.
 #'
-#' @return if data model matches with the data, TRUE will be returned. Otherwise an updated data model will be returned.
+#' @param data.model a \emph{mandatory} data model.
+#' @param items a \emph{mandatory} data.frame of the items.
+#' @param template an optional data.frame(name = c(...), type = c(...)) to be used to force attribute classes.
+#'
+#' @return if `data.model` matches with the `items`, `TRUE` will be returned. Otherwise an updated data model will be returned.
 #' @export
 #'
 #' @details
 #'
-#' In case an attribute is missing from the data model, it will be added with either a type matching the template
-#' one or a guessed one (using the class() function).
+#' In case an attribute of the `items` is missing from the `data.model`, it will be added with either a type matching the template
+#' one or a guessed one (using the `class()` function).
 #'
-#' In case an extra attribute is found in the data model as compared to the items, it will be dropped from the
+#' In case an extra attribute is found in the `data.model` as compared to the `items`, it will be dropped from the
 #' data model.
 #'
 #' @examples

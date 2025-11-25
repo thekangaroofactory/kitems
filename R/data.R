@@ -125,10 +125,10 @@ TEMPLATE_DATA_MODEL <- data.frame(name = c("date",
                                   default.arg = rep(NA, 16),
 
                                   # -- added #220
-                                  display = c(FALSE,
-                                             rep(FALSE, 7),
-                                             TRUE, rep(FALSE, 5),
-                                             rep(FALSE, 2)),
+                                  display = c(TRUE,
+                                             rep(TRUE, 7),
+                                             FALSE, rep(TRUE, 5),
+                                             rep(TRUE, 2)),
 
                                   # -- added #220
                                   skip = c(FALSE,

@@ -1,16 +1,16 @@
 
 
-#' Load data
+#' Load Items
 #'
-#' @param col.classes a vector containing the expected column types
-#' @param file an optional file name (including .csv extension)
-#' @param path an optional path to the file
+#' @param col.classes a named vector containing the expected column types.
+#' @param file an optional file name (including .csv extension).
+#' @param path an optional path to the file.
 #'
-#' @return the data (items)
+#' @return The data.frame of the items.
 #' @export
 #'
 #' @details
-#' File connector: if file is not NULL, then data are loaded from the given .csv
+#' File connector: if file is not `NULL`, then data are loaded from the given .csv file.
 #'
 #' @examples
 #' \dontrun{
@@ -18,7 +18,6 @@
 #' item_load(col.classes = c(id = "numeric", date = "Date", comment = "character"),
 #' file = "mydata.csv", path = "path/to/my/data")
 #' }
-
 
 item_load <- function(col.classes, file = NULL, path = NULL){
 

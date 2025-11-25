@@ -7,14 +7,16 @@
 update_widget(id)
 }
 \arguments{
-\item{id}{the server module id}
+\item{id}{the server module id.}
 }
 \value{
-a rendered actionButton
+An HTML element that can be included in the UI.
 }
 \description{
-Update Item Button
+Button to fire the update item dialog.
 }
 \examples{
+\dontrun{
 update_widget(id = "mydata")
+}
 }

@@ -526,7 +526,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
       } else {
 
         value_skip <- FALSE
-        value_display <- FALSE}
+        value_display <- TRUE}
 
       catl("[step.3] init: skip =", value_skip, "/ display =", value_display)
 

@@ -2,27 +2,26 @@
 % Please edit documentation in R/dm_version.R
 \name{dm_version}
 \alias{dm_version}
-\title{Check Data Model Version}
+\title{Data Model Version}
 \usage{
 dm_version(data.model)
 }
 \arguments{
-\item{data.model}{a data.frame of the data model}
+\item{data.model}{a data.frame of the data model.}
 }
 \value{
-a vector c(migration = TRUE/FALSE, comment = "message")
+A vector \code{c(migration = TRUE/FALSE, comment = "message")}.
 }
 \description{
-Check Data Model Version
+Check data model version
 }
 \details{
 Data model version is required from v.0.7.1
 This function will check whether the data model has a version (attribute) or not
-as well as if the data model requires a migration
+as well as if the data model requires a migration.
 
-It works both within a Shiny app context or at the console
-It is recommended that this check is performed after installing a new version of
-the package.
+It works both within a Shiny app context or at the console. It is recommended
+that this check is performed after installing a new version of the package.
 }
 \examples{
 \dontrun{

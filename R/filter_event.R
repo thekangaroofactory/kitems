@@ -1,19 +1,19 @@
 
 
-#' Create Filter Event
-#'
-#' @param layer the filter layer ("pre" or "main")
-#' @param ... the expression(s) to pass to the filter
-#'
-#' @returns an event (list)
-#' @export
+#' Filter Event
 #'
 #' @description
 #' Helper function to create filter events to be passed to kitems module server
 #' with the filter argument.
 #'
+#' @param layer the filter layer ("pre" or "main").
+#' @param ... the expression(s) to pass to the filter.
+#'
+#' @returns An event `list()`.
+#' @export
+#'
 #' @details
-#' When no expression is passed to ... then the filter layer will be reset
+#' When no expression is passed to `...` then the filter layer will be reset.
 #'
 #' @examples
 #' \dontrun{

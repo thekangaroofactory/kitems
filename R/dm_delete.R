@@ -1,13 +1,15 @@
 
 
-#' Delete data model
+#' Delete Data Model
 #'
-#' @param data.model the reference of the data model reactive value
-#' @param items the reference of the items reactive value
-#' @param dm_url the url (path + filename) of the data model
-#' @param items_url the url (path + filename) of the items
-#' @param autosave logical if the data should be saved
-#' @param item.file a logical if the item file should be deleted
+#' @param data.model the reference of the data model reactive value.
+#' @param items the reference of the items reactive value.
+#' @param dm_url the url (path + filename) of the data model.
+#' @param items_url the url (path + filename) of the items.
+#' @param autosave a logical if the data should be saved.
+#' @param item.file a logical if the item file should be deleted.
+#'
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{

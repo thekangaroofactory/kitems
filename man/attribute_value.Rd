@@ -7,14 +7,14 @@
 attribute_value(key, value, data.model)
 }
 \arguments{
-\item{key}{the name of the attribute}
+\item{key}{the name of the attribute.}
 
-\item{value}{a vector of input values}
+\item{value}{a vector of input values.}
 
-\item{data.model}{the data.frame of the data.model}
+\item{data.model}{the data.frame of the data model.}
 }
 \value{
-a vector, with values checked against the data.model
+A vector of values checked against the data model.
 }
 \description{
 Turn Value(s) into Attribute

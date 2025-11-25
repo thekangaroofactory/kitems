@@ -1,16 +1,19 @@
 
 
-#' Apply mask
+#' Item Mask
 #'
-#' @param data.model a data.frame of the data model
-#' @param items a data.frame of the items
+#' @description
+#' Apply a mask on the data.frame of the items.
 #'
-#' @return a data.frame of the items with applied masks
+#' @param data.model a data.frame of the data model.
+#' @param items a data.frame of the items.
+#'
+#' @return A data.frame of the items with applied masks.
 #' @export
 #'
 #' @details
 #' Two masks are applied:
-#' - the data model masks (display = TRUE)
+#' - the data model masks (attributes with display = `TRUE` are kept)
 #' - a default mask (replace . and _ by a space in the attribute names, plus capitalize first letter)
 #'
 #' @examples
@@ -24,9 +27,7 @@ item_mask <- function(data.model, items){
   display_cols <- dm_display(data.model)
 
   # -- Apply attribute display
-  if(!is.null(display_cols))
-    items <- items[-which(names(items) %in% display_cols)]
-
+  items <- items[display_cols]
 
   # -- Apply attribute/column name mask
   if(!is.null(items)){

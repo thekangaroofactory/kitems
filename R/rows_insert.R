@@ -2,9 +2,9 @@
 
 #' Insert Item(s)
 #'
-#' @param items a data.frame of the items
-#' @param values a list of named values
-#' @param data.model a data.frame of the data.model
+#' @param items a data.frame of the items.
+#' @param values a list of named values.
+#' @param data.model a data.frame of the data.model.
 #'
 #' @details
 #' values is a named list. The names are used to check the corresponding values
@@ -73,7 +73,8 @@ rows_insert <- function(items, values, data.model){
     stop("Duplicated ids have been generated, insert is aborted!")
 
   # -- insert item(s)
-  items <-dplyr::bind_rows(items, values)
+  # Need to check for empty items, otherwise an error will be raised by dplyr
+  items <- if(nrow(items) == 0) as.data.frame(values) else dplyr::bind_rows(items, values)
   catl("- Rows inserted, output dim =", dim(items), level = 2)
 
   # -- return

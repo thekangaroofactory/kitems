@@ -39,7 +39,7 @@ test_that("dm_integrity: missing id", {
   # -- check: id params
   expect_equal(x[x$name == "id", ]$default.fun, TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == "id", ]$default.fun)
   expect_true(x[x$name == "id", ]$skip)
-  expect_true(x[x$name == "id", ]$display)
+  expect_false(x[x$name == "id", ]$display)
 
 })
 

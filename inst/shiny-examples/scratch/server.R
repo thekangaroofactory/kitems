@@ -8,7 +8,6 @@
 shinyServer(
   function(input, output, session){
 
-
     # -- Get path to demo app ----
     demo_dir <- system.file("shiny-examples", "scratch", package = "kitems")
 
@@ -23,18 +22,6 @@ shinyServer(
     # -- Generate dynamic sidebar ----
     # see ui.R
     output$menu <- renderMenu(kitems::dynamic_sidebar(names = list("data_1")))
-
-
-    # -- log
-    ktools::catl("----------------------------------------------------------", debug = 1)
-    ktools::catl("Main application server ready", debug = 1)
-    ktools::catl("----------------------------------------------------------", debug = 1)
-
-
-    # -- Observe item list ----
-    observeEvent(data_1$items(),
-                 ktools::catl("Main app server: data_1 items have just been updated."))
-
 
   }
 )

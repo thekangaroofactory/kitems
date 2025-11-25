@@ -7,12 +7,12 @@
 danger_zone_widget(k_data_model, ns)
 }
 \arguments{
-\item{k_data_model}{the reference of the data model reactive value}
+\item{k_data_model}{the reference of the data model reactive object.}
 
-\item{ns}{the namespace function}
+\item{ns}{the namespace function.}
 }
 \value{
-a tagList object
+A tagList object to include in the UI.
 }
 \description{
 Danger Zone Widget
@@ -22,3 +22,4 @@ Danger Zone Widget
 danger_zone_widget(k_data_model, ns)
 }
 }
+\keyword{internal}

@@ -1,10 +1,14 @@
 
 
-#' Data model name
+#' Data Model Name
 #'
-#' @param id the id of the module server instance
+#' @description
+#' Helper function to compute the data model name.
 #'
-#' @return the name of the corresponding reactive value
+#'
+#' @param id the id of the module server instance.
+#'
+#' @return The name of the corresponding data model.
 #' @export
 #'
 #' @examples
@@ -13,11 +17,14 @@
 dm_name <- function(id){paste0(id, "_data_model")}
 
 
-#' Items name
+#' Items Name
+#'
+#' @description
+#' Helper function to compute the items name.
 #'
 #' @param id the id of the module server instance
 #'
-#' @return the name of the corresponding reactive value
+#' @return The name of the corresponding items.
 #' @export
 #'
 #' @examples

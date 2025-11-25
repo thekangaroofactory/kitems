@@ -2,10 +2,10 @@
 
 #' Delete Item(s)
 #'
-#' @param items the data.frame of the items
-#' @param id a vector of id(s) for the item to delete
+#' @param items the data.frame of the items.
+#' @param id a vector of id(s) for the item(s) to delete.
 #'
-#' @return the new data.frame of the items
+#' @return The updated data.frame of the items.
 #' @export
 #'
 #' @examples

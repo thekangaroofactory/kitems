@@ -1,10 +1,13 @@
 
 
-#' Restore Data Model & Items Files
+#' Restore Files
 #'
-#' @param id the kitems id used to create the data model
-#' @param path the path to the data model
-#' @param type the type of file to backup. \code{items} (default) or \code{dm}
+#' @description
+#' Restores the data model & items files.
+#'
+#' @param id the id used to create the data model.
+#' @param path the path to the data model.
+#' @param type the type of file to backup. \code{items} (default) or \code{dm}.
 #'
 #' @export
 #'

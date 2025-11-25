@@ -2,25 +2,25 @@
 % Please edit documentation in R/item_mask.R
 \name{item_mask}
 \alias{item_mask}
-\title{Apply mask}
+\title{Item Mask}
 \usage{
 item_mask(data.model, items)
 }
 \arguments{
-\item{data.model}{a data.frame of the data model}
+\item{data.model}{a data.frame of the data model.}
 
-\item{items}{a data.frame of the items}
+\item{items}{a data.frame of the items.}
 }
 \value{
-a data.frame of the items with applied masks
+A data.frame of the items with applied masks.
 }
 \description{
-Apply mask
+Apply a mask on the data.frame of the items.
 }
 \details{
 Two masks are applied:
 \itemize{
-\item the data model masks (display = TRUE)
+\item the data model masks (attributes with display = \code{TRUE} are kept)
 \item a default mask (replace . and _ by a space in the attribute names, plus capitalize first letter)
 }
 }
