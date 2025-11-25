@@ -167,7 +167,7 @@ Selected *item(s)* will also trigger which buttons are available / visible.
 
 #### Date sliderInput
 
-If the data model has an attribute named '*date*' (literally), a date `shiny::sliderInput()` will be created automatically to enable date filtering.
+If the data model has an attribute named '*date*' (literally), a date `shiny::sliderInput()` can be used to enable date filtering.
 
 See:
 
