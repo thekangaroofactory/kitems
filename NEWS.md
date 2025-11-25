@@ -3,6 +3,12 @@
 The milestone focuses on the package documentation & website.\
 Many articles have been added to cover the core concepts of the framework as well as the features.
 
+## Demo
+
+-   Drop nested module example (#494)
+-   Upgrade demo app (#574)
+-   Upgrade from scratch demo example (#575)
+
 ## Documentation
 
 -   Implement get started page (#539)
@@ -31,6 +37,14 @@ Many articles have been added to cover the core concepts of the framework as wel
 -   Add author link to footer (#543)
 -   Organize articles per sections (#538)
 -   Group function reference into sections (#387)
+
+## Bug Fix
+
+-   Migrate button is displayed when creating a data model from scratch (#578)
+-   Hidden attributes are displayed in admin console (#577)
+-   The item view message is wrong when there is no item (#581)
+-   The item view displays an error when there is no attribute to display(#582)
+-   An error is displayed after the empty item table message (#579)
 
 # kitems v0.7.1-beta
 
