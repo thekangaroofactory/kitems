@@ -21,12 +21,12 @@ test_that("rows_insert works", {
   expect_equal(x$total[nrow(x)], 200)
 
   # -- create single item (items = NULL)
-  x <- rows_insert(NULL, list(name = "create", total = 200), dm)
+  x <- rows_insert(data.frame(), list(name = "create", total = 200), dm)
   expect_equal(nrow(x), 1)
   expect_equal(x$name, "create")
 
   # -- create multiple items (items = NULL)
-  x <- rows_insert(NULL, list(total = 1:10), dm)
+  x <- rows_insert(data.frame(), list(total = 1:10), dm)
   expect_equal(nrow(x), 10)
 
 
