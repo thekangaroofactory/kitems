@@ -45,6 +45,9 @@ Many articles have been added to cover the core concepts of the framework as wel
 -   The item view message is wrong when there is no item (#581)
 -   The item view displays an error when there is no attribute to display(#582)
 -   An error is displayed after the empty item table message (#579)
+-   Create item fails after creating a data model from scratch (#583)
+-   Error is raised when data model has no date attribute but widget is in the UI (#585)
+-   Data.table popup error is displayed in the admin UI about missing Id column (#586)
 
 # kitems v0.7.1-beta
 
