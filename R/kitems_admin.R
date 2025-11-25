@@ -172,7 +172,7 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
         # -- define input
         selectizeInput(inputId = ns("dm_display"),
-                       label = "Hide columns",
+                       label = "Display columns",
                        choices = k_data_model()$name,
                        selected = filter_cols,
                        multiple = TRUE,
