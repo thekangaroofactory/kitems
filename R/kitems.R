@@ -832,7 +832,6 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
     ## -- Pre-filtering layer ----
     # Only custom filter is applied at this level
-
     prefiltered_items <- reactive(
 
       # -- check custom filter
@@ -852,8 +851,10 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
     ## -- Main-filtering layer ----
     # Custom filter + date filter / + ordering
-
     filtered_items <- reactive({
+
+      # -- check for empty items
+      req(prefiltered_items())
 
       catl(MODULE, "Apply custom filter(s) on items")
 
