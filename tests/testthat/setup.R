@@ -48,7 +48,7 @@ default_fun <- c("id" = "ktools::getTimestamp", "date" = "Sys.time")
 default_arg <- c("id" = "list(k = 1000000)")
 
 # -- declare display
-display <- c("id")
+display <- names(colClasses)[!names(colClasses) %in% "id"]
 
 # -- declare skip
 skip <- c("isvalid")
