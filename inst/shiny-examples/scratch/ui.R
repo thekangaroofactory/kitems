@@ -14,7 +14,8 @@ sidebar <- dashboardSidebar(
 
   # -- static section
   sidebarMenu(
-    menuItem("Home", tabName = "home", icon = icon("dashboard"), selected = TRUE)),
+    menuItem("Introduction", tabName = "intro", icon = icon("house"), selected = TRUE),
+    menuItem("Items", tabName = "items", icon = icon("rectangle-list"))),
 
   # -- add dynamic section
   # see server.R
@@ -30,30 +31,64 @@ body <- dashboardBody(
   tabItems(
 
     # -- Content tab
-    tabItem(tabName = "home",
+    tabItem(tabName = "intro",
             fluidRow(
               column(width = 8,
 
-                     h1("Introduction"),
-                     p("This application demonstrates how to implement {kitems} module from scracth (no data)."),
+                     h1("Kitems from scratch"),
 
-                     h3("Data"),
+                     p("This application demonstrates the behavior of the {kitems} module when",
+                       "it is used from scracth (no item or data model).", br(),
+                       "It's possible to use it as a playground: you can create a data model and",
+                       "see how it affects the 'items' tab."),
+
+                     h2("Data"),
                      p("This instance has no corresponding files (data model or items) in the given path.", br(),
-                       "The administration console will only display the Create and Import data buttons."),
+                       "The administration console will only display the 'create' and 'import' buttons."),
                      tags$pre("# -- start module server: \ndata_1 <- kitems::kitems(id = \"data_1\",
                               path = \"path/to/my/data\",
                               autosave = FALSE,
                               admin = TRUE)"),
-                     p("Because autosave is FALSE (to keep this demo in frozen state), nothing will be saved if
-                       data are created or imported."),
+                     # -- warning
+                     fluidRow(
+                       box(title = "Autosave",
+                           width = 12,
+                           solidHeader = TRUE,
+                           status = "warning",
+                           collapsible = TRUE,
+                           "The autosave argument of the module server function is set to FALSE for demonstration purpose.", br(),
+                           "Creating a data model or items won't be persistent after the app is closed.")),
 
                      # -- admin
                      h3("Admin console"),
                      p("In general, it is not recommended to display the admin console within the
-                               application as any user could alter the data model.", br(),
-                       "It is implemented here for the purpose of the demonstation."),
-                     p("A menu output is generated on server side using renderMenu function,
-                                 which is used by a sidebarMenuOutput function on ui side.")))),
+                               application as any user could alter the data model!", br(),
+                       "It is implemented here for the purpose of the demonstation.")))),
+
+    # -- Content tab
+    tabItem(tabName = "items",
+
+            # -- inputs
+            fluidRow(
+
+              column(width = 6,
+                     h2("Buttons"),
+                     p("Buttons are not visible when there is no data model defined."),
+                     kitems::create_widget("data_1"),
+                     kitems::update_widget("data_1"),
+                     kitems::delete_widget("data_1")),
+
+              column(width = 6,
+                     h2("Filter"),
+                     p("The date filter is not visible when there is no item."),
+                     kitems::date_slider_widget("data_1"))),
+
+            # -- items
+            fluidRow(
+              column(width = 12,
+                     h2("Items"),
+                     p("A message is displayed when the table is empty:"),
+                     kitems::filtered_view_widget("data_1")))),
 
     # -- Content tab
     tabItem(tabName = "data_1",
