@@ -48,10 +48,12 @@ dm_migrate <- function(data.model){
 
     catl("[dm_migrate] Data model migration @v0.7.1", debug = 1)
 
-    # -- rename column
+    # -- rename column & update value
+    # need to invert values otherwise wrong columns will be shown! #577
     if("filter" %in% names(data.model)){
       message("[dm_migrate] Data model migration to v0.7.1, rename column filter into display")
       names(data.model)[names(data.model) == "filter"] <- "display"
+      data.model$display <- !data.model$display
       attr(data.model, "version") <- "0.7.1"
       dirty <- TRUE}
 
