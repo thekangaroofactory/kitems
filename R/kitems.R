@@ -853,8 +853,8 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
     # Custom filter + date filter / + ordering
     filtered_items <- reactive({
 
-      # -- check for empty items
-      req(prefiltered_items())
+      # -- check for empty items (NULL or 0 obs.)
+      req(prefiltered_items(), nrow(prefiltered_items()) > 0)
 
       catl(MODULE, "Apply custom filter(s) on items")
 
