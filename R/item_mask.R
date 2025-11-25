@@ -27,9 +27,7 @@ item_mask <- function(data.model, items){
   display_cols <- dm_display(data.model)
 
   # -- Apply attribute display
-  if(!is.null(display_cols))
-    items <- items[which(names(items) %in% display_cols)]
-
+  items <- items[display_cols]
 
   # -- Apply attribute/column name mask
   if(!is.null(items)){
