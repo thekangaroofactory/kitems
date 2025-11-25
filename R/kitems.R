@@ -859,7 +859,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
       catl(MODULE, "Apply custom filter(s) on items")
 
       # -- check date slider
-      date_expr <- if(!is.null(input$date_slider)){
+      date_expr <- if(hasDate(k_data_model()) && !is.null(input$date_slider)){
         catl("- Date slider =", input$date_slider, level = 2)
         dplyr::expr(date >= input$date_slider[1] & date <= input$date_slider[2])}
 
