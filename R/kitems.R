@@ -308,6 +308,9 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
     if(autosave)
       observeEvent(k_data_model(), {
 
+        # -- secure #596
+        req(is.data.frame(k_data_model()))
+
         # -- Write & notify
         saveRDS(k_data_model(), file = dm_url)
         catl(MODULE, "[EVENT] Data model has been (auto) saved")
