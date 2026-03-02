@@ -36,7 +36,8 @@ item_integrity <- function(items, data.model){
   items_classes <- sapply(items_classes, "[[", 1)
 
   # -- columns to fix
-  cols <- names(items_classes[items_classes != colClasses])
+  # make sure attributes comes with same order #597
+  cols <- names(items_classes[items_classes != colClasses[names(items_classes)]])
 
   # -- check: return input if nothing to do
   if(length(cols) == 0)
