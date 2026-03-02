@@ -352,8 +352,12 @@ kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosav
 
       # -- Check NULL data model
       if(!is.null(dm)){
-        dm <- dm_display(data.model = dm, set = input$dm_display)
-        k_data_model(dm)}
+
+        if(length(input$dm_display) == 0)
+          showNotification("View can't be empty. Data model is not saved.", type = "error")
+        else {
+          dm <- dm_display(data.model = dm, set = input$dm_display)
+          k_data_model(dm)}}
 
     }, ignoreInit = TRUE, ignoreNULL = FALSE)
 
