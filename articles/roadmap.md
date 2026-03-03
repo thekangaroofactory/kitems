@@ -16,18 +16,20 @@ delivered throughout 2024 as more time could be spent on the project.
 
 ![](images/roadmap_slide_2.jpg)
 
+![](images/roadmap_slide_3.jpg)
+
 ## Where we are
 
-Since 2025, focus has been put on deep work to improve the architecture,
-communication, workflows & performances. Also long time expected
-features (like filtering) are delivered.
+Since mid-2025, focus has been put on deep work to improve the
+architecture, communication, workflows & performances. Also long time
+expected features (like filtering) are delivered.
 
-![](images/roadmap_slide_3.jpg)
+![](images/roadmap_slide_4.jpg)
 
 ## What’s next
 
 As the package gets more strength and has been widely tested in real
-life use cases, it is now time to deliver all the necessary materials to
-support its promotion.
+life use cases, it is now time to deliver all the necessary features to
+reach next step.
 
-![](images/roadmap_slide_4.jpg)
+![](images/roadmap_slide_5.jpg)
