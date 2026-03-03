@@ -420,7 +420,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
           trigger_filter_main(event$expr)
 
       }) |> bindEvent(filter(),
-                      ignoreInit = TRUE)
+                      ignoreInit = FALSE)
 
 
     # //////////////////////////////////////////////////////////////////////////
