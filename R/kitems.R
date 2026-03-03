@@ -308,6 +308,9 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
     if(autosave)
       observeEvent(k_data_model(), {
 
+        # -- secure #596
+        req(is.data.frame(k_data_model()))
+
         # -- Write & notify
         saveRDS(k_data_model(), file = dm_url)
         catl(MODULE, "[EVENT] Data model has been (auto) saved")
@@ -417,7 +420,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
           trigger_filter_main(event$expr)
 
       }) |> bindEvent(filter(),
-                      ignoreInit = TRUE)
+                      ignoreInit = FALSE)
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -787,44 +790,48 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
     # As of v0.7.1 the date slider min / max are computed based
     # on prefiltered_items() instead of k_items() #496
 
+    # -- check if date slider widget is in the UI #591
+    has_date_slider <- isolate("date_slider" %in% names(input))
+
     ## -- Date slider ----
-    observe({
+    if(has_date_slider)
+      observe({
 
-      # -- check data model
-      req(hasDate(k_data_model()))
+        # -- check data model
+        req(hasDate(k_data_model()))
 
-      catl(MODULE, "Update date sliderInput")
-      catl("- strategy =", input$date_slider_strategy, level = 2)
+        catl(MODULE, "Update date sliderInput")
+        catl("- strategy =", input$date_slider_strategy, level = 2)
 
-      # -- Get min/max
-      if(nrow(prefiltered_items()) > 0){
+        # -- Get min/max
+        if(nrow(prefiltered_items()) > 0){
 
-        min <- min(prefiltered_items()$date)
-        max <- max(prefiltered_items()$date)
+          min <- min(prefiltered_items()$date)
+          max <- max(prefiltered_items()$date)
 
-      } else {
+        } else {
 
-        min <- Sys.Date()
-        max <- min
+          min <- Sys.Date()
+          max <- min
 
-      }
+        }
 
-      # -- Set value
-      # implement this_year strategy by default #211
-      # keep this year after item is added #223 & #242
-      value <- if(is.null(input$date_slider_strategy) || input$date_slider_strategy == "this-year")
-        ktools::date_range(min, max, type = "this_year")
-      else
-        value <- input$date_slider
+        # -- Set value
+        # implement this_year strategy by default #211
+        # keep this year after item is added #223 & #242
+        value <- if(is.null(input$date_slider_strategy) || input$date_slider_strategy == "this-year")
+          ktools::date_range(min, max, type = "this_year")
+        else
+          value <- input$date_slider
 
-      # -- date slider
-      # adding as.Date() to ensure they all have same format #521
-      updateSliderInput(inputId = "date_slider",
-                        min = as.Date(min),
-                        max = as.Date(max),
-                        value = as.Date(value))
+        # -- date slider
+        # adding as.Date() to ensure they all have same format #521
+        updateSliderInput(inputId = "date_slider",
+                          min = as.Date(min),
+                          max = as.Date(max),
+                          value = as.Date(value))
 
-    })
+      })
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -839,8 +846,13 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
         # -- apply filter
         catl(MODULE, "Apply custom pre-filtering on items")
-        items <- k_items() %>%
-          dplyr::filter(if(is.list(trigger_filter_pre())) !!!trigger_filter_pre() else !!trigger_filter_pre())
+
+        # -- test must be done out of the filter() function #593
+        # otherwise multiple confitions does not work
+        items <- if(is.list(trigger_filter_pre()))
+          k_items() %>% dplyr::filter(!!!trigger_filter_pre())
+        else
+          k_items() %>% dplyr::filter(!!trigger_filter_pre())
         catl("- ouput dim =", dim(items), level = 2)
 
         # -- return
@@ -876,8 +888,12 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
       # -- apply filter(s)
       if(!is.null(filter_exprs)){
-        items <- items %>%
-          dplyr::filter(if(is.list(filter_exprs)) !!!filter_exprs else !!filter_exprs)
+        # -- test must be done out of the filter() function #601
+        # otherwise multiple confitions does not work
+        items <- if(is.list(filter_exprs))
+          k_items() %>% dplyr::filter(!!!filter_exprs)
+        else
+          k_items() %>% dplyr::filter(!!filter_exprs)
         catl("- ouput dim =", dim(items), level = 2)}
 
       # -- Apply ordering

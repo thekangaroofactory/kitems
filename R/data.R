@@ -21,12 +21,13 @@ OBJECT_CLASS <- c("numeric",
                   "POSIXct")
 
 # -- Define list of as functions
+# Note: replacing .Date by as.Date #588 (see issue)
 CLASS_FUNCTIONS <- list("numeric" = "as.numeric",
                         "integer" = "as.integer",
                         "logical" = "as.logical",
                         "character" = "as.character",
                         "factor" = "as.factor",
-                        "Date" = ".Date",
+                        "Date" = "as.Date",
                         "POSIXct" = "as.POSIXct")
 
 # -- Define list of examples #281

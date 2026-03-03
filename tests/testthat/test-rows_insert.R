@@ -50,4 +50,11 @@ test_that("rows_insert works", {
   x <- rows_insert(items, list(id = NULL, quantity = 100), dm)
   expect_equal(dim(x), dim(items) + c(1, 0))
 
+  # -- NA Date #588
+  expect_no_error(
+    x <- rows_insert(items = data.frame(id = 1, date = Sys.Date()),
+                     values = list(id = 2),
+                     data.model = data_model(colClasses = c(id = "numeric", date = "Date"))))
+  expect_equal(dim(x), c(2, 2))
+
 })
