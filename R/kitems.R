@@ -888,8 +888,12 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
       # -- apply filter(s)
       if(!is.null(filter_exprs)){
-        items <- items %>%
-          dplyr::filter(if(is.list(filter_exprs)) !!!filter_exprs else !!filter_exprs)
+        # -- test must be done out of the filter() function #601
+        # otherwise multiple confitions does not work
+        items <- if(is.list(filter_exprs))
+          k_items() %>% dplyr::filter(!!!filter_exprs)
+        else
+          k_items() %>% dplyr::filter(!!filter_exprs)
         catl("- ouput dim =", dim(items), level = 2)}
 
       # -- Apply ordering
