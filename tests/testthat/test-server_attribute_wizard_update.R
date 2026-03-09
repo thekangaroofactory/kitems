@@ -9,7 +9,6 @@ test_that("[testServer] Update attribute wizard works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 path = testdata_path,
                  autosave = TRUE,
                  admin = TRUE)
 

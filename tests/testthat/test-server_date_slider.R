@@ -15,7 +15,6 @@ test_that("Date sliderInput works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 path = testdata_path,
                  autosave = TRUE)
 
   # -- module server call

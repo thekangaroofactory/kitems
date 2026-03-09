@@ -23,6 +23,9 @@ options("k.debug" = NULL)
 testdata_base_path <- file.path(system.file("tests", "testthat", package = "kitems"), "testdata")
 testdata_path <- file.path(testdata_base_path, module_id)
 
+# -- set environment variable
+Sys.setenv("R_KITEMS_PATH" = testdata_path)
+
 # -- build urls
 dm_url <- file.path(testdata_path, paste0(dm_name(module_id), ".rds"))
 items_url <- file.path(testdata_path, paste0(items_name(module_id), ".csv"))

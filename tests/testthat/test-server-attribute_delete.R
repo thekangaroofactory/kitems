@@ -14,7 +14,6 @@ test_that("attribute delete works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 path = testdata_path,
                  autosave = TRUE,
                  admin = TRUE)
 

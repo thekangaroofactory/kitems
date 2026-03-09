@@ -9,7 +9,6 @@ test_that("[testServer] Delete data model works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 path = testdata_path,
                  autosave = FALSE,
                  admin = TRUE)
 

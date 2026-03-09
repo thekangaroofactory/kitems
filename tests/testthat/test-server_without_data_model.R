@@ -10,7 +10,6 @@ test_that("launch server without data model", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 path = testdata_path,
                  autosave = TRUE,
                  admin = TRUE)
 

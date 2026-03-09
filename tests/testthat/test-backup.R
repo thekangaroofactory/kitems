@@ -7,7 +7,7 @@ test_that("backup data.model works", {
 
   # -- function call
   # create first backup
-  backup(id = module_id, type = "dm", path = testdata_path, max = 1)
+  backup(id = module_id, type = "dm", max = 1)
 
   # -- check
   url <- file.path(testdata_path, "backup", paste0(dm_name(module_id), "_", as.character(Sys.Date()), ".rds"))
@@ -20,7 +20,7 @@ test_that("backup data.model works", {
 
   # -- function call
   # first backup will be overwritten
-  backup(id = module_id, type = "dm", path = testdata_path, max = 3)
+  backup(id = module_id, type = "dm", max = 3)
 
   # -- check
   n <- length(list.files(path = file.path(testdata_path, "backup"), pattern = dm_name(module_id)))
@@ -28,7 +28,7 @@ test_that("backup data.model works", {
 
   # -- function call
   # 2 files should be deleted
-  backup(id = module_id, type = "dm", path = testdata_path, max = 1)
+  backup(id = module_id, type = "dm", max = 1)
 
   # -- check
   n <- length(list.files(path = file.path(testdata_path, "backup"), pattern = dm_name(module_id)))
@@ -41,7 +41,7 @@ test_that("backup items works", {
 
   # -- function call
   # create first backup
-  backup(id = module_id, type = "items", path = testdata_path, max = 1)
+  backup(id = module_id, type = "items", max = 1)
 
   # -- check
   url <- file.path(testdata_path, "backup", paste0(items_name(module_id), "_", as.character(Sys.Date()), ".csv"))
@@ -54,7 +54,7 @@ test_that("backup items works", {
 
   # -- function call
   # first backup will be overwritten
-  backup(id = module_id, type = "items", path = testdata_path, max = 3)
+  backup(id = module_id, type = "items", max = 3)
 
   # -- check
   n <- length(list.files(path = file.path(testdata_path, "backup"), pattern = items_name(module_id)))
@@ -62,7 +62,7 @@ test_that("backup items works", {
 
   # -- function call
   # 2 files should be deleted
-  backup(id = module_id, type = "items", path = testdata_path, max = 1)
+  backup(id = module_id, type = "items", max = 1)
 
   # -- check
   n <- length(list.files(path = file.path(testdata_path, "backup"), pattern = items_name(module_id)))

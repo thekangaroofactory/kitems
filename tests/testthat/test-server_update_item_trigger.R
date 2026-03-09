@@ -15,7 +15,6 @@ test_that("Update works [trigger dialog]", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 path = testdata_path,
                  autosave = TRUE,
                  trigger = reactiveVal())
 

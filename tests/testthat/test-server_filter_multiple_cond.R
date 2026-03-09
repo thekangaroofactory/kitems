@@ -13,7 +13,6 @@ test_that("Filter with multiple conditions works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 path = testdata_path,
                  autosave = TRUE,
                  filter = reactiveVal(kitems::filter_event(layer = "pre", name == "Banana", total == 106)))
 
@@ -40,7 +39,6 @@ test_that("Filter with multiple conditions works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 path = testdata_path,
                  autosave = TRUE,
                  filter = reactiveVal(kitems::filter_event(layer = "main", name == "Banana", isvalid == FALSE)))
 
