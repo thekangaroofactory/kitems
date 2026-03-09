@@ -5,10 +5,13 @@
 #' @description
 #' Launches the administration console (Shiny App)
 #'
-#' @param path the path where to find the item folder(s)
+#' @param path where to find the data model & item folder(s)
 #'
 #' @details
-#' The app will scan the `path` to detect sub folders that are expected to be
+#' The recommended way to define the `path` argument is to set the R_KITEMS_PATH
+#' environment variable.
+#'
+#' The app will scan `path` to detect sub folders that are expected to be
 #' item folders named after the id used to create them.
 #'
 #' It will build the ui tabs from this list.
@@ -21,7 +24,7 @@
 #' }
 
 # -- function definition
-admin <- function(path = getwd()) {
+admin <- function(path = Sys.getenv("R_KITEMS_PATH")) {
 
   # -- get app path
   appDir <- system.file("shiny", package = "kitems")

@@ -6,13 +6,16 @@
 #' Backup data model & items files
 #'
 #' @param id the id used to create the data model.
-#' @param path the path to the data model.
+#' @param path the path to the data model and items.
 #' @param type the type of file to backup: "items" (default) or "dm".
 #' @param max an integer to indicate how many backup files are allowed.
 #'
 #' @export
 #'
 #' @details
+#' The recommended way to define the `path` argument is to set the R_KITEMS_PATH
+#' environment variable.
+#'
 #' Backup file will be named as \emph{id_data_model_YYYY-MM-DD.rds} or \emph{id_items_YYYY-MM-DD.csv}
 #' If same file already exists, it will be overwritten.
 #'
@@ -24,7 +27,7 @@
 #' backup(id = "mydata", path = "path/to/my/data", max = 2)
 #' }
 
-backup <- function(id, path, type = "items", max = NULL){
+backup <- function(id, path = Sys.getenv("R_KITEMS_PATH"), type = "items", max = NULL){
 
   # -- check path
   if(!dir.exists(path))

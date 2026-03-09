@@ -19,7 +19,6 @@
 #' kitems_admin(
 #' k_data_model = mydata$data_model,
 #' k_items = mydata$items,
-#' path = path,
 #' dm_url = dm_url,
 #' items_url = items_url,
 #' autosave = autosave)
@@ -27,7 +26,7 @@
 
 # -- Shiny module server logic -------------------------------------------------
 
-kitems_admin <- function(k_data_model, k_items, path, dm_url, items_url, autosave) {
+kitems_admin <- function(k_data_model, k_items, path = Sys.getenv("R_KITEMS_PATH"), dm_url, items_url, autosave) {
 
   # -- force set id to 'admin'
   id <- "admin"

@@ -6,7 +6,7 @@
 #' This is the main component of the package.
 #'
 #' @param id the id to be used for the module server instance.
-#' @param path a path where data model and items are stored.
+#' @param path where the data model and items are stored (see details).
 #' @param autosave a logical whether the item auto save should be activated or not (default = `TRUE`).
 #' @param admin a logical indicating if the admin module server should be launched (default = `FALSE`).
 #' @param options a list of options (see details).
@@ -29,6 +29,8 @@
 #' - filters = the reference of the reactive list with filter expressions.
 #'
 #' @details
+#' The recommended way to define the `path` argument is to set the R_KITEMS_PATH
+#' environment variable.
 #'
 #' If autosave is `FALSE`, the `item_save()` function should be used to make the data persistent.
 #' To make the data model persistent, use \link[base]{saveRDS} function. The file name should be
@@ -51,11 +53,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' kitems(id = "mydata", path = "path/to/my/data", autosave = TRUE)
+#' kitems(id = "mydata", autosave = TRUE)
 #' }
 
 # -- Shiny module server logic -------------------------------------------------
-kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, filter = NULL, options = list(shortcut = FALSE)) {
+kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admin = FALSE, trigger = NULL, filter = NULL, options = list(shortcut = FALSE)) {
 
   moduleServer(id, function(input, output, session) {
 

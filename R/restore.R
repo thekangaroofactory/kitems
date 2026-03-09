@@ -6,8 +6,12 @@
 #' Restores the data model & items files.
 #'
 #' @param id the id used to create the data model.
-#' @param path the path to the data model.
+#' @param path the path to the data model and items.
 #' @param type the type of file to backup. \code{items} (default) or \code{dm}.
+#'
+#' @details
+#' The recommended way to define the `path` argument is to set the R_KITEMS_PATH
+#' environment variable.
 #'
 #' @export
 #'
@@ -17,7 +21,7 @@
 #' restore(id = "mydata", path = "path/to/mydata", type = "dm")
 #' }
 
-restore <- function(id, path, type = "items"){
+restore <- function(id, path = Sys.getenv("R_KITEMS_PATH"), type = "items"){
 
   # -- check path
   if(!dir.exists(path))
