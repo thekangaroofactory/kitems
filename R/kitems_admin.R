@@ -12,6 +12,10 @@
 #' @param items_url the url of the item file.
 #' @param autosave the autosave value passed to the kitems server.
 #'
+#' @details
+#' The recommended way to define the `path` argument is to set the R_KITEMS_PATH
+#' environment variable.
+#'
 #' @importFrom magrittr %>%
 #'
 #' @examples

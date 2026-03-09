@@ -40,7 +40,7 @@ By default, the module server will take care of the data persistence, meaning an
 This feature can be turned off:
 
 ```{r, eval=FALSE}
-kitems::kitems(id = "mydata", path = "./", autosave = FALSE)
+kitems::kitems(id = "mydata", autosave = FALSE)
 ```
 
 This is useful when using *frozen* data that you don't want to alter or when your app needs to perform extra operations before save.
@@ -50,7 +50,7 @@ This is useful when using *frozen* data that you don't want to alter or when you
 The admin tasks are wrapped into a dedicated module server (see [admin](./admin.html){data-heading="Useful links"}).
 
 ```{r, eval=FALSE}
-kitems::kitems(id = "mydata", path = "./", admin = FALSE)
+kitems::kitems(id = "mydata", admin = FALSE)
 ```
 
 When the main module server is used in an admin context (mostly within the Admin Console), this mode is turned ON.
@@ -62,7 +62,7 @@ When the main module server is used in an admin context (mostly within the Admin
 The shortcut option activates the corresponding behavior.
 
 ```{r, eval=FALSE}
-kitems::kitems(id = "mydata", path = "./", options = list(shortcut = TRUE))
+kitems::kitems(id = "mydata", options = list(shortcut = TRUE))
 ```
 
 When it is activated, user will get shortcut values (suggestions) next to the inputs in the item form.
@@ -91,7 +91,7 @@ See [filtering](./filtering.html) article to learn about the filters and how to 
 The module server function returns a list of elements that can be accessed from the outside.
 
 ```{r, eval=FALSE}
-my_data <- kitems::kitems(id = "mydata", path = "./")
+my_data <- kitems::kitems(id = "mydata")
 ```
 
 Elements items, data_model, filtered_items, selected_items, clicked_column and filters are reactive objects on which listeners (observers) can take dependency to trigger actions at a higher level.
@@ -105,7 +105,7 @@ The data model can be accessed **in a reactive context** from the return value l
 ```{r, eval=FALSE}
 
 # -- call module
-mydata <- kitems::kitems(id = "mydata", path = "path/to/my/data")
+mydata <- kitems::kitems(id = "mydata")
 
 # -- get data model (in a reactive context!)
 data_model <- mydata$data_model()
@@ -118,7 +118,7 @@ The *items* can be accessed **in a reactive context** from the return value list
 
 ```{r, eval=FALSE}
 # -- call module
-mydata <- kitems::kitems(id = "mydata", path = "path/to/my/data")
+mydata <- kitems::kitems(id = "mydata")
 
 # -- get items (in a reactive context!)
 items <- mydata$items()
@@ -134,7 +134,7 @@ Here is an example how to observe the *items*:
 
 ```{r, eval=FALSE}
 # -- Call module server
-mydata <- kitems::kitems(id = "mydata", path = "./data")
+mydata <- kitems::kitems(id = "mydata")
 
 # -- Observe items
 observeEvent(mydata$items(), {
@@ -203,7 +203,7 @@ By default, the UI / widget functions are called with the `id` that was defined 
 
 ```{r, eval=FALSE}
 # -- call module
-mydata <- kitems::kitems(id = "mydata", path = "path/to/my/data")
+mydata <- kitems::kitems(id = "mydata")
 
 # -- call item view
 filtered_view_widget(id = "mydata")
@@ -215,7 +215,7 @@ If you don't want to wrap the widget function output into another UI function at
 
 ```{r, eval=FALSE}
 # -- call module (as child of a module with id = "module")
-mydata <- kitems::kitems(id = "mydata", path = "path/to/my/data")
+mydata <- kitems::kitems(id = "mydata")
 
 # -- call item view
 filtered_view_widget(id = shiny::NS(namespace = "module", id = "mydata"))

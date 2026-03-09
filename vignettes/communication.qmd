@@ -41,7 +41,7 @@ A typical example is a plot that will be updated as soon as the items are modifi
 
 ``` r
 # -- call the module server
-mydata <- kitems::kitems(id = "my_data", path = "./data")
+mydata <- kitems::kitems(id = "my_data")
 
 # -- plot
 output$plot <- renderPlot({

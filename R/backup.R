@@ -24,7 +24,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' backup(id = "mydata", path = "path/to/my/data", max = 2)
+#' backup(id = "mydata", max = 2)
 #' }
 
 backup <- function(id, path = Sys.getenv("R_KITEMS_PATH"), type = "items", max = NULL){

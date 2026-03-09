@@ -4,19 +4,10 @@
 \alias{admin}
 \title{Admin Console}
 \usage{
-admin(path = getwd())
-}
-\arguments{
-\item{path}{the path where to find the item folder(s)}
+admin()
 }
 \description{
 Launches the administration console (Shiny App)
-}
-\details{
-The app will scan the \code{path} to detect sub folders that are expected to be
-item folders named after the id used to create them.
-
-It will build the ui tabs from this list.
 }
 \examples{
 \dontrun{

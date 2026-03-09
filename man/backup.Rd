@@ -4,12 +4,12 @@
 \alias{backup}
 \title{Backup Files}
 \usage{
-backup(id, path, type = "items", max = NULL)
+backup(id, path = Sys.getenv("R_KITEMS_PATH"), type = "items", max = NULL)
 }
 \arguments{
 \item{id}{the id used to create the data model.}
 
-\item{path}{the path to the data model.}
+\item{path}{the path to the data model and items.}
 
 \item{type}{the type of file to backup: "items" (default) or "dm".}
 
@@ -19,6 +19,9 @@ backup(id, path, type = "items", max = NULL)
 Backup data model & items files
 }
 \details{
+The recommended way to define the \code{path} argument is to set the R_KITEMS_PATH
+environment variable.
+
 Backup file will be named as \emph{id_data_model_YYYY-MM-DD.rds} or \emph{id_items_YYYY-MM-DD.csv}
 If same file already exists, it will be overwritten.
 
@@ -27,6 +30,6 @@ Whenever \code{max = NULL} (default), it will be replaced by 1.
 }
 \examples{
 \dontrun{
-backup(id = "mydata", path = "path/to/my/data", max = 2)
+backup(id = "mydata", max = 2)
 }
 }

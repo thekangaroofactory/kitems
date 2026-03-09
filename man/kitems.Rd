@@ -6,7 +6,7 @@
 \usage{
 kitems(
   id,
-  path,
+  path = Sys.getenv("R_KITEMS_PATH"),
   autosave = TRUE,
   admin = FALSE,
   trigger = NULL,
@@ -17,7 +17,7 @@ kitems(
 \arguments{
 \item{id}{the id to be used for the module server instance.}
 
-\item{path}{a path where data model and items are stored.}
+\item{path}{where the data model and items are stored (see details).}
 
 \item{autosave}{a logical whether the item auto save should be activated or not (default = \code{TRUE}).}
 
@@ -47,6 +47,9 @@ All elements except \code{id} & \code{url} are references to reactive values.
 This is the main component of the package.
 }
 \details{
+The recommended way to define the \code{path} argument is to set the R_KITEMS_PATH
+environment variable.
+
 If autosave is \code{FALSE}, the \code{item_save()} function should be used to make the data persistent.
 To make the data model persistent, use \link[base]{saveRDS} function. The file name should be
 consistent with the output of \link[kitems]{dm_name} function used with \code{id} plus .rds extension.
@@ -70,6 +73,6 @@ If \code{NULL}, the filter manager will not be initialized.
 }
 \examples{
 \dontrun{
-kitems(id = "mydata", path = "path/to/my/data", autosave = TRUE)
+kitems(id = "mydata", autosave = TRUE)
 }
 }

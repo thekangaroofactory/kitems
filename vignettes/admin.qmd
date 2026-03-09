@@ -20,10 +20,10 @@ The main reason is that in most cases, it's not recommended to have the data mod
 To run the app, use the `admin()` function:
 
 ```{r, eval=FALSE}
-kitems::admin(path = "path/to/data")
+kitems::admin()
 ```
 
-The admin console gives access to all the data models belonging to the `path` argument in one place. One tab per data model will be displayed inside the UI.
+The admin console gives access to all the data models belonging to the path defined by the R_KITEMS_PATH environment variable in one place. One tab per data model will be displayed inside the UI.
 
 ### Features
 
@@ -73,7 +73,7 @@ You can add or remove attributes to be hidden from this view (or update the attr
 
 ### Initialization
 
-When the console detects an empty folder inside the provided path, it will allow you to create a new data model:
+When the console detects an empty folder inside the defined path, it will allow you to create a new data model:
 
 ![](images/admin_scratch.png)
 

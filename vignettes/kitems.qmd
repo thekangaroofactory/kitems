@@ -51,8 +51,17 @@ The package is deeply correlated with the development of Shiny applications, so 
 To start the module server, just call the `kitems()` function from the app server:
 
 ```{r, eval=FALSE}
-mydata <- kitems::kitems(id = "mydata", path = "./")
+mydata <- kitems::kitems(id = "mydata")
 ```
+
+::: callout-note
+The path argument is defined through the R_KITEMS_PATH environment variable.\
+You should either declare it in the .Renviron file or set it before calling the module:
+
+``` r
+Sys.setenv("R_KITEMS_PATH" = "./")
+```
+:::
 
 Components to interact with the module server can be integrated inside the UI of your app.\
 For example, the `filtered_view_widget()` function will output the item table:

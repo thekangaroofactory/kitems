@@ -4,7 +4,14 @@
 \alias{kitems_admin}
 \title{kitems Admin Module Server}
 \usage{
-kitems_admin(k_data_model, k_items, path, dm_url, items_url, autosave)
+kitems_admin(
+  k_data_model,
+  k_items,
+  path = Sys.getenv("R_KITEMS_PATH"),
+  dm_url,
+  items_url,
+  autosave
+)
 }
 \arguments{
 \item{k_data_model}{the reference of the data model reactive value.}
@@ -22,12 +29,15 @@ kitems_admin(k_data_model, k_items, path, dm_url, items_url, autosave)
 \description{
 The admin module server is the back end of the admin console app.
 }
+\details{
+The recommended way to define the \code{path} argument is to set the R_KITEMS_PATH
+environment variable.
+}
 \examples{
 \dontrun{
 kitems_admin(
 k_data_model = mydata$data_model,
 k_items = mydata$items,
-path = path,
 dm_url = dm_url,
 items_url = items_url,
 autosave = autosave)

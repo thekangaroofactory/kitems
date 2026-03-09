@@ -33,7 +33,7 @@ shinyServer(
   function(input, output, session){
     
     # -- Launch module servers
-    mydata <- kitems::kitems(id = "mydata", path = "./data")
+    mydata <- kitems::kitems(id = "mydata")
     
   })
 ```
@@ -93,7 +93,7 @@ shinyServer(
     events <- reactiveVal()
     
     # -- Launch module servers
-    mydata <- kitems::kitems(id = "mydata", path = "./data", trigger = events)
+    mydata <- kitems::kitems(id = "mydata", trigger = events)
     
   })
 ```
@@ -139,7 +139,7 @@ shinyServer(
     events <- reactiveVal()
     
     # -- Launch module servers
-    mydata <- kitems::kitems(id = "mydata", path = "./data", trigger = events)
+    mydata <- kitems::kitems(id = "mydata", trigger = events)
     
   })
 ```

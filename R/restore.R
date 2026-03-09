@@ -17,8 +17,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' restore(id = "mydata", path = "path/to/mydata", type = "items")
-#' restore(id = "mydata", path = "path/to/mydata", type = "dm")
+#' restore(id = "mydata", type = "items")
+#' restore(id = "mydata", type = "dm")
 #' }
 
 restore <- function(id, path = Sys.getenv("R_KITEMS_PATH"), type = "items"){

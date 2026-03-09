@@ -4,21 +4,25 @@
 \alias{restore}
 \title{Restore Files}
 \usage{
-restore(id, path, type = "items")
+restore(id, path = Sys.getenv("R_KITEMS_PATH"), type = "items")
 }
 \arguments{
 \item{id}{the id used to create the data model.}
 
-\item{path}{the path to the data model.}
+\item{path}{the path to the data model and items.}
 
 \item{type}{the type of file to backup. \code{items} (default) or \code{dm}.}
 }
 \description{
 Restores the data model & items files.
 }
+\details{
+The recommended way to define the \code{path} argument is to set the R_KITEMS_PATH
+environment variable.
+}
 \examples{
 \dontrun{
-restore(id = "mydata", path = "path/to/mydata", type = "items")
-restore(id = "mydata", path = "path/to/mydata", type = "dm")
+restore(id = "mydata", type = "items")
+restore(id = "mydata", type = "dm")
 }
 }

@@ -17,7 +17,7 @@ Both data model & item files are stored in a specific folder dedicated to a give
 
 -   The folder is named after the `id` of the module
 
--   It is located under the path given to the `path` argument
+-   It is located under the path declared in the `R_KITEMS_PATH` environment variable (recommended) or given to the `path` argument
 
 ```{r, eval=FALSE}
 kitems::kitems(id = "mydata", path = "./data")
