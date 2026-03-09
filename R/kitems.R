@@ -139,48 +139,16 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
       ## -- Check path ---------------------------------------------------------
       incProgress(0/4, detail = "Init")
 
-      # -- Build url from module id
-      dm_url <- file.path(path, paste0(dm_name(id), ".rds"))
-      items_url <- file.path(path, paste0(items_name(id), ".csv"))
+      stopifnot("path does not exist, check R_KITEMS_PATH environment variable" = dir.exists(path))
 
       # -- Check folder structure
       # item files are stored in a dedicated folder #356
-      if(basename(path) != id){
-
-        # -- update path
+      if(basename(path) != id)
         path <- file.path(path, id)
-        catl(MODULE, "Update path =", path)
 
-        # -- check updated path
-        if(!dir.exists(path))
-          dir.create(path)
-
-        # -- Build new url
-        new_dm_url <- file.path(path, paste0(dm_name(id), ".rds"))
-        new_items_url <- file.path(path, paste0(items_name(id), ".csv"))
-
-        # -- check for dm migration
-        if(file.exists(dm_url)){
-          catl(MODULE, "Moving data model file to updated path", debug = 1)
-          res <- file.copy(dm_url, new_dm_url, overwrite = FALSE, copy.date = TRUE)
-          if(res) unlink(dm_url) else warning("Copy failed, check folder")}
-
-        # -- check for items migration
-        if(file.exists(items_url)){
-          catl(MODULE, "Moving items file to updated path", debug = 1)
-          res <- file.copy(items_url, new_items_url, overwrite = FALSE, copy.date = TRUE)
-          if(res) unlink(items_url) else warning("Copy failed, check folder")}
-
-        # -- Update url & cleanup
-        dm_url <- new_dm_url
-        items_url <- new_items_url
-        rm(new_dm_url, new_items_url)
-
-      } else {
-
-        # -- Create path (to avoid connection problems if missing folder)
-        if(!dir.exists(path))
-          dir.create(path)}
+      # -- Build url from module id
+      dm_url <- file.path(path, paste0(dm_name(id), ".rds"))
+      items_url <- file.path(path, paste0(items_name(id), ".csv"))
 
 
       ## -- Read data model ----------------------------------------------------
