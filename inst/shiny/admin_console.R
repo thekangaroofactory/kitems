@@ -12,13 +12,13 @@ ui <- fluidPage(fluidRow(uiOutput("admin_console")),
 # -- Define server logic
 server <- function(input, output, session) {
 
-  # -- get the path from option
-  kitems_path <- getwd()
-  kitems_path <- getShinyOption("kitems_path", kitems_path)
+  # -- get path
+  path <- Sys.getenv("R_KITEMS_PATH")
+  stopifnot("path is empty, set R_KITEMS_PATH environment variable" = path == "")
 
-  # -- check folder(s) in kitems_path
+  # -- check folder(s)
   # each folder contains files related to an item and is named after the id
-  items <- list.dirs(kitems_path, full.names = F, recursive = F)
+  items <- list.dirs(path, full.names = F, recursive = F)
 
   # -- check items
   output$admin_console <- if(length(items) == 0)
@@ -34,7 +34,6 @@ server <- function(input, output, session) {
 
     # -- launch item servers
     res <- lapply(items, function(x) kitems::kitems(id = x,
-                                                    path = kitems_path,
                                                     autosave = TRUE,
                                                     admin = TRUE))
 
