@@ -24,6 +24,8 @@
 restore <- function(id, path = Sys.getenv("R_KITEMS_PATH"), type = "items"){
 
   # -- check path
+  stopifnot("path can't be NULL, set R_KITEMS_PATH environment variable" = is.null(path))
+  stopifnot("path is empty, set R_KITEMS_PATH environment variable" = path == "")
   if(!dir.exists(path))
     stop(paste("Path does not exist! path =", path))
 
