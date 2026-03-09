@@ -6,8 +6,8 @@ create_testdata()
 test_that("restore data.model works", {
 
   # -- create backup & restore it
-  backup(id = module_id, path = testdata_path, type = "dm", max = 1)
-  restore(id = module_id, path = testdata_path, type = "dm")
+  backup(id = module_id, type = "dm", max = 1)
+  restore(id = module_id, type = "dm")
 
   # -- check
   url <- file.path(testdata_path, paste0(dm_name(module_id), ".rds"))
@@ -24,8 +24,8 @@ test_that("restore items works", {
 
   # -- function call
   # create first backup
-  backup(id = module_id, type = "items", path = testdata_path, max = 1)
-  restore(id = module_id, path = testdata_path, type = "items")
+  backup(id = module_id, type = "items", max = 1)
+  restore(id = module_id, type = "items")
 
   # -- check
   url <- file.path(testdata_path, paste0(items_name(module_id), ".csv"))
