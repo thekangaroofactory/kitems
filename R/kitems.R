@@ -65,8 +65,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
     # -- Check parameters ----
 
     # -- check path
-    stopifnot("path can't be NULL, set R_KITEMS_PATH environment variable" = !is.null(path))
-    stopifnot("path is empty, set R_KITEMS_PATH environment variable" = path != "")
+    check_path(path)
 
     # -- check autosave & admin
     stopifnot("autosave argument must be a logical" = is.logical(autosave))
@@ -138,8 +137,6 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
 
       ## -- Check path ---------------------------------------------------------
       incProgress(0/4, detail = "Init")
-
-      stopifnot("path does not exist, check R_KITEMS_PATH environment variable" = dir.exists(path))
 
       # -- Check folder structure
       # item files are stored in a dedicated folder #356

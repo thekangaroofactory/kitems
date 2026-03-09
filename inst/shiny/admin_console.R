@@ -12,9 +12,9 @@ ui <- fluidPage(fluidRow(uiOutput("admin_console")),
 # -- Define server logic
 server <- function(input, output, session) {
 
-  # -- get path
+  # -- get path & check
   path <- Sys.getenv("R_KITEMS_PATH")
-  stopifnot("path is empty, set R_KITEMS_PATH environment variable" = path != "")
+  check_path(path)
 
   # -- check folder(s)
   # each folder contains files related to an item and is named after the id

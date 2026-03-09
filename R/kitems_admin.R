@@ -32,9 +32,8 @@
 
 kitems_admin <- function(k_data_model, k_items, path = Sys.getenv("R_KITEMS_PATH"), dm_url, items_url, autosave) {
 
-  # -- check path
-  stopifnot("path can't be NULL, set R_KITEMS_PATH environment variable" = !is.null(path))
-  stopifnot("path is empty, set R_KITEMS_PATH environment variable" = path != "")
+  # -- check argument
+  check_path(path)
 
   # -- force set id to 'admin'
   id <- "admin"
