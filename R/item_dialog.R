@@ -47,7 +47,7 @@ item_dialog <- function(data.model = NULL, items = NULL, workflow = c("create", 
     dialog <- modalDialog(
       item_form(data.model = data.model,
                 items = items,
-                update = TRUE,
+                workflow = "update",
                 item = item,
                 shortcut = shortcut,
                 ns = ns),
