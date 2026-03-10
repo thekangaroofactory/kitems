@@ -11,7 +11,7 @@ kitems(
   admin = FALSE,
   trigger = NULL,
   filter = NULL,
-  options = list(shortcut = FALSE)
+  options = list(shortcut = FALSE, notify = TRUE)
 )
 }
 \arguments{
@@ -59,6 +59,7 @@ It is expected that this function will not be used when admin = \code{FALSE}.
 Behavior of the module server can be tuned using a list of options:
 \itemize{
 \item \code{shortcut} option is a logical to activate shortcut mechanism within item forms.
+\item \code{notify} option is a logical if Shiny notifications should be displayed (default TRUE)
 }
 
 Triggers are the way to send events for the module to execute dedicated actions.
