@@ -46,7 +46,7 @@ body <- dashboardBody(
                            width = 12,
                            solidHeader = TRUE,
                            status = "info",
-                           "The autosave argument of the module server function is set to FALSE for demonstration purpose.",
+                           "The autosave option of the module server function is set to FALSE for demonstration purpose.",
                            "Create / update / delete won't be persistent after the app is closed.")),
 
                      h3("Admin console"),

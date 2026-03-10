@@ -15,9 +15,8 @@ shinyServer(
     # autosave = FALSE to keep demo data frozen
     data_2 <- kitems::kitems(id = "data_2",
                              path = demo_dir,
-                             autosave = FALSE,
-                             admin = FALSE,
-                             options = list(shortcut = TRUE))
+                             options = list(autosave = FALSE,
+                                            shortcut = TRUE))
 
   }
 )
