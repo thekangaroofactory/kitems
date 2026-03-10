@@ -40,7 +40,7 @@ test_that("item_form: logical without default", {
 test_that("item_form: update", {
 
   # -- function call
-  x <- item_form(ns = ns, item = items[1, ], update = TRUE, data.model = dm)
+  x <- item_form(ns = ns, item = items[1, ], workflow = "update", data.model = dm)
 
   # -- check class
   expect_type(x, "list")
