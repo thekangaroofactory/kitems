@@ -45,4 +45,8 @@ For debugging purpose, the package implements traces through outputs to the cons
 
 But because printing to the console has serious impact on the overall app performance, it has been decided to wrap the trace mechanism into a function that only outputs the log when it is activated.
 
-To set the trace level, you need to use the `ktools::trace_level()` function.
+To set the trace level, you need to export the `R_KITEMS_DEBUG` environment variable (0 = no traces, 1 = verbose, 2 = more verbose).
+
+```{r, eval=FALSE}
+Sys.setenv(R_KITEMS_DEBUG = 1)
+```
