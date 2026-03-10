@@ -59,9 +59,9 @@ rows_insert <- function(items, values, data.model){
   # -- check values & types
 
   values <- sapply(names(values),
-                   function(x) attribute_value(key = x,
-                                               value = values[[x]],
-                                               data.model = data.model),
+                   function(x) attribute_values(key = x,
+                                                value = values[[x]],
+                                                data.model = data.model),
                    simplify = FALSE,
                    USE.NAMES = TRUE)
 
