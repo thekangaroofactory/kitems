@@ -4,14 +4,21 @@
 \alias{item_form}
 \title{Item Form}
 \usage{
-item_form(data.model, items, update = FALSE, item = NULL, shortcut = FALSE, ns)
+item_form(
+  data.model,
+  items,
+  workflow = c("create", "update"),
+  item = NULL,
+  shortcut = FALSE,
+  ns
+)
 }
 \arguments{
 \item{data.model}{the data.frame of the data model.}
 
 \item{items}{the data.frame of the items.}
 
-\item{update}{an optional logical (default = \code{FALSE}) to trigger update behavior.}
+\item{workflow}{a character string to indicate workflow (see details).}
 
 \item{item}{an optional item (used to set default input values if update = \code{TRUE}).}
 
@@ -27,10 +34,13 @@ Builds the create or update item form.
 }
 \details{
 Data model skip feature will be used to return inputs only for the skip = \code{FALSE} attributes
+
+Possible values for workflow are "create", "update" or "delete".
+"create" is the default.
 }
 \examples{
 \dontrun{
-item_form(data.model = mydata$data_model(), update = FALSE, item = NULL, ns)
-item_form(data.model = mydata$data_model(), update = TRUE, item = myitem, ns)
+item_form(data.model = mydata$data_model(), workflow = "create", item = NULL, ns)
+item_form(data.model = mydata$data_model(), workflow = "update", item = myitem, ns)
 }
 }
