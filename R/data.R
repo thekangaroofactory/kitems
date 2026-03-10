@@ -123,7 +123,9 @@ TEMPLATE_DATA_MODEL <- data.frame(name = c("date",
                                                   rep(NA, 2)),
 
                                   # -- added #63
-                                  default.arg = rep(NA, 17),
+                                  default.arg = c(rep(NA, 9),
+                                                  "list(k=1000000)",
+                                                  rep(NA, 7)),
 
                                   # -- added #220
                                   display = c(TRUE,
