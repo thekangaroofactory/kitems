@@ -42,6 +42,10 @@ kitems_admin <- function(k_data_model, k_items, path = Sys.getenv("R_KITEMS_PATH
 
     # -- Init ------------------------------------------------------------------
 
+    # -- Set trace level
+    if(Sys.getenv("R_KITEMS_DEBUG") != "")
+      ktools::trace_level(as.numeric(Sys.getenv("R_KITEMS_DEBUG")))
+
     # -- Get namespace
     ns <- session$ns
 

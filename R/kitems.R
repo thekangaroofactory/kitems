@@ -100,6 +100,10 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
     # //////////////////////////////////////////////////////////////////////////
     # -- Init environment ----
 
+    ## -- Set trace level
+    if(Sys.getenv("R_KITEMS_DEBUG") != "")
+      ktools::trace_level(as.numeric(Sys.getenv("R_KITEMS_DEBUG")))
+
     ## -- Declare config parameters ----
 
     # -- Build log pattern
