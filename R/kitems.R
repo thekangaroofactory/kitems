@@ -7,8 +7,6 @@
 #'
 #' @param id the id to be used for the module server instance.
 #' @param path where the data model and items are stored (see details).
-#' @param autosave a logical whether the item auto save should be activated or not (default = `TRUE`).
-#' @param admin a logical indicating if the admin module server should be launched (default = `FALSE`).
 #' @param options a list of options (see details).
 #' @param trigger a reactive object to pass workflow events to the module (see details).
 #' @param filter a reactive object to pass filters to the module (see details).
@@ -31,16 +29,18 @@
 #' The recommended way to define the `path` argument is to set the R_KITEMS_PATH
 #' environment variable.
 #'
-#' If autosave is `FALSE`, the `item_save()` function should be used to make the data persistent.
+#' Behavior of the module server can be tuned using a list of options:
+#' - `autosave` option is a logical whether the item auto save should be activated or not (default = `TRUE`).
+#' - `admin` a logical indicating if the admin module server should be launched (default = `FALSE`).
+#' - `shortcut` option is a logical to activate shortcut mechanism within item forms.
+#' - `notify` option is a logical if Shiny notifications should be displayed (default = `TRUE`)
+#'
+#' If autosave option is `FALSE`, the `item_save()` function should be used to make the data persistent.
 #' To make the data model persistent, use \link[base]{saveRDS} function. The file name should be
 #' consistent with the output of \link[kitems]{dm_name} function used with \code{id} plus .rds extension.
 #'
 #' When admin is `FALSE`, \link[kitems]{admin_widget} will return an 'empty' layout (tabs with no content)
 #' It is expected that this function will not be used when admin = `FALSE`.
-#'
-#' Behavior of the module server can be tuned using a list of options:
-#' - `shortcut` option is a logical to activate shortcut mechanism within item forms.
-#' - `notify` option is a logical if Shiny notifications should be displayed (default TRUE)
 #'
 #' Triggers are the way to send events for the module to execute dedicated actions.
 #' `trigger` must be a reactive (or `NULL`, the default). An event is defined as a named list of the form
@@ -53,11 +53,15 @@
 #'
 #' @examples
 #' \dontrun{
-#' kitems(id = "mydata", autosave = TRUE)
+#' kitems(id = "mydata")
 #' }
 
 # -- Shiny module server logic -------------------------------------------------
-kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admin = FALSE, trigger = NULL, filter = NULL, options = list(shortcut = FALSE, notify = TRUE)) {
+kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filter = NULL,
+                   options = list(autosave = TRUE,
+                                  admin = FALSE,
+                                  shortcut = FALSE,
+                                  notify = TRUE)) {
 
   moduleServer(id, function(input, output, session) {
 
@@ -67,20 +71,13 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
     # -- check path
     check_path(path)
 
-    # -- check autosave & admin
-    stopifnot("autosave argument must be a logical" = is.logical(autosave))
-    stopifnot("admin argument must be a logical" = is.logical(admin))
-
-
     # -- check trigger
     if(!is.null(trigger))
       stopifnot("trigger must be a reactive object" = is.reactive(trigger))
 
-
     # -- check filter
     if(!is.null(filter))
       stopifnot("filter must be a reactive object" = is.reactive(filter))
-
 
     # -- check options
     stopifnot("options argument must be a list" = is.list(options))
@@ -95,6 +92,8 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
     # -- check elements in option list
     options <- helper(fun = kitems, arg = "options", value = options)
     stopifnot("shortcut option must be a logical" = is.logical(options$shortcut))
+    stopifnot("autosave option must be a logical" = is.logical(options$autosave))
+    stopifnot("admin option must be a logical" = is.logical(options$admin))
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -171,7 +170,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
         # -- Data model version
         # note: only when admin == FALSE, otherwise admin console
         # would stop when migration is needed!
-        if(!admin){
+        if(!options$admin){
 
           # -- check
           rv <- dm_version(init_dm)
@@ -231,7 +230,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
 
           # -- Update data model & save
           init_dm <- result
-          if(autosave){
+          if(options$autosave){
             saveRDS(init_dm, file = k_dm_url)
             catl(MODULE, "Data model saved")}
 
@@ -280,7 +279,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
     ## -- Data model ----
 
     # -- Check parameter & observe data model
-    if(autosave)
+    if(options$autosave)
       observeEvent(k_data_model(), {
 
         # -- secure #596
@@ -296,7 +295,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
     ## -- Items ----
 
     # -- Check parameter & observe items
-    if(autosave)
+    if(options$autosave)
       observeEvent(k_items(), {
 
         # -- Write
@@ -920,8 +919,8 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
     # -- Admin ----
 
     # -- Call module
-    if(admin)
-      kitems_admin(k_data_model, k_items, path, k_dm_url, k_items_url, autosave)
+    if(options$admin)
+      kitems_admin(k_data_model, k_items, path, k_dm_url, k_items_url, options$autosave)
 
 
     # //////////////////////////////////////////////////////////////////////////
