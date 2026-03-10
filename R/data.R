@@ -101,45 +101,45 @@ DATA_MODEL_DEFAULTS <- list(name = NA,
 # -- Data model template
 # Extend template to all data model parameters #220
 TEMPLATE_DATA_MODEL <- data.frame(name = c("date",
-                                           "name", "title", "description", "comment", "note", "status", "detail",
+                                           "name", "title", "description", "comment", "note", "status", "type", "detail",
                                            "id", "debit", "credit", "amount", "total", "balance",
                                            "quantity", "progress"),
 
                                   type = c("Date",
-                                           rep("character", 7),
+                                           rep("character", 8),
                                            rep("numeric", 6),
                                            rep("integer", 2)),
 
                                   # -- added #220
                                   default.val = c(NA,
-                                                  rep(NA, 7),
+                                                  rep(NA, 8),
                                                   NA, rep(0, 5),
                                                   rep(0, 2)),
 
                                   # -- added #220
                                   default.fun = c("Sys.Date",
-                                                  rep(NA, 7),
+                                                  rep(NA, 8),
                                                   "ktools::getTimestamp", rep(NA, 5),
                                                   rep(NA, 2)),
 
                                   # -- added #63
-                                  default.arg = rep(NA, 16),
+                                  default.arg = rep(NA, 17),
 
                                   # -- added #220
                                   display = c(TRUE,
-                                             rep(TRUE, 7),
+                                             rep(TRUE, 8),
                                              FALSE, rep(TRUE, 5),
                                              rep(TRUE, 2)),
 
                                   # -- added #220
                                   skip = c(FALSE,
-                                           rep(FALSE, 7),
+                                           rep(FALSE, 8),
                                            TRUE, rep(FALSE, 5),
                                            rep(FALSE, 2)),
 
                                   # -- added #239
-                                  sort.rank = rep(NA, 16),
+                                  sort.rank = rep(NA, 17),
 
                                   # -- added #239
-                                  sort.desc = rep(NA, 16))
+                                  sort.desc = rep(NA, 17))
 
