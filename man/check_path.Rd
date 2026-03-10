@@ -15,6 +15,3 @@ NULL if all checks are ok
 \description{
 Check Path Argument
 }
-\examples{
-check_path("./")
-}

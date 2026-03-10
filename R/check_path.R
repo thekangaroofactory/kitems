@@ -5,9 +5,6 @@
 #' @param path the value to check
 #'
 #' @returns NULL if all checks are ok
-#'
-#' @examples
-#' check_path("./")
 
 check_path <- function(path){
 
