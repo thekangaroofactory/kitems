@@ -11,9 +11,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' attribute_value(key, value, data.model)}
+#' attribute_values(key, value, data.model)}
 
-attribute_value <- function(key, value, data.model){
+attribute_values <- function(key, value, data.model){
 
   # -- extract expected class from data.model
   colClass <- dm_colClasses(data.model)[key]
