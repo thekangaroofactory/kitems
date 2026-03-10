@@ -7,7 +7,7 @@
 #'
 #' @param data.model the data.frame of the data model.
 #' @param items the data.frame of the items.
-#' @param update an optional logical (default = `FALSE`) to trigger update behavior.
+#' @param workflow a character string to indicate workflow (see details).
 #' @param item an optional item (used to set default input values if update = `TRUE`).
 #' @param shortcut a logical to indicate if shortcuts should be displayed.
 #' @param ns the namespace function, output of `shiny::NS()`.
@@ -18,15 +18,20 @@
 #' @details
 #' Data model skip feature will be used to return inputs only for the skip = `FALSE` attributes
 #'
+#' Possible values for workflow are "create", "update" or "delete".
+#' "create" is the default.
+#'
 #' @examples
 #' \dontrun{
-#' item_form(data.model = mydata$data_model(), update = FALSE, item = NULL, ns)
-#' item_form(data.model = mydata$data_model(), update = TRUE, item = myitem, ns)
+#' item_form(data.model = mydata$data_model(), workflow = "create", item = NULL, ns)
+#' item_form(data.model = mydata$data_model(), workflow = "update", item = myitem, ns)
 #' }
 
-item_form <- function(data.model, items, update = FALSE, item = NULL, shortcut = FALSE, ns){
+item_form <- function(data.model, items, workflow = c("create", "update"), item = NULL, shortcut = FALSE, ns){
 
-  catl("[item_form] Building input list", ifelse(update, "(update)", ""))
+  # -- check argument
+  workflow <- match.arg(workflow)
+  catl("[item_form] Building input list, workflow =", workflow)
 
   # -- get parameters from data model
   colClasses <- dm_colClasses(data.model)
@@ -42,7 +47,7 @@ item_form <- function(data.model, items, update = FALSE, item = NULL, shortcut =
     return("There is no attribute that requires an input value (all attributes are skipped!).")
 
   # -- Define default input values
-  if(update){
+  if(workflow == "update"){
 
     # -- Apply skip on item to update
     values <- item[names(colClasses)]
