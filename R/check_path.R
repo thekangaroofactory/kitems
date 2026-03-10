@@ -11,6 +11,10 @@
 
 check_path <- function(path){
 
+  # -- check variable
+  if(path != Sys.getenv("R_KITEMS_PATH"))
+    message("It is recommended to use R_KITEMS_PATH environment variable to define the path")
+
   # -- check value
   stopifnot("path can't be NULL, set R_KITEMS_PATH environment variable" = !is.null(path))
   stopifnot("path is empty, set R_KITEMS_PATH environment variable" = path != "")
