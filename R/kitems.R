@@ -40,6 +40,7 @@
 #'
 #' Behavior of the module server can be tuned using a list of options:
 #' - `shortcut` option is a logical to activate shortcut mechanism within item forms.
+#' - `notify` option is a logical if Shiny notifications should be displayed (default TRUE)
 #'
 #' Triggers are the way to send events for the module to execute dedicated actions.
 #' `trigger` must be a reactive (or `NULL`, the default). An event is defined as a named list of the form
@@ -56,7 +57,7 @@
 #' }
 
 # -- Shiny module server logic -------------------------------------------------
-kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admin = FALSE, trigger = NULL, filter = NULL, options = list(shortcut = FALSE)) {
+kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admin = FALSE, trigger = NULL, filter = NULL, options = list(shortcut = FALSE, notify = TRUE)) {
 
   moduleServer(id, function(input, output, session) {
 
@@ -458,7 +459,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
                       data.model = k_data_model()))
 
         # -- notify
-        if(shiny::isRunning())
+        if(options$notify)
           showNotification(paste(MODULE, "Item created."), type = "message")
 
       },
@@ -468,7 +469,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
 
         # -- print & notify
         warning(paste("Item has not been created. \n error =", e$message))
-        if(shiny::isRunning())
+        if(options$notify)
           showNotification(paste(MODULE, "Item has not been created."), type = "error")
 
       })
@@ -595,7 +596,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
                       data.model = k_data_model()))
 
         # -- notify
-        if(shiny::isRunning())
+        if(options$notify)
           showNotification(paste(MODULE, "Item updated."), type = "message")},
 
         # -- failed
@@ -603,7 +604,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
 
           # -- print & notify
           warning(paste("Item update has failed. \n error =", e$message))
-          if(shiny::isRunning())
+          if(options$notify)
             showNotification(paste(MODULE, "Item has not been updated."), type = "error")
 
         })
@@ -700,14 +701,14 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
           rows_delete(items = k_items(),
                       id = ids))
 
-        if(shiny::isRunning())
+        if(options$notify)
           showNotification(paste(MODULE, "Item(s) deleted."), type = "message")},
 
         # -- failed
         error = function(e) {
 
           warning(paste("Item(s) has not been deleted. \n error =", e$message))
-          if(shiny::isRunning())
+          if(options$notify)
             showNotification(paste(MODULE, "Item(s) not deleted."), type = "error")
 
         })
@@ -739,14 +740,14 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
             rows_delete(items = k_items(),
                         id = ids))
 
-          if(shiny::isRunning())
+          if(options$notify)
             showNotification(paste(MODULE, "Item(s) deleted."), type = "message")},
 
           # -- failed
           error = function(e) {
 
             warning(paste("Item(s) has not been deleted. \n error =", e$message))
-            if(shiny::isRunning())
+            if(options$notify)
               showNotification(paste(MODULE, "Item(s) not deleted."), type = "error")
 
           })
