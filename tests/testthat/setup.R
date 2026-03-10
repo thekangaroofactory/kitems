@@ -27,8 +27,8 @@ testdata_path <- file.path(testdata_base_path, module_id)
 Sys.setenv("R_KITEMS_PATH" = testdata_path)
 
 # -- build urls
-dm_url <- file.path(testdata_path, paste0(dm_name(module_id), ".rds"))
-items_url <- file.path(testdata_path, paste0(items_name(module_id), ".csv"))
+test_dm_url <- dm_url(module_id)
+test_items_url <- items_url(module_id)
 items_file <- paste0(items_name(module_id), ".csv")
 import_url <- file.path(testdata_path, "data_to_import.csv")
 
@@ -180,10 +180,10 @@ create_testdata <- function(){
   create_folder()
 
   # -- save data model
-  saveRDS(dm, file = dm_url)
+  saveRDS(dm, file = test_dm_url)
 
   # -- save items
-  item_save(items, file = items_url)
+  item_save(items, file = test_items_url)
 
 }
 
@@ -195,10 +195,10 @@ create_empty_items <- function(){
   create_folder()
 
   # -- save data model
-  saveRDS(data_model(colClasses = c(id = "numeric", date = "POSIXct")), file = dm_url)
+  saveRDS(data_model(colClasses = c(id = "numeric", date = "POSIXct")), file = test_dm_url)
 
   # -- save items
-  item_save(items_no_row2, file = items_url)
+  item_save(items_no_row2, file = test_items_url)
 
 }
 
@@ -213,10 +213,10 @@ create_integrity_testdata <- function(){
   dm <- dm[-3, ]
 
   # -- save data model
-  saveRDS(dm, file = dm_url)
+  saveRDS(dm, file = test_dm_url)
 
   # -- save items
-  item_save(items, file = items_url)
+  item_save(items, file = test_items_url)
 
 }
 
