@@ -82,15 +82,8 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
     # -- check options
     stopifnot("options argument must be a list" = is.list(options))
 
-    # -- helper: most probably expected to go into {ktools}
-    helper <- function(fun, arg, value){
-      def_val <- eval(formals(fun)[[arg]])
-      missing <- def_val[!names(def_val) %in% names(value)]
-      value <- value[names(value) %in% names(def_val)]
-      c(value, missing)}
-
     # -- check elements in option list
-    options <- helper(fun = kitems, arg = "options", value = options)
+    options <- ktools::match.option(fun = kitems, arg = "options", value = options)
     stopifnot("shortcut option must be a logical" = is.logical(options$shortcut))
     stopifnot("autosave option must be a logical" = is.logical(options$autosave))
     stopifnot("admin option must be a logical" = is.logical(options$admin))
