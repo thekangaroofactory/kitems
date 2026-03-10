@@ -34,7 +34,6 @@ the module server function returns a list of the reactive references that are ac
 All elements except \code{id} & \code{url} are references to reactive values.
 \itemize{
 \item id = the \code{id} of the module (same as the input argument)
-\item url = the url of the items
 \item items = the reference of the items reactive
 \item data_model = the reference of the data model reactive
 \item filtered_items = the reference of the filtered items reactive

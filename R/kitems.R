@@ -20,7 +20,6 @@
 #' @returns the module server function returns a list of the reactive references that are accessible outside the module.
 #' All elements except `id` & `url` are references to reactive values.
 #' - id = the `id` of the module (same as the input argument)
-#' - url = the url of the items
 #' - items = the reference of the items reactive
 #' - data_model = the reference of the data model reactive
 #' - filtered_items = the reference of the filtered items reactive
@@ -929,7 +928,6 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
 
     # -- the reference (not the value!)
     list(id = id,
-         url = k_items_url,
          items = reactive(k_items()),
          data_model = reactive(k_data_model()),
          filtered_items = filtered_items,
