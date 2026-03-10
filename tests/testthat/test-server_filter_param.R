@@ -13,7 +13,6 @@ test_that("Filter reactive check works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 autosave = TRUE,
                  filter = 12)
 
   # -- module server call

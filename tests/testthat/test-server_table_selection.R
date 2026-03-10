@@ -8,8 +8,7 @@ create_testdata()
 test_that("[testServer] In table selection works", {
 
   # -- declare arguments
-  params <- list(id = module_id,
-                 autosave = TRUE)
+  params <- list(id = module_id)
 
   # -- module server call
   testServer(kitems, args = params, {

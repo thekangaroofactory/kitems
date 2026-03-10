@@ -15,7 +15,6 @@ test_that("Create item [dialog trigger]", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 autosave = TRUE,
                  trigger = reactiveVal(NULL))
 
   # -- module server call

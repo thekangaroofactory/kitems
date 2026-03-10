@@ -13,9 +13,7 @@ create_testdata()
 test_that("attribute delete works", {
 
   # -- declare arguments
-  params <- list(id = module_id,
-                 autosave = TRUE,
-                 admin = TRUE)
+  params <- list(id = module_id, options = list(admin = TRUE))
 
   # -- module server call
   testServer(kitems, args = params, {
