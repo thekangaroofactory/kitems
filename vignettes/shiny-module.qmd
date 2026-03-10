@@ -40,7 +40,7 @@ By default, the module server will take care of the data persistence, meaning an
 This feature can be turned off:
 
 ```{r, eval=FALSE}
-kitems::kitems(id = "mydata", autosave = FALSE)
+kitems::kitems(id = "mydata", options = list(autosave = FALSE))
 ```
 
 This is useful when using *frozen* data that you don't want to alter or when your app needs to perform extra operations before save.

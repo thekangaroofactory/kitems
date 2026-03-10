@@ -7,21 +7,15 @@
 kitems(
   id,
   path = Sys.getenv("R_KITEMS_PATH"),
-  autosave = TRUE,
-  admin = FALSE,
   trigger = NULL,
   filter = NULL,
-  options = list(shortcut = FALSE, notify = TRUE)
+  options = list(autosave = TRUE, admin = FALSE, shortcut = FALSE, notify = TRUE)
 )
 }
 \arguments{
 \item{id}{the id to be used for the module server instance.}
 
 \item{path}{where the data model and items are stored (see details).}
-
-\item{autosave}{a logical whether the item auto save should be activated or not (default = \code{TRUE}).}
-
-\item{admin}{a logical indicating if the admin module server should be launched (default = \code{FALSE}).}
 
 \item{trigger}{a reactive object to pass workflow events to the module (see details).}
 
@@ -49,18 +43,20 @@ This is the main component of the package.
 The recommended way to define the \code{path} argument is to set the R_KITEMS_PATH
 environment variable.
 
-If autosave is \code{FALSE}, the \code{item_save()} function should be used to make the data persistent.
+Behavior of the module server can be tuned using a list of options:
+\itemize{
+\item \code{autosave} option is a logical whether the item auto save should be activated or not (default = \code{TRUE}).
+\item \code{admin} a logical indicating if the admin module server should be launched (default = \code{FALSE}).
+\item \code{shortcut} option is a logical to activate shortcut mechanism within item forms.
+\item \code{notify} option is a logical if Shiny notifications should be displayed (default = \code{TRUE})
+}
+
+If autosave option is \code{FALSE}, the \code{item_save()} function should be used to make the data persistent.
 To make the data model persistent, use \link[base]{saveRDS} function. The file name should be
 consistent with the output of \link[kitems]{dm_name} function used with \code{id} plus .rds extension.
 
 When admin is \code{FALSE}, \link[kitems]{admin_widget} will return an 'empty' layout (tabs with no content)
 It is expected that this function will not be used when admin = \code{FALSE}.
-
-Behavior of the module server can be tuned using a list of options:
-\itemize{
-\item \code{shortcut} option is a logical to activate shortcut mechanism within item forms.
-\item \code{notify} option is a logical if Shiny notifications should be displayed (default TRUE)
-}
 
 Triggers are the way to send events for the module to execute dedicated actions.
 \code{trigger} must be a reactive (or \code{NULL}, the default). An event is defined as a named list of the form
@@ -73,6 +69,6 @@ If \code{NULL}, the filter manager will not be initialized.
 }
 \examples{
 \dontrun{
-kitems(id = "mydata", autosave = TRUE)
+kitems(id = "mydata")
 }
 }

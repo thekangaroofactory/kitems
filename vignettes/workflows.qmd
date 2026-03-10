@@ -170,7 +170,7 @@ Of course if some id(s) are not retrieved, they will be ignored.
 ::: callout-caution
 It is recommended that your application will secure delete with some confirmation process as the module server will **not** ask for any confirmation!
 
-This is particularly true when the `autosave` is set to `TRUE` as the item table will be saved as soon as it is modified.
+This is particularly true when the `autosave` option is set to `TRUE` as the item table will be saved as soon as it is modified.
 :::
 
 ### Schema {#schema-delete}
