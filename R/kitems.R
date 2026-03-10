@@ -144,8 +144,8 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
         path <- file.path(path, id)
 
       # -- Build url from module id
-      dm_url <- file.path(path, paste0(dm_name(id), ".rds"))
-      items_url <- file.path(path, paste0(items_name(id), ".csv"))
+      k_dm_url <- dm_url(id, path)
+      k_items_url <- items_url(id, path)
 
 
       ## -- Read data model ----------------------------------------------------
@@ -154,14 +154,14 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
       init_dm <- NULL
 
       catl(MODULE, "Checking if data model file exists")
-      catl("- path =", dirname(dm_url), level = 2)
-      catl("- file =", basename(dm_url), level = 2)
+      catl("- path =", dirname(k_dm_url), level = 2)
+      catl("- file =", basename(k_dm_url), level = 2)
 
       # -- Check url
-      if(file.exists(dm_url)){
+      if(file.exists(k_dm_url)){
 
         catl(MODULE, "Reading data model from file")
-        init_dm <- readRDS(dm_url)
+        init_dm <- readRDS(k_dm_url)
         catl("- output dim =", dim(init_dm))
 
         # -- Data model version
@@ -205,9 +205,9 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
       # -- Check for NULL data model (then no reason to try loading)
       if(!is.null(init_dm))
 
-        # path = NULL as temporary workaround (it's contained in items_url)
+        # path = NULL as temporary workaround (it's contained in k_items_url)
         init_items <- item_load(col.classes = dm_colClasses(init_dm),
-                                file = items_url,
+                                file = k_items_url,
                                 path = NULL)
 
       # -- Increment the progress bar, and update the detail text.
@@ -228,14 +228,14 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
           # -- Update data model & save
           init_dm <- result
           if(autosave){
-            saveRDS(init_dm, file = dm_url)
+            saveRDS(init_dm, file = k_dm_url)
             catl(MODULE, "Data model saved")}
 
           # -- Reload data with updated data model
-          # path = NULL as temporary workaround (it's contained in items_url)
+          # path = NULL as temporary workaround (it's contained in k_items_url)
           catl(MODULE, "Reloading the item data with updated data model")
           init_items <- item_load(col.classes = dm_colClasses(init_dm),
-                                  file = items_url,
+                                  file = k_items_url,
                                   path = NULL)
 
         }}
@@ -283,7 +283,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
         req(is.data.frame(k_data_model()))
 
         # -- Write & notify
-        saveRDS(k_data_model(), file = dm_url)
+        saveRDS(k_data_model(), file = k_dm_url)
         catl(MODULE, "[EVENT] Data model has been (auto) saved")
 
       }, ignoreInit = TRUE)
@@ -296,7 +296,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
       observeEvent(k_items(), {
 
         # -- Write
-        item_save(data = k_items(), file = items_url)
+        item_save(data = k_items(), file = k_items_url)
 
         # -- Notify
         catl(MODULE, "[EVENT] Item list has been (auto) saved")
@@ -917,7 +917,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
 
     # -- Call module
     if(admin)
-      kitems_admin(k_data_model, k_items, path, dm_url, items_url, autosave)
+      kitems_admin(k_data_model, k_items, path, k_dm_url, k_items_url, autosave)
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -925,7 +925,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), autosave = TRUE, admi
 
     # -- the reference (not the value!)
     list(id = id,
-         url = items_url,
+         url = k_items_url,
          items = reactive(k_items()),
          data_model = reactive(k_data_model()),
          filtered_items = filtered_items,

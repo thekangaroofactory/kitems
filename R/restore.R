@@ -37,14 +37,11 @@ restore <- function(id, path = Sys.getenv("R_KITEMS_PATH"), type = "items"){
   if(length(backups) == 0)
     stop(paste("There is no backup available! pattern =", pattern))
 
-  # -- get backup_url
+  # -- backup_url
   backup_url <- tail(backups, n = 1)
 
-  # -- get source_url
-  source_url <- if(type == "dm")
-    file.path(path, paste0(dm_name(id), ".rds"))
-  else
-    file.path(path, paste0(items_name(id), ".csv"))
+  # -- source_url
+  source_url <- ifelse(type == "dm", dm_url(id, path), items_url(id, path))
 
   # -- check source file
   if(file.exists(source_url)){

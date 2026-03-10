@@ -32,19 +32,8 @@ backup <- function(id, path = Sys.getenv("R_KITEMS_PATH"), type = "items", max =
   # -- check argument
   check_path(path)
 
-  # -- get source_url
-  source_url <- if(type == "dm")
-    file.path(path, paste0(dm_name(id), ".rds"))
-  else
-    file.path(path, paste0(items_name(id), ".csv"))
-
-  # -- get target_url
-  target_url <- if(type == "dm")
-    paste0(dm_name(id), "_", as.character(Sys.Date()), ".rds")
-  else
-    paste0(items_name(id), "_", as.character(Sys.Date()), ".csv")
-
-  # -- check source file
+  # -- source_url
+  source_url <- ifelse(type == "dm", dm_url(id, path), items_url(id, path))
   if(!file.exists(source_url))
     stop(paste("Source file does not exist! file =", source_url))
 
@@ -53,8 +42,14 @@ backup <- function(id, path = Sys.getenv("R_KITEMS_PATH"), type = "items", max =
   if(!dir.exists(backup_path))
     dir.create(path = backup_path, showWarnings = FALSE)
 
+  # -- target_url
+  target_filename <- if(type == "dm")
+    paste0(dm_name(id), "_", as.character(Sys.Date()), ".rds")
+  else
+    paste0(items_name(id), "_", as.character(Sys.Date()), ".csv")
+
   # -- create backup file
-  backup_url <- file.path(backup_path, target_url)
+  backup_url <- file.path(backup_path, target_filename)
   file.copy(source_url, backup_url, overwrite = TRUE)
   catl("Backup has been created", backup_url)
 
