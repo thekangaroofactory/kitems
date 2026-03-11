@@ -4,7 +4,7 @@
 \alias{dm_integrity}
 \title{Data Model Integrity}
 \usage{
-dm_integrity(data.model, items, template = NULL)
+dm_integrity(data.model, items, template = NULL, fix = FALSE)
 }
 \arguments{
 \item{data.model}{a \emph{mandatory} data model.}
@@ -12,6 +12,8 @@ dm_integrity(data.model, items, template = NULL)
 \item{items}{a \emph{mandatory} data.frame of the items.}
 
 \item{template}{an optional data.frame(name = c(...), type = c(...)) to be used to force attribute classes.}
+
+\item{fix}{a logical (default = \code{FALSE}) if data.model should be fixed}
 }
 \value{
 if \code{data.model} matches with the \code{items}, \code{TRUE} will be returned. Otherwise an updated data model will be returned.
@@ -20,6 +22,8 @@ if \code{data.model} matches with the \code{items}, \code{TRUE} will be returned
 Check the data model integrity.
 }
 \details{
+When \code{fix} is FALSE, an error will be raised if a problem is detected.
+
 In case an attribute of the \code{items} is missing from the \code{data.model}, it will be added with either a type matching the template
 one or a guessed one (using the \code{class()} function).
 
@@ -28,7 +32,7 @@ data model.
 }
 \examples{
 \dontrun{
-feedback <- dm_integrity(mydatamodel, myitems)
+feedback <- dm_integrity(mydatamodel, myitems, fix = TRUE)
 if(!is.logical(feedback))
   mydatamodel <- feedback
 }
