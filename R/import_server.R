@@ -145,7 +145,7 @@ import_server <- function(id, k_data_model, k_items, callback) {
       # -- Check items classes #216
       # Because dataset was read first, the current colclasses are 'guessed' and may not comply with the data model
       # ex: date class is forced in data model, but it may be char ("2024-02-07) or num (19760)
-      items <- item_integrity(items = cache_items(), data.model = cache_dm())
+      items <- item_integrity(items = cache_items(), data.model = cache_dm(), fix = TRUE)
 
       # -- Store items & data model
       k_items(items)
