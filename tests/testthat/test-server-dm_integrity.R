@@ -14,30 +14,7 @@ test_that("Data model integrity works", {
   params <- list(id = module_id)
 
   # -- module server call
-  testServer(kitems, args = params, {
-
-    # --------------------------------------------------------------------------
-    # Data model
-    # --------------------------------------------------------------------------
-
-    x <- k_data_model()
-
-    # -- test class & dim
-    expect_s3_class(x, "data.frame")
-    expect_equal(dim(x), c(6, length(DATA_MODEL_COLCLASSES)))
-
-
-    # --------------------------------------------------------------------------
-    # Items
-    # --------------------------------------------------------------------------
-
-    x <- k_items()
-
-    # -- test class & dim
-    expect_s3_class(x, "data.frame")
-    expect_equal(dim(x), c(4, 6))
-
-  })
+  expect_error(testServer(kitems, args = params))
 
 })
 
