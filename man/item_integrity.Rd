@@ -4,12 +4,14 @@
 \alias{item_integrity}
 \title{Items Integrity}
 \usage{
-item_integrity(items, data.model)
+item_integrity(items, data.model, fix = FALSE)
 }
 \arguments{
 \item{items}{a data.frame of the items.}
 
 \item{data.model}{a data.frame of the data model.}
+
+\item{fix}{a logical (default = \code{FALSE}) if the items should be fixed.}
 }
 \value{
 A data.frame of the items, with corrected attribute types.
@@ -20,10 +22,13 @@ Check items integrity vs the data model.
 \details{
 The function checks if the class of the attributes in items matches with
 the one in the data model.
-If not, it will coerce the values of the corresponding column to the data model class.
+
+If not, and if \code{fix} is TRUE, it will coerce the values of the corresponding
+column to the data model class.
+If \code{fix} is FALSE, it will raise an error.
 }
 \examples{
 \dontrun{
-items <- item_integrity(items, data.model)
+items <- item_integrity(items, data.model, fix = TRUE)
 }
 }
