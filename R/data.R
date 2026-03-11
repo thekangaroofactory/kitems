@@ -16,7 +16,6 @@ OBJECT_CLASS <- c("numeric",
                   "integer",
                   "logical",
                   "character",
-                  "factor",
                   "Date",
                   "POSIXct")
 
@@ -26,7 +25,6 @@ CLASS_FUNCTIONS <- list("numeric" = "as.numeric",
                         "integer" = "as.integer",
                         "logical" = "as.logical",
                         "character" = "as.character",
-                        "factor" = "as.factor",
                         "Date" = "as.Date",
                         "POSIXct" = "as.POSIXct")
 
@@ -35,7 +33,6 @@ CLASS_EXAMPLES <- list("numeric" = 10.5,
                        "integer" = 2,
                        "logical" = TRUE,
                        "character" = "mango",
-                       "factor" = "- (NA, a factor can't be displayed here)",
                        "Date" = as.Date(Sys.Date()),
                        "POSIXct" = as.POSIXct(Sys.time()))
 
@@ -49,7 +46,6 @@ DEFAULT_VALUES <- list("numeric" = 0,
                        "integer" = 0,
                        "logical" = FALSE,
                        "character" = "",
-                       "factor" = NULL,
                        "Date" = Sys.Date(),
                        "POSIXct" = Sys.time())
 
@@ -58,7 +54,6 @@ DEFAULT_FUNCTIONS <- list("numeric" = NULL,
                           "integer" = NULL,
                           "logical" = NULL,
                           "character" = NULL,
-                          "factor" = NULL,
                           "Date" = "Sys.Date",
                           "POSIXct" = c("Sys.time", "Sys.Date"))
 

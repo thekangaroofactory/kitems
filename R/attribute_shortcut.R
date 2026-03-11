@@ -46,7 +46,7 @@ attribute_shortcut <- function(colClass, suggestions, ns){
 
   # -- character
   # list(value1 = frequency, value_2, = frequency, ...)
-  if(colClass %in% c("character", "factor", "logical"))
+  if(colClass %in% c("character", "logical"))
 
     # -- apply over suggestions
     shortcuts <- lapply(1:length(suggestions), function(x)

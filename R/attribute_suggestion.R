@@ -4,7 +4,7 @@
 #'
 #' @param values a vector of values, most probably corresponding to one of the item's data frame columns.
 #' @param type an optional character vector, the type (class) of values. If not provided, `class(values)` will be used.
-#' @param n the desired number of suggestions. This applies only on character, factor, numeric & integer types.
+#' @param n the desired number of suggestions. This applies only on character, numeric & integer types.
 #' @param floor a numeric value to indicate a floor frequency. This applies only for numeric & integer types (see details).
 #'
 #' @details
@@ -14,7 +14,7 @@
 #' @return
 #' A list of suggestions that depends on the \code{type} of values:
 #'
-#' - character, factor:
+#' - character:
 #' the most frequent values ; \code{list(value1 = frequency, value_2, = frequency)}
 #'
 #' - numeric, integer:
@@ -48,7 +48,7 @@ attribute_suggestion <- function(values, type = class(values), n = 3, floor = 10
   suggestions <- NULL
 
   # -- character
-  if(type %in% c("character", "factor")){
+  if(type == "character"){
     suggestions <- as.list(head(sort(table(values), decreasing = TRUE), n = n))
     suggestions <- lapply(suggestions, function(x) round(x / length(values) * 100))}
 
