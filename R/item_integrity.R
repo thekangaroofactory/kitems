@@ -8,6 +8,7 @@
 #'
 #' @param items a data.frame of the items.
 #' @param data.model a data.frame of the data model.
+#' @param fix a logical (default = `FALSE`) if the items should be fixed.
 #'
 #' @return A data.frame of the items, with corrected attribute types.
 #' @export
@@ -15,18 +16,21 @@
 #' @details
 #' The function checks if the class of the attributes in items matches with
 #' the one in the data model.
-#' If not, it will coerce the values of the corresponding column to the data model class.
+#'
+#' If not, and if `fix` is TRUE, it will coerce the values of the corresponding
+#' column to the data model class.
+#' If `fix` is FALSE, it will raise an error.
 #'
 #' @examples
 #' \dontrun{
-#' items <- item_integrity(items, data.model)
+#' items <- item_integrity(items, data.model, fix = TRUE)
 #' }
 
-item_integrity <- function(items, data.model){
+item_integrity <- function(items, data.model, fix = FALSE){
 
   # -- check args
   if(is.null(items) || is.null(data.model))
-    return(items)
+    return(NULL)
 
   # -- get dm colClasses
   colClasses <- dm_colClasses(data.model = data.model)
@@ -41,7 +45,8 @@ item_integrity <- function(items, data.model){
 
   # -- check: return input if nothing to do
   if(length(cols) == 0)
-    return(items)
+    return(NULL)
+  else if(!fix) stop("item attribute class does not match with data model")
 
   # -- helper function
   helper <- function(att_name){
@@ -49,7 +54,7 @@ item_integrity <- function(items, data.model){
     item_class <- items_classes[att_name]
     dm_class <- colClasses[att_name]
 
-    catl("[WARNING] Attribute", att_name, "class does not match with data model:", debug = 1)
+    catl("[warning] Attribute", att_name, "class does not match with data model:", debug = 1)
     catl("-- items class =", item_class, "vs data.model type =", dm_class, debug = 1)
 
     # -- Wrapp attempt to coerce value
