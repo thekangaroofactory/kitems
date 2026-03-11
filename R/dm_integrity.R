@@ -8,11 +8,13 @@
 #' @param data.model a \emph{mandatory} data model.
 #' @param items a \emph{mandatory} data.frame of the items.
 #' @param template an optional data.frame(name = c(...), type = c(...)) to be used to force attribute classes.
+#' @param fix a logical (default = `FALSE`) if data.model should be fixed
 #'
 #' @return if `data.model` matches with the `items`, `TRUE` will be returned. Otherwise an updated data model will be returned.
 #' @export
 #'
 #' @details
+#' When `fix` is FALSE, an error will be raised if a problem is detected.
 #'
 #' In case an attribute of the `items` is missing from the `data.model`, it will be added with either a type matching the template
 #' one or a guessed one (using the `class()` function).
@@ -22,12 +24,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' feedback <- dm_integrity(mydatamodel, myitems)
+#' feedback <- dm_integrity(mydatamodel, myitems, fix = TRUE)
 #' if(!is.logical(feedback))
 #'   mydatamodel <- feedback
 #' }
 
-dm_integrity <- function(data.model, items, template = NULL){
+dm_integrity <- function(data.model, items, template = NULL, fix = FALSE){
 
   # -- init
   integrity <- TRUE
@@ -41,6 +43,10 @@ dm_integrity <- function(data.model, items, template = NULL){
 
     catl("[Warning]", n, "missing attribute(s) in data model:", missing_att, debug = 1)
     integrity <- FALSE
+
+    # -- check mode, just throw an error
+    if(!fix)
+      stop("missing attribute(s)")
 
     # -- helper: get unique value for class()
     helper <- function(x){
@@ -103,8 +109,12 @@ dm_integrity <- function(data.model, items, template = NULL){
   extra_att <- data.model$name[!data.model$name %in% colnames(items)]
   if(!identical(extra_att, character(0))){
 
-    catl("[Warning] Extra attribute in data model:", extra_att, debug = 1)
+    catl("[Warning] Extra attribute(s) in data model:", extra_att, debug = 1)
     integrity <- FALSE
+
+    # -- check mode, just throw an error
+    if(!fix)
+      stop("extra attribute(s)")
 
     # -- Drop extra rows
     data.model <- data.model[!data.model$name %in% extra_att, ]
