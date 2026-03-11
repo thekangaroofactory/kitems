@@ -4,7 +4,7 @@
 \alias{restore}
 \title{Restore Files}
 \usage{
-restore(id, path = Sys.getenv("R_KITEMS_PATH"), type = "items")
+restore(id, path = Sys.getenv("R_KITEMS_PATH"), type = c("items", "dm"))
 }
 \arguments{
 \item{id}{the id used to create the data model.}

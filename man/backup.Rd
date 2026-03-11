@@ -4,7 +4,12 @@
 \alias{backup}
 \title{Backup Files}
 \usage{
-backup(id, path = Sys.getenv("R_KITEMS_PATH"), type = "items", max = NULL)
+backup(
+  id,
+  path = Sys.getenv("R_KITEMS_PATH"),
+  type = c("items", "dm"),
+  max = NULL
+)
 }
 \arguments{
 \item{id}{the id used to create the data model.}
