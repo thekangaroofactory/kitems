@@ -27,10 +27,11 @@
 #' backup(id = "mydata", max = 2)
 #' }
 
-backup <- function(id, path = Sys.getenv("R_KITEMS_PATH"), type = "items", max = NULL){
+backup <- function(id, path = Sys.getenv("R_KITEMS_PATH"), type = c("items", "dm"), max = NULL){
 
-  # -- check argument
+  # -- check arguments
   check_path(path)
+  type <- match.arg(type)
 
   # -- source_url
   source_url <- ifelse(type == "dm", dm_url(id, path), items_url(id, path))

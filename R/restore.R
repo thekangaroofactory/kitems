@@ -21,10 +21,11 @@
 #' restore(id = "mydata", type = "dm")
 #' }
 
-restore <- function(id, path = Sys.getenv("R_KITEMS_PATH"), type = "items"){
+restore <- function(id, path = Sys.getenv("R_KITEMS_PATH"), type = c("items", "dm")){
 
-  # -- check argument
+  # -- check arguments
   check_path(path)
+  type <- match.arg(type)
 
   # -- check backup path
   backup_path <- file.path(path, "backup")
