@@ -181,7 +181,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
                 footer = actionButton(inputId = ns("dm_version_warning"), label = "Close app")))
 
             # -- listen to modal close button
-            observeEvent(input$dm_version_warning, stopApp())}}
+            observeEvent(input$dm_version_warning, stopApp(), once = TRUE)}}
 
       } else {
 
@@ -216,25 +216,30 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
       if(!is.null(init_dm) & !is.null(init_items)){
 
         catl(MODULE, "Checking data model integrity")
-        result <- dm_integrity(data.model = init_dm, items = init_items, template = TEMPLATE_DATA_MODEL)
 
-        # -- Check feedback (otherwise value is TRUE)
-        if(is.data.frame(result)){
+        # -- dm_integrity may raise an error (fix = FALSE)
+        tryCatch(
 
-          # -- Update data model & save
-          init_dm <- result
-          if(options$autosave){
-            saveRDS(init_dm, file = k_dm_url)
-            catl(MODULE, "Data model saved")}
+          init_dm |>
+            dm_integrity(items = init_items, template = TEMPLATE_DATA_MODEL),
 
-          # -- Reload data with updated data model
-          # path = NULL as temporary workaround (it's contained in k_items_url)
-          catl(MODULE, "Reloading the item data with updated data model")
-          init_items <- item_load(col.classes = dm_colClasses(init_dm),
-                                  file = k_items_url,
-                                  path = NULL)
+          error = function(e) {
 
-        }}
+            # -- when interactive
+            if(isRunning()){
+              showModal(
+                modalDialog(
+                  title = "Data Model Integrity",
+                  p("Data model requires recovery actions"),
+                  p("Reason:", e$message),
+                  p("Run admin() to fix it."),
+                  footer = actionButton(inputId = ns("close_app"), label = "Close app")))
+              observeEvent(input$close_app, stopApp(), once = TRUE)}
+
+            else
+              stop(e$message)})
+
+      }
 
 
       # -- Check items integrity -----------------------------------------------
