@@ -11,14 +11,14 @@ attribute_suggestion(values, type = class(values), n = 3, floor = 10)
 
 \item{type}{an optional character vector, the type (class) of values. If not provided, \code{class(values)} will be used.}
 
-\item{n}{the desired number of suggestions. This applies only on character, factor, numeric & integer types.}
+\item{n}{the desired number of suggestions. This applies only on character, numeric & integer types.}
 
 \item{floor}{a numeric value to indicate a floor frequency. This applies only for numeric & integer types (see details).}
 }
 \value{
 A list of suggestions that depends on the \code{type} of values:
 \itemize{
-\item character, factor:
+\item character:
 the most frequent values ; \code{list(value1 = frequency, value_2, = frequency)}
 \item numeric, integer:
 the most frequent values ; \code{list(value1 = frequency, value_2, = frequency)}, or
