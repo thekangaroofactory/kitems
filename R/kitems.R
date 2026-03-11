@@ -248,8 +248,30 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
       if(!is.null(init_dm) & !is.null(init_items)){
 
         catl(MODULE, "Checking items classes integrity")
-        init_items <- item_integrity(items = init_items,
-                                     data.model = init_dm)}
+
+        # -- item_integrity may raise an error (fix = FALSE)
+        tryCatch(
+
+          init_items |>
+            item_integrity(data.model = init_dm),
+
+          error = function(e) {
+
+            # -- when interactive
+            if(isRunning()){
+              showModal(
+                modalDialog(
+                  title = "Items Integrity",
+                  p("Items require recovery actions"),
+                  p("Reason:", e$message),
+                  p("Run admin() to fix it."),
+                  footer = actionButton(inputId = ns("close_app"), label = "Close app")))
+              observeEvent(input$close_app, stopApp(), once = TRUE)}
+
+            else
+              stop(e$message)})
+
+      }
 
       # Increment the progress bar, and update the detail text.
       incProgress(3/4, detail = "Integrity checked")
