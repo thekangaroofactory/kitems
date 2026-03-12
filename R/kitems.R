@@ -279,7 +279,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
 
       # -- Store into reactive values ------------------------------------------
 
-      # -- Store data model (either content of the RDS or the server function input)
+      # -- Store data model
       k_data_model <- reactiveVal(init_dm)
       rm(init_dm)
 
