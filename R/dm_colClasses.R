@@ -17,11 +17,6 @@
 
 dm_colClasses <- function(data.model = NULL){
 
-  # -- Extract classes
-  colClasses <- data.model$type
-  names(colClasses) <- data.model$name
-
-  # -- Return
-  colClasses
+  stats::setNames(data.model$type, data.model$name)
 
 }
