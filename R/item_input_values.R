@@ -61,7 +61,9 @@ item_input_values <- function(input, colClasses){
         catl("-- timezone =", extra_values[[att_tz]], 2)
 
         # -- compute real value from all inputs
-        value <- eval(call(CLASS_FUNCTIONS[[colClasses[name]]], paste(as.character(values[[name]]), extra_values[[att_time]]), tz = extra_values[[att_tz]]))
+        value <- convert(x = paste(as.character(values[[name]]), extra_values[[att_time]]),
+                         class = colClasses[name],
+                         class.arg = paste0("list(tz = '", extra_values[[att_tz]], "')"))
 
       }
 

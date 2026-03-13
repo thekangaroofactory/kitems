@@ -377,7 +377,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
             # -- try: coerce input to expected class
             catl("[step.2] Eval default value", level = 2)
             value <- tryCatch(
-              eval(call(CLASS_FUNCTIONS[[type]], input$w_default_val)),
+              convert(input$w_default_val, type),
               error = function(e) e,
               warning = function(w) w)
 

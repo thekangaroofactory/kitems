@@ -51,7 +51,7 @@ attribute_values <- function(key, value, data.model){
   # value might have several classes (case POSIX*)
   if(!colClass %in% class(value)){
     catl("> Class:", class(value), "does not fit with:", colClass, "/ Coerce to target class", level = 2)
-    value <- eval(call(CLASS_FUNCTIONS[[colClass]], value))}
+    value <- convert(value, colClass, data.model[data.model$name == key, ]$class.arg)}
 
   # -- output summary (debug)
   catl("> Output: class =", class(value), "/ value =", as.character(value))

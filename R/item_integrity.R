@@ -67,7 +67,9 @@ item_integrity <- function(items, data.model, fix = FALSE){
         output <- if(dm_class == "Date")
           as.Date(items[[att_name]])
         else
-          eval(call(CLASS_FUNCTIONS[[dm_class]], items[[att_name]]))
+          convert(x = items[[att_name]],
+                  class = dm_class,
+                  class.arg = data.model[data.model$name == att_name, ]$class.arg)
 
         # -- return
         output
