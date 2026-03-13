@@ -42,7 +42,16 @@ rows_update <- function(items, values, data.model){
   values <- as.data.frame(values)
 
   # -- drop unmatched rows
-  values <- values[values$id %in% items$id, ]
+  # replace [] by filter otherwise values = list(id = 123)
+  # will brake df into a num vector (without name!)
+  values <- values |> dplyr::filter(.data$id %in% items$id)
+
+  # -- check skipped attributes to refresh
+  # add names to values so they will be computed again
+  att_refresh <- data.model |> dplyr::filter(.data$skip, .data$refresh) |> dplyr::pull(.data$name)
+  att_refresh <- att_refresh[!att_refresh %in% names(values)]
+  if(!identical(att_refresh, character(0)))
+     values <- c(values, as.list(stats::setNames(NA, att_refresh)))
 
 
   # ////////////////////////////////////////////////////////////////////////////
