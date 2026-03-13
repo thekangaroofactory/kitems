@@ -10,8 +10,9 @@ attribute_update(
   default.val = NULL,
   default.fun = NULL,
   default.arg = NULL,
-  skip = NULL,
   display = NULL,
+  skip = NULL,
+  refresh = NULL,
   sort.rank = NULL,
   sort.desc = NULL
 )
@@ -25,11 +26,13 @@ attribute_update(
 
 \item{default.fun}{a character string, the new default function name}
 
-\item{default.arg}{a named vector of arguments, to pass along with the default function.}
+\item{default.arg}{a named vector of arguments, to pass along with the default function}
+
+\item{display}{a logical to set the display value}
 
 \item{skip}{a logical to set the skip value}
 
-\item{display}{a logical to set the display value}
+\item{refresh}{a logical to tell if skipped attributes should be refreshed upon update}
 
 \item{sort.rank}{a numeric, used to define sort rank}
 

@@ -11,6 +11,7 @@ data_model(
   default.arg = NULL,
   display = NULL,
   skip = NULL,
+  refresh = NULL,
   sort.rank = NULL,
   sort.desc = NULL
 )
@@ -27,6 +28,8 @@ data_model(
 \item{display}{an optional character vector, indicating which attribute names should be displayed in the table view.}
 
 \item{skip}{an optional character vector, indicating which attribute names should be skipped from the user input form.}
+
+\item{refresh}{an optional named logical vector, to indicate if skipped attributes should be updated (see details).}
 
 \item{sort.rank}{an optional named numeric vector, to define sort orders.}
 
@@ -54,10 +57,13 @@ All \verb{default.*} parameters are optional. When provided, they will be used t
 
 \code{display} and \code{skip} directly contains the names of the attributes to set to TRUE
 
+Attributes with \code{skip} set to TRUE will be ignored by default when an item is updated. To force the computation of a new
+value (based on the default parameters), set \code{refresh} to TRUE as well.
+
 If not provided, defaults will be applied:
 \itemize{
 \item \code{NA} for \code{default.val}, \code{default.fun} and \code{default.arg}
-\item \code{FALSE} for \code{display} and \code{skip}
+\item \code{FALSE} for \code{display}, \code{skip} and \code{refresh}
 }
 }
 \examples{
