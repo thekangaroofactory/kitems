@@ -14,6 +14,19 @@ test_that("data_model: colClasses", {
 })
 
 
+test_that("data_model: class.arg", {
+
+  # -- function call
+  x <- data_model(colClasses = colClasses, class.arg = c("date" = "list(format = 'a', origin = 'b')"))
+
+  # -- check: output is data.frame
+  expect_s3_class(x, "data.frame")
+  expect_equal(dim(x), c(length(colClasses), length(DATA_MODEL_COLCLASSES)))
+  expect_identical(x[x$name == "date", ]$class.arg, "list(format = 'a', origin = 'b')")
+
+})
+
+
 test_that("data_model: default.val", {
 
   # -- function call

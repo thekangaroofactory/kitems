@@ -14,6 +14,18 @@ test_that("attribute_update works", {
 })
 
 
+test_that("attribute_update / class.arg", {
+
+  # -- function call
+  x <- attribute_update(data.model = dm, name = "date", class.arg = "list(format = '%Y-%m-%dT%H:%M:%S')")
+
+  # -- test class
+  expect_s3_class(x, "data.frame")
+  expect_identical(x[x$name == "date", ]$class.arg, "list(format = '%Y-%m-%dT%H:%M:%S')")
+
+})
+
+
 test_that("attribute_update / default.val", {
 
   # -- function call
