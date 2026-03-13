@@ -69,6 +69,32 @@ test_that("attribute_update / display", {
 })
 
 
+test_that("attribute_update / skip", {
+
+  # -- function call
+  x <- attribute_update(data.model = dm, name = "name", skip = TRUE)
+
+  # -- checks
+  expect_s3_class(x, "data.frame")
+  expect_true(x[x$name == "name", ]$skip)
+  expect_false(x[x$name == "name", ]$refresh)
+
+})
+
+
+test_that("attribute_update / skip + refresh", {
+
+  # -- function call
+  x <- attribute_update(data.model = dm, name = "name", skip = TRUE, refresh = TRUE)
+
+  # -- checks
+  expect_s3_class(x, "data.frame")
+  expect_true(x[x$name == "name", ]$skip)
+  expect_true(x[x$name == "name", ]$refresh)
+
+})
+
+
 test_that("attribute_update / sort.rank & sort.desc", {
 
   # -- function call

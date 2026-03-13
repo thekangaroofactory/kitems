@@ -1,6 +1,6 @@
 
 
-test_that("data_model: colClasses argument only", {
+test_that("data_model: colClasses", {
 
   # -- function call
   x <- data_model(colClasses = colClasses, default.val = NULL, default.fun = NULL, display = NULL, skip = NULL)
@@ -52,6 +52,34 @@ test_that("data_model: default.arg", {
 
   # -- check: output dim
   expect_equal(dim(x), c(length(colClasses), length(DATA_MODEL_COLCLASSES)))
+
+})
+
+
+test_that("data_model: skip", {
+
+  # -- function call
+  x <- data_model(colClasses = colClasses, skip = names(colClasses))
+
+  # -- checks
+  expect_s3_class(x, "data.frame")
+  expect_equal(dim(x), c(length(colClasses), length(DATA_MODEL_COLCLASSES)))
+  expect_all_true(x$skip)
+  expect_all_false(x$refresh)
+
+})
+
+
+test_that("data_model: skip & refresh", {
+
+  # -- function call
+  x <- data_model(colClasses = colClasses, skip = names(colClasses), refresh = names(colClasses))
+
+  # -- checks
+  expect_s3_class(x, "data.frame")
+  expect_equal(dim(x), c(length(colClasses), length(DATA_MODEL_COLCLASSES)))
+  expect_all_true(x$skip)
+  expect_all_true(x$refresh)
 
 })
 
