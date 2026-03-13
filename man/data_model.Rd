@@ -6,6 +6,7 @@
 \usage{
 data_model(
   colClasses,
+  class.arg = NULL,
   default.val = NULL,
   default.fun = NULL,
   default.arg = NULL,
@@ -18,6 +19,8 @@ data_model(
 }
 \arguments{
 \item{colClasses}{a \emph{mandatory} named vector of classes, defining the data model.}
+
+\item{class.arg}{an optional named vector of arguments, to pass along with the class function (see details).}
 
 \item{default.val}{an optional named vector of values, defining the default values.}
 
@@ -43,7 +46,9 @@ Build a data model
 }
 \details{
 \code{colClasses} will be used to create the data.frame: names will define the attributes of the data model,
-and values will define the class (type) of the attributes.
+and values will define the class of the attributes.
+When \code{class.arg} is set, it will be sent along with the as.* conversion function call.
+Ex: as.POSIXct("2025-09-10T13:16:55Z", format = "\%Y-\%m-\%dT\%H:\%M:\%S")
 
 All \verb{default.*} parameters are optional. When provided, they will be used to match with names defined in colClasses:
 \itemize{

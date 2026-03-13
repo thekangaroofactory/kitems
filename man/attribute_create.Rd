@@ -8,6 +8,7 @@ attribute_create(
   data.model = NULL,
   name,
   type,
+  class.arg = NULL,
   default.val = NULL,
   default.fun = NULL,
   default.arg = NULL,
@@ -23,6 +24,8 @@ attribute_create(
 \item{name}{a character vector for the new attribute name}
 
 \item{type}{a character vector for the new attribute type}
+
+\item{class.arg}{an optional named vector of arguments, to pass along with the class function.}
 
 \item{default.val}{an optional named vector of values, defining the default values.}
 

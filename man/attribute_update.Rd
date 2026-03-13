@@ -7,6 +7,7 @@
 attribute_update(
   data.model,
   name,
+  class.arg = NULL,
   default.val = NULL,
   default.fun = NULL,
   default.arg = NULL,
@@ -21,6 +22,8 @@ attribute_update(
 \item{data.model}{a data.frame containing the data model}
 
 \item{name}{a character string of the attribute name}
+
+\item{class.arg}{an optional named vector of arguments, to pass along with the class function.}
 
 \item{default.val}{a character string, the new default value}
 
