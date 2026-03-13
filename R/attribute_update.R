@@ -7,6 +7,7 @@
 #'
 #' @param data.model a data.frame containing the data model
 #' @param name a character string of the attribute name
+#' @param class.arg an optional named vector of arguments, to pass along with the class function.
 #' @param default.val a character string, the new default value
 #' @param default.fun a character string, the new default function name
 #' @param default.arg a named vector of arguments, to pass along with the default function
@@ -39,13 +40,16 @@
 #'                  skip = TRUE)
 #'
 
-attribute_update <- function(data.model, name,
+attribute_update <- function(data.model, name, class.arg = NULL,
                              default.val = NULL, default.fun = NULL, default.arg = NULL,
                              display = NULL, skip = NULL, refresh = NULL,
                              sort.rank = NULL, sort.desc = NULL){
 
   # -- update row
   # adding tests to update only if not NULL #226
+  if(!is.null(class.arg))
+    data.model[match(name, data.model$name), ]$class.arg <- class.arg
+
   if(!is.null(default.val)){
     data.model[match(name, data.model$name), ]$default.val <- default.val
     data.model[match(name, data.model$name), ]$default.fun <- NA

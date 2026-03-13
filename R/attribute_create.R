@@ -8,6 +8,7 @@
 #' @param data.model a data model data.frame, structured as an output of the `data_model()` function
 #' @param name a character vector for the new attribute name
 #' @param type a character vector for the new attribute type
+#' @param class.arg an optional named vector of arguments, to pass along with the class function.
 #' @param default.val an optional named vector of values, defining the default values.
 #' @param default.fun an optional named vector of functions, defining the default functions to be used to generate default values.
 #' @param default.arg an optional named vector of arguments, to pass along with the default function.
@@ -41,7 +42,7 @@
 #'
 #' }
 
-attribute_create <- function(data.model = NULL, name, type,
+attribute_create <- function(data.model = NULL, name, type, class.arg = NULL,
                              default.val = NULL, default.fun = NULL, default.arg = NULL,
                              display = NULL, skip = NULL,
                              sort.rank = NULL, sort.desc = NULL){
@@ -50,6 +51,7 @@ attribute_create <- function(data.model = NULL, name, type,
 
   # -- Init attribute (using data_model to fit with structure)
   new_attribute <- data_model(colClasses = stats::setNames(type, name),
+                              class.arg = class.arg,
                               default.val = default.val,
                               default.fun = default.fun,
                               default.arg = default.arg,

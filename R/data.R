@@ -69,6 +69,7 @@ DATA_MODEL_VERSION <- "0.7.1"
 # -- colClasses
 DATA_MODEL_COLCLASSES <- list(name = "character",
                               type = "character",
+                              class.arg = "character",
                               default.val = "character",
                               default.fun = "character",
                               default.arg = "character",
@@ -81,6 +82,7 @@ DATA_MODEL_COLCLASSES <- list(name = "character",
 # -- default values
 DATA_MODEL_DEFAULTS <- list(name = NA,
                             type = NA,
+                            class.arg = NA,
                             default.val = NA,
                             default.fun = NA,
                             default.arg = NA,

@@ -6,6 +6,7 @@
 #' Build a data model
 #'
 #' @param colClasses a \emph{mandatory} named vector of classes, defining the data model.
+#' @param class.arg an optional named vector of arguments, to pass along with the class function (see details).
 #' @param default.val an optional named vector of values, defining the default values.
 #' @param default.fun an optional named vector of functions, defining the default functions to be used to generate default values.
 #' @param default.arg an optional named vector of arguments, to pass along with the default function.
@@ -21,7 +22,9 @@
 #'
 #' @details
 #' `colClasses` will be used to create the data.frame: names will define the attributes of the data model,
-#' and values will define the class (type) of the attributes.
+#' and values will define the class of the attributes.
+#' When `class.arg` is set, it will be sent along with the as.* conversion function call.
+#' Ex: as.POSIXct("2025-09-10T13:16:55Z", format = "%Y-%m-%dT%H:%M:%S")
 #'
 #' All `default.*` parameters are optional. When provided, they will be used to match with names defined in colClasses:
 #' - order in those vectors doesn't matter
@@ -60,7 +63,8 @@
 #' data_model(colClasses, default.val, display = display, skip = skip)
 #'
 
-data_model <- function(colClasses, default.val = NULL, default.fun = NULL, default.arg = NULL,
+data_model <- function(colClasses, class.arg = NULL,
+                       default.val = NULL, default.fun = NULL, default.arg = NULL,
                        display = NULL, skip = NULL, refresh = NULL,
                        sort.rank = NULL, sort.desc = NULL){
 
@@ -75,6 +79,12 @@ data_model <- function(colClasses, default.val = NULL, default.fun = NULL, defau
 
   # -- Build data.frame from colClasses (named vector)
   dm <- data.frame("name" = names(colClasses), "type" = unname(colClasses))
+
+  # -- Add class.arg (match input with names)
+  if(isTruthy(class.arg))
+    dm$class.arg <- as.character(class.arg[match(dm$name, names(class.arg))])
+  else
+    dm$class.arg <- NA
 
   # -- Add default.val (match input with names)
   if(isTruthy(default.val))
