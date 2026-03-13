@@ -74,6 +74,7 @@ DATA_MODEL_COLCLASSES <- list(name = "character",
                               default.arg = "character",
                               display = "logical",
                               skip = "logical",
+                              refresh = "logical",
                               sort.rank = "numeric",
                               sort.desc = "logical")
 
@@ -85,6 +86,7 @@ DATA_MODEL_DEFAULTS <- list(name = NA,
                             default.arg = NA,
                             display = FALSE,
                             skip = FALSE,
+                            refresh = FALSE,
                             sort.rank = NA,
                             sort.desc = NA)
 

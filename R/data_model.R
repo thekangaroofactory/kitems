@@ -11,6 +11,7 @@
 #' @param default.arg an optional named vector of arguments, to pass along with the default function.
 #' @param display an optional character vector, indicating which attribute names should be displayed in the table view.
 #' @param skip an optional character vector, indicating which attribute names should be skipped from the user input form.
+#' @param refresh an optional named logical vector, to indicate if skipped attributes should be updated (see details).
 #' @param sort.rank an optional named numeric vector, to define sort orders.
 #' @param sort.desc an optional named logical vector, to define if sort should be descending.
 #'
@@ -32,9 +33,12 @@
 #'
 #' `display` and `skip` directly contains the names of the attributes to set to TRUE
 #'
+#' Attributes with `skip` set to TRUE will be ignored by default when an item is updated. To force the computation of a new
+#' value (based on the default parameters), set `refresh` to TRUE as well.
+#'
 #' If not provided, defaults will be applied:
 #' - \code{NA} for `default.val`, `default.fun` and `default.arg`
-#' - \code{FALSE} for `display` and `skip`
+#' - \code{FALSE} for `display`, `skip` and `refresh`
 #'
 #' @examples
 #' # -- order in vectors doesn't matter:
@@ -57,7 +61,7 @@
 #'
 
 data_model <- function(colClasses, default.val = NULL, default.fun = NULL, default.arg = NULL,
-                       display = NULL, skip = NULL,
+                       display = NULL, skip = NULL, refresh = NULL,
                        sort.rank = NULL, sort.desc = NULL){
 
   # -- check arg #217
@@ -93,8 +97,9 @@ data_model <- function(colClasses, default.val = NULL, default.fun = NULL, defau
   # -- Add display (match input with names)
   dm$display <- dm$name %in% display
 
-  # -- Add skip (match input with names)
+  # -- Add skip & refresh (match input with names)
   dm$skip <- dm$name %in% skip
+  dm$refresh <- dm$name %in% refresh
 
   # -- Add sort.rank (match input with names)
   if(isTruthy(sort.rank))

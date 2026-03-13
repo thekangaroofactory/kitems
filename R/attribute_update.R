@@ -9,9 +9,10 @@
 #' @param name a character string of the attribute name
 #' @param default.val a character string, the new default value
 #' @param default.fun a character string, the new default function name
-#' @param default.arg a named vector of arguments, to pass along with the default function.
-#' @param skip a logical to set the skip value
+#' @param default.arg a named vector of arguments, to pass along with the default function
 #' @param display a logical to set the display value
+#' @param skip a logical to set the skip value
+#' @param refresh a logical to tell if skipped attributes should be refreshed upon update
 #' @param sort.rank a numeric, used to define sort rank
 #' @param sort.desc a logical, to define if sorting should be in descending order
 #'
@@ -40,7 +41,7 @@
 
 attribute_update <- function(data.model, name,
                              default.val = NULL, default.fun = NULL, default.arg = NULL,
-                             skip = NULL, display = NULL,
+                             display = NULL, skip = NULL, refresh = NULL,
                              sort.rank = NULL, sort.desc = NULL){
 
   # -- update row
@@ -57,11 +58,14 @@ attribute_update <- function(data.model, name,
   if(!is.null(default.arg) & !is.null(default.fun))
     data.model[match(name, data.model$name), ]$default.arg <- default.arg
 
+  if(!is.null(display))
+    data.model[match(name, data.model$name), ]$display <- display
+
   if(!is.null(skip))
     data.model[match(name, data.model$name), ]$skip <- skip
 
-  if(!is.null(display))
-    data.model[match(name, data.model$name), ]$display <- display
+  if(!is.null(refresh))
+    data.model[match(name, data.model$name), ]$refresh <- refresh
 
   if(!is.null(sort.rank))
     data.model[match(name, data.model$name), ]$sort.rank <- sort.rank
