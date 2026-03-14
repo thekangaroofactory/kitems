@@ -14,6 +14,18 @@ test_that("data_model: colClasses", {
 })
 
 
+test_that("data_model: missing id", {
+
+  # -- function call
+  expect_warning(x <- data_model(colClasses = colClasses[names(colClasses) != "id"]), "Adding missing id attribute")
+
+  # -- check: output is data.frame
+  expect_s3_class(x, "data.frame")
+  expect_equal(dim(x), c(length(colClasses), length(DATA_MODEL_COLCLASSES)))
+
+})
+
+
 test_that("data_model: class.arg", {
 
   # -- function call
