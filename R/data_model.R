@@ -3,7 +3,7 @@
 #' Data Model
 #'
 #' @description
-#' Build a data model
+#' Build a data model or an attribute.
 #'
 #' @param colClasses a \emph{mandatory} named vector of classes, defining the data model.
 #' @param class.arg an optional named vector of arguments, to pass along with the class function (see details).
@@ -16,13 +16,17 @@
 #' @param sort.rank an optional named numeric vector, to define sort orders.
 #' @param sort.desc an optional named logical vector, to define if sort should be descending.
 #'
-#' @return A data.frame containing the data model.
+#' @return A data.frame containing the data model or the attribute.
 #'
 #' @export
 #'
 #' @details
+#' Unless it is called from the `attribute_create()` function, it will return a data.model.
+#' This is because a standalone attribute has no reason to exist.
+#'
 #' `colClasses` will be used to create the data.frame: names will define the attributes of the data model,
 #' and values will define the class of the attributes.
+#' When creating a data model, the id attribute will be added if it's missing from `colClasses`.
 #' When `class.arg` is set, it will be sent along with the as.* conversion function call.
 #' Ex: as.POSIXct("2025-09-10T13:16:55Z", format = "%Y-%m-%dT%H:%M:%S")
 #'
@@ -72,61 +76,73 @@ data_model <- function(colClasses, class.arg = NULL,
   if(is.null(names(colClasses)))
     stop("colClasses must be a named vector")
 
+  # -- check call stack
+  # function will output a data.model or attribute
+  if(deparse(sys.call(-1)[[1L]]) != "attribute_create"){
+
+    # -- this should be replaced by values from TEMPLATE_DATA_MODEL
+    if(!"id" %in% names(colClasses)){
+      warning("Adding missing id attribute")
+      colClasses <- c(c(id = "numeric"), colClasses)
+      default.fun <- c(c(id = "ktools::getTimestamp"), default.fun)
+      default.arg <- c(c(id = "list(k=1000000)"), default.arg)
+      skip <- c("id", skip)}}
+
   # -- make sure default.val & fun are mutual exclusive
   if(any(names(default.val) %in% names(default.fun)))
     default.val <- default.val[!names(default.val) %in% names(default.fun)]
 
 
   # -- Build data.frame from colClasses (named vector)
-  dm <- data.frame("name" = names(colClasses), "type" = unname(colClasses))
+  x <- data.frame("name" = names(colClasses), "type" = unname(colClasses))
 
   # -- Add class.arg (match input with names)
   if(isTruthy(class.arg))
-    dm$class.arg <- as.character(class.arg[match(dm$name, names(class.arg))])
+    x$class.arg <- as.character(class.arg[match(x$name, names(class.arg))])
   else
-    dm$class.arg <- NA
+    x$class.arg <- NA
 
   # -- Add default.val (match input with names)
   if(isTruthy(default.val))
-    dm$default.val <- as.character(default.val[match(dm$name, names(default.val))])
+    x$default.val <- as.character(default.val[match(x$name, names(default.val))])
   else
-    dm$default.val <- NA
+    x$default.val <- NA
 
   # -- Add default.fun (match input with names)
   if(isTruthy(default.fun))
-    dm$default.fun <- as.character(default.fun[match(dm$name, names(default.fun))])
+    x$default.fun <- as.character(default.fun[match(x$name, names(default.fun))])
   else
-    dm$default.fun <- NA
+    x$default.fun <- NA
 
   # -- Add default.arg (match input with names)
   if(isTruthy(default.arg))
-    dm$default.arg <- as.character(default.arg[match(dm$name, names(default.arg))])
+    x$default.arg <- as.character(default.arg[match(x$name, names(default.arg))])
   else
-    dm$default.arg <- NA
+    x$default.arg <- NA
 
   # -- Add display (match input with names)
-  dm$display <- dm$name %in% display
+  x$display <- x$name %in% display
 
   # -- Add skip & refresh (match input with names)
-  dm$skip <- dm$name %in% skip
-  dm$refresh <- dm$name %in% refresh
+  x$skip <- x$name %in% skip
+  x$refresh <- x$name %in% refresh
 
   # -- Add sort.rank (match input with names)
   if(isTruthy(sort.rank))
-    dm$sort.rank <- as.numeric(sort.rank[match(dm$name, names(sort.rank))])
+    x$sort.rank <- as.numeric(sort.rank[match(x$name, names(sort.rank))])
   else
-    dm$sort.rank <- NA
+    x$sort.rank <- NA
 
   # -- Add sort.desc (match input with names)
   if(isTruthy(sort.desc))
-    dm$sort.desc <- as.logical(sort.desc[match(dm$name, names(sort.desc))])
+    x$sort.desc <- as.logical(sort.desc[match(x$name, names(sort.desc))])
   else
-    dm$sort.desc <- NA
+    x$sort.desc <- NA
 
   # -- Add version
-  attr(dm, "version") <- as.character(utils::packageVersion("kitems"))
+  attr(x, "version") <- as.character(utils::packageVersion("kitems"))
 
   # -- Return
-  dm
+  x
 
 }
