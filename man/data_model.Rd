@@ -39,14 +39,18 @@ data_model(
 \item{sort.desc}{an optional named logical vector, to define if sort should be descending.}
 }
 \value{
-A data.frame containing the data model.
+A data.frame containing the data model or the attribute.
 }
 \description{
-Build a data model
+Build a data model or an attribute.
 }
 \details{
+Unless it is called from the \code{attribute_create()} function, it will return a data.model.
+This is because a standalone attribute has no reason to exist.
+
 \code{colClasses} will be used to create the data.frame: names will define the attributes of the data model,
 and values will define the class of the attributes.
+When creating a data model, the id attribute will be added if it's missing from \code{colClasses}.
 When \code{class.arg} is set, it will be sent along with the as.* conversion function call.
 Ex: as.POSIXct("2025-09-10T13:16:55Z", format = "\%Y-\%m-\%dT\%H:\%M:\%S")
 
