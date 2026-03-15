@@ -28,7 +28,7 @@ test_that("item_form: only id", {
 test_that("item_form: logical without default", {
 
   # -- function call
-  x <- item_form(ns = ns, data.model = attribute_create(name = "isValid", type = "logical"))
+  x <- item_form(ns = ns, data.model = attribute_create(data.model = NULL, name = "isValid", class = "logical"))
 
   # -- check class
   expect_type(x, "list")
