@@ -10,7 +10,7 @@ test_that("item_delete works", {
 
   # -- default checks
   expect_items(x, n = nrow(items) - 1)
-  expect_colclasses(x, colClasses)
+  expect_colclasses(x, dm_colClasses(dm))
 
   # -- test id
   expect_false(item_id %in% x$id)
@@ -24,7 +24,7 @@ test_that("item_delete works", {
 
   # -- default checks
   expect_items(x, n = nrow(items) - 2)
-  expect_colclasses(x, colClasses)
+  expect_colclasses(x, dm_colClasses(dm))
 
   # -- test id
   expect_false(all(items$id[2:3] %in% x$id))

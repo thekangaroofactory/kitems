@@ -7,20 +7,20 @@ test_that("item_search works", {
 
   # -- default checks
   expect_items(x)
-  expect_colclasses(x, colClasses)
+  expect_colclasses(x, dm_colClasses(dm))
 
   # -- function call
   x <- item_search(items, pattern = "an")
 
   # -- default checks
   expect_items(x, n = 3)
-  expect_colclasses(x, colClasses)
+  expect_colclasses(x, dm_colClasses(dm))
 
   # -- function call
   x <- item_search(items, pattern = 2)
 
   # -- default checks
   expect_items(x, n = 4)
-  expect_colclasses(x, colClasses)
+  expect_colclasses(x, dm_colClasses(dm))
 
 })

@@ -14,13 +14,13 @@ input_values_x <- list("id" = c(170539948621),
 test_that("item_input_values works", {
 
   # -- function call
-  x <- item_input_values(input = input_values_x, colClasses = colClasses)
+  x <- item_input_values(input = input_values_x, colClasses = dm_colClasses(dm))
 
   # -- test output class
   expect_type(x, "list")
 
   # -- test output names
-  expect_equal(names(x), names(colClasses))
+  expect_equal(names(x), names(dm_colClasses(dm)))
 
   # -- test output values
   expect_equal(x$id, 170539948621)
@@ -52,13 +52,13 @@ input_values_x <- list("id" = c(170539948621),
 test_that("item_input_values POSIXct works", {
 
   # -- function call
-  x <- item_input_values(input = input_values_x, colClasses = colClasses)
+  x <- item_input_values(input = input_values_x, colClasses = dm_colClasses(dm))
 
   # -- test output class
   expect_type(x, "list")
 
   # -- test output names
-  expect_equal(names(x), names(colClasses))
+  expect_equal(names(x), names(dm_colClasses(dm)))
 
   # -- test output values
   expect_equal(x$id, 170539948621)

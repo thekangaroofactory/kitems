@@ -7,7 +7,7 @@ test_that("item_migrate works", {
 
   # -- default checks
   expect_items(x, n = nrow(items))
-  expect_colclasses(x, c(colClasses, new_attribute = "logical"))
+  expect_colclasses(x, c(dm_colClasses(dm), new_attribute = "logical"))
 
   # -- test nb cols
   expect_equal(ncol(x), ncol(items) + 1)

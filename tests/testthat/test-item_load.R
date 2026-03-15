@@ -10,7 +10,7 @@ test_that("item_load works", {
 
   # -- default checks
   expect_items(x, n = nrow(items))
-  expect_colclasses(x, colClasses)
+  expect_colclasses(x, dm_colClasses(dm))
 
 })
 

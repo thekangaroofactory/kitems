@@ -20,7 +20,7 @@ test_that("Server works", {
   testServer(kitems, args = params, {
 
     # -- update input
-    session$setInputs('admin-dm_sort' = names(colClasses[order(names(colClasses))]))
+    session$setInputs('admin-dm_sort' = names(dm_colClasses(dm)[order(names(dm_colClasses(dm)))]))
 
 
     # --------------------------------------------------------------------------
@@ -37,7 +37,7 @@ test_that("Server works", {
     expect_equal(dim(x), dim(dm))
 
     # -- test names
-    expect_equal(x$name, names(colClasses[order(names(colClasses))]))
+    expect_equal(x$name, names(dm_colClasses(dm)[order(names(dm_colClasses(dm)))]))
 
 
     # --------------------------------------------------------------------------
@@ -54,7 +54,7 @@ test_that("Server works", {
     expect_equal(dim(x), dim(items))
 
     # -- test names
-    expect_equal(colnames(x), names(colClasses[order(names(colClasses))]))
+    expect_equal(colnames(x), names(dm_colClasses(dm)[order(names(dm_colClasses(dm)))]))
 
 
   })

@@ -36,7 +36,7 @@ test_that("dm_display: get displays (no display set)", {
 test_that("dm_display: set / unset displays", {
 
   # -- function call
-  x <-dm_display(data.model = dm_nodisplay, set = display)
+  x <-dm_display(data.model = dm_nodisplay, set = "date")
 
   # -- test class & display
   expect_s3_class(x, "data.frame")

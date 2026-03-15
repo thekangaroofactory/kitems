@@ -38,7 +38,7 @@ import_url <- file.path(testdata_path, "data_to_import.csv")
 # ------------------------------------------------------------------------------
 
 # -- declare colClasses
-colClasses <- c(id = "numeric", date = "POSIXct", name = "character", quantity = "integer", total = "numeric", isvalid = "logical")
+colClasses <- c(date = "POSIXct", name = "character", quantity = "integer", total = "numeric", isvalid = "logical")
 colClasses_extra_att <- c(colClasses, extra_att = "integer")
 colClasses_no_date <- colClasses[!names(colClasses) %in% "date"]
 colClasses_id_only <- c(id = "numeric")
@@ -47,17 +47,13 @@ colClasses_id_only <- c(id = "numeric")
 default_val <- c("name" = "fruit", "isvalid" = TRUE)
 
 # -- declare default.fun & arg
-default_fun <- c("id" = "ktools::getTimestamp", "date" = "Sys.time")
-default_arg <- c("id" = "list(k = 1000000)")
-
-# -- declare display
-display <- names(colClasses)[!names(colClasses) %in% "id"]
+default_fun <- c("date" = "Sys.time")
 
 # -- declare skip
-skip <- c("isvalid")
+# skip <- c("isvalid")
 
 # -- declare sort
-sort_rank <- c("date" = 1)
+sort_rank <- c("date" = 1L)
 sort_desc <- c("date" = TRUE)
 
 
@@ -67,16 +63,16 @@ sort_desc <- c("date" = TRUE)
 
 # -- build base data model
 dm <- data_model(colClasses = colClasses,
-                 default.val = default_val, default.fun = default_fun, default.arg = default_arg,
-                 display = display, skip = skip, sort.rank = sort_rank, sort.desc = sort_desc)
+                 default.val = default_val, default.fun = default_fun,
+                 sort.rank = sort_rank, sort.desc = sort_desc)
 
 # -- build specific data models
-dm_nodisplay <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, display = NULL, skip = skip)
-dm_no_skip <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, display = display, skip = NULL)
-dm_extra_att <- data_model(colClasses = colClasses_extra_att, default.val = default_val, default.fun = default_fun, display = display, skip = skip)
+dm_nodisplay <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, display = FALSE)
+dm_no_skip <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun)
+dm_extra_att <- data_model(colClasses = colClasses_extra_att, default.val = default_val, default.fun = default_fun)
 dm_no_date <- data_model(colClasses = colClasses_no_date)
-dm_id_only <- data_model(colClasses = colClasses_id_only, skip = "id")
-dm_sort <- data_model(colClasses = colClasses, sort.rank = c("date" = 1), sort.desc = c("date" = TRUE))
+dm_id_only <- data_model(colClasses = colClasses_id_only, skip = TRUE)
+dm_sort <- data_model(colClasses = colClasses, sort.rank = sort_rank, sort.desc = sort_desc)
 
 # ------------------------------------------------------------------------------
 # Build items
