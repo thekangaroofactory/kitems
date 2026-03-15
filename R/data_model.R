@@ -154,7 +154,11 @@ data_model <- function(colClasses, class.arg = NULL,
   # function will output a data.model or attribute
   # note: as long as specific function name is checked, this behavior can't be
   # triggered from a custom function
-  if(deparse(sys.call(-1)[[1L]]) != "attribute_create"){
+  # note: call in attribute_create is wrapped into tryCatch which makes it
+  # tricky to get the function name
+
+  if(is.null(rlang::caller_call(n = 1)) ||
+     unlist(strsplit(toString(rlang::caller_call(n = 1)), split = ","))[1L] != "attribute_create"){
 
     # -- check id attribute
     if(!"id" %in% names(colClasses)){

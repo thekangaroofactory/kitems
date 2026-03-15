@@ -770,7 +770,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
         # -- Add attribute to the data model
         attribute_create(data.model = dm,
                          name = input$w_name,
-                         type = input$w_type,
+                         class = input$w_type,
                          default.val = if(input$w_default_choice == "val") stats::setNames(input$w_default_val, input$w_name) else NULL,
                          default.fun = if(input$w_default_choice == "fun") stats::setNames(input$w_default_fun, input$w_name) else NULL,
                          default.arg = if(input$w_default_choice == "fun") stats::setNames(input$w_default_arg, input$w_name) else NULL,

@@ -106,7 +106,7 @@ dm_integrity <- function(data.model, items, template = NULL, fix = FALSE){
     # -- Add missing attributes
     data.model <- attribute_create(data.model = data.model,
                                    name = missing_att,
-                                   type = missing_types,
+                                   class = missing_types,
                                    default.val = missing_default_val,
                                    default.fun = missing_default_fun,
                                    default.arg = missing_default_arg,

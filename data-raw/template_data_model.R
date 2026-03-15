@@ -10,7 +10,7 @@ TEMPLATE_DATA_MODEL <-
 
   # -- id
   attribute_create(name = "id",
-                   type = "numeric",
+                   class = "numeric",
                    default.fun = "ktools::getTimestamp",
                    default.arg = "list(k=1000000)",
                    skip = TRUE,
@@ -18,72 +18,72 @@ TEMPLATE_DATA_MODEL <-
 
   # -- date & time
   attribute_create(name = "date",
-                   type = "Date",
+                   class = "Date",
                    default.fun = "Sys.Date") |>
 
   attribute_create(name = "created_on",
-                   type = "POSIXct",
+                   class = "POSIXct",
                    default.fun = "Sys.time",
                    skip = TRUE) |>
 
   attribute_create(name = "updated_on",
-                   type = "POSIXct",
+                   class = "POSIXct",
                    default.fun = "Sys.time",
                    skip = TRUE,
                    refresh = TRUE) |>
 
   # -- character
   attribute_create(name = "name",
-                   type = "character") |>
+                   class = "character") |>
 
   attribute_create(name = "title",
-                   type = "character") |>
+                   class = "character") |>
 
   attribute_create(name = "description",
-                   type = "character") |>
+                   class = "character") |>
 
   attribute_create(name = "comment",
-                   type = "character") |>
+                   class = "character") |>
 
   attribute_create(name = "note",
-                   type = "character") |>
+                   class = "character") |>
 
   attribute_create(name = "status",
-                   type = "character") |>
+                   class = "character") |>
 
   attribute_create(name = "type",
-                   type = "character") |>
+                   class = "character") |>
 
   attribute_create(name = "detail",
-                   type = "character") |>
+                   class = "character") |>
 
   attribute_create(name = "debit",
-                   type = "numeric",
+                   class = "numeric",
                    default.val = 0) |>
 
   attribute_create(name = "credit",
-                   type = "numeric",
+                   class = "numeric",
                    default.val = 0) |>
 
   attribute_create(name = "amount",
-                   type = "numeric",
+                   class = "numeric",
                    default.val = 0) |>
 
   attribute_create(name = "total",
-                   type = "numeric",
+                   class = "numeric",
                    default.val = 0) |>
 
   attribute_create(name = "balance",
-                   type = "numeric",
+                   class = "numeric",
                    default.val = 0) |>
 
   # -- integer
   attribute_create(name = "quantity",
-                   type = "integer",
+                   class = "integer",
                    default.val = 0) |>
 
   attribute_create(name = "progress",
-                   type = "integer",
+                   class = "integer",
                    default.val = 0)
 
 
