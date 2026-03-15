@@ -4,66 +4,38 @@
 \alias{attribute_create}
 \title{Add Attribute}
 \usage{
-attribute_create(
-  data.model = NULL,
-  name,
-  type,
-  class.arg = NULL,
-  default.val = NULL,
-  default.fun = NULL,
-  default.arg = NULL,
-  display = NULL,
-  skip = NULL,
-  sort.rank = NULL,
-  sort.desc = NULL
-)
+attribute_create(data.model = NULL, name, class, ...)
 }
 \arguments{
-\item{data.model}{a data model data.frame, structured as an output of the \code{data_model()} function}
+\item{data.model}{a data model, structured as an output of the \code{data_model()} function}
 
-\item{name}{a character vector for the new attribute name}
+\item{name}{a character vector for the attribute name to add}
 
-\item{type}{a character vector for the new attribute type}
+\item{class}{a character vector for the attribute class to add}
 
-\item{class.arg}{an optional named vector of arguments, to pass along with the class function.}
-
-\item{default.val}{an optional named vector of values, defining the default values.}
-
-\item{default.fun}{an optional named vector of functions, defining the default functions to be used to generate default values.}
-
-\item{default.arg}{an optional named vector of arguments, to pass along with the default function.}
-
-\item{display}{an optional character vector, with the name(s) of the attribute(s) to display}
-
-\item{skip}{an optional character vector, with the name(s) of the attribute(s) to skip}
-
-\item{sort.rank}{an optional named numeric vector, to define sort orders}
-
-\item{sort.desc}{an optional named logical vector, to define if sort should be descending}
+\item{...}{further arguments passed to \code{data_model()}}
 }
 \value{
-The updated data model data.frame
+The updated data model (or \code{data.model} if it fails)
 }
 \description{
 Add an attribute to a data model
 }
 \details{
-Multiple attribute creation is supported, in this case make sure all vectors have same length.
-
-When \code{data.model} is omitted, the function will return a data model containing the created attributes.
+Multiple attribute creation is supported.
 }
 \examples{
 \dontrun{
 
-# -- create single attribute
-attribute_create(name = "new_attribute", type = "character")
-attribute_create(name = "total", type = "numeric", default.val = 0)
-attribute_create(name = "date", type = "Date", default.fun = "Sys.Date")
-attribute_create(name = "progress", type = "integer", skip = "progress")
-attribute_create(name = "internal", type = "logical", display = "internal")
+# -- Add single attribute
+attribute_create(data.model = NULL, name = "new_attribute", class = "character")
+attribute_create(data.model = NULL, name = "total", class = "numeric", default.val = 0)
+attribute_create(data.model = NULL, name = "date", class = "Date", default.fun = "Sys.Date")
+attribute_create(data.model = NULL, name = "progress", class = "integer", skip = "progress")
+attribute_create(data.model = NULL, name = "internal", class = "logical", display = "internal")
 
 # -- create multiple attributes
-attribute_create(name = c("foo", "bar"), type = c("character", "numeric"))
+attribute_create(data.model = NULL, name = c("foo", "bar"), class = c("character", "numeric"))
 
 }
 }
