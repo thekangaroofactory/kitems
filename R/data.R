@@ -67,6 +67,7 @@ DEFAULT_FUNCTIONS <- list("numeric" = NULL,
 DATA_MODEL_VERSION <- "0.7.1"
 
 # -- colClasses
+# this is used to check data.model integrity
 DATA_MODEL_COLCLASSES <- list(name = "character",
                               type = "character",
                               class.arg = "character",
@@ -80,6 +81,7 @@ DATA_MODEL_COLCLASSES <- list(name = "character",
                               sort.desc = "logical")
 
 # -- default values
+# this is used for data.mode migration
 DATA_MODEL_DEFAULTS <- list(name = NA,
                             type = NA,
                             class.arg = NA,

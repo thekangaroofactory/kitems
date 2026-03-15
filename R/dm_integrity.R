@@ -34,6 +34,11 @@ dm_integrity <- function(data.model, items, template = NULL, fix = FALSE){
   # -- init
   integrity <- TRUE
 
+  # -- check data.mode structure
+  if(any(!names(DATA_MODEL_COLCLASSES) %in% colnames(data.model)))
+    if(!fix)
+      stop("data model has wrong structure")
+
   # -- Check for missing attributes (columns in item data.frame not in data model)
   missing_att <- colnames(items)[(!colnames(items) %in% data.model$name)]
   if(!identical(missing_att, character(0))){
