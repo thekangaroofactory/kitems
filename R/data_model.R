@@ -5,16 +5,16 @@
 #' @description
 #' Build a data model or an attribute.
 #'
-#' @param colClasses a \emph{mandatory} named vector of classes, defining the data model.
-#' @param class.arg an optional named vector of arguments, to pass along with the class function (see details).
-#' @param default.val an optional named vector of values, defining the default values.
-#' @param default.fun an optional named vector of functions, defining the default functions to be used to generate default values.
-#' @param default.arg an optional named vector of arguments, to pass along with the default function.
-#' @param display an optional character vector, indicating which attribute names should be displayed in the table view.
-#' @param skip an optional character vector, indicating which attribute names should be skipped from the user input form.
-#' @param refresh an optional named logical vector, to indicate if skipped attributes should be updated (see details).
-#' @param sort.rank an optional named numeric vector, to define sort orders.
-#' @param sort.desc an optional named logical vector, to define if sort should be descending.
+#' @param colClasses \emph{mandatory} named vector of classes, defining the data model.
+#' @param class.arg optional named vector of arguments, to pass along with the class function (see details).
+#' @param default.val optional named vector of default values.
+#' @param default.fun optional named vector of default functions to be used to generate default values.
+#' @param default.arg optional named vector of arguments, to pass along with the default function.
+#' @param display optional logical value, if the attributes should be displayed in the table view.
+#' @param skip optional logical value, if the attributes should be skipped from the user input form.
+#' @param refresh optional logical value, if skipped attributes should be updated (see details).
+#' @param sort.rank optional named integer vector, to define sort orders.
+#' @param sort.desc optional named logical vector, if sort should be descending.
 #'
 #' @return A data.frame containing the data model or the attribute.
 #'
@@ -24,28 +24,37 @@
 #' Unless it is called from the `attribute_create()` function, it will return a data.model.
 #' This is because a standalone attribute has no reason to exist.
 #'
-#' `colClasses` will be used to create the data.frame: names will define the attributes of the data model,
-#' and values will define the class of the attributes.
+#' Parameters for this function are strictly checked against their expected class & shape.
+#' This process may throw errors as it is considered not safe to guess what the user is trying to do.
+#' Calls to this function should be wrapped into a `tryCatch()` expression.
+#'
+#' `colClasses` will be used to create the data.frame:
+#' - names will define the attributes of the data model,
+#' - values will define the class of the attributes.
 #' When creating a data model, the id attribute will be added if it's missing from `colClasses`.
 #' When `class.arg` is set, it will be sent along with the as.* conversion function call.
 #' Ex: as.POSIXct("2025-09-10T13:16:55Z", format = "%Y-%m-%dT%H:%M:%S")
 #'
-#' All `default.*` parameters are optional. When provided, they will be used to match with names defined in colClasses:
+#' All `default.*` parameters are optional.
+#' When provided, they will be used to match with names defined in colClasses:
 #' - order in those vectors doesn't matter
 #' - there is no need to set values for all attributes (see examples)
 #' - names in vectors not matching with colClasses names will be ignored
 #'
-#' `default.fun` and `default.val` are mutual exclusive, with priority on `default.fun` (`default.val` will be forced to \code{NA})
-#' `default.arg` requires `default.fun` not to be NULL (will be forced to \code{NA} otherwise)
+#' `default.fun` and `default.val` are mutual exclusive, with priority on `default.fun` (`default.val` will be ignored)
+#' `default.arg` requires `default.fun` not to be NULL (will be ignored otherwise)
 #'
-#' `display` and `skip` directly contains the names of the attributes to set to TRUE
+#' `display`, `skip` and `refresh` only accept logical values (no vector).
+#' For those attributes, it is expected that fine tuning will be done through the fine grain verbs (escape, show, hide).
 #'
-#' Attributes with `skip` set to TRUE will be ignored by default when an item is updated. To force the computation of a new
-#' value (based on the default parameters), set `refresh` to TRUE as well.
+#' Attributes with `skip` set to TRUE will be ignored by default when an item is updated.
+#' To force the computation of a new value (based on the default parameters), set `refresh` to TRUE as well.
+#' When `skip` is not set (default = FALSE), `refresh` will be ignored
 #'
 #' If not provided, defaults will be applied:
 #' - \code{NA} for `default.val`, `default.fun` and `default.arg`
-#' - \code{FALSE} for `display`, `skip` and `refresh`
+#' - \code{TRUE} for `display`
+#' - \code{FALSE} for `skip` and `refresh`
 #'
 #' @examples
 #' # -- order in vectors doesn't matter:
@@ -57,11 +66,11 @@
 #' default.val <- c("name" = "test", "total" = 2)
 #'
 #' # -- display and skip
-#' display <- "id"
-#' skip <- c("id", "date")
+#' display <- TRUE
+#' skip <- FALSE
 #'
 #' # -- sort
-#' sort.rank = c("date" = 1, "total" = 2, "name" = 3)
+#' sort.rank = c("date" = 1L, "total" = 2L, "name" = 3L)
 #' sort.desc = c("date" = TRUE, "total" = FALSE)
 #'
 #' data_model(colClasses, default.val, display = display, skip = skip)
@@ -69,29 +78,98 @@
 
 data_model <- function(colClasses, class.arg = NULL,
                        default.val = NULL, default.fun = NULL, default.arg = NULL,
-                       display = NULL, skip = NULL, refresh = NULL,
+                       display = TRUE, skip = FALSE, refresh = FALSE,
                        sort.rank = NULL, sort.desc = NULL){
 
-  # -- check arg #217
-  if(is.null(names(colClasses)))
-    stop("colClasses must be a named vector")
 
-  # -- check call stack
-  # function will output a data.model or attribute
-  if(deparse(sys.call(-1)[[1L]]) != "attribute_create"){
+  # ////////////////////////////////////////////////////////////////////////////
 
-    # -- this should be replaced by values from TEMPLATE_DATA_MODEL
-    if(!"id" %in% names(colClasses)){
-      warning("Adding missing id attribute")
-      colClasses <- c(c(id = "numeric"), colClasses)
-      default.fun <- c(c(id = "ktools::getTimestamp"), default.fun)
-      default.arg <- c(c(id = "list(k=1000000)"), default.arg)
-      skip <- c("id", skip)}}
+  # -- colClasses
+  # must be a named character vector
+  if(!is.vector(colClasses, mode = "character") || is.null(names(colClasses)))
+    stop("colClasses must be a named character vector")
 
-  # -- make sure default.val & fun are mutual exclusive
+  if(any(!colClasses %in% OBJECT_CLASS))
+    stop("colClasses must be a supported class: ", paste(OBJECT_CLASS, collapse = " / "))
+
+
+  # ////////////////////////////////////////////////////////////////////////////
+
+  # -- class.arg, default.fun, default.arg
+  # must be a named character vector or a character value
+
+  if(!is.null(class.arg))
+    class.arg <- match_arg_t1(class.arg, colClasses, mode = "character")
+
+  if(!is.null(default.fun))
+    default.fun <- match_arg_t1(default.fun, colClasses, mode = "character")
+
+  if(!is.null(default.arg))
+    default.arg <- match_arg_t1(default.arg, colClasses, mode = "character")
+
+
+  # ////////////////////////////////////////////////////////////////////////////
+
+  # -- default.val
+  # must be a named vector or value
+
+  if(!is.null(default.val))
+    default.val <- match_arg_t1(default.val, colClasses)
+
+  # -- make sure default.val & default.fun are mutual exclusive
+  # note: default.fun has priority over default.val
   if(any(names(default.val) %in% names(default.fun)))
     default.val <- default.val[!names(default.val) %in% names(default.fun)]
 
+
+  # ////////////////////////////////////////////////////////////////////////////
+
+  # -- display, skip, refresh
+  # must be a logical value
+  # note: it makes no sense to send a vector, use hide / show verbs instead
+
+  display <- match_arg_t2(display, default = TRUE, advice = "hide or show")
+  skip <- match_arg_t2(skip, advice = "skip")
+  refresh <- if(skip) match_arg_t2(refresh, advice = "skip") else FALSE
+
+
+  # ////////////////////////////////////////////////////////////////////////////
+
+  # -- sort.rank
+  # must be a named integer vector or integer value
+
+  if(!is.null(sort.rank))
+    sort.rank <- match_arg_t1(sort.rank, colClasses, mode = "integer")
+
+  # -- sort.desc
+  # must be a named logical vector or logical value
+
+  if(!is.null(sort.desc))
+    sort.desc <- match_arg_t1(sort.desc, colClasses, mode = "logical")
+
+
+  # ////////////////////////////////////////////////////////////////////////////
+
+  # -- check call stack
+  # function will output a data.model or attribute
+  # note: as long as specific function name is checked, this behavior can't be
+  # triggered from a custom function
+  if(deparse(sys.call(-1)[[1L]]) != "attribute_create"){
+
+    # -- check id attribute
+    if(!"id" %in% names(colClasses)){
+      message("Adding missing id attribute")
+      # -- add from template
+      id <- TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == "id", ]
+      colClasses <- c(c(id = id$type), colClasses)
+      default.fun <- c(c(id = id$default.fun), default.fun)
+      default.arg <- c(c(id = id$default.arg), default.arg)
+      display <- c(id$display, rep(display, length(colClasses) - 1))
+      skip <- c(id$skip, rep(skip, length(colClasses) - 1))
+      refresh <- c(id$refresh, rep(refresh, length(colClasses) - 1))}}
+
+
+  # ////////////////////////////////////////////////////////////////////////////
 
   # -- Build data.frame from colClasses (named vector)
   x <- data.frame("name" = names(colClasses), "type" = unname(colClasses))
@@ -115,17 +193,17 @@ data_model <- function(colClasses, class.arg = NULL,
     x$default.fun <- NA
 
   # -- Add default.arg (match input with names)
+  # drop names not in default.fun
+  default.arg <- default.arg[names(default.arg) %in% names(default.fun)]
   if(isTruthy(default.arg))
     x$default.arg <- as.character(default.arg[match(x$name, names(default.arg))])
   else
     x$default.arg <- NA
 
-  # -- Add display (match input with names)
-  x$display <- x$name %in% display
-
-  # -- Add skip & refresh (match input with names)
-  x$skip <- x$name %in% skip
-  x$refresh <- x$name %in% refresh
+  # -- Add display, skip & refresh
+  x$display <- display
+  x$skip <- skip
+  x$refresh <- refresh
 
   # -- Add sort.rank (match input with names)
   if(isTruthy(sort.rank))
@@ -134,7 +212,13 @@ data_model <- function(colClasses, class.arg = NULL,
     x$sort.rank <- NA
 
   # -- Add sort.desc (match input with names)
-  if(isTruthy(sort.desc))
+  # drop names not in sort.rank
+  sort.desc <- sort.desc[names(sort.desc) %in% names(sort.rank)]
+  # add missing sort.rank names (set to FALSE)
+  missing <- names(sort.rank)[!names(sort.rank) %in% names(sort.desc)]
+  sort.desc <- c(sort.desc, stats::setNames(rep(FALSE, length(missing)), missing))
+  # use custom is_truthy because FALSE is fine!
+  if(is_truthy(sort.desc))
     x$sort.desc <- as.logical(sort.desc[match(x$name, names(sort.desc))])
   else
     x$sort.desc <- NA
