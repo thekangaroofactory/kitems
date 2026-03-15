@@ -58,19 +58,30 @@ dm_integrity <- function(data.model, items, template = NULL, fix = FALSE){
 
     # -- Set defaults
     # note: sequence to prepare for update from template
-    missing_default_val <- rep(NA, n)
-    missing_default_fun <- rep(NA, n)
-    missing_default_arg <- rep(NA, n)
-    missing_skip <- character()
-    missing_display <- character()
-
-    # -- Set names
-    names(missing_default_val) <- missing_att
-    names(missing_default_fun) <- missing_att
-    names(missing_default_arg) <- missing_att
+    missing_default_val <- NULL
+    missing_default_fun <- NULL
+    missing_default_arg <- NULL
+    missing_skip <- FALSE
+    missing_display <- TRUE
 
     # -- Check argument
     if(!is.null(template)){
+
+      message("*** THIS SECTION SHOULD BE REWORKED ***")
+
+      # -- Set defaults
+      # note: sequence to prepare for update from template
+      missing_default_val <- rep(NA, n)
+      missing_default_fun <- rep(NA, n)
+      missing_default_arg <- rep(NA, n)
+      missing_skip <- FALSE
+      missing_display <- TRUE
+
+      # -- Set names
+      names(missing_default_val) <- missing_att
+      names(missing_default_fun) <- missing_att
+      names(missing_default_arg) <- missing_att
+
 
       # -- Check if any attribute is part of template
       if(any(missing_att %in% TEMPLATE_DATA_MODEL$name)){
@@ -87,9 +98,8 @@ dm_integrity <- function(data.model, items, template = NULL, fix = FALSE){
         missing_default_fun[names(missing_default_fun) %in% template$name][] <- template[idx, ]$default.fun
         missing_default_arg[names(missing_default_arg) %in% template$name][] <- template[idx, ]$default.arg
 
-
-        missing_skip <- template[idx, ][template[idx, ]$skip, 'name']
-        missing_display <- template[idx, ][template[idx, ]$display, 'name']
+        # missing_skip <- template[idx, ]$skip
+        # missing_display <- template[idx, ]$display
 
       }}
 

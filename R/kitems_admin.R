@@ -414,8 +414,9 @@ kitems_admin <- function(k_data_model, k_items, path = Sys.getenv("R_KITEMS_PATH
       colClasses <- stats::setNames(template$type, template$name)
       default_val <- stats::setNames(template$default.val, template$name)
       default_fun <- stats::setNames(template$default.fun, template$name)
-      display <- if(template$display) template$name else NULL
-      skip <- if(template$skip) template$name else NULL
+      display <- template$display
+      skip <- template$skip
+      refresh <- template$refresh
 
       # -- init data model & store
       catl(MODULE, "-- Building data model")
@@ -423,7 +424,8 @@ kitems_admin <- function(k_data_model, k_items, path = Sys.getenv("R_KITEMS_PATH
                        default.val = default_val,
                        default.fun = default_fun,
                        display = display,
-                       skip = skip)
+                       skip = skip,
+                       refresh = refresh)
 
       # -- store
       k_data_model(dm)
