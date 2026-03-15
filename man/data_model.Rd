@@ -10,33 +10,33 @@ data_model(
   default.val = NULL,
   default.fun = NULL,
   default.arg = NULL,
-  display = NULL,
-  skip = NULL,
-  refresh = NULL,
+  display = TRUE,
+  skip = FALSE,
+  refresh = FALSE,
   sort.rank = NULL,
   sort.desc = NULL
 )
 }
 \arguments{
-\item{colClasses}{a \emph{mandatory} named vector of classes, defining the data model.}
+\item{colClasses}{\emph{mandatory} named vector of classes, defining the data model.}
 
-\item{class.arg}{an optional named vector of arguments, to pass along with the class function (see details).}
+\item{class.arg}{optional named vector of arguments, to pass along with the class function (see details).}
 
-\item{default.val}{an optional named vector of values, defining the default values.}
+\item{default.val}{optional named vector of default values.}
 
-\item{default.fun}{an optional named vector of functions, defining the default functions to be used to generate default values.}
+\item{default.fun}{optional named vector of default functions to be used to generate default values.}
 
-\item{default.arg}{an optional named vector of arguments, to pass along with the default function.}
+\item{default.arg}{optional named vector of arguments, to pass along with the default function.}
 
-\item{display}{an optional character vector, indicating which attribute names should be displayed in the table view.}
+\item{display}{optional logical value, if the attributes should be displayed in the table view.}
 
-\item{skip}{an optional character vector, indicating which attribute names should be skipped from the user input form.}
+\item{skip}{optional logical value, if the attributes should be skipped from the user input form.}
 
-\item{refresh}{an optional named logical vector, to indicate if skipped attributes should be updated (see details).}
+\item{refresh}{optional logical value, if skipped attributes should be updated (see details).}
 
-\item{sort.rank}{an optional named numeric vector, to define sort orders.}
+\item{sort.rank}{optional named integer vector, to define sort orders.}
 
-\item{sort.desc}{an optional named logical vector, to define if sort should be descending.}
+\item{sort.desc}{optional named logical vector, if sort should be descending.}
 }
 \value{
 A data.frame containing the data model or the attribute.
@@ -48,31 +48,42 @@ Build a data model or an attribute.
 Unless it is called from the \code{attribute_create()} function, it will return a data.model.
 This is because a standalone attribute has no reason to exist.
 
-\code{colClasses} will be used to create the data.frame: names will define the attributes of the data model,
-and values will define the class of the attributes.
+Parameters for this function are strictly checked against their expected class & shape.
+This process may throw errors as it is considered not safe to guess what the user is trying to do.
+Calls to this function should be wrapped into a \code{tryCatch()} expression.
+
+\code{colClasses} will be used to create the data.frame:
+\itemize{
+\item names will define the attributes of the data model,
+\item values will define the class of the attributes.
 When creating a data model, the id attribute will be added if it's missing from \code{colClasses}.
 When \code{class.arg} is set, it will be sent along with the as.* conversion function call.
 Ex: as.POSIXct("2025-09-10T13:16:55Z", format = "\%Y-\%m-\%dT\%H:\%M:\%S")
+}
 
-All \verb{default.*} parameters are optional. When provided, they will be used to match with names defined in colClasses:
+All \verb{default.*} parameters are optional.
+When provided, they will be used to match with names defined in colClasses:
 \itemize{
 \item order in those vectors doesn't matter
 \item there is no need to set values for all attributes (see examples)
 \item names in vectors not matching with colClasses names will be ignored
 }
 
-\code{default.fun} and \code{default.val} are mutual exclusive, with priority on \code{default.fun} (\code{default.val} will be forced to \code{NA})
-\code{default.arg} requires \code{default.fun} not to be NULL (will be forced to \code{NA} otherwise)
+\code{default.fun} and \code{default.val} are mutual exclusive, with priority on \code{default.fun} (\code{default.val} will be ignored)
+\code{default.arg} requires \code{default.fun} not to be NULL (will be ignored otherwise)
 
-\code{display} and \code{skip} directly contains the names of the attributes to set to TRUE
+\code{display}, \code{skip} and \code{refresh} only accept logical values (no vector).
+For those attributes, it is expected that fine tuning will be done through the fine grain verbs (escape, show, hide).
 
-Attributes with \code{skip} set to TRUE will be ignored by default when an item is updated. To force the computation of a new
-value (based on the default parameters), set \code{refresh} to TRUE as well.
+Attributes with \code{skip} set to TRUE will be ignored by default when an item is updated.
+To force the computation of a new value (based on the default parameters), set \code{refresh} to TRUE as well.
+When \code{skip} is not set (default = FALSE), \code{refresh} will be ignored
 
 If not provided, defaults will be applied:
 \itemize{
 \item \code{NA} for \code{default.val}, \code{default.fun} and \code{default.arg}
-\item \code{FALSE} for \code{display}, \code{skip} and \code{refresh}
+\item \code{TRUE} for \code{display}
+\item \code{FALSE} for \code{skip} and \code{refresh}
 }
 }
 \examples{
@@ -85,11 +96,11 @@ colClasses <- c("id" = "numeric", "name" = "character", "total" = "numeric")
 default.val <- c("name" = "test", "total" = 2)
 
 # -- display and skip
-display <- "id"
-skip <- c("id", "date")
+display <- TRUE
+skip <- FALSE
 
 # -- sort
-sort.rank = c("date" = 1, "total" = 2, "name" = 3)
+sort.rank = c("date" = 1L, "total" = 2L, "name" = 3L)
 sort.desc = c("date" = TRUE, "total" = FALSE)
 
 data_model(colClasses, default.val, display = display, skip = skip)
