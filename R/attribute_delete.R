@@ -2,64 +2,51 @@
 
 #' Delete Attribute
 #'
-#' @param k_data_model the reference of the data model reactive value
-#' @param k_items the reference of the items reactive value
-#' @param name the name of the attribute to delete
-#' @param MODULE an optional string to be displayed in the notification
-#' @param autosave a logical if autosave is ON
-#' @param dm_url the url of the data model file
-#' @param items_url the url of the item file
-#' @param notify a logical if shiny notification should be fired
+#' @description
+#' Delete an attribute from the data.model & items
 #'
-#' @keywords internal
+#' @param data.model the data.model to update
+#' @param items the items to update
+#' @param name the name of the attribute to delete
+#'
+#' @return a named list(data.model, items)
+#'
+#' @details
+#' The function returns a list so that both data.model & items
+#' are treated in a single place. This ensures data integrity.
 #'
 #' @examples
 #' \dontrun{
-#' attribute_delete(k_data_model,
-#' k_items,
-#' name = "comment",
-#' MODULE = "mydata",
-#' autosave = TRUE,
-#' dm_url = dm_url,
-#' items_url = items_url,
-#' notify = TRUE)
+#' attribute_delete(dm, items, name = "comment")
 #' }
 #'
 
-attribute_delete <- function(k_data_model, k_items, name, MODULE = NULL, autosave = FALSE, dm_url = NULL, items_url = NULL, notify = FALSE){
+attribute_delete <- function(data.model, name, items){
 
-  # -- drop column!
-  catl(MODULE, "Drop attribute from all items")
-  items <- k_items()
+  # -- checks
+  # note: not mandatory since no error would occur, but we assume user
+  # didn't want to do that
+  if(!name %in% data.model$name)
+    stop(name, "is not an attribute of the data model")
+
+  # -- items
+  # drop attribute from the items first (it won't bother is name is missing)
+  catl("Drop attribute", name, "from items")
   items[name] <- NULL
 
-  # -- update data model
-  catl(MODULE, "Drop attribute from data model")
-  dm <- k_data_model()
-  dm <- dm[dm$name != name, ]
+  # -- data.model
+  # drop attribute from the data.model (basically keep all others)
+  catl("Drop", name, "from data model")
+  x <- data.model[data.model$name != name, ]
 
+  # -- check for empty data.model
+  if(nrow(x) == 0){
 
-  # -- check for empty data model & store
-  if(nrow(dm) == 0){
-    catl(MODULE, "Empty Data model, cleaning data model & items")
-    k_items(NULL)
-    k_data_model(NULL)
+    catl("Empty data model, cleaning data model & items")
+    items <- NULL
+    x <- NULL}
 
-    if(autosave){
-      catl(MODULE, "Deleting data model & item files")
-      unlink(dm_url)
-      unlink(items_url)
-
-      # -- notify
-      if(notify)
-        shiny::showNotification(paste(MODULE, "Empty data model deleted."), type = "message")}
-
-  } else {
-    k_items(items)
-    k_data_model(dm)
-
-    # -- notify
-    if(notify)
-      shiny::showNotification(paste(MODULE, "Attribute deleted."), type = "message")}
+  # -- return
+  list(data.model = x, items = items)
 
 }
