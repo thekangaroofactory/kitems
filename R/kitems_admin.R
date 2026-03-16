@@ -536,20 +536,35 @@ kitems_admin <- function(k_data_model, k_items, path = Sys.getenv("R_KITEMS_PATH
     ### -- Observe confirm button ----
     observeEvent(input$dz_delete_att_confirm, {
 
-      # -- check & close modal
+      # -- check & modal
       req(input$dz_delete_att_name)
       catl("[BTN] Delete attribute:", input$dz_delete_att_name)
       removeModal()
 
       # -- perform delete
-      attribute_delete(k_data_model,
-                       k_items,
-                       name = input$dz_delete_att_name,
-                       MODULE,
-                       autosave,
-                       dm_url,
-                       items_url,
-                       notify = shiny::isRunning())})
+      x <- attribute_delete(data.model = k_data_model(),
+                            name = input$dz_delete_att_name,
+                            items = k_items())
+
+      # -- store updated objects
+      k_data_model(x$data.model)
+      k_items(x$items)
+
+      if(shiny::isRunning())
+        shiny::showNotification(paste(MODULE, "Attribute", input$dz_delete_att_name, "dropped from data model."), type = "message")
+
+      # -- case when data.model is empty (NULL)
+      # This should be moved to the autosave section... (try with ignoreNull = FALSE)
+      if(autosave && is.null(x$data.model)){
+
+        catl(MODULE, "Deleting data model & item files")
+        unlink(dm_url)
+        unlink(items_url)
+
+        if(shiny::isRunning())
+          shiny::showNotification(paste(MODULE, "Empty data model deleted."), type = "message")}
+
+      })
 
 
     ## -- Delete data model ----------------------------------------------------
