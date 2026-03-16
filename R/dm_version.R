@@ -19,11 +19,12 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' dm_version(data.model = mydatamodel)
-#' }
+#' dm_version(data_model(c(foo = "logical")))
 
 dm_version <- function(data.model){
+
+  if(!is.data.frame(data.model))
+    stop("data.model is not a data.frame")
 
   # -- Check if has a version
   if(!"version" %in% names(attributes(data.model))){

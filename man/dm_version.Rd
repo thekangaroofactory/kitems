@@ -24,7 +24,5 @@ It works both within a Shiny app context or at the console. It is recommended
 that this check is performed after installing a new version of the package.
 }
 \examples{
-\dontrun{
-dm_version(data.model = mydatamodel)
-}
+dm_version(data_model(c(foo = "logical")))
 }
