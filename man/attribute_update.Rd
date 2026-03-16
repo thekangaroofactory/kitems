@@ -19,39 +19,47 @@ attribute_update(
 )
 }
 \arguments{
-\item{data.model}{a data.frame containing the data model}
+\item{data.model}{a data.frame of the data model}
 
-\item{name}{a character string of the attribute name}
+\item{name}{the name(s) of the attribute(s) to update (see details)}
 
-\item{class.arg}{an optional named vector of arguments, to pass along with the class function.}
+\item{class.arg}{the argument(s) to pass along with the class function}
 
-\item{default.val}{a character string, the new default value}
+\item{default.val}{the new default value(s)}
 
-\item{default.fun}{a character string, the new default function name}
+\item{default.fun}{the new default function name(s)}
 
-\item{default.arg}{a named vector of arguments, to pass along with the default function}
+\item{default.arg}{the new argument(s), to pass along with the default function(s)}
 
-\item{display}{a logical to set the display value}
+\item{display}{a logical to set display}
 
-\item{skip}{a logical to set the skip value}
+\item{skip}{a logical to set skip}
 
 \item{refresh}{a logical to tell if skipped attributes should be refreshed upon update}
 
-\item{sort.rank}{a numeric, used to define sort rank}
+\item{sort.rank}{a named vector of integer(s), used to define sort rank}
 
-\item{sort.desc}{a logical, to define if sorting should be in descending order}
+\item{sort.desc}{a named vector of logical(s), to define if sorting should be in descending order}
 }
 \value{
-The updated data model data.frame
+The updated data.model
 }
 \description{
-Update a data model attribute
+Update data model attribute(s)
 }
 \details{
-Updating attribute class is not supported by this function (as it requires data migration).
+Updating attribute class is not supported (as it requires data migration).
+
+Partial update will be performed based on arguments that are not NULL.
 
 The use of vectors to update several attributes is supported as long as the \code{length()} of the different
 parameters is either same as \code{name} or 1 (then all rows gets same value).
+When the intend is to update all attributes with the same value, then named vector is not necessary.
+
+When attribute parameters are not compatible, they will be reset.
+Ex: setting \code{default.val} will reset both \code{default.fun} & \code{default.arg}
+
+Otherwise same rules apply as in the \code{data_model()} function.
 }
 \examples{
 
@@ -60,8 +68,8 @@ dm <- data_model(colClasses = c(name = "character", total = "numeric"))
 
 # -- Use of vectors to update several attributes
 attribute_update(data.model = dm,
-                 name = c("name","total"),
-                 default.val = c("test", 2),
+                 name = c("name", "total"),
+                 default.val = c(name = "test", total = 2),
                  skip = TRUE)
 
 }
