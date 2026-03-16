@@ -4,10 +4,10 @@
 \alias{dm_colClasses}
 \title{Data Model colClasses}
 \usage{
-dm_colClasses(data.model = NULL)
+dm_colClasses(data.model)
 }
 \arguments{
-\item{data.model}{a data.frame containing the data model.}
+\item{data.model}{a data.frame of the data model.}
 }
 \value{
 A named vector of the attribute types.
@@ -16,7 +16,5 @@ A named vector of the attribute types.
 Extract attribute classes from the data model.
 }
 \examples{
-\dontrun{
-dm_colClasses(data.model = mydatamodel)
-}
+dm_colClasses(data.model = data_model(colClasses = c(name = "character", total = "numeric")))
 }
