@@ -4,48 +4,28 @@
 \alias{attribute_delete}
 \title{Delete Attribute}
 \usage{
-attribute_delete(
-  k_data_model,
-  k_items,
-  name,
-  MODULE = NULL,
-  autosave = FALSE,
-  dm_url = NULL,
-  items_url = NULL,
-  notify = FALSE
-)
+attribute_delete(data.model, name, items)
 }
 \arguments{
-\item{k_data_model}{the reference of the data model reactive value}
-
-\item{k_items}{the reference of the items reactive value}
+\item{data.model}{the data.model to update}
 
 \item{name}{the name of the attribute to delete}
 
-\item{MODULE}{an optional string to be displayed in the notification}
-
-\item{autosave}{a logical if autosave is ON}
-
-\item{dm_url}{the url of the data model file}
-
-\item{items_url}{the url of the item file}
-
-\item{notify}{a logical if shiny notification should be fired}
+\item{items}{the items to update}
+}
+\value{
+a named list(data.model, items)
 }
 \description{
-Delete Attribute
+Delete an attribute from the data.model & items
+}
+\details{
+The function returns a list so that both data.model & items
+are treated in a single place. This ensures data integrity.
 }
 \examples{
 \dontrun{
-attribute_delete(k_data_model,
-k_items,
-name = "comment",
-MODULE = "mydata",
-autosave = TRUE,
-dm_url = dm_url,
-items_url = items_url,
-notify = TRUE)
+attribute_delete(dm, items, name = "comment")
 }
 
 }
-\keyword{internal}
