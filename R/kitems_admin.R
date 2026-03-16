@@ -553,18 +553,7 @@ kitems_admin <- function(k_data_model, k_items, path = Sys.getenv("R_KITEMS_PATH
       if(shiny::isRunning())
         shiny::showNotification(paste(MODULE, "Attribute", input$dz_delete_att_name, "dropped from data model."), type = "message")
 
-      # -- case when data.model is empty (NULL)
-      # This should be moved to the autosave section... (try with ignoreNull = FALSE)
-      if(autosave && is.null(x$data.model)){
-
-        catl(MODULE, "Deleting data model & item files")
-        unlink(dm_url)
-        unlink(items_url)
-
-        if(shiny::isRunning())
-          shiny::showNotification(paste(MODULE, "Empty data model deleted."), type = "message")}
-
-      })
+    })
 
 
     ## -- Delete data model ----------------------------------------------------
@@ -592,9 +581,11 @@ kitems_admin <- function(k_data_model, k_items, path = Sys.getenv("R_KITEMS_PATH
       removeModal()
       catl(MODULE, "Delete data model confirmed!")
 
-      # -- delete data model
-      dm_delete(k_data_model, k_items, dm_url, items_url,
-                autosave, item.file = input$dz_delete_dm_items)
+      # -- delete data model & items
+      # items can't live with a data.model
+      # note: autosave will take care of file removal
+      k_items(NULL)
+      k_data_model(NULL)
 
       # -- notify
       if(shiny::isRunning())

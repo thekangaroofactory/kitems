@@ -303,13 +303,20 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
       observeEvent(k_data_model(), {
 
         # -- secure #596
-        req(is.data.frame(k_data_model()))
+        req(is.data.frame(k_data_model()) || is.null(k_data_model()))
 
-        # -- Write & notify
-        saveRDS(k_data_model(), file = k_dm_url)
+        # -- case when data.model has been deleted
+        if(is.null(k_data_model()))
+          if(file.exists(k_dm_url)){
+            success <- unlink(k_dm_url)
+            if(success == 1) warning("Data model file could not be deleted. Delete it manually.")
+          }
+        else
+          saveRDS(k_data_model(), file = k_dm_url)
+
         catl(MODULE, "[EVENT] Data model has been (auto) saved")
 
-      }, ignoreInit = TRUE)
+      }, ignoreNULL = FALSE, ignoreInit = TRUE)
 
 
     ## -- Items ----
@@ -318,13 +325,21 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
     if(options$autosave)
       observeEvent(k_items(), {
 
-        # -- Write
-        item_save(data = k_items(), file = k_items_url)
+        # -- secure #596
+        req(is.data.frame(k_items()) || is.null(k_items()))
 
-        # -- Notify
+        # -- case when items has been deleted
+        if(is.null(k_items()))
+          if(file.exists(k_items_url)){
+            success <- unlink(k_items_url)
+            if(success == 1) warning("Item file could not be deleted. Delete it manually.")
+          }
+        else
+          item_save(data = k_items(), file = k_items_url)
+
         catl(MODULE, "[EVENT] Item list has been (auto) saved")
 
-      }, ignoreInit = TRUE)
+      }, ignoreNULL = FALSE, ignoreInit = TRUE)
 
 
     # //////////////////////////////////////////////////////////////////////////
