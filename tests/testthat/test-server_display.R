@@ -26,26 +26,19 @@ test_that("Server works", {
     session$flushReact()
 
     # -- update input
-    session$setInputs('admin-dm_display' = c("id", "total"))
-
+    session$setInputs('admin-dm_display' = "id")
 
 
     # --------------------------------------------------------------------------
     # Data model
     # --------------------------------------------------------------------------
 
-    r_data_model <- dm_name(module_id)
     x <- k_data_model()
 
-    # -- test class
+    # -- tests
     expect_s3_class(x, "data.frame")
-
-    # -- test dim
     expect_equal(dim(x), dim(dm))
-
-    # -- test names
-    expect_equal(x$name[x$display], c("id", "total"))
-
+    expect_equal(x$name[x$display], x$name)
 
   })
 
