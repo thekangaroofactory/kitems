@@ -15,6 +15,8 @@
 #' @returns a data.frame of the updated data model or a character vector
 #' @export
 #'
+#' @seealso [hide()] [attribute_update()]
+#'
 #' @examples
 #' display(data_model(c(foo = "character")), id)
 #' display(data_model(c(foo = "character")), "id")
@@ -32,14 +34,7 @@ display <- function(data.model, ...){
   if(!length(cols))
     return(data.model[data.model$display, 'name'])
 
-  # -- secure
-  # we need at least one attribute in the data.model
-  if(all(!cols %in% data.model$name)){
-    warning("Attribute not found in the data.model.")
-    return(data.model)}
-
   # -- setter
-  data.model[data.model$name %in% cols, ]$display <- TRUE
-  data.model
+  attribute_update(data.model, name = cols, display = TRUE)
 
 }

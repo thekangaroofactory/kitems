@@ -29,3 +29,6 @@ hide(data_model(c(foo = "character", bar = "logical")), "foo", bar)
 # getter
 hide(data_model(c(foo = "character")))
 }
+\seealso{
+\code{\link[=display]{display()}} \code{\link[=attribute_update]{attribute_update()}}
+}
