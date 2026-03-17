@@ -122,8 +122,11 @@ attribute_update <- function(data.model, name, class.arg = NULL,
       x[idx, ]$refresh <- FALSE}
 
   # -- refresh
-  if(!is.null(refresh))
-    x[match(name, x$name), ]$refresh <- if(skip) match_arg_t2(refresh, advice = "skip") else FALSE
+  # note: it's forbidden to refresh id (throwing an error so there's a cost
+  # trying dummy stuff)
+  if(!is.null(refresh)){
+    if("id" %in% name) stop("It's forbidden to refresh the id attribute")
+    x[match(name, x$name), ]$refresh <- if(skip) match_arg_t2(refresh, advice = "skip") else FALSE}
 
 
   # ////////////////////////////////////////////////////////////////////////////
