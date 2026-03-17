@@ -24,7 +24,7 @@
 item_mask <- function(data.model, items){
 
   # -- Get display from data model
-  display_cols <- dm_display(data.model)
+  display_cols <- display(data.model)
 
   # -- Apply attribute display
   items <- items[display_cols]

@@ -173,7 +173,7 @@ kitems_admin <- function(k_data_model, k_items, path = Sys.getenv("R_KITEMS_PATH
       else {
 
         # -- init params
-        filter_cols <- dm_display(k_data_model())
+        filter_cols <- display(k_data_model())
 
         onInitialize <- if(is.null(filter_cols))
           I('function() { this.setValue(""); }')
@@ -366,7 +366,9 @@ kitems_admin <- function(k_data_model, k_items, path = Sys.getenv("R_KITEMS_PATH
         if(length(input$dm_display) == 0)
           showNotification("View can't be empty. Data model is not saved.", type = "error")
         else {
-          dm <- dm_display(data.model = dm, set = input$dm_display)
+          foo <- input$dm_display
+          dm <- do.call(display, c(list(dm), foo))
+
           k_data_model(dm)}}
 
     }, ignoreInit = TRUE, ignoreNULL = FALSE)
