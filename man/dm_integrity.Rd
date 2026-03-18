@@ -4,16 +4,18 @@
 \alias{dm_integrity}
 \title{Data Model Integrity}
 \usage{
-dm_integrity(data.model, items, template = NULL, fix = FALSE)
+dm_integrity(data.model, items, fix = FALSE, template = FALSE, n = 100)
 }
 \arguments{
-\item{data.model}{a \emph{mandatory} data model.}
+\item{data.model}{a data.frame of the data model.}
 
-\item{items}{a \emph{mandatory} data.frame of the items.}
+\item{items}{a data.frame of the items.}
 
-\item{template}{an optional data.frame(name = c(...), type = c(...)) to be used to force attribute classes.}
+\item{fix}{a logical (default = \code{FALSE}) if \code{data.model} should be fixed.}
 
-\item{fix}{a logical (default = \code{FALSE}) if data.model should be fixed}
+\item{template}{a logical (default = \code{FALSE}) if attribute template should be used (see details).}
+
+\item{n}{the maximum number (default = 100) of \code{items} rows used to compute an attribute class (see details)}
 }
 \value{
 if \code{data.model} matches with the \code{items}, \code{TRUE} will be returned. Otherwise an updated data model will be returned.
@@ -22,10 +24,15 @@ if \code{data.model} matches with the \code{items}, \code{TRUE} will be returned
 Check the data model integrity.
 }
 \details{
-When \code{fix} is FALSE, an error will be raised if a problem is detected.
+When \code{fix} is FALSE, an error will be raised if a problem is detected (on first occurrence).
 
-In case an attribute of the \code{items} is missing from the \code{data.model}, it will be added with either a type matching the template
-one or a guessed one (using the \code{class()} function).
+Checks if \code{data.model} matches with the expected data.frame structure.
+
+In case an attribute of \code{items} is missing from \code{data.model}, it will be added to the data model (\code{fix = TRUE}).
+When \code{template = TRUE} it will check if the missing attribute(s) matches with en entry in the attribute template
+so that they will be added with parameters from the template.
+If not found (or when \code{template = FALSE}), it will guess the class of the missing attribute(s) from the \code{n} first rows
+of the \code{items}.
 
 In case an extra attribute is found in the \code{data.model} as compared to the \code{items}, it will be dropped from the
 data model.
@@ -33,7 +40,5 @@ data model.
 \examples{
 \dontrun{
 feedback <- dm_integrity(mydatamodel, myitems, fix = TRUE)
-if(!is.logical(feedback))
-  mydatamodel <- feedback
 }
 }
