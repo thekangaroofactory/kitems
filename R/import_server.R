@@ -117,7 +117,7 @@ import_server <- function(id, k_data_model, k_items, callback) {
       # -- Get the data model
       # use dm_integrity with data.model = NULL means all attributes are missing
       catl(MODULE, "Extract data model from data")
-      dm <- dm_integrity(data.model = NULL, items = cache_items(), template = TEMPLATE_ATTRIBUTES, fix = TRUE)
+      dm <- dm_integrity(data.model = NULL, items = cache_items(), fix = TRUE, template = TRUE)
 
       # -- Store in cache
       cache_dm(dm)
