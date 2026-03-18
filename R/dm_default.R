@@ -8,25 +8,24 @@
 #' @param data.model a data.frame containing the data model.
 #' @param name a character string with the attribute name.
 #' @param n an integer (default 1) to use when a vector is expected
-#' for default function case.
+#' for default function case (otherwise it will be ignored).
 #'
 #' @details
 #' Whenever a default function is set for an attribute of the data.model,
 #' it is possible to generate a vector of default values instead of a single
-#' default value by using n parameter. This is usefull when the function
+#' default value by using n parameter. This is useful when the function
 #' generates single values (time or unique id for example)
 #'
 #' @return A vector of length `n`.
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' value <- dm_default(data.model = mydatamodel, name = "date")
-#' }
+#' dm <- data_model(colClasses = c(foo = "numeric"), default.val = 12)
+#' dm_default(dm, "foo")
 
 dm_default <- function(data.model, name, n = 1){
 
-  catl("[dm_default] Default value, attribute =", name)
+  catl("Default value, attribute =", name)
 
   # -- get defaults from data model
   default_val <- data.model[data.model$name == name, ]$default.val
@@ -73,7 +72,7 @@ dm_default <- function(data.model, name, n = 1){
 
   # -- default: NA
   else{
-    catl("- strategy: no default set, output = NA", level = 2)
+    catl("- strategy: no default set", level = 2)
     value <- NA}
 
   # -- return

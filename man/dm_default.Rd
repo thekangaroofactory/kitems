@@ -12,7 +12,7 @@ dm_default(data.model, name, n = 1)
 \item{name}{a character string with the attribute name.}
 
 \item{n}{an integer (default 1) to use when a vector is expected
-for default function case.}
+for default function case (otherwise it will be ignored).}
 }
 \value{
 A vector of length \code{n}.
@@ -23,11 +23,10 @@ Compute the default value(s).
 \details{
 Whenever a default function is set for an attribute of the data.model,
 it is possible to generate a vector of default values instead of a single
-default value by using n parameter. This is usefull when the function
+default value by using n parameter. This is useful when the function
 generates single values (time or unique id for example)
 }
 \examples{
-\dontrun{
-value <- dm_default(data.model = mydatamodel, name = "date")
-}
+dm <- data_model(colClasses = c(foo = "numeric"), default.val = 12)
+dm_default(dm, "foo")
 }
