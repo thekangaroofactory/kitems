@@ -90,7 +90,7 @@ dm_integrity <- function(data.model, items, template = NULL, fix = FALSE){
 
 
       # -- Check if any attribute is part of template
-      if(any(missing_att %in% TEMPLATE_DATA_MODEL$name)){
+      if(any(missing_att %in% TEMPLATE_ATTRIBUTES$name)){
 
         # -- get index & drop NAs (attribute not matching in template)
         idx <- match(names(missing_types), template$name)

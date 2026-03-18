@@ -412,7 +412,7 @@ kitems_admin <- function(k_data_model, k_items, path = Sys.getenv("R_KITEMS_PATH
 
       # -- init parameters (id)
       # Implement template #220
-      template <- TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == "id", ]
+      template <- TEMPLATE_ATTRIBUTES[TEMPLATE_ATTRIBUTES$name == "id", ]
       colClasses <- stats::setNames(template$type, template$name)
       default_val <- stats::setNames(template$default.val, template$name)
       default_fun <- stats::setNames(template$default.fun, template$name)

@@ -221,7 +221,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
         tryCatch(
 
           init_dm |>
-            dm_integrity(items = init_items, template = TEMPLATE_DATA_MODEL),
+            dm_integrity(items = init_items, template = TEMPLATE_ATTRIBUTES),
 
           error = function(e) {
 

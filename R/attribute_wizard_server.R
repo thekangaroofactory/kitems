@@ -42,7 +42,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
       isValid$type <- FALSE
 
       # -- prepare
-      names <- TEMPLATE_DATA_MODEL[!TEMPLATE_DATA_MODEL$name %in% k_data_model()$name, "name"]
+      names <- TEMPLATE_ATTRIBUTES[!TEMPLATE_ATTRIBUTES$name %in% k_data_model()$name, "name"]
       types <- OBJECT_CLASS
 
       # -- display modal
@@ -130,9 +130,9 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
             isValid$name <- TRUE
 
             # -- update default type
-            if(input$w_name %in% TEMPLATE_DATA_MODEL$name)
+            if(input$w_name %in% TEMPLATE_ATTRIBUTES$name)
               updateSelectizeInput(inputId = "w_type",
-                                   selected = TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == input$w_name, ]$type)
+                                   selected = TEMPLATE_ATTRIBUTES[TEMPLATE_ATTRIBUTES$name == input$w_name, ]$type)
 
           }}}
 

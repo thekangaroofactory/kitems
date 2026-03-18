@@ -173,7 +173,7 @@ data_model <- function(colClasses = NULL, class.arg = NULL,
     if(!"id" %in% names(colClasses)){
       message("Adding missing id attribute")
       # -- add from template
-      id <- TEMPLATE_DATA_MODEL[TEMPLATE_DATA_MODEL$name == "id", ]
+      id <- TEMPLATE_ATTRIBUTES[TEMPLATE_ATTRIBUTES$name == "id", ]
       colClasses <- c(c(id = id$type), colClasses)
       default.fun <- c(c(id = id$default.fun), default.fun)
       default.arg <- c(c(id = id$default.arg), default.arg)
