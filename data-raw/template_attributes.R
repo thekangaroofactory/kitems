@@ -6,7 +6,7 @@
 
 # -- code to prepare package data
 # run to create the data
-TEMPLATE_DATA_MODEL <-
+TEMPLATE_ATTRIBUTES <-
 
   # -- id
   attribute_create(name = "id",
@@ -89,4 +89,4 @@ TEMPLATE_DATA_MODEL <-
 
 # -- code to save package data
 # # run to save the data
-usethis::use_data(TEMPLATE_DATA_MODEL, internal = TRUE, overwrite = TRUE)
+usethis::use_data(TEMPLATE_ATTRIBUTES, internal = TRUE, overwrite = TRUE)
