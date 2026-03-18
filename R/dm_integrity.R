@@ -34,19 +34,21 @@ dm_integrity <- function(data.model, items, template = NULL, fix = FALSE){
   # -- init
   integrity <- TRUE
 
-  # -- check data.mode structure
+  # -- check structure
+  # data.model has expected columns
   if(any(!names(DATA_MODEL_COLCLASSES) %in% colnames(data.model)))
     if(!fix)
-      stop("data model has wrong structure")
+      stop("Data model has wrong structure. Check for migration using version().")
 
-  # -- Check for missing attributes (columns in item data.frame not in data model)
+  # -- Check for missing attributes
+  # columns in items not in data.model
   missing_att <- colnames(items)[(!colnames(items) %in% data.model$name)]
   if(!identical(missing_att, character(0))){
 
     # -- nb attribute to add
     n <- length(missing_att)
 
-    catl("[Warning]", n, "missing attribute(s) in data model:", missing_att, debug = 1)
+    catl(n, "missing attribute(s) in data model:", missing_att, debug = 1)
     integrity <- FALSE
 
     # -- check mode, just throw an error
@@ -54,8 +56,7 @@ dm_integrity <- function(data.model, items, template = NULL, fix = FALSE){
       stop("missing attribute(s)")
 
     # -- helper: get unique value for class()
-    helper <- function(x){
-      class(x)[1]}
+    helper <- function(x) class(x)[1]
 
     # -- Get class from items
     missing_types <- sapply(items[missing_att], helper)
