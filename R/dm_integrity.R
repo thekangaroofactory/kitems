@@ -5,19 +5,25 @@
 #' @description
 #' Check the data model integrity.
 #'
-#' @param data.model a \emph{mandatory} data model.
-#' @param items a \emph{mandatory} data.frame of the items.
-#' @param template an optional data.frame(name = c(...), type = c(...)) to be used to force attribute classes.
-#' @param fix a logical (default = `FALSE`) if data.model should be fixed
+#' @param data.model a data.frame of the data model.
+#' @param items a data.frame of the items.
+#' @param fix a logical (default = `FALSE`) if `data.model` should be fixed.
+#' @param template a logical (default = `FALSE`) if attribute template should be used (see details).
+#' @param n the maximum number (default = 100) of `items` rows used to compute an attribute class (see details)
 #'
 #' @return if `data.model` matches with the `items`, `TRUE` will be returned. Otherwise an updated data model will be returned.
 #' @export
 #'
 #' @details
-#' When `fix` is FALSE, an error will be raised if a problem is detected.
+#' When `fix` is FALSE, an error will be raised if a problem is detected (on first occurrence).
 #'
-#' In case an attribute of the `items` is missing from the `data.model`, it will be added with either a type matching the template
-#' one or a guessed one (using the `class()` function).
+#' Checks if `data.model` matches with the expected data.frame structure.
+#'
+#' In case an attribute of `items` is missing from `data.model`, it will be added to the data model (`fix = TRUE`).
+#' When `template = TRUE` it will check if the missing attribute(s) matches with en entry in the attribute template
+#' so that they will be added with parameters from the template.
+#' If not found (or when `template = FALSE`), it will guess the class of the missing attribute(s) from the `n` first rows
+#' of the `items`.
 #'
 #' In case an extra attribute is found in the `data.model` as compared to the `items`, it will be dropped from the
 #' data model.
@@ -25,123 +31,106 @@
 #' @examples
 #' \dontrun{
 #' feedback <- dm_integrity(mydatamodel, myitems, fix = TRUE)
-#' if(!is.logical(feedback))
-#'   mydatamodel <- feedback
 #' }
 
-dm_integrity <- function(data.model, items, template = NULL, fix = FALSE){
+dm_integrity <- function(data.model, items, fix = FALSE, template = FALSE, n = 100){
 
   # -- init
   integrity <- TRUE
+
+  # ////////////////////////////////////////////////////////////////////////////
 
   # -- check structure
   # data.model has expected columns
   if(any(!names(DATA_MODEL_COLCLASSES) %in% colnames(data.model)))
     if(!fix)
-      stop("Data model has wrong structure. Check for migration using version().")
+      stop("Data model has wrong structure. Check version().")
+
+
+  # ////////////////////////////////////////////////////////////////////////////
 
   # -- Check for missing attributes
   # columns in items not in data.model
-  missing_att <- colnames(items)[(!colnames(items) %in% data.model$name)]
-  if(!identical(missing_att, character(0))){
-
-    # -- nb attribute to add
-    n <- length(missing_att)
-
-    catl(n, "missing attribute(s) in data model:", missing_att, debug = 1)
-    integrity <- FALSE
+  missing_names <- colnames(items)[(!colnames(items) %in% data.model$name)]
+  if(!identical(missing_names, character(0))){
 
     # -- check mode, just throw an error
     if(!fix)
-      stop("missing attribute(s)")
+      stop("Missing attribute(s): ", missing_names)
 
-    # -- helper: get unique value for class()
-    helper <- function(x) class(x)[1]
+    # -- init
+    catl(length(missing_names), "missing attribute(s) in data model:", missing_names, debug = 1)
+    integrity <- FALSE
 
-    # -- Get class from items
-    missing_types <- sapply(items[missing_att], helper)
-    missing_types <- unlist(missing_types)
 
-    # -- Set defaults
-    # note: sequence to prepare for update from template
-    missing_default_val <- NULL
-    missing_default_fun <- NULL
-    missing_default_arg <- NULL
-    missing_skip <- FALSE
-    missing_display <- TRUE
+    # //////////////////////////////////////////////////////////////////////////
 
-    # -- Check argument
-    if(!is.null(template)){
-
-      message("*** THIS SECTION SHOULD BE REWORKED ***")
-
-      # -- Set defaults
-      # note: sequence to prepare for update from template
-      missing_default_val <- rep(NA, n)
-      missing_default_fun <- rep(NA, n)
-      missing_default_arg <- rep(NA, n)
-      missing_skip <- FALSE
-      missing_display <- TRUE
-
-      # -- Set names
-      names(missing_default_val) <- missing_att
-      names(missing_default_fun) <- missing_att
-      names(missing_default_arg) <- missing_att
-
+    # -- When template is used
+    if(template){
 
       # -- Check if any attribute is part of template
-      if(any(missing_att %in% TEMPLATE_ATTRIBUTES$name)){
+      idx <- match(missing_names, TEMPLATE_ATTRIBUTES$name)
+      if(!all(is.na(idx))){
 
-        # -- get index & drop NAs (attribute not matching in template)
-        idx <- match(names(missing_types), template$name)
-        idx <- idx[!is.na(idx)]
+        # -- keep matching attributes
+        missing_template <- TEMPLATE_ATTRIBUTES[idx, ]
+        catl("-- attribute(s) in template:", missing_template$name, level = 2)
 
-        catl("-- attribute(s) in template:", template$name[idx], level = 2)
+        # -- add to data.model
+        # TEMPLATE_ATTRIBUTES is built using attribute_create so no need to
+        # create those attributes again
+        data.model <- dplyr::bind_rows(data.model, missing_template)
 
-        # -- update parameters
-        missing_types[names(missing_types) %in% template$name][] <- template[idx, ]$type
-        missing_default_val[names(missing_default_val) %in% template$name][] <- template[idx, ]$default.val
-        missing_default_fun[names(missing_default_fun) %in% template$name][] <- template[idx, ]$default.fun
-        missing_default_arg[names(missing_default_arg) %in% template$name][] <- template[idx, ]$default.arg
+        # -- update missing
+        missing_names <- missing_names[!missing_names %in% missing_template]}}
 
-        # missing_skip <- template[idx, ]$skip
-        # missing_display <- template[idx, ]$display
 
-      }}
+    # //////////////////////////////////////////////////////////////////////////
+    # Remaining attributes
+    # (or all if template FALSE or not found in template)
 
-    # -- Add missing attributes
-    data.model <- attribute_create(data.model = data.model,
-                                   name = missing_att,
-                                   class = missing_types,
-                                   default.val = missing_default_val,
-                                   default.fun = missing_default_fun,
-                                   default.arg = missing_default_arg,
-                                   skip = missing_skip,
-                                   display = missing_display)
+    if(!identical(missing_names, character(0))){
 
-  }
+      # -- Get class from items
+      # set limit to avoid computing class on huge column(s)
+      # we take 1st class cause POSIXct will return "POSIXct" "POSIXt"
+      nb_row <- if(nrow(items) > n) n else nrow(items)
+      missing_types <- sapply(items[nb_row, missing_names], function(x) class(x)[1])
 
-  # -- Check for missing columns (attribute in data model not in item data.frame)
+      # -- Add missing attributes
+      # defaults will be taken from attribute_create
+      data.model <- attribute_create(data.model = data.model,
+                                     name = missing_names,
+                                     class = missing_types)}}
+
+
+  # ////////////////////////////////////////////////////////////////////////////
+
+  # -- Check for extra attributes
+  # attribute in data.model not in items
   extra_att <- data.model$name[!data.model$name %in% colnames(items)]
   if(!identical(extra_att, character(0))){
 
-    catl("[Warning] Extra attribute(s) in data model:", extra_att, debug = 1)
-    integrity <- FALSE
-
     # -- check mode, just throw an error
     if(!fix)
-      stop("extra attribute(s)")
+      stop("Extra attribute(s) in data model: ", extra_att)
 
     # -- Drop extra rows
+    catl("Extra attribute(s) in data model:", extra_att, debug = 1)
     data.model <- data.model[!data.model$name %in% extra_att, ]
+    integrity <- FALSE}
 
-  }
 
+  # ////////////////////////////////////////////////////////////////////////////
+
+  # -- reorder attributes to match items
+  if(!integrity)
+    data.model <- data.model[match(colnames(items), data.model$name), ]
+
+
+  # ////////////////////////////////////////////////////////////////////////////
 
   # -- Return
-  if(!integrity)
-    data.model
-  else
-    TRUE
+  if(!integrity) data.model else TRUE
 
 }
