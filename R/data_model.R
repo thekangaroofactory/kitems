@@ -5,7 +5,7 @@
 #' @description
 #' Build a data model or an attribute.
 #'
-#' @param colClasses \emph{mandatory} named vector of classes, defining the data model.
+#' @param colClasses a names vector of classes, defining the data model.
 #' @param class.arg optional named vector of arguments, to pass along with the class function (see details).
 #' @param default.val optional named vector of default values.
 #' @param default.fun optional named vector of default functions to be used to generate default values.
@@ -28,10 +28,11 @@
 #' This process may throw errors as it is considered not safe to guess what the user is trying to do.
 #' Calls to this function should be wrapped into a `tryCatch()` expression.
 #'
-#' `colClasses` will be used to create the data.frame:
+#' `colClasses` will be used to create the data model:
 #' - names will define the attributes of the data model,
 #' - values will define the class of the attributes.
 #' When creating a data model, the id attribute will be added if it's missing from `colClasses`.
+#' When `colClasses` is NULL, a data model with the id attribute will be returned.
 #' When `class.arg` is set, it will be sent along with the as.* conversion function call.
 #' Ex: as.POSIXct("2025-09-10T13:16:55Z", format = "%Y-%m-%dT%H:%M:%S")
 #'
@@ -76,7 +77,7 @@
 #' data_model(colClasses, default.val, display = display, skip = skip)
 #'
 
-data_model <- function(colClasses, class.arg = NULL,
+data_model <- function(colClasses = NULL, class.arg = NULL,
                        default.val = NULL, default.fun = NULL, default.arg = NULL,
                        display = TRUE, skip = FALSE, refresh = FALSE,
                        sort.rank = NULL, sort.desc = NULL){
@@ -85,12 +86,20 @@ data_model <- function(colClasses, class.arg = NULL,
   # ////////////////////////////////////////////////////////////////////////////
 
   # -- colClasses
-  # must be a named character vector
-  if(!is.vector(colClasses, mode = "character") || is.null(names(colClasses)))
-    stop("colClasses must be a named character vector")
+  # check for init without attribute
+  if(is.null(colClasses)){
 
-  if(any(!colClasses %in% OBJECT_CLASS))
-    stop("colClasses must be a supported class: ", paste(OBJECT_CLASS, collapse = " / "))
+    # force reset all parameters
+    class.arg <- default.val <- default.fun <- default.arg <- sort.rank <- sort.desc <- NULL
+
+  } else {
+
+    # must be a named character vector
+    if(!is.vector(colClasses, mode = "character") || is.null(names(colClasses)))
+      stop("colClasses must be a named character vector")
+
+    if(any(!colClasses %in% OBJECT_CLASS))
+      stop("colClasses must be a supported class: ", paste(OBJECT_CLASS, collapse = " / "))}
 
 
   # ////////////////////////////////////////////////////////////////////////////

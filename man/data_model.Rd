@@ -5,7 +5,7 @@
 \title{Data Model}
 \usage{
 data_model(
-  colClasses,
+  colClasses = NULL,
   class.arg = NULL,
   default.val = NULL,
   default.fun = NULL,
@@ -18,7 +18,7 @@ data_model(
 )
 }
 \arguments{
-\item{colClasses}{\emph{mandatory} named vector of classes, defining the data model.}
+\item{colClasses}{a names vector of classes, defining the data model.}
 
 \item{class.arg}{optional named vector of arguments, to pass along with the class function (see details).}
 
@@ -52,11 +52,12 @@ Parameters for this function are strictly checked against their expected class &
 This process may throw errors as it is considered not safe to guess what the user is trying to do.
 Calls to this function should be wrapped into a \code{tryCatch()} expression.
 
-\code{colClasses} will be used to create the data.frame:
+\code{colClasses} will be used to create the data model:
 \itemize{
 \item names will define the attributes of the data model,
 \item values will define the class of the attributes.
 When creating a data model, the id attribute will be added if it's missing from \code{colClasses}.
+When \code{colClasses} is NULL, a data model with the id attribute will be returned.
 When \code{class.arg} is set, it will be sent along with the as.* conversion function call.
 Ex: as.POSIXct("2025-09-10T13:16:55Z", format = "\%Y-\%m-\%dT\%H:\%M:\%S")
 }
