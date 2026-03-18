@@ -1,21 +1,21 @@
 
 
 test_that("dm_integrity (check)",
-          expect_true(dm_integrity(data.model = dm, items = items, template = NULL)))
+          expect_true(dm_integrity(data.model = dm, items = items)))
 
 
 test_that("dm_integrity (fix)",
-          expect_true(dm_integrity(data.model = dm, items = items, template = NULL, fix = TRUE)))
+          expect_true(dm_integrity(data.model = dm, items = items, fix = TRUE)))
 
 
 test_that("dm_integrity: missing attribute (check)",
-          expect_error(dm_integrity(data.model = dm, items = items_extra_att, template = NULL)))
+          expect_error(dm_integrity(data.model = dm, items = items_extra_att)))
 
 
 test_that("dm_integrity: missing attribute (fix)", {
 
   # -- function call
-  x <- dm_integrity(data.model = dm, items = items_extra_att, template = NULL, fix = TRUE)
+  x <- dm_integrity(data.model = dm, items = items_extra_att, fix = TRUE)
 
   # -- checks:
   expect_s3_class(x, "data.frame")
@@ -23,15 +23,26 @@ test_that("dm_integrity: missing attribute (fix)", {
 
 })
 
+test_that("dm_integrity: several missing attributes (fix)", {
+
+  # -- function call
+  x <- dm_integrity(data.model = dm[dm$name[1], ], items = items, fix = TRUE)
+
+  expect_s3_class(x, "data.frame")
+  expect_equal(dim(x), c(dim(dm)[1], length(DATA_MODEL_COLCLASSES)))
+
+})
+
+
 
 test_that("dm_integrity: missing id (check)",
-          expect_error(dm_integrity(data.model = dm[dm$name != "id", ], items = items, template = TEMPLATE_ATTRIBUTES)))
+          expect_error(dm_integrity(data.model = dm[dm$name != "id", ], items = items)))
 
 
 test_that("dm_integrity: missing id (fix)", {
 
   # -- function call
-  x <- dm_integrity(data.model = dm[dm$name != "id", ], items = items, template = TEMPLATE_ATTRIBUTES, fix = TRUE)
+  x <- dm_integrity(data.model = dm[dm$name != "id", ], items = items, fix = TRUE, template = TRUE)
 
   # -- checks:
   expect_s3_class(x, "data.frame")
@@ -44,13 +55,13 @@ test_that("dm_integrity: missing id (fix)", {
 
 
 test_that("dm_integrity: extra attribute (check)",
-          expect_error(dm_integrity(data.model = dm_extra_att, items = items, template = NULL)))
+          expect_error(dm_integrity(data.model = dm_extra_att, items = items)))
 
 
 test_that("dm_integrity: extra attribute (fix)", {
 
   # -- function call
-  x <- dm_integrity(data.model = dm_extra_att, items = items, template = NULL, fix = TRUE)
+  x <- dm_integrity(data.model = dm_extra_att, items = items, fix = TRUE)
 
   # -- checks:
   expect_s3_class(x, "data.frame")
