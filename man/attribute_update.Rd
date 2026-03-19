@@ -10,7 +10,6 @@ attribute_update(
   class.arg = NULL,
   default.val = NULL,
   default.fun = NULL,
-  default.arg = NULL,
   display = NULL,
   skip = NULL,
   refresh = NULL,
@@ -28,8 +27,6 @@ attribute_update(
 \item{default.val}{the new default value(s)}
 
 \item{default.fun}{the new default function name(s)}
-
-\item{default.arg}{the new argument(s), to pass along with the default function(s)}
 
 \item{display}{a logical to set display}
 
@@ -57,7 +54,7 @@ parameters is either same as \code{name} or 1 (then all rows gets same value).
 When the intend is to update all attributes with the same value, then named vector is not necessary.
 
 When attribute parameters are not compatible, they will be reset.
-Ex: setting \code{default.val} will reset both \code{default.fun} & \code{default.arg}
+Ex: setting \code{default.val} will reset \code{default.fun}
 
 Otherwise same rules apply as in the \code{data_model()} function.
 }

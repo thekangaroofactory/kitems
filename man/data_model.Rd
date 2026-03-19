@@ -9,7 +9,6 @@ data_model(
   class.arg = NULL,
   default.val = NULL,
   default.fun = NULL,
-  default.arg = NULL,
   display = TRUE,
   skip = FALSE,
   refresh = FALSE,
@@ -25,8 +24,6 @@ data_model(
 \item{default.val}{optional named vector of default values.}
 
 \item{default.fun}{optional named vector of default functions to be used to generate default values.}
-
-\item{default.arg}{optional named vector of arguments, to pass along with the default function.}
 
 \item{display}{optional logical value, if the attributes should be displayed in the table view.}
 
@@ -70,8 +67,8 @@ When provided, they will be used to match with names defined in colClasses:
 \item names in vectors not matching with colClasses names will be ignored
 }
 
-\code{default.fun} and \code{default.val} are mutual exclusive, with priority on \code{default.fun} (\code{default.val} will be ignored)
-\code{default.arg} requires \code{default.fun} not to be NULL (will be ignored otherwise)
+\code{default.fun} and \code{default.val} are mutual exclusive, with priority on \code{default.fun} (\code{default.val} will be ignored).
+\code{default.fun} must be a string that can be parsed into a function call.
 
 \code{display}, \code{skip} and \code{refresh} only accept logical values (no vector).
 For those attributes, it is expected that fine tuning will be done through the fine grain verbs (escape, show, hide).
@@ -82,7 +79,7 @@ When \code{skip} is not set (default = FALSE), \code{refresh} will be ignored
 
 If not provided, defaults will be applied:
 \itemize{
-\item \code{NA} for \code{default.val}, \code{default.fun} and \code{default.arg}
+\item \code{NA} for \code{default.val}, \code{default.fun}
 \item \code{TRUE} for \code{display}
 \item \code{FALSE} for \code{skip} and \code{refresh}
 }
