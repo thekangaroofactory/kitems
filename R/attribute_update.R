@@ -10,7 +10,6 @@
 #' @param class.arg the argument(s) to pass along with the class function
 #' @param default.val the new default value(s)
 #' @param default.fun the new default function name(s)
-#' @param default.arg the new argument(s), to pass along with the default function(s)
 #' @param display a logical to set display
 #' @param skip a logical to set skip
 #' @param refresh a logical to tell if skipped attributes should be refreshed upon update
@@ -30,7 +29,7 @@
 #' When the intend is to update all attributes with the same value, then named vector is not necessary.
 #'
 #' When attribute parameters are not compatible, they will be reset.
-#' Ex: setting `default.val` will reset both `default.fun` & `default.arg`
+#' Ex: setting `default.val` will reset `default.fun`
 #'
 #' Otherwise same rules apply as in the `data_model()` function.
 #'
@@ -49,7 +48,7 @@
 #'
 
 attribute_update <- function(data.model, name, class.arg = NULL,
-                             default.val = NULL, default.fun = NULL, default.arg = NULL,
+                             default.val = NULL, default.fun = NULL,
                              display = NULL, skip = NULL, refresh = NULL,
                              sort.rank = NULL, sort.desc = NULL){
 
@@ -76,32 +75,19 @@ attribute_update <- function(data.model, name, class.arg = NULL,
     default.val <- NULL
 
   # -- default.val
-  # note: reset default.fun & default.arg
+  # note: reset default.fun
   if(!is.null(default.val)){
     default.val <- match_arg_t1(default.val, colClasses['default.val'])
     x[match(name, x$name), ]$default.val <- if(isTruthy(default.val)) as.character(default.val) else NA
-    x[match(name, x$name), ]$default.fun <- NA
-    x[match(name, x$name), ]$default.arg <- NA}
+    x[match(name, x$name), ]$default.fun <- NA}
 
   # -- default.fun
   # note: reset default.val
-  # + it's okay to update only the function & keep default.arg
   if(!is.null(default.fun)){
     default.fun <- match_arg_t1(default.fun, colClasses['default.fun'], mode = "character")
     x[match(name, x$name), ]$default.fun <- if(isTruthy(default.fun)) as.character(default.fun) else NA
-    # -- check default.arg reset
-    idx <- x$name %in% name & is.na(x$default.fun) & !is.na(x$default.arg)
-    if(any(idx))
-      x[idx, ]$default.arg <- NA
     # -- reset default.val
     x[match(name, x$name), ]$default.val <- NA}
-
-  # -- default.arg
-  # note: it's okay to keep default.fun, but it must be set
-  if(!is.null(default.arg))
-    if(all(!is.na(x[match(name, x$name), ]$default.fun))){
-      default.arg <- match_arg_t1(default.arg, colClasses['default.arg'], mode = "character")
-      x[match(name, x$name), ]$default.arg <- if(isTruthy(default.arg)) as.character(default.arg) else NA}
 
 
   # ////////////////////////////////////////////////////////////////////////////

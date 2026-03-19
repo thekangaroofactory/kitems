@@ -24,7 +24,7 @@
 #' # -- Add single attribute
 #' attribute_create(data.model = NULL, name = "new_attribute", class = "character")
 #' attribute_create(data.model = NULL, name = "total", class = "numeric", default.val = 0)
-#' attribute_create(data.model = NULL, name = "date", class = "Date", default.fun = "Sys.Date")
+#' attribute_create(data.model = NULL, name = "date", class = "Date", default.fun = "Sys.Date()")
 #' attribute_create(data.model = NULL, name = "progress", class = "integer", skip = "progress")
 #' attribute_create(data.model = NULL, name = "internal", class = "logical", display = "internal")
 #'

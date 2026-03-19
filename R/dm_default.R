@@ -25,55 +25,62 @@
 
 dm_default <- function(data.model, name, n = 1){
 
+  # -- get attribute's defaults
   catl("Default value, attribute =", name)
+  x <- data.model[data.model$name == name, c("default.val", "default.fun")]
 
-  # -- get defaults from data model
-  default_val <- data.model[data.model$name == name, ]$default.val
-  default_fun <- data.model[data.model$name == name, ]$default.fun
-  default_arg <- data.model[data.model$name == name, ]$default.arg
+
+  # ////////////////////////////////////////////////////////////////////////////
 
   # -- P1: default function
-  if(!is.na(default_fun)){
+  if(!is.na(x$default.fun)){
 
-    catl("- strategy: default function =", default_fun, level = 2)
-
-    # -- check arg
-    args <- if(!is.na(default_arg))
-      eval(parse(text = default_arg))
-    else list()
-    catl("- args: default arguments =", default_arg, level = 2)
+    catl("- strategy: default function =", x$default.fun, level = 2)
 
     # -- wrapping into a tryCatch #235
-    value <- tryCatch(
+    value <- tryCatch({
 
       # -- Support multiple values #489
       # replicate calls default_fun n times (simplify = F to get a list)
       # do.call convert list into vector AND keep class!
-      do.call("c",
-              replicate(n,
-                        eval(do.call(ktools::getNsFunction(default_fun), args = args)),
-                        simplify = F)),
+      # do.call("c",
+      #         replicate(n,
+      #                   eval(do.call(ktools::getNsFunction(default_fun), args = args)),
+      #                   simplify = F))
 
-      # -- failed
+      # -- parse string & evaluate expression #642
+      # tidy evaluation is used to allow data-masking (use of items column names)
+      expr <- rlang::parse_expr(x$default.fun)
+      if(!rlang::is_call(expr))
+        stop("Default function should be a call")
+      if(n > 1)
+        replicate(n, rlang::eval_tidy(expr, data = NULL))
+      else
+        rlang::eval_tidy(expr, data = NULL)},
+
+      # -- failed (return NA)
       error = function(e) {
+        warning("Error when trying to apply default function =", x$default.fun, "\n", e$message)
+        NA})}
 
-        # -- print error
-        warning("Error when trying to apply default function =", default_fun, "\n", e$message, debug = 1)
 
-        # -- return NA (as default)
-        NA})
-
-  }
+  # ////////////////////////////////////////////////////////////////////////////
 
   # -- P2: then default value
-  else if(!is.na(default_val)){
-    value <- default_val
+  else if(!is.na(x$default.val)){
+    value <- x$default.val
     catl("- strategy: default value", level = 2)}
+
+
+  # ////////////////////////////////////////////////////////////////////////////
 
   # -- default: NA
   else{
     catl("- strategy: no default set", level = 2)
     value <- NA}
+
+
+  # ////////////////////////////////////////////////////////////////////////////
 
   # -- return
   catl("- output: value =", as.character(value))

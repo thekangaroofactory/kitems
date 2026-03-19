@@ -9,7 +9,6 @@
 #' @param class.arg optional named vector of arguments, to pass along with the class function (see details).
 #' @param default.val optional named vector of default values.
 #' @param default.fun optional named vector of default functions to be used to generate default values.
-#' @param default.arg optional named vector of arguments, to pass along with the default function.
 #' @param display optional logical value, if the attributes should be displayed in the table view.
 #' @param skip optional logical value, if the attributes should be skipped from the user input form.
 #' @param refresh optional logical value, if skipped attributes should be updated (see details).
@@ -42,8 +41,8 @@
 #' - there is no need to set values for all attributes (see examples)
 #' - names in vectors not matching with colClasses names will be ignored
 #'
-#' `default.fun` and `default.val` are mutual exclusive, with priority on `default.fun` (`default.val` will be ignored)
-#' `default.arg` requires `default.fun` not to be NULL (will be ignored otherwise)
+#' `default.fun` and `default.val` are mutual exclusive, with priority on `default.fun` (`default.val` will be ignored).
+#' `default.fun` must be a string that can be parsed into a function call.
 #'
 #' `display`, `skip` and `refresh` only accept logical values (no vector).
 #' For those attributes, it is expected that fine tuning will be done through the fine grain verbs (escape, show, hide).
@@ -53,7 +52,7 @@
 #' When `skip` is not set (default = FALSE), `refresh` will be ignored
 #'
 #' If not provided, defaults will be applied:
-#' - \code{NA} for `default.val`, `default.fun` and `default.arg`
+#' - \code{NA} for `default.val`, `default.fun`
 #' - \code{TRUE} for `display`
 #' - \code{FALSE} for `skip` and `refresh`
 #'
@@ -78,7 +77,7 @@
 #'
 
 data_model <- function(colClasses = NULL, class.arg = NULL,
-                       default.val = NULL, default.fun = NULL, default.arg = NULL,
+                       default.val = NULL, default.fun = NULL,
                        display = TRUE, skip = FALSE, refresh = FALSE,
                        sort.rank = NULL, sort.desc = NULL){
 
@@ -90,7 +89,7 @@ data_model <- function(colClasses = NULL, class.arg = NULL,
   if(is.null(colClasses)){
 
     # force reset all parameters
-    class.arg <- default.val <- default.fun <- default.arg <- sort.rank <- sort.desc <- NULL
+    class.arg <- default.val <- default.fun <- sort.rank <- sort.desc <- NULL
 
   } else {
 
@@ -104,7 +103,7 @@ data_model <- function(colClasses = NULL, class.arg = NULL,
 
   # ////////////////////////////////////////////////////////////////////////////
 
-  # -- class.arg, default.fun, default.arg
+  # -- class.arg, default.fun
   # must be a named character vector or a character value
 
   if(!is.null(class.arg))
@@ -113,15 +112,11 @@ data_model <- function(colClasses = NULL, class.arg = NULL,
   if(!is.null(default.fun))
     default.fun <- match_arg_t1(default.fun, colClasses, mode = "character")
 
-  if(!is.null(default.arg))
-    default.arg <- match_arg_t1(default.arg, colClasses, mode = "character")
-
 
   # ////////////////////////////////////////////////////////////////////////////
 
   # -- default.val
   # must be a named vector or value
-
   if(!is.null(default.val))
     default.val <- match_arg_t1(default.val, colClasses)
 
@@ -176,7 +171,6 @@ data_model <- function(colClasses = NULL, class.arg = NULL,
       id <- TEMPLATE_ATTRIBUTES[TEMPLATE_ATTRIBUTES$name == "id", ]
       colClasses <- c(c(id = id$type), colClasses)
       default.fun <- c(c(id = id$default.fun), default.fun)
-      default.arg <- c(c(id = id$default.arg), default.arg)
       display <- c(id$display, rep(display, length(colClasses) - 1))
       skip <- c(id$skip, rep(skip, length(colClasses) - 1))
       refresh <- c(id$refresh, rep(refresh, length(colClasses) - 1))}}
@@ -204,14 +198,6 @@ data_model <- function(colClasses = NULL, class.arg = NULL,
     x$default.fun <- as.character(default.fun[match(x$name, names(default.fun))])
   else
     x$default.fun <- NA
-
-  # -- Add default.arg (match input with names)
-  # drop names not in default.fun
-  default.arg <- default.arg[names(default.arg) %in% names(default.fun)]
-  if(isTruthy(default.arg))
-    x$default.arg <- as.character(default.arg[match(x$name, names(default.arg))])
-  else
-    x$default.arg <- NA
 
   # -- Add display, skip & refresh
   x$display <- display

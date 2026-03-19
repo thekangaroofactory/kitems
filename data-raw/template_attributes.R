@@ -11,8 +11,7 @@ TEMPLATE_ATTRIBUTES <-
   # -- id
   attribute_create(name = "id",
                    class = "numeric",
-                   default.fun = "ktools::getTimestamp",
-                   default.arg = "list(k=1000000)",
+                   default.fun = "ktools::getTimestamp(k=1000000)",
                    skip = TRUE,
                    display = FALSE) |>
 
