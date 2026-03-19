@@ -47,7 +47,7 @@ colClasses_id_only <- c(id = "numeric")
 default_val <- c("name" = "fruit", "isvalid" = TRUE)
 
 # -- declare default.fun & arg
-default_fun <- c("date" = "Sys.time")
+default_fun <- c("date" = "Sys.time()")
 
 # -- declare skip
 # skip <- c("isvalid")

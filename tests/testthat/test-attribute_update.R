@@ -51,12 +51,11 @@ test_that("attribute_update / default.fun", {
 test_that("attribute_update / default.fun + default.arg", {
 
   # -- function call
-  x <- attribute_update(data.model = dm, name = "id", default.fun = "ktools::getTimestamp", default.arg = "list(k = 10)")
+  x <- attribute_update(data.model = dm, name = "id", default.fun = "ktools::getTimestamp(k = 10)")
 
   # -- checks
   expect_s3_class(x, "data.frame")
-  expect_equal(x[x$name == "id", ]$default.fun, "ktools::getTimestamp")
-  expect_equal(x[x$name == "id", ]$default.arg, "list(k = 10)")
+  expect_equal(x[x$name == "id", ]$default.fun, "ktools::getTimestamp(k = 10)")
 
 })
 

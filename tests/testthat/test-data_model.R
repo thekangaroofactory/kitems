@@ -38,24 +38,18 @@ test_that("data_model works", {
 
 
   # -- default.fun (ok)
-  data_model(colClasses = c(foo = "Date"), default.fun = "Sys.Date")
-  data_model(colClasses = c(foo = "Date"), default.fun = c(foo = "Sys.Date"))
-  data_model(colClasses = c(foo = "Date", bar = "numeric"), default.fun = c(foo = "Sys.Date"))
+  data_model(colClasses = c(foo = "Date"), default.fun = "Sys.Date()")
+  data_model(colClasses = c(foo = "Date"), default.fun = c(foo = "Sys.Date()"))
+  data_model(colClasses = c(foo = "Date", bar = "numeric"), default.fun = c(foo = "Sys.Date()"))
 
   # -- default.fun (ko)
-  expect_error(data_model(colClasses = c(foo = "Date", bar = "numeric"), default.fun = "Sys.Date"))
+  expect_error(data_model(colClasses = c(foo = "Date", bar = "numeric"), default.fun = "Sys.Date()"))
 
 
-  # -- default.arg (ok)
-  data_model(colClasses = c(foo = "numeric"), default.fun = "rnorm", default.arg = "1")
-  data_model(colClasses = c(foo = "numeric"), default.fun = c(foo = "rnorm"), default.arg = c(foo = "list(1)"))
-  data_model(colClasses = c(foo = "numeric", bar = "character"), default.fun = c(foo = "rnorm"), default.arg = c(foo = "list(1)"))
-
-  # -- default.arg (ok, but will drop default.arg since no matchin default.fun)
-  data_model(colClasses = c(foo = "numeric", bar = "character"), default.arg = c(foo = "list(1)"))
-
-  # -- default.arg (ko)
-  expect_error(data_model(colClasses = c(foo = "numeric", bar = "character"), default.fun = c(foo = "rnorm"), default.arg = "list(1)"))
+  # -- default.fun with arg (ok)
+  data_model(colClasses = c(foo = "numeric"), default.fun = "rnorm(1)")
+  data_model(colClasses = c(foo = "numeric"), default.fun = c(foo = "rnorm(1)"))
+  data_model(colClasses = c(foo = "numeric", bar = "character"), default.fun = c(foo = "rnorm(1)"))
 
 
   # //////////////////////////////////////////////////////////////////////////////
