@@ -7,6 +7,7 @@
 data_model(
   colClasses = NULL,
   class.arg = NULL,
+  values = NULL,
   default.val = NULL,
   default.fun = NULL,
   display = TRUE,
@@ -20,6 +21,8 @@ data_model(
 \item{colClasses}{a names vector of classes, defining the data model.}
 
 \item{class.arg}{optional named vector of arguments, to pass along with the class function (see details).}
+
+\item{values}{optional named vector, to indicate possible values.}
 
 \item{default.val}{optional named vector of default values.}
 
@@ -59,6 +62,13 @@ When \code{class.arg} is set, it will be sent along with the as.* conversion fun
 Ex: as.POSIXct("2025-09-10T13:16:55Z", format = "\%Y-\%m-\%dT\%H:\%M:\%S")
 }
 
+\code{values} allows different behaviors:
+\itemize{
+\item suggest() to let user chose among these values or set a different one
+\item limit() to force attribute choices among a given list of values
+\item lifecycle() to indicate values are states (with promote/demote mechanism)
+}
+
 All \verb{default.*} parameters are optional.
 When provided, they will be used to match with names defined in colClasses:
 \itemize{
@@ -90,8 +100,13 @@ default.val <- c("name" = "test", "total" = 2)
 default.val <- c("total" = 2, "name" = "test")
 
 # -- no need to set all values
-colClasses <- c("id" = "numeric", "name" = "character", "total" = "numeric")
+colClasses <- c("id" = "numeric", "name" = "character", state = "character", "total" = "numeric")
 default.val <- c("name" = "test", "total" = 2)
+
+# -- values
+values <- c("total" = "suggest(12, 37)",
+            "name" = "limit('foo', 'bar')",
+            "state" = "lifecycle('draft', 'inwork', 'done')")
 
 # -- display and skip
 display <- TRUE
@@ -101,6 +116,6 @@ skip <- FALSE
 sort.rank = c("date" = 1L, "total" = 2L, "name" = 3L)
 sort.desc = c("date" = TRUE, "total" = FALSE)
 
-data_model(colClasses, default.val, display = display, skip = skip)
+data_model(colClasses, values = values, default.val = default.val, display = display, skip = skip)
 
 }

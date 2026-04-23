@@ -54,8 +54,8 @@ DEFAULT_FUNCTIONS <- list("numeric" = NULL,
                           "integer" = NULL,
                           "logical" = NULL,
                           "character" = NULL,
-                          "Date" = "Sys.Date",
-                          "POSIXct" = c("Sys.time", "Sys.Date"))
+                          "Date" = "Sys.Date()",
+                          "POSIXct" = c("Sys.time()", "Sys.Date()"))
 
 
 # --------------------------------------------------------------------------
@@ -76,6 +76,7 @@ DATA_MODEL_COLCLASSES <- list(name = "character",
                               display = "logical",
                               skip = "logical",
                               refresh = "logical",
+                              values = "character",
                               sort.rank = "numeric",
                               sort.desc = "logical")
 
@@ -89,6 +90,7 @@ DATA_MODEL_DEFAULTS <- list(name = NA,
                             display = FALSE,
                             skip = FALSE,
                             refresh = FALSE,
+                            values = NA,
                             sort.rank = NA,
                             sort.desc = NA)
 

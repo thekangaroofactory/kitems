@@ -7,6 +7,7 @@
 #'
 #' @param colClasses a names vector of classes, defining the data model.
 #' @param class.arg optional named vector of arguments, to pass along with the class function (see details).
+#' @param values optional named vector, to indicate possible values.
 #' @param default.val optional named vector of default values.
 #' @param default.fun optional named vector of default functions to be used to generate default values.
 #' @param display optional logical value, if the attributes should be displayed in the table view.
@@ -35,6 +36,11 @@
 #' When `class.arg` is set, it will be sent along with the as.* conversion function call.
 #' Ex: as.POSIXct("2025-09-10T13:16:55Z", format = "%Y-%m-%dT%H:%M:%S")
 #'
+#' `values` allows different behaviors:
+#' - suggest() to let user chose among these values or set a different one
+#' - limit() to force attribute choices among a given list of values
+#' - lifecycle() to indicate values are states (with promote/demote mechanism)
+#'
 #' All `default.*` parameters are optional.
 #' When provided, they will be used to match with names defined in colClasses:
 #' - order in those vectors doesn't matter
@@ -62,8 +68,13 @@
 #' default.val <- c("total" = 2, "name" = "test")
 #'
 #' # -- no need to set all values
-#' colClasses <- c("id" = "numeric", "name" = "character", "total" = "numeric")
+#' colClasses <- c("id" = "numeric", "name" = "character", state = "character", "total" = "numeric")
 #' default.val <- c("name" = "test", "total" = 2)
+#'
+#' # -- values
+#' values <- c("total" = "suggest(12, 37)",
+#'             "name" = "limit('foo', 'bar')",
+#'             "state" = "lifecycle('draft', 'inwork', 'done')")
 #'
 #' # -- display and skip
 #' display <- TRUE
@@ -73,12 +84,14 @@
 #' sort.rank = c("date" = 1L, "total" = 2L, "name" = 3L)
 #' sort.desc = c("date" = TRUE, "total" = FALSE)
 #'
-#' data_model(colClasses, default.val, display = display, skip = skip)
+#' data_model(colClasses, values = values, default.val = default.val, display = display, skip = skip)
 #'
 
 data_model <- function(colClasses = NULL, class.arg = NULL,
+                       values = NULL,
                        default.val = NULL, default.fun = NULL,
-                       display = TRUE, skip = FALSE, refresh = FALSE,
+                       display = TRUE,
+                       skip = FALSE, refresh = FALSE,
                        sort.rank = NULL, sort.desc = NULL){
 
 
@@ -103,11 +116,14 @@ data_model <- function(colClasses = NULL, class.arg = NULL,
 
   # ////////////////////////////////////////////////////////////////////////////
 
-  # -- class.arg, default.fun
+  # -- class.arg, values, default.fun
   # must be a named character vector or a character value
 
   if(!is.null(class.arg))
     class.arg <- match_arg_t1(class.arg, colClasses, mode = "character")
+
+  if(!is.null(values))
+    values <- match_arg_t1(values, colClasses, mode = "character")
 
   if(!is.null(default.fun))
     default.fun <- match_arg_t1(default.fun, colClasses, mode = "character")
@@ -203,6 +219,12 @@ data_model <- function(colClasses = NULL, class.arg = NULL,
   x$display <- display
   x$skip <- skip
   x$refresh <- refresh
+
+  # -- Add values
+  if(isTruthy(values))
+    x$values <- as.character(values[match(x$name, names(values))])
+  else
+    x$values <- NA
 
   # -- Add sort.rank (match input with names)
   if(isTruthy(sort.rank))
