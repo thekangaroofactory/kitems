@@ -60,6 +60,35 @@ dm_migrate <- function(data.model){
   }
 
 
+  # -- migration @v0.8.0
+  # add class.arg, values, refresh
+  # drop default.arg & merge into default.fun
+  if(version < "0.8.0"){
+
+    catl("[dm_migrate] Data model migration @v0.8.0", debug = 1)
+
+    # -- check that new cols are not already in the data.model!
+    new_cols <- c("class.arg", "values", "refresh")
+    new_cols <- new_cols[!new_cols %in% names(data.model)]
+
+    # -- add missing columns
+    if(length(new_cols) > 0){
+      message("[dm_migrate] Data model migration to v0.8.0, missing columns = ", new_cols)
+      data.model[new_cols] <- DATA_MODEL_DEFAULTS[new_cols]
+      attr(data.model, "version") <- "0.8.0"
+      dirty <- TRUE}
+
+    # drop default.arg & merge into default.fun
+    if("default.arg" %in% names(data.model)){
+      message("[dm_migrate] Data model migration to v0.8.0, drop column = default.arg")
+      data.model |> dplyr::mutate(default.fun = dplyr::case_when(!is.na(default.arg) ~ stringr::str_replace(default.arg, "list", default.fun),
+                                                         .default = paste0(default.fun, "()" )))
+      data.model$default.arg <- NULL
+      dirty <- TRUE}
+
+  }
+
+
   # -- force columns order
   # attribute version must be kept
   if(dirty){

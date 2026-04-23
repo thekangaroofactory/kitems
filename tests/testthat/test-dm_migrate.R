@@ -40,11 +40,12 @@ test_that("dm_migrate: migration @v0.5.2", {
 test_that("dm_migrate: migration @v0.7.1", {
 
   # -- alter data model
-  names(dm)[names(dm) == "display"] <- "filter"
-  attr(dm, "version") <- "0.7.0"
+  dm2 <- dm
+  names(dm2)[names(dm2) == "display"] <- "filter"
+  attr(dm2, "version") <- "0.7.0"
 
   # -- function call
-  expect_message(x <- dm_migrate(data.model = dm))
+  expect_message(x <- dm_migrate(data.model = dm2))
 
   # -- checks:
   expect_s3_class(x, "data.frame")
@@ -53,5 +54,28 @@ test_that("dm_migrate: migration @v0.7.1", {
   expect_true("display" %in% names(x))
   expect_false("filter" %in% names(x))
   expect_true(attributes(x)$version == "0.7.1")
+
+})
+
+
+test_that("dm_migrate: migration @v0.8.0", {
+
+  # -- alter data model
+  dm2 <- dm
+  dm2[c("class.arg", "values", "refresh")] <- NULL
+  dm2[1, "default.fun"] <- "getTimestamp"
+  dm2[1, "default.arg"] <- "list(k = 1000)"
+  attr(dm2, "version") <- "0.7.1"
+
+  # -- function call
+  expect_message(x <- dm_migrate(data.model = dm2))
+
+  # -- checks:
+  expect_s3_class(x, "data.frame")
+
+  # -- check: x dim
+  expect_true("display" %in% names(x))
+  expect_false("filter" %in% names(x))
+  expect_true(attributes(x)$version == "0.8.0")
 
 })

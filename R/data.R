@@ -64,19 +64,19 @@ DEFAULT_FUNCTIONS <- list("numeric" = NULL,
 
 # -- version
 # this is the latest package version introducing a data model upgrade
-DATA_MODEL_VERSION <- "0.7.1"
+DATA_MODEL_VERSION <- "0.8.0"
 
 # -- colClasses
 # this is used to check data.model integrity
 DATA_MODEL_COLCLASSES <- list(name = "character",
                               type = "character",
                               class.arg = "character",
+                              values = "character",
                               default.val = "character",
                               default.fun = "character",
                               display = "logical",
                               skip = "logical",
                               refresh = "logical",
-                              values = "character",
                               sort.rank = "numeric",
                               sort.desc = "logical")
 
@@ -85,12 +85,12 @@ DATA_MODEL_COLCLASSES <- list(name = "character",
 DATA_MODEL_DEFAULTS <- list(name = NA,
                             type = NA,
                             class.arg = NA,
+                            values = NA,
                             default.val = NA,
                             default.fun = NA,
                             display = FALSE,
                             skip = FALSE,
                             refresh = FALSE,
-                            values = NA,
                             sort.rank = NA,
                             sort.desc = NA)
 
