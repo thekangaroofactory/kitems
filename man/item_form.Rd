@@ -6,7 +6,7 @@
 \usage{
 item_form(
   data.model,
-  items,
+  items = NULL,
   workflow = c("create", "update"),
   item = NULL,
   shortcut = FALSE,
