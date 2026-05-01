@@ -4,29 +4,18 @@
 \alias{dm_default}
 \title{Default Value(s)}
 \usage{
-dm_default(data.model, name, n = 1)
+dm_default(data.model)
 }
 \arguments{
-\item{data.model}{a data.frame containing the data model.}
-
-\item{name}{a character string with the attribute name.}
-
-\item{n}{an integer (default 1) to use when a vector is expected
-for default function case (otherwise it will be ignored).}
+\item{data.model}{the data.frame of the data model.}
 }
 \value{
-A vector of length \code{n}.
+A data.frame with a 'default' column.
 }
 \description{
-Compute the default value(s).
-}
-\details{
-Whenever a default function is set for an attribute of the data.model,
-it is possible to generate a vector of default values instead of a single
-default value by using n parameter. This is useful when the function
-generates single values (time or unique id for example)
+Compute default value(s).
 }
 \examples{
 dm <- data_model(colClasses = c(foo = "numeric"), default.val = 12)
-dm_default(dm, "foo")
+dm_default(dm)
 }
