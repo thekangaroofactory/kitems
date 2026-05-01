@@ -3,87 +3,48 @@
 #' Default Value(s)
 #'
 #' @description
-#' Compute the default value(s).
+#' Compute default value(s).
 #'
-#' @param data.model a data.frame containing the data model.
-#' @param name a character string with the attribute name.
-#' @param n an integer (default 1) to use when a vector is expected
-#' for default function case (otherwise it will be ignored).
+#' @param data.model the data.frame of the data model.
 #'
-#' @details
-#' Whenever a default function is set for an attribute of the data.model,
-#' it is possible to generate a vector of default values instead of a single
-#' default value by using n parameter. This is useful when the function
-#' generates single values (time or unique id for example)
-#'
-#' @return A vector of length `n`.
+#' @return A data.frame with a 'default' column.
 #' @export
 #'
 #' @examples
 #' dm <- data_model(colClasses = c(foo = "numeric"), default.val = 12)
-#' dm_default(dm, "foo")
+#' dm_default(dm)
 
-dm_default <- function(data.model, name, n = 1){
+dm_default <- function(data.model){
 
-  # -- get attribute's defaults
-  catl("Default value, attribute =", name)
-  x <- data.model[data.model$name == name, c("default.val", "default.fun")]
-
-
-  # ////////////////////////////////////////////////////////////////////////////
-
-  # -- P1: default function
-  if(!is.na(x$default.fun)){
+  # -- default function
+  if(any(!is.na(data.model$default.fun))){
 
     catl("- strategy: default function =", x$default.fun, level = 2)
 
-    # -- wrapping into a tryCatch #235
-    value <- tryCatch({
+    # maybe a function to deal with the evaluation
+    foo_eval <- function(x) {
 
-      # -- Support multiple values #489
-      # replicate calls default_fun n times (simplify = F to get a list)
-      # do.call convert list into vector AND keep class!
-      # do.call("c",
-      #         replicate(n,
-      #                   eval(do.call(ktools::getNsFunction(default_fun), args = args)),
-      #                   simplify = F))
+      unlist(as.character(lapply(rlang::parse_exprs(x), function(y) {
 
-      # -- parse string & evaluate expression #642
-      # tidy evaluation is used to allow data-masking (use of items column names)
-      expr <- rlang::parse_expr(x$default.fun)
-      if(!rlang::is_call(expr))
-        stop("Default function should be a call")
-      if(n > 1)
-        replicate(n, rlang::eval_tidy(expr, data = NULL))
-      else
-        rlang::eval_tidy(expr, data = NULL)},
+        tryCatch({
 
-      # -- failed (return NA)
-      error = function(e) {
-        warning("Error when trying to apply default function =", x$default.fun, "\n", e$message)
-        NA})}
+          rlang::eval_tidy(y, data = NULL)},
 
+          # -- failed (return NA)
+          error = function(e) {
+            warning("Error when trying to apply default function =", y, "\n", e$message)
+            NA}) })))
 
-  # ////////////////////////////////////////////////////////////////////////////
+    }
 
-  # -- P2: then default value
-  else if(!is.na(x$default.val)){
-    value <- x$default.val
-    catl("- strategy: default value", level = 2)}
+    data.model <- data.model |>
+      mutate(default.val = replace_when(default.val, !is.na(default.fun) ~ foo_eval(default.fun)))
 
+  }
 
-  # ////////////////////////////////////////////////////////////////////////////
-
-  # -- default: NA
-  else{
-    catl("- strategy: no default set", level = 2)
-    value <- NA}
-
-
-  # ////////////////////////////////////////////////////////////////////////////
-
-  # -- return
-  catl("- output: value =", as.character(value))
-  value
+  # -- drop columns & return
+  data.model |>
+    select(!c(class.arg, default.fun, display, sort.rank, sort.desc)) |>
+    rename(default = default.val)
 
 }
