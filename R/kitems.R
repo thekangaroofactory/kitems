@@ -343,15 +343,6 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
 
 
     # //////////////////////////////////////////////////////////////////////////
-    # -- Item workflows ----
-
-    ## -- declare shortcut observer ----
-    if(options$shortcut)
-      observeEvent(input$shortcut_trigger,
-                   attribute_input_update(k_data_model(), input$shortcut_trigger, MODULE))
-
-
-    # //////////////////////////////////////////////////////////////////////////
     ## -- Event manager (trigger) ----
 
     if(!is.null(trigger))
