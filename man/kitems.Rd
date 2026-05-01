@@ -9,7 +9,7 @@ kitems(
   path = Sys.getenv("R_KITEMS_PATH"),
   trigger = NULL,
   filter = NULL,
-  options = list(autosave = TRUE, admin = FALSE, shortcut = FALSE, notify = TRUE)
+  options = list(autosave = TRUE, admin = FALSE, notify = TRUE)
 )
 }
 \arguments{
@@ -47,7 +47,6 @@ Behavior of the module server can be tuned using a list of options:
 \itemize{
 \item \code{autosave} option is a logical whether the item auto save should be activated or not (default = \code{TRUE}).
 \item \code{admin} a logical indicating if the admin module server should be launched (default = \code{FALSE}).
-\item \code{shortcut} option is a logical to activate shortcut mechanism within item forms.
 \item \code{notify} option is a logical if Shiny notifications should be displayed (default = \code{TRUE})
 }
 
