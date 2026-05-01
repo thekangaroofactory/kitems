@@ -2,6 +2,7 @@
 
 export(admin)
 export(admin_widget)
+export(as_default)
 export(ask)
 export(attribute_create)
 export(attribute_input)
