@@ -3,69 +3,44 @@
 #' Item Modal Dialog(s)
 #'
 #' @description
-#' Produces a create / update / delete modal dialog to display.
+#' Produces a create / update / delete modal dialog.
 #'
-#' @param data.model a data.frame of the data model.
-#' @param items a data.frame of the items.
+#' @param ... the content to be displayed in the modal dialog.
 #' @param workflow a character string to indicate workflow (see details).
-#' @param item a data.frame of the item to update (when `workflow` = "update").
-#' @param shortcut a logical (default `FALSE`) if shortcuts should be activated.
-#' @param ns the intended namespace function to use in the dialog.
+#' @param ns the namespace function to use in the dialog.
 #'
-#' @returns a modal dialog to display using `shiny::showModal()`.
+#' @returns a modal dialog.
 #' @export
 #'
 #' @details
-#' Possible values for workflow are "create", "update" or "delete".
-#' "create" is the default.
+#' Possible values for workflow are "create" (default), "update" or "delete".
+#'
+#' `...` is typically the output of the item_form() function
+#' When `workflow = "delete"`, it will be ignored and replaced by a standard message.
 #'
 #' @examples
 #' \dontrun{
-#' item_dialog(data.model, items, update = FALSE, item = NULL, shortcut = FALSE, ns)
+#' item_dialog(workflow = "delete", ns)
 #' }
 
-item_dialog <- function(data.model = NULL, items = NULL, workflow = c("create", "update", "delete"), item = NULL, shortcut = FALSE, ns){
+item_dialog <- function(..., workflow = c("create", "update", "delete"), ns){
 
   # -- check argument
   workflow <- match.arg(workflow)
 
-  # -- create
-  if(workflow == "create")
-    dialog <- modalDialog(
-      item_form(data.model = data.model,
-                items = items,
-                shortcut = shortcut,
-                ns = ns),
-      title = "Create item",
-      footer = tagList(
-        modalButton("Cancel"),
-        actionButton(inputId = ns(("item_create_confirm")),
-                     label = "Create")))
+  # -- prepare
+  title <- paste0(ktools::toupperfirst(workflow), " item", ifelse(workflow == "delete", "(s)", ""))
+  content <- ifelse(workflow == "delete", "Danger: deleting item(s) can't be undone! Do you confirm?", ...)
+  btn_id <- ns(paste("item", workflow, "confirm", sep = "_"))
+  btn_label <- ktools::toupperfirst(workflow)
 
-  # -- update
-  if(workflow == "update")
-    dialog <- modalDialog(
-      item_form(data.model = data.model,
-                items = items,
-                workflow = "update",
-                item = item,
-                shortcut = shortcut,
-                ns = ns),
-      title = "Update item",
-      footer = tagList(
-        modalButton("Cancel"),
-        actionButton(inputId = ns(("item_update_confirm")),
-                     label = "Update")))
-
-  # -- delete
-  if(workflow == "delete")
-    dialog <- modalDialog(title = "Delete item(s)",
-                "Danger: deleting item(s) can't be undone! Do you confirm?",
-                footer = tagList(
-                  modalButton("Cancel"),
-                  actionButton(ns("item_delete_confirm"), "Delete")))
-
-  # -- return
-  dialog
+  # -- build dialog & return
+  modalDialog(
+    content,
+    title = title,
+    footer = tagList(
+      modalButton("Cancel"),
+      actionButton(inputId = btn_id,
+                   label = btn_label)))
 
 }
