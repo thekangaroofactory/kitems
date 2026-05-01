@@ -5,10 +5,10 @@
 #' @description
 #' Build input for an attribute
 #'
-#' @param colClass a length-one named vector. \code{names(colClass)} is the name of the attribute,
-#' and \code{colClass} is the type (class) of the attribute.
-#' @param value the value used to initialize the input
-#' @param ns the namespace function reference
+#' @param name the name of the attribute.
+#' @param type the type of the attribute.
+#' @param value the value to be used to initialize the input.
+#' @param ns the namespace function reference.
 #'
 #' @return An input that can be added to the UI definition.
 #' @export
@@ -19,25 +19,26 @@
 #' ns <- shiny::NS("my_data")
 #'
 #' # -- create inputs
-#' attribute_input(colClass = c(name = "character"), ns)
-#' attribute_input(colClass = c(total = "numeric"), value = 10, ns)
+#' attribute_input(name = "total", type = "numeric", value = 10, ns)
 #' }
 
-attribute_input <- function(colClass, value = NULL, ns){
+attribute_input <- function(name, type, value = NULL, ns){
 
-  # -- check colClass
-  if(is.null(names(colClass)) | !colClass %in% OBJECT_CLASS)
-    stop("colClass has either no name or value does not fit with supported class (see OBJECT_CLASS)")
+  # -- check arguments
+  if(is.null(name))
+    stop("name is required")
 
-  catl("- [attribute_input] name =", names(colClass), "/ type =", colClass, "/ value =", value)
+  if(!type %in% OBJECT_CLASS)
+    stop("type does not fit with supported class (see OBJECT_CLASS)")
+
+  catl("- [attribute_input] name =", name, "/ type =", type, "/ value =", value)
 
   # -- compute inputId & label
-  name <- names(colClass)
   input_id <- ns(name)
   label <- stringr::str_to_title(name)
 
   # -- character
-  if(colClass == "character")
+  if(type == "character")
     input <- textInput(inputId = input_id,
                        label = label,
                        value = value,
@@ -46,7 +47,7 @@ attribute_input <- function(colClass, value = NULL, ns){
 
   # -- numeric, integer
   # removed double #218
-  if(colClass %in% c("numeric", "integer"))
+  if(type %in% c("numeric", "integer"))
     input <- numericInput(
       inputId = input_id,
       label = label,
@@ -57,7 +58,7 @@ attribute_input <- function(colClass, value = NULL, ns){
       width = NULL)
 
   # -- date, POSIXct
-  if(colClass %in% c("Date", "POSIXct"))
+  if(type %in% c("Date", "POSIXct"))
     input <- dateInput(
       inputId = input_id,
       label = label,
@@ -74,7 +75,7 @@ attribute_input <- function(colClass, value = NULL, ns){
       daysofweekdisabled = NULL)
 
   # -- POSIXct (add time & timezone inputs)
-  if(colClass == "POSIXct"){
+  if(type == "POSIXct"){
 
     # -- get timezone from value
     # Note: pick values matching with OlsonNames list
@@ -102,7 +103,7 @@ attribute_input <- function(colClass, value = NULL, ns){
 
 
   # -- logical
-  if(colClass == "logical"){
+  if(type == "logical"){
 
     # -- check value
     if(is.character(value))

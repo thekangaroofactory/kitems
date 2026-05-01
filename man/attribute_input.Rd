@@ -4,15 +4,16 @@
 \alias{attribute_input}
 \title{Attribute Input}
 \usage{
-attribute_input(colClass, value = NULL, ns)
+attribute_input(name, type, value = NULL, ns)
 }
 \arguments{
-\item{colClass}{a length-one named vector. \code{names(colClass)} is the name of the attribute,
-and \code{colClass} is the type (class) of the attribute.}
+\item{name}{the name of the attribute.}
 
-\item{value}{the value used to initialize the input}
+\item{type}{the type of the attribute.}
 
-\item{ns}{the namespace function reference}
+\item{value}{the value to be used to initialize the input.}
+
+\item{ns}{the namespace function reference.}
 }
 \value{
 An input that can be added to the UI definition.
@@ -26,7 +27,6 @@ Build input for an attribute
 ns <- shiny::NS("my_data")
 
 # -- create inputs
-attribute_input(colClass = c(name = "character"), ns)
-attribute_input(colClass = c(total = "numeric"), value = 10, ns)
+attribute_input(name = "total", type = "numeric", value = 10, ns)
 }
 }
