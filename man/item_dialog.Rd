@@ -4,40 +4,29 @@
 \alias{item_dialog}
 \title{Item Modal Dialog(s)}
 \usage{
-item_dialog(
-  data.model = NULL,
-  items = NULL,
-  workflow = c("create", "update", "delete"),
-  item = NULL,
-  shortcut = FALSE,
-  ns
-)
+item_dialog(..., workflow = c("create", "update", "delete"), ns)
 }
 \arguments{
-\item{data.model}{a data.frame of the data model.}
-
-\item{items}{a data.frame of the items.}
+\item{...}{the content to be displayed in the modal dialog.}
 
 \item{workflow}{a character string to indicate workflow (see details).}
 
-\item{item}{a data.frame of the item to update (when \code{workflow} = "update").}
-
-\item{shortcut}{a logical (default \code{FALSE}) if shortcuts should be activated.}
-
-\item{ns}{the intended namespace function to use in the dialog.}
+\item{ns}{the namespace function to use in the dialog.}
 }
 \value{
-a modal dialog to display using \code{shiny::showModal()}.
+a modal dialog.
 }
 \description{
-Produces a create / update / delete modal dialog to display.
+Produces a create / update / delete modal dialog.
 }
 \details{
-Possible values for workflow are "create", "update" or "delete".
-"create" is the default.
+Possible values for workflow are "create" (default), "update" or "delete".
+
+\code{...} is typically the output of the item_form() function
+When \code{workflow = "delete"}, it will be ignored and replaced by a standard message.
 }
 \examples{
 \dontrun{
-item_dialog(data.model, items, update = FALSE, item = NULL, shortcut = FALSE, ns)
+item_dialog(workflow = "delete", ns)
 }
 }

@@ -4,43 +4,25 @@
 \alias{item_form}
 \title{Item Form}
 \usage{
-item_form(
-  data.model,
-  items = NULL,
-  workflow = c("create", "update"),
-  item = NULL,
-  shortcut = FALSE,
-  ns
-)
+item_form(data.model, ns)
 }
 \arguments{
 \item{data.model}{the data.frame of the data model.}
 
-\item{items}{the data.frame of the items.}
-
-\item{workflow}{a character string to indicate workflow (see details).}
-
-\item{item}{an optional item (used to set default input values if update = \code{TRUE}).}
-
-\item{shortcut}{a logical to indicate if shortcuts should be displayed.}
-
 \item{ns}{the namespace function, output of \code{shiny::NS()}.}
 }
 \value{
-An HTML object \code{tagList()} containing the attribute inputs.
+A list of HTML input objects.
 }
 \description{
 Builds the create or update item form.
 }
 \details{
-Data model skip feature will be used to return inputs only for the skip = \code{FALSE} attributes
-
-Possible values for workflow are "create", "update" or "delete".
-"create" is the default.
+Possible values for workflow are "create" (the default) or "update".
 }
 \examples{
 \dontrun{
-item_form(data.model = mydata$data_model(), workflow = "create", item = NULL, ns)
-item_form(data.model = mydata$data_model(), workflow = "update", item = myitem, ns)
+item_form(data.model = mydata$data_model(), ns)
+item_form(data.model = mydata$data_model(), ns)
 }
 }
