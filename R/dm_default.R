@@ -38,13 +38,13 @@ dm_default <- function(data.model){
     }
 
     data.model <- data.model |>
-      mutate(default.val = replace_when(default.val, !is.na(default.fun) ~ foo_eval(default.fun)))
+      dplyr::mutate(default.val = dplyr::replace_when(default.val, !is.na(default.fun) ~ foo_eval(default.fun)))
 
   }
 
   # -- drop columns & return
   data.model |>
-    select(!c(class.arg, default.fun, display, sort.rank, sort.desc)) |>
-    rename(default = default.val)
+    dplyr::select(!c(class.arg, default.fun, display, sort.rank, sort.desc)) |>
+    dplyr::rename(default = default.val)
 
 }
