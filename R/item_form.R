@@ -27,7 +27,7 @@
 #' item_form(data.model = mydata$data_model(), workflow = "update", item = myitem, ns)
 #' }
 
-item_form <- function(data.model, items, workflow = c("create", "update"), item = NULL, shortcut = FALSE, ns){
+item_form <- function(data.model, items = NULL, workflow = c("create", "update"), item = NULL, shortcut = FALSE, ns){
 
   # -- check argument
   workflow <- match.arg(workflow)
