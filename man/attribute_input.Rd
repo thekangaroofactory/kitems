@@ -4,7 +4,7 @@
 \alias{attribute_input}
 \title{Attribute Input}
 \usage{
-attribute_input(name, type, value = NULL, ns)
+attribute_input(name, type, value = NULL, choices = NULL, create = FALSE, ns)
 }
 \arguments{
 \item{name}{the name of the attribute.}
@@ -13,6 +13,10 @@ attribute_input(name, type, value = NULL, ns)
 
 \item{value}{the value to be used to initialize the input.}
 
+\item{choices}{a list of values to select from (see details).}
+
+\item{create}{a logical (default = FALSE) if user is allowed to create values (see details)}
+
 \item{ns}{the namespace function reference.}
 }
 \value{
@@ -20,6 +24,12 @@ An input that can be added to the UI definition.
 }
 \description{
 Build input for an attribute
+}
+\details{
+By default (\code{choices = NULL}), the function will return an input driven by the
+type of the attribute.
+When \code{choices} are provided, it will be replaced by a selectizeInput. User
+will be allowed to create additional values depending on \code{create} (otherwise ignored).
 }
 \examples{
 \dontrun{

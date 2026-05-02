@@ -4,10 +4,12 @@
 \alias{item_form}
 \title{Item Form}
 \usage{
-item_form(data.model, ns)
+item_form(attributes, items = NULL, ns)
 }
 \arguments{
-\item{data.model}{the data.frame of the data model.}
+\item{attributes}{a data.frame of the attributes (see details).}
+
+\item{items}{a data.frame of the items (see details).}
 
 \item{ns}{the namespace function, output of \code{shiny::NS()}.}
 }
@@ -18,11 +20,12 @@ A list of HTML input objects.
 Builds the create or update item form.
 }
 \details{
-Possible values for workflow are "create" (the default) or "update".
+\code{attributes} is expected to be the output of the \code{dm_default()} function.
+\code{items} are required only when the attribute values defined in the data.model
+should be evaluated with data masking support.
 }
 \examples{
 \dontrun{
-item_form(data.model = mydata$data_model(), ns)
-item_form(data.model = mydata$data_model(), ns)
+item_form(attributes = dm_default(data_model()), ns)
 }
 }

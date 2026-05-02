@@ -12,6 +12,7 @@
 #' @export
 #'
 #' @examples
+#' dm_values(x = "suggest(1, 2)")
 
 dm_values <- function(x, data = NULL){
 
