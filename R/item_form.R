@@ -5,29 +5,40 @@
 #' @description
 #' Builds the create or update item form.
 #'
-#' @param data.model the data.frame of the data model.
+#' @param attributes a data.frame of the attributes (see details).
+#' @param items a data.frame of the items (see details).
 #' @param ns the namespace function, output of `shiny::NS()`.
+#'
+#' @details
+#' `attributes` is expected to be the output of the `dm_default()` function.
+#' `items` are required only when the attribute values defined in the data.model
+#' should be evaluated with data masking support.
 #'
 #' @return A list of HTML input objects.
 #' @export
 #'
-#' @details
-#' Possible values for workflow are "create" (the default) or "update".
-#'
 #' @examples
 #' \dontrun{
-#' item_form(data.model = mydata$data_model(), ns)
-#' item_form(data.model = mydata$data_model(), ns)
+#' item_form(attributes = dm_default(data_model()), ns)
 #' }
 
-item_form <- function(data.model, ns){
+item_form <- function(attributes, items = NULL, ns){
 
   # -- check argument
-  if(nrow(data.model) == 0)
+  if(nrow(attributes) == 0)
     return(NULL)
 
   # -- apply attribute_input over the input
   # note: faster than apply over data.frame + as.list the output
-  lapply(1:nrow(data.model), function(x) attribute_input(name = data.model[x, 'name'], type = data.model[x, 'type'], value = data.model[x, 'default'], ns))
+  lapply(1:nrow(attributes), function(x) {
+
+    attribute_input(name = attributes[x, 'name'],
+                    type = attributes[x, 'type'],
+                    value = attributes[x, 'default'],
+                    choices = if(!is.na(attributes[x, 'values'])) dm_values(attributes[x, 'values'], data = items) else NULL,
+                    create = rlang::is_call(rlang::parse_expr(attributes[x, 'values']), name = "suggest"),
+                    ns)
+
+    })
 
 }

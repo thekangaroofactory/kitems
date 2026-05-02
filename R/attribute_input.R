@@ -8,7 +8,15 @@
 #' @param name the name of the attribute.
 #' @param type the type of the attribute.
 #' @param value the value to be used to initialize the input.
+#' @param choices a list of values to select from (see details).
+#' @param create a logical (default = FALSE) if user is allowed to create values (see details)
 #' @param ns the namespace function reference.
+#'
+#' @details
+#' By default (`choices = NULL`), the function will return an input driven by the
+#' type of the attribute.
+#' When `choices` are provided, it will be replaced by a selectizeInput. User
+#' will be allowed to create additional values depending on `create` (otherwise ignored).
 #'
 #' @return An input that can be added to the UI definition.
 #' @export
@@ -22,7 +30,7 @@
 #' attribute_input(name = "total", type = "numeric", value = 10, ns)
 #' }
 
-attribute_input <- function(name, type, value = NULL, ns){
+attribute_input <- function(name, type, value = NULL, choices = NULL, create = FALSE, ns){
 
   # -- check arguments
   if(is.null(name))
@@ -36,6 +44,16 @@ attribute_input <- function(name, type, value = NULL, ns){
   # -- compute inputId & label
   input_id <- ns(name)
   label <- stringr::str_to_title(name)
+
+
+  # -- attribute values
+  # when choices are provided, type driven input it replaced by a selectInput
+  if(!is.null(choices))
+    input <- selectizeInput(inputId = input_id,
+                            label = label,
+                            choices = choices,
+                            selected = value,
+                            options = list(create = create))
 
   # -- character
   if(type == "character")
