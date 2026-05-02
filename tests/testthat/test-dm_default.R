@@ -6,7 +6,7 @@ test_that("dm_default works", {
   # default.fun
 
   # -- function call
-  x <- dm_default(data.model = dm, name = "date")
+  x <- dm_default(data.model = dm[dm$name == "date", ])
 
   # -- tests
   expect_equal(class(x), c("POSIXct", "POSIXt"))

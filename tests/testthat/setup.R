@@ -43,11 +43,8 @@ colClasses_extra_att <- c(colClasses, extra_att = "integer")
 colClasses_no_date <- colClasses[!names(colClasses) %in% "date"]
 colClasses_id_only <- c(id = "numeric")
 
-# -- declare default.val
-default_val <- c("name" = "fruit", "isvalid" = TRUE)
-
-# -- declare default.fun & arg
-default_fun <- c("date" = "Sys.time()")
+# -- declare default
+default <- c(name = "fruit", isvalid = TRUE, date = "Sys.time()")
 
 # -- declare skip
 # skip <- c("isvalid")
@@ -63,13 +60,13 @@ sort_desc <- c("date" = TRUE)
 
 # -- build base data model
 dm <- data_model(colClasses = colClasses,
-                 default.val = default_val, default.fun = default_fun,
+                 default = default,
                  sort.rank = sort_rank, sort.desc = sort_desc)
 
 # -- build specific data models
-dm_nodisplay <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun, display = FALSE)
-dm_no_skip <- data_model(colClasses = colClasses, default.val = default_val, default.fun = default_fun)
-dm_extra_att <- data_model(colClasses = colClasses_extra_att, default.val = default_val, default.fun = default_fun)
+dm_nodisplay <- data_model(colClasses = colClasses, default = default, display = FALSE)
+dm_no_skip <- data_model(colClasses = colClasses, default = default)
+dm_extra_att <- data_model(colClasses = colClasses_extra_att, default = default)
 dm_no_date <- data_model(colClasses = colClasses_no_date)
 dm_id_only <- data_model(colClasses = colClasses_id_only, skip = TRUE)
 dm_sort <- data_model(colClasses = colClasses, sort.rank = sort_rank, sort.desc = sort_desc)
