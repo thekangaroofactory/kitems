@@ -19,7 +19,7 @@ dm_default <- function(data.model){
   # -- default function
   if(any(!is.na(data.model$default.fun))){
 
-    catl("- strategy: default function =", x$default.fun, level = 2)
+    catl("- strategy: default function =", data.model$default.fun, level = 2)
 
     # maybe a function to deal with the evaluation
     foo_eval <- function(x) {
