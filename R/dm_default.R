@@ -32,8 +32,8 @@ dm_default <- function(data.model){
       if(rlang::is_call(y))
 
         tryCatch({
-          catl("- Call requires evaluation", x, level = 2)
-          rlang::eval_tidy(y, data = NULL)},
+          catl("- Call requires an evaluation:", x, level = 2)
+          as.character(rlang::eval_tidy(y, data = NULL))},
           error = function(e) {
             warning("Error when trying to evaluate default =", y, "\n", e$message)
             NA})
