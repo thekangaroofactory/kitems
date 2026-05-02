@@ -3,11 +3,11 @@
 test_that("attribute_update works", {
 
   # -- function call
-  x <- attribute_update(data.model = dm, name = "isvalid", default.val = FALSE)
+  x <- attribute_update(data.model = dm, name = "isvalid", default = FALSE)
 
   # -- checks
   expect_s3_class(x, "data.frame")
-  expect_true(is.na(x[x$name == "isvalid", ]$default.val))
+  expect_true(is.na(x[x$name == "isvalid", ]$default))
 
 })
 
@@ -24,38 +24,38 @@ test_that("attribute_update / class.arg", {
 })
 
 
-test_that("attribute_update / default.val", {
+test_that("attribute_update / default", {
 
   # -- function call
-  x <- attribute_update(data.model = dm, name = "name", default.val = "blueberry")
+  x <- attribute_update(data.model = dm, name = "name", default = "blueberry")
 
   # -- checks
   expect_s3_class(x, "data.frame")
-  expect_equal(x[x$name == "name", ]$default.val, "blueberry")
+  expect_equal(x[x$name == "name", ]$default, "blueberry")
 
 })
 
 
-test_that("attribute_update / default.fun", {
+test_that("attribute_update / default", {
 
   # -- function call
-  x <- attribute_update(data.model = dm, name = "date", default.fun = "Sys.Date")
+  x <- attribute_update(data.model = dm, name = "date", default = "Sys.Date()")
 
   # -- checks
   expect_s3_class(x, "data.frame")
-  expect_equal(x[x$name == "date", ]$default.fun, "Sys.Date")
+  expect_equal(x[x$name == "date", ]$default, "Sys.Date()")
 
 })
 
 
-test_that("attribute_update / default.fun + default.arg", {
+test_that("attribute_update / default + default.arg", {
 
   # -- function call
-  x <- attribute_update(data.model = dm, name = "id", default.fun = "ktools::getTimestamp(k = 10)")
+  x <- attribute_update(data.model = dm, name = "id", default = "ktools::getTimestamp(k = 10)")
 
   # -- checks
   expect_s3_class(x, "data.frame")
-  expect_equal(x[x$name == "id", ]$default.fun, "ktools::getTimestamp(k = 10)")
+  expect_equal(x[x$name == "id", ]$default, "ktools::getTimestamp(k = 10)")
 
 })
 

@@ -32,7 +32,7 @@ test_that("dm_migrate: migration @v0.5.2", {
   # expect_true("default.arg" %in% names(x)) <<<<<<<<<<<<<<<<< that needs an upgrade: just migrate it normally for v8.x (test ko for now)
   expect_true("sort.rank" %in% names(x))
   expect_true("sort.desc" %in% names(x))
-  expect_true(attributes(x)$version == "0.5.2")
+  expect_true(attributes(x)$version == utils::packageVersion("kitems"))
 
 })
 
@@ -53,7 +53,7 @@ test_that("dm_migrate: migration @v0.7.1", {
   # -- check: x dim
   expect_true("display" %in% names(x))
   expect_false("filter" %in% names(x))
-  expect_true(attributes(x)$version == "0.7.1")
+  expect_true(attributes(x)$version == utils::packageVersion("kitems"))
 
 })
 
@@ -76,6 +76,6 @@ test_that("dm_migrate: migration @v0.8.0", {
   # -- check: x dim
   expect_true("display" %in% names(x))
   expect_false("filter" %in% names(x))
-  expect_true(attributes(x)$version == "0.8.0")
+  expect_true(attributes(x)$version == utils::packageVersion("kitems"))
 
 })

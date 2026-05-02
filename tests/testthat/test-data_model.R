@@ -28,28 +28,28 @@ test_that("data_model works", {
 
   # //////////////////////////////////////////////////////////////////////////////
 
-  # -- default.val (ok)
-  data_model(colClasses = c(foo = "character"), default.val = "foo")
-  data_model(colClasses = c(foo = "character"), default.val = c(foo = "foo"))
-  data_model(colClasses = c(foo = "character", bar = "numeric"), default.val = c(foo = "foo"))
+  # -- default (ok)
+  data_model(colClasses = c(foo = "character"), default = "foo")
+  data_model(colClasses = c(foo = "character"), default = c(foo = "foo"))
+  data_model(colClasses = c(foo = "character", bar = "numeric"), default = c(foo = "foo"))
 
-  # -- default.val (ko)
-  expect_error(data_model(colClasses = c(foo = "character", bar = "numeric"), default.val = "foo"))
-
-
-  # -- default.fun (ok)
-  data_model(colClasses = c(foo = "Date"), default.fun = "Sys.Date()")
-  data_model(colClasses = c(foo = "Date"), default.fun = c(foo = "Sys.Date()"))
-  data_model(colClasses = c(foo = "Date", bar = "numeric"), default.fun = c(foo = "Sys.Date()"))
-
-  # -- default.fun (ko)
-  expect_error(data_model(colClasses = c(foo = "Date", bar = "numeric"), default.fun = "Sys.Date()"))
+  # -- default (ko)
+  expect_error(data_model(colClasses = c(foo = "character", bar = "numeric"), default = "foo"))
 
 
-  # -- default.fun with arg (ok)
-  data_model(colClasses = c(foo = "numeric"), default.fun = "rnorm(1)")
-  data_model(colClasses = c(foo = "numeric"), default.fun = c(foo = "rnorm(1)"))
-  data_model(colClasses = c(foo = "numeric", bar = "character"), default.fun = c(foo = "rnorm(1)"))
+  # -- default (ok)
+  data_model(colClasses = c(foo = "Date"), default = "Sys.Date()")
+  data_model(colClasses = c(foo = "Date"), default = c(foo = "Sys.Date()"))
+  data_model(colClasses = c(foo = "Date", bar = "numeric"), default = c(foo = "Sys.Date()"))
+
+  # -- default (ko)
+  expect_error(data_model(colClasses = c(foo = "Date", bar = "numeric"), default = "Sys.Date()"))
+
+
+  # -- default with arg (ok)
+  data_model(colClasses = c(foo = "numeric"), default = "rnorm(1)")
+  data_model(colClasses = c(foo = "numeric"), default = c(foo = "rnorm(1)"))
+  data_model(colClasses = c(foo = "numeric", bar = "character"), default = c(foo = "rnorm(1)"))
 
 
   # //////////////////////////////////////////////////////////////////////////////
