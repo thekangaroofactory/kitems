@@ -75,16 +75,31 @@ dm_migrate <- function(data.model){
     if(length(new_cols) > 0){
       message("[dm_migrate] Data model migration to v0.8.0, missing columns = ", new_cols)
       data.model[new_cols] <- DATA_MODEL_DEFAULTS[new_cols]
-      attr(data.model, "version") <- "0.8.0"
       dirty <- TRUE}
 
     # drop default.arg & merge into default.fun
     if("default.arg" %in% names(data.model)){
       message("[dm_migrate] Data model migration to v0.8.0, drop column = default.arg")
-      data.model |> dplyr::mutate(default.fun = dplyr::case_when(!is.na(default.arg) ~ stringr::str_replace(default.arg, "list", default.fun),
+      data.model <- data.model |> dplyr::mutate(default.fun = dplyr::case_when(!is.na(default.arg) ~ stringr::str_replace(default.arg, "list", default.fun),
                                                          .default = paste0(default.fun, "()" )))
       data.model$default.arg <- NULL
       dirty <- TRUE}
+
+    # drop default.fun & merge into default.val
+    if("default.fun" %in% names(data.model)){
+      message("[dm_migrate] Data model migration to v0.8.0, drop column = default.fun")
+      data.model <- data.model |> dplyr::mutate(default.val = dplyr::replace_when(default.val, !is.na(default.fun) ~ default.fun))
+      data.model$default.fun <- NULL
+      dirty <- TRUE}
+
+    # rename default.val into default
+    if("default.val" %in% names(data.model)){
+      message("[dm_migrate] Data model migration to v0.8.0, rename column = default.val")
+      data.model <- data.model |> dplyr::rename(default = default.val)
+      dirty <- TRUE}
+
+    # update version
+    attr(data.model, "version") <- "0.8.0"
 
   }
 
