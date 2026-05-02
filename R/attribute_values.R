@@ -32,7 +32,7 @@ attribute_values <- function(key, value, data.model){
 
     if(!is_truthy(value)){
       catl("> Attribute has invalid input / set default", level = 2)
-      value <- dm_default(data.model, key)}
+      value <- dm_default(data.model |> dplyr::filter(name == key))$default}
 
   } else {
 
