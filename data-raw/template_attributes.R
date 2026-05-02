@@ -11,23 +11,23 @@ TEMPLATE_ATTRIBUTES <-
   # -- id
   attribute_create(name = "id",
                    class = "numeric",
-                   default.fun = "ktools::getTimestamp(k=1000000)",
+                   default = "ktools::getTimestamp(k=1000000)",
                    skip = TRUE,
                    display = FALSE) |>
 
   # -- date & time
   attribute_create(name = "date",
                    class = "Date",
-                   default.fun = "Sys.Date") |>
+                   default = "Sys.Date") |>
 
   attribute_create(name = "created_on",
                    class = "POSIXct",
-                   default.fun = "Sys.time",
+                   default = "Sys.time",
                    skip = TRUE) |>
 
   attribute_create(name = "updated_on",
                    class = "POSIXct",
-                   default.fun = "Sys.time",
+                   default = "Sys.time",
                    skip = TRUE,
                    refresh = TRUE) |>
 
@@ -58,32 +58,32 @@ TEMPLATE_ATTRIBUTES <-
 
   attribute_create(name = "debit",
                    class = "numeric",
-                   default.val = 0) |>
+                   default = 0) |>
 
   attribute_create(name = "credit",
                    class = "numeric",
-                   default.val = 0) |>
+                   default = 0) |>
 
   attribute_create(name = "amount",
                    class = "numeric",
-                   default.val = 0) |>
+                   default = 0) |>
 
   attribute_create(name = "total",
                    class = "numeric",
-                   default.val = 0) |>
+                   default = 0) |>
 
   attribute_create(name = "balance",
                    class = "numeric",
-                   default.val = 0) |>
+                   default = 0) |>
 
   # -- integer
   attribute_create(name = "quantity",
                    class = "integer",
-                   default.val = 0) |>
+                   default = 0) |>
 
   attribute_create(name = "progress",
                    class = "integer",
-                   default.val = 0)
+                   default = 0)
 
 
 # -- code to save package data

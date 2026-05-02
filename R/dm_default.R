@@ -11,40 +11,43 @@
 #' @export
 #'
 #' @examples
-#' dm <- data_model(colClasses = c(foo = "numeric"), default.val = 12)
+#' dm <- data_model(colClasses = c(foo = "numeric"), default = 12)
 #' dm_default(dm)
 
 dm_default <- function(data.model){
 
-  # -- default function
-  if(any(!is.na(data.model$default.fun))){
+  # -- check default(s)
+  if(any(!is.na(data.model$default))){
 
-    catl("- strategy: default function =", data.model$default.fun, level = 2)
+    catl("Compute default(s)")
 
-    # maybe a function to deal with the evaluation
-    foo_eval <- function(x) {
+    # -- helper function to deal with the vectorized evaluation
+    helper <- function(x) {
 
-      unlist(as.character(lapply(rlang::parse_exprs(x), function(y) {
+      # -- parse text to expression
+      y <- rlang::parse_expr(x)
+
+      # -- check if evaluation is required (call)
+      # otherwise return unchanged input
+      if(rlang::is_call(y))
 
         tryCatch({
-
+          catl("- Call requires evaluation", x, level = 2)
           rlang::eval_tidy(y, data = NULL)},
-
-          # -- failed (return NA)
           error = function(e) {
-            warning("Error when trying to apply default function =", y, "\n", e$message)
-            NA}) })))
+            warning("Error when trying to evaluate default =", y, "\n", e$message)
+            NA})
 
-    }
+      else x}
 
+    # --
     data.model <- data.model |>
-      dplyr::mutate(default.val = dplyr::replace_when(default.val, !is.na(default.fun) ~ foo_eval(default.fun)))
+      dplyr::mutate(default = unlist(lapply(default, helper)))
 
   }
 
   # -- drop columns & return
   data.model |>
-    dplyr::select(!c(class.arg, default.fun, display, sort.rank, sort.desc)) |>
-    dplyr::rename(default = default.val)
+    dplyr::select(!c(class.arg, display, sort.rank, sort.desc))
 
 }

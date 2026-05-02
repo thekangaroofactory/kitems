@@ -8,8 +8,7 @@
 #' @param colClasses a names vector of classes, defining the data model.
 #' @param class.arg optional named vector of arguments, to pass along with the class function (see details).
 #' @param values optional named vector, to indicate possible values.
-#' @param default.val optional named vector of default values.
-#' @param default.fun optional named vector of default functions to be used to generate default values.
+#' @param default optional named vector of default values.
 #' @param display optional logical value, if the attributes should be displayed in the table view.
 #' @param skip optional logical value, if the attributes should be skipped from the user input form.
 #' @param refresh optional logical value, if skipped attributes should be updated (see details).
@@ -41,14 +40,11 @@
 #' - limit() to force attribute choices among a given list of values
 #' - lifecycle() to indicate values are states (with promote/demote mechanism)
 #'
-#' All `default.*` parameters are optional.
-#' When provided, they will be used to match with names defined in colClasses:
-#' - order in those vectors doesn't matter
+#' All `default` parameter is optional.
+#' When provided, it will be used to match with names defined in colClasses:
+#' - order in the vector doesn't matter
 #' - there is no need to set values for all attributes (see examples)
-#' - names in vectors not matching with colClasses names will be ignored
-#'
-#' `default.fun` and `default.val` are mutual exclusive, with priority on `default.fun` (`default.val` will be ignored).
-#' `default.fun` must be a string that can be parsed into a function call.
+#' - names in vector not matching with colClasses names will be ignored
 #'
 #' `display`, `skip` and `refresh` only accept logical values (no vector).
 #' For those attributes, it is expected that fine tuning will be done through the fine grain verbs (escape, show, hide).
@@ -58,18 +54,18 @@
 #' When `skip` is not set (default = FALSE), `refresh` will be ignored
 #'
 #' If not provided, defaults will be applied:
-#' - \code{NA} for `default.val`, `default.fun`
+#' - \code{NA} for `default`
 #' - \code{TRUE} for `display`
 #' - \code{FALSE} for `skip` and `refresh`
 #'
 #' @examples
 #' # -- order in vectors doesn't matter:
-#' default.val <- c("name" = "test", "total" = 2)
-#' default.val <- c("total" = 2, "name" = "test")
+#' default <- c("name" = "test", "total" = 2)
+#' default <- c("total" = 2, "name" = "test")
 #'
 #' # -- no need to set all values
 #' colClasses <- c("id" = "numeric", "name" = "character", state = "character", "total" = "numeric")
-#' default.val <- c("name" = "test", "total" = 2)
+#' default <- c("name" = "test", "total" = 2)
 #'
 #' # -- values
 #' values <- c("total" = "suggest(12, 37)",
@@ -84,12 +80,12 @@
 #' sort.rank = c("date" = 1L, "total" = 2L, "name" = 3L)
 #' sort.desc = c("date" = TRUE, "total" = FALSE)
 #'
-#' data_model(colClasses, values = values, default.val = default.val, display = display, skip = skip)
+#' data_model(colClasses, values = values, default = default, display = display, skip = skip)
 #'
 
 data_model <- function(colClasses = NULL, class.arg = NULL,
                        values = NULL,
-                       default.val = NULL, default.fun = NULL,
+                       default = NULL,
                        display = TRUE,
                        skip = FALSE, refresh = FALSE,
                        sort.rank = NULL, sort.desc = NULL){
@@ -102,7 +98,7 @@ data_model <- function(colClasses = NULL, class.arg = NULL,
   if(is.null(colClasses)){
 
     # force reset all parameters
-    class.arg <- default.val <- default.fun <- sort.rank <- sort.desc <- NULL
+    class.arg <- default <- sort.rank <- sort.desc <- NULL
 
   } else {
 
@@ -116,7 +112,7 @@ data_model <- function(colClasses = NULL, class.arg = NULL,
 
   # ////////////////////////////////////////////////////////////////////////////
 
-  # -- class.arg, values, default.fun
+  # -- class.arg, values
   # must be a named character vector or a character value
 
   if(!is.null(class.arg))
@@ -125,21 +121,13 @@ data_model <- function(colClasses = NULL, class.arg = NULL,
   if(!is.null(values))
     values <- match_arg_t1(values, colClasses, mode = "character")
 
-  if(!is.null(default.fun))
-    default.fun <- match_arg_t1(default.fun, colClasses, mode = "character")
-
 
   # ////////////////////////////////////////////////////////////////////////////
 
-  # -- default.val
+  # -- default
   # must be a named vector or value
-  if(!is.null(default.val))
-    default.val <- match_arg_t1(default.val, colClasses)
-
-  # -- make sure default.val & default.fun are mutual exclusive
-  # note: default.fun has priority over default.val
-  if(any(names(default.val) %in% names(default.fun)))
-    default.val <- default.val[!names(default.val) %in% names(default.fun)]
+  if(!is.null(default))
+    default <- match_arg_t1(default, colClasses)
 
 
   # ////////////////////////////////////////////////////////////////////////////
@@ -186,7 +174,7 @@ data_model <- function(colClasses = NULL, class.arg = NULL,
       # -- add from template
       id <- TEMPLATE_ATTRIBUTES[TEMPLATE_ATTRIBUTES$name == "id", ]
       colClasses <- c(c(id = id$type), colClasses)
-      default.fun <- c(c(id = id$default.fun), default.fun)
+      default <- c(c(id = id$default), default)
       display <- c(id$display, rep(display, length(colClasses) - 1))
       skip <- c(id$skip, rep(skip, length(colClasses) - 1))
       refresh <- c(id$refresh, rep(refresh, length(colClasses) - 1))}}
@@ -203,17 +191,11 @@ data_model <- function(colClasses = NULL, class.arg = NULL,
   else
     x$class.arg <- NA
 
-  # -- Add default.val (match input with names)
-  if(isTruthy(default.val))
-    x$default.val <- as.character(default.val[match(x$name, names(default.val))])
+  # -- Add default (match input with names)
+  if(isTruthy(default))
+    x$default <- as.character(default[match(x$name, names(default))])
   else
-    x$default.val <- NA
-
-  # -- Add default.fun (match input with names)
-  if(isTruthy(default.fun))
-    x$default.fun <- as.character(default.fun[match(x$name, names(default.fun))])
-  else
-    x$default.fun <- NA
+    x$default <- NA
 
   # -- Add display, skip & refresh
   x$display <- display
