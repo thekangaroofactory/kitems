@@ -8,8 +8,7 @@ attribute_update(
   data.model,
   name,
   class.arg = NULL,
-  default.val = NULL,
-  default.fun = NULL,
+  default = NULL,
   display = NULL,
   skip = NULL,
   refresh = NULL,
@@ -24,9 +23,7 @@ attribute_update(
 
 \item{class.arg}{the argument(s) to pass along with the class function}
 
-\item{default.val}{the new default value(s)}
-
-\item{default.fun}{the new default function name(s)}
+\item{default}{the new default value(s)}
 
 \item{display}{a logical to set display}
 
@@ -54,7 +51,6 @@ parameters is either same as \code{name} or 1 (then all rows gets same value).
 When the intend is to update all attributes with the same value, then named vector is not necessary.
 
 When attribute parameters are not compatible, they will be reset.
-Ex: setting \code{default.val} will reset \code{default.fun}
 
 Otherwise same rules apply as in the \code{data_model()} function.
 }
@@ -66,7 +62,7 @@ dm <- data_model(colClasses = c(name = "character", total = "numeric"))
 # -- Use of vectors to update several attributes
 attribute_update(data.model = dm,
                  name = c("name", "total"),
-                 default.val = c(name = "test", total = 2),
+                 default = c(name = "test", total = 2),
                  skip = TRUE)
 
 }

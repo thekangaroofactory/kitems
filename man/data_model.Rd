@@ -8,8 +8,7 @@ data_model(
   colClasses = NULL,
   class.arg = NULL,
   values = NULL,
-  default.val = NULL,
-  default.fun = NULL,
+  default = NULL,
   display = TRUE,
   skip = FALSE,
   refresh = FALSE,
@@ -24,9 +23,7 @@ data_model(
 
 \item{values}{optional named vector, to indicate possible values.}
 
-\item{default.val}{optional named vector of default values.}
-
-\item{default.fun}{optional named vector of default functions to be used to generate default values.}
+\item{default}{optional named vector of default values.}
 
 \item{display}{optional logical value, if the attributes should be displayed in the table view.}
 
@@ -69,16 +66,13 @@ Ex: as.POSIXct("2025-09-10T13:16:55Z", format = "\%Y-\%m-\%dT\%H:\%M:\%S")
 \item lifecycle() to indicate values are states (with promote/demote mechanism)
 }
 
-All \verb{default.*} parameters are optional.
-When provided, they will be used to match with names defined in colClasses:
+All \code{default} parameter is optional.
+When provided, it will be used to match with names defined in colClasses:
 \itemize{
-\item order in those vectors doesn't matter
+\item order in the vector doesn't matter
 \item there is no need to set values for all attributes (see examples)
-\item names in vectors not matching with colClasses names will be ignored
+\item names in vector not matching with colClasses names will be ignored
 }
-
-\code{default.fun} and \code{default.val} are mutual exclusive, with priority on \code{default.fun} (\code{default.val} will be ignored).
-\code{default.fun} must be a string that can be parsed into a function call.
 
 \code{display}, \code{skip} and \code{refresh} only accept logical values (no vector).
 For those attributes, it is expected that fine tuning will be done through the fine grain verbs (escape, show, hide).
@@ -89,19 +83,19 @@ When \code{skip} is not set (default = FALSE), \code{refresh} will be ignored
 
 If not provided, defaults will be applied:
 \itemize{
-\item \code{NA} for \code{default.val}, \code{default.fun}
+\item \code{NA} for \code{default}
 \item \code{TRUE} for \code{display}
 \item \code{FALSE} for \code{skip} and \code{refresh}
 }
 }
 \examples{
 # -- order in vectors doesn't matter:
-default.val <- c("name" = "test", "total" = 2)
-default.val <- c("total" = 2, "name" = "test")
+default <- c("name" = "test", "total" = 2)
+default <- c("total" = 2, "name" = "test")
 
 # -- no need to set all values
 colClasses <- c("id" = "numeric", "name" = "character", state = "character", "total" = "numeric")
-default.val <- c("name" = "test", "total" = 2)
+default <- c("name" = "test", "total" = 2)
 
 # -- values
 values <- c("total" = "suggest(12, 37)",
@@ -116,6 +110,6 @@ skip <- FALSE
 sort.rank = c("date" = 1L, "total" = 2L, "name" = 3L)
 sort.desc = c("date" = TRUE, "total" = FALSE)
 
-data_model(colClasses, values = values, default.val = default.val, display = display, skip = skip)
+data_model(colClasses, values = values, default = default, display = display, skip = skip)
 
 }

@@ -16,6 +16,6 @@ A data.frame with a 'default' column.
 Compute default value(s).
 }
 \examples{
-dm <- data_model(colClasses = c(foo = "numeric"), default.val = 12)
+dm <- data_model(colClasses = c(foo = "numeric"), default = 12)
 dm_default(dm)
 }
