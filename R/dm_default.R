@@ -7,7 +7,7 @@
 #'
 #' @param data.model the data.frame of the data model.
 #'
-#' @return A data.frame with a 'default' column.
+#' @return A data.frame with default values.
 #' @export
 #'
 #' @examples
@@ -48,6 +48,6 @@ dm_default <- function(data.model){
 
   # -- drop columns & return
   data.model |>
-    dplyr::select(!c(class.arg, display, sort.rank, sort.desc))
+    dplyr::select(!c(class.arg, display, skip, refresh, sort.rank, sort.desc))
 
 }

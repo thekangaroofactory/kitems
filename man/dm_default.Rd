@@ -10,7 +10,7 @@ dm_default(data.model)
 \item{data.model}{the data.frame of the data model.}
 }
 \value{
-A data.frame with a 'default' column.
+A data.frame with default values.
 }
 \description{
 Compute default value(s).
