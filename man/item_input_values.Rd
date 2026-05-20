@@ -15,7 +15,7 @@ item_input_values(input, colClasses)
 a named list of values.
 }
 \description{
-Build a list of values from the input.
+Extract the list of values from the input.
 }
 \details{
 the output list will contain as many entries as the \code{colClasses} named vector.

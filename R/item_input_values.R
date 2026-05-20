@@ -3,7 +3,7 @@
 #' Input Values
 #'
 #' @description
-#' Build a list of values from the input.
+#' Extract the list of values from the input.
 #'
 #' @param input the input object from the shiny module.
 #' @param colClasses a named vector of classes, defining the data model.
@@ -31,10 +31,7 @@ item_input_values <- function(input, colClasses){
   # Need to retrieve additional time & timezone inputs
   if(any(colClasses == "POSIXct")){
 
-    catl("[item_input_values] Need to retrieve additional time & timezone inputs")
-
-    # -- get attributes
-    att_names <- names(colClasses)[colClasses == "POSIXct"]
+    catl("Retrieving additional time & timezone inputs")
 
     # -- helper function
     helper <- function(name){
@@ -67,14 +64,15 @@ item_input_values <- function(input, colClasses){
 
       }
 
-      catl("- Attribute =", name, "/ value =", class(value), value)
+      catl("-- output value =", value)
 
       # -- return
       value
 
     }
 
-    # -- apply & rename output
+    # -- get attributes, apply & rename output
+    att_names <- names(colClasses)[colClasses == "POSIXct"]
     att_values <- lapply(att_names, helper)
     names(att_values) <- att_names
 
