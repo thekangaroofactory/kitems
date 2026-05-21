@@ -2,24 +2,24 @@
 % Please edit documentation in R/attribute_values.R
 \name{attribute_values}
 \alias{attribute_values}
-\title{Turn Value(s) into Attribute}
+\title{Validate Value(s)}
 \usage{
-attribute_values(key, value, data.model)
+attribute_values(values, data.model, update = FALSE)
 }
 \arguments{
-\item{key}{the name of the attribute.}
-
-\item{value}{a vector of input values.}
-
 \item{data.model}{the data.frame of the data model.}
+
+\item{update}{whether the id attribute should be checked or not (default FALSE).}
+
+\item{value}{a list of input values.}
 }
 \value{
-A vector of values checked against the data model.
+A data.frame of item(s) checked against the data model.
 }
 \description{
-Turn Value(s) into Attribute
+Validate the input values and turn them into item(s)
 }
 \examples{
 \dontrun{
-attribute_values(key, value, data.model)}
+attribute_values(values, data.model)}
 }
