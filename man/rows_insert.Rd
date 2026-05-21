@@ -19,5 +19,5 @@ Insert Item(s)
 }
 \examples{
 \dontrun{
-rows_insert(items, values)}
+rows_insert(values, items)}
 }

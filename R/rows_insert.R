@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' rows_insert(items, values)}
+#' rows_insert(values, items)}
 
 rows_insert <- function(values, items){
 
