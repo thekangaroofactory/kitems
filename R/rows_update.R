@@ -4,7 +4,6 @@
 #'
 #' @param items a data.frame of the items.
 #' @param values a list of named values.
-#' @param data.model a data.frame of the data.model.
 #'
 #' @details
 #' values is a named list. The names are used to check the corresponding values
@@ -21,48 +20,17 @@
 #'
 #' @examples
 #' \dontrun{
-#' rows_update(items, values, data.model)}
+#' rows_update(items, values)}
 
-rows_update <- function(items, values, data.model){
+rows_update <- function(items, values){
 
   # ////////////////////////////////////////////////////////////////////////////
   # -- cleanup & prepare values
-
-  # -- drop unmatched columns
-  # before projection to avoid potential duplicated rows
-  values <- values[names(values) %in% data.model$name]
-
-  # -- secure against length 0 (NULL, numeric(0)...)
-  # otherwise as.data.frame will fail
-  if(any(lengths(values) == 0))
-    values <- values[lengths(values) != 0]
-
-  # -- make rectangular
-  # elements must have length 1 or same as the id element
-  values <- as.data.frame(values)
 
   # -- drop unmatched rows
   # replace [] by filter otherwise values = list(id = 123)
   # will brake df into a num vector (without name!)
   values <- values |> dplyr::filter(.data$id %in% items$id)
-
-  # -- check skipped attributes to refresh
-  # add names to values so they will be computed again
-  att_refresh <- data.model |> dplyr::filter(.data$skip, .data$refresh) |> dplyr::pull(.data$name)
-  att_refresh <- att_refresh[!att_refresh %in% names(values)]
-  if(!identical(att_refresh, character(0)))
-     values <- c(values, as.list(stats::setNames(NA, att_refresh)))
-
-
-  # ////////////////////////////////////////////////////////////////////////////
-  # -- check values & types
-
-  values <- sapply(names(values),
-                   function(x) attribute_values(key = x,
-                                                value = values[[x]],
-                                                data.model = data.model),
-                   simplify = FALSE,
-                   USE.NAMES = TRUE)
 
 
   # ////////////////////////////////////////////////////////////////////////////

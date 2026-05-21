@@ -4,14 +4,12 @@
 \alias{rows_update}
 \title{Update Item(s)}
 \usage{
-rows_update(items, values, data.model)
+rows_update(items, values)
 }
 \arguments{
 \item{items}{a data.frame of the items.}
 
 \item{values}{a list of named values.}
-
-\item{data.model}{a data.frame of the data.model.}
 }
 \value{
 a data.frame of the items
@@ -31,5 +29,5 @@ the call into tryCatch as this may fail.
 }
 \examples{
 \dontrun{
-rows_update(items, values, data.model)}
+rows_update(items, values)}
 }
