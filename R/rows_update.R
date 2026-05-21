@@ -2,27 +2,17 @@
 
 #' Update Item(s)
 #'
+#' @param values a data.frame used to update the items.
 #' @param items a data.frame of the items.
-#' @param values a list of named values.
-#'
-#' @details
-#' values is a named list. The names are used to check the corresponding values
-#' vs the data.model (class, default values if the provided one is not valid).
-#' The elements in the list must have either length one or same length as the id element.
-#'
-#' When an element has length one but the id has several values, all items corresponding
-#' to these ids will be updated with same value. To do so, values will be turned into
-#' a data.frame using as.data.frame ; for this reason, it's strongly advised to wrap
-#' the call into tryCatch as this may fail.
 #'
 #' @returns a data.frame of the items
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' rows_update(items, values)}
+#' rows_update(values, items)}
 
-rows_update <- function(items, values){
+rows_update <- function(values, items){
 
   # ////////////////////////////////////////////////////////////////////////////
   # -- cleanup & prepare values
