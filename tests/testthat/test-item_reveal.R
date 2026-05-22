@@ -3,7 +3,7 @@
 test_that("item_reveal works", {
 
   # -- function call
-  x <- item_reveal(items = items, data.model = dm)
+  x <- mask(item_reveal(items, dm))
 
   # -- default checks
   expect_items(x, n = nrow(items))

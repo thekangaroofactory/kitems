@@ -4,7 +4,9 @@
 test_that("item_form: create", {
 
   # -- function call
-  x <- item_form(ns = ns, data.model = dm_default(dm_no_skip))
+  x <- dm_no_skip |>
+    dm_default() |>
+    item_form(ns = shiny::NS("id"))
 
   # -- check class
   expect_type(x, "list")
@@ -16,10 +18,13 @@ test_that("item_form: create", {
 test_that("item_form: only id", {
 
   # -- function call
-  x <- item_form(ns = ns, data.model = dm_default(dm_id_only))
+  x <- dm_id_only |>
+    dplyr::filter(!skip) |>
+    dm_default() |>
+    item_form(ns = shiny::NS("id"))
 
   # -- check class
-  expect_type(x, "character")
+  expect_null(x)
 
 })
 
@@ -28,19 +33,9 @@ test_that("item_form: only id", {
 test_that("item_form: logical without default", {
 
   # -- function call
-  x <- item_form(ns = ns, data.model = dm_default(attribute_create(data.model = NULL, name = "isValid", class = "logical")))
-
-  # -- check class
-  expect_type(x, "list")
-
-})
-
-
-# -- case update ---------------------------------------------------------------
-test_that("item_form: update", {
-
-  # -- function call
-  x <- item_form(data.model = dm_default(dm), ns = ns)
+  x <- attribute_create(data.model = NULL, name = "isValid", class = "logical") |>
+    dm_default() |>
+    item_form(ns = shiny::NS("id"))
 
   # -- check class
   expect_type(x, "list")

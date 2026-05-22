@@ -75,12 +75,17 @@ dm_sort <- data_model(colClasses = colClasses, sort.rank = sort_rank, sort.desc 
 # Build items
 # ------------------------------------------------------------------------------
 
+values <- list(date = c(NA, "2024-01-14", "2024-01-16", "2024-01-17"),
+               name = c("Apple", "Banana", "Mango", "Orange"),
+               quantity = c(1, 12, 3, 7),
+               total = c(12.5, 106.3, 45.7, 17.5),
+               isvalid = c(TRUE, FALSE, TRUE, FALSE))
+
 # -- build base items
-item1 <- rows_insert(data.frame(), list(id = NA, date = NA, name = "Apple", quantity = 1, total = 12.5, isvalid = TRUE), dm)
-item2 <- rows_insert(data.frame(), list(id = NA, date = "2024-01-14", name = "Banana", quantity = 12, total = 106.3, isvalid = FALSE), dm)
-item3 <- rows_insert(data.frame(), list(id = NA, date = "2024-01-16", name = "Mango", quantity = 3, total = 45.7, isvalid = TRUE), dm)
-item4 <- rows_insert(data.frame(), list(id = NA, date = "2024-01-17", name = "Orange", quantity = 7, total = 17.5, isvalid = FALSE), dm)
-items <- dplyr::bind_rows(item1, item2, item3, item4)
+items <- values |>
+  prepare_values(dm) |>
+  attribute_values(dm) |>
+  rows_insert(data.frame())
 
 # -- items with additional attribute
 items_extra_att <- items
@@ -93,9 +98,9 @@ items_no_row2 <- data.frame("id" = as.numeric(numeric()),
                             "date" = as.character(character()))
 
 # -- items to test triggers
-new_item <- rows_insert(data.frame(), list(id = NA, date = NA, name = "Raspberry", quantity = 34, total = 86.4, isvalid = TRUE), dm)
-update_item <- rows_insert(data.frame(), list(id = items$id[1], date = NA, name = "Apple-update", quantity = 100, total = 0.1, isvalid = FALSE), dm)
-update_item_2 <- rows_insert(data.frame(), list(id = items$id[2], date = NA, name = "Banana-update", quantity = 10, total = 0.1, isvalid = TRUE), dm)
+new_item <- list(name = "Raspberry", quantity = 34, total = 86.4, isvalid = TRUE) |> prepare_values(dm) |> attribute_values(dm)
+update_item <- list(id = items$id[1], name = "Apple-update", quantity = 100, total = 0.1, isvalid = FALSE) |> prepare_values(dm) |> attribute_values(dm)
+update_item_2 <- list(id = items$id[2], date = NA, name = "Banana-update", quantity = 10, total = 0.1, isvalid = TRUE) |> prepare_values(dm) |> attribute_values(dm)
 
 
 # --------------------------------------------------------------------------
@@ -127,7 +132,7 @@ values_multiple_lengths <-  list("id" = c(170539948621, 170539948622),
                                  "isvalid" = FALSE)
 
 # -- values with extra column
-values_extra_col <- list("id" = item1$id,
+values_extra_col <- list("id" = items[1, 'id'],
                          "name" = c("update"),
                          "quantity" = 400,
                          "dummy" = NA)
