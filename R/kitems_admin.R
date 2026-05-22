@@ -124,7 +124,7 @@ kitems_admin <- function(k_data_model, k_items, path = Sys.getenv("R_KITEMS_PATH
     # setting rownames = FALSE #209
     # setting dom = "tpl" instead of "t" #245
     # allowing display all #244
-    output$dm_table <- DT::renderDT(dm_mask(k_data_model()),
+    output$dm_table <- DT::renderDT(mask(k_data_model()),
                                     rownames = FALSE,
                                     options = list(lengthMenu = list(c(20, 50, -1), c('20', '50', 'All')),
                                                    pageLength = 20, dom = "tpl", scrollX = TRUE),
@@ -137,7 +137,7 @@ kitems_admin <- function(k_data_model, k_items, path = Sys.getenv("R_KITEMS_PATH
                                      selection = list(mode = 'single', target = "row", selected = NULL))
 
     ## -- Masked item view ----
-    output$masked_table <- DT::renderDT(item_mask(k_data_model(), k_items()),
+    output$masked_table <- DT::renderDT(mask(item_reveal(k_items(), k_data_model())),
                                         rownames = FALSE,
                                         selection = list(mode = 'single', target = "row", selected = NULL))
 
