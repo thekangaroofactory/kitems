@@ -5,7 +5,7 @@
 #' @description
 #' Validate the input values and turn them into item(s)
 #'
-#' @param value a list of input values.
+#' @param values a list of input values.
 #' @param data.model the data.frame of the data model.
 #' @param update whether the id attribute should be checked or not (default FALSE).
 #'

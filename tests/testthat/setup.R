@@ -44,7 +44,7 @@ colClasses_no_date <- colClasses[!names(colClasses) %in% "date"]
 colClasses_id_only <- c(id = "numeric")
 
 # -- declare default
-default <- c(name = "fruit", isvalid = TRUE, date = "Sys.time()")
+default <- c(name = "fruit", isvalid = TRUE, date = "Sys.Date()")
 
 # -- declare skip
 # skip <- c("isvalid")

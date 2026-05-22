@@ -62,9 +62,10 @@ test_that("dm_migrate: migration @v0.8.0", {
 
   # -- alter data model
   dm2 <- dm
-  dm2[c("class.arg", "values", "refresh")] <- NULL
+  dm2[c("class.arg", "values", "refresh", "default")] <- NULL
   dm2[1, "default.fun"] <- "getTimestamp"
   dm2[1, "default.arg"] <- "list(k = 1000)"
+  dm2[1, "default.val"] <- NA
   attr(dm2, "version") <- "0.7.1"
 
   # -- function call

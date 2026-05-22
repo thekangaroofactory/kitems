@@ -7,11 +7,11 @@
 attribute_values(values, data.model, update = FALSE)
 }
 \arguments{
+\item{values}{a list of input values.}
+
 \item{data.model}{the data.frame of the data model.}
 
 \item{update}{whether the id attribute should be checked or not (default FALSE).}
-
-\item{value}{a list of input values.}
 }
 \value{
 A data.frame of item(s) checked against the data model.
