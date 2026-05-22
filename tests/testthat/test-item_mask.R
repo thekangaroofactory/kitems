@@ -1,9 +1,9 @@
 
 
-test_that("item_mask works", {
+test_that("item_reveal works", {
 
   # -- function call
-  x <- item_mask(data.model = dm, items = items)
+  x <- item_reveal(items = items, data.model = dm)
 
   # -- default checks
   expect_items(x, n = nrow(items))
