@@ -438,10 +438,13 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
       catl(MODULE, "[Event] Create item button")
 
       # -- show create dialog
-      showModal(
-        item_dialog(data.model = k_data_model(),
-                    items = k_items(),
-                    ns = ns))})
+      k_data_model() |>
+        dplyr::filter(!skip) |>
+        dm_default() |>
+        item_form(ns = ns) |>
+        item_dialog(workflow = "create", ns = ns)
+
+      })
 
 
     # -- Observe: fire dialog from trigger
@@ -451,10 +454,11 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
         catl(MODULE, "[Event] Create item dialog trigger")
 
         # -- show create dialog
-        showModal(
-          item_dialog(data.model = k_data_model(),
-                      items = k_items(),
-                      ns = ns))
+        k_data_model() |>
+          dplyr::filter(!skip) |>
+          dm_default() |>
+          item_form(ns = ns) |>
+          item_dialog(workflow = "create", ns = ns)
 
       }) |> bindEvent(trigger_create_dialog())
 
@@ -465,18 +469,14 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
       catl(MODULE, "[Event] Confirm create dialog item")
       removeModal()
 
-      # -- get named list of input values
-      catl("- Get list of input values")
-      values <- item_input_values(input, dm_colClasses(k_data_model()))
-
       # -- Secure workflow
       tryCatch({
 
         # -- store new item table
-        k_items(
-          rows_insert(items = k_items(),
-                      values = values,
-                      data.model = k_data_model()))
+        k_items(input |>
+                  item_input_values(colClasses = dm_colClasses(k_data_model())) |>
+                  attribute_values(data.model = k_data_model()) |>
+                  rows_insert(items = k_items()))
 
         # -- notify
         if(options$notify)
@@ -507,10 +507,10 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
         tryCatch({
 
           # -- store new item table
-          k_items(
-            rows_insert(items = k_items(),
-                        values = trigger_create_values(),
-                        data.model = k_data_model()))
+          k_items(trigger_create_values() |>
+                     prepare_values(data.model = k_data_model()) |>
+                     attribute_values(data.model = k_data_model()) |>
+                     rows_insert(items = k_items()))
 
           # -- notify
           catl(MODULE, "Item(s) created")},
@@ -554,12 +554,12 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
       item <- k_items()[k_items()$id == selected_items(), ]
 
       # -- show update dialog
-      showModal(
-        item_dialog(data.model = k_data_model(),
-                    items = k_items(),
-                    workflow = "update",
-                    item = item,
-                    ns = ns))})
+      item |>
+        as_default(data.model = k_data_model()) |>
+        item_form(ns = ns) |>
+        item_dialog(workflow = "update", ns = ns)
+
+      })
 
 
     # -- Observe: fire update dialog from trigger
@@ -575,12 +575,10 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
         item <- k_items()[k_items()$id == trigger_update_dialog(), ]
 
         # -- show update dialog
-        showModal(
-          item_dialog(data.model = k_data_model(),
-                      items = k_items(),
-                      workflow = "update",
-                      item = item,
-                      ns = ns))
+        item |>
+          as_default(data.model = k_data_model()) |>
+          item_form(ns = ns) |>
+          item_dialog(workflow = "update", ns = ns)
 
       }) |> bindEvent(trigger_update_dialog(),
                       ignoreInit = TRUE)
@@ -609,9 +607,9 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
 
         # -- store updated item list
         k_items(
-          rows_update(items = k_items(),
-                      values = values,
-                      data.model = k_data_model()))
+          values |>
+            attribute_values(data.model = k_data_model(), update = TRUE) |>
+            rows_update(items = k_items()))
 
         # -- notify
         if(options$notify)
@@ -645,9 +643,10 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
 
           # -- store updated item list
           k_items(
-            rows_update(items = k_items(),
-                        values = trigger_update_values(),
-                        data.model = k_data_model()))
+            trigger_update_values() |>
+              prepare_values(data.model = k_data_model(), update = TRUE) |>
+              attribute_values(data.model = k_data_model(), update = TRUE) |>
+              rows_update(items = k_items()))
 
           # -- notify
           catl(MODULE, "Item(s) updated")},
