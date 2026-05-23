@@ -73,7 +73,7 @@ dm_migrate <- function(data.model){
 
     # -- add missing columns
     if(length(new_cols) > 0){
-      message("[dm_migrate] Data model migration to v0.8.0, missing columns = ", new_cols)
+      message("[dm_migrate] Data model migration to v0.8.0, add missing column(s) = ", paste(new_cols, collapse = " | "))
       data.model[new_cols] <- DATA_MODEL_DEFAULTS[new_cols]
       dirty <- TRUE}
 
@@ -81,21 +81,16 @@ dm_migrate <- function(data.model){
     if("default.arg" %in% names(data.model)){
       message("[dm_migrate] Data model migration to v0.8.0, drop column = default.arg")
       data.model <- data.model |> dplyr::mutate(default.fun = dplyr::case_when(!is.na(default.arg) ~ stringr::str_replace(default.arg, "list", default.fun),
-                                                         .default = paste0(default.fun, "()" )))
+                                                         .default = NA))
       data.model$default.arg <- NULL
       dirty <- TRUE}
 
-    # drop default.fun & merge into default.val
-    if("default.fun" %in% names(data.model)){
-      message("[dm_migrate] Data model migration to v0.8.0, drop column = default.fun")
-      data.model <- data.model |> dplyr::mutate(default.val = dplyr::replace_when(default.val, !is.na(default.fun) ~ default.fun))
+    # drop default.fun & default.val & merge into default
+    if(all(c("default.val", "default.fun") %in% names(data.model))){
+      message("[dm_migrate] Data model migration to v0.8.0, merge columns = default.fun | default.val")
+      data.model <- data.model |> dplyr::mutate(default = dplyr::case_when(!is.na(default.fun) ~  default.fun, !is.na(default.val) ~ default.val, .default = NA))
       data.model$default.fun <- NULL
-      dirty <- TRUE}
-
-    # rename default.val into default
-    if("default.val" %in% names(data.model)){
-      message("[dm_migrate] Data model migration to v0.8.0, rename column = default.val")
-      data.model <- data.model |> dplyr::rename(default = default.val)
+      data.model$default.val <- NULL
       dirty <- TRUE}
 
     # update version
