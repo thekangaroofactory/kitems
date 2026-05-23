@@ -78,11 +78,12 @@ attribute_values <- function(values, data.model, update = FALSE){
   # ////////////////////////////////////////////////////////////////////////////
   # -- check values & types
 
-  sapply(names(values),
-         function(x) helper(key = x,
-                            value = values[[x]],
-                            att_dm = data.model[data.model$name == x, ]),
-         simplify = FALSE,
-         USE.NAMES = TRUE)
+  as.data.frame(
+    sapply(names(values),
+           function(x) helper(key = x,
+                              value = values[[x]],
+                              att_dm = data.model[data.model$name == x, ]),
+           simplify = FALSE,
+           USE.NAMES = TRUE))
 
 }
