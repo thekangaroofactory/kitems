@@ -33,7 +33,16 @@ dm_default <- function(data.model){
 
         tryCatch({
           catl("- Call requires an evaluation:", x, level = 2)
-          as.character(rlang::eval_tidy(y, data = NULL))},
+
+          # -- raw value
+          value <- rlang::eval_tidy(y, data = NULL)
+
+          # -- convert to character
+          # ISO-8601 to keep timezone for POSIXct
+          value <- if("POSIXct" %in% class(value))
+            format(value, "%FT%H:%M:%S%z")
+          else as.character(value)},
+
           error = function(e) {
             warning("Error when trying to evaluate default =", y, "\n", e$message)
             NA})

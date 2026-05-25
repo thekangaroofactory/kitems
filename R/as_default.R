@@ -21,8 +21,14 @@
 
 as_default <- function(item, data.model){
 
+  # -- ensure datetime is kept
+  # otherwise conversion may loose time or tz
+  if("POSIXct" %in% data.model$type)
+    item[data.model$name[data.model$type == "POSIXct"]] <- format(item[data.model$name[data.model$type == "POSIXct"]], "%FT%H:%M:%S%z")
+
+  # -- turn into default(s)
   data.model |>
-    dplyr::mutate(default = as.vector(item)) |>
+    dplyr::mutate(default = as.character(item)) |>
     dplyr::filter(!skip) |>
     dplyr::select(c(name, type, default, values))
 
