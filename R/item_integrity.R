@@ -63,8 +63,8 @@ item_integrity <- function(items, data.model, fix = FALSE){
     item_class <- items_classes[att_name]
     dm_class <- colClasses[att_name]
 
-    warning("Attribute", att_name, "class does not match with data model:")
-    warning("-- items class =", item_class, "vs data.model type =", dm_class)
+    warning("Attribute ", att_name, " class does not match with data model: \n",
+            "-- items class = ", item_class, " vs data.model type = ", dm_class)
 
     # -- Wrap attempt to coerce value
     new_values <- tryCatch(
@@ -88,7 +88,7 @@ item_integrity <- function(items, data.model, fix = FALSE){
       # -- catch error
       error = function(e){
 
-        warning("Coerce", att_name, "to", dm_class, "did not work!")
+        warning("Coerce ", att_name, " to ", dm_class, " did not work!")
         message(e$message)
 
         # -- setting output (see replace)
