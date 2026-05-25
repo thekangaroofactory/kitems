@@ -4,14 +4,12 @@
 \alias{item_load}
 \title{Load Items}
 \usage{
-item_load(col.classes, file = NULL, path = NULL)
+item_load(connector, col.classes)
 }
 \arguments{
+\item{connector}{a list parameters that will passed to iker::load_data() call.}
+
 \item{col.classes}{a named vector containing the expected column types.}
-
-\item{file}{an optional file name (including .csv extension).}
-
-\item{path}{an optional path to the file.}
 }
 \value{
 The data.frame of the items.
@@ -19,13 +17,10 @@ The data.frame of the items.
 \description{
 Load Items
 }
-\details{
-File connector: if file is not \code{NULL}, then data are loaded from the given .csv file.
-}
 \examples{
 \dontrun{
 # -- File connector:
 item_load(col.classes = c(id = "numeric", date = "Date", comment = "character"),
-file = "mydata.csv", path = "path/to/my/data")
+connector = list(type = "file", path = "path/to/my/data", filename = "mydata.csv")
 }
 }

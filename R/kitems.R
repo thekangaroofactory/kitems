@@ -199,9 +199,9 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
       if(!is.null(init_dm))
 
         # path = NULL as temporary workaround (it's contained in k_items_url)
-        init_items <- item_load(col.classes = dm_colClasses(init_dm),
-                                file = k_items_url,
-                                path = NULL)
+        init_items <- item_load(connector = list(file = k_items_url,
+                                                 path = NULL),
+                                col.classes = dm_colClasses(init_dm))
 
       # -- Increment the progress bar, and update the detail text.
       incProgress(2/4, detail = "Read items")
