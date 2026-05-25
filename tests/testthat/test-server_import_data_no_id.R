@@ -29,8 +29,9 @@ test_that("Import data without id works", {
     session$setInputs('admin-import-file_confirm' = 1)
 
     # -- click
+    # add snapshot because item_integrity now throws warnings
     session$setInputs('admin-import-items_confirm' = 1)
-    session$setInputs('admin-import-dm_confirm' = 1)
+    expect_snapshot(session$setInputs('admin-import-dm_confirm' = 1))
 
 
     # --------------------------------------------------------------------------

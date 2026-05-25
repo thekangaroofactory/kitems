@@ -7,7 +7,7 @@ test_that("item_integrity Date (fix)", {
   dm[dm$name == "date", ]$type <- "Date"
 
   # -- function call
-  x <- item_integrity(items = items, data.model = dm, fix = TRUE)
+  expect_warning(x <- item_integrity(items = items, data.model = dm, fix = TRUE))
 
   # -- test
   expect_equal(class(x$date), "Date")
@@ -42,7 +42,7 @@ test_that("item_integrity / error (fix)", {
   dm[dm$name == "date", ]$type <- "Date"
 
   # -- function call
-  x <- item_integrity(items = items, data.model = dm, fix = TRUE)
+  expect_snapshot(x <- item_integrity(items = items, data.model = dm, fix = TRUE))
 
   # -- test
   expect_equal(class(x$date), "character")
@@ -69,7 +69,7 @@ test_that("item_integrity / warning (fix)", {
   dm[dm$name == "name", ]$type <- "numeric"
 
   # -- function call
-  x <- item_integrity(items = items, data.model = dm, fix = TRUE)
+  expect_snapshot(x <- item_integrity(items = items, data.model = dm, fix = TRUE))
 
   # -- test
   expect_equal(class(x$name), "character")
