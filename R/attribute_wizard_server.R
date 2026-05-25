@@ -757,8 +757,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
         # -- Update attribute
         attribute_update(data.model = dm,
                          name = attribute$name,
-                         default.val = default_val,
-                         default.fun = default_fun,
+                         default = paste(default_val, default_fun),
                          skip = skip,
                          display = display,
                          sort.rank = sort_rank,
@@ -785,7 +784,7 @@ attribute_wizard_server <- function(id, k_data_model, k_items, update = FALSE, a
       if(!update){
 
         # -- get default value
-        value <- dm_default(data.model = dm, name = input$w_name)
+        value <- dm_default(data.model = dm[name == input$w_name, ])
 
         # -- Add column to items & store
         catl("[step.6] Add new attribute to existing items", level = 2)

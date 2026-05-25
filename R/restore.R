@@ -14,6 +14,7 @@
 #' environment variable.
 #'
 #' @export
+#' @importFrom utils tail
 #'
 #' @examples
 #' \dontrun{

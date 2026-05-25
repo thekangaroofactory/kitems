@@ -12,6 +12,8 @@
 #'
 #' @export
 #'
+#' @importFrom utils head
+#'
 #' @details
 #' The recommended way to define the `path` argument is to set the R_KITEMS_PATH
 #' environment variable.

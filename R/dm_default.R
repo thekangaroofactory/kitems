@@ -10,6 +10,8 @@
 #' @return A data.frame with default values.
 #' @export
 #'
+#' @importFrom rlang .data
+#'
 #' @examples
 #' dm <- data_model(colClasses = c(foo = "numeric"), default = 12)
 #' dm_default(dm)
@@ -51,12 +53,12 @@ dm_default <- function(data.model){
 
     # --
     data.model <- data.model |>
-      dplyr::mutate(default = unlist(lapply(default, helper)))
+      dplyr::mutate(default = unlist(lapply(.data$default, helper)))
 
   }
 
   # -- drop columns & return
   data.model |>
-    dplyr::select(!c(class.arg, display, skip, refresh, sort.rank, sort.desc))
+    dplyr::select(!c(.data$class.arg, .data$display, .data$skip, .data$refresh, .data$sort.rank, .data$sort.desc))
 
 }

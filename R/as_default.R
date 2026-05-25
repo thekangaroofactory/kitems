@@ -10,9 +10,10 @@
 #' of the attributes in the data model are expected to match with the names
 #' of the columns in item.
 #'
-#'
 #' @returns a data.frame to pass to item_form() function.
 #' @export
+#'
+#' @importFrom rlang .data
 #'
 #' @examples
 #' \dontrun{
@@ -29,7 +30,7 @@ as_default <- function(item, data.model){
   # -- turn into default(s)
   data.model |>
     dplyr::mutate(default = as.character(item)) |>
-    dplyr::filter(!skip) |>
-    dplyr::select(c(name, type, default, values))
+    dplyr::filter(!.data$skip) |>
+    dplyr::select(c(.data$name, .data$type, .data$default, .data$values))
 
 }

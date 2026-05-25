@@ -13,6 +13,8 @@
 #'
 #' @import shiny shinydashboard shinyWidgets
 #' @importFrom ktools catl
+#' @importFrom rlang .data
+#'
 #' @export
 #'
 #' @returns the module server function returns a list of the reactive references that are accessible outside the module.
@@ -439,7 +441,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
 
       # -- show create dialog
       k_data_model() |>
-        dplyr::filter(!skip) |>
+        dplyr::filter(!.data$skip) |>
         dm_default() |>
         item_form(ns = ns) |>
         item_dialog(workflow = "create", ns = ns)
@@ -455,7 +457,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
 
         # -- show create dialog
         k_data_model() |>
-          dplyr::filter(!skip) |>
+          dplyr::filter(!.data$skip) |>
           dm_default() |>
           item_form(ns = ns) |>
           item_dialog(workflow = "create", ns = ns)
