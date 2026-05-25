@@ -32,21 +32,30 @@ item_integrity <- function(items, data.model, fix = FALSE){
   if(is.null(items) || is.null(data.model))
     return(NULL)
 
+  # ////////////////////////////////////////////////////////////////////////////
+  # Check
+
   # -- get dm colClasses
   colClasses <- dm_colClasses(data.model = data.model)
 
   # -- get items classes
+  # when POSIXct, two classes will be found
   items_classes <- sapply(items, class)
-  items_classes <- sapply(items_classes, "[[", 1)
+  if(is.list(items_classes))
+    items_classes <- sapply(items_classes, "[[", 1)
 
   # -- columns to fix
   # make sure attributes comes with same order #597
   cols <- names(items_classes[items_classes != colClasses[names(items_classes)]])
 
-  # -- check: return input if nothing to do
+  # -- check: return if nothing to do or fix not required
   if(length(cols) == 0)
     return(NULL)
-  else if(!fix) stop("item attribute class does not match with data model")
+  else if(!fix) stop(cols, " do(es) not match with data model type(s).")
+
+
+  # ////////////////////////////////////////////////////////////////////////////
+  # Fix
 
   # -- helper function
   helper <- function(att_name){
@@ -54,10 +63,10 @@ item_integrity <- function(items, data.model, fix = FALSE){
     item_class <- items_classes[att_name]
     dm_class <- colClasses[att_name]
 
-    catl("[warning] Attribute", att_name, "class does not match with data model:", debug = 1)
-    catl("-- items class =", item_class, "vs data.model type =", dm_class, debug = 1)
+    warning("Attribute", att_name, "class does not match with data model:")
+    warning("-- items class =", item_class, "vs data.model type =", dm_class)
 
-    # -- Wrapp attempt to coerce value
+    # -- Wrap attempt to coerce value
     new_values <- tryCatch(
 
       # -- expression
@@ -79,8 +88,8 @@ item_integrity <- function(items, data.model, fix = FALSE){
       # -- catch error
       error = function(e){
 
-        catl("[ERROR] Coerce", att_name, "to", dm_class, "did not work!", debug = 1)
-        catl(e$message, debug = 1)
+        warning("Coerce", att_name, "to", dm_class, "did not work!")
+        message(e$message)
 
         # -- setting output (see replace)
         output <- NULL},
@@ -88,12 +97,12 @@ item_integrity <- function(items, data.model, fix = FALSE){
       # -- catch warnings
       warning = function(w){
 
-        catl(w$message)
+        warning(w$message)
         output <- NULL
 
       })
 
-    catl("   >> Check after conversion:", class(new_values))
+    message(">> Check after conversion:", class(new_values))
 
     # -- return
     if(!is.null(new_values))
