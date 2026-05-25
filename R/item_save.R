@@ -6,28 +6,18 @@
 #' Saves the items data.frame.
 #'
 #' @param data a data.frame containing the data to be saved.
-#' @param file the url of the file (including path & .csv extension).
+#' @param connector a list parameters that will passed to iker::save_data() call.
 #'
 #' @export
-#'
-#' @details
-#' File connector: if file is not `NULL`, then data is saved to .csv
 #'
 #' @examples
 #' \dontrun{
 #' # -- File connector:
-#' item_save(data = mydata, file = "path/to/my/data/mydata.csv")
+#' item_save(data = mydata, connector = list(type = "file", file = "path/to/my/data/mydata.csv")
 #' }
 
-item_save <- function(data, file = NULL){
+item_save <- function(data, connector){
 
-  # ----------------------------------------------------------------------------
-  # Connector: file (.csv)
-  # ----------------------------------------------------------------------------
-
-  if(!is.null(file))
-    iker::save_data(data, path = NULL, file = file)
-
-  # ----------------------------------------------------------------------------
+  iker::save_data(data, path = NULL, file = connector$file)
 
 }

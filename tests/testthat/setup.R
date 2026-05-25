@@ -181,7 +181,7 @@ create_testdata <- function(){
   saveRDS(dm, file = test_dm_url)
 
   # -- save items
-  item_save(items, file = test_items_url)
+  item_save(items,  connector = list(file = test_items_url))
 
 }
 
@@ -196,7 +196,7 @@ create_empty_items <- function(){
   saveRDS(data_model(colClasses = c(id = "numeric", date = "POSIXct")), file = test_dm_url)
 
   # -- save items
-  item_save(items_no_row2, file = test_items_url)
+  item_save(items_no_row2,  connector = list(file = test_items_url))
 
 }
 
@@ -214,7 +214,7 @@ create_integrity_testdata <- function(){
   saveRDS(dm, file = test_dm_url)
 
   # -- save items
-  item_save(items, file = test_items_url)
+  item_save(items,  connector = list(file = test_items_url))
 
 }
 
@@ -227,7 +227,7 @@ create_noid_data_to_import <- function(){
 
   # -- drop id column & save items
   items$id <- NULL
-  item_save(items, file = import_url)
+  item_save(items,  connector = list(file = import_url))
 
 }
 
@@ -239,7 +239,7 @@ create_data_to_import <- function(){
   create_folder()
 
   # -- save items
-  item_save(items, file = import_url)
+  item_save(items,  connector = list(file = import_url))
 
 }
 

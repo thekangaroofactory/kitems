@@ -5,7 +5,7 @@ create_folder()
 test_that("item_save works", {
 
   # -- function call
-  item_save(data = items, file = items_url(module_id))
+  item_save(data = items,  connector = list(file = items_url(module_id)))
 
   # -- check file exists
   expect_true(file.exists(items_url(module_id)))

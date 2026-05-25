@@ -332,7 +332,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
             if(success == 1) warning("Item file could not be deleted. Delete it manually.")
           }
         else
-          item_save(data = k_items(), file = k_items_url)
+          item_save(data = k_items(), connector = list(file = k_items_url))
 
         catl(MODULE, "[EVENT] Item list has been (auto) saved")
 
