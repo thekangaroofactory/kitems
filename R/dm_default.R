@@ -51,7 +51,7 @@ dm_default <- function(data.model){
 
     # --
     data.model <- data.model |>
-      dplyr::mutate(default = unlist(lapply(default, helper)))
+      dplyr::mutate(default = unlist(lapply(.data$default, helper)))
 
   }
 
