@@ -434,10 +434,10 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
                      label = "Create"))
 
 
-    # -- Observe: fire dialog from UI
-    observeEvent(input$item_create, {
+    # -- Observe: fire create dialog
+    observe({
 
-      catl(MODULE, "[Event] Create item button")
+      catl(MODULE, "[Event] Show create item dialog")
 
       # -- show create dialog
       k_data_model() |>
@@ -446,23 +446,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
         item_form(ns = ns) |>
         item_dialog(workflow = "create", ns = ns)
 
-      })
-
-
-    # -- Observe: fire dialog from trigger
-    if(!is.null(trigger))
-      observe({
-
-        catl(MODULE, "[Event] Create item dialog trigger")
-
-        # -- show create dialog
-        k_data_model() |>
-          dplyr::filter(!.data$skip) |>
-          dm_default() |>
-          item_form(ns = ns) |>
-          item_dialog(workflow = "create", ns = ns)
-
-      }) |> bindEvent(trigger_create_dialog())
+    }) |> bindEvent(input$item_create, if(!is.null(trigger)) trigger_create_dialog(), ignoreInit = TRUE)
 
 
     # -- Observe: create item from dialog values
