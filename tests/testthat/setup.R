@@ -16,7 +16,7 @@ module_id <- "data"
 # --------------------------------------------------------------------------
 
 # -- disable traces
-options("k.debug" = NULL)
+ktools::trace_level(0)
 
 # -- data folder
 # adding module_id
@@ -148,14 +148,6 @@ item_id <- items$id[1]
 
 # -- date selection
 date_slider_value <- c(as.POSIXct(as.Date("2024-01-15")), as.POSIXct(as.Date("2024-01-17")))
-
-
-# --------------------------------------------------------------------------
-# Declare miscellaneous parameters
-# --------------------------------------------------------------------------
-
-# -- enable traces
-# options("k.debug" = 1)
 
 
 # --------------------------------------------------------------------------
