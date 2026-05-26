@@ -13,8 +13,6 @@
 #' @returns a data.frame to pass to item_form() function.
 #' @export
 #'
-#' @importFrom rlang .data
-#'
 #' @examples
 #' \dontrun{
 #' as_default(item, data.model)
@@ -31,6 +29,6 @@ as_default <- function(item, data.model){
   data.model |>
     dplyr::mutate(default = as.character(item)) |>
     dplyr::filter(!.data$skip) |>
-    dplyr::select(c(.data$name, .data$type, .data$default, .data$values))
+    dplyr::select(c("name", "type", "default", "values"))
 
 }
