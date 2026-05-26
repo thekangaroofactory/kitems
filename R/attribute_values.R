@@ -78,12 +78,24 @@ attribute_values <- function(values, data.model, update = FALSE){
   # ////////////////////////////////////////////////////////////////////////////
   # -- check values & types
 
-  as.data.frame(
-    sapply(names(values),
-           function(x) helper(key = x,
-                              value = values[[x]],
-                              att_dm = data.model[data.model$name == x, ]),
-           simplify = FALSE,
-           USE.NAMES = TRUE))
+  # -- id is not checked upon update workflow #620
+  cols <- if(update)
+    names(values)[!names(values) == "id"]
+  else
+    names(values)
+
+  # -- check values (loop over attributes)
+  att_values <- sapply(cols,
+                      function(x) helper(key = x,
+                                         value = values[[x]],
+                                         att_dm = data.model[data.model$name == x, ]),
+                      simplify = FALSE,
+                      USE.NAMES = TRUE)
+
+  # -- return
+  if(update)
+    as.data.frame(c(values["id"], att_values))
+  else
+    as.data.frame(att_values)
 
 }
