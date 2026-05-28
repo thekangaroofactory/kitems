@@ -123,21 +123,19 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     # //////////////////////////////////////////////////////////////////////////
     # -- Declare reactive objects ----
 
-    # -- Internal create workflow triggers
-    trigger_create_dialog <- reactiveVal(NULL)
-    trigger_create_values <- reactiveVal(NULL)
-
-    # -- Internal update workflow triggers
-    trigger_update_dialog <- reactiveVal(NULL)
-    trigger_update_values <- reactiveVal(NULL)
-
-    # -- Internal delete workflow triggers
-    trigger_delete_dialog <- reactiveVal(NULL)
-    trigger_delete_values <- reactiveVal(NULL)
+    # -- Internal workflow triggers
+    if(!is.null(trigger)){
+      trigger_create_dialog <- reactiveVal(NULL)
+      trigger_create_values <- reactiveVal(NULL)
+      trigger_update_dialog <- reactiveVal(NULL)
+      trigger_update_values <- reactiveVal(NULL)
+      trigger_delete_dialog <- reactiveVal(NULL)
+      trigger_delete_values <- reactiveVal(NULL)}
 
     # -- Internal filter triggers
-    trigger_filter_pre <- reactiveVal(NULL)
-    trigger_filter_main <- reactiveVal(NULL)
+    if(!is.null(filter)){
+      trigger_filter_pre <- reactiveVal(NULL)
+      trigger_filter_main <- reactiveVal(NULL)}
 
 
     # //////////////////////////////////////////////////////////////////////////
