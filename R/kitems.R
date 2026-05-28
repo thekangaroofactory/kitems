@@ -7,9 +7,9 @@
 #'
 #' @param id the id to be used for the module server instance.
 #' @param path where the data model and items are stored (see details).
-#' @param options a list of options (see details).
 #' @param trigger a reactive object to pass workflow events to the module (see details).
 #' @param filter a reactive object to pass filters to the module (see details).
+#' @param options a list of options (see details).
 #'
 #' @import shiny shinydashboard shinyWidgets
 #' @importFrom ktools catl
@@ -58,7 +58,8 @@
 #' }
 
 # -- Shiny module server logic -------------------------------------------------
-kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filter = NULL,
+kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
+                   trigger = NULL, filter = NULL,
                    options = list(autosave = TRUE,
                                   admin = FALSE,
                                   notify = TRUE)) {
@@ -66,10 +67,41 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
   moduleServer(id, function(input, output, session) {
 
     # //////////////////////////////////////////////////////////////////////////
-    # -- Check parameters ----
+    # -- Warm up ----
+
+    ## -- Set trace level
+    if(Sys.getenv("R_KITEMS_DEBUG") != "")
+      ktools::trace_level(as.numeric(Sys.getenv("R_KITEMS_DEBUG")))
+
+    # -- Build log pattern
+    MODULE <- paste0("[", id, "]")
+    catl(MODULE, "Starting kitems module server...", debug = 1)
+
+    # -- Get namespace
+    ns <- session$ns
+
+
+    # //////////////////////////////////////////////////////////////////////////
+    # -- Check path & yaml config file ----
 
     # -- check path
     check_path(path)
+
+    # -- when _kitems.yml is found, it will overwrite input parameters
+    config_file <- list.files(path, pattern = "_kitems.yml", full.names = T)
+    if(length(config_file)){
+
+      catl("Reading YAML config file", config_file, level = 1)
+      config <- yaml::read_yaml(file = config_file)
+
+      path <- config$source$path
+      options <- config$options
+
+    } else message("It is recommended to use a _kitems.yml file to define the module server parameters")
+
+
+    # //////////////////////////////////////////////////////////////////////////
+    # -- Check other parameters ----
 
     # -- check trigger
     if(!is.null(trigger))
@@ -89,23 +121,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"), trigger = NULL, filte
 
 
     # //////////////////////////////////////////////////////////////////////////
-    # -- Init environment ----
-
-    ## -- Set trace level
-    if(Sys.getenv("R_KITEMS_DEBUG") != "")
-      ktools::trace_level(as.numeric(Sys.getenv("R_KITEMS_DEBUG")))
-
-    ## -- Declare config parameters ----
-
-    # -- Build log pattern
-    MODULE <- paste0("[", id, "]")
-    catl(MODULE, "Starting kitems module server...", debug = 1)
-
-    # -- Get namespace
-    ns <- session$ns
-
-
-    ## -- Declare reactive objects ----
+    # -- Declare reactive objects ----
 
     # -- Internal create workflow triggers
     trigger_create_dialog <- reactiveVal(NULL)
