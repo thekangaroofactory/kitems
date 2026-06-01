@@ -31,7 +31,9 @@ trigger_event <- function(workflow = c("create", "update", "delete"), type = c("
       stop("values should be passed for this type of event")
 
   # -- build default event
+  # adding event_id to make event unique (otherwise reactive won't update)
   event <- list(
+    event_id = ktools::uuid(),
     workflow = workflow,
     type = type)
 
