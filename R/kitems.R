@@ -124,18 +124,20 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     # -- Declare reactive objects ----
 
     # -- Internal workflow triggers
-    if(!is.null(trigger)){
+    #if(!is.null(trigger)){
       trigger_create_dialog <- reactiveVal(NULL)
       trigger_create_values <- reactiveVal(NULL)
       trigger_update_dialog <- reactiveVal(NULL)
       trigger_update_values <- reactiveVal(NULL)
       trigger_delete_dialog <- reactiveVal(NULL)
-      trigger_delete_values <- reactiveVal(NULL)}
+      trigger_delete_values <- reactiveVal(NULL)
+      #}
 
     # -- Internal filter triggers
-    if(!is.null(filter)){
+    #if(!is.null(filter)){
       trigger_filter_pre <- reactiveVal(NULL)
-      trigger_filter_main <- reactiveVal(NULL)}
+      trigger_filter_main <- reactiveVal(NULL)
+      #}
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -863,9 +865,10 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       catl(MODULE, "Apply custom filter(s) on items")
 
       # -- check date slider
+      # note: force everything to be a Date #615
       date_expr <- if(hasDate(k_data_model()) && !is.null(input$date_slider)){
         catl("- Date slider =", input$date_slider, level = 2)
-        dplyr::expr(date >= input$date_slider[1] & date <= input$date_slider[2])}
+        dplyr::expr(as.Date(date) >= as.Date(input$date_slider[1]) & as.Date(date) <= as.Date(input$date_slider[2]))}
 
       # -- check custom filter
       if(!is.null(trigger_filter_main()))
