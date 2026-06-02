@@ -25,7 +25,8 @@ Imports:
     iker,
     ktools,
     stringr,
-    magrittr
+    magrittr,
+    yaml
 Suggests: 
     knitr,
     rmarkdown,
