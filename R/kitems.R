@@ -236,7 +236,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         tryCatch(
 
           init_dm |>
-            dm_integrity(items = init_items),
+            dm_integrity(items = init_items, fix = options$admin),
 
           error = function(e) {
 
