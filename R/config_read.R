@@ -27,5 +27,3 @@ config_read <- function(path = Sys.getenv("R_KITEMS_PATH")){
   } else NULL
 
 }
-
-# yaml::write_yaml(dm, file = "D:/Downloads/_kitems_update.yml", indent = 4, handlers = list(logical = yaml::verbatim_logical))
