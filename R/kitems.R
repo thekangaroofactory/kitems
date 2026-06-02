@@ -88,16 +88,13 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     check_path(path)
 
     # -- when _kitems.yml is found, it will overwrite input parameters
-    config_file <- list.files(path, pattern = "_kitems.yml", full.names = T)
-    if(length(config_file)){
-
-      catl("Reading YAML config file", config_file, level = 1)
-      config <- yaml::read_yaml(file = config_file)
+    config <- config_read(path = path)
+    if(!is.null(config)){
 
       path <- config$source$path
       options <- config$options
 
-    } else message("It is recommended to use a _kitems.yml file to define the module server parameters")
+    } else stop("No _kitems.yml configuration file found.\nCheck provided path.")
 
 
     # //////////////////////////////////////////////////////////////////////////
