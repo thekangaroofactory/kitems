@@ -15,11 +15,11 @@
 admin <- function() {
 
   # -- get app path
-  appDir <- system.file("shiny", package = "kitems")
+  appDir <- system.file("R", package = "kitems")
 
   # -- check30
   if(appDir == "")
-    stop("Could not find shiny folder. Try re-installing `kitems`.", call. = FALSE)
+    stop("Could not find R folder. Try re-installing `kitems`.", call. = FALSE)
 
   # -- run app
   shiny::runApp(file.path(appDir, "admin_console.R"), display.mode = "normal")
