@@ -79,9 +79,23 @@ server <- function(input, output, session) {
   if(length(legacy_dm)){
 
     # -- insert migration tab
-    admin_migration_layout()
+    bslib::nav_insert(id = "nav",
+                      target = "home",
+                      position = "after",
+                      select = TRUE,
 
-    # -- add content
+                      nav = bslib::nav_panel(title = "Migration",
+                                             icon = icon(name = "person-digging"),
+
+                                             # -- main container
+                                             # where to dynamically add / remove content
+                                             div(id = "migration-content")))
+
+    # -- remove home
+    # after cause we need it to insert after..
+    bslib::nav_remove(id = "nav", target = "home")
+
+    # -- add content (to migrate)
     insertUI(selector = "#migration-content",
              where = "afterBegin",
              admin_migration_required_layout(files = legacy_dm))
@@ -112,7 +126,7 @@ server <- function(input, output, session) {
              data.model = dm_to_yaml(new_dm))})
 
       # -- save config file
-      config_write(c(config_create(basename(path)), config), path = path)
+      config_write(c(config_create(basename(path)), items = list(config)), path = path)
 
       # -- delete old data model files
       file.remove(legacy_dm)
@@ -126,7 +140,7 @@ server <- function(input, output, session) {
       # -- refresh page listener (button)
       observeEvent(input$refresh, session$reload())
 
-    })
+    }, once = TRUE)
 
   }
 
@@ -141,7 +155,7 @@ server <- function(input, output, session) {
 
   # -- when YAML is missing
   # config_read will return NULL
-  if(is.null(yaml)){
+  if(is.null(yaml) && !length(legacy_dm)){
 
     # -- dialog
     showModal(
@@ -174,7 +188,7 @@ server <- function(input, output, session) {
 
 
   # ////////////////////////////////////////////////////////////////////////////
-  # Global app
+  # Navigation
 
   # -- Select tab
   observeEvent(input$select_tab, {
@@ -290,7 +304,6 @@ server <- function(input, output, session) {
       insertUI(selector = "#home-project-items",
                where = "afterBegin",
                admin_item_card(name = x$id))})}
-
 
 }
 

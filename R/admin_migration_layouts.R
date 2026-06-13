@@ -1,30 +1,6 @@
 
 
 # //////////////////////////////////////////////////////////////////////////////
-#' Migration Layout
-#'
-#' @description
-#' Insert the data model migration tab into the main layout.
-#'
-#' @examples
-
-admin_migration_layout <- function(){
-
-  # -- insert tab
-  bslib::nav_insert(id = "nav",
-                    select = TRUE,
-
-                    nav = bslib::nav_panel(title = "Migration",
-                                           icon = icon(name = "person-digging"),
-
-                                           # -- main container
-                                           # where to dynamically add / remove content
-                                           div(id = "migration-content")))
-
-}
-
-
-# //////////////////////////////////////////////////////////////////////////////
 #' Migration Required Layout
 #'
 #' @param files a list of data.model files to migrate
