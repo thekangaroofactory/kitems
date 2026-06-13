@@ -1,21 +1,67 @@
 
 
 # ------------------------------------------------------------------------------
-# This is the kitems Admin Shiny application
+# This is the kitems Admin Console application
 # ------------------------------------------------------------------------------
 
 # -- UI
+# The main layout will be used to dynamically insert / remove content from
+# the server side.
+
 ui <- bslib::page_navbar(title = "Admin Console",
                          window_title = "Kitems Admin Console",
                          id = "nav",
+
+                         shinyjs::useShinyjs(),
+
+                         # -- home tab (persistent)
+                         bslib::nav_panel(title = "Home",
+                                          value = "home",
+                                          icon = icon(name = "home"),
+
+                                          # -- layout
+                                          bslib::layout_sidebar(
+                                            border = FALSE,
+
+                                            # -- sidebar
+                                            sidebar = bslib::sidebar(
+                                              id = "home-sidebar",
+                                              position = "right",
+                                              width = 300,
+                                              open = FALSE,
+
+                                              # -- yaml
+                                              h3("YAML", icon("gears")),
+                                              textOutput("yaml_file"),
+                                              uiOutput("yaml_message")),
+
+                                            # -- main
+                                            # container where to insert elements
+                                            h1(class = "mb-3", textOutput("project_name")),
+
+                                            # -- wrapper
+                                            div(id = "home-project-items-section",
+                                                bslib::layout_column_wrap(
+                                                  id = "home-project-items",
+                                                  bslib::card(id = "home-items-create",
+                                                      p(actionLink(inputId = "item_create", label = "Add"), "an item to the project.")))))),
+
+                         # -- space
+                         # To ensure dark mode switch is on right
+                         bslib::nav_spacer(),
+
+                         # -- dark mode switch
                          bslib::nav_item(
-                           id = "darkmode",
                            bslib::input_dark_mode(id = "dark", mode = NULL)),
-                         footer = "kitems v0.8.x")
+
+                         footer = paste0("kitems v", as.character(packageVersion("kitems"))))
 
 
 # -- Server
 server <- function(input, output, session) {
+
+  # ////////////////////////////////////////////////////////////////////////////
+  # -- check path & config file
 
   # -- get path & check
   path <- Sys.getenv("R_KITEMS_PATH")
@@ -24,54 +70,33 @@ server <- function(input, output, session) {
 
   # ////////////////////////////////////////////////////////////////////////////
   # Data Migration
+  # Check first if data migration is required as it will generate a YAML file.
 
-  old_dm <- list.files(path = path, pattern = "_data_model.rds", full.names = TRUE, recursive = TRUE)
-  if(length(grep(pattern = "backup_", old_dm)))
-    old_dm <- old_dm[-grep(pattern = "backup_", old_dm)]
+  legacy_dm <- list.files(path = path, pattern = "_data_model.rds", full.names = TRUE, recursive = TRUE)
+  if(length(grep(pattern = "backup_", legacy_dm)))
+    legacy_dm <- legacy_dm[-grep(pattern = "backup_", legacy_dm)]
 
-  if(length(old_dm)){
+  if(length(legacy_dm)){
 
-    # -- insert migration UI
-    bslib::nav_insert(id = "nav",
-                      select = TRUE,
-                      nav = bslib::nav_panel(title = "Migration",
-                                             icon = icon(name = "person-digging"),
-                                             div(id = "migration-required",
-                                                 h1(class = "mb-3","Migration required"),
-                                                 p("Kitems v0.8.x has introduced a metamodel YAML structure that contains the data model definition.", br(),
-                                                   "Old data models (.rds files) need to be migrated."),
-                                                 bslib::layout_column_wrap(
-                                                   !!!lapply(old_dm, function(x) {
+    # -- insert migration tab
+    admin_migration_layout()
 
-                                                     item_id <- unlist(strsplit(basename(x), split = "_"))[[1]]
+    # -- add content
+    insertUI(selector = "#migration-content",
+             where = "afterBegin",
+             admin_migration_required_layout(files = legacy_dm))
 
-                                                     bslib::card(
-                                                       bslib::card_header(class = "bg-warning", "Item:", item_id),
-                                                       bslib::layout_column_wrap(
-                                                         heights_equal = "row",
-                                                         tagList("Data model file:", br(), x),
-                                                         tagList(
-                                                           "Actions that will be applied during migration:", br(),
-                                                           tags$ul(
-                                                             tags$li("Backup file"),
-                                                             tags$li("Upgrade data model"),
-                                                             tags$li("Convert to YAML")))))})),
-
-                                                 p("Once migrated, data model(s) will be merged into a single YAML configuration file."),
-                                                 actionButton(inputId = "migrate", label = "Start migration", icon = icon(name = "person-digging"))),
-                                             div(id = "outcome")))
-
-    # --
+    # -- create migration listener (button)
     observeEvent(input$migrate, {
 
       message("Starting data model migration...")
 
       # -- convert data model(s)
-      yaml <- lapply(old_dm, function(x){
+      config <- lapply(legacy_dm, function(x){
 
         # -- read data model & version
-        old_dm <- readRDS(x)
-        dm_version <- attr(old_dm, "version")
+        legacy_dm <- readRDS(x)
+        dm_version <- attr(legacy_dm, "version")
 
         # -- backup file
         bakup_dir <- file.path(path, paste0("backup_", gsub(pattern = "\\.", replacement = "_", dm_version)))
@@ -79,7 +104,7 @@ server <- function(input, output, session) {
           dir.create(bakup_dir)
         file.copy(x, file.path(bakup_dir, basename(x)), copy.date = T)
 
-        new_dm <- dm_migrate(old_dm)
+        new_dm <- dm_migrate(legacy_dm)
 
         list(id = unlist(strsplit(basename(x), split = "_"))[[1]],
              source = list(type = "file",
@@ -87,203 +112,185 @@ server <- function(input, output, session) {
              data.model = dm_to_yaml(new_dm))})
 
       # -- save config file
-      config_write(yaml, path = path)
+      config_write(c(config_create(basename(path)), config), path = path)
 
       # -- delete old data model files
-      file.remove(old_dm)
+      file.remove(legacy_dm)
 
+      # -- update layout
       removeUI(selector = "#migration-required", immediate = TRUE, multiple = TRUE)
-      insertUI(selector = "#outcome",
-               where = "beforeEnd",
-               ui = tagList(
-                 h1("Migration done!"),
-                 p(icon("check"), length(old_dm), "data model(s) have been migrated."),
+      insertUI(selector = "#migration-content",
+               where = "afterBegin",
+               ui = admin_migration_done_layout(path))
 
-                 bslib::layout_column_wrap(
-                   bslib::card(
-                     bslib::card_header(class = "bg-success", "Backup"),
-                     p("The old data model file(s) can be found in the backup directory:", br(),
-                       file.path(path, list.files(path = path, pattern = "backup_")))),
-
-                   bslib::card(
-                     bslib::card_header(class = "bg-success", "YAML"),
-                     p("The data model(s) are exposed in the YAML configuration file:", br(),
-                       file.path(path, "_kitems.yml")))),
-
-                 p(icon("circle-right"), "It's now time to refresh this app to take advantage of the new features!"),
-                 actionButton(inputId = "refresh", label = "Refresh page", icon = icon("arrow-rotate-right"))))
+      # -- refresh page listener (button)
+      observeEvent(input$refresh, session$reload())
 
     })
-
-
-    observeEvent(input$refresh, session$reload())
 
   }
 
 
   # ////////////////////////////////////////////////////////////////////////////
+  # YAML configuration
 
   # -- read YAML
-  config <- config_read()
+  config_file <- file.path(path, "_kitems.yml")
+  yaml <- config_read(path)
+  config <- reactiveVal(yaml)
 
-  bslib::nav_insert(id = "nav",
-                    select = TRUE,
-                    nav = bslib::nav_panel(title = "Home",
-                                           icon = icon(name = "home"),
+  # -- when YAML is missing
+  # config_read will return NULL
+  if(is.null(yaml)){
 
-                                           if(is.null(config))
-                                             p("There is no item available in this project.")
+    # -- dialog
+    showModal(
+      modalDialog(
+        size = "xl",
+        admin_no_yaml_layout(),
+        footer = actionButton(inputId = "close_app", label = "Close app")))
 
-                                           else
-                                             bslib::layout_sidebar(
-                                               border = FALSE,
+    # -- dismiss (then force close app)
+    observeEvent(input$close_app, stopApp())
 
-                                               sidebar = bslib::sidebar(
-                                                 position = "right",
-                                                 width = 300,
-                                                 open = TRUE,
+    # -- create listener
+    # only when no config is found + self-destroy
+    observeEvent(input$yaml_create, {
 
-                                                 # -- yaml
-                                                 h3(icon("gears"), "YAML"),
-                                                 file.path(path, "_kitems.yml")
+      removeModal()
 
-                                               ),
+      # -- create config file & store
+      config(config_create(project = basename(path)))
 
-                                               h1(class = "mb-3", ktools::toupper_words(basename(path))),
+      # -- update ui
+      bslib::toggle_sidebar(id = "home-sidebar", open = TRUE)
 
-                                               bslib::layout_column_wrap(
+    }, once = TRUE)
 
-                                                 bslib::card(
-                                                   bslib::card_header(length(config), "Item(s)"),
-                                                   tags$ul(lapply(sapply(config, "[[", "id"), tags$li))),
+  } else bslib::toggle_sidebar(id = "home-sidebar", open = TRUE)
 
-                                                 actionButton(inputId = "add", label = "+"),
-                                                 actionButton(inputId = "import", label = "Import")
+  # -- auto save
+  observeEvent(config(), config_write(config()))
 
-                                                 ))
-                    ))
+
+  # ////////////////////////////////////////////////////////////////////////////
+  # Global app
+
+  # -- Select tab
+  observeEvent(input$select_tab, {
+
+    # -- get id from input value
+    tab_id <- unlist(strsplit(input$select_tab, "_"))[1]
+
+    # -- select
+    bslib::nav_select(id = "nav", selected = tab_id)
+
+  })
+
+
+  # ////////////////////////////////////////////////////////////////////////////
+  # Home tab
+
+  # -- outputs (sidebar)
+  output$yaml_file <- renderText(if(!is.null(config())) config_file else "")
+  output$yaml_message <- renderUI(admin_yaml_message(config()))
+
+  # -- outputs (main)
+  output$project_name <- renderText(ktools::toupperfirst(config()$project))
+
+
+  # ////////////////////////////////////////////////////////////////////////////
+  # create item
+
+  # -- create (actionLink)
+  observeEvent(input$item_create, {
+
+    # -- dialog
+    showModal(
+      modalDialog(
+        title = "Add item",
+        textInput(inputId = "add_item_name",
+                  label = "Item name"),
+        uiOutput("add_item_message"),
+        footer =  tagList(
+          modalButton("Cancel"),
+          actionButton(inputId = "item_create_confirm",
+                       label = "Create"))))
+
+  })
+
+
+  # -- watch dialog input
+  output$add_item_message <- renderUI({
+
+    req(input$add_item_name != "")
+
+    if(grepl('[^[:alnum:]]', input$add_item_name))
+      span(class = "text-danger", icon("circle-chevron-right"), "This name is not valid.")
+    else if(input$add_item_name == "foo")
+      span(class = "text-warning", icon("circle-chevron-right"), "This name already exist!")
+    else
+      span(class = "text-success-emphasis", icon("circle-chevron-right"), "This name is valid.")
+
+  })
+
+
+  # -- confirm dialog
+  observeEvent(input$item_create_confirm, {
+
+    # -- secure
+    req(input$add_item_name != "",
+        input$add_item_name != "foo",
+        !grepl('[^[:alnum:]]', input$add_item_name))
+
+    # -- close dialog
+    removeModal()
+
+    # -- get config & last tab id
+    yaml <- config()
+    last_tab <- tail(sapply(yaml$items, "[[", "id"), n = 1L)
+    if(length(last_tab) == 0) last_tab <- "home"
+
+    # -- update config & store
+    new_item <- list(id = input$add_item_name,
+                     source = list(type = "file",
+                                   path = path))
+    yaml$items <- c(yaml$items, list(new_item))
+    config(yaml)
+
+    # -- ui: add item card
+    insertUI(selector = "#home-project-items > div:last",
+             where = "beforeBegin",
+             admin_item_card(name = input$add_item_name))
+
+    # -- ui: add item tab
+    bslib::nav_insert(id = "nav",
+                      target = last_tab,
+                      position = "after",
+                      nav = admin_item_layout(new_item))
+
+  })
 
 
   # ////////////////////////////////////////////////////////////////////////////
   # Items Management
 
-
-
   # -- add one tab per item
-  if(!is.null(config)){
+  if(!is.null(yaml$items)){
 
-    # -- get list of items
-    #items_list <- sapply(config, "[[", "id")
+    lapply(rev(yaml$items), function(x) {
 
-    lapply(config, function(x) {
-
+      # -- update nav
       bslib::nav_insert(id = "nav",
-                        nav = bslib::nav_panel(title = x$id,
-                                               icon = icon(name = "box"),
+                        target = "home",
+                        position = "after",
+                        nav = admin_item_layout(x))
 
-                                               bslib::layout_sidebar(
-                                                 border = FALSE,
+      # -- update item list
+      insertUI(selector = "#home-project-items",
+               where = "afterBegin",
+               admin_item_card(name = x$id))})}
 
-                                                 sidebar = bslib::sidebar(
-                                                   position = "right",
-                                                   width = 300,
-                                                   open = TRUE,
-
-                                                   h3("Source"),
-                                                   p("Type:", x$source$type, br(),
-                                                     if(x$source$type == "file")
-                                                       paste("path:", x$source$path)),
-
-                                                   h3("Skipped"),
-                                                   p("No input will be generated for those attributes when creating / updating items."),
-                                                   span(class = "text-warning", paste(x$data.model$skip, collapse = "|")),
-
-                                                   h3("Display"),
-                                                   p("Attributes that won't be displayed in the item table."),
-                                                   span(class = "text-warning", paste(x$data.model$hide, collapse = "|")),
-
-                                                   h3("Danger zone"),
-                                                   bslib::input_switch(id = "dz", label = "Allow")
-
-                                                   ),
-
-                                                 h1(class = "mb-3", length(x$data.model$attributes), "attributes"),
-                                                 bslib::layout_column_wrap(
-                                                   !!!lapply(x$data.model$attributes, card_attribute),
-                                                   actionButton(inputId = "create", "+"))
-
-
-                                               )
-
-
-
-
-                                               ))
-
-    })
-
-
-  }
-
-
-
-
-  showModal(
-    modalDialog(
-
-      bslib::layout_columns(
-        col_widths = c(2,10),
-
-        tagList(
-          p("Step 1"),
-          p("Step 2")),
-
-        "Main content"
-
-      )
-
-
-    )
-  )
-
-
-
-
-
-  # ////////////////////////////////////////////////////////////////////////////
-  # -- check YAML file
-
-
-  # items <- character()
-  #
-  # # -- check items
-  # output$admin_console <- if(length(items) == 0)
-  #
-  #   # -- ui: display message
-  #   renderUI(
-  #     column(width = 12,
-  #            h3("Kitems Admin Console"),
-  #            p(id = "subtitle", em("Manage your items data model")),
-  #            wellPanel("No item has been found in the provided path.")))
-  #
-  # else {
-  #
-  #   # -- launch item servers
-  #   res <- lapply(items, function(x) kitems::kitems(id = x, options = list(admin = TRUE)))
-  #
-  #   # -- ui
-  #   renderUI({
-  #
-  #     # -- build tabPanels content
-  #     panels <- lapply(items, function(x) tabPanel(x, kitems::admin_widget(x)))
-  #
-  #     # -- build page & return
-  #     do.call(navbarPage, c(panels,
-  #                           id = "page",
-  #                           title = "Kitems"))})
-  #
-  #
-  # } # check items
 
 }
 
