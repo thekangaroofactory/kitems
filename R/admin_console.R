@@ -187,7 +187,7 @@ server <- function(input, output, session) {
   } else bslib::toggle_sidebar(id = "home-sidebar", open = TRUE)
 
   # -- auto save
-  observeEvent(config(), config_write(config()))
+  observeEvent(config(), config_write(config()), ignoreInit = T)
 
 
   # ////////////////////////////////////////////////////////////////////////////
