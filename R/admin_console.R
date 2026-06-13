@@ -118,12 +118,12 @@ server <- function(input, output, session) {
           dir.create(bakup_dir)
         file.copy(x, file.path(bakup_dir, basename(x)), copy.date = T)
 
+        # -- do migration & return yaml
         new_dm <- dm_migrate(legacy_dm)
+        c(config_item(id = unlist(strsplit(basename(x), split = "_"))[[1]], path = path),
+          data.model = dm_to_yaml(new_dm))
 
-        list(id = unlist(strsplit(basename(x), split = "_"))[[1]],
-             source = list(type = "file",
-                           path = path),
-             data.model = dm_to_yaml(new_dm))})
+      })
 
       # -- save config file
       config_write(c(config_create(basename(path)), items = list(config)), path = path)
