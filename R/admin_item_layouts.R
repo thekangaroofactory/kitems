@@ -39,13 +39,22 @@ admin_item_layout <- function(x){
 
 }
 
-admin_item_card <- function(name, description){
+admin_item_card <- function(name, description = NULL){
 
   # -- return
   div(class="bslib-grid-item bslib-gap-spacing html-fill-container",
       bslib::card(
         bslib::card_header(name),
-        p("Description:", description),
+        p(id = paste0(name, "_description"), "Description:", description),
+
+        # -- allow update
+        if(is.null(description))
+          actionLink(inputId = paste0(name, "_update_description"),
+                     label = "Set description",
+                     icon = icon("circle-arrow-right"),
+                     onclick = 'Shiny.setInputValue(\"update_description\", this.id, {priority: \"event\"})'),
+
+        # -- nav link
         actionLink(inputId = paste0(name, "_select_tab"),
                    label = "Switch tab",
                    icon = icon("circle-arrow-right"),

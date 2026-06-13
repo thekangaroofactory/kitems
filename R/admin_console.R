@@ -311,6 +311,40 @@ server <- function(input, output, session) {
                admin_item_card(name = x$id,
                                description = x$description))})}
 
+  # -- update description
+  observeEvent(input$update_description, {
+
+     # -- get item
+    item <- unlist(strsplit(input$update_description, "_"))[1]
+
+    # -- dialog
+    showModal(
+      modalDialog(
+        title = item,
+        textInput(inputId = "update_item_description",
+                  label = "Description"),
+        footer = tagList(
+          modalButton(label = "Cancel"),
+          actionButton(inputId = "item_upd_desc_confirm", label = "Update"))))
+
+    # -- confirm dialog
+    observeEvent(input$item_upd_desc_confirm, {
+
+      removeModal()
+
+      # -- update yaml
+      yaml <- config()
+      yaml$items[[match(item, item_list())]]$description <- input$update_item_description
+      config(yaml)
+
+      # -- update ui
+      js <- paste0("$('#", item, "_description').html('", input$update_item_description, "')")
+      shinyjs::runjs(js)
+
+    }, ignoreInit = T, once = T)
+
+  })
+
 }
 
 
