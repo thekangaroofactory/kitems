@@ -266,9 +266,7 @@ server <- function(input, output, session) {
     if(length(last_tab) == 0) last_tab <- "home"
 
     # -- update config & store
-    new_item <- list(id = input$add_item_name,
-                     source = list(type = "file",
-                                   path = path))
+    new_item <- config_item(id = input$add_item_name, path = path)
     yaml$items <- c(yaml$items, list(new_item))
     config(yaml)
 
