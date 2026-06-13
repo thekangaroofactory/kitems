@@ -18,4 +18,7 @@ admin_yaml_message <- function(config){
   if(is.null(config$items))
     return(p(class = "text-warning", icon("circle-chevron-right"), "The project has no item yet."))
 
+  if(!is.null(config$version))
+    return(p(class = "text-success-emphasis", icon("circle-chevron-right"), "Version:", config$version))
+
 }
