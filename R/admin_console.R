@@ -153,6 +153,9 @@ server <- function(input, output, session) {
   yaml <- config_read(path)
   config <- reactiveVal(yaml)
 
+  # -- reactive objects
+  item_list <- reactive(sapply(config()$items, "[[", "id"))
+
   # -- when YAML is missing
   # config_read will return NULL
   if(is.null(yaml) && !length(legacy_dm)){
@@ -243,7 +246,7 @@ server <- function(input, output, session) {
 
     if(grepl('[^[:alnum:]]', input$add_item_name))
       span(class = "text-danger", icon("circle-chevron-right"), "This name is not valid.")
-    else if(input$add_item_name == "foo")
+    else if(input$add_item_name %in% item_list())
       span(class = "text-warning", icon("circle-chevron-right"), "This name already exist!")
     else
       span(class = "text-success-emphasis", icon("circle-chevron-right"), "This name is valid.")
@@ -256,7 +259,7 @@ server <- function(input, output, session) {
 
     # -- secure
     req(input$add_item_name != "",
-        input$add_item_name != "foo",
+        !input$add_item_name %in% item_list(),
         !grepl('[^[:alnum:]]', input$add_item_name))
 
     # -- close dialog
@@ -264,7 +267,7 @@ server <- function(input, output, session) {
 
     # -- get config & last tab id
     yaml <- config()
-    last_tab <- tail(sapply(yaml$items, "[[", "id"), n = 1L)
+    last_tab <- tail(item_list(), n = 1L)
     if(length(last_tab) == 0) last_tab <- "home"
 
     # -- update config & store
