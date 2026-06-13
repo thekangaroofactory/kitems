@@ -226,6 +226,8 @@ server <- function(input, output, session) {
         textInput(inputId = "add_item_name",
                   label = "Item name"),
         uiOutput("add_item_message"),
+        textInput(inputId = "add_item_description",
+                  label = "Description"),
         footer =  tagList(
           modalButton("Cancel"),
           actionButton(inputId = "item_create_confirm",
@@ -266,14 +268,16 @@ server <- function(input, output, session) {
     if(length(last_tab) == 0) last_tab <- "home"
 
     # -- update config & store
-    new_item <- config_item(id = input$add_item_name, path = path)
+    new_item <- config_item(id = input$add_item_name,
+                            description = input$add_item_description,
+                            path = path)
     yaml$items <- c(yaml$items, list(new_item))
     config(yaml)
 
     # -- ui: add item card
     insertUI(selector = "#home-project-items > div:last",
              where = "beforeBegin",
-             admin_item_card(name = input$add_item_name))
+             admin_item_card(name = input$add_item_name, description = input$add_item_description))
 
     # -- ui: add item tab
     bslib::nav_insert(id = "nav",
@@ -301,7 +305,8 @@ server <- function(input, output, session) {
       # -- update item list
       insertUI(selector = "#home-project-items",
                where = "afterBegin",
-               admin_item_card(name = x$id))})}
+               admin_item_card(name = x$id,
+                               description = x$description))})}
 
 }
 

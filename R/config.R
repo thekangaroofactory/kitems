@@ -34,9 +34,10 @@ config_create <- function(project){
 #' @examples
 #' config_item(id = "foo", path = "./")
 
-config_item <- function(id, path){
+config_item <- function(id, description = "", path){
 
   list(id = id,
+       description = description,
        source = list(type = "file",
                      path = path))
 

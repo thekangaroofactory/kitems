@@ -39,12 +39,13 @@ admin_item_layout <- function(x){
 
 }
 
-admin_item_card <- function(name){
+admin_item_card <- function(name, description){
 
   # -- return
   div(class="bslib-grid-item bslib-gap-spacing html-fill-container",
       bslib::card(
         bslib::card_header(name),
+        p("Description:", description),
         actionLink(inputId = paste0(name, "_select_tab"),
                    label = "Switch tab",
                    icon = icon("circle-arrow-right"),
