@@ -50,6 +50,10 @@ ui <- bslib::page_navbar(title = "Admin Console",
                          # To ensure dark mode switch is on right
                          bslib::nav_spacer(),
 
+                         # -- link to package documentation
+                         bslib::nav_item(
+                           a(href="https://thekangaroofactory.github.io/kitems/", "kitems", target = "_blank")),
+
                          # -- dark mode switch
                          bslib::nav_item(
                            bslib::input_dark_mode(id = "dark", mode = NULL)),
