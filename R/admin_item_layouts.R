@@ -52,13 +52,13 @@ admin_item_card <- function(name, description = NULL){
           actionLink(inputId = paste0(name, "_update_description"),
                      label = "Set description",
                      icon = icon("circle-arrow-right"),
-                     onclick = 'Shiny.setInputValue(\"update_description\", this.id, {priority: \"event\"})'),
+                     onclick = ktools::onclick_event(target = "update_description")),
 
         # -- nav link
         actionLink(inputId = paste0(name, "_select_tab"),
                    label = "Switch tab",
                    icon = icon("circle-arrow-right"),
-                   onclick = 'Shiny.setInputValue(\"select_tab\", this.id, {priority: \"event\"})')))
+                   onclick = ktools::onclick_event(target = "select_tab"))))
 
 }
 

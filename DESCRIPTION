@@ -23,7 +23,7 @@ Imports:
     dplyr,
     rlang,
     iker,
-    ktools,
+    ktools (>= 0.9.9),
     stringr,
     magrittr,
     yaml
