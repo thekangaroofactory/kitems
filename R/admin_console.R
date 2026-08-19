@@ -373,6 +373,9 @@ server <- function(input, output, session) {
     yaml$items[which(items_list == id)] <- NULL
     config(yaml)
 
+    # -- delete item file
+    warning("Item file & folder should be deleted here!")
+
     # -- ui: drop item card & tab + notify
     removeUI(selector = paste0("#", id, "-item-card"), immediate = TRUE)
     bslib::nav_remove(id = "nav", target = id)
