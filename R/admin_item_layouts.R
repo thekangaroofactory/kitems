@@ -34,8 +34,12 @@ admin_item_layout <- function(x){
                      ),
 
                      h1(class = "mb-3", length(x$data.model$attributes), "attributes"),
+                     # -- call the attribute card function with extra arguments (hide, skip..)
                      bslib::layout_column_wrap(
-                       !!!lapply(x$data.model$attributes, card_attribute),
+                       !!!lapply(x$data.model$attributes,
+                                 card_attribute,
+                                 hide = x$data.model$hide,
+                                 skip = x$data.model$skip),
                        actionButton(inputId = "create", "+"))))
 
 }
