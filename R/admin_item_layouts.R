@@ -28,7 +28,8 @@ admin_item_layout <- function(x){
                        span(class = "text-warning", paste(x$data.model$hide, collapse = "|")),
 
                        h3("Danger zone"),
-                       bslib::input_switch(id = "dz", label = "Allow")
+                       div(id = paste0(x$id, "_dz_container"),
+                           bslib::input_switch(id = paste0(x$id, "_dz"), label = "Allow"))
 
                      ),
 
@@ -43,6 +44,7 @@ admin_item_card <- function(name, description = NULL){
 
   # -- return
   div(class="bslib-grid-item bslib-gap-spacing html-fill-container",
+      id = paste0(name, "-item-card"),
       bslib::card(
         bslib::card_header(name),
         p(id = paste0(name, "_description"), "Description:", description),
@@ -62,3 +64,11 @@ admin_item_card <- function(name, description = NULL){
 
 }
 
+admin_item_dz <- function(name){
+
+  actionLink(inputId = paste0(name, "_delete"),
+             label = "Delete item",
+             icon = icon("circle-arrow-right"),
+             onclick = ktools::onclick_event(target = "delete_item"))
+
+}

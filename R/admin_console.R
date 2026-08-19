@@ -302,6 +302,87 @@ server <- function(input, output, session) {
 
 
   # ////////////////////////////////////////////////////////////////////////////
+  # Danger zone(s)
+
+  # -- extract 'dz' switch inputs & init cache
+  # logical named vector
+  dz_switch <- reactive(sapply(names(input)[grepl("dz", names(input))], function(x) input[[x]]))
+  dz_switch_cache <- reactiveVal()
+
+  # -- hide / show
+  observeEvent(dz_switch(), {
+
+    # -- check
+    # actual & cache vectors must be same length (otherwise we're just adding a switch)
+    if(length(dz_switch()) == length(dz_switch_cache())){
+
+      # -- get updated switch (clicked)
+      upd_switch <- dz_switch()[dz_switch() != dz_switch_cache()]
+
+      # -- insert / remove UI
+      if(length(upd_switch)){
+        id <- names(upd_switch)
+        if(upd_switch)
+          insertUI(selector = paste0("#", id, "_container"),
+                   where = "afterEnd",
+                   div(id = paste0(id, "_content"),
+                       admin_item_dz(name = unlist(strsplit(id, split = "_"))[[1]])))
+        else
+          removeUI(selector = paste0("#", id, "_content"), immediate = TRUE)}}
+
+    # -- update cache
+    dz_switch_cache(dz_switch())
+
+  })
+
+
+  # -- delete item
+  observeEvent(input$delete_item, {
+
+    id <- unlist(strsplit(input$delete_item, split = "_"))[[1]]
+
+    showModal(
+      modalDialog(
+        p(class = "text-danger", "This action cannot be undone!", br(),
+          "Data model & items will be lost."),
+        p("Are you sure you want to delete", id, "item?", br(),
+          "Type:", paste0("delete-", id), "to confirm."),
+        textInput(inputId = "delete_item_string", label = ""),
+        title = "Delete item!",
+        size = "l",
+        footer = tagList(
+          modalButton(label = "Cancel"),
+          actionButton(inputId = "delete_item_confirm",
+                       label = "Confirm delete"))))
+
+  })
+
+
+  # -- confirm delete item
+  observeEvent(input$delete_item_confirm, {
+
+    # -- extract target item & check
+    id <- unlist(strsplit(input$delete_item, split = "_"))[[1]]
+    req(input$delete_item_string == paste0("delete-", id))
+
+    removeModal()
+
+    # -- update config & store
+    yaml <- config()
+    items_list <- sapply(yaml$items, function(x) x$id)
+    yaml$items[which(items_list == id)] <- NULL
+    config(yaml)
+
+    # -- ui: drop item card & tab + notify
+    removeUI(selector = paste0("#", id, "-item-card"), immediate = TRUE)
+    bslib::nav_remove(id = "nav", target = id)
+    bslib::nav_select(id = "nav", selected = "home")
+    showNotification(paste("Item", id, "has been deleted."))
+
+  })
+
+
+  # ////////////////////////////////////////////////////////////////////////////
   # Items Management
 
   # -- add one tab per item
