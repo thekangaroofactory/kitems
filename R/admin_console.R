@@ -69,7 +69,13 @@ server <- function(input, output, session) {
 
   # -- get path & check
   path <- Sys.getenv("R_KITEMS_PATH")
-  check_path(path)
+  tryCatch(check_path(path),
+           error = function(e) {
+             showModal(modalDialog(e$message,
+                                   title = "Environment error",
+                                   size = "l",
+                                   footer = NULL))
+             stop(e$message)})
 
 
   # ////////////////////////////////////////////////////////////////////////////
