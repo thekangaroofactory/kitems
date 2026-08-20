@@ -130,7 +130,7 @@ server <- function(input, output, session) {
 
         # -- do migration & return yaml
         new_dm <- dm_migrate(legacy_dm)
-        c(config_item(id = unlist(strsplit(basename(x), split = "_"))[[1]], path = path),
+        c(config_item_create(id = unlist(strsplit(basename(x), split = "_"))[[1]], path = path),
           data.model = dm_to_yaml(new_dm))
 
       })
@@ -236,10 +236,10 @@ server <- function(input, output, session) {
     showModal(
       modalDialog(
         title = "Add item",
-        textInput(inputId = "add_item_name",
+        textInput(inputId = "item_name",
                   label = "Item name"),
         uiOutput("add_item_message"),
-        textInput(inputId = "add_item_description",
+        textInput(inputId = "item_description",
                   label = "Description"),
         footer =  tagList(
           modalButton("Cancel"),
@@ -252,11 +252,11 @@ server <- function(input, output, session) {
   # -- watch dialog input
   output$add_item_message <- renderUI({
 
-    req(input$add_item_name != "")
+    req(input$item_name != "")
 
-    if(grepl('[^[:alnum:]]', input$add_item_name))
+    if(grepl('[^[:alnum:]]', input$item_name))
       span(class = "text-danger", icon("circle-chevron-right"), "This name is not valid.")
-    else if(input$add_item_name %in% item_list())
+    else if(input$item_name %in% item_list())
       span(class = "text-warning", icon("circle-chevron-right"), "This name already exist!")
     else
       span(class = "text-success-emphasis", icon("circle-chevron-right"), "This name is valid.")
@@ -268,9 +268,9 @@ server <- function(input, output, session) {
   observeEvent(input$item_create_confirm, {
 
     # -- secure
-    req(input$add_item_name != "",
-        !input$add_item_name %in% item_list(),
-        !grepl('[^[:alnum:]]', input$add_item_name))
+    req(input$item_name != "",
+        !input$item_name %in% item_list(),
+        !grepl('[^[:alnum:]]', input$item_name))
 
     # -- close dialog
     removeModal()
@@ -281,8 +281,8 @@ server <- function(input, output, session) {
     if(length(last_tab) == 0) last_tab <- "home"
 
     # -- update config & store
-    new_item <- config_item(id = input$add_item_name,
-                            description = input$add_item_description,
+    new_item <- config_item_create(id = input$item_name,
+                            description = input$item_description,
                             path = path)
     yaml$items <- c(yaml$items, list(new_item))
     config(yaml)
@@ -290,7 +290,7 @@ server <- function(input, output, session) {
     # -- ui: add item card
     insertUI(selector = "#home-project-items > div:last",
              where = "beforeBegin",
-             admin_item_card(name = input$add_item_name, description = input$add_item_description))
+             admin_item_card(name = input$item_name, description = input$item_description))
 
     # -- ui: add item tab
     bslib::nav_insert(id = "nav",
@@ -337,9 +337,9 @@ server <- function(input, output, session) {
 
 
   # -- delete item
-  observeEvent(input$delete_item, {
+  observeEvent(input$item_delete, {
 
-    id <- unlist(strsplit(input$delete_item, split = "_"))[[1]]
+    id <- unlist(strsplit(input$item_delete, split = "_"))[[1]]
 
     showModal(
       modalDialog(
@@ -347,29 +347,29 @@ server <- function(input, output, session) {
           "Data model & items will be lost."),
         p("Are you sure you want to delete", id, "item?", br(),
           "Type:", paste0("delete-", id), "to confirm."),
-        textInput(inputId = "delete_item_string", label = ""),
+        textInput(inputId = "item_delete_string", label = ""),
         title = "Delete item!",
         size = "l",
         footer = tagList(
           modalButton(label = "Cancel"),
-          actionButton(inputId = "delete_item_confirm",
+          actionButton(inputId = "item_delete_confirm",
                        label = "Confirm delete"))))
 
   })
 
 
   # -- confirm delete item
-  observeEvent(input$delete_item_confirm, {
+  observeEvent(input$item_delete_confirm, {
 
     # -- extract target item & check
-    id <- unlist(strsplit(input$delete_item, split = "_"))[[1]]
-    req(input$delete_item_string == paste0("delete-", id))
+    id <- unlist(strsplit(input$item_delete, split = "_"))[[1]]
+    req(input$item_delete_string == paste0("delete-", id))
 
     removeModal()
 
     # -- update config & store
     yaml <- config()
-    items_list <- sapply(yaml$items, function(x) x$id)
+    items_list <- config_items(yaml)
     yaml$items[which(items_list == id)] <- NULL
     config(yaml)
 
@@ -406,33 +406,33 @@ server <- function(input, output, session) {
                                description = x$description))})}
 
   # -- update description
-  observeEvent(input$update_description, {
+  observeEvent(input$item_update_description, {
 
      # -- get item
-    item <- unlist(strsplit(input$update_description, "_"))[1]
+    item <- unlist(strsplit(input$item_update_description, "_"))[1]
 
     # -- dialog
     showModal(
       modalDialog(
         title = item,
-        textInput(inputId = "update_item_description",
+        textInput(inputId = "item_update_description_value",
                   label = "Description"),
         footer = tagList(
           modalButton(label = "Cancel"),
-          actionButton(inputId = "item_upd_desc_confirm", label = "Update"))))
+          actionButton(inputId = "item_update_description_confirm", label = "Update"))))
 
     # -- confirm dialog
-    observeEvent(input$item_upd_desc_confirm, {
+    observeEvent(input$item_update_description_confirm, {
 
       removeModal()
 
       # -- update yaml
       yaml <- config()
-      yaml$items[[match(item, item_list())]]$description <- input$update_item_description
+      yaml$items[[match(item, item_list())]]$description <- input$item_update_description_value
       config(yaml)
 
       # -- update ui
-      js <- paste0("$('#", item, "_description').html('", input$update_item_description, "')")
+      js <- paste0("$('#", item, "_description').html('", input$item_update_description_value, "')")
       shinyjs::runjs(js)
 
     }, ignoreInit = T, once = T)
