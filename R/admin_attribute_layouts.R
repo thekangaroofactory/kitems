@@ -12,7 +12,6 @@
 #' @param update the listf of attributes to update
 #'
 #' @returns A htmltools::div() tag.
-#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -63,5 +62,41 @@ admin_attribute_card <- function(attribute, item, hide = NULL, skip = NULL, upda
                                   label = "",
                                   icon = icon("trash"),
                                   onclick = ktools::onclick_event(target = "attribute_action"))))
+
+}
+
+
+#' Attribute Modal Window
+#'
+#' @description
+#' This is the UI layout function for the attribute wizard.
+#'
+#' @details
+#' Mostly composed of container div elements that will be filled / updated
+#' dynamically.
+#'
+#' @returns a modal dialog
+#'
+#' @examples
+#' admin_attribute_modal()
+
+admin_attribute_modal <- function(){
+
+  # -- return
+  modalDialog(
+    title = "Create Attribute",
+    size = "l",
+
+    # -- input container
+    div(id = "input-container"),
+
+    # -- validation container
+    uiOutput("w_validation"),
+
+    # -- footer
+    footer = tagList(
+      modalButton(label = "Cancel"),
+      uiOutput("w_actions"),
+      div(id = "action-container")))
 
 }

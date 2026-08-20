@@ -453,7 +453,7 @@ server <- function(input, output, session) {
     # -- perform action
     if(event['action'] == "attribute_create"){
 
-      warning(event['action'], event['namespace'])
+      admin_attribute_wizard(yaml, item = event['namespace'])
 
     } else if(event['action'] == "attribute_update"){
 
