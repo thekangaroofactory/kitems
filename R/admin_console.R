@@ -439,6 +439,55 @@ server <- function(input, output, session) {
 
   })
 
+
+  # ////////////////////////////////////////////////////////////////////////////
+  # Attribute Management
+
+  # -- centralized action manager
+  observeEvent(input$attribute_action, {
+
+    # -- extract event & get yaml
+    event <- ktools::input_decode(input$attribute_action)
+    yaml <- config()
+
+    # -- perform action
+    if(event['action'] == "attribute_update"){
+
+
+
+    } else if(event['action'] == "attribute_move"){
+
+      choices <- config_attributes(yaml, item = event['namespace'])
+      choices <- choices[!choices %in% event['value']]
+
+      # -- dialog
+      showModal(
+        modalDialog(
+          p("Move attribute", event['value'], "column:"),
+          radioButtons(inputId = "attribute_move_position", label = "Position", choices = list("before", "after")),
+          selectInput(inputId = "attribute_move_target",
+                      label = "Attribute",
+                      choices = choices),
+          footer = tagList(modalButton(label = "Cancel"),
+                           actionButton(inputId = "attribute_move_confirm", label = "Move"))))
+
+      # -- action
+      observeEvent(input$attribute_move_confirm, {
+
+        removeModal()
+        warning("Do womething here")
+
+      }, once = TRUE)
+
+    } else if(event['action'] == "attribute_delete"){
+
+
+
+    }
+
+
+  })
+
 }
 
 
