@@ -72,10 +72,9 @@ config_item_position <- function(config, item){
 #' config_attributes(config)
 #' }
 
-config_attributes <- function(config){
+config_attributes <- function(config, item){
 
-  warning("should extract from main config to keep it homogenbized")
-  sapply(config$data.model$attributes, function(x) x$name)
+  sapply(config_extract(config, item)$data.model$attributes, function(x) x$name)
 
 }
 
