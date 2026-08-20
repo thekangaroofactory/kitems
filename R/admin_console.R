@@ -451,9 +451,13 @@ server <- function(input, output, session) {
     yaml <- config()
 
     # -- perform action
-    if(event['action'] == "attribute_update"){
+    if(event['action'] == "attribute_create"){
 
+      warning(event['action'], event['namespace'])
 
+    } else if(event['action'] == "attribute_update"){
+
+      warning(event['action'], event['namespace'])
 
     } else if(event['action'] == "attribute_move"){
 
@@ -475,7 +479,7 @@ server <- function(input, output, session) {
       observeEvent(input$attribute_move_confirm, {
 
         removeModal()
-        warning("Do womething here")
+        warning(event['action'], event['namespace'])
 
       }, once = TRUE)
 

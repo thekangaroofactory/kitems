@@ -41,7 +41,12 @@ admin_item_layout <- function(x){
                                  x$id,
                                  hide = x$data.model$hide,
                                  skip = x$data.model$skip),
-                       actionButton(inputId = "create", "+"))))
+
+                       # -- add attribute
+                       p(actionLink(inputId = paste0(x$id, "-attribute_create_x"),
+                                    label = "Add",
+                                    onclick = ktools::onclick_event(target = "attribute_action")),
+                         "an attribute to the item."))))
 
 }
 
