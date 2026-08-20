@@ -5,7 +5,6 @@
 #' @param project a character string to indicate the name of the project
 #'
 #' @returns a list
-#' @export
 #'
 #' @examples
 #' config_create(project = "my_project")
@@ -28,7 +27,6 @@ config_create <- function(project){
 #' @param config a yaml config
 #'
 #' @returns a vector
-#' @export
 #'
 #' @examples
 #' config_items(list(items = list(config_item_create(id = "foo", path = "./"),
@@ -68,7 +66,6 @@ config_item_position <- function(config, item){
 #' @param config a yaml config section for an item
 #'
 #' @returns a vector
-#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -120,7 +117,6 @@ config_attribute_position <- function(config, item, attribute){
 #' return the input.
 #'
 #' @returns a list (the yaml section for the attribute)
-#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -153,7 +149,6 @@ config_extract <- function(config, item = NULL, attribute = NULL){
 #' @param path a character string where to find the data
 #'
 #' @returns a list
-#' @export
 #'
 #' @examples
 #' config_item_create(id = "foo", path = "./")
