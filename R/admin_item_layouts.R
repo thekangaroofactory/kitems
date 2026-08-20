@@ -37,7 +37,8 @@ admin_item_layout <- function(x){
                      # -- call the attribute card function with extra arguments (hide, skip..)
                      bslib::layout_column_wrap(
                        !!!lapply(x$data.model$attributes,
-                                 card_attribute,
+                                 admin_attribute_card,
+                                 x$id,
                                  hide = x$data.model$hide,
                                  skip = x$data.model$skip),
                        actionButton(inputId = "create", "+"))))
@@ -58,7 +59,7 @@ admin_item_card <- function(name, description = NULL){
           actionLink(inputId = paste0(name, "_update_description"),
                      label = "Set description",
                      icon = icon("circle-arrow-right"),
-                     onclick = ktools::onclick_event(target = "update_description")),
+                     onclick = ktools::onclick_event(target = "item_update_description")),
 
         # -- nav link
         actionLink(inputId = paste0(name, "_select_tab"),
@@ -73,6 +74,6 @@ admin_item_dz <- function(name){
   actionLink(inputId = paste0(name, "_delete"),
              label = "Delete item",
              icon = icon("circle-arrow-right"),
-             onclick = ktools::onclick_event(target = "delete_item"))
+             onclick = ktools::onclick_event(target = "item_delete"))
 
 }
