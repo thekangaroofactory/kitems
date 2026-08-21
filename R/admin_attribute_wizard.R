@@ -52,8 +52,7 @@ admin_attribute_wizard <- function(config, item, session = getDefaultReactiveDom
     })
 
     # -- store step
-    session$userData$kitems$wizard <- list(step = 1,
-                                           listeners = obs)
+    session$userData$kitems$wizard$step <- list(id = 1, listeners = obs)
 
   }
 
@@ -77,13 +76,13 @@ admin_attribute_wizard <- function(config, item, session = getDefaultReactiveDom
       actionButton(inputId = "w_next", label = "Next", icon = icon("circle-chevron-right")))
 
     # -- store step
-    session$userData$kitems$wizard <- list(step = 2)
+    session$userData$kitems$wizard$step <- list(id = 2)
 
   }
 
 
   # ----------------------------------------------------------------------------
-  # Step.3 hide / skip / update
+  # Step.3 hide / skip
   # ----------------------------------------------------------------------------
 
   wizard_step_3 <- function(){
@@ -96,16 +95,14 @@ admin_attribute_wizard <- function(config, item, session = getDefaultReactiveDom
                       checkboxInput(inputId = "attribute_hide", label = "Hide"),
                       p("Should the attribute be skipped in the item form?", br(),
                         "If so, its value will be computed based on defaults."),
-                      checkboxInput(inputId = "attribute_skip", label = "Skip"),
-                      p("Since skipped, should the attribute be computed again when an item is updated?"),
-                      checkboxInput(inputId = "attribute_update", label = "Update")))
+                      checkboxInput(inputId = "attribute_skip", label = "Skip")))
 
     # -- no validation is required
     output$w_actions <- renderUI(
-      actionButton(inputId = "w_next", label = "Next", icon = icon("circle-chevron-right")))
+      actionButton(inputId = "w_confirm", label = "Create attribute", icon = icon("circle-chevron-right")))
 
     # -- store step
-    session$userData$kitems$wizard <- list(step = 3)
+    session$userData$kitems$wizard$step <- list(id = 3)
 
   }
 
@@ -124,35 +121,94 @@ admin_attribute_wizard <- function(config, item, session = getDefaultReactiveDom
 
 
   # ----------------------------------------------------------------------------
-  # Next step
+  # Cleanup
   # ----------------------------------------------------------------------------
 
-  observeEvent(input$w_next, {
+  cleanup <- function(wizard = FALSE, session = getDefaultReactiveDomain()){
 
-    # -- cleanup modal
+    # -- cleanup modal UI
     output$w_validation <- renderUI(NULL)
     output$w_actions <- renderUI(NULL)
     removeUI(selector = "#input-content", immediate = TRUE)
 
-    # -- destroy observers
-    obs <- session$userData$kitems$wizard$listeners
-    if(!is.null(obs)){
-      if(is.list(obs))
-        lapply(obs, function(x) x$destroy())
-      else
-        obs$destroy()}
+    # -- helper: destroy observers
+    helper <- function(obs){
+      if(!is.null(obs)){
+        if(is.list(obs))
+          lapply(obs, function(x) x$destroy())
+        else
+          obs$destroy()}}
+
+    # -- destroy step listeners
+    helper(session$userData$kitems$wizard$step$listeners)
+
+    # -- destroy wizard listeners
+    if(wizard)
+      helper(session$userData$kitems$wizard$listeners)
+
+  }
+
+
+  # ----------------------------------------------------------------------------
+  # Next step
+  # ----------------------------------------------------------------------------
+
+  obs_next <- observeEvent(input$w_next, {
+
+    message("w_next")
+
+    # -- cleanup step
+    cleanup()
 
     # -- launch next step
-    get(paste0("wizard_step_", session$userData$kitems$wizard$step + 1))()
+    get(paste0("wizard_step_", session$userData$kitems$wizard$step$id + 1))()
 
-  })
+  }, ignoreInit = TRUE)
+
+  # -- store
+  session$userData$kitems$wizard$listeners <- obs_next
+
+
+  # ----------------------------------------------------------------------------
+  # Cancel wizard
+  # ----------------------------------------------------------------------------
+
+  observeEvent(input$w_cancel, {
+
+    message("w_cancel")
+
+    # -- cleanup UI
+    removeModal()
+
+    # -- cleanup wizard
+    cleanup(wizard = TRUE)
+
+    # -- cleanup userData
+    session$userData$kitems[['wizard']] <- NULL
+
+  }, ignoreInit = TRUE, once = TRUE)
 
 
   # ----------------------------------------------------------------------------
   # Final confirmation
   # ----------------------------------------------------------------------------
 
-  observeEvent(input$w_confirm, {
+  # >>>>>>>> Il va falloir le sortir pour le mettre dans la console
+  # pour pouvoir traiter le yaml
+  # changer le nom admin_attribute_create_confirm
+
+  obs_confirm <- observeEvent(input$w_confirm, {
+
+    message("w_confirm")
+
+    # -- cleanup UI
+    removeModal()
+
+    # -- cleanup wizard
+    cleanup(wizard = TRUE)
+
+    # -- cleanup userData
+    session$userData$kitems[['wizard']] <- NULL
 
     # step.1
     input$attribute_name
@@ -163,8 +219,10 @@ admin_attribute_wizard <- function(config, item, session = getDefaultReactiveDom
     # step.3
     input$attribute_hide
     input$attribute_skip
-    input$attribute_update
 
-  })
+  }, ignoreInit = TRUE, once = TRUE)
+
+  # -- store
+  session$userData$kitems$wizard$listeners <- c(session$userData$kitems$wizard$listeners, obs_confirm)
 
 }

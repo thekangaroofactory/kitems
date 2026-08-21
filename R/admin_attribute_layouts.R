@@ -95,7 +95,7 @@ admin_attribute_modal <- function(){
 
     # -- footer
     footer = tagList(
-      modalButton(label = "Cancel"),
+      actionButton(inputId = "w_cancel", label = "Cancel"),
       uiOutput("w_actions"),
       div(id = "action-container")))
 
