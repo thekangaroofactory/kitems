@@ -12,7 +12,8 @@ ui <- bslib::page_navbar(title = "Admin Console",
                          window_title = "Kitems Admin Console",
                          id = "nav",
 
-                         shinyjs::useShinyjs(),
+                         # -- allow shinyjs
+                         header = shinyjs::useShinyjs(),
 
                          # -- home tab (persistent)
                          bslib::nav_panel(title = "Home",
@@ -432,8 +433,8 @@ server <- function(input, output, session) {
       config(yaml)
 
       # -- update ui
-      js <- paste0("$('#", item, "_description').html('", input$item_update_description_value, "')")
-      shinyjs::runjs(js)
+      shinyjs::html(id = paste0(item, "_description"),
+                    html = input$item_update_description_value)
 
     }, ignoreInit = T, once = T)
 
