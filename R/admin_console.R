@@ -472,6 +472,7 @@ server <- function(input, output, session) {
         config(yaml)
 
         # -- update UI
+        # add attribute card
         dm <- config_extract(yaml, item = event['namespace'])$data.model
         at <- config_extract(yaml, item = event['namespace'], attribute = callback()$name)
         insertUI(selector = paste0("#", event['namespace'], "-attributes > div:last"),
@@ -482,6 +483,11 @@ server <- function(input, output, session) {
                                           hide = dm$hide,
                                           skip = dm$skip,
                                           update = dm$update)))
+        # update attribute nb
+        shinyjs::html(id = paste0(event['namespace'], "_attribute_nb"),
+                      html = admin_attribute_nb(
+                        config_extract(config(),
+                                       item = event['namespace'])))
 
         # -- cleanup
         callback(NULL)
@@ -573,8 +579,14 @@ server <- function(input, output, session) {
         # -- update UI
         # remove attribute card
         removeUI(selector = paste0("div:has(> #",
-                                   paste(event['namespace'], event['value'], "attribute-card", sep = "-")),
+                                   paste(event['namespace'], event['value'],
+                                         "attribute-card", sep = "-")),
                  immediate = TRUE)
+        # update attribute nb
+        shinyjs::html(id = paste0(event['namespace'], "_attribute_nb"),
+                      html = admin_attribute_nb(
+                        config_extract(config(),
+                                       item = event['namespace'])))
 
       }, ignoreInit = TRUE)
 

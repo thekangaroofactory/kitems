@@ -22,3 +22,15 @@ admin_yaml_message <- function(config){
     return(p(class = "text-success-emphasis", icon("circle-chevron-right"), "Version:", config$version))
 
 }
+
+
+# ------------------------------------------------------------------------------
+# Helper functions to compute messages
+# ------------------------------------------------------------------------------
+
+admin_attribute_nb <- function(item_config){
+
+  nb <- length(item_config$data.model$attributes)
+  paste0(nb, " attribute", if(nb > 1) "s")
+
+}

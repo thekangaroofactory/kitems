@@ -6,6 +6,7 @@ admin_item_layout <- function(x){
   bslib::nav_panel(title = x$id,
                    icon = icon(name = "box"),
 
+                   # -- sidebar
                    bslib::layout_sidebar(
                      border = FALSE,
 
@@ -29,11 +30,13 @@ admin_item_layout <- function(x){
 
                        h3("Danger zone"),
                        div(id = paste0(x$id, "_dz_container"),
-                           bslib::input_switch(id = paste0(x$id, "_dz"), label = "Allow"))
+                           bslib::input_switch(id = paste0(x$id, "_dz"), label = "Allow"))),
 
-                     ),
+                     # -- main content
+                     h1(id = paste0(x$id, "_attribute_nb"),
+                        class = "mb-3",
+                        admin_attribute_nb(x)),
 
-                     h1(class = "mb-3", length(x$data.model$attributes), "attributes"),
                      # -- call the attribute card function with extra arguments (hide, skip..)
                      bslib::layout_column_wrap(
                        id = paste0(x$id, "-attributes"),
