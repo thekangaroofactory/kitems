@@ -99,7 +99,7 @@ admin_attribute_wizard <- function(config, item, session = getDefaultReactiveDom
 
     # -- no validation is required
     output$w_actions <- renderUI(
-      actionButton(inputId = "w_confirm", label = "Create attribute", icon = icon("circle-chevron-right")))
+      actionButton(inputId = "w_next", label = "Next", icon = icon("circle-chevron-right")))
 
     # -- store step
     session$userData$kitems$wizard$step <- list(id = 3)
@@ -108,16 +108,33 @@ admin_attribute_wizard <- function(config, item, session = getDefaultReactiveDom
 
 
   # ----------------------------------------------------------------------------
-  # Launch wizard
+  # Step.4 confirmation
   # ----------------------------------------------------------------------------
 
-  # -- init
-  output$w_actions <- renderUI(NULL)
-  showModal(
-    admin_attribute_modal())
+  wizard_step_4 <- function(){
 
-  # -- start
-  wizard_step_1()
+    # -- init UI
+    insertUI(selector = "#input-container",
+             where = "afterBegin",
+             ui = div(id = "input-content",
+                      p("Attibute summary, please check the parameters:"),
+                      tags$ul(
+                        tags$li("Name: ", input$attribute_name),
+                        tags$li("Type: ", input$attribute_type)),
+                      p("Additional behaviors, the attribute will be:"),
+                      tags$ul(
+                        tags$li(ifelse(input$attribute_hide, "Hidden", "Displayed"), "in the item table."),
+                        if(input$attribute_skip)
+                          tags$li("Skipped in the item form."))))
+
+    # -- no validation is required
+    output$w_actions <- renderUI(
+      actionButton(inputId = "w_confirm", label = "Create attribute", icon = icon("circle-chevron-right")))
+
+    # -- store step
+    session$userData$kitems$wizard$step <- list(id = 4)
+
+  }
 
 
   # ----------------------------------------------------------------------------
@@ -224,5 +241,18 @@ admin_attribute_wizard <- function(config, item, session = getDefaultReactiveDom
 
   # -- store
   session$userData$kitems$wizard$listeners <- c(session$userData$kitems$wizard$listeners, obs_confirm)
+
+
+  # ----------------------------------------------------------------------------
+  # Launch wizard
+  # ----------------------------------------------------------------------------
+
+  # -- init
+  output$w_actions <- renderUI(NULL)
+  showModal(
+    admin_attribute_modal())
+
+  # -- start
+  wizard_step_1()
 
 }
