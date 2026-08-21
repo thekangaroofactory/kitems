@@ -518,7 +518,17 @@ server <- function(input, output, session) {
 
     } else if(event['action'] == "attribute_delete"){
 
+      # -- drop attribute from config
+      config(
+        config_attribute_drop(config(),
+                              item = event['namespace'],
+                              attribute = event['value']))
 
+      # -- update UI
+      # remove attribute card
+      removeUI(selector = paste0("div:has(> #",
+                                 paste(event['namespace'], event['value'], "attribute-card", sep = "-")),
+               immediate = TRUE)
 
     }
 
