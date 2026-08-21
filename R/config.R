@@ -318,9 +318,11 @@ config_attribute_move <- function(config, item, attribute, where){
     target_idx <- target_idx - 1
 
   # -- reorder attribute indexes
+  att_list <- config_attributes(config, item)
   att_order <- append(att_list[!att_list %in% attribute], attribute, after = target_idx)
 
   # -- reorder attributes
+  item_idx <- config_item_position(config, item)
   config$items[[item_idx]]$data.model$attributes <- config$items[[item_idx]]$data.model$attributes[match(att_order, att_list)]
 
   # -- return

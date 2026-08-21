@@ -500,6 +500,7 @@ server <- function(input, output, session) {
       # -- dialog
       showModal(
         modalDialog(
+          title = "Move Attribute",
           p("Move attribute", event['value'], "column:"),
           radioButtons(inputId = "attribute_move_position", label = "Position", choices = list("before", "after")),
           selectInput(inputId = "attribute_move_target",
@@ -512,26 +513,71 @@ server <- function(input, output, session) {
       observeEvent(input$attribute_move_confirm, {
 
         removeModal()
-        warning(event['action'], event['namespace'])
 
-      }, once = TRUE)
+        # -- update config
+        config(
+          config_attribute_move(config(),
+                                item = event['namespace'],
+                                attribute = event['value'],
+                                where = list(position = input$attribute_move_position,
+                                             attribute = input$attribute_move_target)))
+
+        # -- update UI
+        # remove attribute card
+        removeUI(selector = paste0("div:has(> #",
+                                   paste(event['namespace'], event['value'], "attribute-card", sep = "-")),
+                 immediate = TRUE)
+        # insert attribute card
+        dm <- config_extract(yaml, item = event['namespace'])$data.model
+        at <- config_extract(yaml, item = event['namespace'], attribute = event['value'])
+        insertUI(selector = paste0("div:has(> #",
+                                   paste(event['namespace'], input$attribute_move_target, "attribute-card", sep = "-")),
+                 where = ifelse(input$attribute_move_position == "before", "beforeBegin", "afterEnd"),
+                 div(class="bslib-grid-item bslib-gap-spacing html-fill-container",
+                     admin_attribute_card(attribute = at,
+                                          item = event['namespace'],
+                                          hide = dm$hide,
+                                          skip = dm$skip,
+                                          update = dm$update)))
+
+      }, ignoreInit = TRUE, once = TRUE)
 
     } else if(event['action'] == "attribute_delete"){
 
-      # -- drop attribute from config
-      config(
-        config_attribute_drop(config(),
-                              item = event['namespace'],
-                              attribute = event['value']))
+      # -- dialog
+      showModal(
+        modalDialog(
+          title = "Delete Attribute",
+          size = "l",
+          p(class = "text-danger", "This action cannot be undone!", br(),
+            "Attribute parameters & corresponding item column will be lost."),
+          p("Are you sure you want to delete", event['value'], "attribute?", br(),
+            "Type:", paste0("delete-", event['value']), "to confirm."),
+          textInput(inputId = "attribute_delete_string", label = ""),
+          footer = tagList(modalButton(label = "Cancel"),
+                           actionButton(inputId = "attribute_delete_confirm", label = "Confirm delete"))))
 
-      # -- update UI
-      # remove attribute card
-      removeUI(selector = paste0("div:has(> #",
-                                 paste(event['namespace'], event['value'], "attribute-card", sep = "-")),
-               immediate = TRUE)
+      # -- action
+      observeEvent(input$attribute_delete_confirm, {
+
+        req(input$attribute_delete_string == paste0("delete-", event['value']))
+        removeModal()
+
+        # -- drop attribute from config
+        config(
+          config_attribute_drop(config(),
+                                item = event['namespace'],
+                                attribute = event['value']))
+
+        # -- update UI
+        # remove attribute card
+        removeUI(selector = paste0("div:has(> #",
+                                   paste(event['namespace'], event['value'], "attribute-card", sep = "-")),
+                 immediate = TRUE)
+
+      }, ignoreInit = TRUE)
 
     }
-
 
   })
 
