@@ -61,7 +61,7 @@ admin_item_card <- function(name, description = NULL){
       id = paste0(name, "-item-card"),
       bslib::card(
         bslib::card_header(name),
-        p(id = paste0(name, "_description"), "Description:", description),
+        p(id = paste0(name, "-description"), "Description:", description),
 
         # -- allow update
         if(is.null(description))

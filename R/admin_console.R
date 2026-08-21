@@ -433,8 +433,11 @@ server <- function(input, output, session) {
       config(yaml)
 
       # -- update ui
-      shinyjs::html(id = paste0(item, "_description"),
-                    html = input$item_update_description_value)
+      # update description
+      shinyjs::html(id = paste0(item, "-description"),
+                    html = paste("Description:", input$item_update_description_value))
+      # remove link
+      removeUI(selector = paste0("#", item, "_update_description"), immediate = TRUE)
 
     }, ignoreInit = T, once = T)
 
