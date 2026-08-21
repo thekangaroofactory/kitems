@@ -37,7 +37,13 @@ admin_attribute_wizard <- function(config, item, callback, session = getDefaultR
         output$w_validation <- renderUI(
           p(class = "text-danger", icon("circle-xmark"), "This name already exists."))}
 
-      # funny char
+      # space(s)
+      if(grepl(" ", input$attribute_name)){
+        is_valid <- FALSE
+        output$w_validation <- renderUI(
+          p(class = "text-danger", icon("circle-xmark"), "Spaces are not allowed."))}
+
+      # funny char(s)
       if(grepl("(?![_.-])[[:punct:]]", input$attribute_name, perl = TRUE)){
         is_valid <- FALSE
         output$w_validation <- renderUI(
