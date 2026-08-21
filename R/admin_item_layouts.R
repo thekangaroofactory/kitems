@@ -36,6 +36,7 @@ admin_item_layout <- function(x){
                      h1(class = "mb-3", length(x$data.model$attributes), "attributes"),
                      # -- call the attribute card function with extra arguments (hide, skip..)
                      bslib::layout_column_wrap(
+                       id = paste0(x$id, "-attributes"),
                        !!!lapply(x$data.model$attributes,
                                  admin_attribute_card,
                                  x$id,

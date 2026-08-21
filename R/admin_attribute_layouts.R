@@ -20,48 +20,52 @@
 
 admin_attribute_card <- function(attribute, item, hide = NULL, skip = NULL, update = NULL){
 
-  # -- return
-  bslib::card(
+  # -- wrapper
+  # the container is needed to locate the 'div:last' inside the layout_column_wrap
+  div(class="bslib-grid-item bslib-gap-spacing html-fill-container",
+      id = paste(item, attribute$name, "attribute-card", sep = "-"),
 
-    # -- attribute name
-    bslib::card_header(class = "d-flex justify-content-between",
-                       attribute$name,
-                       div(
-                         if(attribute$name %in% hide)
-                           bslib::tooltip(icon("eye-slash"), "The attribute is not displayed"),
-                         if(attribute$name %in% skip)
-                           bslib::tooltip(icon("bolt-lightning"), "The attribute is skipped"),
-                         if(attribute$name %in% update)
-                           icon("rotate"))),
+      bslib::card(
 
-    # -- content
-    bslib::card_body(
+        # -- attribute name
+        bslib::card_header(class = "d-flex justify-content-between",
+                           attribute$name,
+                           div(
+                             if(attribute$name %in% hide)
+                               bslib::tooltip(icon("eye-slash"), "The attribute is not displayed"),
+                             if(attribute$name %in% skip)
+                               bslib::tooltip(icon("bolt-lightning"), "The attribute is skipped"),
+                             if(attribute$name %in% update)
+                               icon("rotate"))),
 
-      # -- mandatory
-      p("type:", attribute$type),
+        # -- content
+        bslib::card_body(
 
-      # -- optional
-      if("default" %in% names(attribute))
-        p("default value:", attribute$default)
+          # -- mandatory
+          p("type:", attribute$type),
 
-    ),
+          # -- optional
+          if("default" %in% names(attribute))
+            p("default value:", attribute$default)
 
-    bslib::card_footer(class = "d-flex justify-content-end",
+        ),
 
-                       actionLink(inputId = paste0(item, "-attribute_update_", attribute$name),
-                                  label = "",
-                                  icon = icon("gear"),
-                                  onclick = ktools::onclick_event(target = "attribute_action")),
+        bslib::card_footer(class = "d-flex justify-content-end",
 
-                       actionLink(inputId = paste0(item, "-attribute_move_", attribute$name),
-                                  label = "",
-                                  icon = icon("arrows-left-right"),
-                                  onclick = ktools::onclick_event(target = "attribute_action")),
+                           actionLink(inputId = paste0(item, "-attribute_update_", attribute$name),
+                                      label = "",
+                                      icon = icon("gear"),
+                                      onclick = ktools::onclick_event(target = "attribute_action")),
 
-                       actionLink(inputId = paste0(item, "-attribute_delete_", attribute$name),
-                                  label = "",
-                                  icon = icon("trash"),
-                                  onclick = ktools::onclick_event(target = "attribute_action"))))
+                           actionLink(inputId = paste0(item, "-attribute_move_", attribute$name),
+                                      label = "",
+                                      icon = icon("arrows-left-right"),
+                                      onclick = ktools::onclick_event(target = "attribute_action")),
+
+                           actionLink(inputId = paste0(item, "-attribute_delete_", attribute$name),
+                                      label = "",
+                                      icon = icon("trash"),
+                                      onclick = ktools::onclick_event(target = "attribute_action")))))
 
 }
 
