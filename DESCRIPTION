@@ -25,7 +25,8 @@ Imports:
     ktools (>= 0.9.9),
     stringr,
     magrittr,
-    yaml
+    yaml,
+    shinyjs
 Suggests: 
     knitr,
     rmarkdown,
