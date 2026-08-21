@@ -346,6 +346,7 @@ config_attribute_drop <- function(config, item, attribute){
 
   # -- get idx to drop
   idx_to_drop <- config_attribute_position(config, item, attribute)
+  item_idx <- config_item_position(config, item)
 
   # -- drop attribute
   config$items[[item_idx]]$data.model$attributes <- config$items[[item_idx]]$data.model$attributes[-idx_to_drop]
