@@ -453,7 +453,40 @@ server <- function(input, output, session) {
     # -- perform action
     if(event['action'] == "attribute_create"){
 
-      admin_attribute_wizard(yaml, item = event['namespace'])
+      callback <- reactiveVal()
+      admin_attribute_wizard(yaml, item = event['namespace'], callback)
+
+      # -- listen to callback
+      observeEvent(callback(), {
+
+        message("callback")
+        yaml <- config_attribute_append(
+          yaml,
+          item = event['namespace'],
+          attribute = config_attribute_create(
+            name = callback()$name,
+            type = callback()$type))
+
+        # -- store the new config
+        config(yaml)
+
+        # -- update UI
+        dm <- config_extract(yaml, item = event['namespace'])$data.model
+        at <- config_extract(yaml, item = event['namespace'], attribute = callback()$name)
+        insertUI(selector = paste0("#", event['namespace'], "-attributes > div:last"),
+                 where = "beforeBegin",
+                 div(class="bslib-grid-item bslib-gap-spacing html-fill-container",
+                     admin_attribute_card(attribute = at,
+                                          item = event['namespace'],
+                                          hide = dm$hide,
+                                          skip = dm$skip,
+                                          update = dm$update)))
+
+        # -- cleanup
+        callback(NULL)
+
+      }, once = TRUE)
+
 
     } else if(event['action'] == "attribute_update"){
 

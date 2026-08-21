@@ -1,6 +1,6 @@
 
 
-admin_attribute_wizard <- function(config, item, session = getDefaultReactiveDomain()){
+admin_attribute_wizard <- function(config, item, callback, session = getDefaultReactiveDomain()){
 
   # -- get inputs
   input <- session$input
@@ -210,10 +210,6 @@ admin_attribute_wizard <- function(config, item, session = getDefaultReactiveDom
   # Final confirmation
   # ----------------------------------------------------------------------------
 
-  # >>>>>>>> Il va falloir le sortir pour le mettre dans la console
-  # pour pouvoir traiter le yaml
-  # changer le nom admin_attribute_create_confirm
-
   obs_confirm <- observeEvent(input$w_confirm, {
 
     message("w_confirm")
@@ -227,15 +223,12 @@ admin_attribute_wizard <- function(config, item, session = getDefaultReactiveDom
     # -- cleanup userData
     session$userData$kitems[['wizard']] <- NULL
 
-    # step.1
-    input$attribute_name
-
-    # step.2
-    input$attribute_type
-
-    # step.3
-    input$attribute_hide
-    input$attribute_skip
+    # -- pass inputs to callback
+    callback(
+      list(name = input$attribute_name,
+           type = input$attribute_type,
+           hide = input$attribute_hide,
+           skip = input$attribute_skip))
 
   }, ignoreInit = TRUE, once = TRUE)
 
