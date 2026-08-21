@@ -94,7 +94,7 @@ config_attributes <- function(config, item){
 
 config_attribute_position <- function(config, item, attribute){
 
-  which(config_attributes(config_extract(config, item)) == attribute)
+  which(config_attributes(config, item) == attribute)
 
 }
 
@@ -125,16 +125,19 @@ config_attribute_position <- function(config, item, attribute){
 
 config_extract <- function(config, item = NULL, attribute = NULL){
 
+  # -- init
+  x <- config
+
   # -- extract item
   if(!is.null(item))
-    config <- config$items[[config_item_position(config, item)]]
+    x <- config$items[[config_item_position(config, item)]]
 
   # -- extract attribute
   if(!is.null(attribute))
-    config <- config$data.model$attributes[[which(config_attributes(config) == attribute)]]
+    x <- x$data.model$attributes[[config_attribute_position(config, item, attribute)]]
 
   # -- return
-  config
+  x
 
 }
 
@@ -258,7 +261,7 @@ config_item_drop <- function(config, item){
 
 config_attribute_create <- function(name, type){
 
-  lits(name = name,
+  list(name = name,
        type = type)
 
 }
@@ -284,7 +287,7 @@ config_attribute_append <- function(config, item, attribute){
   item_idx <- config_item_position(config, item)
 
   # -- need position where to insert / append
-  attribute_idx <- length(config_attributes(config_extract(config, item))) + 1
+  attribute_idx <- length(config_attributes(config, item)) + 1
   config$items[[item_idx]]$data.model$attributes[[attribute_idx]] <- attribute
 
   # -- return
