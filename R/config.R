@@ -272,6 +272,8 @@ config_attribute_create <- function(name, type){
 #' @param config the yaml config
 #' @param item the name of the target item
 #' @param attribute the attribute config
+#' @param hide a logical (default = FALSE) if the attribute should be hidden
+#' @param skip a logical (default = FALSE) if the attribute should be skipped
 #'
 #' @returns the new config
 #'
@@ -281,14 +283,20 @@ config_attribute_create <- function(name, type){
 #'                         attribute = config_attribute_create(name = "bar", type "numeric"))
 #' }
 
-config_attribute_append <- function(config, item, attribute){
+config_attribute_append <- function(config, item, attribute, hide = FALSE, skip = FALSE){
 
-  # -- get item position in config$items
+  # -- get item & (last) attribute positions
   item_idx <- config_item_position(config, item)
-
-  # -- need position where to insert / append
   attribute_idx <- length(config_attributes(config, item)) + 1
+
+  # -- append attribute
   config$items[[item_idx]]$data.model$attributes[[attribute_idx]] <- attribute
+
+  # -- update hide & skip
+  if(hide)
+    config$items[[item_idx]]$data.model$hide <- c(config$items[[item_idx]]$data.model$hide, attribute$name)
+  if(skip)
+    config$items[[item_idx]]$data.model$skip <- c(config$items[[item_idx]]$data.model$skip, attribute$name)
 
   # -- return
   config

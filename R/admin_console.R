@@ -469,7 +469,9 @@ server <- function(input, output, session) {
           item = event['namespace'],
           attribute = config_attribute_create(
             name = callback()$name,
-            type = callback()$type))
+            type = callback()$type),
+          hide = callback()$hide,
+          skip = callback()$skip)
 
         # -- store the new config
         config(yaml)
