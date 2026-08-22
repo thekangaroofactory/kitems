@@ -472,7 +472,8 @@ server <- function(input, output, session) {
           attribute = config_attribute_create(
             name = callback()$name,
             type = callback()$type,
-            class.arg = if(callback()$class.arg == "") NULL else callback()$class.arg),
+            class.arg = if(callback()$class.arg == "") NULL else callback()$class.arg,
+            values = if(callback()$values == "") NULL else callback()$values),
           hide = callback()$hide,
           skip = callback()$skip)
 

@@ -97,27 +97,24 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
                                   label = "Type",
                                   choices = c("integer", "character"),
                                   selected = values$type),
-                      div(id = "class-arg-container",
-                          bslib::input_switch(id = "attribute_allow_class_arg",
-                                              label = "Class argument(s)",
-                                              value = if(is.null(values$class.arg)) FALSE else TRUE))))
+                      bslib::input_switch(id = "attribute_allow_class_arg",
+                                          label = "Class argument(s)",
+                                          value = if(is.null(values$class.arg)) FALSE else TRUE),
+                      div(id = "class-arg-content",
+                          p("Class arguments are sent along with values to the as.* conversion function.", br(),
+                            "ex: as.Date(34519, origin = '1904-01-01')"),
+                          textInput(inputId = "attribute_class_arg",
+                                    label = "Argument(s)",
+                                    value = values$class.arg))))
 
     # -- listener
     # class.arg switch
     obs <- observeEvent(input$attribute_allow_class_arg, {
 
       if(input$attribute_allow_class_arg)
-        insertUI(selector = "#class-arg-container",
-                 where = "beforeEnd",
-                 ui = div(id = "class-arg-content",
-                          p("Class arguments are sent along with values to the as.* conversion function.", br(),
-                            "ex: as.Date(34519, origin = '1904-01-01')"),
-                          textInput(inputId = "attribute_class_arg",
-                                    label = "Argument(s)",
-                                    value = values$class.arg)))
+        shinyjs::show("class-arg-content")
       else
-        removeUI(selector = "#class-arg-content",
-                 immediate = TRUE)
+        shinyjs::hide("class-arg-content")
 
     })
 
@@ -132,10 +129,58 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
 
 
   # ----------------------------------------------------------------------------
-  # Step.3 hide / skip
+  # Step.3 values
   # ----------------------------------------------------------------------------
 
   wizard_step_3 <- function(){
+
+    # -- init UI
+    insertUI(selector = "#input-container",
+             where = "afterBegin",
+             ui = div(id = "input-content",
+                      "Indicate possible values for an attribute.",
+                      radioButtons(inputId = "attribute_values_verb",
+                                   label = "",
+                                   choices = list("any", "suggest", "limit", "lifecycle"),
+                                   selected = NULL,
+                                   inline = TRUE),
+                      div(id = "attribute-values-container",
+                          textInput(inputId = "attribute_values",
+                                    label = "Values",
+                                    value = ""),
+                          p("Use comma (,) between values."),
+                          p("Behaviors:", br(),
+                            tags$ul(
+                              tags$li("suggest to let user chose among these values or set a different one,"),
+                              tags$li("limit to force attribute choices among a given list of values,"),
+                              tags$li("lifecycle to indicate values are states (with promote/demote mechanism)."))))))
+
+    # -- listener
+    # radio buttons
+    obs <- observeEvent(input$attribute_values_verb, {
+
+      if(input$attribute_values_verb == "any")
+        shinyjs::hide("attribute-values-container")
+      else
+        shinyjs::show("attribute-values-container")
+
+    })
+
+    # -- no validation is required
+    output$w_actions <- renderUI(
+      actionButton(inputId = "w_next", label = "Next", icon = icon("circle-chevron-right")))
+
+    # -- store step
+    session$userData$kitems$wizard$step <- list(id = 3)
+
+  }
+
+
+  # ----------------------------------------------------------------------------
+  # Step.4 hide / skip
+  # ----------------------------------------------------------------------------
+
+  wizard_step_4 <- function(){
 
     # -- init UI
     insertUI(selector = "#input-container",
@@ -152,16 +197,16 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
       actionButton(inputId = "w_next", label = "Next", icon = icon("circle-chevron-right")))
 
     # -- store step
-    session$userData$kitems$wizard$step <- list(id = 3)
+    session$userData$kitems$wizard$step <- list(id = 4)
 
   }
 
 
   # ----------------------------------------------------------------------------
-  # Step.4 confirmation
+  # Step.5 confirmation
   # ----------------------------------------------------------------------------
 
-  wizard_step_4 <- function(){
+  wizard_step_5 <- function(){
 
     # -- init UI
     insertUI(selector = "#input-container",
@@ -184,7 +229,7 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
                    icon = icon("circle-chevron-right")))
 
     # -- store step
-    session$userData$kitems$wizard$step <- list(id = 4)
+    session$userData$kitems$wizard$step <- list(id = 5)
 
   }
 
@@ -274,6 +319,7 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
       list(name = if(update && attribute == "id") attribute else input$attribute_name,
            type = input$attribute_type,
            class.arg = input$attribute_class_arg,
+           values = paste0(input$attribute_values_verb, "(", input$attribute_values, ")"),
            hide = input$attribute_hide,
            skip = input$attribute_skip))
 

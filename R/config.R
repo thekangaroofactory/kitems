@@ -260,7 +260,7 @@ config_item_drop <- function(config, item){
 #' @examples
 #' config_attribute_create(name = "att_1", type = "integer")
 
-config_attribute_create <- function(name, type, class.arg = NULL){
+config_attribute_create <- function(name, type, class.arg = NULL, values = NULL){
 
   # -- init
   config <- list(name = name,
@@ -269,6 +269,10 @@ config_attribute_create <- function(name, type, class.arg = NULL){
   # -- class.arg
   if(!is.null(class.arg))
     config <- c(config, list(class.arg = class.arg))
+
+  # -- values
+  if(!is.null(values) && rlang::call_name(rlang::parse_expr(values)) != "any")
+    config <- c(config, list(values = values))
 
   # -- return
   config
