@@ -498,9 +498,11 @@ server <- function(input, output, session) {
         # update attribute nb
         shinyjs::html(id = paste0(event['namespace'], "-attribute-nb"),
                       html = admin_attribute_nb(item))
-        # update skipped & hidden (sidebar)
+        # update skipped, refreshed & hidden (sidebar)
         shinyjs::html(id = paste0(event['namespace'], "-skipped-attributes"),
                       html = paste(item$data.model$skip, collapse = "|"))
+        shinyjs::html(id = paste0(event['namespace'], "-refreshed-attributes"),
+                      html = paste(item$data.model$refresh, collapse = "|"))
         shinyjs::html(id = paste0(event['namespace'], "-hidden-attributes"),
                       html = paste(item$data.model$hide, collapse = "|"))
 
@@ -563,9 +565,11 @@ server <- function(input, output, session) {
                                           skip = dm$skip,
                                           refresh = dm$refresh))
 
-        # update skipped & hidden (sidebar)
+        # update skipped, refreshed & hidden (sidebar)
         shinyjs::html(id = paste0(event['namespace'], "-skipped-attributes"),
                       html = paste(dm$skip, collapse = "|"))
+        shinyjs::html(id = paste0(event['namespace'], "-refreshed-attributes"),
+                      html = paste(dm$refresh, collapse = "|"))
         shinyjs::html(id = paste0(event['namespace'], "-hidden-attributes"),
                       html = paste(dm$hide, collapse = "|"))
 
@@ -669,9 +673,11 @@ server <- function(input, output, session) {
         item <- config_extract(config(), item = event['namespace'])
         shinyjs::html(id = paste0(event['namespace'], "-attribute-nb"),
                       html = admin_attribute_nb(item))
-        # update skipped & hidden (sidebar)
+        # update skipped, refreshed & hidden (sidebar)
         shinyjs::html(id = paste0(event['namespace'], "-skipped-attributes"),
                       html = paste(item$data.model$skip, collapse = "|"))
+        shinyjs::html(id = paste0(event['namespace'], "-refreshed-attributes"),
+                      html = paste(item$data.model$refresh, collapse = "|"))
         shinyjs::html(id = paste0(event['namespace'], "-hidden-attributes"),
                       html = paste(item$data.model$hide, collapse = "|"))
 

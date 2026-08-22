@@ -24,7 +24,11 @@ admin_item_layout <- function(x){
                        p("No input will be generated for those attributes when creating / updating items."),
                        span(id = paste0(x$id, "-skipped-attributes"), class = "text-warning", paste(x$data.model$skip, collapse = "|")),
 
-                       h3("Display"),
+                       h3("Refreshed"),
+                       p("Skipped attributes that will be refreshed when updating items."),
+                       span(id = paste0(x$id, "-refreshed-attributes"), class = "text-warning", paste(x$data.model$refresh, collapse = "|")),
+
+                       h3("Hidden"),
                        p("Attributes that won't be displayed in the item table."),
                        span(id = paste0(x$id, "-hidden-attributes"), class = "text-warning", paste(x$data.model$hide, collapse = "|")),
 

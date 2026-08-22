@@ -348,15 +348,17 @@ config_attribute_update <- function(config, item, attribute, hide = FALSE, skip 
   # -- update attribute
   config$items[[item_idx]]$data.model$attributes[[attribute_idx]] <- attribute
 
-  # -- update hide & skip
+  # -- update hide
   config$items[[item_idx]]$data.model$hide <- if(hide)
     unique(c(config$items[[item_idx]]$data.model$hide, attribute$name))
   else
     config$items[[item_idx]]$data.model$hide[!config$items[[item_idx]]$data.model$hide %in% attribute$name]
+  # update skip
   config$items[[item_idx]]$data.model$skip <- if(skip)
     unique(c(config$items[[item_idx]]$data.model$skip, attribute$name))
   else
     config$items[[item_idx]]$data.model$skip[!config$items[[item_idx]]$data.model$skip %in% attribute$name]
+  # update refresh
   config$items[[item_idx]]$data.model$refresh <- if(refresh)
     unique(c(config$items[[item_idx]]$data.model$refresh, attribute$name))
   else
@@ -425,9 +427,10 @@ config_attribute_drop <- function(config, item, attribute){
   # -- drop attribute
   config$items[[item_idx]]$data.model$attributes <- config$items[[item_idx]]$data.model$attributes[-idx_to_drop]
 
-  # -- update hide & skip
+  # -- update hide, skip & refresh
   config$items[[item_idx]]$data.model$hide <- config$items[[item_idx]]$data.model$hide[!config$items[[item_idx]]$data.model$hide %in% attribute]
   config$items[[item_idx]]$data.model$skip <- config$items[[item_idx]]$data.model$skip[!config$items[[item_idx]]$data.model$skip %in% attribute]
+  config$items[[item_idx]]$data.model$refresh <- config$items[[item_idx]]$data.model$refresh[!config$items[[item_idx]]$data.model$refresh %in% attribute]
 
   # -- return
   config
