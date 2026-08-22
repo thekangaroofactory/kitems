@@ -47,6 +47,10 @@ admin_attribute_card <- function(attribute, item, hide = NULL, skip = NULL, upda
           if("class.arg" %in% names(attribute))
             p("Class argument(s):", attribute$class.arg),
 
+          # -- values
+          if("values" %in% names(attribute))
+            p("Values:", attribute$values),
+
           # -- optional
           if("default" %in% names(attribute))
             p("default value:", attribute$default)
