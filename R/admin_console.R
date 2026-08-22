@@ -480,25 +480,25 @@ server <- function(input, output, session) {
 
         # -- update UI
         # add attribute card
-        dm <- config_extract(yaml, item = event['namespace'])$data.model
+        item <- config_extract(yaml, item = event['namespace'])
         at <- config_extract(yaml, item = event['namespace'], attribute = callback()$name)
         insertUI(selector = paste0("#", event['namespace'], "-attributes > div:last"),
                  where = "beforeBegin",
                  div(class="bslib-grid-item bslib-gap-spacing html-fill-container",
                      admin_attribute_card(attribute = at,
                                           item = event['namespace'],
-                                          hide = dm$hide,
-                                          skip = dm$skip,
-                                          update = dm$update)))
+                                          hide = item$data.model$hide,
+                                          skip = item$data.model$skip,
+                                          update = item$data.model$update)))
 
         # update attribute nb
         shinyjs::html(id = paste0(event['namespace'], "-attribute-nb"),
                       html = admin_attribute_nb(item))
         # update skipped & hidden (sidebar)
         shinyjs::html(id = paste0(event['namespace'], "-skipped-attributes"),
-                      html = paste(dm$skip, collapse = "|"))
+                      html = paste(item$data.model$skip, collapse = "|"))
         shinyjs::html(id = paste0(event['namespace'], "-hidden-attributes"),
-                      html = paste(dm$hide, collapse = "|"))
+                      html = paste(item$data.model$hide, collapse = "|"))
 
         # -- cleanup
         callback(NULL)
@@ -539,30 +539,20 @@ server <- function(input, output, session) {
         # replace attribute card
         dm <- config_extract(yaml, item = event['namespace'])$data.model
         at <- config_extract(yaml, item = event['namespace'], attribute = callback()$name)
-
-        selector <- paste0("div:has(> #",
-                           paste(event['namespace'], event['value'],
-                                 "attribute-card", sep = "-"))
-
-        insertUI(selector = selector,
-                 where = "afterEnd",
-                 immediate = TRUE,
-                 ui = div(id = "temp_marker", ""))
-
-        removeUI(selector = selector,
+        # remove old card
+        removeUI(selector = paste0("#", paste(event['namespace'], event['value'],
+                                  "attribute-card", sep = "-")),
                  immediate = TRUE)
-
-        insertUI(selector = "#temp_marker",
-                 where = "beforeBegin",
+        # insert updated card
+        insertUI(selector = paste0("#", paste(event['namespace'], event['value'],
+                                              "attribute-card-container", sep = "-")),
+                 where = "afterBegin",
                  immediate = TRUE,
-                 div(class="bslib-grid-item bslib-gap-spacing html-fill-container",
                      admin_attribute_card(attribute = at,
                                           item = event['namespace'],
                                           hide = dm$hide,
                                           skip = dm$skip,
-                                          update = dm$update)))
-
-        removeUI(selector = "#temp_marker", immediate = TRUE)
+                                          update = dm$update))
 
         # update skipped & hidden (sidebar)
         shinyjs::html(id = paste0(event['namespace'], "-skipped-attributes"),
@@ -613,13 +603,13 @@ server <- function(input, output, session) {
         # -- update UI
         # remove attribute card
         removeUI(selector = paste0("div:has(> #",
-                                   paste(event['namespace'], event['value'], "attribute-card", sep = "-")),
+                                   paste(event['namespace'], event['value'], "attribute-card-container", sep = "-")),
                  immediate = TRUE)
         # insert attribute card
         dm <- config_extract(yaml, item = event['namespace'])$data.model
         at <- config_extract(yaml, item = event['namespace'], attribute = event['value'])
         insertUI(selector = paste0("div:has(> #",
-                                   paste(event['namespace'], input$attribute_move_target, "attribute-card", sep = "-")),
+                                   paste(event['namespace'], input$attribute_move_target, "attribute-card-container", sep = "-")),
                  where = ifelse(input$attribute_move_position == "before", "beforeBegin", "afterEnd"),
                  div(class="bslib-grid-item bslib-gap-spacing html-fill-container",
                      admin_attribute_card(attribute = at,
@@ -664,7 +654,7 @@ server <- function(input, output, session) {
         # remove attribute card
         removeUI(selector = paste0("div:has(> #",
                                    paste(event['namespace'], event['value'],
-                                         "attribute-card", sep = "-")),
+                                         "attribute-card-container", sep = "-")),
                  immediate = TRUE)
         # update attribute nb
         item <- config_extract(config(), item = event['namespace'])

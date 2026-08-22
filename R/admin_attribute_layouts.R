@@ -23,9 +23,10 @@ admin_attribute_card <- function(attribute, item, hide = NULL, skip = NULL, upda
   # -- wrapper
   # the wrapper is needed to locate the 'div:last' inside the layout_column_wrap
   div(class="bslib-grid-item bslib-gap-spacing html-fill-container",
-      id = paste(item, attribute$name, "attribute-card", sep = "-"),
+      id = paste(item, attribute$name, "attribute-card-container", sep = "-"),
 
       bslib::card(
+        id = paste(item, attribute$name, "attribute-card", sep = "-"),
 
         # -- attribute name
         bslib::card_header(class = "d-flex justify-content-between",
