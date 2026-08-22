@@ -526,8 +526,6 @@ server <- function(input, output, session) {
       # -- listen to callback
       observeEvent(callback(), {
 
-        str(callback())
-
         yaml <- config_attribute_update(
           yaml,
           item = event['namespace'],
@@ -535,7 +533,8 @@ server <- function(input, output, session) {
             name = callback()$name,
             type = callback()$type,
             class.arg = if(callback()$class.arg == "") NULL else callback()$class.arg,
-            values = if(callback()$values == "") NULL else callback()$values),
+            values = if(callback()$values == "") NULL else callback()$values,
+            default = if(callback()$default == "") NULL else callback()$default),
           hide = callback()$hide,
           skip = callback()$skip)
 

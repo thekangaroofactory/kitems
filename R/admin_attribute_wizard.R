@@ -189,7 +189,7 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
                       "Setup a default for the attribute:",
                       textInput(inputId = "attribute_default",
                                 label = "Default",
-                                value = ""),
+                                value = if(is.null(values$default)) "" else values$default),
                       p("Ex: 1, draft, Sys.Date()"),
                       p("The default is used to:",
                         tags$ul(

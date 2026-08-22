@@ -53,7 +53,7 @@ admin_attribute_card <- function(attribute, item, hide = NULL, skip = NULL, upda
 
           # -- optional
           if("default" %in% names(attribute))
-            p("default value:", attribute$default)
+            p("default:", attribute$default)
 
         ),
 
