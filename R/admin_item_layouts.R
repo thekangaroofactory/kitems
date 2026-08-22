@@ -22,18 +22,18 @@ admin_item_layout <- function(x){
 
                        h3("Skipped"),
                        p("No input will be generated for those attributes when creating / updating items."),
-                       span(class = "text-warning", paste(x$data.model$skip, collapse = "|")),
+                       span(id = paste0(x$id, "-skipped-attributes"), class = "text-warning", paste(x$data.model$skip, collapse = "|")),
 
                        h3("Display"),
                        p("Attributes that won't be displayed in the item table."),
-                       span(class = "text-warning", paste(x$data.model$hide, collapse = "|")),
+                       span(id = paste0(x$id, "-hidden-attributes"), class = "text-warning", paste(x$data.model$hide, collapse = "|")),
 
                        h3("Danger zone"),
                        div(id = paste0(x$id, "_dz_container"),
                            bslib::input_switch(id = paste0(x$id, "_dz"), label = "Allow"))),
 
                      # -- main content
-                     h1(id = paste0(x$id, "_attribute_nb"),
+                     h1(id = paste0(x$id, "-attribute-nb"),
                         class = "mb-3",
                         admin_attribute_nb(x)),
 

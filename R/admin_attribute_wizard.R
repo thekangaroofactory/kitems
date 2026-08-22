@@ -1,10 +1,31 @@
 
 
-admin_attribute_wizard <- function(config, item, callback, session = getDefaultReactiveDomain()){
+admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE, skip = FALSE,
+                                   callback, session = getDefaultReactiveDomain()){
+
+  # ----------------------------------------------------------------------------
+  # Init
+  # ----------------------------------------------------------------------------
 
   # -- get inputs
   input <- session$input
   output <- session$output
+
+  # -- check for update
+  update <- !is.null(attribute)
+  values <- if(update)
+    config_extract(config, item, attribute)
+  else
+    list(name = "", type = NULL)
+  values <- c(values, hide = hide, skip = skip)
+  str(values)
+
+  # -- compute reserved names
+  # existing attributes (except itself for update)
+  reserved <- config_attributes(config, item)
+  if(update)
+    reserved <- reserved[!reserved %in% attribute]
+
 
   # ----------------------------------------------------------------------------
   # Step.1 name
@@ -16,7 +37,7 @@ admin_attribute_wizard <- function(config, item, callback, session = getDefaultR
     insertUI(selector = "#input-container",
              where = "afterBegin",
              ui = div(id = "input-content",
-                      textInput(inputId = "attribute_name", label = "Name")))
+                      textInput(inputId = "attribute_name", label = "Name", value = values$name)))
 
     # -- validate
     obs <- observeEvent(input$attribute_name, {
@@ -32,7 +53,7 @@ admin_attribute_wizard <- function(config, item, callback, session = getDefaultR
           p(class = "text-danger", icon("circle-xmark"), "A name is required."))}
 
       # duplicate
-      if(input$attribute_name %in% config_attributes(config, item)){
+      if(input$attribute_name %in% reserved){
         is_valid <- FALSE
         output$w_validation <- renderUI(
           p(class = "text-danger", icon("circle-xmark"), "This name already exists."))}
@@ -75,7 +96,8 @@ admin_attribute_wizard <- function(config, item, callback, session = getDefaultR
              ui = div(id = "input-content",
                       selectInput(inputId = "attribute_type",
                                   label = "Name",
-                                  choices = c("integer", "character"))))
+                                  choices = c("integer", "character"),
+                                  selected = values$type)))
 
     # -- no validation is required
     output$w_actions <- renderUI(
@@ -98,10 +120,10 @@ admin_attribute_wizard <- function(config, item, callback, session = getDefaultR
              where = "afterBegin",
              ui = div(id = "input-content",
                       p("Should the attribute column be hidden in the item table?"),
-                      checkboxInput(inputId = "attribute_hide", label = "Hide"),
+                      checkboxInput(inputId = "attribute_hide", label = "Hide", value = values$hide),
                       p("Should the attribute be skipped in the item form?", br(),
                         "If so, its value will be computed based on defaults."),
-                      checkboxInput(inputId = "attribute_skip", label = "Skip")))
+                      checkboxInput(inputId = "attribute_skip", label = "Skip", value = values$skip)))
 
     # -- no validation is required
     output$w_actions <- renderUI(
@@ -125,7 +147,7 @@ admin_attribute_wizard <- function(config, item, callback, session = getDefaultR
              ui = div(id = "input-content",
                       p("Attibute summary, please check the parameters:"),
                       tags$ul(
-                        tags$li("Name: ", input$attribute_name),
+                        tags$li("Name: ", if(update && attribute == "id") attribute else input$attribute_name),
                         tags$li("Type: ", input$attribute_type)),
                       p("Additional behaviors, the attribute will be:"),
                       tags$ul(
@@ -135,7 +157,9 @@ admin_attribute_wizard <- function(config, item, callback, session = getDefaultR
 
     # -- no validation is required
     output$w_actions <- renderUI(
-      actionButton(inputId = "w_confirm", label = "Create attribute", icon = icon("circle-chevron-right")))
+      actionButton(inputId = "w_confirm",
+                   label = paste(ifelse(update, "Update", "Create"), "Attribute"),
+                   icon = icon("circle-chevron-right")))
 
     # -- store step
     session$userData$kitems$wizard$step <- list(id = 4)
@@ -231,7 +255,7 @@ admin_attribute_wizard <- function(config, item, callback, session = getDefaultR
 
     # -- pass inputs to callback
     callback(
-      list(name = input$attribute_name,
+      list(name = if(update && attribute == "id") attribute else input$attribute_name,
            type = input$attribute_type,
            hide = input$attribute_hide,
            skip = input$attribute_skip))
@@ -249,9 +273,12 @@ admin_attribute_wizard <- function(config, item, callback, session = getDefaultR
   # -- init
   output$w_actions <- renderUI(NULL)
   showModal(
-    admin_attribute_modal())
+    admin_attribute_modal(update = update))
 
   # -- start
-  wizard_step_1()
+  if(update && attribute == "id")
+    wizard_step_2()
+  else
+    wizard_step_1()
 
 }

@@ -304,6 +304,47 @@ config_attribute_append <- function(config, item, attribute, hide = FALSE, skip 
 }
 
 
+#' Update Attribute
+#'
+#' @param config the yaml config
+#' @param item the name of the target item
+#' @param attribute the attribute config
+#' @param hide a logical (default = FALSE) if the attribute should be hidden
+#' @param skip a logical (default = FALSE) if the attribute should be skipped
+#'
+#' @returns the new config
+#'
+#' @examples
+#' \dontrun{
+#' config_attribute_update(config, item = foo,
+#'                         attribute = config_attribute_create(name = "bar", type "numeric"))
+#' }
+
+config_attribute_update <- function(config, item, attribute, hide = FALSE, skip = FALSE){
+
+  # -- get item & attribute positions
+  item_idx <- config_item_position(config, item)
+  attribute_idx <- config_attribute_position(config, item, attribute$name)
+
+  # -- update attribute
+  config$items[[item_idx]]$data.model$attributes[[attribute_idx]] <- attribute
+
+  # -- update hide & skip
+  config$items[[item_idx]]$data.model$hide <- if(hide)
+    unique(c(config$items[[item_idx]]$data.model$hide, attribute$name))
+  else
+    config$items[[item_idx]]$data.model$hide[!config$items[[item_idx]]$data.model$hide %in% attribute$name]
+  config$items[[item_idx]]$data.model$skip <- if(skip)
+    unique(c(config$items[[item_idx]]$data.model$skip, attribute$name))
+  else
+    config$items[[item_idx]]$data.model$skip[!config$items[[item_idx]]$data.model$skip %in% attribute$name]
+
+  # -- return
+  config
+
+}
+
+
 #' Move Attribute
 #'
 #' @param config the yaml config
@@ -360,6 +401,10 @@ config_attribute_drop <- function(config, item, attribute){
 
   # -- drop attribute
   config$items[[item_idx]]$data.model$attributes <- config$items[[item_idx]]$data.model$attributes[-idx_to_drop]
+
+  # -- update hide & skip
+  config$items[[item_idx]]$data.model$hide <- config$items[[item_idx]]$data.model$hide[!config$items[[item_idx]]$data.model$hide %in% attribute]
+  config$items[[item_idx]]$data.model$skip <- config$items[[item_idx]]$data.model$skip[!config$items[[item_idx]]$data.model$skip %in% attribute]
 
   # -- return
   config

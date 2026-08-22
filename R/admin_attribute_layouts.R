@@ -84,11 +84,11 @@ admin_attribute_card <- function(attribute, item, hide = NULL, skip = NULL, upda
 #' @examples
 #' admin_attribute_modal()
 
-admin_attribute_modal <- function(){
+admin_attribute_modal <- function(update = FALSE){
 
   # -- return
   modalDialog(
-    title = "Create Attribute",
+    title = paste(ifelse(update, "Update", "Create"), "Attribute"),
     size = "l",
 
     # -- input container

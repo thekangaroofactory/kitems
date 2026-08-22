@@ -457,13 +457,15 @@ server <- function(input, output, session) {
     # -- perform action
     if(event['action'] == "attribute_create"){
 
+      # ------------------------------------------------------------------------
+      # Create attribute
+
       callback <- reactiveVal()
-      admin_attribute_wizard(yaml, item = event['namespace'], callback)
+      admin_attribute_wizard(yaml, item = event['namespace'], callback = callback)
 
       # -- listen to callback
       observeEvent(callback(), {
 
-        message("callback")
         yaml <- config_attribute_append(
           yaml,
           item = event['namespace'],
@@ -488,11 +490,15 @@ server <- function(input, output, session) {
                                           hide = dm$hide,
                                           skip = dm$skip,
                                           update = dm$update)))
+
         # update attribute nb
-        shinyjs::html(id = paste0(event['namespace'], "_attribute_nb"),
-                      html = admin_attribute_nb(
-                        config_extract(config(),
-                                       item = event['namespace'])))
+        shinyjs::html(id = paste0(event['namespace'], "-attribute-nb"),
+                      html = admin_attribute_nb(item))
+        # update skipped & hidden (sidebar)
+        shinyjs::html(id = paste0(event['namespace'], "-skipped-attributes"),
+                      html = paste(dm$skip, collapse = "|"))
+        shinyjs::html(id = paste0(event['namespace'], "-hidden-attributes"),
+                      html = paste(dm$hide, collapse = "|"))
 
         # -- cleanup
         callback(NULL)
@@ -502,9 +508,79 @@ server <- function(input, output, session) {
 
     } else if(event['action'] == "attribute_update"){
 
-      warning(event['action'], event['namespace'])
+      # ------------------------------------------------------------------------
+      # Update attribute
+
+      callback <- reactiveVal()
+      old_dm <- config_extract(yaml, item = event['namespace'])$data.model
+      admin_attribute_wizard(yaml,
+                             item = event['namespace'],
+                             attribute = event['value'],
+                             hide = event['value'] %in% old_dm$hide,
+                             skip = event['value'] %in% old_dm$skip,
+                             callback)
+
+      # -- listen to callback
+      observeEvent(callback(), {
+
+        yaml <- config_attribute_update(
+          yaml,
+          item = event['namespace'],
+          attribute = config_attribute_create(
+            name = callback()$name,
+            type = callback()$type),
+          hide = callback()$hide,
+          skip = callback()$skip)
+
+        # -- store the new config
+        config(yaml)
+
+        # -- update UI
+        # replace attribute card
+        dm <- config_extract(yaml, item = event['namespace'])$data.model
+        at <- config_extract(yaml, item = event['namespace'], attribute = callback()$name)
+
+        selector <- paste0("div:has(> #",
+                           paste(event['namespace'], event['value'],
+                                 "attribute-card", sep = "-"))
+
+        insertUI(selector = selector,
+                 where = "afterEnd",
+                 immediate = TRUE,
+                 ui = div(id = "temp_marker", ""))
+
+        removeUI(selector = selector,
+                 immediate = TRUE)
+
+        insertUI(selector = "#temp_marker",
+                 where = "beforeBegin",
+                 immediate = TRUE,
+                 div(class="bslib-grid-item bslib-gap-spacing html-fill-container",
+                     admin_attribute_card(attribute = at,
+                                          item = event['namespace'],
+                                          hide = dm$hide,
+                                          skip = dm$skip,
+                                          update = dm$update)))
+
+        removeUI(selector = "#temp_marker", immediate = TRUE)
+
+        # update skipped & hidden (sidebar)
+        shinyjs::html(id = paste0(event['namespace'], "-skipped-attributes"),
+                      html = paste(dm$skip, collapse = "|"))
+        shinyjs::html(id = paste0(event['namespace'], "-hidden-attributes"),
+                      html = paste(dm$hide, collapse = "|"))
+
+        # -- cleanup
+        callback(NULL)
+
+      }, once = TRUE)
+
+
 
     } else if(event['action'] == "attribute_move"){
+
+      # ------------------------------------------------------------------------
+      # Move attribute
 
       choices <- config_attributes(yaml, item = event['namespace'])
       choices <- choices[!choices %in% event['value']]
@@ -556,6 +632,9 @@ server <- function(input, output, session) {
 
     } else if(event['action'] == "attribute_delete"){
 
+      # ------------------------------------------------------------------------
+      # Delete attribute
+
       # -- dialog
       showModal(
         modalDialog(
@@ -588,10 +667,14 @@ server <- function(input, output, session) {
                                          "attribute-card", sep = "-")),
                  immediate = TRUE)
         # update attribute nb
-        shinyjs::html(id = paste0(event['namespace'], "_attribute_nb"),
-                      html = admin_attribute_nb(
-                        config_extract(config(),
-                                       item = event['namespace'])))
+        item <- config_extract(config(), item = event['namespace'])
+        shinyjs::html(id = paste0(event['namespace'], "-attribute-nb"),
+                      html = admin_attribute_nb(item))
+        # update skipped & hidden (sidebar)
+        shinyjs::html(id = paste0(event['namespace'], "-skipped-attributes"),
+                      html = paste(item$data.model$skip, collapse = "|"))
+        shinyjs::html(id = paste0(event['namespace'], "-hidden-attributes"),
+                      html = paste(item$data.model$hide, collapse = "|"))
 
       }, ignoreInit = TRUE)
 
