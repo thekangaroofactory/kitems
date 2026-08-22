@@ -71,6 +71,7 @@ dm_no_date <- data_model(colClasses = colClasses_no_date)
 dm_id_only <- data_model(colClasses = colClasses_id_only, skip = TRUE)
 dm_sort <- data_model(colClasses = colClasses, sort.rank = sort_rank, sort.desc = sort_desc)
 
+
 # ------------------------------------------------------------------------------
 # Build items
 # ------------------------------------------------------------------------------
@@ -172,6 +173,9 @@ create_testdata <- function(){
   # -- save data model
   saveRDS(dm, file = test_dm_url)
 
+  # -- YAML
+  config_write(config_create(project = "test"))
+
   # -- save items
   item_save(items,  connector = list(file = test_items_url))
 
@@ -186,6 +190,9 @@ create_empty_items <- function(){
 
   # -- save data model
   saveRDS(data_model(colClasses = c(id = "numeric", date = "POSIXct")), file = test_dm_url)
+
+  # -- YAML
+  config_write(config_create(project = "test"))
 
   # -- save items
   item_save(items_no_row2,  connector = list(file = test_items_url))
@@ -221,6 +228,9 @@ create_noid_data_to_import <- function(){
   items$id <- NULL
   item_save(items,  connector = list(file = import_url))
 
+  # -- YAML
+  config_write(config_create(project = "test"))
+
 }
 
 
@@ -232,6 +242,9 @@ create_data_to_import <- function(){
 
   # -- save items
   item_save(items,  connector = list(file = import_url))
+
+  # -- YAML
+  config_write(config_create(project = "test"))
 
 }
 

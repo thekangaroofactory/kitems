@@ -2,6 +2,9 @@
 # -- setup
 create_folder()
 
+# -- YAML
+config_write(config_create(project = "test"))
+
 # --------------------------------------------------------------------------
 # Scenario: launch server without data model
 # --------------------------------------------------------------------------

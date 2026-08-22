@@ -91,8 +91,11 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     config <- config_read(path = path)
     if(!is.null(config)){
 
-      path <- config$source$path
-      options <- config$options
+      message("XXX check this code section")
+      # >>> following lines commented because they will end up in path & options = NULL
+      # if the entries are not in the config. Make is conditional if something then overwrite (or shoudl it be the opposite).
+      # path <- config$source$path
+      # options <- config$options
 
     } else stop("No _kitems.yml configuration file found.\nCheck provided path.")
 
