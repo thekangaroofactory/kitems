@@ -249,6 +249,43 @@ config_item_drop <- function(config, item){
 }
 
 
+#' Sort Items
+#'
+#' @param config the yaml config
+#' @param item the name of the item to drop
+#' @param sort a character string
+#'
+#' @details
+#' `sort` will be used to order the items.
+#' Comma should be used between attribute names.
+#' Wrap attribute name with desc() to indicate descending order.
+#'
+#' @returns the new config
+#'
+#' @examples
+#' \dontrun{
+#' # define sorting
+#' config_item_sort(config, item, sort = "date, value")
+#' config_item_sort(config, item, sort = "desc(date), value")
+#'
+#' # reset sorting
+#' config_item_sort(config, item, sort = NULL)
+#' }
+
+config_item_sort <- function(config, item, sort = NULL){
+
+  # -- get item index
+  item_idx <- config_item_position(config, item)
+
+  # -- update sort
+  config$items[[item_idx]]$data.model$sort <- if(is.null(sort) || sort == "") NULL else sort
+
+  # -- return
+  config
+
+}
+
+
 #' Create Attribute
 #'
 #' @param name the name of the attribute

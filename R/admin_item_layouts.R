@@ -44,6 +44,7 @@ admin_item_layout <- function(x){
                      # -- call the attribute card function with extra arguments (hide, skip..)
                      bslib::layout_column_wrap(
                        id = paste0(x$id, "-attributes"),
+                       fill = FALSE,
                        !!!lapply(x$data.model$attributes,
                                  admin_attribute_card,
                                  x$id,
@@ -55,7 +56,15 @@ admin_item_layout <- function(x){
                        p(actionLink(inputId = paste0(x$id, "-attribute_create_x"),
                                     label = "Add",
                                     onclick = ktools::onclick_event(target = "attribute_action")),
-                         "an attribute to the item."))))
+                         "an attribute to the item.")),
+
+                     h2("Sorting"),
+                     p(actionLink(inputId = paste0(x$id, "-sorting_x"),
+                                  label = "",
+                                  icon = icon("gear"),
+                                  onclick = ktools::onclick_event(target = "sorting_action")),
+                       span(id = paste0(x$id, "-sorting"), class = "text-warning",
+                            if(is.null(x$data.model$sort)) "No sorting is defined." else paste(x$data.model$sort, collapse = "|")))))
 
 }
 

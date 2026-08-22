@@ -687,6 +687,57 @@ server <- function(input, output, session) {
 
   })
 
+
+  # ////////////////////////////////////////////////////////////////////////////
+  # Sorting
+
+  observeEvent(input$sorting_action, {
+
+    # -- get event & item data.model
+    event <- ktools::input_decode(input$sorting_action)
+    dm <- config_extract(config(), item = event['namespace'])$data.model
+
+    # -- dialog
+    showModal(
+      modalDialog(
+        title = "Sorting",
+        size = "l",
+
+        # -- content
+        p("Define if / how the item table should be sorted."),
+        textInput(inputId = "item_ordering",
+                  label = "Order",
+                  value = if(is.null(dm$sort)) "" else dm$sort),
+        p("Use comma (,) between attribute names.", br(),
+          "Use desc() for descending order.", br(),
+          "Ex: date, value or desc(date)"),
+
+        # -- footer
+        footer = tagList(
+          modalButton(label = "Cancel"),
+          actionButton(inputId = "sorting_confirm", label = "Save"))))
+
+    # -- listener
+    observeEvent(input$sorting_confirm, {
+
+      # -- close window
+      removeModal()
+
+      # -- update & store
+      config(
+        config_item_sort(config(),
+                         item = event['namespace'],
+                         sort = input$item_ordering))
+
+      # -- update UI
+      sort <- config_extract(config(), item = event['namespace'])$data.model$sort
+      shinyjs::html(id = paste0(event['namespace'], "-sorting"),
+                    html = if(is.null(sort)) "No sorting is defined." else paste(sort, collapse = "|"))
+
+    }, ignoreInit = TRUE, once = TRUE)
+
+  })
+
 }
 
 
