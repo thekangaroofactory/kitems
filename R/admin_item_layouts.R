@@ -44,7 +44,8 @@ admin_item_layout <- function(x){
                                  admin_attribute_card,
                                  x$id,
                                  hide = x$data.model$hide,
-                                 skip = x$data.model$skip),
+                                 skip = x$data.model$skip,
+                                 refresh = x$data.model$refresh),
 
                        # -- add attribute
                        p(actionLink(inputId = paste0(x$id, "-attribute_create_x"),

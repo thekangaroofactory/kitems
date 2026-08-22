@@ -18,7 +18,7 @@
 #' admin_attribute_card(attribute, item)
 #' }
 
-admin_attribute_card <- function(attribute, item, hide = NULL, skip = NULL, update = NULL){
+admin_attribute_card <- function(attribute, item, hide = NULL, skip = NULL, refresh = NULL){
 
   # -- wrapper
   # the wrapper is needed to locate the 'div:last' inside the layout_column_wrap
@@ -36,8 +36,8 @@ admin_attribute_card <- function(attribute, item, hide = NULL, skip = NULL, upda
                                bslib::tooltip(icon("eye-slash"), "The attribute is not displayed"),
                              if(attribute$name %in% skip)
                                bslib::tooltip(icon("bolt-lightning"), "The attribute is skipped"),
-                             if(attribute$name %in% update)
-                               icon("rotate"))),
+                             if(attribute$name %in% refresh)
+                               bslib::tooltip(icon("rotate"), "The attribute will be refreshed upon update"))),
 
         # -- content
         bslib::card_body(

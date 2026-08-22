@@ -493,7 +493,7 @@ server <- function(input, output, session) {
                                           item = event['namespace'],
                                           hide = item$data.model$hide,
                                           skip = item$data.model$skip,
-                                          update = item$data.model$update)))
+                                          refresh = item$data.model$refresh)))
 
         # update attribute nb
         shinyjs::html(id = paste0(event['namespace'], "-attribute-nb"),
@@ -561,7 +561,7 @@ server <- function(input, output, session) {
                                           item = event['namespace'],
                                           hide = dm$hide,
                                           skip = dm$skip,
-                                          update = dm$update))
+                                          refresh = dm$refresh))
 
         # update skipped & hidden (sidebar)
         shinyjs::html(id = paste0(event['namespace'], "-skipped-attributes"),
@@ -625,7 +625,7 @@ server <- function(input, output, session) {
                                           item = event['namespace'],
                                           hide = dm$hide,
                                           skip = dm$skip,
-                                          update = dm$update)))
+                                          refresh = dm$refresh)))
 
       }, ignoreInit = TRUE, once = TRUE)
 
