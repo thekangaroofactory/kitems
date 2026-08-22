@@ -177,10 +177,42 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
 
 
   # ----------------------------------------------------------------------------
-  # Step.4 hide / skip
+  # Step.4 default
   # ----------------------------------------------------------------------------
 
   wizard_step_4 <- function(){
+
+    # -- init UI
+    insertUI(selector = "#input-container",
+             where = "afterBegin",
+             ui = div(id = "input-content",
+                      "Setup a default for the attribute:",
+                      textInput(inputId = "attribute_default",
+                                label = "Default",
+                                value = ""),
+                      p("Ex: 1, draft, Sys.Date()"),
+                      p("The default is used to:",
+                        tags$ul(
+                          tags$li("init the item form,"),
+                          tags$li("set a value when it's left empty,"),
+                          tags$li("compute the value when attribute is skipped."))),
+                      p("It can be a symbol or a call with ().")))
+
+    # -- no validation is required
+    output$w_actions <- renderUI(
+      actionButton(inputId = "w_next", label = "Next", icon = icon("circle-chevron-right")))
+
+    # -- store step
+    session$userData$kitems$wizard$step <- list(id = 4)
+
+  }
+
+
+  # ----------------------------------------------------------------------------
+  # Step.5 hide / skip
+  # ----------------------------------------------------------------------------
+
+  wizard_step_5 <- function(){
 
     # -- init UI
     insertUI(selector = "#input-container",
@@ -197,7 +229,7 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
       actionButton(inputId = "w_next", label = "Next", icon = icon("circle-chevron-right")))
 
     # -- store step
-    session$userData$kitems$wizard$step <- list(id = 4)
+    session$userData$kitems$wizard$step <- list(id = 5)
 
   }
 
@@ -206,7 +238,7 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
   # Step.5 confirmation
   # ----------------------------------------------------------------------------
 
-  wizard_step_5 <- function(){
+  wizard_step_6 <- function(){
 
     # -- init UI
     insertUI(selector = "#input-container",
@@ -229,7 +261,7 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
                    icon = icon("circle-chevron-right")))
 
     # -- store step
-    session$userData$kitems$wizard$step <- list(id = 5)
+    session$userData$kitems$wizard$step <- list(id = 6)
 
   }
 
@@ -320,6 +352,7 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
            type = input$attribute_type,
            class.arg = input$attribute_class_arg,
            values = paste0(input$attribute_values_verb, "(", input$attribute_values, ")"),
+           default = input$attribute_default,
            hide = input$attribute_hide,
            skip = input$attribute_skip))
 
