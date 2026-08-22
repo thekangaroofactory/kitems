@@ -89,14 +89,17 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
 
   wizard_step_2 <- function(){
 
+    # -- trick to disable input
+    x <- selectInput(inputId = "attribute_type",
+                     label = "Type",
+                     choices = OBJECT_CLASS,
+                     selected = values$type)
+
     # -- init UI
     insertUI(selector = "#input-container",
              where = "afterBegin",
              ui = div(id = "input-content",
-                      selectInput(inputId = "attribute_type",
-                                  label = "Type",
-                                  choices = c("integer", "character"),
-                                  selected = values$type),
+                      if(update) shinyjs::disabled(x) else x,
                       bslib::input_switch(id = "attribute_allow_class_arg",
                                           label = "Class argument(s)",
                                           value = if(is.null(values$class.arg)) FALSE else TRUE),
