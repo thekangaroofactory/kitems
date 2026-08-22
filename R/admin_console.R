@@ -529,13 +529,9 @@ server <- function(input, output, session) {
       # Update attribute
 
       callback <- reactiveVal()
-      old_dm <- config_extract(yaml, item = event['namespace'])$data.model
       admin_attribute_wizard(yaml,
                              item = event['namespace'],
                              attribute = event['value'],
-                             hide = event['value'] %in% old_dm$hide,
-                             skip = event['value'] %in% old_dm$skip,
-                             refresh = event['value'] %in% old_dm$refresh,
                              callback)
 
       # -- listen to callback

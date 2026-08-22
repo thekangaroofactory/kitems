@@ -1,7 +1,27 @@
 
 
-admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE, skip = FALSE, refresh = FALSE,
-                                   callback, session = getDefaultReactiveDomain()){
+#' Attribute Wizard
+#'
+#' @description
+#' The function launches a modal window to display a step by step
+#' attribute wizard.
+#'
+#' @param config the YAML config
+#' @param item the name of the target item
+#' @param attribute an optional name to indicate it's an update
+#' @param callback a reactiveVal to send the output of the wizard
+#' @param session optional, the Shiny session object
+#'
+#' @examples
+#' \dontrun{
+#' admin_attribute_wizard(config, item = "foo")
+#' }
+
+admin_attribute_wizard <- function(config, item, attribute = NULL, callback, session = getDefaultReactiveDomain()){
+
+  # -- arg check
+  stopifnot("callback must be a reactiveVal" = "reactiveVal" %in% class(callback))
+
 
   # ----------------------------------------------------------------------------
   # Init
@@ -11,13 +31,15 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
   input <- session$input
   output <- session$output
 
-  # -- check for update
+  # -- define input values
   update <- !is.null(attribute)
-  values <- if(update)
-    config_extract(config, item, attribute)
-  else
-    list(name = "", type = NULL)
-  values <- c(values, hide = hide, skip = skip, refresh = refresh)
+  values <- if(update){
+    dm <- config_extract(config, item)$data.model
+    c(config_extract(config, item, attribute),
+      hide = attribute %in% dm$hide, skip = attribute %in% dm$skip,
+      refresh = attribute %in% dm$refresh)
+  } else
+    list(name = "", type = NULL, hide = FALSE, skip = FALSE, refresh = FALSE)
 
   # -- compute reserved names
   # existing attributes (except itself for update)
