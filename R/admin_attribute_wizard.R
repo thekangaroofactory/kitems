@@ -18,7 +18,6 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
   else
     list(name = "", type = NULL)
   values <- c(values, hide = hide, skip = skip)
-  str(values)
 
   # -- compute reserved names
   # existing attributes (except itself for update)
@@ -202,8 +201,6 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
 
   obs_next <- observeEvent(input$w_next, {
 
-    message("w_next")
-
     # -- cleanup step
     cleanup()
 
@@ -222,8 +219,6 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
 
   observeEvent(input$w_cancel, {
 
-    message("w_cancel")
-
     # -- cleanup UI
     removeModal()
 
@@ -241,8 +236,6 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
   # ----------------------------------------------------------------------------
 
   obs_confirm <- observeEvent(input$w_confirm, {
-
-    message("w_confirm")
 
     # -- cleanup UI
     removeModal()
