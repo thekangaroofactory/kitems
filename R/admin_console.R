@@ -281,11 +281,22 @@ server <- function(input, output, session) {
     last_tab <- tail(item_list(), n = 1L)
     if(length(last_tab) == 0) last_tab <- "home"
 
-    # -- update config & store
-    new_item <- config_item_create(id = input$item_name,
-                            description = input$item_description,
-                            path = path)
-    yaml$items <- c(yaml$items, list(new_item))
+    # -- update config
+    yaml <- config_item_append(yaml,
+                               config_item_create(id = input$item_name,
+                                                  description = input$item_description,
+                                                  path = path))
+
+    # -- create id attribute (mandatory)
+    yaml <- config_attribute_append(yaml,
+                                    item = input$item_name,
+                                    attribute = config_attribute_create(name = "id",
+                                                                        type = "numeric",
+                                                                        default = "ktools::uuid()"),
+                                    hide = TRUE,
+                                    skip = TRUE)
+
+    # -- store
     config(yaml)
 
     # -- ui: add item card
@@ -297,7 +308,7 @@ server <- function(input, output, session) {
     bslib::nav_insert(id = "nav",
                       target = last_tab,
                       position = "after",
-                      nav = admin_item_layout(new_item))
+                      nav = admin_item_layout(config_extract(config(), input$item_name)))
 
   })
 
