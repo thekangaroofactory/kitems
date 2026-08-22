@@ -253,16 +253,25 @@ config_item_drop <- function(config, item){
 #'
 #' @param name the name of the attribute
 #' @param type the type of the attribute
+#' @param class.arg optional argument to sent to the as.* conversion function
 #'
 #' @returns a list
 #'
 #' @examples
 #' config_attribute_create(name = "att_1", type = "integer")
 
-config_attribute_create <- function(name, type){
+config_attribute_create <- function(name, type, class.arg = NULL){
 
-  list(name = name,
-       type = type)
+  # -- init
+  config <- list(name = name,
+                 type = type)
+
+  # -- class.arg
+  if(!is.null(class.arg))
+    config <- c(config, list(class.arg = class.arg))
+
+  # -- return
+  config
 
 }
 

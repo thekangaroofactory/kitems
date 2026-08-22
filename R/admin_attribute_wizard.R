@@ -84,7 +84,7 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
 
 
   # ----------------------------------------------------------------------------
-  # Step.2 type
+  # Step.2 type & class.arg
   # ----------------------------------------------------------------------------
 
   wizard_step_2 <- function(){
@@ -94,16 +94,37 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
              where = "afterBegin",
              ui = div(id = "input-content",
                       selectInput(inputId = "attribute_type",
-                                  label = "Name",
+                                  label = "Type",
                                   choices = c("integer", "character"),
-                                  selected = values$type)))
+                                  selected = values$type),
+                      div(id = "class-arg-container",
+                          bslib::input_switch(id = "attribute_allow_class_arg",
+                                              label = "Class argument(s)"))))
+
+    # -- listener
+    # class.arg switch
+    obs <- observeEvent(input$attribute_allow_class_arg, {
+
+      if(input$attribute_allow_class_arg)
+        insertUI(selector = "#class-arg-container",
+                 where = "beforeEnd",
+                 ui = div(id = "class-arg-content",
+                          p("Class arguments are sent along with values to the as.* conversion function.", br(),
+                            "ex: as.Date(34519, origin = '1904-01-01')"),
+                          textInput(inputId = "attribute_class_arg",
+                                    label = "Argument(s)")))
+      else
+        removeUI(selector = "#class-arg-content",
+                 immediate = TRUE)
+
+    })
 
     # -- no validation is required
     output$w_actions <- renderUI(
       actionButton(inputId = "w_next", label = "Next", icon = icon("circle-chevron-right")))
 
     # -- store step
-    session$userData$kitems$wizard$step <- list(id = 2)
+    session$userData$kitems$wizard$step <- list(id = 2, listeners = obs)
 
   }
 
@@ -250,6 +271,7 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
     callback(
       list(name = if(update && attribute == "id") attribute else input$attribute_name,
            type = input$attribute_type,
+           class.arg = input$attribute_class_arg,
            hide = input$attribute_hide,
            skip = input$attribute_skip))
 
