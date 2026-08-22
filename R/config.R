@@ -300,7 +300,7 @@ config_attribute_create <- function(name, type, class.arg = NULL, values = NULL,
 #'                         attribute = config_attribute_create(name = "bar", type "numeric"))
 #' }
 
-config_attribute_append <- function(config, item, attribute, hide = FALSE, skip = FALSE){
+config_attribute_append <- function(config, item, attribute, hide = FALSE, skip = FALSE, refresh = FALSE){
 
   # -- get item & (last) attribute positions
   item_idx <- config_item_position(config, item)
@@ -309,11 +309,13 @@ config_attribute_append <- function(config, item, attribute, hide = FALSE, skip 
   # -- append attribute
   config$items[[item_idx]]$data.model$attributes[[attribute_idx]] <- attribute
 
-  # -- update hide & skip
+  # -- update hide / skip & refresh
   if(hide)
     config$items[[item_idx]]$data.model$hide <- c(config$items[[item_idx]]$data.model$hide, attribute$name)
   if(skip)
     config$items[[item_idx]]$data.model$skip <- c(config$items[[item_idx]]$data.model$skip, attribute$name)
+  if(refresh)
+    config$items[[item_idx]]$data.model$refresh <- c(config$items[[item_idx]]$data.model$refresh, attribute$name)
 
   # -- return
   config
@@ -337,7 +339,7 @@ config_attribute_append <- function(config, item, attribute, hide = FALSE, skip 
 #'                         attribute = config_attribute_create(name = "bar", type "numeric"))
 #' }
 
-config_attribute_update <- function(config, item, attribute, hide = FALSE, skip = FALSE){
+config_attribute_update <- function(config, item, attribute, hide = FALSE, skip = FALSE, refresh = FALSE){
 
   # -- get item & attribute positions
   item_idx <- config_item_position(config, item)
@@ -355,6 +357,10 @@ config_attribute_update <- function(config, item, attribute, hide = FALSE, skip 
     unique(c(config$items[[item_idx]]$data.model$skip, attribute$name))
   else
     config$items[[item_idx]]$data.model$skip[!config$items[[item_idx]]$data.model$skip %in% attribute$name]
+  config$items[[item_idx]]$data.model$refresh <- if(refresh)
+    unique(c(config$items[[item_idx]]$data.model$refresh, attribute$name))
+  else
+    config$items[[item_idx]]$data.model$refresh[!config$items[[item_idx]]$data.model$refresh %in% attribute$name]
 
   # -- return
   config

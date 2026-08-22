@@ -476,7 +476,8 @@ server <- function(input, output, session) {
             values = if(callback()$values == "") NULL else callback()$values,
             default = if(callback()$default == "") NULL else callback()$default),
           hide = callback()$hide,
-          skip = callback()$skip)
+          skip = callback()$skip,
+          refresh = if(callback()$skip) callback()$refresh else FALSE)
 
         # -- store the new config
         config(yaml)
@@ -521,6 +522,7 @@ server <- function(input, output, session) {
                              attribute = event['value'],
                              hide = event['value'] %in% old_dm$hide,
                              skip = event['value'] %in% old_dm$skip,
+                             refresh = event['value'] %in% old_dm$refresh,
                              callback)
 
       # -- listen to callback
@@ -536,7 +538,8 @@ server <- function(input, output, session) {
             values = if(callback()$values == "") NULL else callback()$values,
             default = if(callback()$default == "") NULL else callback()$default),
           hide = callback()$hide,
-          skip = callback()$skip)
+          skip = callback()$skip,
+          refresh = if(callback()$skip) callback()$refresh else FALSE)
 
         # -- store the new config
         config(yaml)

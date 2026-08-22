@@ -1,6 +1,6 @@
 
 
-admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE, skip = FALSE,
+admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE, skip = FALSE, refresh = FALSE,
                                    callback, session = getDefaultReactiveDomain()){
 
   # ----------------------------------------------------------------------------
@@ -17,7 +17,7 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
     config_extract(config, item, attribute)
   else
     list(name = "", type = NULL)
-  values <- c(values, hide = hide, skip = skip)
+  values <- c(values, hide = hide, skip = skip, refresh = refresh)
 
   # -- compute reserved names
   # existing attributes (except itself for update)
@@ -209,7 +209,7 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
 
 
   # ----------------------------------------------------------------------------
-  # Step.5 hide / skip
+  # Step.5 hide / skip & refresh
   # ----------------------------------------------------------------------------
 
   wizard_step_5 <- function(){
@@ -222,14 +222,29 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
                       checkboxInput(inputId = "attribute_hide", label = "Hide", value = values$hide),
                       p("Should the attribute be skipped in the item form?", br(),
                         "If so, its value will be computed based on defaults."),
-                      checkboxInput(inputId = "attribute_skip", label = "Skip", value = values$skip)))
+                      checkboxInput(inputId = "attribute_skip", label = "Skip", value = values$skip),
+                      div(id = "attribute-refresh-container",
+                          style = if(!values$skip) "display: none;",
+                          p("When the attribute is skipped, should it be refreshed upon item update?"),
+                          checkboxInput(inputId = "attribute_refresh", label = "Refresh", value = values$refresh))))
+
+    # -- listener
+    # skip radio buttons
+    obs <- observeEvent(input$attribute_skip, {
+
+      if(input$attribute_skip)
+        shinyjs::show("attribute-refresh-container")
+      else
+        shinyjs::hide("attribute-refresh-container")
+
+    })
 
     # -- no validation is required
     output$w_actions <- renderUI(
       actionButton(inputId = "w_next", label = "Next", icon = icon("circle-chevron-right")))
 
     # -- store step
-    session$userData$kitems$wizard$step <- list(id = 5)
+    session$userData$kitems$wizard$step <- list(id = 5, listeners = obs)
 
   }
 
@@ -354,7 +369,8 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
            values = paste0(input$attribute_values_verb, "(", input$attribute_values, ")"),
            default = input$attribute_default,
            hide = input$attribute_hide,
-           skip = input$attribute_skip))
+           skip = input$attribute_skip,
+           refresh = input$attribute_refresh))
 
   }, ignoreInit = TRUE, once = TRUE)
 
