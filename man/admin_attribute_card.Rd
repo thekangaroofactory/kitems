@@ -4,7 +4,7 @@
 \alias{admin_attribute_card}
 \title{Attribute Card}
 \usage{
-admin_attribute_card(attribute, item, hide = NULL, skip = NULL, update = NULL)
+admin_attribute_card(attribute, item, hide = NULL, skip = NULL, refresh = NULL)
 }
 \arguments{
 \item{attribute}{the yaml of the attribute}

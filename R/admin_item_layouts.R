@@ -1,5 +1,19 @@
 
 
+#' Item Layout
+#'
+#' @description
+#' This is a UI / Layout function for the Admin Console
+#'
+#' @param x the item config
+#'
+#' @returns a bslib::nav_panel() object
+#'
+#' @examples
+#' \dontrun{
+#' admin_item_layout(item_config)
+#' }
+
 admin_item_layout <- function(x){
 
   # -- return
@@ -68,6 +82,22 @@ admin_item_layout <- function(x){
 
 }
 
+
+#' Item Card
+#'
+#' @description
+#' This is a UI / Layout function for the Admin Console
+#'
+#' @param name the name of the item
+#' @param description an optional description
+#'
+#' @returns a div() HTML object
+#'
+#' @examples
+#' \dontrun{
+#' admin_item_card("date")
+#' }
+
 admin_item_card <- function(name, description = NULL){
 
   # -- return
@@ -91,6 +121,21 @@ admin_item_card <- function(name, description = NULL){
                    onclick = ktools::onclick_event(target = "select_tab"))))
 
 }
+
+
+#' Item Danger Zone
+#'
+#' @description
+#' This is a UI / Layout function for the Admin Console
+#'
+#' @param name the name of the item
+#'
+#' @returns an HTML tag
+#'
+#' @examples
+#' \dontrun{
+#' admin_item_dz("date")
+#' }
 
 admin_item_dz <- function(name){
 

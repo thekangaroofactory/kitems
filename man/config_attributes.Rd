@@ -4,7 +4,7 @@
 \alias{config_attributes}
 \title{Config Attributes}
 \usage{
-config_attributes(config)
+config_attributes(config, item)
 }
 \arguments{
 \item{config}{a yaml config section for an item}

@@ -1,5 +1,17 @@
 
 
+#' Missing Config Layout
+#'
+#' @description
+#' This is a UI / Layout function for the Admin Console
+#'
+#' @returns an HTML tag (div)
+#'
+#' @examples
+#' \dontrun{
+#' admin_no_yaml_layout()
+#' }
+
 admin_no_yaml_layout <- function(){
 
   div(id = "home-no-yaml",
@@ -9,6 +21,25 @@ admin_no_yaml_layout <- function(){
 
 }
 
+
+# ------------------------------------------------------------------------------
+# Helper functions to compute messages
+# ------------------------------------------------------------------------------
+
+
+#' YAML Messages
+#'
+#' @description
+#' This is a helper function to return messages about the YAML config.
+#'
+#' @param config a YAML config
+#'
+#' @returns an HTML tag
+#'
+#' @examples
+#' \dontrun{
+#' admin_yaml_message(config)
+#' }
 
 admin_yaml_message <- function(config){
 
@@ -24,13 +55,20 @@ admin_yaml_message <- function(config){
 }
 
 
-# ------------------------------------------------------------------------------
-# Helper functions to compute messages
-# ------------------------------------------------------------------------------
+#' Attribute Number
+#'
+#' @param config an item config
+#'
+#' @returns a character string
+#'
+#' @examples
+#' \dontrun{
+#' admin_attribute_nb(config)
+#' }
 
-admin_attribute_nb <- function(item_config){
+admin_attribute_nb <- function(config){
 
-  nb <- length(item_config$data.model$attributes)
+  nb <- length(config$data.model$attributes)
   paste0(nb, " attribute", if(nb > 1) "s")
 
 }

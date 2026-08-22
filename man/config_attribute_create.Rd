@@ -4,12 +4,20 @@
 \alias{config_attribute_create}
 \title{Create Attribute}
 \usage{
-config_attribute_create(name, type)
+config_attribute_create(
+  name,
+  type,
+  class.arg = NULL,
+  values = NULL,
+  default = NULL
+)
 }
 \arguments{
 \item{name}{the name of the attribute}
 
 \item{type}{the type of the attribute}
+
+\item{class.arg}{optional argument to sent to the as.* conversion function}
 }
 \value{
 a list
