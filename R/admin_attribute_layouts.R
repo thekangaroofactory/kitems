@@ -59,20 +59,26 @@ admin_attribute_card <- function(attribute, item, hide = NULL, skip = NULL, refr
 
         bslib::card_footer(class = "d-flex justify-content-end",
 
-                           actionLink(inputId = paste0(item, "-attribute_update_", attribute$name),
-                                      label = "",
-                                      icon = icon("gear"),
-                                      onclick = ktools::onclick_event(target = "attribute_action")),
+                           # -- id attribute is frozen
+                           if(attribute$name == "id")
+                             span(class = "text-primary", "id is frozen.")
 
-                           actionLink(inputId = paste0(item, "-attribute_move_", attribute$name),
-                                      label = "",
-                                      icon = icon("arrows-left-right"),
-                                      onclick = ktools::onclick_event(target = "attribute_action")),
+                           else
+                             tagList(
+                               actionLink(inputId = paste0(item, "-attribute_update_", attribute$name),
+                                          label = "",
+                                          icon = icon("gear"),
+                                          onclick = ktools::onclick_event(target = "attribute_action")),
 
-                           actionLink(inputId = paste0(item, "-attribute_delete_", attribute$name),
-                                      label = "",
-                                      icon = icon("trash"),
-                                      onclick = ktools::onclick_event(target = "attribute_action")))))
+                               actionLink(inputId = paste0(item, "-attribute_move_", attribute$name),
+                                          label = "",
+                                          icon = icon("arrows-left-right"),
+                                          onclick = ktools::onclick_event(target = "attribute_action")),
+
+                               actionLink(inputId = paste0(item, "-attribute_delete_", attribute$name),
+                                          label = "",
+                                          icon = icon("trash"),
+                                          onclick = ktools::onclick_event(target = "attribute_action"))))))
 
 }
 
