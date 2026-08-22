@@ -529,7 +529,8 @@ server <- function(input, output, session) {
           item = event['namespace'],
           attribute = config_attribute_create(
             name = callback()$name,
-            type = callback()$type),
+            type = callback()$type,
+            class.arg = if(callback()$class.arg == "") NULL else callback()$class.arg),
           hide = callback()$hide,
           skip = callback()$skip)
 

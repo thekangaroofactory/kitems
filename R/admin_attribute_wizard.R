@@ -99,7 +99,8 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
                                   selected = values$type),
                       div(id = "class-arg-container",
                           bslib::input_switch(id = "attribute_allow_class_arg",
-                                              label = "Class argument(s)"))))
+                                              label = "Class argument(s)",
+                                              value = if(is.null(values$class.arg)) FALSE else TRUE))))
 
     # -- listener
     # class.arg switch
@@ -112,7 +113,8 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, hide = FALSE,
                           p("Class arguments are sent along with values to the as.* conversion function.", br(),
                             "ex: as.Date(34519, origin = '1904-01-01')"),
                           textInput(inputId = "attribute_class_arg",
-                                    label = "Argument(s)")))
+                                    label = "Argument(s)",
+                                    value = values$class.arg)))
       else
         removeUI(selector = "#class-arg-content",
                  immediate = TRUE)
