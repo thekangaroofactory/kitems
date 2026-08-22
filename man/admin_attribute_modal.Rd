@@ -6,6 +6,9 @@
 \usage{
 admin_attribute_modal(update = FALSE)
 }
+\arguments{
+\item{update}{whether it is an update or not}
+}
 \value{
 a modal dialog
 }
@@ -17,5 +20,7 @@ Mostly composed of container div elements that will be filled / updated
 dynamically.
 }
 \examples{
+\dontrun{
 admin_attribute_modal()
+}
 }

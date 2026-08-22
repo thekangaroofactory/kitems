@@ -20,7 +20,7 @@ The input data model should have its version = "0.8.0" otherwise an error
 will be raised. Use \code{dm_migrate()} first it needed.
 }
 \examples{
-\notrun{
+\dontrun{
 dm_to_yaml(dm, name = "my_item")
 }
 }

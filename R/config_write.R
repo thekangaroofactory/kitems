@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-#' \notrun{
+#' \dontrun{
 #' config_write(list(foo = 1, bar = "two"))
 #' }
 

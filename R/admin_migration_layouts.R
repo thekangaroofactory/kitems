@@ -8,7 +8,7 @@
 #' @returns a layout
 #'
 #' @examples
-#' \notrun{
+#' \dontrun{
 #' admin_migration_required_layout("./item_data_model.rds")
 #' }
 
@@ -52,7 +52,7 @@ admin_migration_required_layout <- function(files){
 #' @returns an HTML layout
 #'
 #' @examples
-#' \notrun{
+#' \dontrun{
 #' admin_migration_done_layout(path = ".")
 #' }
 

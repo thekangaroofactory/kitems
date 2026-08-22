@@ -18,7 +18,7 @@ Write YAML config file
 By default, \code{path} uses the R_KITEMS_PATH environment variable.
 }
 \examples{
-\notrun{
+\dontrun{
 config_write(list(foo = 1, bar = "two"))
 }
 }

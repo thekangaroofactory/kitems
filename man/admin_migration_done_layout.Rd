@@ -16,7 +16,7 @@ an HTML layout
 Migration Done Layout
 }
 \examples{
-\notrun{
+\dontrun{
 admin_migration_done_layout(path = ".")
 }
 }

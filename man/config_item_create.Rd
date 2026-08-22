@@ -9,6 +9,8 @@ config_item_create(id, description = NULL, path)
 \arguments{
 \item{id}{a character string to set the name of the item group}
 
+\item{description}{an optional description for the item}
+
 \item{path}{a character string where to find the data}
 }
 \value{

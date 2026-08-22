@@ -9,7 +9,7 @@
 #' @param item the name of the item
 #' @param hide the list of attributes to hide
 #' @param skip the list of attributes to skip
-#' @param update the listf of attributes to update
+#' @param refresh the list of attributes to refresh
 #'
 #' @returns A htmltools::div() tag.
 #'
@@ -88,6 +88,8 @@ admin_attribute_card <- function(attribute, item, hide = NULL, skip = NULL, refr
 #' @description
 #' This is the UI layout function for the attribute wizard.
 #'
+#' @param update whether it is an update or not
+#'
 #' @details
 #' Mostly composed of container div elements that will be filled / updated
 #' dynamically.
@@ -95,7 +97,9 @@ admin_attribute_card <- function(attribute, item, hide = NULL, skip = NULL, refr
 #' @returns a modal dialog
 #'
 #' @examples
+#' \dontrun{
 #' admin_attribute_modal()
+#' }
 
 admin_attribute_modal <- function(update = FALSE){
 

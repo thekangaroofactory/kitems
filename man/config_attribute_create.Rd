@@ -18,6 +18,10 @@ config_attribute_create(
 \item{type}{the type of the attribute}
 
 \item{class.arg}{optional argument to sent to the as.* conversion function}
+
+\item{values}{a character string to set the rules for values}
+
+\item{default}{a character string to define the defaults}
 }
 \value{
 a list

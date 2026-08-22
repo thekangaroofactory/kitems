@@ -15,7 +15,7 @@
 #' @export
 #'
 #' @examples
-#' \notrun{
+#' \dontrun{
 #' dm_to_yaml(dm, name = "my_item")
 #' }
 

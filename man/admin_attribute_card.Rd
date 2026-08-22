@@ -15,7 +15,7 @@ admin_attribute_card(attribute, item, hide = NULL, skip = NULL, refresh = NULL)
 
 \item{skip}{the list of attributes to skip}
 
-\item{update}{the listf of attributes to update}
+\item{refresh}{the list of attributes to refresh}
 }
 \value{
 A htmltools::div() tag.

@@ -64,6 +64,7 @@ config_item_position <- function(config, item){
 #' Get the attribute names in an item YAML config section.
 #'
 #' @param config a yaml config section for an item
+#' @param item the name of the item
 #'
 #' @returns a vector
 #'
@@ -148,6 +149,7 @@ config_extract <- function(config, item = NULL, attribute = NULL){
 #' Helper function to create the config section for an item.
 #'
 #' @param id a character string to set the name of the item group
+#' @param description an optional description for the item
 #' @param path a character string where to find the data
 #'
 #' @returns a list
@@ -291,11 +293,15 @@ config_item_sort <- function(config, item, sort = NULL){
 #' @param name the name of the attribute
 #' @param type the type of the attribute
 #' @param class.arg optional argument to sent to the as.* conversion function
+#' @param values a character string to set the rules for values
+#' @param default a character string to define the defaults
 #'
 #' @returns a list
 #'
 #' @examples
+#' \dontrun{
 #' config_attribute_create(name = "att_1", type = "integer")
+#' }
 
 config_attribute_create <- function(name, type, class.arg = NULL, values = NULL, default = NULL){
 
@@ -328,6 +334,7 @@ config_attribute_create <- function(name, type, class.arg = NULL, values = NULL,
 #' @param attribute the attribute config
 #' @param hide a logical (default = FALSE) if the attribute should be hidden
 #' @param skip a logical (default = FALSE) if the attribute should be skipped
+#' @param refresh a logical (default = FALSE) if the attribute should be refreshed
 #'
 #' @returns the new config
 #'
@@ -367,6 +374,7 @@ config_attribute_append <- function(config, item, attribute, hide = FALSE, skip 
 #' @param attribute the attribute config
 #' @param hide a logical (default = FALSE) if the attribute should be hidden
 #' @param skip a logical (default = FALSE) if the attribute should be skipped
+#' @param refresh a logical (default = FALSE) if the attribute should be refreshed
 #'
 #' @returns the new config
 #'

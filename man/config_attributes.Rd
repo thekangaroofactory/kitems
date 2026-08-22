@@ -8,6 +8,8 @@ config_attributes(config, item)
 }
 \arguments{
 \item{config}{a yaml config section for an item}
+
+\item{item}{the name of the item}
 }
 \value{
 a vector

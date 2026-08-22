@@ -16,7 +16,7 @@ a layout
 Migration Required Layout
 }
 \examples{
-\notrun{
+\dontrun{
 admin_migration_required_layout("./item_data_model.rds")
 }
 }

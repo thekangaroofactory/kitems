@@ -23,6 +23,8 @@ config_attribute_append(
 \item{hide}{a logical (default = FALSE) if the attribute should be hidden}
 
 \item{skip}{a logical (default = FALSE) if the attribute should be skipped}
+
+\item{refresh}{a logical (default = FALSE) if the attribute should be refreshed}
 }
 \value{
 the new config

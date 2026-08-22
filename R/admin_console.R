@@ -278,7 +278,7 @@ server <- function(input, output, session) {
 
     # -- get config & last tab id
     yaml <- config()
-    last_tab <- tail(item_list(), n = 1L)
+    last_tab <- utils::tail(item_list(), n = 1L)
     if(length(last_tab) == 0) last_tab <- "home"
 
     # -- update config
