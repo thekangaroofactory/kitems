@@ -160,7 +160,6 @@ server <- function(input, output, session) {
   # YAML configuration
 
   # -- read YAML
-  config_file <- file.path(path, "_kitems.yml")
   config <- reactiveVal(config_read(path))
 
   # -- reactive objects
@@ -227,7 +226,7 @@ server <- function(input, output, session) {
   # Home tab
 
   # -- outputs (sidebar)
-  output$yaml_file <- renderText(if(!is.null(config())) config_file else "")
+  output$yaml_file <- renderText(if(!is.null(config())) file.path(path, "_kitems.yml") else "")
   output$yaml_message <- renderUI(admin_yaml_message(config()))
 
   # -- outputs (main)
