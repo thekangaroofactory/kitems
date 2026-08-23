@@ -436,9 +436,19 @@ config_attribute_append <- function(config, item, attribute, hide = FALSE, skip 
 
 config_attribute_update <- function(config, item, attribute, hide = FALSE, skip = FALSE, refresh = FALSE){
 
+  # -- secure against forbidden actions
+  if(attribute$name == "id"){
+    warning("Updating the ", crayon::blue("id"), " attribute is forbidden.", call. = FALSE)
+    return(config)}
+
   # -- get item & attribute positions
   item_idx <- config_item_position(config, item)
   attribute_idx <- config_attribute_position(config, item, attribute$name)
+
+  # -- secure against forbidden actions
+  if(config$items[[item_idx]]$data.model$attributes[[attribute_idx]]$type != attribute$type){
+    warning("Updating the attribute ", crayon::blue("type"), " is forbidden.", call. = FALSE)
+    return(config)}
 
   # -- update attribute
   config$items[[item_idx]]$data.model$attributes[[attribute_idx]] <- attribute
