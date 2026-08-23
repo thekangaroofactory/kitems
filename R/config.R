@@ -5,6 +5,7 @@
 #' @param project a character string to indicate the name of the project
 #'
 #' @returns a list
+#' @export
 #'
 #' @examples
 #' config_create(project = "my_project")
@@ -27,6 +28,7 @@ config_create <- function(project){
 #' @param config a yaml config
 #'
 #' @returns a vector
+#' @export
 #'
 #' @examples
 #' config_items(list(items = list(config_item_create(id = "foo", path = "./"),
@@ -45,6 +47,7 @@ config_items <- function(config){
 #' @param item the name of the item to locate
 #'
 #' @returns an integer
+#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -67,6 +70,7 @@ config_item_position <- function(config, item){
 #' @param item the name of the item
 #'
 #' @returns a vector
+#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -87,6 +91,7 @@ config_attributes <- function(config, item){
 #' @param attribute the name of the attribute to locate
 #'
 #' @returns an integer
+#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -117,6 +122,7 @@ config_attribute_position <- function(config, item, attribute){
 #' return the input.
 #'
 #' @returns a list (the yaml section for the attribute)
+#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -209,6 +215,7 @@ config_item_colclasses <- function(config, item){
 #' will be used.
 #'
 #' @returns a list
+#' @export
 #'
 #' @examples
 #' config_item_create(id = "foo", path = "./")
@@ -240,6 +247,7 @@ config_item_create <- function(id, description = NULL, path = Sys.getenv("R_KITE
 #' @param ... item(s) to append
 #'
 #' @returns the new config
+#' @export
 #'
 #' @examples
 #' config_item_append(config_create("prj"),
@@ -260,6 +268,7 @@ config_item_append <- function(config, ...){
 #' @param where a list(position = c("before", "after"), item = "foo")
 #'
 #' @returns the new config
+#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -294,6 +303,7 @@ config_item_move <- function(config, item, where){
 #' @param item the name of the item to drop
 #'
 #' @returns the new config
+#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -323,6 +333,7 @@ config_item_drop <- function(config, item){
 #' Wrap attribute name with desc() to indicate descending order.
 #'
 #' @returns the new config
+#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -357,6 +368,7 @@ config_item_sort <- function(config, item, sort = NULL){
 #' @param default a character string to define the defaults
 #'
 #' @returns a list
+#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -397,6 +409,7 @@ config_attribute_create <- function(name, type, class.arg = NULL, values = NULL,
 #' @param refresh a logical (default = FALSE) if the attribute should be refreshed
 #'
 #' @returns the new config
+#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -437,6 +450,7 @@ config_attribute_append <- function(config, item, attribute, hide = FALSE, skip 
 #' @param refresh a logical (default = FALSE) if the attribute should be refreshed
 #'
 #' @returns the new config
+#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -493,6 +507,7 @@ config_attribute_update <- function(config, item, attribute, hide = FALSE, skip 
 #' @param where a list(position = c("before", "after"), attribute = "foo")
 #'
 #' @returns the new config
+#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -527,6 +542,7 @@ config_attribute_move <- function(config, item, attribute, where){
 #' @param attribute the name of the attribute to drop
 #'
 #' @returns the new yaml config
+#' @export
 #'
 #' @examples
 #' \dontrun{
