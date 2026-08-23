@@ -202,17 +202,9 @@ server <- function(input, output, session) {
 
 
   # ////////////////////////////////////////////////////////////////////////////
-  # Items Selective Loading
+  # Init item tabs
 
-  # -- init datamart
-  # use items() to get / load items
-  datamart <- reactiveValues()
-
-
-  # ////////////////////////////////////////////////////////////////////////////
-  # Home tab
-
-  # -- init: add one tab per item
+  # -- add one tab per item
   if(!is.null(yaml_init$items)){
 
     lapply(rev(yaml_init$items), function(x) {
@@ -228,6 +220,22 @@ server <- function(input, output, session) {
                where = "afterBegin",
                admin_item_card(name = x$id,
                                description = x$description))})}
+
+  # -- drop yaml_init
+  # to secure against use of the static object
+  rm(yaml_init)
+
+
+  # ////////////////////////////////////////////////////////////////////////////
+  # Items Selective Loading
+
+  # -- init datamart
+  # use items() to get / load items
+  datamart <- reactiveValues()
+
+
+  # ////////////////////////////////////////////////////////////////////////////
+  # Home tab
 
   # -- outputs (sidebar)
   output$yaml_file <- renderText(if(!is.null(config())) file.path(path, "_kitems.yml") else "")
