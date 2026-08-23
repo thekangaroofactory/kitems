@@ -21,7 +21,9 @@ Item colClasses
 # create a config
 yaml <- config_create("test") |>
   config_item_append(config_item_create(id = "foo", path = "/temp")) |>
-  config_attribute_append(item = "foo", attribute = config_attribute_create(name = "id", type = "numeric"))
+  config_attribute_append(item = "foo",
+                          attribute = config_attribute_create(name = "id",
+                                                              type = "numeric"))
 
 # get item colClasses
 config_item_colclasses(yaml, "foo")
