@@ -273,10 +273,10 @@ server <- function(input, output, session) {
         title = "Add item",
         textInput(inputId = "item_name",
                   label = "Item name"),
-        uiOutput("add_item_message"),
+        div(id = "item-name-message"),
         textInput(inputId = "item_description",
                   label = "Description"),
-        footer =  tagList(
+        footer = tagList(
           modalButton("Cancel"),
           actionButton(inputId = "item_create_confirm",
                        label = "Create"))))
@@ -285,16 +285,17 @@ server <- function(input, output, session) {
 
 
   # -- watch dialog input
-  output$add_item_message <- renderUI({
+  observeEvent(input$item_name, {
 
-    req(input$item_name != "")
-
-    if(grepl('[^[:alnum:]]', input$item_name))
-      span(class = "text-danger", icon("circle-chevron-right"), "This name is not valid.")
-    else if(input$item_name %in% item_list())
-      span(class = "text-warning", icon("circle-chevron-right"), "This name already exist!")
-    else
-      span(class = "text-success-emphasis", icon("circle-chevron-right"), "This name is valid.")
+    shinyjs::html(id = "item-name-message",
+                  html = if(input$item_name == "")
+                    ""
+                  else if(grepl('[^[:alnum:]]', input$item_name))
+                    paste(span(class = "text-danger", icon("circle-chevron-right"), "This name is not valid."))
+                  else if(input$item_name %in% item_list())
+                    paste(span(class = "text-warning", icon("circle-chevron-right"), "This name already exist!"))
+                  else
+                    paste(span(class = "text-success-emphasis", icon("circle-chevron-right"), "This name is valid.")))
 
   })
 
