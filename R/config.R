@@ -200,19 +200,27 @@ config_item_colclasses <- function(config, item){
 #'
 #' @param id a character string to set the name of the item group
 #' @param description an optional description for the item
-#' @param path a character string where to find the data
+#' @param path an optional character string where to find the data
+#'
+#' @details
+#' When `path` is not provided, the R_KITEMS_PATH environment variable
+#' will be used.
 #'
 #' @returns a list
 #'
 #' @examples
 #' config_item_create(id = "foo", path = "./")
 
-config_item_create <- function(id, description = NULL, path){
+config_item_create <- function(id, description = NULL, path = Sys.getenv("R_KITEMS_PATH")){
+
+  # -- secure
+  check_path(path)
 
   # -- init
   config <- list(id = id,
                  source = list(type = "file",
-                               path = path))
+                               path = file.path(path, id),
+                               filename = basename(items_url(id))))
 
   # -- append description
   if(!is.null(description))
