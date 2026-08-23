@@ -11,6 +11,7 @@
 ui <- bslib::page_navbar(title = "Admin Console",
                          window_title = "Kitems Admin Console",
                          id = "nav",
+                         fillable = FALSE,
 
                          # -- allow shinyjs
                          header = shinyjs::useShinyjs(),
