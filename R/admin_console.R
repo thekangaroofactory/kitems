@@ -161,15 +161,15 @@ server <- function(input, output, session) {
   # YAML configuration
 
   # -- read YAML
-  yaml <- config_read(path)
-  config <- reactiveVal(yaml)
+  yaml_init <- config_read(path)
+  config <- reactiveVal(yaml_init)
 
   # -- reactive objects
   item_list <- reactive(sapply(config()$items, "[[", "id"))
 
   # -- when YAML is missing
   # config_read will return NULL
-  if(is.null(yaml) && !length(legacy_dm)){
+  if(is.null(yaml_init) && !length(legacy_dm)){
 
     # -- dialog
     showModal(
@@ -210,6 +210,34 @@ server <- function(input, output, session) {
 
 
   # ////////////////////////////////////////////////////////////////////////////
+  # Home tab
+
+  # -- init: add one tab per item
+  if(!is.null(yaml_init$items)){
+
+    lapply(rev(yaml_init$items), function(x) {
+
+      # -- update nav
+      bslib::nav_insert(id = "nav",
+                        target = "home",
+                        position = "after",
+                        nav = admin_item_layout(x))
+
+      # -- update item list
+      insertUI(selector = "#home-project-items",
+               where = "afterBegin",
+               admin_item_card(name = x$id,
+                               description = x$description))})}
+
+  # -- outputs (sidebar)
+  output$yaml_file <- renderText(if(!is.null(config())) file.path(path, "_kitems.yml") else "")
+  output$yaml_message <- renderUI(admin_yaml_message(config()))
+
+  # -- outputs (main)
+  output$project_name <- renderText(ktools::toupperfirst(config()$project))
+
+
+  # ////////////////////////////////////////////////////////////////////////////
   # Navigation
 
   # -- Select tab
@@ -223,17 +251,6 @@ server <- function(input, output, session) {
     bslib::nav_select(id = "nav", selected = tab_id)
 
   })
-
-
-  # ////////////////////////////////////////////////////////////////////////////
-  # Home tab
-
-  # -- outputs (sidebar)
-  output$yaml_file <- renderText(if(!is.null(config())) file.path(path, "_kitems.yml") else "")
-  output$yaml_message <- renderUI(admin_yaml_message(config()))
-
-  # -- outputs (main)
-  output$project_name <- renderText(ktools::toupperfirst(config()$project))
 
 
   # ////////////////////////////////////////////////////////////////////////////
@@ -410,23 +427,6 @@ server <- function(input, output, session) {
 
   # ////////////////////////////////////////////////////////////////////////////
   # Items Management
-
-  # -- add one tab per item
-  if(!is.null(yaml$items)){
-
-    lapply(rev(yaml$items), function(x) {
-
-      # -- update nav
-      bslib::nav_insert(id = "nav",
-                        target = "home",
-                        position = "after",
-                        nav = admin_item_layout(x))
-
-      # -- update item list
-      insertUI(selector = "#home-project-items",
-               where = "afterBegin",
-               admin_item_card(name = x$id,
-                               description = x$description))})}
 
   # -- update description
   observeEvent(input$item_update_description, {
