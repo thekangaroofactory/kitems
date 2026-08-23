@@ -30,5 +30,7 @@ a list
 Create Attribute
 }
 \examples{
+\dontrun{
 config_attribute_create(name = "att_1", type = "integer")
+}
 }

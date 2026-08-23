@@ -4,20 +4,24 @@
 \alias{config_item_create}
 \title{Create Item Config}
 \usage{
-config_item_create(id, description = NULL, path)
+config_item_create(id, description = NULL, path = Sys.getenv("R_KITEMS_PATH"))
 }
 \arguments{
 \item{id}{a character string to set the name of the item group}
 
 \item{description}{an optional description for the item}
 
-\item{path}{a character string where to find the data}
+\item{path}{an optional character string where to find the data}
 }
 \value{
 a list
 }
 \description{
 Helper function to create the config section for an item.
+}
+\details{
+When \code{path} is not provided, the R_KITEMS_PATH environment variable
+will be used.
 }
 \examples{
 config_item_create(id = "foo", path = "./")
