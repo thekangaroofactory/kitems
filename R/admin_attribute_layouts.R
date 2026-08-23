@@ -65,20 +65,21 @@ admin_attribute_card <- function(attribute, item, hide = NULL, skip = NULL, refr
 
                            else
                              tagList(
-                               actionLink(inputId = paste0(item, "-attribute_update_", attribute$name),
-                                          label = "",
-                                          icon = icon("gear"),
-                                          onclick = ktools::onclick_event(target = "attribute_action")),
-
-                               actionLink(inputId = paste0(item, "-attribute_move_", attribute$name),
-                                          label = "",
-                                          icon = icon("arrows-left-right"),
-                                          onclick = ktools::onclick_event(target = "attribute_action")),
-
-                               actionLink(inputId = paste0(item, "-attribute_delete_", attribute$name),
-                                          label = "",
-                                          icon = icon("trash"),
-                                          onclick = ktools::onclick_event(target = "attribute_action"))))))
+                               ktools::action_link(id = attribute$name,
+                                                   label = "",
+                                                   icon = icon("gear"),
+                                                   target = "attribute_action",
+                                                   pattern = paste0(item, "-attribute_update")),
+                               ktools::action_link(id = attribute$name,
+                                                   label = "",
+                                                   icon = icon("arrows-left-right"),
+                                                   target = "attribute_action",
+                                                   pattern = paste0(item, "-attribute_move")),
+                               ktools::action_link(id = attribute$name,
+                                                   label = "",
+                                                   icon = icon("trash"),
+                                                   target = "attribute_action",
+                                                   pattern = paste0(item, "-attribute_delete"))))))
 
 }
 

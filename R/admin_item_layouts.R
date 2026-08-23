@@ -67,16 +67,18 @@ admin_item_layout <- function(x){
                                  refresh = x$data.model$refresh),
 
                        # -- add attribute
-                       p(actionLink(inputId = paste0(x$id, "-attribute_create_x"),
-                                    label = "Add",
-                                    onclick = ktools::onclick_event(target = "attribute_action")),
+                       p(ktools::action_link(id = "x",
+                                             label = "Add",
+                                             target = "attribute_action",
+                                             pattern = paste0(x$id, "-attribute_create")),
                          "an attribute to the item.")),
 
                      h2("Sorting"),
-                     p(actionLink(inputId = paste0(x$id, "-sorting_x"),
-                                  label = "",
-                                  icon = icon("gear"),
-                                  onclick = ktools::onclick_event(target = "sorting_action")),
+                     p(ktools::action_link(id = "x",
+                                           label = "",
+                                           icon = icon("gear"),
+                                           target = "sorting_action",
+                                           pattern = paste0(x$id, "-sorting_action")),
                        span(id = paste0(x$id, "-sorting"), class = "text-warning",
                             if(is.null(x$data.model$sort)) "No sorting is defined." else paste(x$data.model$sort, collapse = "|")))))
 
@@ -107,18 +109,19 @@ admin_item_card <- function(name, description = NULL){
         bslib::card_header(name),
         p(id = paste0(name, "-description"), "Description:", description),
 
-        # -- allow update
-        if(is.null(description))
-          actionLink(inputId = paste0(name, "_update_description"),
-                     label = "Set description",
-                     icon = icon("circle-arrow-right"),
-                     onclick = ktools::onclick_event(target = "item_update_description")),
+        # -- update description
+        ktools::action_link(id = "x",
+                            label = "Update description",
+                            icon = icon("gear"),
+                            target = "item_update_description",
+                            pattern = paste0(name, "-update_description")),
 
-        # -- nav link
-        actionLink(inputId = paste0(name, "_select_tab"),
-                   label = "Switch tab",
-                   icon = icon("circle-arrow-right"),
-                   onclick = ktools::onclick_event(target = "select_tab"))))
+        # -- switch to item tab
+        ktools::action_link(id = "x",
+                            label = "Switch to item tab",
+                            icon = icon("circle-arrow-right"),
+                            target = "select_tab",
+                            pattern = paste0(name, "-select_tab"))))
 
 }
 
@@ -139,9 +142,10 @@ admin_item_card <- function(name, description = NULL){
 
 admin_item_dz <- function(name){
 
-  actionLink(inputId = paste0(name, "_delete"),
-             label = "Delete item",
-             icon = icon("circle-arrow-right"),
-             onclick = ktools::onclick_event(target = "item_delete"))
+  ktools::action_link(id = "x",
+                      label = "Delete item",
+                      icon = icon("circle-arrow-right"),
+                      target = "item_delete",
+                      pattern = paste0(name, "-delete"))
 
 }

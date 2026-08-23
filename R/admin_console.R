@@ -161,7 +161,8 @@ server <- function(input, output, session) {
   # YAML configuration
 
   # -- read YAML
-  config <- reactiveVal(config_read(path))
+  yaml <- config_read(path)
+  config <- reactiveVal(yaml)
 
   # -- reactive objects
   item_list <- reactive(sapply(config()$items, "[[", "id"))
@@ -215,7 +216,8 @@ server <- function(input, output, session) {
   observeEvent(input$select_tab, {
 
     # -- get id from input value
-    tab_id <- unlist(strsplit(input$select_tab, "_"))[1]
+    event <- ktools::input_decode(input$select_tab)
+    tab_id <- event[['namespace']]
 
     # -- select
     bslib::nav_select(id = "nav", selected = tab_id)
@@ -358,7 +360,9 @@ server <- function(input, output, session) {
   # -- delete item
   observeEvent(input$item_delete, {
 
-    id <- unlist(strsplit(input$item_delete, split = "_"))[[1]]
+    # -- decode input
+    event <- ktools::input_decode(input$item_delete)
+    id <- event[['namespace']]
 
     showModal(
       modalDialog(
@@ -427,8 +431,9 @@ server <- function(input, output, session) {
   # -- update description
   observeEvent(input$item_update_description, {
 
-     # -- get item
-    item <- unlist(strsplit(input$item_update_description, "_"))[1]
+    # -- get item
+    event <- ktools::input_decode(input$item_update_description)
+    item <- event['namespace']
 
     # -- dialog
     showModal(
@@ -454,8 +459,6 @@ server <- function(input, output, session) {
       # update description
       shinyjs::html(id = paste0(item, "-description"),
                     html = paste("Description:", input$item_update_description_value))
-      # remove link
-      removeUI(selector = paste0("#", item, "_update_description"), immediate = TRUE)
 
     }, ignoreInit = T, once = T)
 
@@ -470,6 +473,7 @@ server <- function(input, output, session) {
 
     # -- extract event & get yaml
     event <- ktools::input_decode(input$attribute_action)
+    ktools::catl("Attribute event received:", paste(names(event), event, sep = " = ", collapse = ", "))
     yaml <- config()
 
     # -- perform action
