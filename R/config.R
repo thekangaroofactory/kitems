@@ -143,6 +143,56 @@ config_extract <- function(config, item = NULL, attribute = NULL){
 }
 
 
+#' Item Connector
+#'
+#' @param config the YAML config
+#' @param item the name of the item
+#'
+#' @returns a list
+#' @export
+#'
+#' @examples
+#' yaml <- config_create("test") |>
+#'   config_item_append(config_item_create(id = "foo", path = "/temp"))
+#'
+#' config_item_connector(yaml, "foo")
+
+config_item_connector <- function(config, item){
+
+  x <- config_extract(config, item)$source
+  x$path <- file.path(x$path, item)
+  x$filename = paste0(items_name(item), ".csv")
+
+  x
+
+}
+
+
+#' Item colClasses
+#'
+#' @param config the yaml config
+#' @param item the name of the item
+#'
+#' @returns a named vector
+#' @export
+#'
+#' @examples
+#' # create a config
+#' yaml <- config_create("test") |>
+#'   config_item_append(config_item_create(id = "foo", path = "/temp")) |>
+#'   config_attribute_append(item = "foo", attribute = config_attribute_create(name = "id", type = "numeric"))
+#'
+#' # get item colClasses
+#' config_item_colclasses(yaml, "foo")
+
+config_item_colclasses <- function(config, item){
+
+  sapply(config_extract(config, item)$data.model$attributes,
+         function(x) rlang::set_names(x$type, x$name))
+
+}
+
+
 #' Create Item Config
 #'
 #' @description

@@ -202,6 +202,26 @@ server <- function(input, output, session) {
 
 
   # ////////////////////////////////////////////////////////////////////////////
+  # Items Selective Loading
+
+  datamart <- reactiveValues()
+
+  # -- helper to get specific item
+  items <- function(id){
+
+    # -- check
+    if(!id %in% names(datamart)){
+      message("Selective loading is required for item ", crayon::blue(id))
+      datamart$id <- item_load(connector = config_item_connector(config(), id),
+                               col.classes = config_item_colclasses(config(), id))}
+
+    # -- return
+    datamart$id
+
+  }
+
+
+  # ////////////////////////////////////////////////////////////////////////////
   # Navigation
 
   # -- Select tab
