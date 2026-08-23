@@ -26,6 +26,9 @@
 
 items <- function(datamart, item){
 
+  # -- secure param
+  stopifnot("datamart must be a reactiveValues object" = "reactiveValues" %in% class(datamart))
+
   # -- check
   if(!item %in% names(datamart)){
     message("Selective loading is required for item ", crayon::blue(item))
