@@ -161,8 +161,7 @@ server <- function(input, output, session) {
 
   # -- read YAML
   config_file <- file.path(path, "_kitems.yml")
-  yaml <- config_read(path)
-  config <- reactiveVal(yaml)
+  config <- reactiveVal(config_read(path))
 
   # -- reactive objects
   item_list <- reactive(sapply(config()$items, "[[", "id"))
