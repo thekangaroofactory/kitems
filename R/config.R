@@ -434,11 +434,16 @@ config_attribute_create <- function(name, type, class.arg = NULL, values = NULL,
 
 config_attribute_append <- function(config, item, attribute, hide = FALSE, skip = FALSE, refresh = FALSE){
 
-  # -- get item & (last) attribute positions
+  # -- get item
   item_idx <- config_item_position(config, item)
+  if(identical(item_idx, integer(0))){
+    warning("Item ", crayon::blue(item), " is not found in config.")
+    return(config)}
+
+  # -- get last attribute position
   attribute_idx <- length(config_attributes(config, item)) + 1
 
-  # -- append attribute
+  # -- append attribute at position
   config$items[[item_idx]]$data.model$attributes[[attribute_idx]] <- attribute
 
   # -- update hide / skip & refresh
