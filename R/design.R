@@ -78,9 +78,7 @@ design <- function(...){
   if(all(c("config", "attribute") %in% names(args)))
     return(
       config_attribute_append(args$config,
-                              item = if(length(args$config$items) == 1)
-                                args$config$items[[1]]$id
-                              else args$item,
+                              item = args$item,
                               config_attribute_create(name = args$attribute$name,
                                                       type = args$attribute$type)))
 
@@ -92,9 +90,7 @@ design <- function(...){
     x <- args$config
     for(i in 1:length(args$attributes))
       x <- config_attribute_append(x,
-                                   item = if(length(x$items) == 1)
-                                     x$items[[1]]$id
-                                   else args$item,
+                                   args$item,
                                    config_attribute_create(name = args$attributes[[i]]$name,
                                                            type = args$attributes[[i]]$type))
     return(x)}
