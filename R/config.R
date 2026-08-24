@@ -258,6 +258,10 @@ config_item_create <- function(id, description = NULL, path = Sys.getenv("R_KITE
 
 config_item_append <- function(config, ...){
 
+  # -- secure against NULL
+  args <- Filter(Negate(is.null), list(...))
+
+  # -- append
   config$items <- c(config$items, list(...))
   config
 
