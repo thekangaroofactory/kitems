@@ -224,6 +224,9 @@ config_item_create <- function(id, description = NULL, path = Sys.getenv("R_KITE
 
   # -- secure
   check_path(path)
+  if(!is.character(id)){
+    warning("Argument id must be a character string.")
+    return(NULL)}
 
   # -- init
   config <- list(id = id,
