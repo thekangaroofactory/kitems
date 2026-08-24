@@ -384,6 +384,14 @@ config_item_sort <- function(config, item, sort = NULL){
 
 config_attribute_create <- function(name, type, class.arg = NULL, values = NULL, default = NULL){
 
+  # -- secure
+  if(!type %in% OBJECT_CLASS){
+    warning("Argument", crayon::blue("type"), "must match supported types.")
+    return(NULL)}
+  if(!is.character(name)){
+    warning("Argument", crayon::blue("name"), "must be a character string.")
+    return(NULL)}
+
   # -- init
   config <- list(name = name,
                  type = type)
