@@ -25,18 +25,17 @@
 
 # -- create (multiple) items
 # config |> design(items = c("foo", "bar"))
-# config |> design(items = list("foo", "bar"))
-# config |> design(items = list(list(id = "foo", description = "x"),
-#                          list(id = "bar", description = "z")))
-# config |> design(items = list(list(id = "foo", description = "x"),
+# config |> design(items = list(c(id = "foo", description = "x"),
+#                               c(id = "bar", description = "z")))
+# config |> design(items = list(c(id = "foo", description = "x"),
 #                               "bar"))
 #
 # -- create (single) attribute
-# config |> design(attribute = list(name = "foo", type = "integer"))
+# config |> design(attribute = c(name = "foo", type = "integer"))
 #
 # -- create (multiple) attributes
-# config |> design(item = "foo", attributes = list(list(name = "bar", type = "integer"),
-#                                                  list(name = "zoo", type = "character")))
+# config |> design(item = "foo", attributes = list(c(name = "bar", type = "integer"),
+#                                                  c(name = "zoo", type = "character")))
 
 design <- function(...){
 
@@ -71,29 +70,12 @@ design <- function(...){
   # Attribute
   # Before item otherwise instruction will be misunderstood
 
-  # -- create (single) attribute
-  # without fine tuning!
-  # checks on item performed in config_attribute_append
-  # checks on name & type performed in config_attribute_create
-  if(all(c("config", "attribute") %in% names(args)))
+  if(all(c("config", "item", "attribute") %in% names(args)))
     return(
-      config_attribute_append(args$config,
-                              item = args$item,
-                              config_attribute_create(name = args$attribute$name,
-                                                      type = args$attribute$type)))
-
-  # -- create (multiple) attribute
-  # without fine tuning!
-  # checks on item performed in config_attribute_append
-  # checks on name & type performed in config_attribute_create
-  if(all(c("config", "attributes") %in% names(args))){
-    x <- args$config
-    for(i in 1:length(args$attributes))
-      x <- config_attribute_append(x,
-                                   args$item,
-                                   config_attribute_create(name = args$attributes[[i]]$name,
-                                                           type = args$attributes[[i]]$type))
-    return(x)}
+      do.call(config_attribute_append,
+              c(list(args$config, args$item),
+                lapply(if(is.list(args$attribute)) args$attribute else list(args$attribute),
+                       function(x) do.call(config_attribute_create, as.list(x))))))
 
 
   # ////////////////////////////////////////////////////////////////////////////
