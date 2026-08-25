@@ -262,7 +262,7 @@ config_item_append <- function(config, ...){
   args <- Filter(Negate(is.null), list(...))
 
   # -- append
-  config$items <- c(config$items, list(...))
+  config$items <- c(config$items, args)
   config
 
 }
