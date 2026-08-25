@@ -418,7 +418,7 @@ config_attribute_create <- function(name, type, class.arg = NULL, values = NULL,
 #'
 #' @param config the yaml config
 #' @param item the name of the target item
-#' @param attribute the attribute config
+#' @param ... one or several attribute config(s)
 #' @param hide a logical (default = FALSE) if the attribute should be hidden
 #' @param skip a logical (default = FALSE) if the attribute should be skipped
 #' @param refresh a logical (default = FALSE) if the attribute should be refreshed
@@ -432,7 +432,7 @@ config_attribute_create <- function(name, type, class.arg = NULL, values = NULL,
 #'                         attribute = config_attribute_create(name = "bar", type "numeric"))
 #' }
 
-config_attribute_append <- function(config, item, attribute, hide = FALSE, skip = FALSE, refresh = FALSE){
+config_attribute_append <- function(config, item, ..., hide = FALSE, skip = FALSE, refresh = FALSE){
 
   # -- get & check item
   item_idx <- config_item_position(config, item)
@@ -440,14 +440,19 @@ config_attribute_append <- function(config, item, attribute, hide = FALSE, skip 
     warning("Item ", crayon::blue(item), " is not found in config.")
     return(config)}
 
-  # -- secure from duplicate attribute names
-  reserved <- config_attributes(config, item)
-  if(attribute$name %in% reserved){
-    warning("Attribute ", crayon::blue(attribute$name), " already exists in item ", crayon::blue(item), ".")
-    return(config)}
+  # -- loop over ...
+  for(attribute in list(...)){
 
-  # -- append attribute at position
-  config$items[[item_idx]]$data.model$attributes[[length(reserved) + 1]] <- attribute
+    # -- secure from duplicated attribute names
+    reserved <- config_attributes(config, item)
+    if(attribute$name %in% reserved){
+      warning("Attribute ", crayon::blue(attribute$name), " already exists in item ", crayon::blue(item), ".")
+      return(config)}
+
+    # -- append attribute at position
+    config$items[[item_idx]]$data.model$attributes[[length(reserved) + 1]] <- attribute
+
+  }
 
   # -- update hide / skip & refresh
   if(hide)
