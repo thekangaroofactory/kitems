@@ -38,6 +38,9 @@
 # config |> design(item = "foo",
 #                  attribute = list(c(name = "bar", type = "integer"),
 #                                   c(name = "zoo", type = "character")))
+#
+# -- dummy stuff
+# design(dream = "draw me a sheep")
 
 design <- function(...){
 
