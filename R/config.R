@@ -263,6 +263,13 @@ config_item_append <- function(config, ...){
   # -- secure against NULL
   args <- Filter(Negate(is.null), list(...))
 
+  # -- secure against duplicated items
+  candidates <- config_items(list(items = args))
+  rejected <- duplicated(candidates) | candidates %in% config_items(config)
+  if(any(rejected)){
+    warning("Some duplicated items (", crayon::blue(paste(candidates[rejected], collapse = ", ")), ") are rejected.", call. = F)
+    args <- args[!rejected]}
+
   # -- append
   config$items <- c(config$items, args)
   config
