@@ -12,6 +12,10 @@
 
 config_create <- function(project){
 
+  # -- secure against multiple values
+  if(length(project) > 1)
+    project <- project[[1]]
+
   # -- return
   list(
     version = as.character(packageVersion("kitems")),
