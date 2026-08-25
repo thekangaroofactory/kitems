@@ -232,7 +232,9 @@ config_item_create <- function(id, description = NULL, path = Sys.getenv("R_KITE
   config <- list(id = id,
                  source = list(type = "file",
                                path = file.path(path, id),
-                               filename = basename(items_url(id))))
+                               filename = basename(items_url(id))),
+                 data.model = list(attributes = list(list(name = "id",
+                                                          type = "numeric"))))
 
   # -- append description
   if(!is.null(description))
