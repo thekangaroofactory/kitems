@@ -24,20 +24,21 @@
 # config |> design(item = c(id = "foo", description = "x"))
 
 # -- create (multiple) items
-# config |> design(item = list("foo", "bar"))
-# config |> design(item = list(c(id = "foo", description = "x"),
-#                               c(id = "bar", description = "z")))
-# config |> design(item = list(c(id = "foo", description = "x"),
-#                               "bar"))
+# config |> design(item = "foo",
+#                  item = "bar")
+# config |> design(item = c(id = "foo", description = "x"),
+#                         c(id = "bar", description = "z"))
+# config |> design(item = c(id = "foo", description = "x"),
+#                  item = "bar")
 #
 # -- create (single) attribute
 # config |> design(item = "foo",
-#                  attribute = c(name = "foo", type = "integer"))
+#                  attribute = c(item = "foo", name = "value", type = "integer"))
 #
 # -- create (multiple) attributes
 # config |> design(item = "foo",
-#                  attribute = list(c(name = "bar", type = "integer"),
-#                                   c(name = "zoo", type = "character")))
+#                  attribute = c(item = "foo", name = "value", type = "integer"),
+#                  attribute = c(item = "foo", name = "comment", type = "character"))
 #
 # -- dummy stuff
 # design(dream = "draw me a sheep")
@@ -64,6 +65,24 @@ design <- function(...){
 
 
   # ////////////////////////////////////////////////////////////////////////////
+  # Check for multiple expressions
+
+  if(length(names(args)[!names(args) %in% "config"]) > 1){
+
+    # -- extract config (if so) & plans
+    config <- args$config
+    plans <- args[!names(args) %in% "config"]
+
+    # -- loop over plans (recursive call)
+    for(i in 1:length(plans))
+      config <- do.call(design,
+                        append(plans[i], list(config)))
+
+    # -- make sure we don't go further
+    return(config)}
+
+
+  # ////////////////////////////////////////////////////////////////////////////
   # Project
 
   # -- create config
@@ -72,26 +91,25 @@ design <- function(...){
 
 
   # ////////////////////////////////////////////////////////////////////////////
-  # Item(s)
+  # Item
 
-  if(all(c("config", "item") %in% names(args)) &&
-     !"attribute" %in% names(args))
+  if(all(c("config", "item") %in% names(args)))
     return(
-      do.call(config_item_append,
-              c(list(args$config),
-                lapply(if(is.list(args$item)) args$item else list(args$item),
-                       function(x) do.call(config_item_create, as.list(x))))))
+      args$config |>
+        config_item_append(
+          do.call(config_item_create,
+                  as.list(args$item))))
 
 
   # ////////////////////////////////////////////////////////////////////////////
-  # Attribute(s)
+  # Attribute
 
-  if(all(c("config", "item", "attribute") %in% names(args)))
+  if(all(c("config", "attribute") %in% names(args)))
     return(
-      do.call(config_attribute_append,
-              c(list(args$config, args$item),
-                lapply(if(is.list(args$attribute)) args$attribute else list(args$attribute),
-                       function(x) do.call(config_attribute_create, as.list(x))))))
+      args$config |>
+        config_attribute_append(args$attribute["item"],
+          do.call(config_attribute_create,
+                  as.list(args$attribute[!names(args$attribute) %in% "item"]))))
 
 
   # ////////////////////////////////////////////////////////////////////////////
