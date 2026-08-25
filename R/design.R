@@ -90,4 +90,9 @@ design <- function(...){
                 lapply(if(is.list(args$attribute)) args$attribute else list(args$attribute),
                        function(x) do.call(config_attribute_create, as.list(x))))))
 
+
+  # ////////////////////////////////////////////////////////////////////////////
+  # Didn't get what user's trying to do!
+  warning("The design instruction could not be undertsood - check ?design.", call. = FALSE)
+
 }
