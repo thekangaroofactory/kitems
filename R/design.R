@@ -100,19 +100,13 @@ design <- function(...){
   # Item
   # After attribute otherwise instruction will be misunderstood
 
-  # -- create (single) item
-  if(all(c("config", "item") %in% names(args))){
-    return(config_item_append(args$config,
-                              config_item_create(id = if(is.list(args$item)) args$item$id else args$item,
-                                                 description = if(is.list(args$item)) args$item$description else NULL)))}
-
-  # -- create (multiple) items
+  # -- create (single or multiple) item(s)
   # checks on id(s) performed in config_item_create
-  if(all(c("config", "items") %in% names(args)))
+  if(all(c("config", "item") %in% names(args)))
     return(
       do.call(config_item_append,
               c(list(args$config),
-                     lapply(args$items,
+                     lapply(args$item,
                             function(x) config_item_create(id = if(is.list(x)) x$id else x,
                                                            description = if(is.list(x)) x$description else NULL)))))
 
