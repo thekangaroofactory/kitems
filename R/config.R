@@ -495,7 +495,6 @@ config_attribute_create <- function(name, type, class.arg = NULL, values = NULL,
 #' @param item the name of the target item
 #' @param ... one or several attribute config(s)
 #' @param hide a logical (default = FALSE) if the attribute should be hidden
-#' @param skip a logical (default = FALSE) if the attribute should be skipped
 #' @param refresh a logical (default = FALSE) if the attribute should be refreshed
 #'
 #' @returns the new config
@@ -507,7 +506,7 @@ config_attribute_create <- function(name, type, class.arg = NULL, values = NULL,
 #'                         attribute = config_attribute_create(name = "bar", type "numeric"))
 #' }
 
-config_attribute_append <- function(config, item, ..., hide = FALSE, skip = FALSE, refresh = FALSE){
+config_attribute_append <- function(config, item, ..., hide = FALSE, refresh = FALSE){
 
   # -- get & check item
   item_idx <- config_item_position(config, item)
@@ -529,11 +528,9 @@ config_attribute_append <- function(config, item, ..., hide = FALSE, skip = FALS
 
   }
 
-  # -- update hide / skip & refresh
+  # -- update hide & refresh
   if(hide)
     config$items[[item_idx]]$data.model$hide <- c(config$items[[item_idx]]$data.model$hide, attribute$name)
-  if(skip)
-    config$items[[item_idx]]$data.model$skip <- c(config$items[[item_idx]]$data.model$skip, attribute$name)
   if(refresh)
     config$items[[item_idx]]$data.model$refresh <- c(config$items[[item_idx]]$data.model$refresh, attribute$name)
 
@@ -549,7 +546,6 @@ config_attribute_append <- function(config, item, ..., hide = FALSE, skip = FALS
 #' @param item the name of the target item
 #' @param attribute the attribute config
 #' @param hide a logical (default = FALSE) if the attribute should be hidden
-#' @param skip a logical (default = FALSE) if the attribute should be skipped
 #' @param refresh a logical (default = FALSE) if the attribute should be refreshed
 #'
 #' @returns the new config
@@ -561,7 +557,7 @@ config_attribute_append <- function(config, item, ..., hide = FALSE, skip = FALS
 #'                         attribute = config_attribute_create(name = "bar", type "numeric"))
 #' }
 
-config_attribute_update <- function(config, item, attribute, hide = FALSE, skip = FALSE, refresh = FALSE){
+config_attribute_update <- function(config, item, attribute, hide = FALSE, refresh = FALSE){
 
   # -- secure against forbidden actions
   if(attribute$name == "id"){
@@ -585,11 +581,6 @@ config_attribute_update <- function(config, item, attribute, hide = FALSE, skip 
     unique(c(config$items[[item_idx]]$data.model$hide, attribute$name))
   else
     config$items[[item_idx]]$data.model$hide[!config$items[[item_idx]]$data.model$hide %in% attribute$name]
-  # update skip
-  config$items[[item_idx]]$data.model$skip <- if(skip)
-    unique(c(config$items[[item_idx]]$data.model$skip, attribute$name))
-  else
-    config$items[[item_idx]]$data.model$skip[!config$items[[item_idx]]$data.model$skip %in% attribute$name]
   # update refresh
   config$items[[item_idx]]$data.model$refresh <- if(refresh)
     unique(c(config$items[[item_idx]]$data.model$refresh, attribute$name))
@@ -598,6 +589,77 @@ config_attribute_update <- function(config, item, attribute, hide = FALSE, skip 
 
   # -- return
   config
+
+}
+
+
+#' Skip Attribute
+#'
+#' @description
+#' Getter / setter function to update the skipped attributes of an item.
+#'
+#' @param config the config list
+#' @param item the targeted item id
+#' @param ... the name of the attribute(s) to skip
+#' @param skip a logical (default = TRUE) if the attribute(s) should be skipped or not
+#'
+#' @returns
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' config_attribute_skip(config, item = "foo", "id")
+#' config_attribute_skip(config, item = "foo", "bar", skip = FALSE)
+#' }
+
+config_attribute_skip <- function(config, item, ..., skip = TRUE){
+
+  # -- secure against missing item / attribute(s)
+  attributes <- unlist(list(...)[is_attribute(config, item, list(...))])
+  if(!length(attributes))
+    return(config)
+
+  # -- get item index
+  item_idx <- config_item_position(config, item)
+
+  # -- alter config
+  config$items[[item_idx]]$data.model$skip <- if(skip)
+    unique(c(config$items[[item_idx]]$data.model$skip, attributes))
+  else
+    !config$items[[item_idx]]$data.model$skip %in% attributes
+
+  # -- return
+  config
+
+}
+
+
+#' Skipped Attributes
+#'
+#' @description
+#' Get the skipped attributes for an item.
+#'
+#' @param config the config list
+#' @param item the name (id) of the item
+#'
+#' @returns a character vector or NULL
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' config_attribute_skipped(config, item = "foo")
+#' }
+
+config_attribute_skipped <- function(config, item){
+
+  # -- get item index
+  item_idx <- config_item_position(config, item)
+
+  # -- secure againt missing item
+  if(is.na(item_idx))
+    NULL
+  else
+    config$items[[item_idx]]$data.model$skip
 
 }
 
