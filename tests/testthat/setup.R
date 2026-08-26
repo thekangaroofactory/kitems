@@ -160,6 +160,7 @@ create_folder <- function(){
 
   # -- create folder
   dir.create(testdata_path, recursive = TRUE, showWarnings = TRUE)
+  Sys.setenv("R_KITEMS_PATH" = testdata_path)
 
 }
 
