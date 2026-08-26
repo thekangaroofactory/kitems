@@ -10,6 +10,10 @@
 # use extend() to create an attribute with fine tuning.
 # use hide(), avoid() & refresh() to set specific attribute behaviors.
 
+# design is the core function / instruction when it comes to manipulate items
+# configuration. It's used in other verbs and can call itself to execute
+# several instructions (recursion).
+
 # use cases:
 # design()
 # yaml |> design()
