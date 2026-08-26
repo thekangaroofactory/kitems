@@ -332,6 +332,13 @@ config_item_move <- function(config, item, where){
 
 config_item_drop <- function(config, item){
 
+  # -- get item index
+  # secure against missing item
+  idx <- config_item_position(config, item)
+  if(identical(idx, integer(0))){
+    warning("Item ", crayon::blue(item), " does not exist!", call. = FALSE)
+    return(config)}
+
   # -- drop item
   config$items <- config$items[-config_item_position(config, item)]
 
@@ -592,8 +599,18 @@ config_attribute_move <- function(config, item, attribute, where){
 
 config_attribute_drop <- function(config, item, attribute){
 
+  # -- secure
+  # against missing item
+  if(!item %in% config_items(config)){
+    warning("Item ", crayon::blue(item), " does not exist.", call. = FALSE)
+    return(config)}
+
   # -- get idx to drop
+  # secure against missing attribute
   idx_to_drop <- config_attribute_position(config, item, attribute)
+  if(identical(idx_to_drop, integer(0))){
+    warning("Attribute ", crayon::blue(attribute), " does not exist in item ", crayon::blue(item), ".", call. = FALSE)
+    return(config)}
   item_idx <- config_item_position(config, item)
 
   # -- drop attribute
