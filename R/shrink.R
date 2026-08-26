@@ -5,10 +5,15 @@
 #' @details
 #' Drop an item or an attribute from the config.
 #'
-#' @param config
-#' @param ...
+#' @param config the config list.
+#' @param ... one or several item or attribute instruction.
 #'
 #' @details
+#' The function understands the following instructions:
+#' - item = foo
+#' - attribute = c(item = "foo", name = "total")
+#'
+#' It supports multiple instructions.
 #'
 #' Note that it is forbidden to delete the 'id' attribute of an item.
 #'
