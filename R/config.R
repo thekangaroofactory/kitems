@@ -45,6 +45,33 @@ config_items <- function(config){
 }
 
 
+#' Item Exists
+#'
+#' @description
+#' Check whether or not an item exists in the config.
+#'
+#' @param config the config list
+#' @param item the name (id) of the item(s) to check
+#'
+#' @returns a logical
+#' @export
+#'
+#' @examples
+#' # build config
+#' config <- design(project = "test",
+#' item = "foo")
+#'
+#' # check
+#' config |> is_item("foo")
+#' config |> is_item("bar)
+
+is_item <- function(config, item){
+
+  item %in% config_items(config)
+
+}
+
+
 #' Item Position
 #'
 #' @param config a yaml config
@@ -84,6 +111,34 @@ config_item_position <- function(config, item){
 config_attributes <- function(config, item){
 
   sapply(config_extract(config, item)$data.model$attributes, function(x) x$name)
+
+}
+
+
+#' Attribute Exists
+#'
+#' @description
+#' Checks whether or not an attribute exists within an item.
+#'
+#' @param config the config list
+#' @param item the name (id) of the item
+#' @param attribute a character vector holding the name of the attribute(s) to check
+#'
+#' @returns a logical
+#' @export
+#'
+#' @examples
+#' # build config (id attribute is mandatory)
+#' config <- design(project = "test",
+#' item = "foo")
+#'
+#' # check
+#' config |> is_attribute(item = "foo", attribute = "id")
+#' config |> is_attribute(item = "foo", attribute = "dummy")
+
+is_attribute <- function(config, item, attribute){
+
+  attribute %in% config_attributes(config, item)
 
 }
 
