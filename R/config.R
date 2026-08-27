@@ -628,15 +628,23 @@ config_attribute_behavior <- function(config, item, behavior, ..., set = TRUE){
   if(!length(attributes))
     return(config)
 
+  # -- secure from trying to refresh id
+  if(behavior == "refresh" & "id" %in% attributes){
+    warning("It is forbidden to refresh the ", crayon::blue("id"), " attribute!", call. = F)
+    return(config)}
+
   # -- get item index
   # already checked above
   item_idx <- config_item_position(config, item)
 
   # -- alter config
-  config$items[[item_idx]]$data.model[[behavior]] <- if(set)
-    unique(c(config$items[[item_idx]]$data.model[[behavior]], attributes))
+  # secure against character(0) because of [[]]
+  old <- config$items[[item_idx]]$data.model[[behavior]]
+  new <- if(set)
+    unique(c(old, attributes))
   else
-    config$items[[item_idx]]$data.model[[behavior]][!config$items[[item_idx]]$data.model[[behavior]] %in% attributes]
+    old[!old %in% attributes]
+  config$items[[item_idx]]$data.model[[behavior]] <- if(length(new)) new else NULL
 
   # -- return
   config
