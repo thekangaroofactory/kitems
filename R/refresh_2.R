@@ -1,5 +1,41 @@
 
 
+#' Refresh Behavior Grammar
+#'
+#' @description
+#' A set of verbs to manipulate the refreshed attribute(s) of an item.
+#'
+#' @param config the config list
+#' @param item the name (id) of the targeted item
+#' @param ... the name of the attribute(s) to manipulate
+#'
+#' @details
+#' `refresh()` and `freeze()` are setter functions that allow to add or remove attributes from the refreshed ones.
+#' `refreshed()` and `frozen()` are getter functions to quickly access the skipped attributes
+#' that are refreshed or not during an item update.
+#'
+#' Trying to refresh an attribute that is not skipped will be ignored without warning.
+#'
+#' @returns a config list (setters) or a character vector (getters)
+#' @export
+#'
+#' @examples
+#' # refresh attribute
+#' config <- design(project = "test",
+#' item = "foo") |>
+#' extend(item = "foo", attribute = c(name = "date", type = "Date")) |>
+#' skip(item = "foo", "date") |>
+#' refresh(item = "foo", "date")
+#'
+#' # refreshed attributes
+#' config |> refreshed(item = "foo")
+#'
+#' # freeze attribute
+#' config |> freeze(item = "foo", "date")
+#'
+#' # frozen attributes
+#' config |> frozen(item = "foo")
+
 refresh <- function(config, item, ...){
   config_attribute_behavior(config, item, behavior = "refresh", ...)}
 
