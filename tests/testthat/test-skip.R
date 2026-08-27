@@ -13,7 +13,7 @@ test_that("Skip grammar works", {
 
    # get skipped attributes
    expect_identical(x |>
-                      skipped(item = "foo"), "date")
+                      skipped(item = "foo"), c("id", "date"))
 
    # include attribute
    expect_no_warning(x <- config |>
@@ -21,7 +21,7 @@ test_that("Skip grammar works", {
 
    # get included attributes
    expect_identical(x |>
-                      included(item = "foo"), c("id", "date"))
+                      included(item = "foo"), c("date"))
 
 })
 

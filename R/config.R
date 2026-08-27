@@ -293,7 +293,9 @@ config_item_create <- function(id, description = NULL, path = Sys.getenv("R_KITE
                                path = file.path(path, id),
                                filename = basename(items_url(id))),
                  data.model = list(attributes = list(list(name = "id",
-                                                          type = "numeric"))))
+                                                          type = "numeric",
+                                                          default = "ktools::uuid()")),
+                                   skip = "id"))
 
   # -- append description
   if(!is.null(description))
@@ -626,7 +628,7 @@ config_attribute_skip <- function(config, item, ..., skip = TRUE){
   config$items[[item_idx]]$data.model$skip <- if(skip)
     unique(c(config$items[[item_idx]]$data.model$skip, attributes))
   else
-    !config$items[[item_idx]]$data.model$skip %in% attributes
+    config$items[[item_idx]]$data.model$skip[!config$items[[item_idx]]$data.model$skip %in% attributes]
 
   # -- return
   config
