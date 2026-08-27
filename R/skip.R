@@ -37,19 +37,19 @@
 #' config |> included(item = "foo")
 
 skip <- function(config, item, ...){
-  config_attribute_skip(config, item, ...)}
+  config_attribute_behavior(config, item, behavior = "skip", ...)}
 
 #' @rdname skip
 #' @export
 include <- function(config, item, ...){
-  config_attribute_skip(config, item, ..., skip = FALSE)}
+  config_attribute_behavior(config, item, behavior = "skip", ..., set = FALSE)}
 
 #' @rdname skip
 #' @export
 skipped <- function(config, item){
-  config_attribute_skipped(config, item)}
+  config_item_behavior(config, item)}
 
 #' @rdname skip
 #' @export
 included <- function(config, item){
-  config_attributes(config, item)[!config_attributes(config, item) %in% config_attribute_skipped(config, item)]}
+  config_attributes(config, item)[!config_attributes(config, item) %in% config_item_behavior(config, item)]}

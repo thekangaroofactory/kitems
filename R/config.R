@@ -601,26 +601,27 @@ config_attribute_update <- function(config, item, attribute, hide = FALSE, refre
 }
 
 
-#' Skip Attribute
+#' Attribute Behaviors
 #'
 #' @description
-#' Getter / setter function to update the skipped attributes of an item.
+#' Function to set/unset the skip, refresh & hide attribute behaviors.
 #'
 #' @param config the config list
 #' @param item the targeted item id
+#' @param behavior which behavior to manipulate ("skip", "refresh" or "hide")
 #' @param ... the name of the attribute(s) to skip
-#' @param skip a logical (default = TRUE) if the attribute(s) should be skipped or not
+#' @param set a logical (default = TRUE) if the behavior should be set or unset
 #'
 #' @returns
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' config_attribute_skip(config, item = "foo", "id")
-#' config_attribute_skip(config, item = "foo", "bar", skip = FALSE)
+#' config_attribute_behavior(config, item = "foo", behavior = "skip", "id")
+#' config_attribute_behavior(config, item = "foo", behavior = "hide", "id", set = FALSE)
 #' }
 
-config_attribute_skip <- function(config, item, ..., skip = TRUE){
+config_attribute_behavior <- function(config, item, behavior, ..., set = TRUE){
 
   # -- secure against missing item / attribute(s)
   attributes <- unlist(list(...)[is_attribute(config, item, list(...))])
@@ -632,10 +633,10 @@ config_attribute_skip <- function(config, item, ..., skip = TRUE){
   item_idx <- config_item_position(config, item)
 
   # -- alter config
-  config$items[[item_idx]]$data.model$skip <- if(skip)
-    unique(c(config$items[[item_idx]]$data.model$skip, attributes))
+  config$items[[item_idx]]$data.model[[behavior]] <- if(set)
+    unique(c(config$items[[item_idx]]$data.model[[behavior]], attributes))
   else
-    config$items[[item_idx]]$data.model$skip[!config$items[[item_idx]]$data.model$skip %in% attributes]
+    config$items[[item_idx]]$data.model[[behavior]][!config$items[[item_idx]]$data.model[[behavior]] %in% attributes]
 
   # -- return
   config
@@ -643,29 +644,39 @@ config_attribute_skip <- function(config, item, ..., skip = TRUE){
 }
 
 
-#' Skipped Attributes
+#' Item Behaviors
 #'
 #' @description
-#' Get the skipped attributes for an item.
+#' Get the attribute names for a specific behavior.
 #'
 #' @param config the config list
 #' @param item the name (id) of the item
+#' @param behavior the name of the behavior (default = "skip")
+#'
+#' @details
+#' Behaviors:
+#' - "skip" the default
+#' - "refresh"
+#' - "hide"
 #'
 #' @returns a character vector or NULL
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' config_attribute_skipped(config, item = "foo")
+#' config_item_behavior(config, item = "foo")
 #' }
 
-config_attribute_skipped <- function(config, item){
+config_item_behavior <- function(config, item, behavior = c("skip", "refresh", "hide")){
 
-  # -- secure againt missing item
+  # -- check arg
+  behavior <- match.arg(behavior)
+
+  # -- secure against missing item
   if(is.na(idx <- config_item_position(config, item)))
     NULL
   else
-    config$items[[idx]]$data.model$skip
+    config$items[[idx]]$data.model[[behavior]]
 
 }
 
