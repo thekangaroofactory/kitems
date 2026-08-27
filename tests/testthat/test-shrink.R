@@ -35,8 +35,10 @@ test_that("Verb shrink works", {
   expect_identical(x, config)
 
   # both missing
-  expect_warning(x <- config |>
-                   shrink(attribute = c(item = "dummy", name = "dummy")))
+  # 2 warnings!
+  expect_warning(
+    expect_warning(x <- config |>
+                     shrink(attribute = c(item = "dummy", name = "dummy"))))
   expect_identical(x, config)
 
 })

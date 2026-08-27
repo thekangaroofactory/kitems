@@ -88,7 +88,7 @@ is_item <- function(config, item){
 config_item_position <- function(config, item){
 
   x <- which(config_items(config) == item)
-  if(identical(x, integer(0))){
+  if(!length(x)){
     warning("Item ", crayon::blue(item), " does not exist!", call. = F)
     NA
   } else x
@@ -116,8 +116,7 @@ config_attributes <- function(config, item){
 
   # no need to check
   # will produce list() if item is missing
-  sapply(
-    config$items[[config_item_position(config, item)]]$data.model$attributes,
+  sapply(config$items[[config_item_position(config, item)]]$data.model$attributes,
     function(x) x$name)
 
 }
