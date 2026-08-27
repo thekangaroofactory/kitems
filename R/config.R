@@ -31,7 +31,7 @@ config_create <- function(project){
 #'
 #' @param config a yaml config
 #'
-#' @returns a vector
+#' @returns a vector or list() if no item is found.
 #' @export
 #'
 #' @examples
@@ -87,7 +87,11 @@ is_item <- function(config, item){
 
 config_item_position <- function(config, item){
 
-  which(config_items(config) == item)
+  x <- which(config_items(config) == item)
+  if(identical(x, integer(0))){
+    warning("Item ", crayon::blue(item), " does not exist!", call. = F)
+    NA
+  } else x
 
 }
 
@@ -97,10 +101,10 @@ config_item_position <- function(config, item){
 #' @description
 #' Get the attribute names in an item YAML config section.
 #'
-#' @param config a yaml config section for an item
-#' @param item the name of the item
+#' @param config a yaml config section for an item.
+#' @param item the name of the item.
 #'
-#' @returns a vector
+#' @returns a vector or list() if not found.
 #' @export
 #'
 #' @examples
@@ -110,7 +114,11 @@ config_item_position <- function(config, item){
 
 config_attributes <- function(config, item){
 
-  sapply(config_extract(config, item)$data.model$attributes, function(x) x$name)
+  # no need to check
+  # will produce list() if item is missing
+  sapply(
+    config$items[[config_item_position(config, item)]]$data.model$attributes,
+    function(x) x$name)
 
 }
 
@@ -159,7 +167,10 @@ is_attribute <- function(config, item, attribute){
 
 config_attribute_position <- function(config, item, attribute){
 
-  which(config_attributes(config, item) == attribute)
+  if(!length(idx <- which(config_attributes(config, item) == attribute))){
+    warning("Attribute ", crayon::blue(attribute), " does not exist in item ", crayon::blue(item), "!", call. = F)
+    NA
+  } else idx
 
 }
 
@@ -191,9 +202,6 @@ config_attribute_position <- function(config, item, attribute){
 
 config_extract <- function(config, item = NULL, attribute = NULL){
 
-  # -- init
-  x <- config
-
   # -- extract item
   if(!is.null(item))
     x <- config$items[[config_item_position(config, item)]]
@@ -203,7 +211,7 @@ config_extract <- function(config, item = NULL, attribute = NULL){
     x <- x$data.model$attributes[[config_attribute_position(config, item, attribute)]]
 
   # -- return
-  x
+  if(exists("x")) x else NULL
 
 }
 
@@ -213,7 +221,7 @@ config_extract <- function(config, item = NULL, attribute = NULL){
 #' @param config the YAML config
 #' @param item the name of the item
 #'
-#' @returns a list
+#' @returns a list or NULL if the item is not found.
 #' @export
 #'
 #' @examples
@@ -224,10 +232,12 @@ config_extract <- function(config, item = NULL, attribute = NULL){
 
 config_item_connector <- function(config, item){
 
-  x <- config_extract(config, item)$source
-  x$path <- file.path(x$path, item)
-  x$filename = paste0(items_name(item), ".csv")
+  # -- secure against missing item
+  if(!is.null(x <- config$items[[config_item_position(config, item)]]$source)){
+    x$path <- file.path(x$path, item)
+    x$filename = paste0(items_name(item), ".csv")}
 
+  # -- return
   x
 
 }
@@ -238,7 +248,7 @@ config_item_connector <- function(config, item){
 #' @param config the yaml config
 #' @param item the name of the item
 #'
-#' @returns a named vector
+#' @returns a named vector or list() if the item is not found.
 #' @export
 #'
 #' @examples
@@ -254,7 +264,7 @@ config_item_connector <- function(config, item){
 
 config_item_colclasses <- function(config, item){
 
-  sapply(config_extract(config, item)$data.model$attributes,
+  sapply(config$items[[config_item_position(config, item)]]$data.model$attributes,
          function(x) rlang::set_names(x$type, x$name))
 
 }
@@ -362,11 +372,10 @@ config_item_move <- function(config, item, where){
   if(where$position == "before")
     target_idx <- target_idx - 1
 
-  # -- reorder item indexes
-  item_order <- append(item_list[!item_list %in% item], item, after = target_idx)
-
   # -- do reorder
-  config$items <- config$items[match(item_order, item_list)]
+  config$items <- config$items[match(append(item_list[!item_list %in% item],
+                                            item, after = target_idx),
+                                     item_list)]
 
   # -- return
   config
@@ -389,15 +398,12 @@ config_item_move <- function(config, item, where){
 
 config_item_drop <- function(config, item){
 
-  # -- get item index
+  # -- get item index & drop
   # secure against missing item
-  idx <- config_item_position(config, item)
-  if(identical(idx, integer(0))){
-    warning("Item ", crayon::blue(item), " does not exist!", call. = FALSE)
-    return(config)}
-
-  # -- drop item
-  config$items <- config$items[-config_item_position(config, item)]
+  if(is.na(idx <- config_item_position(config, item)))
+    return(config)
+  else
+    config$items <- config$items[-idx]
 
   # -- return
   config
@@ -432,10 +438,11 @@ config_item_drop <- function(config, item){
 config_item_sort <- function(config, item, sort = NULL){
 
   # -- get item index
-  item_idx <- config_item_position(config, item)
+  if(is.na(idx <- config_item_position(config, item)))
+    return(config)
 
   # -- update sort
-  config$items[[item_idx]]$data.model$sort <- if(is.null(sort) || sort == "") NULL else sort
+  config$items[[idx]]$data.model$sort <- if(is.null(sort) || sort == "") NULL else sort
 
   # -- return
   config
@@ -510,11 +517,9 @@ config_attribute_create <- function(name, type, class.arg = NULL, values = NULL,
 
 config_attribute_append <- function(config, item, ..., hide = FALSE, refresh = FALSE){
 
-  # -- get & check item
-  item_idx <- config_item_position(config, item)
-  if(identical(item_idx, integer(0))){
-    warning("Item ", crayon::blue(item), " is not found in config.")
-    return(config)}
+  # -- item position
+  if(is.na(item_idx <- config_item_position(config, item)))
+    return(config)
 
   # -- loop over ...
   for(attribute in list(...)){
@@ -566,9 +571,11 @@ config_attribute_update <- function(config, item, attribute, hide = FALSE, refre
     warning("Updating the ", crayon::blue("id"), " attribute is forbidden.", call. = FALSE)
     return(config)}
 
-  # -- get item & attribute positions
+  # -- attribute & item positions
+  # attribute will check both exist
+  if(is.na(attribute_idx <- config_attribute_position(config, item, attribute$name)))
+     return(config)
   item_idx <- config_item_position(config, item)
-  attribute_idx <- config_attribute_position(config, item, attribute$name)
 
   # -- secure against forbidden actions
   if(config$items[[item_idx]]$data.model$attributes[[attribute_idx]]$type != attribute$type){
@@ -622,6 +629,7 @@ config_attribute_skip <- function(config, item, ..., skip = TRUE){
     return(config)
 
   # -- get item index
+  # already checked above
   item_idx <- config_item_position(config, item)
 
   # -- alter config
@@ -654,14 +662,11 @@ config_attribute_skip <- function(config, item, ..., skip = TRUE){
 
 config_attribute_skipped <- function(config, item){
 
-  # -- get item index
-  item_idx <- config_item_position(config, item)
-
   # -- secure againt missing item
-  if(is.na(item_idx))
+  if(is.na(idx <- config_item_position(config, item)))
     NULL
   else
-    config$items[[item_idx]]$data.model$skip
+    config$items[[idx]]$data.model$skip
 
 }
 
@@ -718,24 +723,19 @@ config_attribute_move <- function(config, item, attribute, where){
 
 config_attribute_drop <- function(config, item, attribute){
 
-  # -- secure
-  # against missing item
-  if(!item %in% config_items(config)){
-    warning("Item ", crayon::blue(item), " does not exist.", call. = FALSE)
+  # -- idx to drop
+  # secure against missing item / attribute
+  if(is.na(idx_to_drop <- config_attribute_position(config, item, attribute))){
     return(config)}
 
-  # -- get idx to drop
-  # secure against missing attribute
-  idx_to_drop <- config_attribute_position(config, item, attribute)
-  if(identical(idx_to_drop, integer(0))){
-    warning("Attribute ", crayon::blue(attribute), " does not exist in item ", crayon::blue(item), ".", call. = FALSE)
-    return(config)}
+  # -- item index
   item_idx <- config_item_position(config, item)
 
   # -- drop attribute
   config$items[[item_idx]]$data.model$attributes <- config$items[[item_idx]]$data.model$attributes[-idx_to_drop]
 
   # -- update hide, skip & refresh
+  warning("CALL DEDICATED FUNCTIONS!")
   config$items[[item_idx]]$data.model$hide <- config$items[[item_idx]]$data.model$hide[!config$items[[item_idx]]$data.model$hide %in% attribute]
   config$items[[item_idx]]$data.model$skip <- config$items[[item_idx]]$data.model$skip[!config$items[[item_idx]]$data.model$skip %in% attribute]
   config$items[[item_idx]]$data.model$refresh <- config$items[[item_idx]]$data.model$refresh[!config$items[[item_idx]]$data.model$refresh %in% attribute]
