@@ -628,10 +628,14 @@ config_attribute_behavior <- function(config, item, behavior, ..., set = TRUE){
   if(!length(attributes))
     return(config)
 
-  # -- secure from trying to refresh id
-  if(behavior == "refresh" & "id" %in% attributes){
-    warning("It is forbidden to refresh the ", crayon::blue("id"), " attribute!", call. = F)
-    return(config)}
+  # -- refresh
+  if(behavior == "refresh"){
+    # -- secure from trying to refresh id
+    if("id" %in% attributes){
+      warning("It is forbidden to refresh the ", crayon::blue("id"), " attribute!", call. = F)
+      return(config)}
+    # -- secure from trying to refresh an attribute that is not skipped
+    attributes <- attributes[attributes %in% config_item_behavior(config, item)]}
 
   # -- get item index
   # already checked above
