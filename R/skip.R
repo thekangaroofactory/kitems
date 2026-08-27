@@ -1,6 +1,6 @@
 
 
-#' Skip Attribute Grammar
+#' Skip Behavior Grammar
 #'
 #' @description
 #' A set of verbs to manipulate the skipped attribute(s) of an item.
