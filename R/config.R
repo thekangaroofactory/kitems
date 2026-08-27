@@ -503,7 +503,6 @@ config_attribute_create <- function(name, type, class.arg = NULL, values = NULL,
 #' @param item the name of the target item
 #' @param ... one or several attribute config(s)
 #' @param hide a logical (default = FALSE) if the attribute should be hidden
-#' @param refresh a logical (default = FALSE) if the attribute should be refreshed
 #'
 #' @returns the new config
 #' @export
@@ -514,7 +513,7 @@ config_attribute_create <- function(name, type, class.arg = NULL, values = NULL,
 #'                         attribute = config_attribute_create(name = "bar", type "numeric"))
 #' }
 
-config_attribute_append <- function(config, item, ..., hide = FALSE, refresh = FALSE){
+config_attribute_append <- function(config, item, ..., hide = FALSE){
 
   # -- item position
   if(is.na(item_idx <- config_item_position(config, item)))
@@ -537,8 +536,6 @@ config_attribute_append <- function(config, item, ..., hide = FALSE, refresh = F
   # -- update hide & refresh
   if(hide)
     config$items[[item_idx]]$data.model$hide <- c(config$items[[item_idx]]$data.model$hide, attribute$name)
-  if(refresh)
-    config$items[[item_idx]]$data.model$refresh <- c(config$items[[item_idx]]$data.model$refresh, attribute$name)
 
   # -- return
   config
@@ -552,7 +549,6 @@ config_attribute_append <- function(config, item, ..., hide = FALSE, refresh = F
 #' @param item the name of the target item
 #' @param attribute the attribute config
 #' @param hide a logical (default = FALSE) if the attribute should be hidden
-#' @param refresh a logical (default = FALSE) if the attribute should be refreshed
 #'
 #' @returns the new config
 #' @export
@@ -563,7 +559,7 @@ config_attribute_append <- function(config, item, ..., hide = FALSE, refresh = F
 #'                         attribute = config_attribute_create(name = "bar", type "numeric"))
 #' }
 
-config_attribute_update <- function(config, item, attribute, hide = FALSE, refresh = FALSE){
+config_attribute_update <- function(config, item, attribute, hide = FALSE){
 
   # -- secure against forbidden actions
   if(attribute$name == "id"){
@@ -589,11 +585,6 @@ config_attribute_update <- function(config, item, attribute, hide = FALSE, refre
     unique(c(config$items[[item_idx]]$data.model$hide, attribute$name))
   else
     config$items[[item_idx]]$data.model$hide[!config$items[[item_idx]]$data.model$hide %in% attribute$name]
-  # update refresh
-  config$items[[item_idx]]$data.model$refresh <- if(refresh)
-    unique(c(config$items[[item_idx]]$data.model$refresh, attribute$name))
-  else
-    config$items[[item_idx]]$data.model$refresh[!config$items[[item_idx]]$data.model$refresh %in% attribute$name]
 
   # -- return
   config
