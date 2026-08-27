@@ -52,4 +52,4 @@ skipped <- function(config, item){
 #' @rdname skip
 #' @export
 included <- function(config, item){
-  !config_attributes(config, item) %in% config_attribute_skipped}
+  config_attributes(config, item)[!config_attributes(config, item) %in% config_attribute_skipped(config, item)]}
