@@ -304,7 +304,8 @@ config_item_create <- function(id, description = NULL, path = Sys.getenv("R_KITE
                  data.model = list(attributes = list(list(name = "id",
                                                           type = "numeric",
                                                           default = "ktools::uuid()")),
-                                   skip = "id"))
+                                   skip = "id",
+                                   hide = "id"))
 
   # -- append description
   if(!is.null(description))
