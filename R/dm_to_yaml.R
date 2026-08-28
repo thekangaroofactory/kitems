@@ -9,14 +9,14 @@
 #'
 #' @details
 #' The input data model should have its version = "0.8.0" otherwise an error
-#' will be raised. Use `dm_migrate()` first it needed.
+#' will be raised. Use `dm_migrate()` first if needed.
 #'
-#' @returns a list
+#' @returns a config list
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' dm_to_yaml(dm, name = "my_item")
+#' dm_to_yaml(dm)
 #' }
 
 dm_to_yaml <- function(dm){
