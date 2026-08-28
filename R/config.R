@@ -502,7 +502,6 @@ config_attribute_create <- function(name, type, class.arg = NULL, values = NULL,
 #' @param config the yaml config
 #' @param item the name of the target item
 #' @param ... one or several attribute config(s)
-#' @param hide a logical (default = FALSE) if the attribute should be hidden
 #'
 #' @returns the new config
 #' @export
@@ -513,7 +512,7 @@ config_attribute_create <- function(name, type, class.arg = NULL, values = NULL,
 #'                         attribute = config_attribute_create(name = "bar", type "numeric"))
 #' }
 
-config_attribute_append <- function(config, item, ..., hide = FALSE){
+config_attribute_append <- function(config, item, ...){
 
   # -- item position
   if(is.na(item_idx <- config_item_position(config, item)))
@@ -533,10 +532,6 @@ config_attribute_append <- function(config, item, ..., hide = FALSE){
 
   }
 
-  # -- update hide & refresh
-  if(hide)
-    config$items[[item_idx]]$data.model$hide <- c(config$items[[item_idx]]$data.model$hide, attribute$name)
-
   # -- return
   config
 
@@ -548,7 +543,6 @@ config_attribute_append <- function(config, item, ..., hide = FALSE){
 #' @param config the yaml config
 #' @param item the name of the target item
 #' @param attribute the attribute config
-#' @param hide a logical (default = FALSE) if the attribute should be hidden
 #'
 #' @returns the new config
 #' @export
@@ -559,7 +553,7 @@ config_attribute_append <- function(config, item, ..., hide = FALSE){
 #'                         attribute = config_attribute_create(name = "bar", type "numeric"))
 #' }
 
-config_attribute_update <- function(config, item, attribute, hide = FALSE){
+config_attribute_update <- function(config, item, attribute){
 
   # -- secure against forbidden actions
   if(attribute$name == "id"){
@@ -579,12 +573,6 @@ config_attribute_update <- function(config, item, attribute, hide = FALSE){
 
   # -- update attribute
   config$items[[item_idx]]$data.model$attributes[[attribute_idx]] <- attribute
-
-  # -- update hide
-  config$items[[item_idx]]$data.model$hide <- if(hide)
-    unique(c(config$items[[item_idx]]$data.model$hide, attribute$name))
-  else
-    config$items[[item_idx]]$data.model$hide[!config$items[[item_idx]]$data.model$hide %in% attribute$name]
 
   # -- return
   config
@@ -748,10 +736,10 @@ config_attribute_drop <- function(config, item, attribute){
   config$items[[item_idx]]$data.model$attributes <- config$items[[item_idx]]$data.model$attributes[-idx_to_drop]
 
   # -- update hide, skip & refresh
-  warning("CALL DEDICATED FUNCTIONS!")
-  config$items[[item_idx]]$data.model$hide <- config$items[[item_idx]]$data.model$hide[!config$items[[item_idx]]$data.model$hide %in% attribute]
-  config$items[[item_idx]]$data.model$skip <- config$items[[item_idx]]$data.model$skip[!config$items[[item_idx]]$data.model$skip %in% attribute]
-  config$items[[item_idx]]$data.model$refresh <- config$items[[item_idx]]$data.model$refresh[!config$items[[item_idx]]$data.model$refresh %in% attribute]
+  config <- config |>
+    config_attribute_behavior(item, behavior = "hide", set = FALSE) |>
+    config_attribute_behavior(item, behavior = "skip", set = FALSE) |>
+    config_attribute_behavior(item, behavior = "refresh", set = FALSE)
 
   # -- return
   config
