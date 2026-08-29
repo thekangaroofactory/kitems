@@ -41,6 +41,7 @@ restore <- function(type = c("config", "items", "dm"), id = NULL, path = Sys.get
                     config = "_kitems",
                     items = items_name(id),
                     dm = dm_name(id))
+  backup_path <- file.path(path, "backup")
   backup_url <- tail(list.files(path = backup_path,
                                 pattern = pattern,
                                 full.names = TRUE), n = 1)
