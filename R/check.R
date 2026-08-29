@@ -3,37 +3,48 @@
 #' Check Integrity
 #'
 #' @description
-#' Wrapper function to either check data.model or items integrity.
+#' Wrapper function to either check the YAML config or items integrity.
 #'
-#' @param x the object to check (data.model or items).
-#' @param ... parameters to pass to the dedicated check integrity function.
+#' @param ... the object(s) to check (see details)
 #'
 #' @details
-#' `x` will be send to the first argument of the dedicated check integrity function.
-#' At least one argument is expected in ...
-#' See dm_integrity() or item_integrity() functions to know what is expected
-#' as ... argument(s)
+#' The function is smart enough to detect what is passed to `...`.
+#' To check the items, it is necessary to also pass the corresponding
+#' id in the config (see examples).
 #'
-#' @returns the output of the dedicated check integrity function
+#' @returns a list
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' data_model |> check(items = foo, fix = FALSE)
-#' items |> check(data.model = foo, fix = TRUE)
+#' # check config (list)
+#' config <- design(project = "test")
+#' check(config)
+#'
+#' # check items (data.frame)
+#' check(items, config, id = "foo")
 #' }
 
-check <- function(x, ...){
+check <- function(...){
 
-    arg <- list(...)
+  # -- check
+  if(!length(arg <- list(...)))
+    stop("At least one argument should be supplied to ...")
 
-    if(!length(arg))
-      stop("At least one argument should be supplied to ...")
+  # -- detect config
+  if(length(idx_c <- which(sapply(arg, class) == "list")))
+    rc <- config_check(arg[[idx_c]])
 
-    if("data.model" %in% names(arg))
-      item_integrity(items = x, ...)
+  # -- detect items
+  if(!exists("rc") || !length(rc)){
+    if(length(x <- which(sapply(arg, class) == "data.frame")))
+      if(!is.null(arg$id))
+        if(!is_item(arg[[idx_c]], arg$id)){
+          stop("Item ", arg$id, "is not in the YAML config!")
+        } else
+          rc <- item_check(arg[[x]], arg[[idx_c]], arg$id)}
 
-    if("items" %in% names(arg))
-      dm_integrity(data.model = x, ...)
+  # -- return
+  if(exists("rc")) rc else list()
 
 }
