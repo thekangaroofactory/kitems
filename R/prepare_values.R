@@ -6,8 +6,9 @@
 #' Turn trigger input values into tabular data
 #'
 #' @param values a list of values.
-#' @param data.model the data.frame of the data model.
+#' @param config the config list.
 #' @param update a logical if values are used in the update workflow (default FALSE).
+#' @param item the name (id) of the item group
 #'
 #' @details
 #' values is a named list. The names are used to check the corresponding values
@@ -19,22 +20,26 @@
 #' a data.frame using as.data.frame ; for this reason, it's strongly advised to wrap
 #' the call into tryCatch as this may fail.
 #'
-#' @returns a data.frame of values
+#' @returns a data.frame
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' prepare_values(values, data.model)
+#' prepare_values(values, config, item = "foo")
 #' }
 
-prepare_values <- function(values, data.model, update = FALSE){
+prepare_values <- function(values, config, update = FALSE, item = NULL){
+
+  # get attribute names
+  att_names <- config_attributes(config, item)
+
 
   # ////////////////////////////////////////////////////////////////////////////
   # -- cleanup & prepare values
 
   # -- drop unmatched columns
   # before projection to avoid potential duplicated rows
-  values <- values[names(values) %in% data.model$name]
+  values <- values[names(values) %in% att_names]
 
   # -- secure against length 0 (NULL, numeric(0)...)
   # otherwise as.data.frame will fail
@@ -51,10 +56,10 @@ prepare_values <- function(values, data.model, update = FALSE){
 
   # -- secure against missing columns
   if(!update)
-    if(any(!data.model$name %in% names(values))){
+    if(any(att_missing <- !att_names %in% names(values))){
       catl("- Adding missing columns", level = 2)
-      values[data.model$name[!data.model$name %in% names(values)]] <- NA
-      values <- values[data.model$name]}
+      values[att_names[att_missing]] <- NA
+      values <- values[att_names]}
 
 
   # ////////////////////////////////////////////////////////////////////////////
@@ -63,7 +68,7 @@ prepare_values <- function(values, data.model, update = FALSE){
   # -- check skipped attributes to refresh
   # add names to values so they will be computed again
   if(update){
-    att_refresh <- data.model |> dplyr::filter(.data$skip, .data$refresh) |> dplyr::pull(.data$name)
+    att_refresh <- config_item_behavior(config, item, behavior = "refresh")
     att_refresh <- att_refresh[!att_refresh %in% names(values)]
     if(!identical(att_refresh, character(0)))
       values <- c(values, as.list(stats::setNames(NA, att_refresh)))}
