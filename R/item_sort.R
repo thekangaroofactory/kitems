@@ -3,25 +3,32 @@
 #' Sort Items
 #'
 #' @param items a data.frame of the items.
-#' @param data.model a data.frame of the data model.
+#' @param config the config list.
+#' @param item the name (id) of the item group.
 #'
-#' @return A data.frame of the items, sorted based on the data model.
+#' @details
+#' The sorting order is given by the sort entry in the config list.
+#'
+#' @seealso [organize()]
+#'
+#' @return a data.frame.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' item_sort(items, data.model)
+#' items |> item_sort(config, item = "foo")
 #' }
 #'
 
-item_sort <- function(items, data.model){
+item_sort <- function(items, config, item){
 
-  # -- get sort info
-  # ordered & ignore sort.rank = NA
-  sorting <- data.model[order(data.model$sort.rank, na.last = NA), c("name", "sort.rank", "sort.desc")]
-  catl("[item_sort] -- Sorting items by =", paste(sorting$name, ifelse(sorting$sort.desc, "desc.", ""), collapse = ", "))
+  # -- get & parse sort instruction
+  raw <- config |> organization(item)
+  catl("-- Sorting items by =", raw)
+  seq <- rlang::parse_exprs(gsub(",", ";", raw))
 
-  # -- order by column(s)
-  items[do.call(order, c(items[sorting$name], list(decreasing = sorting$sort.desc))), ]
+  # -- do order items
+  items |>
+    dplyr::arrange(!!!seq)
 
 }
