@@ -7,7 +7,14 @@
 #'
 #' @param data.model the data.frame of the data model.
 #'
-#' @return A data.frame with default values.
+#' @details
+#' This function does not accept the data.model element of the config list as an input.
+#' It should be turned into a data.frame first, using [yaml_to_dm()].
+#'
+#' `data.model` should contain the following columns:
+#' "name", "type", "default".
+#'
+#' @return A data.frame
 #' @export
 #'
 #' @examples
@@ -57,6 +64,6 @@ dm_default <- function(data.model){
 
   # -- drop columns & return
   data.model |>
-    dplyr::select(!c("class.arg", "display", "skip", "refresh", "sort.rank", "sort.desc"))
+    dplyr::select(name, type, default)
 
 }
