@@ -9,6 +9,9 @@
 #' This function does not accept the data.model element of the config list as an input.
 #' It should be turned into a data.frame first, using [yaml_to_dm()].
 #'
+#' `data.model` should contain the following columns:
+#' "name", "type", "default", "values".
+#'
 #' `item` and `data.model` must have same structure. That means the names
 #' of the attributes in the data model are expected to match with the names
 #' of the columns in item.
