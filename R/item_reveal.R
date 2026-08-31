@@ -5,23 +5,26 @@
 #' @description
 #' Apply data model display mask on the items.
 #'
-#' @param items a data.frame of the items.
-#' @param data.model a data.frame of the data model.
-#'
-#' @return A data.frame of the items with applied mask.
-#' @export
+#' @param items the data.frame of the items.
+#' @param config the config list.
+#' @param item the name (id) of the item in the config.
 #'
 #' @details
-#' The data model display mask is defined by attributes with display = `TRUE`.
+#' The data model display mask is defined at the data.model level.
+#' use [hide()] or [display()] to tune it.
+#'
+#' @seealso [hide()][display()]
+#'
+#' @return A data.frame.
+#' @export
 #'
 #' @examples
 #' \dontrun{
-#' item_reveal(items = "myitems", data.model = "mydatamodel")
+#' item_reveal(items, config, item = "foo")
 #' }
 
-item_reveal <- function(items, data.model){
+item_reveal <- function(items, config, item = NULL){
 
-  # -- Apply attribute display
-  items[display(data.model)]
+  items[displayed(config, item)]
 
 }
