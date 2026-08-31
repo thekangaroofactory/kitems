@@ -1,0 +1,45 @@
+
+
+#' Config List To Table
+#'
+#' @description
+#' Turn a config list into a data.frame
+#'
+#' @param config the config list (see details).
+#' @param ... the columns to include in the output.
+#' @param item the name (id) of the item.
+#'
+#' @details
+#' The function is used as a bridge between the config list structure and
+#' the expected data.frame input argument for some functions.
+#' It also helps to keep / select the desired columns (see example).
+#'
+#' By default, `config` is the global project config list.
+#' `item` is required in this case.
+#'
+#' In case the item level config list is provided, it should be up to
+#' the data.model's level.
+#'
+#' @returns a data.frame
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' # get data.model with name and default
+#' yaml_to_dm(config, name, default, item = "foo")
+#' }
+
+yaml_to_dm <- function(config, ..., item = NULL){
+
+  # -- item data.model
+  if(!is.null(item))
+    config <- config_extract(config, item)$data.model
+
+  # -- get expected column(s)
+  cols <- sapply(rlang::ensyms(...), rlang::as_name)
+
+  # -- return
+  dplyr::bind_rows(config$attributes) |>
+    dplyr::select(any_of(cols))
+
+}
