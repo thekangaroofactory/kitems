@@ -3,11 +3,18 @@
 #' Validate Value(s)
 #'
 #' @description
-#' Validate the input values and turn them into item(s)
+#' Validate values and turn them into item(s)
 #'
-#' @param values a list of input values.
-#' @param data.model the data.frame of the data model.
+#' @param values a list of named values.
+#' @param data.model the data.frame of the data model (see details).
 #' @param update whether the id attribute should be checked or not (default FALSE).
+#'
+#' @details
+#' This function does not accept the data.model element of the config list as an input.
+#' It should be turned into a data.frame first, using [yaml_to_dm()].
+#'
+#' `data.model` should contain the following columns:
+#' "name", "type", "default", "class.arg".
 #'
 #' @returns A data.frame of item(s) checked against the data model.
 #' @export
@@ -21,7 +28,6 @@ attribute_values <- function(values, data.model, update = FALSE){
   # the input for this function will be the named values instead of key/value
   # - extract from the input
   # - prepared from the trigger (squared)
-  # >> done
 
   # ////////////////////////////////////////////////////////////////////////////
   # -- helper function
@@ -73,7 +79,6 @@ attribute_values <- function(values, data.model, update = FALSE){
     value
 
   }
-
 
   # ////////////////////////////////////////////////////////////////////////////
   # -- check values & types
