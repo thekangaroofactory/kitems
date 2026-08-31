@@ -450,6 +450,34 @@ config_item_sort <- function(config, item, sort = NULL){
 }
 
 
+#' Item Row Order
+#'
+#' @description
+#' Getter function that returns the ordering info of an item.
+#'
+#' @param config the config list
+#' @param item the name of the item
+#'
+#' @returns a character string or `NA` if `ìtem` is missing.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' config_item_row_order(config, item = "foo")
+#' }
+
+config_item_row_order <- function(config, item){
+
+  # -- get item index
+  if(is.na(idx <- config_item_position(config, item)))
+    return(NA)
+
+  # -- return
+  config$items[[idx]]$data.model$sort
+
+}
+
+
 #' Create Attribute
 #'
 #' @param name the name of the attribute
