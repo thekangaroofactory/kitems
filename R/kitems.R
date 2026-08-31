@@ -37,8 +37,6 @@
 #' - `notify` option is a logical if Shiny notifications should be displayed (default = `TRUE`)
 #'
 #' If autosave option is `FALSE`, the `item_save()` function should be used to make the data persistent.
-#' To make the data model persistent, use \link[base]{saveRDS} function. The file name should be
-#' consistent with the output of \link[kitems]{dm_name} function used with \code{id} plus .rds extension.
 #'
 #' When admin is `FALSE`, \link[kitems]{admin_widget} will return an 'empty' layout (tabs with no content)
 #' It is expected that this function will not be used when admin = `FALSE`.
@@ -88,7 +86,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     check_path(path)
 
     # -- when _kitems.yml is found, it will overwrite input parameters
-    config <- config_read(path = path)
+    config <- config_read(path)
     if(!is.null(config)){
 
       message("XXX check this code section")
@@ -151,8 +149,9 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       # -- Check folder structure
       # item files are stored in a dedicated folder #356
-      if(basename(path) != id)
-        path <- file.path(path, id)
+      # >> should be ok by now, just drop that
+      # if(basename(path) != id)
+      #   path <- file.path(path, id)
 
       # -- Build url from module id
       k_dm_url <- dm_url(id, path)
