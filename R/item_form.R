@@ -11,10 +11,13 @@
 #'
 #' @details
 #' `attributes` is expected to be the output of the `dm_default()` function.
+#' The data.frame should have the following columns:
+#' "name", "type", "default", "values".
+#'
 #' `items` are required only when the attribute values defined in the data.model
 #' should be evaluated with data masking support.
 #'
-#' @return A list of HTML input objects.
+#' @return A list of HTML tags.
 #' @export
 #'
 #' @examples

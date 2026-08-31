@@ -64,6 +64,6 @@ dm_default <- function(data.model){
 
   # -- drop columns & return
   data.model |>
-    dplyr::select(name, type, default)
+    dplyr::select(name, type, default, values)
 
 }
