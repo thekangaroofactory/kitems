@@ -6,7 +6,7 @@
 #' Update specific parameter(s) of specific attribute(s)).
 #'
 #' @param config the config list.
-#' @param item the name (id) of the item group.
+#' @param item optional (see details), the name (id) of the item group.
 #' @param ... one or several attribute instructions.
 #'
 #' @details
@@ -16,6 +16,11 @@
 #' Note that it is forbidden to update:
 #' - the id attribute (any parameter),
 #' - the name and/or type of an attribute.
+#'
+#' When `item` is set in the parent frame, then the attribute can be skipped
+#' in the function call.
+#'
+#' @seealso [parent.frame()]
 #'
 #' @returns a config list
 #' @export
@@ -27,19 +32,21 @@
 #'   extend(item = "foo",
 #'          attribute = c(name = "total", type = "integer"))
 #'
+#' # skip item argument (in the following calls)
+#' item <- "foo"
+#'
 #' # single instruction
 #' config |>
-#'   amend(item = "foo", attribute = c(name = "total", default = 12))
+#'   amend(attribute = c(name = "total", default = 12))
 #' config |>
-#'   amend(item = "foo", attribute = c(name = "total", values = "suggest(12)"))
+#'   amend(attribute = c(name = "total", values = "suggest(12)"))
 #'
 #' # multiple instructions
 #' config |>
-#'   amend(item = "foo",
-#'         attribute = c(name = "total", values = "suggest(12)"),
+#'   amend(attribute = c(name = "total", values = "suggest(12)"),
 #'         attribute = c(name = "total", default = "0"))
 
-amend <- function(config, item, ...){
+amend <- function(config, item = get_context(), ...){
 
   # -- get instruction
   # secure against funny instructions
