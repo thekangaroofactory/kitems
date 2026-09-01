@@ -6,7 +6,7 @@
 #' Set or get sorting order.
 #'
 #' @param config the config list
-#' @param item the name (id) of the item group
+#' @param item optional (see details), the name (id) of the item group
 #' @param sort a character string to set the order (see details)
 #'
 #' @details
@@ -19,6 +19,11 @@
 #' Ranking depends on the position of the attribute.
 #' Wrap attribute name by "desc()" to set descending order.
 #'
+#' When `item` is set in the parent frame, then the attribute can be skipped
+#' in the function call.
+#'
+#' @seealso [parent.frame()]
+#'
 #' @returns `organize` returns a config list and
 #' `organized` returns a character string
 #' @export
@@ -29,11 +34,11 @@
 #' organize(config, item = "foo", sort = NULL)
 #' }
 
-organize <- function(config, item, sort){
+organize <- function(config, item = get_context(), sort){
   config_item_sort(config, item, sort)}
 
 
 #' @rdname organize
 #' @export
-organized <- function(config, item){
+organized <- function(config, item = get_context()){
   config_item_row_order(config, item)}
