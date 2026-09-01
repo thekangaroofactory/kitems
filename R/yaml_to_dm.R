@@ -7,7 +7,7 @@
 #'
 #' @param config the config list (see details).
 #' @param ... the columns to include in the output.
-#' @param item the name (id) of the item.
+#' @param item the name (id) of the item group.
 #'
 #' @details
 #' The function is used as a bridge between the config list structure and

@@ -6,7 +6,7 @@
 #' Update specific parameter(s) of specific attribute(s)).
 #'
 #' @param config the config list.
-#' @param item the name (id) of the targeted item.
+#' @param item the name (id) of the item group.
 #' @param ... one or several attribute instructions.
 #'
 #' @details

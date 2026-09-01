@@ -7,7 +7,7 @@
 #' items are loaded only when required.
 #'
 #' @param datamart a reactiveValues object holding the items
-#' @param item the name (id) of the item to return
+#' @param item the name (id) of the item group
 #'
 #' @returns a data.frame of the items or NULL
 #' @export

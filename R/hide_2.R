@@ -6,7 +6,7 @@
 #' A set of verbs to manipulate the display of an attribute.
 #'
 #' @param config the config list
-#' @param item the name (id) of the targeted item
+#' @param item the name (id) of the item group
 #' @param ... the name of the attribute(s) to manipulate
 #'
 #' @details

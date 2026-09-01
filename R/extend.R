@@ -6,7 +6,7 @@
 #' Add specific attribute(s) with fine tuning.
 #'
 #' @param config the config object
-#' @param item the name (id) of the item to extend
+#' @param item the name (id) of the item group
 #' @param ... one or several attribute instructions
 #'
 #' @details

@@ -6,7 +6,7 @@
 #' This is a UI layout function to display attributes.
 #'
 #' @param attribute the yaml of the attribute
-#' @param item the name of the item
+#' @param item the name (id) of the item group
 #' @param hide the list of attributes to hide
 #' @param skip the list of attributes to skip
 #' @param refresh the list of attributes to refresh

@@ -51,7 +51,7 @@ config_items <- function(config){
 #' Check whether or not an item exists in the config.
 #'
 #' @param config the config list
-#' @param item the name (id) of the item(s) to check
+#' @param item the name (id) of the item group
 #'
 #' @returns a logical
 #' @export
@@ -75,7 +75,7 @@ is_item <- function(config, item){
 #' Item Position
 #'
 #' @param config a yaml config
-#' @param item the name of the item to locate
+#' @param item the name (id) of the item group
 #'
 #' @returns an integer
 #' @export
@@ -102,7 +102,7 @@ config_item_position <- function(config, item){
 #' Get the attribute names in an item YAML config section.
 #'
 #' @param config a yaml config section for an item.
-#' @param item the name of the item.
+#' @param item the name (id) of the item group
 #'
 #' @returns a vector or list() if not found.
 #' @export
@@ -128,7 +128,7 @@ config_attributes <- function(config, item){
 #' Checks whether or not an attribute exists within an item.
 #'
 #' @param config the config list
-#' @param item the name (id) of the item
+#' @param item the name (id) of the item group
 #' @param attribute a character vector holding the name of the attribute(s) to check
 #'
 #' @returns a logical
@@ -153,7 +153,7 @@ is_attribute <- function(config, item, attribute){
 #' Attribute Position
 #'
 #' @param config a yaml config
-#' @param item the target item
+#' @param item the name (id) of the item group
 #' @param attribute the name of the attribute to locate
 #'
 #' @returns an integer
@@ -180,7 +180,7 @@ config_attribute_position <- function(config, item, attribute){
 #' Extract the section for a specific item or attribute.
 #'
 #' @param config the yaml configuration
-#' @param item optional, the name (id) of the item
+#' @param item optional, the name (id) of the item group
 #' @param attribute optional, the name of the attribute
 #'
 #' @details
@@ -218,7 +218,7 @@ config_extract <- function(config, item = NULL, attribute = NULL){
 #' Item Connector
 #'
 #' @param config the YAML config
-#' @param item the name of the item
+#' @param item the name (id) of the item group
 #'
 #' @returns a list or NULL if the item is not found.
 #' @export
@@ -245,7 +245,7 @@ config_item_connector <- function(config, item){
 #' Item colClasses
 #'
 #' @param config the yaml config
-#' @param item the name of the item
+#' @param item the name (id) of the item group
 #'
 #' @returns a named vector or list() if the item is not found.
 #' @export
@@ -351,7 +351,7 @@ config_item_append <- function(config, ...){
 #' Move Item
 #'
 #' @param config the yaml config
-#' @param item the name of the item to move
+#' @param item the name (id) of the item group
 #' @param where a list(position = c("before", "after"), item = "foo")
 #'
 #' @returns the new config
@@ -386,7 +386,7 @@ config_item_move <- function(config, item, where){
 #' Drop Item
 #'
 #' @param config the yaml config
-#' @param item the name of the item to drop
+#' @param item the name (id) of the item group
 #'
 #' @returns the new config
 #' @export
@@ -414,7 +414,7 @@ config_item_drop <- function(config, item){
 #' Sort Items
 #'
 #' @param config the yaml config
-#' @param item the name of the item to drop
+#' @param item the name (id) of the item group
 #' @param sort a character string
 #'
 #' @details
@@ -456,7 +456,7 @@ config_item_sort <- function(config, item, sort = NULL){
 #' Getter function that returns the ordering info of an item.
 #'
 #' @param config the config list
-#' @param item the name of the item
+#' @param item the name (id) of the item group
 #'
 #' @returns a character string or `NA` if `ìtem` is missing.
 #' @export
@@ -529,7 +529,7 @@ config_attribute_create <- function(name, type, class.arg = NULL, values = NULL,
 #' Append Attribute
 #'
 #' @param config the yaml config
-#' @param item the name of the target item
+#' @param item the name (id) of the item group
 #' @param ... one or several attribute config(s)
 #'
 #' @returns the new config
@@ -570,7 +570,7 @@ config_attribute_append <- function(config, item, ...){
 #' Update Attribute
 #'
 #' @param config the yaml config
-#' @param item the name of the target item
+#' @param item the name (id) of the item group
 #' @param attribute the attribute config
 #'
 #' @returns the new config
@@ -615,7 +615,7 @@ config_attribute_update <- function(config, item, attribute){
 #' Function to set/unset the skip, refresh & hide attribute behaviors.
 #'
 #' @param config the config list
-#' @param item the targeted item id
+#' @param item the name (id) of the item group
 #' @param behavior which behavior to manipulate ("skip", "refresh" or "hide")
 #' @param ... the name of the attribute(s) to skip
 #' @param set a logical (default = TRUE) if the behavior should be set or unset
@@ -670,7 +670,7 @@ config_attribute_behavior <- function(config, item, behavior, ..., set = TRUE){
 #' Get the attribute names for a specific behavior.
 #'
 #' @param config the config list
-#' @param item the name (id) of the item
+#' @param item the name (id) of the item group
 #' @param behavior the name of the behavior (default = "skip")
 #'
 #' @details
@@ -704,7 +704,7 @@ config_item_behavior <- function(config, item, behavior = c("skip", "refresh", "
 #' Move Attribute
 #'
 #' @param config the yaml config
-#' @param item the name of the target item
+#' @param item the name (id) of the item group
 #' @param attribute the name of the attribute to move
 #' @param where a list(position = c("before", "after"), attribute = "foo")
 #'
@@ -740,7 +740,7 @@ config_attribute_move <- function(config, item, attribute, where){
 #' Drop Attribute
 #'
 #' @param config the yaml config
-#' @param item the target item
+#' @param item the name (id) of the item group
 #' @param attribute the name of the attribute to drop
 #'
 #' @returns the new yaml config

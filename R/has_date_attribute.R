@@ -6,7 +6,7 @@
 #' Basic check if item has a 'date' attribute.
 #'
 #' @param config the config list
-#' @param item the name of the item
+#' @param item the name (id) of the item group
 #'
 #' @returns a logical
 #' @export

@@ -6,7 +6,7 @@
 #' Set or get sorting order.
 #'
 #' @param config the config list
-#' @param item the name of the item
+#' @param item the name (id) of the item group
 #' @param sort a character string to set the order (see details)
 #'
 #' @details

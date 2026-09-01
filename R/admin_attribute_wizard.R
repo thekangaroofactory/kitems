@@ -7,7 +7,7 @@
 #' attribute wizard.
 #'
 #' @param config the YAML config
-#' @param item the name of the target item
+#' @param item the name (id) of the item group
 #' @param attribute an optional name to indicate it's an update
 #' @param callback a reactiveVal to send the output of the wizard
 #' @param session optional, the Shiny session object
