@@ -6,7 +6,7 @@
 #' A set of verbs to manipulate the skipped attribute(s) of an item.
 #'
 #' @param config the config list
-#' @param item the name (id) of the item group
+#' @param item optional (see details), the name (id) of the item group
 #' @param ... the name of the attribute(s) to manipulate
 #'
 #' @details
@@ -16,6 +16,11 @@
 #'
 #' In a scenario where items are created programmatically, `included()` may be used
 #' to determine what values can be sent to the trigger.
+#'
+#' When `item` is set in the parent frame, then the attribute can be skipped
+#' in the function call.
+#'
+#' @seealso [parent.frame()]
 #'
 #' @returns a config list (setters) or a character vector (getters)
 #' @export
@@ -36,20 +41,20 @@
 #' # get included attributes
 #' config |> included(item = "foo")
 
-skip <- function(config, item, ...){
+skip <- function(config, item = get_context(), ...){
   config_attribute_behavior(config, item, behavior = "skip", ...)}
 
 #' @rdname skip
 #' @export
-include <- function(config, item, ...){
+include <- function(config, item = get_context(), ...){
   config_attribute_behavior(config, item, behavior = "skip", ..., set = FALSE)}
 
 #' @rdname skip
 #' @export
-skipped <- function(config, item){
+skipped <- function(config, item = get_context()){
   config_item_behavior(config, item)}
 
 #' @rdname skip
 #' @export
-included <- function(config, item){
+included <- function(config, item = get_context()){
   config_attributes(config, item)[!config_attributes(config, item) %in% config_item_behavior(config, item)]}
