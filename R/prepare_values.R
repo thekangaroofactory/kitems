@@ -8,7 +8,7 @@
 #' @param values a list of values.
 #' @param config the config list.
 #' @param update a logical if values are used in the update workflow (default FALSE).
-#' @param item the name (id) of the item group
+#' @param item optional (see details), the name (id) of the item group.
 #'
 #' @details
 #' values is a named list. The names are used to check the corresponding values
@@ -20,6 +20,11 @@
 #' a data.frame using as.data.frame ; for this reason, it's strongly advised to wrap
 #' the call into tryCatch as this may fail.
 #'
+#' When `item` is set in the parent frame, then the attribute can be skipped
+#' in the function call.
+#'
+#' @seealso [parent.frame()]
+#'
 #' @returns a data.frame
 #' @export
 #'
@@ -28,7 +33,7 @@
 #' prepare_values(values, config, item = "foo")
 #' }
 
-prepare_values <- function(values, config, update = FALSE, item = NULL){
+prepare_values <- function(values, config, update = FALSE, item = get_context()){
 
   # get attribute names
   att_names <- config_attributes(config, item)
