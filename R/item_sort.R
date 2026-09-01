@@ -23,7 +23,7 @@
 item_sort <- function(items, config, item){
 
   # -- get & parse sort instruction
-  raw <- config |> organization(item)
+  raw <- config |> organized(item)
   catl("-- Sorting items by =", raw)
   seq <- rlang::parse_exprs(gsub(",", ";", raw))
 

@@ -20,7 +20,7 @@
 #' Wrap attribute name by "desc()" to set descending order.
 #'
 #' @returns `organize` returns a config list and
-#' `organization` returns a character string
+#' `organized` returns a character string
 #' @export
 #'
 #' @examples
@@ -35,5 +35,5 @@ organize <- function(config, item, sort){
 
 #' @rdname organize
 #' @export
-organization <- function(config, item){
+organized <- function(config, item){
   config_item_row_order(config, item)}
