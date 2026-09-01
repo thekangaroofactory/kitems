@@ -27,9 +27,9 @@ testdata_path <- file.path(testdata_base_path, module_id)
 Sys.setenv("R_KITEMS_PATH" = testdata_path)
 
 # -- build urls
-test_dm_url <- dm_url(module_id)
-test_items_url <- items_url(module_id)
-items_file <- paste0(items_name(module_id), ".csv")
+test_dm_url <- file.path(testdata_path, module_id, name(module_id, what = "dm"))
+test_items_url <- name(id, url = T)
+items_file <- name(module_id, file = T)
 import_url <- file.path(testdata_path, "data_to_import.csv")
 
 

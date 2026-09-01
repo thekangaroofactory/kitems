@@ -46,9 +46,9 @@ backup <- function(type = c("config", "items", "dm"),
 
   # -- define & check source
   source_url <- switch(type,
-                       config = file.path(path, "_kitems.yml"),
-                       items = items_url(id, path),
-                       dm = dm_url(id, path))
+                       config = name(what = "config", url = T),
+                       items = name(id, url = T),
+                       dm = name(id, what = "dm", url = T))
   if(!file.exists(source_url))
     stop(paste("Source file does not exist! file =", source_url))
 
@@ -60,8 +60,8 @@ backup <- function(type = c("config", "items", "dm"),
   # -- target_url
   target_filename <- switch(type,
                             config = paste0("_kitems_", as.character(Sys.Date()), ".yml"),
-                            items = paste0(items_name(id), "_", as.character(Sys.Date()), ".csv"),
-                            dm = paste0(dm_name(id), "_", as.character(Sys.Date()), ".rds"))
+                            items = name(id, file = T, backup = T),
+                            dm = name(id, what = "dm", file = T, backup = T))
 
   # -- create backup file
   backup_url <- file.path(backup_path, target_filename)
@@ -71,8 +71,8 @@ backup <- function(type = c("config", "items", "dm"),
   # -- check nb backup
   pattern <- switch(type,
                     config = "_kitems.yml",
-                    items = items_name(id),
-                    dm = dm_name(id))
+                    items = name(id),
+                    dm = name(id, what = "dm"))
   backups <- list.files(path = backup_path, pattern = pattern, full.names = TRUE)
   n <- length(backups)
 

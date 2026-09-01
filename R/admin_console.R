@@ -238,7 +238,7 @@ server <- function(input, output, session) {
   # Home tab
 
   # -- outputs (sidebar)
-  output$yaml_file <- renderText(if(!is.null(config())) file.path(path, "_kitems.yml") else "")
+  output$yaml_file <- renderText(if(!is.null(config())) name("_kitems.yml", url = R) else "")
   output$yaml_message <- renderUI(admin_yaml_message(config()))
 
   # -- outputs (main)

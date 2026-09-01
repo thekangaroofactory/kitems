@@ -67,8 +67,8 @@ test_that("attribute delete works", {
     expect_null(k_items())
 
     # -- test files
-    expect_false(file.exists(dm_url(module_id)))
-    expect_false(file.exists(items_url(module_id)))
+    # >> obsolete since YAML: expect_false(file.exists(dm_url(module_id)))
+    expect_false(file.exists(name(id, url = T)))
 
 
   })

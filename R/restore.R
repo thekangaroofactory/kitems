@@ -39,8 +39,8 @@ restore <- function(type = c("config", "items", "dm"), id = NULL, path = Sys.get
   # -- check backups
   pattern <- switch(type,
                     config = "_kitems",
-                    items = items_name(id),
-                    dm = dm_name(id))
+                    items = name(id),
+                    dm = name(id, what = "dm"))
   backup_path <- file.path(path, "backup")
   backup_url <- tail(list.files(path = backup_path,
                                 pattern = pattern,
@@ -50,9 +50,9 @@ restore <- function(type = c("config", "items", "dm"), id = NULL, path = Sys.get
 
   # -- source_url
   source_url <- switch(type,
-                       config = file.path(path, "_kitems.yml"),
-                       items = items_url(id, path),
-                       dm = dm_url(id, path))
+                       config = name(what = "config", url = T),
+                       items = name(id, url = T),,
+                       dm = name(id, hat = "dm", url = T))
 
   # -- check source file
   if(file.exists(source_url)){

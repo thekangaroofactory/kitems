@@ -233,8 +233,8 @@ config_item_connector <- function(config, item){
 
   # -- secure against missing item
   if(!is.null(x <- config$items[[config_item_position(config, item)]]$source)){
-    x$path <- file.path(x$path, item)
-    x$filename = paste0(items_name(item), ".csv")}
+    x$path <- dirnamename(item, url = T)
+    x$filename = name(item, file = T)}
 
   # -- return
   x
@@ -299,8 +299,8 @@ config_item_create <- function(id, description = NULL, path = Sys.getenv("R_KITE
   # -- init
   config <- list(id = id,
                  source = list(type = "file",
-                               path = file.path(path, id),
-                               filename = basename(items_url(id))),
+                               path = dirname(name(id, url = T)),
+                               filename = name(id)),
                  data.model = list(attributes = list(list(name = "id",
                                                           type = "numeric",
                                                           default = "ktools::uuid()")),

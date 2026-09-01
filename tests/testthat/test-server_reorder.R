@@ -27,7 +27,7 @@ test_that("Server works", {
     # Data model
     # --------------------------------------------------------------------------
 
-    r_data_model <- dm_name(module_id)
+    r_data_model <- name(module_id, what = "dm")
     x <- k_data_model()
 
     # -- test class
@@ -44,7 +44,7 @@ test_that("Server works", {
     # Items
     # --------------------------------------------------------------------------
 
-    r_items <- items_name(module_id)
+    r_items <- name(module_id)
     x <- k_items()
 
     # -- test class

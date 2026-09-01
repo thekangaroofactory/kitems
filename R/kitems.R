@@ -154,8 +154,8 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       #   path <- file.path(path, id)
 
       # -- Build url from module id
-      k_dm_url <- dm_url(id, path)
-      k_items_url <- items_url(id, path)
+      k_dm_url <- name(id, what = "dm", url = T)
+      k_items_url <- name(id, url = T)
 
 
       ## -- Read data model ----------------------------------------------------

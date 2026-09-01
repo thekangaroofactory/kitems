@@ -25,8 +25,8 @@ test_that("[testServer] Delete data model works", {
     # - tests
     expect_null(k_data_model())
     expect_null(k_items())
-    expect_true(file.exists(dm_url(module_id)))
-    expect_true(file.exists(items_url(module_id)))
+    # >> obsolete since YAML: expect_true(file.exists(dm_url(module_id)))
+    expect_true(file.exists(name(id, url = T)))
 
   })
 

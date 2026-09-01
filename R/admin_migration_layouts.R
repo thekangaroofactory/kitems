@@ -58,8 +58,8 @@ admin_migration_required_layout <- function(files){
 
 admin_migration_done_layout <- function(path){
 
-  backups <- file.path(path, list.files(path = path, pattern = "backup_"))
-  config_file <- file.path(path, "_kitems.yml")
+  backups <- list.files(path = path, pattern = "backup_", full.names = T)
+  config_file <- name(what = "config", file = T)
 
   # -- return
   div(
