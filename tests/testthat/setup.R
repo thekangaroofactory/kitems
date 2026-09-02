@@ -23,8 +23,14 @@ ktools::trace_level(0)
 testdata_base_path <- file.path(system.file("tests", "testthat", package = "kitems"), "testdata")
 testdata_path <- file.path(testdata_base_path, module_id)
 
-# -- set environment variable
-Sys.setenv("R_KITEMS_PATH" = testdata_path)
+# -- helper: create folder
+create_folder <- function(){
+
+  # -- create folder
+  dir.create(testdata_path, recursive = TRUE, showWarnings = TRUE)
+  Sys.setenv("R_KITEMS_PATH" = testdata_path)
+
+}
 
 # -- build urls
 test_dm_url <- file.path(testdata_path, module_id, name(module_id, what = "dm"))
@@ -32,6 +38,7 @@ test_items_url <- name(module_id, url = T)
 items_file <- name(module_id, file = T)
 import_url <- file.path(testdata_path, "data_to_import.csv")
 
+create_folder()
 
 # ------------------------------------------------------------------------------
 # Declare objects to build data model
@@ -59,17 +66,21 @@ sort_desc <- c("date" = TRUE)
 # ------------------------------------------------------------------------------
 
 # -- build base data model
-dm <- data_model(colClasses = colClasses,
-                 default = default,
-                 sort.rank = sort_rank, sort.desc = sort_desc)
+# dm <- data_model(colClasses = colClasses,
+#                  default = default,
+#                  sort.rank = sort_rank, sort.desc = sort_desc)
+
+dm <- design(project = "test",
+             item = "foo",
+             attribute = c(item = "foo", name = "test", type = "integer"))
 
 # -- build specific data models
-dm_nodisplay <- data_model(colClasses = colClasses, default = default, display = FALSE)
-dm_no_skip <- data_model(colClasses = colClasses, default = default)
-dm_extra_att <- data_model(colClasses = colClasses_extra_att, default = default)
-dm_no_date <- data_model(colClasses = colClasses_no_date)
-dm_id_only <- data_model(colClasses = colClasses_id_only, skip = TRUE)
-dm_sort <- data_model(colClasses = colClasses, sort.rank = sort_rank, sort.desc = sort_desc)
+# dm_nodisplay <- data_model(colClasses = colClasses, default = default, display = FALSE)
+# dm_no_skip <- data_model(colClasses = colClasses, default = default)
+# dm_extra_att <- data_model(colClasses = colClasses_extra_att, default = default)
+# dm_no_date <- data_model(colClasses = colClasses_no_date)
+# dm_id_only <- data_model(colClasses = colClasses_id_only, skip = TRUE)
+# dm_sort <- data_model(colClasses = colClasses, sort.rank = sort_rank, sort.desc = sort_desc)
 
 
 # ------------------------------------------------------------------------------
@@ -90,7 +101,7 @@ items <- values |>
 
 # -- items with additional attribute
 items_extra_att <- items
-items_extra_att$extra_att <- c("this", "is", "an", "extra")
+#items_extra_att$extra_att <- c("this", "is", "an", "extra")
 
 # -- items without row
 items_no_row <- data.frame("id" = as.numeric(numeric()),
@@ -154,16 +165,6 @@ date_slider_value <- c(as.POSIXct(as.Date("2024-01-15")), as.POSIXct(as.Date("20
 # --------------------------------------------------------------------------
 # Declare helper functions
 # --------------------------------------------------------------------------
-
-# -- helper: create folder
-create_folder <- function(){
-
-  # -- create folder
-  dir.create(testdata_path, recursive = TRUE, showWarnings = TRUE)
-  Sys.setenv("R_KITEMS_PATH" = testdata_path)
-
-}
-
 
 # -- helper: create test data
 create_testdata <- function(){
