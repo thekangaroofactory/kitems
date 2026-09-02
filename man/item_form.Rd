@@ -14,13 +14,16 @@ item_form(attributes, items = NULL, ns)
 \item{ns}{the namespace function, output of \code{shiny::NS()}.}
 }
 \value{
-A list of HTML input objects.
+A list of HTML tags.
 }
 \description{
 Builds the create or update item form.
 }
 \details{
 \code{attributes} is expected to be the output of the \code{dm_default()} function.
+The data.frame should have the following columns:
+"name", "type", "default", "values".
+
 \code{items} are required only when the attribute values defined in the data.model
 should be evaluated with data masking support.
 }

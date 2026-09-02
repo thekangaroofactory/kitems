@@ -7,9 +7,9 @@
 attribute_values(values, data.model, update = FALSE)
 }
 \arguments{
-\item{values}{a list of input values.}
+\item{values}{a list of named values.}
 
-\item{data.model}{the data.frame of the data model.}
+\item{data.model}{the data.frame of the data model (see details).}
 
 \item{update}{whether the id attribute should be checked or not (default FALSE).}
 }
@@ -17,7 +17,14 @@ attribute_values(values, data.model, update = FALSE)
 A data.frame of item(s) checked against the data model.
 }
 \description{
-Validate the input values and turn them into item(s)
+Validate values and turn them into item(s)
+}
+\details{
+This function does not accept the data.model element of the config list as an input.
+It should be turned into a data.frame first, using \code{\link[=yaml_to_dm]{yaml_to_dm()}}.
+
+\code{data.model} should contain the following columns:
+"name", "type", "default", "class.arg".
 }
 \examples{
 \dontrun{

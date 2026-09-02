@@ -4,27 +4,14 @@
 \alias{config_attribute_update}
 \title{Update Attribute}
 \usage{
-config_attribute_update(
-  config,
-  item,
-  attribute,
-  hide = FALSE,
-  skip = FALSE,
-  refresh = FALSE
-)
+config_attribute_update(config, item, attribute)
 }
 \arguments{
 \item{config}{the yaml config}
 
-\item{item}{the name of the target item}
+\item{item}{the name (id) of the item group}
 
 \item{attribute}{the attribute config}
-
-\item{hide}{a logical (default = FALSE) if the attribute should be hidden}
-
-\item{skip}{a logical (default = FALSE) if the attribute should be skipped}
-
-\item{refresh}{a logical (default = FALSE) if the attribute should be refreshed}
 }
 \value{
 the new config

@@ -9,10 +9,10 @@ config_item_connector(config, item)
 \arguments{
 \item{config}{the YAML config}
 
-\item{item}{the name of the item}
+\item{item}{the name (id) of the item group}
 }
 \value{
-a list
+a list or NULL if the item is not found.
 }
 \description{
 Item Connector

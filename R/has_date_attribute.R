@@ -18,7 +18,7 @@
 #' @export
 #'
 #' @examples
-#' has_date(design(project = "test))
+#' has_date_attribute(design(project = "test"))
 
 has_date_attribute <- function(config, item = get_context()){
 

@@ -10,10 +10,17 @@ dm_default(data.model)
 \item{data.model}{the data.frame of the data model.}
 }
 \value{
-A data.frame with default values.
+A data.frame
 }
 \description{
 Compute default value(s).
+}
+\details{
+This function does not accept the data.model element of the config list as an input.
+It should be turned into a data.frame first, using \code{\link[=yaml_to_dm]{yaml_to_dm()}}.
+
+\code{data.model} should contain the following columns:
+"name", "type", "default" & "values".
 }
 \examples{
 dm <- data_model(colClasses = c(foo = "numeric"), default = 12)

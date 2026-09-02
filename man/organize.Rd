@@ -2,38 +2,46 @@
 % Please edit documentation in R/organize.R
 \name{organize}
 \alias{organize}
-\title{Sort Attributes}
+\alias{organized}
+\title{Sort Items Grammar}
 \usage{
-organize(data.model, ...)
+organize(config, item = get_context(), sort)
+
+organized(config, item = get_context())
 }
 \arguments{
-\item{data.model}{a data.frame of the data model}
+\item{config}{the config list}
 
-\item{...}{the name(s) of the attributes to use for sorting (quoted or unquoted).
-Use desc() for descending order (see examples).}
+\item{item}{optional (see details), the name (id) of the item group}
+
+\item{sort}{a character string to set the order (see details)}
 }
 \value{
-a data.frame of the updated data model or of the sorting parameters
+\code{organize} returns a config list and
+\code{organized} returns a character string
 }
 \description{
-Get or set sorting order of the data.model
+Set or get sorting order.
 }
 \details{
-When \code{...} is left empty, the function will act as a getter and return
-a data.frame of the attributes used to sort the items.
+The \code{organize} function accepts a character string for \code{sort} because it is
+primarily intended to deal with the Admin Console (which returns
+a character string from the user input).
+
+Setting \code{sort = NULL} will reset the item sorting!
 
 Ranking depends on the position of the attribute.
+Wrap attribute name by "desc()" to set descending order.
+
+When \code{item} is set in the parent frame, then the attribute can be skipped
+in the function call.
 }
 \examples{
-
-dm <- data_model(c(foo = "character", bar = "logical", zoo = "numeric"))
-
-# Sort by attribute foo (ascending order)
-organize(dm, foo)
-
-# Sort by attribute foo (descending order)
-organize(dm, desc(foo))
-
-# Sort by attribute foo, then bar (descending order)
-organize(dm, foo, desc(bar))
+\dontrun{
+organize(config, item = "foo", sort = "date, desc(total)")
+organize(config, item = "foo", sort = NULL)
+}
+}
+\seealso{
+\code{\link[=parent.frame]{parent.frame()}}
 }

@@ -9,7 +9,7 @@ admin_attribute_card(attribute, item, hide = NULL, skip = NULL, refresh = NULL)
 \arguments{
 \item{attribute}{the yaml of the attribute}
 
-\item{item}{the name of the item}
+\item{item}{the name (id) of the item group}
 
 \item{hide}{the list of attributes to hide}
 

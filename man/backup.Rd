@@ -5,36 +5,46 @@
 \title{Backup Files}
 \usage{
 backup(
-  id,
-  path = Sys.getenv("R_KITEMS_PATH"),
-  type = c("items", "dm"),
-  max = NULL
+  type = c("config", "items", "dm"),
+  id = NULL,
+  max = 1,
+  path = Sys.getenv("R_KITEMS_PATH")
 )
 }
 \arguments{
-\item{id}{the id used to create the data model.}
+\item{type}{the type of file to backup (see details).}
 
-\item{path}{the path to the data model and items.}
+\item{id}{the id of the item or data model.}
 
-\item{type}{the type of file to backup: "items" (default) or "dm".}
+\item{max}{an integer (default = 1) to indicate how many backup files are allowed.}
 
-\item{max}{an integer to indicate how many backup files are allowed.}
+\item{path}{optional, the path to the data.}
 }
 \description{
-Backup data model & items files
+Backup config, data model or items files
 }
 \details{
+Type of files:
+\itemize{
+\item "config" (the default)
+\item "items"
+\item "dm"
+}
+
+"dm" is kept to enable data.model backup before migration to the YAML config.
+
+\code{id} will be ignored if \code{type = "config"}
+
 The recommended way to define the \code{path} argument is to set the R_KITEMS_PATH
 environment variable.
 
-Backup file will be named as \emph{id_data_model_YYYY-MM-DD.rds} or \emph{id_items_YYYY-MM-DD.csv}
+Backup file will be named as \emph{_kitems_YYYY-MM-DD.yml},
+\emph{id_data_model_YYYY-MM-DD.rds} or \emph{id_items_YYYY-MM-DD.csv}
 If same file already exists, it will be overwritten.
-
-If the number of backup files exceeds \code{max} then the oldest will be deleted.
-Whenever \code{max = NULL} (default), it will be replaced by 1.
 }
 \examples{
 \dontrun{
-backup(id = "mydata", max = 2)
+# backup config
+backup()
 }
 }

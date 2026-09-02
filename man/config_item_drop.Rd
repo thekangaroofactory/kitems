@@ -9,7 +9,7 @@ config_item_drop(config, item)
 \arguments{
 \item{config}{the yaml config}
 
-\item{item}{the name of the item to drop}
+\item{item}{the name (id) of the item group}
 }
 \value{
 the new config

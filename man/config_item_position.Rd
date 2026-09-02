@@ -9,7 +9,7 @@ config_item_position(config, item)
 \arguments{
 \item{config}{a yaml config}
 
-\item{item}{the name of the item to locate}
+\item{item}{the name (id) of the item group}
 }
 \value{
 an integer

@@ -9,7 +9,7 @@ config_item_move(config, item, where)
 \arguments{
 \item{config}{the yaml config}
 
-\item{item}{the name of the item to move}
+\item{item}{the name (id) of the item group}
 
 \item{where}{a list(position = c("before", "after"), item = "foo")}
 }

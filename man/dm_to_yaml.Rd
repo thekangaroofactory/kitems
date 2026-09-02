@@ -10,17 +10,17 @@ dm_to_yaml(dm)
 \item{dm}{a data.frame of the data model}
 }
 \value{
-a list
+a config list
 }
 \description{
 Convert data model to YAML configuration file.
 }
 \details{
 The input data model should have its version = "0.8.0" otherwise an error
-will be raised. Use \code{dm_migrate()} first it needed.
+will be raised. Use \code{dm_migrate()} first if needed.
 }
 \examples{
 \dontrun{
-dm_to_yaml(dm, name = "my_item")
+dm_to_yaml(dm)
 }
 }

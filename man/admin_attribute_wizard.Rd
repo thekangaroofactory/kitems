@@ -15,7 +15,7 @@ admin_attribute_wizard(
 \arguments{
 \item{config}{the YAML config}
 
-\item{item}{the name of the target item}
+\item{item}{the name (id) of the item group}
 
 \item{attribute}{an optional name to indicate it's an update}
 

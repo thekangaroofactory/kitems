@@ -9,7 +9,7 @@ items(datamart, item)
 \arguments{
 \item{datamart}{a reactiveValues object holding the items}
 
-\item{item}{the name (id) of the item to return}
+\item{item}{the name (id) of the item group}
 }
 \value{
 a data.frame of the items or NULL

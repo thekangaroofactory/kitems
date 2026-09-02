@@ -4,12 +4,12 @@
 \alias{display}
 \title{Display Attribute(s)}
 \usage{
-display(data.model, ...)
+display(config, item = get_context(), ...)
 }
 \arguments{
-\item{data.model}{a data.frame of the data model}
-
 \item{...}{the name(s) of the attributes to set as displayed (quoted or unquoted)}
+
+\item{data.model}{a data.frame of the data model}
 }
 \value{
 a data.frame of the updated data model or a character vector

@@ -9,7 +9,7 @@ as_default(item, data.model)
 \arguments{
 \item{item}{the data.frame of the item to use as a reference.}
 
-\item{data.model}{the data.frame of the data.model.}
+\item{data.model}{the data.frame of the data.model (see details).}
 }
 \value{
 a data.frame to pass to item_form() function.
@@ -18,6 +18,12 @@ a data.frame to pass to item_form() function.
 Turn Item Into Default Value(s)
 }
 \details{
+This function does not accept the data.model element of the config list as an input.
+It should be turned into a data.frame first, using \code{\link[=yaml_to_dm]{yaml_to_dm()}}.
+
+\code{data.model} should contain the following columns:
+"name", "type", "default", "values".
+
 \code{item} and \code{data.model} must have same structure. That means the names
 of the attributes in the data model are expected to match with the names
 of the columns in item.

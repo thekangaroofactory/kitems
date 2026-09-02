@@ -9,7 +9,7 @@ config_attribute_drop(config, item, attribute)
 \arguments{
 \item{config}{the yaml config}
 
-\item{item}{the target item}
+\item{item}{the name (id) of the item group}
 
 \item{attribute}{the name of the attribute to drop}
 }

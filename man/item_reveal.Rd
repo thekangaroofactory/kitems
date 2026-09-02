@@ -4,24 +4,34 @@
 \alias{item_reveal}
 \title{Reveal Items}
 \usage{
-item_reveal(items, data.model)
+item_reveal(items, config, item = get_context())
 }
 \arguments{
-\item{items}{a data.frame of the items.}
+\item{items}{the data.frame of the items.}
 
-\item{data.model}{a data.frame of the data model.}
+\item{config}{the config list.}
+
+\item{item}{optional (see details), the name (id) of the item group.}
 }
 \value{
-A data.frame of the items with applied mask.
+A data.frame.
 }
 \description{
 Apply data model display mask on the items.
 }
 \details{
-The data model display mask is defined by attributes with display = \code{TRUE}.
+The data model display mask is defined at the data.model level.
+use \code{\link[=hide]{hide()}} or \code{\link[=display]{display()}} to tune it.
+
+When \code{item} is set in the parent frame, then the attribute can be skipped
+in the function call.
 }
 \examples{
 \dontrun{
-item_reveal(items = "myitems", data.model = "mydatamodel")
+item <- "foo"
+items |> item_reveal(config)
 }
+}
+\seealso{
+[hide()][display()][parent.frame()]
 }

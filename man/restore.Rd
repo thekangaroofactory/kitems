@@ -4,25 +4,38 @@
 \alias{restore}
 \title{Restore Files}
 \usage{
-restore(id, path = Sys.getenv("R_KITEMS_PATH"), type = c("items", "dm"))
+restore(
+  type = c("config", "items", "dm"),
+  id = NULL,
+  path = Sys.getenv("R_KITEMS_PATH")
+)
 }
 \arguments{
-\item{id}{the id used to create the data model.}
+\item{type}{the type of file to restore (see details).}
 
-\item{path}{the path to the data model and items.}
+\item{id}{the id for data.model & items.}
 
-\item{type}{the type of file to backup. \code{items} (default) or \code{dm}.}
+\item{path}{optional, the path to the data.}
+}
+\value{
+a logical (see \code{\link[=file.copy]{file.copy()}})
 }
 \description{
-Restores the data model & items files.
+Restore config, data model or items files.
 }
 \details{
 The recommended way to define the \code{path} argument is to set the R_KITEMS_PATH
 environment variable.
+
+In case several backup files exist, the newest one will be restored.
+
+Values for \code{type} are "config" (the default), "items" or "dm".
+When "config" is used, \code{id} is ignored.
+"dm" is kept for compatibility purpose.
 }
 \examples{
 \dontrun{
-restore(id = "mydata", type = "items")
-restore(id = "mydata", type = "dm")
+restore()
+restore(type = "items", id = "foo")
 }
 }

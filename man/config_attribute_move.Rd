@@ -9,7 +9,7 @@ config_attribute_move(config, item, attribute, where)
 \arguments{
 \item{config}{the yaml config}
 
-\item{item}{the name of the target item}
+\item{item}{the name (id) of the item group}
 
 \item{attribute}{the name of the attribute to move}
 

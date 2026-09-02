@@ -9,7 +9,7 @@ config_extract(config, item = NULL, attribute = NULL)
 \arguments{
 \item{config}{the yaml configuration}
 
-\item{item}{optional, the name (id) of the item}
+\item{item}{optional, the name (id) of the item group}
 
 \item{attribute}{optional, the name of the attribute}
 }

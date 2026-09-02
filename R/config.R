@@ -58,12 +58,11 @@ config_items <- function(config){
 #'
 #' @examples
 #' # build config
-#' config <- design(project = "test",
-#' item = "foo")
+#' config <- design(project = "test", item = "foo")
 #'
 #' # check
 #' config |> is_item("foo")
-#' config |> is_item("bar)
+#' config |> is_item("bar")
 
 is_item <- function(config, item){
 
@@ -620,7 +619,7 @@ config_attribute_update <- function(config, item, attribute){
 #' @param ... the name of the attribute(s) to skip
 #' @param set a logical (default = TRUE) if the behavior should be set or unset
 #'
-#' @returns
+#' @returns a character vector
 #' @export
 #'
 #' @examples

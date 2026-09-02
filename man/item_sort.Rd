@@ -4,22 +4,32 @@
 \alias{item_sort}
 \title{Sort Items}
 \usage{
-item_sort(items, data.model)
+item_sort(items, config, item = get_context())
 }
 \arguments{
 \item{items}{a data.frame of the items.}
 
-\item{data.model}{a data.frame of the data model.}
+\item{config}{the config list.}
+
+\item{item}{optional (see details), the name (id) of the item group.}
 }
 \value{
-A data.frame of the items, sorted based on the data model.
+a data.frame.
 }
 \description{
 Sort Items
 }
+\details{
+The sorting order is given by the sort entry in the config list.
+
+When \code{item} is set in the parent frame, then the attribute can be skipped
+in the function call.
+}
 \examples{
 \dontrun{
-item_sort(items, data.model)
+items |> item_sort(config, item = "foo")
 }
-
+}
+\seealso{
+\link[=parent.frame]{organize()}
 }

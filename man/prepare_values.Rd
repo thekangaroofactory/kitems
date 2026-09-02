@@ -4,17 +4,19 @@
 \alias{prepare_values}
 \title{Prepare Values}
 \usage{
-prepare_values(values, data.model, update = FALSE)
+prepare_values(values, config, update = FALSE, item = get_context())
 }
 \arguments{
 \item{values}{a list of values.}
 
-\item{data.model}{the data.frame of the data model.}
+\item{config}{the config list.}
 
 \item{update}{a logical if values are used in the update workflow (default FALSE).}
+
+\item{item}{optional (see details), the name (id) of the item group.}
 }
 \value{
-a data.frame of values
+a data.frame
 }
 \description{
 Turn trigger input values into tabular data
@@ -28,9 +30,15 @@ When an element has length one but the id has several values, all items correspo
 to these ids will be updated with same value. To do so, values will be turned into
 a data.frame using as.data.frame ; for this reason, it's strongly advised to wrap
 the call into tryCatch as this may fail.
+
+When \code{item} is set in the parent frame, then the attribute can be skipped
+in the function call.
 }
 \examples{
 \dontrun{
-prepare_values(values, data.model)
+prepare_values(values, config, item = "foo")
 }
+}
+\seealso{
+\code{\link[=parent.frame]{parent.frame()}}
 }

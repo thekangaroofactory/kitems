@@ -7,12 +7,12 @@
 config_attributes(config, item)
 }
 \arguments{
-\item{config}{a yaml config section for an item}
+\item{config}{a yaml config section for an item.}
 
-\item{item}{the name of the item}
+\item{item}{the name (id) of the item group}
 }
 \value{
-a vector
+a vector or list() if not found.
 }
 \description{
 Get the attribute names in an item YAML config section.

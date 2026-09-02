@@ -29,7 +29,7 @@ All elements except \code{id} & \code{url} are references to reactive values.
 \itemize{
 \item id = the \code{id} of the module (same as the input argument)
 \item items = the reference of the items reactive
-\item data_model = the reference of the data model reactive
+\item data_model = the data model of the item group
 \item filtered_items = the reference of the filtered items reactive
 \item selected_items = the reference of the selected items (ids)
 \item clicked_column = the reference of the clicked column reactive
@@ -51,8 +51,6 @@ Behavior of the module server can be tuned using a list of options:
 }
 
 If autosave option is \code{FALSE}, the \code{item_save()} function should be used to make the data persistent.
-To make the data model persistent, use \link[base]{saveRDS} function. The file name should be
-consistent with the output of \link[kitems]{dm_name} function used with \code{id} plus .rds extension.
 
 When admin is \code{FALSE}, \link[kitems]{admin_widget} will return an 'empty' layout (tabs with no content)
 It is expected that this function will not be used when admin = \code{FALSE}.

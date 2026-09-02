@@ -9,10 +9,10 @@ config_item_colclasses(config, item)
 \arguments{
 \item{config}{the yaml config}
 
-\item{item}{the name of the item}
+\item{item}{the name (id) of the item group}
 }
 \value{
-a named vector
+a named vector or list() if the item is not found.
 }
 \description{
 Item colClasses

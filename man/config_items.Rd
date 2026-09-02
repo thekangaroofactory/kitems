@@ -10,7 +10,7 @@ config_items(config)
 \item{config}{a yaml config}
 }
 \value{
-a vector
+a vector or list() if no item is found.
 }
 \description{
 Get the item names (id) in a YAML config.
