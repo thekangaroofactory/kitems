@@ -21,7 +21,7 @@
 #' All elements except `id` & `url` are references to reactive values.
 #' - id = the `id` of the module (same as the input argument)
 #' - items = the reference of the items reactive
-#' - data_model = the reference of the data model reactive
+#' - data_model = the data model of the item group
 #' - filtered_items = the reference of the filtered items reactive
 #' - selected_items = the reference of the selected items (ids)
 #' - clicked_column = the reference of the clicked column reactive
@@ -80,22 +80,10 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
 
     # //////////////////////////////////////////////////////////////////////////
-    # -- Check path & yaml config file ----
+    # -- Check path ----
 
     # -- check path
     check_path(path)
-
-    # -- when _kitems.yml is found, it will overwrite input parameters
-    config <- config_read(path)
-    if(!is.null(config)){
-
-      message("XXX check this code section")
-      # >>> following lines commented because they will end up in path & options = NULL
-      # if the entries are not in the config. Make is conditional if something then overwrite (or shoudl it be the opposite).
-      # path <- config$source$path
-      # options <- config$options
-
-    } else stop("No _kitems.yml configuration file found.\nCheck provided path.")
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -123,219 +111,118 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
     # -- Internal workflow triggers
     #if(!is.null(trigger)){
-      trigger_create_dialog <- reactiveVal(NULL)
-      trigger_create_values <- reactiveVal(NULL)
-      trigger_update_dialog <- reactiveVal(NULL)
-      trigger_update_values <- reactiveVal(NULL)
-      trigger_delete_dialog <- reactiveVal(NULL)
-      trigger_delete_values <- reactiveVal(NULL)
-      #}
+    trigger_create_dialog <- reactiveVal(NULL)
+    trigger_create_values <- reactiveVal(NULL)
+    trigger_update_dialog <- reactiveVal(NULL)
+    trigger_update_values <- reactiveVal(NULL)
+    trigger_delete_dialog <- reactiveVal(NULL)
+    trigger_delete_values <- reactiveVal(NULL)
+    #}
 
     # -- Internal filter triggers
     #if(!is.null(filter)){
-      trigger_filter_pre <- reactiveVal(NULL)
-      trigger_filter_main <- reactiveVal(NULL)
-      #}
+    trigger_filter_pre <- reactiveVal(NULL)
+    trigger_filter_main <- reactiveVal(NULL)
+    #}
 
 
     # //////////////////////////////////////////////////////////////////////////
     # -- Initialize data model and items ----
 
-    # -- Notify progress
+    ## -- Init item name / id
+    # to allow attribute skip in grammar level function calls
+    item <- id
+
     withProgress(message = MODULE, value = 0, {
 
-      ## -- Check path ---------------------------------------------------------
+      # -- init progress
       incProgress(0/4, detail = "Init")
 
-      # -- Check folder structure
-      # item files are stored in a dedicated folder #356
-      # >> should be ok by now, just drop that
-      # if(basename(path) != id)
-      #   path <- file.path(path, id)
+      ## -- Load & check config ------------------------------------------------
 
-      # -- Build url from module id
-      k_dm_url <- name(id, what = "dm", url = T)
+      # -- read file
+      config <- config_read(path)
+      if(is.null(config))
+        stop("No _kitems.yml configuration file found.\nCheck provided path.")
+
+      # -- check version
+      # config version must be same as package
+      if(config$version != utils::packageVersion("kitems")){
+
+        # -- display message
+        showModal(
+          modalDialog(
+            title = "Kitems Version",
+            p("Kitems config requires an update since package version is different."),
+            p("Run kitems::admin() to fix it."),
+            footer = actionButton(inputId = ns("dm_version_warning"), label = "Close app")))
+
+        # -- listen to modal close button
+        observeEvent(input$dm_version_warning, stopApp(), once = TRUE)}
+
+      # -- Increment progress
+      incProgress(1/4, detail = "Read items")
+
+
+      ## -- Read the data (items) ----------------------------------------------
+
+      # -- url from module id
       k_items_url <- name(id, url = T)
-
-
-      ## -- Read data model ----------------------------------------------------
-
-      # -- Init (non persistent object)
-      init_dm <- NULL
-
-      catl(MODULE, "Checking if data model file exists")
-      catl("- path =", dirname(k_dm_url), level = 2)
-      catl("- file =", basename(k_dm_url), level = 2)
-
-      # -- Check url
-      if(file.exists(k_dm_url)){
-
-        catl(MODULE, "Reading data model from file")
-        init_dm <- readRDS(k_dm_url)
-        catl("- output dim =", dim(init_dm))
-
-        # -- Data model version
-        # note: only when admin == FALSE, otherwise admin console
-        # would stop when migration is needed!
-        if(!options$admin){
-
-          # -- check
-          rv <- dm_version(init_dm)
-
-          # -- when migration is needed
-          if(rv['migration']){
-
-            # -- display message
-            showModal(
-              modalDialog(
-                title = "Data Model",
-                p("Data model requires a migration"),
-                p("Reason:", rv['comment']),
-                p("Run admin() to fix it."),
-                footer = actionButton(inputId = ns("dm_version_warning"), label = "Close app")))
-
-            # -- listen to modal close button
-            observeEvent(input$dm_version_warning, stopApp(), once = TRUE)}}
-
-      } else {
-
-        catl(">> No data model file found.")
-
-      }
-
-      # -- Increment the progress bar, and update the detail text.
-      incProgress(1/4, detail = "Read data model")
-
-
-      # -- Read the data (items) ----------------------------------------------
 
       # -- Init (non persistent object)
       init_items <- NULL
 
-      # -- Check for NULL data model (then no reason to try loading)
-      if(!is.null(init_dm))
+      # path = NULL as temporary workaround (it's contained in k_items_url)
+      init_items <- item_load(connector = list(file = k_items_url,
+                                               path = NULL),
+                              col.classes = config_item_colclasses(config, item))
 
-        # path = NULL as temporary workaround (it's contained in k_items_url)
-        init_items <- item_load(connector = list(file = k_items_url,
-                                                 path = NULL),
-                                col.classes = dm_colClasses(init_dm))
-
-      # -- Increment the progress bar, and update the detail text.
-      incProgress(2/4, detail = "Read items")
-
-
-      # -- Check data model integrity -----------------------------------------
-
-      # -- Check for NULL data model + data.frame
-      if(!is.null(init_dm) & !is.null(init_items)){
-
-        catl(MODULE, "Checking data model integrity")
-
-        # -- dm_integrity may raise an error (fix = FALSE)
-        tryCatch(
-
-          init_dm |>
-            dm_integrity(items = init_items, fix = options$admin),
-
-          error = function(e) {
-
-            # -- when interactive
-            if(isRunning()){
-              showModal(
-                modalDialog(
-                  title = "Data Model Integrity",
-                  p("Data model requires recovery actions"),
-                  p("Reason:", e$message),
-                  p("Run admin() to fix it."),
-                  footer = actionButton(inputId = ns("close_app"), label = "Close app")))
-              observeEvent(input$close_app, stopApp(), once = TRUE)}
-
-            else
-              stop(e$message)})
-
-      }
+      # -- Increment progress
+      incProgress(2/4, detail = "Check items")
 
 
       # -- Check items integrity -----------------------------------------------
 
-      # -- Check classes vs data.model
-      if(!is.null(init_dm) & !is.null(init_items)){
+      if(!is.null(init_items)){
+        catl(MODULE, "Checking items integrity")
 
-        catl(MODULE, "Checking items classes integrity")
-
-        # -- item_integrity may raise an error (fix = FALSE)
-        tryCatch(
-
-          init_items |>
-            item_integrity(data.model = init_dm),
-
-          error = function(e) {
-
+        rc <- init_items |> check(config, item)
+        if(length(rc))
             # -- when interactive
             if(isRunning()){
               showModal(
                 modalDialog(
                   title = "Items Integrity",
-                  p("Items require recovery actions"),
-                  p("Reason:", e$message),
+                  p("Items require", length(rc), "recovery action(s)."),
                   p("Run admin() to fix it."),
                   footer = actionButton(inputId = ns("close_app"), label = "Close app")))
-              observeEvent(input$close_app, stopApp(), once = TRUE)}
+              observeEvent(input$close_app, stopApp(), once = TRUE)}}
 
-            else
-              stop(e$message)})
-
-      }
-
-      # Increment the progress bar, and update the detail text.
-      incProgress(3/4, detail = "Integrity checked")
+      # Increment progress
+      incProgress(3/4, detail = "Wrap everything")
 
 
       # -- Store into reactive values ------------------------------------------
 
-      # -- Store data model
-      k_data_model <- reactiveVal(init_dm)
-      rm(init_dm)
+      # -- data model
+      # item config up to the data.model level
+      k_data_model <- config_extract(config, item = item)$data.model
 
-      # -- Store items
+      # -- items
       k_items <- reactiveVal(init_items)
       rm(init_items)
 
-      # Increment the progress bar, and update the detail text.
-      incProgress(4/4, detail = "Load data done")
+      # Increment progress
+      incProgress(4/4, detail = "Load items done")
 
     }) #end withProgress
 
 
     # //////////////////////////////////////////////////////////////////////////
     # -- Auto save ----
+    # only for the items (config is managed in Admin Console)
 
-    ## -- Data model ----
-
-    # -- Check parameter & observe data model
-    if(options$autosave)
-      observeEvent(k_data_model(), {
-
-        # -- secure #596
-        req(is.data.frame(k_data_model()) || is.null(k_data_model()))
-
-        # -- case when data.model has been deleted
-        if(is.null(k_data_model()))
-          if(file.exists(k_dm_url)){
-            success <- unlink(k_dm_url)
-            if(success == 1) warning("Data model file could not be deleted. Delete it manually.")
-          }
-        else
-          saveRDS(k_data_model(), file = k_dm_url)
-
-        catl(MODULE, "[EVENT] Data model has been (auto) saved")
-
-      }, ignoreNULL = FALSE, ignoreInit = TRUE)
-
-
-    ## -- Items ----
-
-    # -- Check parameter & observe items
+    # -- declare listener (conditional)
     if(options$autosave)
       observeEvent(k_items(), {
 
@@ -346,8 +233,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         if(is.null(k_items()))
           if(file.exists(k_items_url)){
             success <- unlink(k_items_url)
-            if(success == 1) warning("Item file could not be deleted. Delete it manually.")
-          }
+            if(success == 1) warning("Item file could not be deleted. Delete it manually.")}
         else
           item_save(data = k_items(), connector = list(file = k_items_url))
 
@@ -444,7 +330,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     output$item_create_btn <- renderUI(
 
       # -- Check data model #290
-      if(!is.null(k_data_model()))
+      if(!is.null(k_data_model))
         actionButton(inputId = ns("item_create"),
                      label = "Create"))
 
@@ -455,8 +341,9 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       catl(MODULE, "[Event] Show create item dialog")
 
       # -- show create dialog
-      k_data_model() |>
-        dplyr::filter(!.data$skip) |>
+      config |>
+        yaml_to_dm(name, type, default, values) |>
+        dplyr::filter(name %in% included(config, item)) |>
         dm_default() |>
         item_form(ns = ns) |>
         item_dialog(workflow = "create", ns = ns)
@@ -473,10 +360,10 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       # -- Secure workflow
       tryCatch({
 
-        # -- store new item table
+        # -- insert & store
         k_items(input |>
-                  item_input_values(colClasses = dm_colClasses(k_data_model())) |>
-                  attribute_values(data.model = k_data_model()) |>
+                  item_input_values(colClasses = config_item_colclasses(config, item)) |>
+                  attribute_values(data.model = yaml_to_dm(config, name, type, default, class.arg)) |>
                   rows_insert(items = k_items()))
 
         # -- notify
@@ -509,9 +396,9 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
           # -- store new item table
           k_items(trigger_create_values() |>
-                     prepare_values(data.model = k_data_model()) |>
-                     attribute_values(data.model = k_data_model()) |>
-                     rows_insert(items = k_items()))
+                    prepare_values(config = config) |>
+                    attribute_values(data.model = yaml_to_dm(config, name, type, default, class.arg)) |>
+                    rows_insert(items = k_items()))
 
           # -- notify
           catl(MODULE, "Item(s) created")},
@@ -552,11 +439,11 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       catl(MODULE, "[Event] Update item button")
 
       # -- Get selected item
-      item <- k_items()[k_items()$id == selected_items(), ]
+      s_item <- k_items()[k_items()$id == selected_items(), ]
 
       # -- show update dialog
-      item |>
-        as_default(data.model = k_data_model()) |>
+      s_item |>
+        as_default(data.model = yaml_to_dm(config, name, type, default, values)) |>
         item_form(ns = ns) |>
         item_dialog(workflow = "update", ns = ns)
 
@@ -573,11 +460,11 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         req(length(trigger_update_dialog()) == 1)
 
         # -- Get selected item
-        item <- k_items()[k_items()$id == trigger_update_dialog(), ]
+        s_item <- k_items()[k_items()$id == trigger_update_dialog(), ]
 
         # -- show update dialog
-        item |>
-          as_default(data.model = k_data_model()) |>
+        s_item |>
+          as_default(data.model = yaml_to_dm(config, name, type, default, values)) |>
           item_form(ns = ns) |>
           item_dialog(workflow = "update", ns = ns)
 
@@ -594,7 +481,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       # -- get named list of input values
       catl("- Get list of input values")
-      values <- item_input_values(input, dm_colClasses(k_data_model()))
+      values <- item_input_values(input, config_item_colclasses(config, item))
 
       # -- force id to update
       # as it's missing in the dialog input, it should be NULL in values
@@ -609,7 +496,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         # -- store updated item list
         k_items(
           values |>
-            attribute_values(data.model = k_data_model(), update = TRUE) |>
+            attribute_values(data.model = yaml_to_dm(config, name, type, default, class.arg), update = TRUE) |>
             rows_update(items = k_items()))
 
         # -- notify
@@ -645,8 +532,8 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
           # -- store updated item list
           k_items(
             trigger_update_values() |>
-              prepare_values(data.model = k_data_model(), update = TRUE) |>
-              attribute_values(data.model = k_data_model(), update = TRUE) |>
+              prepare_values(config = config, update = TRUE) |>
+              attribute_values(data.model = yaml_to_dm(config, name, type, default, class.arg), update = TRUE) |>
               rows_update(items = k_items()))
 
           # -- notify
@@ -791,7 +678,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       observe({
 
         # -- check data model
-        req(hasDate(k_data_model()))
+        req(has_date_attribute(config))
 
         catl(MODULE, "Update date sliderInput")
         catl("- strategy =", input$date_slider_strategy, level = 2)
@@ -865,7 +752,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       # -- check date slider
       # note: force everything to be a Date #615
-      date_expr <- if(hasDate(k_data_model()) && !is.null(input$date_slider)){
+      date_expr <- if(has_date_attribute(config) && !is.null(input$date_slider)){
         catl("- Date slider =", input$date_slider, level = 2)
         dplyr::expr(as.Date(date) >= as.Date(input$date_slider[1]) & as.Date(date) <= as.Date(input$date_slider[2]))}
 
@@ -891,21 +778,20 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         catl("- ouput dim =", dim(items), level = 2)}
 
       # -- Apply ordering
-      dm <- k_data_model()
-      if(any(!is.na(dm$sort.rank)))
-        items <- item_sort(items, dm)
+      if(!is.null(organized(config)))
+        items <- item_sort(items, config)
 
       # -- Return
       items
 
-    }) |> bindEvent(prefiltered_items(), trigger_filter_main(), input$date_slider, k_data_model())
+    }) |> bindEvent(prefiltered_items(), trigger_filter_main(), input$date_slider)
 
 
     # //////////////////////////////////////////////////////////////////////////
     # -- Filtered view ----
 
     ## -- Declare view ----
-    output$filtered_view <- DT::renderDT(mask(item_reveal(filtered_items(), k_data_model())),
+    output$filtered_view <- DT::renderDT(mask(item_reveal(filtered_items(), config)),
                                         rownames = FALSE,
                                         selection = list(mode = 'multiple', target = "row", selected = NULL))
 
@@ -923,7 +809,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       # -- Get table col names
       # need to apply masks to get correct columns, hence sending only first row
-      cols <- colnames(mask(item_reveal(utils::head(filtered_items(), n = 1), k_data_model())))
+      cols <- colnames(mask(item_reveal(utils::head(filtered_items(), n = 1), config)))
 
       # -- Get name of the clicked column
       col_clicked <- cols[input$filtered_view_cell_clicked$col + 1]
@@ -939,8 +825,8 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     # -- Admin ----
 
     # -- Call module
-    if(options$admin)
-      kitems_admin(k_data_model, k_items, path, k_dm_url, k_items_url, options$autosave)
+    # if(options$admin)
+    #   kitems_admin(k_data_model, k_items, path, k_dm_url, k_items_url, options$autosave)
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -949,7 +835,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     # -- the reference (not the value!)
     list(id = id,
          items = reactive(k_items()),
-         data_model = reactive(k_data_model()),
+         data_model = k_data_model,
          filtered_items = filtered_items,
          selected_items = selected_items,
          clicked_column = clicked_column,
