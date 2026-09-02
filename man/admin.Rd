@@ -11,6 +11,10 @@ Launches the administration console (Shiny App)
 }
 \examples{
 \dontrun{
+# set environment (where to find the _kitems.yml)
+Sys.setenv("R_KITEMS_PATH" = "D:/data")
+
+# launch the Admin Console
 admin()
 }
 }
