@@ -70,7 +70,7 @@ attribute_values <- function(values, data.model, update = FALSE){
 
     if(!att_dm$type %in% class(value)){
       catl("> Class:", class(value), "does not fit with:", att_dm$type, level = 2)
-      value <- convert(value, att_dm$type, att_dm$class.arg)}
+      value <- convert(value, att_dm$type, if("class.arg" %in% names(att_dm)) att_dm$class.arg)}
 
     # -- output summary (debug)
     catl(">> Output: class =", class(value), "/ value =", as.character(value))
