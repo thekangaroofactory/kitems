@@ -9,7 +9,7 @@ kitems(
   path = Sys.getenv("R_KITEMS_PATH"),
   trigger = NULL,
   filter = NULL,
-  options = list(autosave = TRUE, admin = FALSE, notify = TRUE)
+  options = list(autosave = TRUE, notify = TRUE)
 )
 }
 \arguments{
@@ -46,14 +46,10 @@ environment variable.
 Behavior of the module server can be tuned using a list of options:
 \itemize{
 \item \code{autosave} option is a logical whether the item auto save should be activated or not (default = \code{TRUE}).
-\item \code{admin} a logical indicating if the admin module server should be launched (default = \code{FALSE}).
 \item \code{notify} option is a logical if Shiny notifications should be displayed (default = \code{TRUE})
 }
 
 If autosave option is \code{FALSE}, the \code{item_save()} function should be used to make the data persistent.
-
-When admin is \code{FALSE}, \link[kitems]{admin_widget} will return an 'empty' layout (tabs with no content)
-It is expected that this function will not be used when admin = \code{FALSE}.
 
 Triggers are the way to send events for the module to execute dedicated actions.
 \code{trigger} must be a reactive (or \code{NULL}, the default). An event is defined as a named list of the form

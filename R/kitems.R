@@ -33,13 +33,9 @@
 #'
 #' Behavior of the module server can be tuned using a list of options:
 #' - `autosave` option is a logical whether the item auto save should be activated or not (default = `TRUE`).
-#' - `admin` a logical indicating if the admin module server should be launched (default = `FALSE`).
 #' - `notify` option is a logical if Shiny notifications should be displayed (default = `TRUE`)
 #'
 #' If autosave option is `FALSE`, the `item_save()` function should be used to make the data persistent.
-#'
-#' When admin is `FALSE`, \link[kitems]{admin_widget} will return an 'empty' layout (tabs with no content)
-#' It is expected that this function will not be used when admin = `FALSE`.
 #'
 #' Triggers are the way to send events for the module to execute dedicated actions.
 #' `trigger` must be a reactive (or `NULL`, the default). An event is defined as a named list of the form
@@ -59,7 +55,6 @@
 kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
                    trigger = NULL, filter = NULL,
                    options = list(autosave = TRUE,
-                                  admin = FALSE,
                                   notify = TRUE)) {
 
   moduleServer(id, function(input, output, session) {
@@ -103,7 +98,6 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     # -- check elements in option list
     options <- ktools::match.option(fun = kitems, arg = "options", value = options)
     stopifnot("autosave option must be a logical" = is.logical(options$autosave))
-    stopifnot("admin option must be a logical" = is.logical(options$admin))
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -819,14 +813,6 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       col_clicked
 
     })
-
-
-    # //////////////////////////////////////////////////////////////////////////
-    # -- Admin ----
-
-    # -- Call module
-    # if(options$admin)
-    #   kitems_admin(k_data_model, k_items, path, k_dm_url, k_items_url, options$autosave)
 
 
     # //////////////////////////////////////////////////////////////////////////
