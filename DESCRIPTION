@@ -22,7 +22,6 @@ Imports:
     iker,
     ktools (>= 0.9.9),
     stringr,
-    magrittr,
     yaml,
     shinyjs,
     bslib,

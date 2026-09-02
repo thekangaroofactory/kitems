@@ -62,8 +62,6 @@ export(trigger_event)
 export(update_widget)
 export(yaml_to_dm)
 import(shiny)
-import(shinyWidgets)
-import(shinydashboard)
 importFrom(ktools,catl)
 importFrom(rlang,.data)
 importFrom(utils,
