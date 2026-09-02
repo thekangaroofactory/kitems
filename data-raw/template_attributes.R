@@ -11,7 +11,7 @@ TEMPLATE_ATTRIBUTES <-
   # -- id
   attribute_create(name = "id",
                    class = "numeric",
-                   default = "ktools::getTimestamp(k=1000000)",
+                   default = "uuid()",
                    skip = TRUE,
                    display = FALSE) |>
 
