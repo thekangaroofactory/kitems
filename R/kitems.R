@@ -724,9 +724,9 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         # -- test must be done out of the filter() function #593
         # otherwise multiple confitions does not work
         items <- if(is.list(trigger_filter_pre()))
-          k_items() %>% dplyr::filter(!!!trigger_filter_pre())
+          k_items() |> dplyr::filter(!!!trigger_filter_pre())
         else
-          k_items() %>% dplyr::filter(!!trigger_filter_pre())
+          k_items() |> dplyr::filter(!!trigger_filter_pre())
         catl("- ouput dim =", dim(items), level = 2)
 
         # -- return
@@ -766,9 +766,9 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         # -- test must be done out of the filter() function #601
         # otherwise multiple confitions does not work
         items <- if(is.list(filter_exprs))
-          k_items() %>% dplyr::filter(!!!filter_exprs)
+          k_items() |> dplyr::filter(!!!filter_exprs)
         else
-          k_items() %>% dplyr::filter(!!filter_exprs)
+          k_items() |> dplyr::filter(!!filter_exprs)
         catl("- ouput dim =", dim(items), level = 2)}
 
       # -- Apply ordering

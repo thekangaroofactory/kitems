@@ -16,7 +16,7 @@ Kitems provides features to enable automatic data filtering at the module server
 Filtering mechanism in the module server relies on `dplyr::filter()` function.
 
 ``` r
-data %>%
+data |>
   filter(name == "foo", 
          value == 12)
 ```
