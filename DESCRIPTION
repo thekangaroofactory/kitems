@@ -15,7 +15,6 @@ Roxygen: list(markdown = TRUE)
 Depends:
     R (>= 4.1.0),
     shiny,
-    shinydashboard,
     shinyWidgets,
 Imports:
     DT,
