@@ -40,8 +40,8 @@ config_check <- function(config){
     rc <- append(rc, list(code = 1, type = "note", message = "Extra element(s) found at root level"))
 
   # version
-  if(!identical(config$version, as.character(packageVersion("kitems"))))
-    rc <- append(rc, list(code = 2, type = "warning", message = paste("Config requires a migration to version", as.character(packageVersion("kitems")))))
+  if(!identical(config$version, as.character(utils::packageVersion("kitems"))))
+    rc <- append(rc, list(code = 2, type = "warning", message = paste("Config requires a migration to version", as.character(utils::packageVersion("kitems")))))
 
   # no items
   if(!length(config$items))

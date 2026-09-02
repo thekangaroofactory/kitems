@@ -32,11 +32,11 @@ dm_to_yaml <- function(dm){
   # display, skip, refresh & sort
 
   # -- extract
-  display <- setNames(dm$display, dm$name)
-  skip <- setNames(dm$skip, dm$name)
-  refresh <- setNames(dm$refresh, dm$name)
-  sort_rank <- setNames(dm$sort.rank, dm$name)
-  sort_desc <- setNames(dm$sort.desc, dm$name)
+  display <- stats::setNames(dm$display, dm$name)
+  skip <- stats::setNames(dm$skip, dm$name)
+  refresh <- stats::setNames(dm$refresh, dm$name)
+  sort_rank <- stats::setNames(dm$sort.rank, dm$name)
+  sort_desc <- stats::setNames(dm$sort.desc, dm$name)
 
   # -- drop
   dm[c("display", "skip", "refresh", "sort.rank", "sort.desc")] <- NULL

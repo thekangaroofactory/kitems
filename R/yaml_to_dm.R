@@ -42,6 +42,6 @@ yaml_to_dm <- function(config, ..., item = get_context()){
 
   # -- return
   dplyr::bind_rows(config$attributes) |>
-    dplyr::select(any_of(cols))
+    dplyr::select(dplyr::any_of(cols))
 
 }

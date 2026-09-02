@@ -34,6 +34,6 @@ as_default <- function(item, data.model){
   # -- turn item value(s) into default(s)
   data.model |>
     dplyr::mutate(default = as.character(item)) |>
-    dplyr::select(any_of(c("name", "type", "default", "values")))
+    dplyr::select(dplyr::any_of(c("name", "type", "default", "values")))
 
 }

@@ -18,7 +18,7 @@ config_create <- function(project){
 
   # -- return
   list(
-    version = as.character(packageVersion("kitems")),
+    version = as.character(utils::packageVersion("kitems")),
     project = project)
 
 }
@@ -232,7 +232,7 @@ config_item_connector <- function(config, item){
 
   # -- secure against missing item
   if(!is.null(x <- config$items[[config_item_position(config, item)]]$source)){
-    x$path <- dirnamename(item, url = T)
+    x$path <- dirname(item, url = T)
     x$filename = name(item, file = T)}
 
   # -- return
