@@ -169,7 +169,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       # path = NULL as temporary workaround (it's contained in k_items_url)
       init_items <- item_load(connector = list(file = k_items_url,
                                                path = NULL),
-                              col.classes = config_item_colclasses(config, item))
+                              col.classes = ci_classes(config, item))
 
       # -- Increment progress
       incProgress(2/4, detail = "Check items")
@@ -200,7 +200,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       # -- data model
       # item config up to the data.model level
-      k_data_model <- config_extract(config, item = item)$data.model
+      k_data_model <- c_extract(config, item = item)$data.model
 
       # -- items
       k_items <- reactiveVal(init_items)
@@ -356,7 +356,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
         # -- insert & store
         k_items(input |>
-                  item_input_values(colClasses = config_item_colclasses(config, item)) |>
+                  item_input_values(colClasses = ci_classes(config, item)) |>
                   attribute_values(data.model = yaml_to_dm(config, name, type, default, class.arg)) |>
                   rows_insert(items = k_items()))
 
@@ -475,7 +475,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       # -- get named list of input values
       catl("- Get list of input values")
-      values <- item_input_values(input, config_item_colclasses(config, item))
+      values <- item_input_values(input, ci_classes(config, item))
 
       # -- force id to update
       # as it's missing in the dialog input, it should be NULL in values

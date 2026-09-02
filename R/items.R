@@ -32,8 +32,8 @@ items <- function(datamart, item){
   # -- check
   if(!item %in% names(datamart)){
     message("Selective loading is required for item ", crayon::blue(item))
-    datamart$item <- item_load(connector = config_item_connector(config(), item),
-                               col.classes = config_item_colclasses(config(), item))}
+    datamart$item <- item_load(connector = ci_connector(config(), item),
+                               col.classes = ci_classes(config(), item))}
 
   # -- return
   datamart$item

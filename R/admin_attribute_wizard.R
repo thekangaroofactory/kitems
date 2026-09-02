@@ -34,8 +34,8 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, callback, ses
   # -- define input values
   update <- !is.null(attribute)
   values <- if(update){
-    dm <- config_extract(config, item)$data.model
-    c(config_extract(config, item, attribute),
+    dm <- c_extract(config, item)$data.model
+    c(c_extract(config, item, attribute),
       hide = attribute %in% dm$hide, skip = attribute %in% dm$skip,
       refresh = attribute %in% dm$refresh)
   } else
@@ -43,7 +43,7 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, callback, ses
 
   # -- compute reserved names
   # existing attributes (except itself for update)
-  reserved <- config_attributes(config, item)
+  reserved <- c_attributes(config, item)
   if(update)
     reserved <- reserved[!reserved %in% attribute]
 

@@ -9,7 +9,7 @@ test_that("Grammar organize works", {
            attribute = c(name = "total", type = "integer"))
 
   # test
-  # just test call as deeper coverage should be done in config_item_sort
+  # just test call as deeper coverage should be done in ci_sort
   expect_no_warning(organize(config, item = "foo", sort = "total"))
 
 })

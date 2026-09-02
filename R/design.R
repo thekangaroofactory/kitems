@@ -117,7 +117,7 @@ design <- function(...){
 
   # -- create config
   if("project" %in% names(args))
-    return(config_create(args$project))
+    return(c_create(args$project))
 
 
   # ////////////////////////////////////////////////////////////////////////////
@@ -126,8 +126,8 @@ design <- function(...){
   if(all(c("config", "item") %in% names(args)))
     return(
       args$config |>
-        config_item_append(
-          do.call(config_item_create,
+        ci_append(
+          do.call(ci_create,
                   as.list(args$item))))
 
 
@@ -137,8 +137,8 @@ design <- function(...){
   if(all(c("config", "attribute") %in% names(args)))
     return(
       args$config |>
-        config_attribute_append(args$attribute["item"],
-          do.call(config_attribute_create,
+        ca_append(args$attribute["item"],
+          do.call(ca_create,
                   as.list(args$attribute[!names(args$attribute) %in% "item"]))))
 
 

@@ -42,19 +42,19 @@
 #' config |> included(item = "foo")
 
 skip <- function(config, item = get_context(), ...){
-  config_attribute_behavior(config, item, behavior = "skip", ...)}
+  ca_behavior(config, item, behavior = "skip", ...)}
 
 #' @rdname skip
 #' @export
 include <- function(config, item = get_context(), ...){
-  config_attribute_behavior(config, item, behavior = "skip", ..., set = FALSE)}
+  ca_behavior(config, item, behavior = "skip", ..., set = FALSE)}
 
 #' @rdname skip
 #' @export
 skipped <- function(config, item = get_context()){
-  config_item_behavior(config, item)}
+  ci_behavior(config, item)}
 
 #' @rdname skip
 #' @export
 included <- function(config, item = get_context()){
-  config_attributes(config, item)[!config_attributes(config, item) %in% config_item_behavior(config, item)]}
+  c_attributes(config, item)[!c_attributes(config, item) %in% ci_behavior(config, item)]}

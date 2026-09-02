@@ -8,9 +8,9 @@
 #' @noRd
 #'
 #' @examples
-#' config_create(project = "my_project")
+#' c_create(project = "my_project")
 
-config_create <- function(project){
+c_create <- function(project){
 
   # -- secure against multiple values
   if(length(project) > 1)
@@ -35,10 +35,10 @@ config_create <- function(project){
 #' @noRd
 #'
 #' @examples
-#' config_items(list(items = list(config_item_create(id = "foo", path = "./"),
-#'                                config_item_create(id = "bar", path = "./"))))
+#' c_items(list(items = list(ci_create(id = "foo", path = "./"),
+#'                                ci_create(id = "bar", path = "./"))))
 
-config_items <- function(config){
+c_items <- function(config){
 
   sapply(config$items, function(x) x$id)
 
@@ -66,7 +66,7 @@ config_items <- function(config){
 
 is_item <- function(config, item){
 
-  item %in% config_items(config)
+  item %in% c_items(config)
 
 }
 
@@ -81,12 +81,12 @@ is_item <- function(config, item){
 #'
 #' @examples
 #' \dontrun{
-#' config_item_position(config, item = "foo")
+#' ci_position(config, item = "foo")
 #' }
 
-config_item_position <- function(config, item){
+ci_position <- function(config, item){
 
-  x <- which(config_items(config) == item)
+  x <- which(c_items(config) == item)
   if(!length(x)){
     warning("Item ", crayon::blue(item), " does not exist!", call. = F)
     NA
@@ -108,14 +108,14 @@ config_item_position <- function(config, item){
 #'
 #' @examples
 #' \dontrun{
-#' config_attributes(config)
+#' c_attributes(config)
 #' }
 
-config_attributes <- function(config, item){
+c_attributes <- function(config, item){
 
   # no need to check
   # will produce list() if item is missing
-  sapply(config$items[[config_item_position(config, item)]]$data.model$attributes,
+  sapply(config$items[[ci_position(config, item)]]$data.model$attributes,
     function(x) x$name)
 
 }
@@ -144,7 +144,7 @@ config_attributes <- function(config, item){
 
 is_attribute <- function(config, item, attribute){
 
-  attribute %in% config_attributes(config, item)
+  attribute %in% c_attributes(config, item)
 
 }
 
@@ -160,12 +160,12 @@ is_attribute <- function(config, item, attribute){
 #'
 #' @examples
 #' \dontrun{
-#' config_attribute_position(config, item = "foo", attribute = "bar")
+#' ca_position(config, item = "foo", attribute = "bar")
 #' }
 
-config_attribute_position <- function(config, item, attribute){
+ca_position <- function(config, item, attribute){
 
-  if(!length(idx <- which(config_attributes(config, item) == attribute))){
+  if(!length(idx <- which(c_attributes(config, item) == attribute))){
     warning("Attribute ", crayon::blue(attribute), " does not exist in item ", crayon::blue(item), "!", call. = F)
     NA
   } else idx
@@ -194,19 +194,19 @@ config_attribute_position <- function(config, item, attribute){
 #'
 #' @examples
 #' \dontrun{
-#' config_extract(config, item = "foo")
-#' config_extract(config, item = "foo", attribute = "bar")
+#' c_extract(config, item = "foo")
+#' c_extract(config, item = "foo", attribute = "bar")
 #' }
 
-config_extract <- function(config, item = NULL, attribute = NULL){
+c_extract <- function(config, item = NULL, attribute = NULL){
 
   # -- extract item
   if(!is.null(item))
-    x <- config$items[[config_item_position(config, item)]]
+    x <- config$items[[ci_position(config, item)]]
 
   # -- extract attribute
   if(!is.null(attribute))
-    x <- x$data.model$attributes[[config_attribute_position(config, item, attribute)]]
+    x <- x$data.model$attributes[[ca_position(config, item, attribute)]]
 
   # -- return
   if(exists("x")) x else NULL
@@ -223,15 +223,15 @@ config_extract <- function(config, item = NULL, attribute = NULL){
 #' @noRd
 #'
 #' @examples
-#' yaml <- config_create("test") |>
-#'   config_item_append(config_item_create(id = "foo", path = "/temp"))
+#' yaml <- c_create("test") |>
+#'   ci_append(ci_create(id = "foo", path = "/temp"))
 #'
-#' config_item_connector(yaml, "foo")
+#' ci_connector(yaml, "foo")
 
-config_item_connector <- function(config, item){
+ci_connector <- function(config, item){
 
   # -- secure against missing item
-  if(!is.null(x <- config$items[[config_item_position(config, item)]]$source)){
+  if(!is.null(x <- config$items[[ci_position(config, item)]]$source)){
     x$path <- dirname(item, url = T)
     x$filename = name(item, file = T)}
 
@@ -251,18 +251,18 @@ config_item_connector <- function(config, item){
 #'
 #' @examples
 #' # create a config
-#' yaml <- config_create("test") |>
-#'   config_item_append(config_item_create(id = "foo", path = "/temp")) |>
-#'   config_attribute_append(item = "foo",
-#'                           attribute = config_attribute_create(name = "id",
+#' yaml <- c_create("test") |>
+#'   ci_append(ci_create(id = "foo", path = "/temp")) |>
+#'   ca_append(item = "foo",
+#'                           attribute = ca_create(name = "id",
 #'                                                               type = "numeric"))
 #'
 #' # get item colClasses
-#' config_item_colclasses(yaml, "foo")
+#' ci_classes(yaml, "foo")
 
-config_item_colclasses <- function(config, item){
+ci_classes <- function(config, item){
 
-  sapply(config$items[[config_item_position(config, item)]]$data.model$attributes,
+  sapply(config$items[[ci_position(config, item)]]$data.model$attributes,
          function(x) rlang::set_names(x$type, x$name))
 
 }
@@ -285,9 +285,9 @@ config_item_colclasses <- function(config, item){
 #' @noRd
 #'
 #' @examples
-#' config_item_create(id = "foo", path = "./")
+#' ci_create(id = "foo", path = "./")
 
-config_item_create <- function(id, description = NULL, path = Sys.getenv("R_KITEMS_PATH")){
+ci_create <- function(id, description = NULL, path = Sys.getenv("R_KITEMS_PATH")){
 
   # -- secure
   check_path(path)
@@ -325,17 +325,17 @@ config_item_create <- function(id, description = NULL, path = Sys.getenv("R_KITE
 #' @noRd
 #'
 #' @examples
-#' config_item_append(config_create("prj"),
-#'                    config_item_create(id = "a", path = "."))
+#' ci_append(c_create("prj"),
+#'                    ci_create(id = "a", path = "."))
 
-config_item_append <- function(config, ...){
+ci_append <- function(config, ...){
 
   # -- secure against NULL
   args <- Filter(Negate(is.null), list(...))
 
   # -- secure against duplicated items
-  candidates <- config_items(list(items = args))
-  rejected <- duplicated(candidates) | candidates %in% config_items(config)
+  candidates <- c_items(list(items = args))
+  rejected <- duplicated(candidates) | candidates %in% c_items(config)
   if(any(rejected)){
     warning("Some duplicated items (", crayon::blue(paste(candidates[rejected], collapse = ", ")), ") are rejected.", call. = F)
     args <- args[!rejected]}
@@ -358,13 +358,13 @@ config_item_append <- function(config, ...){
 #'
 #' @examples
 #' \dontrun{
-#' config_item_move(config, item = "bar", where = list(position = "before", item = "foo"))
+#' ci_move(config, item = "bar", where = list(position = "before", item = "foo"))
 #' }
 
-config_item_move <- function(config, item, where){
+ci_move <- function(config, item, where){
 
   # -- get item list
-  item_list <- config_items(config)
+  item_list <- c_items(config)
 
   # -- get target index
   target_idx <- which(item_list == where$item)
@@ -392,14 +392,14 @@ config_item_move <- function(config, item, where){
 #'
 #' @examples
 #' \dontrun{
-#' config_item_drop(config, item = "foo")
+#' ci_drop(config, item = "foo")
 #' }
 
-config_item_drop <- function(config, item){
+ci_drop <- function(config, item){
 
   # -- get item index & drop
   # secure against missing item
-  if(is.na(idx <- config_item_position(config, item)))
+  if(is.na(idx <- ci_position(config, item)))
     return(config)
   else
     config$items <- config$items[-idx]
@@ -427,17 +427,17 @@ config_item_drop <- function(config, item){
 #' @examples
 #' \dontrun{
 #' # define sorting
-#' config_item_sort(config, item, sort = "date, value")
-#' config_item_sort(config, item, sort = "desc(date), value")
+#' ci_sort(config, item, sort = "date, value")
+#' ci_sort(config, item, sort = "desc(date), value")
 #'
 #' # reset sorting
-#' config_item_sort(config, item, sort = NULL)
+#' ci_sort(config, item, sort = NULL)
 #' }
 
-config_item_sort <- function(config, item, sort = NULL){
+ci_sort <- function(config, item, sort = NULL){
 
   # -- get item index
-  if(is.na(idx <- config_item_position(config, item)))
+  if(is.na(idx <- ci_position(config, item)))
     return(config)
 
   # -- update sort
@@ -462,13 +462,13 @@ config_item_sort <- function(config, item, sort = NULL){
 #'
 #' @examples
 #' \dontrun{
-#' config_item_row_order(config, item = "foo")
+#' ci_row_order(config, item = "foo")
 #' }
 
-config_item_row_order <- function(config, item){
+ci_row_order <- function(config, item){
 
   # -- get item index
-  if(is.na(idx <- config_item_position(config, item)))
+  if(is.na(idx <- ci_position(config, item)))
     return(NA)
 
   # -- return
@@ -490,10 +490,10 @@ config_item_row_order <- function(config, item){
 #'
 #' @examples
 #' \dontrun{
-#' config_attribute_create(name = "att_1", type = "integer")
+#' ca_create(name = "att_1", type = "integer")
 #' }
 
-config_attribute_create <- function(name, type, class.arg = NULL, values = NULL, default = NULL){
+ca_create <- function(name, type, class.arg = NULL, values = NULL, default = NULL){
 
   # -- secure
   if(!type %in% OBJECT_CLASS){
@@ -536,21 +536,21 @@ config_attribute_create <- function(name, type, class.arg = NULL, values = NULL,
 #'
 #' @examples
 #' \dontrun{
-#' config_attribute_append(config, item = foo,
-#'                         attribute = config_attribute_create(name = "bar", type "numeric"))
+#' ca_append(config, item = foo,
+#'                         attribute = ca_create(name = "bar", type "numeric"))
 #' }
 
-config_attribute_append <- function(config, item, ...){
+ca_append <- function(config, item, ...){
 
   # -- item position
-  if(is.na(item_idx <- config_item_position(config, item)))
+  if(is.na(item_idx <- ci_position(config, item)))
     return(config)
 
   # -- loop over ...
   for(attribute in list(...)){
 
     # -- secure from duplicated attribute names
-    reserved <- config_attributes(config, item)
+    reserved <- c_attributes(config, item)
     if(attribute$name %in% reserved){
       warning("Attribute ", crayon::blue(attribute$name), " already exists in item ", crayon::blue(item), ".")
       return(config)}
@@ -577,11 +577,11 @@ config_attribute_append <- function(config, item, ...){
 #'
 #' @examples
 #' \dontrun{
-#' config_attribute_update(config, item = foo,
-#'                         attribute = config_attribute_create(name = "bar", type "numeric"))
+#' ca_update(config, item = foo,
+#'                         attribute = ca_create(name = "bar", type "numeric"))
 #' }
 
-config_attribute_update <- function(config, item, attribute){
+ca_update <- function(config, item, attribute){
 
   # -- secure against forbidden actions
   if(attribute$name == "id"){
@@ -590,9 +590,9 @@ config_attribute_update <- function(config, item, attribute){
 
   # -- attribute & item positions
   # attribute will check both exist
-  if(is.na(attribute_idx <- config_attribute_position(config, item, attribute$name)))
+  if(is.na(attribute_idx <- ca_position(config, item, attribute$name)))
      return(config)
-  item_idx <- config_item_position(config, item)
+  item_idx <- ci_position(config, item)
 
   # -- secure against forbidden actions
   if(config$items[[item_idx]]$data.model$attributes[[attribute_idx]]$type != attribute$type){
@@ -624,11 +624,11 @@ config_attribute_update <- function(config, item, attribute){
 #'
 #' @examples
 #' \dontrun{
-#' config_attribute_behavior(config, item = "foo", behavior = "skip", "id")
-#' config_attribute_behavior(config, item = "foo", behavior = "hide", "id", set = FALSE)
+#' ca_behavior(config, item = "foo", behavior = "skip", "id")
+#' ca_behavior(config, item = "foo", behavior = "hide", "id", set = FALSE)
 #' }
 
-config_attribute_behavior <- function(config, item, behavior, ..., set = TRUE){
+ca_behavior <- function(config, item, behavior, ..., set = TRUE){
 
   # -- secure against missing item / attribute(s)
   attributes <- unlist(list(...)[is_attribute(config, item, list(...))])
@@ -642,11 +642,11 @@ config_attribute_behavior <- function(config, item, behavior, ..., set = TRUE){
       warning("It is forbidden to refresh the ", crayon::blue("id"), " attribute!", call. = F)
       return(config)}
     # -- secure from trying to refresh an attribute that is not skipped
-    attributes <- attributes[attributes %in% config_item_behavior(config, item)]}
+    attributes <- attributes[attributes %in% ci_behavior(config, item)]}
 
   # -- get item index
   # already checked above
-  item_idx <- config_item_position(config, item)
+  item_idx <- ci_position(config, item)
 
   # -- alter config
   # secure against character(0) because of [[]]
@@ -683,16 +683,16 @@ config_attribute_behavior <- function(config, item, behavior, ..., set = TRUE){
 #'
 #' @examples
 #' \dontrun{
-#' config_item_behavior(config, item = "foo")
+#' ci_behavior(config, item = "foo")
 #' }
 
-config_item_behavior <- function(config, item, behavior = c("skip", "refresh", "hide")){
+ci_behavior <- function(config, item, behavior = c("skip", "refresh", "hide")){
 
   # -- check arg
   behavior <- match.arg(behavior)
 
   # -- secure against missing item
-  if(is.na(idx <- config_item_position(config, item)))
+  if(is.na(idx <- ci_position(config, item)))
     NULL
   else
     config$items[[idx]]$data.model[[behavior]]
@@ -712,22 +712,22 @@ config_item_behavior <- function(config, item, behavior = c("skip", "refresh", "
 #'
 #' @examples
 #' \dontrun{
-#' config_attribute_move(config, "item_1", "att_1", list(position = "after", attribute = "att_2"))
+#' ca_move(config, "item_1", "att_1", list(position = "after", attribute = "att_2"))
 #' }
 
-config_attribute_move <- function(config, item, attribute, where){
+ca_move <- function(config, item, attribute, where){
 
   # -- get target index
-  target_idx <-  config_attribute_position(config, item, where$attribute)
+  target_idx <-  ca_position(config, item, where$attribute)
   if(where$position == "before")
     target_idx <- target_idx - 1
 
   # -- reorder attribute indexes
-  att_list <- config_attributes(config, item)
+  att_list <- c_attributes(config, item)
   att_order <- append(att_list[!att_list %in% attribute], attribute, after = target_idx)
 
   # -- reorder attributes
-  item_idx <- config_item_position(config, item)
+  item_idx <- ci_position(config, item)
   config$items[[item_idx]]$data.model$attributes <- config$items[[item_idx]]$data.model$attributes[match(att_order, att_list)]
 
   # -- return
@@ -747,27 +747,27 @@ config_attribute_move <- function(config, item, attribute, where){
 #'
 #' @examples
 #' \dontrun{
-#' config_attribute_drop(config, item = "foo", attribute = "att_1")
+#' ca_drop(config, item = "foo", attribute = "att_1")
 #' }
 
-config_attribute_drop <- function(config, item, attribute){
+ca_drop <- function(config, item, attribute){
 
   # -- idx to drop
   # secure against missing item / attribute
-  if(is.na(idx_to_drop <- config_attribute_position(config, item, attribute))){
+  if(is.na(idx_to_drop <- ca_position(config, item, attribute))){
     return(config)}
 
   # -- item index
-  item_idx <- config_item_position(config, item)
+  item_idx <- ci_position(config, item)
 
   # -- drop attribute
   config$items[[item_idx]]$data.model$attributes <- config$items[[item_idx]]$data.model$attributes[-idx_to_drop]
 
   # -- update hide, skip & refresh
   config <- config |>
-    config_attribute_behavior(item, behavior = "hide", set = FALSE) |>
-    config_attribute_behavior(item, behavior = "skip", set = FALSE) |>
-    config_attribute_behavior(item, behavior = "refresh", set = FALSE)
+    ca_behavior(item, behavior = "hide", set = FALSE) |>
+    ca_behavior(item, behavior = "skip", set = FALSE) |>
+    ca_behavior(item, behavior = "refresh", set = FALSE)
 
   # -- return
   config

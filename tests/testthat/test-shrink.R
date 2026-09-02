@@ -17,7 +17,7 @@ test_that("Verb shrink works", {
   # drop attribute
   x <- config |>
     shrink(attribute = c(item = "foo", name = "total"))
-  expect_identical(config_attributes(x, item = "foo"), "id")
+  expect_identical(c_attributes(x, item = "foo"), "id")
 
   # multiple instructions
   x <- config |>

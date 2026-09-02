@@ -36,7 +36,7 @@
 prepare_values <- function(values, config, update = FALSE, item = get_context()){
 
   # get attribute names
-  att_names <- config_attributes(config, item)
+  att_names <- c_attributes(config, item)
 
 
   # ////////////////////////////////////////////////////////////////////////////
@@ -73,7 +73,7 @@ prepare_values <- function(values, config, update = FALSE, item = get_context())
   # -- check skipped attributes to refresh
   # add names to values so they will be computed again
   if(update){
-    att_refresh <- config_item_behavior(config, item, behavior = "refresh")
+    att_refresh <- ci_behavior(config, item, behavior = "refresh")
     att_refresh <- att_refresh[!att_refresh %in% names(values)]
     if(!identical(att_refresh, character(0)))
       values <- c(values, as.list(rlang::set_names(NA, att_refresh)))}

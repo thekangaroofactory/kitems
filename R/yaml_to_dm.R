@@ -35,7 +35,7 @@ yaml_to_dm <- function(config, ..., item = get_context()){
 
   # -- item data.model
   if(!is.null(item))
-    config <- config_extract(config, item)$data.model
+    config <- c_extract(config, item)$data.model
 
   # -- get expected column(s)
   cols <- sapply(rlang::ensyms(...), rlang::as_name)

@@ -42,19 +42,19 @@
 #' config |> displayed()
 
 hide <- function(config, item = get_context(), ...){
-  config_attribute_behavior(config, item, behavior = "hide", ...)}
+  ca_behavior(config, item, behavior = "hide", ...)}
 
 #' @rdname hide
 #' @export
 display <- function(config, item = get_context(), ...){
-  config_attribute_behavior(config, item, behavior = "hide", ..., set = FALSE)}
+  ca_behavior(config, item, behavior = "hide", ..., set = FALSE)}
 
 #' @rdname hide
 #' @export
 hidden <- function(config, item = get_context()){
-  config_item_behavior(config, item, behavior = "hide")}
+  ci_behavior(config, item, behavior = "hide")}
 
 #' @rdname hide
 #' @export
 displayed <- function(config, item = get_context()){
-  config_attributes(config, item)[!config_attributes(config, item) %in% config_item_behavior(config, item, behavior = "hide")]}
+  c_attributes(config, item)[!c_attributes(config, item) %in% ci_behavior(config, item, behavior = "hide")]}

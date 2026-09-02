@@ -22,6 +22,6 @@
 
 has_date_attribute <- function(config, item = get_context()){
 
-  "date" %in% names(config_item_colclasses(config, item))
+  "date" %in% names(ci_classes(config, item))
 
 }

@@ -35,10 +35,10 @@
 #' }
 
 organize <- function(config, item = get_context(), sort){
-  config_item_sort(config, item, sort)}
+  ci_sort(config, item, sort)}
 
 
 #' @rdname organize
 #' @export
 organized <- function(config, item = get_context()){
-  config_item_row_order(config, item)}
+  ci_row_order(config, item)}

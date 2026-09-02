@@ -42,19 +42,19 @@
 #' config |> frozen(item = "foo")
 
 refresh <- function(config, item = get_context(), ...){
-  config_attribute_behavior(config, item, behavior = "refresh", ...)}
+  ca_behavior(config, item, behavior = "refresh", ...)}
 
 #' @rdname refresh
 #' @export
 freeze <- function(config, item = get_context(), ...){
-  config_attribute_behavior(config, item, behavior = "refresh", ..., set = FALSE)}
+  ca_behavior(config, item, behavior = "refresh", ..., set = FALSE)}
 
 #' @rdname refresh
 #' @export
 refreshed <- function(config, item = get_context()){
-  config_item_behavior(config, item, behavior = "refresh")}
+  ci_behavior(config, item, behavior = "refresh")}
 
 #' @rdname refresh
 #' @export
 frozen <- function(config, item = get_context()){
-  config_item_behavior(config, item)[!config_item_behavior(config, item) %in% config_item_behavior(config, item, behavior = "refresh")]}
+  ci_behavior(config, item)[!ci_behavior(config, item) %in% ci_behavior(config, item, behavior = "refresh")]}

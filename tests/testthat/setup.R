@@ -176,7 +176,7 @@ create_testdata <- function(){
   saveRDS(dm, file = test_dm_url)
 
   # -- YAML
-  config_write(config_create(project = "test"))
+  config_write(c_create(project = "test"))
 
   # -- save items
   item_save(items,  connector = list(file = test_items_url))
@@ -194,7 +194,7 @@ create_empty_items <- function(){
   saveRDS(data_model(colClasses = c(id = "numeric", date = "POSIXct")), file = test_dm_url)
 
   # -- YAML
-  config_write(config_create(project = "test"))
+  config_write(c_create(project = "test"))
 
   # -- save items
   item_save(items_no_row2,  connector = list(file = test_items_url))
@@ -231,7 +231,7 @@ create_noid_data_to_import <- function(){
   item_save(items,  connector = list(file = import_url))
 
   # -- YAML
-  config_write(config_create(project = "test"))
+  config_write(c_create(project = "test"))
 
 }
 
@@ -246,7 +246,7 @@ create_data_to_import <- function(){
   item_save(items,  connector = list(file = import_url))
 
   # -- YAML
-  config_write(config_create(project = "test"))
+  config_write(c_create(project = "test"))
 
 }
 

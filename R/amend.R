@@ -70,17 +70,17 @@ amend <- function(config, item = get_context(), ...){
   # Update attribute
 
   # -- get attribute
-  x <- config_extract(config, item, attribute = args$attribute['name'])
+  x <- c_extract(config, item, attribute = args$attribute['name'])
 
   # -- create new attribute
   # secure against name & type update
-  new <- do.call(config_attribute_create,
+  new <- do.call(ca_create,
                  c(list(name = args$attribute[['name']],
                         type = x$type),
                    args$attribute[!names(args$attribute) %in% c("name", "type")]))
 
   # -- update attribute
   x[names(new)] <- new
-  config_attribute_update(config, item, attribute = x)
+  ca_update(config, item, attribute = x)
 
 }

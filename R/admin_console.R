@@ -132,13 +132,13 @@ server <- function(input, output, session) {
 
         # -- do migration & return yaml
         new_dm <- dm_migrate(legacy_dm)
-        c(config_item_create(id = unlist(strsplit(basename(x), split = "_"))[[1]], path = path),
+        c(ci_create(id = unlist(strsplit(basename(x), split = "_"))[[1]], path = path),
           data.model = dm_to_yaml(new_dm))
 
       })
 
       # -- save config file
-      config_write(c(config_create(basename(path)), items = list(config)), path = path)
+      config_write(c(c_create(basename(path)), items = list(config)), path = path)
 
       # -- delete old data model files
       file.remove(legacy_dm)
@@ -188,7 +188,7 @@ server <- function(input, output, session) {
       removeModal()
 
       # -- create config file & store
-      config(config_create(project = basename(path)))
+      config(c_create(project = basename(path)))
 
       # -- update ui
       bslib::toggle_sidebar(id = "home-sidebar", open = TRUE)
@@ -317,15 +317,15 @@ server <- function(input, output, session) {
     if(length(last_tab) == 0) last_tab <- "home"
 
     # -- update config
-    yaml <- config_item_append(yaml,
-                               config_item_create(id = input$item_name,
+    yaml <- ci_append(yaml,
+                               ci_create(id = input$item_name,
                                                   description = input$item_description,
                                                   path = path))
 
     # -- create id attribute (mandatory)
-    yaml <- config_attribute_append(yaml,
+    yaml <- ca_append(yaml,
                                     item = input$item_name,
-                                    attribute = config_attribute_create(name = "id",
+                                    attribute = ca_create(name = "id",
                                                                         type = "numeric",
                                                                         default = "ktools::uuid()"),
                                     hide = TRUE,
@@ -343,7 +343,7 @@ server <- function(input, output, session) {
     bslib::nav_insert(id = "nav",
                       target = last_tab,
                       position = "after",
-                      nav = admin_item_layout(config_extract(config(), input$item_name)))
+                      nav = admin_item_layout(c_extract(config(), input$item_name)))
 
   })
 
@@ -418,7 +418,7 @@ server <- function(input, output, session) {
 
     # -- update config & store
     yaml <- config()
-    items_list <- config_items(yaml)
+    items_list <- c_items(yaml)
     yaml$items[which(items_list == id)] <- NULL
     config(yaml)
 
@@ -497,10 +497,10 @@ server <- function(input, output, session) {
       # -- listen to callback
       observeEvent(callback(), {
 
-        yaml <- config_attribute_append(
+        yaml <- ca_append(
           yaml,
           item = event['namespace'],
-          attribute = config_attribute_create(
+          attribute = ca_create(
             name = callback()$name,
             type = callback()$type,
             class.arg = if(callback()$class.arg == "") NULL else callback()$class.arg,
@@ -515,8 +515,8 @@ server <- function(input, output, session) {
 
         # -- update UI
         # add attribute card
-        item <- config_extract(yaml, item = event['namespace'])
-        at <- config_extract(yaml, item = event['namespace'], attribute = callback()$name)
+        item <- c_extract(yaml, item = event['namespace'])
+        at <- c_extract(yaml, item = event['namespace'], attribute = callback()$name)
         insertUI(selector = paste0("#", event['namespace'], "-attributes > div:last"),
                  where = "beforeBegin",
                  div(class="bslib-grid-item bslib-gap-spacing html-fill-container",
@@ -557,10 +557,10 @@ server <- function(input, output, session) {
       # -- listen to callback
       observeEvent(callback(), {
 
-        yaml <- config_attribute_update(
+        yaml <- ca_update(
           yaml,
           item = event['namespace'],
-          attribute = config_attribute_create(name = callback()$name,
+          attribute = ca_create(name = callback()$name,
                                               type = callback()$type,
                                               class.arg = if(callback()$class.arg == "") NULL else callback()$class.arg,
                                               values = if(callback()$values == "") NULL else callback()$values,
@@ -574,8 +574,8 @@ server <- function(input, output, session) {
 
         # -- update UI
         # replace attribute card
-        dm <- config_extract(yaml, item = event['namespace'])$data.model
-        at <- config_extract(yaml, item = event['namespace'], attribute = callback()$name)
+        dm <- c_extract(yaml, item = event['namespace'])$data.model
+        at <- c_extract(yaml, item = event['namespace'], attribute = callback()$name)
         # remove old card
         removeUI(selector = paste0("#", paste(event['namespace'], event['value'],
                                   "attribute-card", sep = "-")),
@@ -611,7 +611,7 @@ server <- function(input, output, session) {
       # ------------------------------------------------------------------------
       # Move attribute
 
-      choices <- config_attributes(yaml, item = event['namespace'])
+      choices <- c_attributes(yaml, item = event['namespace'])
       choices <- choices[!choices %in% event['value']]
 
       # -- dialog
@@ -633,7 +633,7 @@ server <- function(input, output, session) {
 
         # -- update config
         config(
-          config_attribute_move(config(),
+          ca_move(config(),
                                 item = event['namespace'],
                                 attribute = event['value'],
                                 where = list(position = input$attribute_move_position,
@@ -645,8 +645,8 @@ server <- function(input, output, session) {
                                    paste(event['namespace'], event['value'], "attribute-card-container", sep = "-")),
                  immediate = TRUE)
         # insert attribute card
-        dm <- config_extract(yaml, item = event['namespace'])$data.model
-        at <- config_extract(yaml, item = event['namespace'], attribute = event['value'])
+        dm <- c_extract(yaml, item = event['namespace'])$data.model
+        at <- c_extract(yaml, item = event['namespace'], attribute = event['value'])
         insertUI(selector = paste0("div:has(> #",
                                    paste(event['namespace'], input$attribute_move_target, "attribute-card-container", sep = "-")),
                  where = ifelse(input$attribute_move_position == "before", "beforeBegin", "afterEnd"),
@@ -685,7 +685,7 @@ server <- function(input, output, session) {
 
         # -- drop attribute from config
         config(
-          config_attribute_drop(config(),
+          ca_drop(config(),
                                 item = event['namespace'],
                                 attribute = event['value']))
 
@@ -696,7 +696,7 @@ server <- function(input, output, session) {
                                          "attribute-card-container", sep = "-")),
                  immediate = TRUE)
         # update attribute nb
-        item <- config_extract(config(), item = event['namespace'])
+        item <- c_extract(config(), item = event['namespace'])
         shinyjs::html(id = paste0(event['namespace'], "-attribute-nb"),
                       html = admin_attribute_nb(item))
         # update skipped, refreshed & hidden (sidebar)
@@ -721,7 +721,7 @@ server <- function(input, output, session) {
 
     # -- get event & item data.model
     event <- ktools::input_decode(input$sorting_action)
-    dm <- config_extract(config(), item = event['namespace'])$data.model
+    dm <- c_extract(config(), item = event['namespace'])$data.model
 
     # -- dialog
     showModal(
@@ -751,12 +751,12 @@ server <- function(input, output, session) {
 
       # -- update & store
       config(
-        config_item_sort(config(),
+        ci_sort(config(),
                          item = event['namespace'],
                          sort = input$item_ordering))
 
       # -- update UI
-      sort <- config_extract(config(), item = event['namespace'])$data.model$sort
+      sort <- c_extract(config(), item = event['namespace'])$data.model$sort
       shinyjs::html(id = paste0(event['namespace'], "-sorting"),
                     html = if(is.null(sort)) "No sorting is defined." else paste(sort, collapse = "|"))
 

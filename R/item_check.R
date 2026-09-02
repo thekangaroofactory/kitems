@@ -26,19 +26,19 @@ item_check <- function(items, config, id){
   rc <- list()
 
   # -- columns
-  if(!identical(names(items), config_attributes(config, id))){
+  if(!identical(names(items), c_attributes(config, id))){
 
     # columns in data.model
-    if(!all(x <- names(items) %in% config_attributes(config, id)))
+    if(!all(x <- names(items) %in% c_attributes(config, id)))
       rc <- c(rc, list(code = 1, type = "error",
                        message = paste("Column(s)", paste(names(items)[x], collapse = ", "), "not in the data.model"),
                        missing = names(items)[x]))
 
     # missing columns
-    if(any(x <- !config_attributes(config, id) %in% names(items)))
+    if(any(x <- !c_attributes(config, id) %in% names(items)))
       rc <- c(rc, list(code = 2, type = "error",
-                       message = paste("Attribute(s)", paste(config_attributes(config, id)[x], collapse = ", "), "not in the items"),
-                       missing = config_attributes(config, id)[x]))
+                       message = paste("Attribute(s)", paste(c_attributes(config, id)[x], collapse = ", "), "not in the items"),
+                       missing = c_attributes(config, id)[x]))
 
   }
 
@@ -49,8 +49,8 @@ item_check <- function(items, config, id){
   if(is.list(items_classes <- sapply(items, class)))
     items_classes <- sapply(items_classes, "[[", 1)
 
-  if(!identical(items_classes, config_item_colclasses(config, id))){
-    x <- names(items_classes[which(items_classes != config_item_colclasses(config, id))])
+  if(!identical(items_classes, ci_classes(config, id))){
+    x <- names(items_classes[which(items_classes != ci_classes(config, id))])
     if(length(x))
       rc <- c(rc, list(code = 3, type = "error",
                        message = paste("Column(s)", paste(x, collapse = ", "), "type not matching with the data.model")))

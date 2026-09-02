@@ -67,7 +67,7 @@ shrink <- function(config, ...){
   # Item
 
   if(names(args) == "item")
-    return(config_item_drop(config,
+    return(ci_drop(config,
                             item = args$item))
 
 
@@ -75,7 +75,7 @@ shrink <- function(config, ...){
   # Attribute
 
   if(names(args) == "attribute")
-    config_attribute_drop(config,
+    ca_drop(config,
                           item = args$attribute['item'],
                           attribute = args$attribute['name'])
 
