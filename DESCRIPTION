@@ -14,8 +14,7 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Depends:
     R (>= 4.1.0),
-    shiny,
-    shinyWidgets,
+    shiny
 Imports:
     DT,
     dplyr,

@@ -11,7 +11,7 @@
 #' @param filter a reactive object to pass filters to the module (see details).
 #' @param options a list of options (see details).
 #'
-#' @import shiny shinydashboard shinyWidgets
+#' @import shiny
 #' @importFrom ktools catl
 #' @importFrom rlang .data
 #'
