@@ -417,10 +417,8 @@ server <- function(input, output, session) {
     removeModal()
 
     # -- update config & store
-    yaml <- config()
-    items_list <- c_items(yaml)
-    yaml$items[which(items_list == id)] <- NULL
-    config(yaml)
+    config(config() |>
+             ci_drop(item = id))
 
     # -- delete item file
     warning("Item file & folder should be deleted here!")
