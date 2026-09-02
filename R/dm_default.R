@@ -12,7 +12,7 @@
 #' It should be turned into a data.frame first, using [yaml_to_dm()].
 #'
 #' `data.model` should contain the following columns:
-#' "name", "type", "default".
+#' "name", "type", "default" & "values".
 #'
 #' @return A data.frame
 #' @export
@@ -64,6 +64,6 @@ dm_default <- function(data.model){
 
   # -- drop columns & return
   data.model |>
-    dplyr::select(name, type, default, values)
+    dplyr::select(dplyr::any_of(c("name", "type", "default", "values")))
 
 }
