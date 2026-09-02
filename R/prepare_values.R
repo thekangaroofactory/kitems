@@ -76,7 +76,7 @@ prepare_values <- function(values, config, update = FALSE, item = get_context())
     att_refresh <- config_item_behavior(config, item, behavior = "refresh")
     att_refresh <- att_refresh[!att_refresh %in% names(values)]
     if(!identical(att_refresh, character(0)))
-      values <- c(values, as.list(stats::setNames(NA, att_refresh)))}
+      values <- c(values, as.list(rlang::set_names(NA, att_refresh)))}
 
   # -- return
   values
