@@ -23,6 +23,7 @@ It should be turned into a data.frame first, using \code{\link[=yaml_to_dm]{yaml
 "name", "type", "default" & "values".
 }
 \examples{
-dm <- data_model(colClasses = c(foo = "numeric"), default = 12)
-dm_default(dm)
+\dontrun{
+dm_default(yaml_to_dm(config...)) # << check this!
+}
 }

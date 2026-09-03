@@ -47,7 +47,7 @@
 #'
 #' @examples
 #' # create project config from scratch
-#' design(project = "foo")
+#' config <- design(project = "foo")
 #'
 #' # add (single) item group
 #' config |> design(item = "foo")
@@ -57,7 +57,7 @@
 #' config |> design(item = "foo",
 #'                  item = "bar")
 #' config |> design(item = c(id = "foo", description = "x"),
-#'                         c(id = "bar", description = "z"))
+#'                  item = c(id = "bar", description = "z"))
 #' config |> design(item = c(id = "foo", description = "x"),
 #'                  item = "bar")
 #

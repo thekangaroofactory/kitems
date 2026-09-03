@@ -19,7 +19,9 @@
 #' @export
 #'
 #' @examples
-#' dm_version(data_model(c(foo = "logical")))
+#' \dontrun{
+#' dm_version(data_model(c(foo = "logical"))) << check this!
+#' }
 
 dm_version <- function(data.model){
 

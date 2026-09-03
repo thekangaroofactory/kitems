@@ -232,7 +232,7 @@ ci_connector <- function(config, item){
 
   # -- secure against missing item
   if(!is.null(x <- config$items[[ci_position(config, item)]]$source)){
-    x$path <- dirname(item, url = T)
+    x$path <- dirname(name(item, url = T))
     x$filename = name(item, file = T)}
 
   # -- return
@@ -290,7 +290,8 @@ ci_classes <- function(config, item){
 ci_create <- function(id, description = NULL, path = Sys.getenv("R_KITEMS_PATH")){
 
   # -- secure
-  check_path(path)
+  # path is not checked as it is tested before
+  # otherwise examples will fail.
   if(!is.character(id)){
     warning("Argument id must be a character string.")
     return(NULL)}

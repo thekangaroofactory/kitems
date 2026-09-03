@@ -25,6 +25,7 @@ Imports:
     yaml,
     shinyjs,
     bslib,
+    shinyWidgets,
     crayon
 Suggests: 
     knitr,

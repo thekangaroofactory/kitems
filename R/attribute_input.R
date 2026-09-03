@@ -20,6 +20,7 @@
 #'
 #' @return An input that can be added to the UI definition.
 #' @export
+#' @importFrom shinyWidgets timeInput
 #'
 #' @examples
 #' \dontrun{
@@ -109,7 +110,7 @@ attribute_input <- function(name, type, value = NULL, choices = NULL, create = F
     input <- wellPanel(input,
 
                        # -- time (need to extract time from value)
-                       timeInput(inputId = ns(paste0(name, "_time")),
+                       shinyWidgets::timeInput(inputId = ns(paste0(name, "_time")),
                                  label = paste(label, "time"),
                                  value = strftime(value, format="%H:%M:%S")),
 

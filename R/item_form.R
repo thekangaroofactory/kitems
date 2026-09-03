@@ -22,7 +22,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' item_form(attributes = dm_default(data_model()), ns)
+#' item_form(attributes = dm_default(data_model()), ns) << check this!
 #' }
 
 item_form <- function(attributes, items = NULL, ns){

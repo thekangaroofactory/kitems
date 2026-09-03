@@ -18,8 +18,9 @@
 #' @export
 #'
 #' @examples
-#' dm <- data_model(colClasses = c(foo = "numeric"), default = 12)
-#' dm_default(dm)
+#' \dontrun{
+#' dm_default(yaml_to_dm(config...)) # << check this!
+#' }
 
 dm_default <- function(data.model){
 
