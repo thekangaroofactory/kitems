@@ -336,7 +336,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       # -- show create dialog
       config |>
-        yaml_to_dm(name, type, default, values) |>
+        yaml_to_dm("name", "type", "default", "values") |>
         dplyr::filter(name %in% included(config, item)) |>
         dm_default() |>
         item_form(ns = ns) |>
@@ -357,7 +357,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         # -- insert & store
         k_items(input |>
                   item_input_values(colClasses = ci_classes(config, item)) |>
-                  attribute_values(data.model = yaml_to_dm(config, name, type, default, class.arg)) |>
+                  attribute_values(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg")) |>
                   rows_insert(items = k_items()))
 
         # -- notify
@@ -391,7 +391,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
           # -- store new item table
           k_items(trigger_create_values() |>
                     prepare_values(config = config) |>
-                    attribute_values(data.model = yaml_to_dm(config, name, type, default, class.arg)) |>
+                    attribute_values(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg")) |>
                     rows_insert(items = k_items()))
 
           # -- notify
@@ -437,7 +437,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       # -- show update dialog
       s_item |>
-        as_default(data.model = yaml_to_dm(config, name, type, default, values)) |>
+        as_default(data.model = yaml_to_dm(config, "name", "type", "default", "values")) |>
         item_form(ns = ns) |>
         item_dialog(workflow = "update", ns = ns)
 
@@ -458,7 +458,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
         # -- show update dialog
         s_item |>
-          as_default(data.model = yaml_to_dm(config, name, type, default, values)) |>
+          as_default(data.model = yaml_to_dm(config, "name", "type", "default", "values")) |>
           item_form(ns = ns) |>
           item_dialog(workflow = "update", ns = ns)
 
@@ -490,7 +490,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         # -- store updated item list
         k_items(
           values |>
-            attribute_values(data.model = yaml_to_dm(config, name, type, default, class.arg), update = TRUE) |>
+            attribute_values(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg"), update = TRUE) |>
             rows_update(items = k_items()))
 
         # -- notify
@@ -527,7 +527,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
           k_items(
             trigger_update_values() |>
               prepare_values(config = config, update = TRUE) |>
-              attribute_values(data.model = yaml_to_dm(config, name, type, default, class.arg), update = TRUE) |>
+              attribute_values(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg"), update = TRUE) |>
               rows_update(items = k_items()))
 
           # -- notify

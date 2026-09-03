@@ -12,7 +12,13 @@
 #' @details
 #' The function is used as a bridge between the config list structure and
 #' the expected data.frame input argument for some functions.
-#' It also helps to keep / select the desired columns (see example).
+#'
+#' It also helps to keep / select the desired columns.
+#' Pass the column names (quoted or unquoted) to `...`.
+#' Note that if the function is used inside a package (kitems does), then
+#' the column names should be quoted or R-CMD Check will throw a note about
+#' 'no visible binding for global variable' since the column names are not
+#' declared as symbol in the environment.
 #'
 #' By default, `config` is the global project config list.
 #' `item` is required in this case unless it is already set in the parent
