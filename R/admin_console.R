@@ -46,7 +46,7 @@ ui <- bslib::page_navbar(title = "Admin Console",
                                                 bslib::layout_column_wrap(
                                                   id = "home-project-items",
                                                   bslib::card(id = "home-items-create",
-                                                      p(actionLink(inputId = "item_create", label = "Add"), "an item to the project.")))))),
+                                                              p(actionLink(inputId = "item_create", label = "Add"), "an item to the project.")))))),
 
                          # -- space
                          # To ensure dark mode switch is on right
@@ -317,28 +317,17 @@ server <- function(input, output, session) {
     # -- close dialog
     removeModal()
 
-    # -- get config & last tab id
-    yaml <- config()
+    # -- last tab id
     last_tab <- utils::tail(item_list(), n = 1L)
     if(length(last_tab) == 0) last_tab <- "home"
 
-    # -- update config
-    yaml <- ci_append(yaml,
-                               ci_create(id = input$item_name,
-                                                  description = input$item_description,
-                                                  path = path))
-
-    # -- create id attribute (mandatory)
-    yaml <- ca_append(yaml,
-                                    item = input$item_name,
-                                    attribute = ca_create(name = "id",
-                                                                        type = "numeric",
-                                                                        default = "ktools::uuid()"),
-                                    hide = TRUE,
-                                    skip = TRUE)
-
-    # -- store
-    config(yaml)
+    # -- update config & store
+    config(
+      config() |>
+        ci_append(
+          ci_create(id = input$item_name,
+                    description = input$item_description,
+                    path = path)))
 
     # -- ui: add item card
     insertUI(selector = "#home-project-items > div:last",
@@ -565,10 +554,10 @@ server <- function(input, output, session) {
           yaml,
           item = event['namespace'],
           attribute = ca_create(name = callback()$name,
-                                              type = callback()$type,
-                                              class.arg = if(callback()$class.arg == "") NULL else callback()$class.arg,
-                                              values = if(callback()$values == "") NULL else callback()$values,
-                                              default = if(callback()$default == "") NULL else callback()$default),
+                                type = callback()$type,
+                                class.arg = if(callback()$class.arg == "") NULL else callback()$class.arg,
+                                values = if(callback()$values == "") NULL else callback()$values,
+                                default = if(callback()$default == "") NULL else callback()$default),
           hide = callback()$hide,
           skip = callback()$skip,
           refresh = if(callback()$skip) callback()$refresh else FALSE)
@@ -582,18 +571,18 @@ server <- function(input, output, session) {
         at <- c_extract(yaml, item = event['namespace'], attribute = callback()$name)
         # remove old card
         removeUI(selector = paste0("#", paste(event['namespace'], event['value'],
-                                  "attribute-card", sep = "-")),
+                                              "attribute-card", sep = "-")),
                  immediate = TRUE)
         # insert updated card
         insertUI(selector = paste0("#", paste(event['namespace'], event['value'],
                                               "attribute-card-container", sep = "-")),
                  where = "afterBegin",
                  immediate = TRUE,
-                     admin_attribute_card(attribute = at,
-                                          item = event['namespace'],
-                                          hide = dm$hide,
-                                          skip = dm$skip,
-                                          refresh = dm$refresh))
+                 admin_attribute_card(attribute = at,
+                                      item = event['namespace'],
+                                      hide = dm$hide,
+                                      skip = dm$skip,
+                                      refresh = dm$refresh))
 
         # update skipped, refreshed & hidden (sidebar)
         shinyjs::html(id = paste0(event['namespace'], "-skipped-attributes"),
@@ -638,10 +627,10 @@ server <- function(input, output, session) {
         # -- update config
         config(
           ca_move(config(),
-                                item = event['namespace'],
-                                attribute = event['value'],
-                                where = list(position = input$attribute_move_position,
-                                             attribute = input$attribute_move_target)))
+                  item = event['namespace'],
+                  attribute = event['value'],
+                  where = list(position = input$attribute_move_position,
+                               attribute = input$attribute_move_target)))
 
         # -- update UI
         # remove attribute card
@@ -690,8 +679,8 @@ server <- function(input, output, session) {
         # -- drop attribute from config
         config(
           ca_drop(config(),
-                                item = event['namespace'],
-                                attribute = event['value']))
+                  item = event['namespace'],
+                  attribute = event['value']))
 
         # -- update UI
         # remove attribute card
@@ -756,8 +745,8 @@ server <- function(input, output, session) {
       # -- update & store
       config(
         ci_sort(config(),
-                         item = event['namespace'],
-                         sort = input$item_ordering))
+                item = event['namespace'],
+                sort = input$item_ordering))
 
       # -- update UI
       sort <- c_extract(config(), item = event['namespace'])$data.model$sort
