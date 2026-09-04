@@ -7,6 +7,7 @@
 #' items are loaded only when required.
 #'
 #' @param datamart a reactiveValues object holding the items
+#' @param config the config list
 #' @param item the name (id) of the item group
 #'
 #' @returns a data.frame of the items or NULL
@@ -24,7 +25,7 @@
 #' datamart |> items("foo")
 #' }
 
-items <- function(datamart, item){
+items <- function(datamart, config, item){
 
   # -- secure param
   stopifnot("datamart must be a reactiveValues object" = "reactiveValues" %in% class(datamart))
@@ -32,8 +33,8 @@ items <- function(datamart, item){
   # -- check
   if(!item %in% names(datamart)){
     message("Selective loading is required for item ", crayon::blue(item))
-    datamart$item <- item_load(connector = ci_connector(config(), item),
-                               col.classes = ci_classes(config(), item))}
+    datamart$item <- item_load(connector = ci_connector(config, item),
+                               col.classes = ci_classes(config, item))}
 
   # -- return
   datamart$item
