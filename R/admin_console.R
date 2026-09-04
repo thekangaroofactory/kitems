@@ -118,11 +118,11 @@ server <- function(input, output, session) {
       message("Starting data model migration...")
 
       # -- convert data model(s)
-      config <- lapply(legacy_dm, function(x){
+      items_list <- lapply(legacy_dm, function(x){
 
         # -- read data model & version
-        legacy_dm <- readRDS(x)
-        dm_version <- attr(legacy_dm, "version")
+        dm <- readRDS(x)
+        dm_version <- attr(dm, "version")
 
         # -- backup file
         bakup_dir <- file.path(path, paste0("backup_", gsub(pattern = "\\.", replacement = "_", dm_version)))
@@ -131,14 +131,20 @@ server <- function(input, output, session) {
         file.copy(x, file.path(bakup_dir, basename(x)), copy.date = T)
 
         # -- do migration & return yaml
-        new_dm <- dm_migrate(legacy_dm)
-        c(ci_create(id = unlist(strsplit(basename(x), split = "_"))[[1]], path = path),
-          data.model = dm_to_yaml(new_dm))
+        new_dm <- dm_migrate(dm)
+        x <- ci_create(id = unlist(strsplit(basename(x), split = "_"))[[1]], path = path)
+        x$data.model <- dm_to_yaml(new_dm)
+
+        # return
+        x
 
       })
 
-      # -- save config file
-      config_write(c(c_create(basename(path)), items = list(config)), path = path)
+      # -- merge & save config
+      config_write(
+        do.call(ci_append,
+                c(list(config = c_create(project = basename(path))),
+                  items_list)))
 
       # -- delete old data model files
       file.remove(legacy_dm)
