@@ -58,7 +58,7 @@ admin_migration_required_layout <- function(files){
 
 admin_migration_done_layout <- function(path){
 
-  backups <- list.files(path = path, pattern = "backup_", full.names = T)
+  backups <- list.files(list.files(path = Sys.getenv("R_KITEMS_PATH"), pattern = "backup_", full.names = T))
   config_file <- name(what = "config", file = T)
 
   # -- return
