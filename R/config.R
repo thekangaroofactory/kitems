@@ -578,11 +578,11 @@ ca_append <- function(config, item, ...){
 #'
 #' @examples
 #' \dontrun{
-#' ca_update(config, item = foo,
-#'                         attribute = ca_create(name = "bar", type "numeric"))
+#' ca_replace(config, item = foo,
+#'            attribute = ca_create(name = "bar", type "numeric"))
 #' }
 
-ca_update <- function(config, item, attribute){
+ca_replace <- function(config, item, attribute){
 
   # -- secure against forbidden actions
   if(attribute$name == "id"){

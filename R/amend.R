@@ -81,6 +81,6 @@ amend <- function(config, item = get_context(), ...){
 
   # -- update attribute
   x[names(new)] <- new
-  ca_update(config, item, attribute = x)
+  ca_replace(config, item, attribute = x)
 
 }
