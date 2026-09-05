@@ -8,7 +8,7 @@
 ns <- shiny::NS("id")
 
 # -- module id
-module_id <- "data"
+module_id <- "myitem"
 
 
 # --------------------------------------------------------------------------
@@ -19,68 +19,57 @@ module_id <- "data"
 ktools::trace_level(0)
 
 # -- data folder
-# adding module_id
-testdata_base_path <- file.path(system.file("tests", "testthat", package = "kitems"), "testdata")
-testdata_path <- file.path(testdata_base_path, module_id)
+# create & export env
+testdata_path_base <- file.path(system.file("tests", "testthat", package = "kitems"), "testdata")
+testdata_path <- file.path(testdata_path_base, module_id)
 
-# -- helper: create folder
-create_folder <- function(){
+dir.create(testdata_path, recursive = TRUE, showWarnings = FALSE)
+Sys.setenv("R_KITEMS_PATH" = testdata_path_base)
 
-  # -- create folder
-  dir.create(testdata_path, recursive = TRUE, showWarnings = TRUE)
-  Sys.setenv("R_KITEMS_PATH" = testdata_path)
+# -- urls
+config_url <- name(module_id, what = "config", url = T)
+items_url <- name(module_id, url = T)
 
-}
-
-# -- build urls
-test_dm_url <- file.path(testdata_path, module_id, name(module_id, what = "dm"))
-test_items_url <- name(module_id, url = T)
-items_file <- name(module_id, file = T)
-import_url <- file.path(testdata_path, "data_to_import.csv")
-
-create_folder()
 
 # ------------------------------------------------------------------------------
 # Declare objects to build data model
 # ------------------------------------------------------------------------------
 
-# -- declare colClasses
-colClasses <- c(date = "POSIXct", name = "character", quantity = "integer", total = "numeric", isvalid = "logical")
-colClasses_extra_att <- c(colClasses, extra_att = "integer")
-colClasses_no_date <- colClasses[!names(colClasses) %in% "date"]
-colClasses_id_only <- c(id = "numeric")
-
-# -- declare default
-default <- c(name = "fruit", isvalid = TRUE, date = "Sys.Date()")
-
-# -- declare skip
-# skip <- c("isvalid")
-
-# -- declare sort
-sort_rank <- c("date" = 1L)
-sort_desc <- c("date" = TRUE)
+# most probably:
+#
+# make a few use cases to create test data:
+# - baseline with config & items
+# -
+#
+# Specific data will be created inside test files
+# - alter baseline
+# - build super specific from scratch
+#
+# >> keep this file as simple as possible.
 
 
 # ------------------------------------------------------------------------------
-# Build data models
+# Baseline
 # ------------------------------------------------------------------------------
 
-# -- build base data model
-# dm <- data_model(colClasses = colClasses,
-#                  default = default,
-#                  sort.rank = sort_rank, sort.desc = sort_desc)
+# -- config
+config <- design(project = "test",
+                  item = "foo") |>
+  extend(item = "foo",
+         attribute = c(name = "quantity", type = "integer"),
+         attribute = c(name = "total", type = "numeric"),
+         attribute = c(name = "name", type = "character"),
+         attribute = c(name = "date", type = "Date"),
+         attribute = c(name = "isvalid", type = "logical"),
+         attribute = c(name = "created", type = "POSIXct"))
 
-dm <- design(project = "test",
-             item = "foo",
-             attribute = c(item = "foo", name = "test", type = "integer"))
+# -- declare item in parent env
+# so that it can be skipped
+item <- "foo"
 
-# -- build specific data models
-# dm_nodisplay <- data_model(colClasses = colClasses, default = default, display = FALSE)
-# dm_no_skip <- data_model(colClasses = colClasses, default = default)
-# dm_extra_att <- data_model(colClasses = colClasses_extra_att, default = default)
-# dm_no_date <- data_model(colClasses = colClasses_no_date)
-# dm_id_only <- data_model(colClasses = colClasses_id_only, skip = TRUE)
-# dm_sort <- data_model(colClasses = colClasses, sort.rank = sort_rank, sort.desc = sort_desc)
+# -- data.model
+dm <- yaml_to_dm(config, "name", "type", "default", "class.arg")
+
 
 
 # ------------------------------------------------------------------------------
@@ -91,16 +80,17 @@ values <- list(date = c(NA, "2024-01-14", "2024-01-16", "2024-01-17"),
                name = c("Apple", "Banana", "Mango", "Orange"),
                quantity = c(1, 12, 3, 7),
                total = c(12.5, 106.3, 45.7, 17.5),
-               isvalid = c(TRUE, FALSE, TRUE, FALSE))
+               isvalid = c(TRUE, FALSE, TRUE, FALSE),
+               created = replicate(4, Sys.time()))
 
 # -- build base items
 items <- values |>
-  prepare_values(dm) |>
+  prepare_values(config) |>
   attribute_values(dm) |>
   rows_insert(data.frame())
 
 # -- items with additional attribute
-items_extra_att <- items
+# items_extra_att <- items
 #items_extra_att$extra_att <- c("this", "is", "an", "extra")
 
 # -- items without row
@@ -110,9 +100,9 @@ items_no_row2 <- data.frame("id" = as.numeric(numeric()),
                             "date" = as.character(character()))
 
 # -- items to test triggers
-new_item <- list(name = "Raspberry", quantity = 34, total = 86.4, isvalid = TRUE) |> prepare_values(dm) |> attribute_values(dm)
-update_item <- list(id = items$id[1], name = "Apple-update", quantity = 100, total = 0.1, isvalid = FALSE) |> prepare_values(dm) |> attribute_values(dm)
-update_item_2 <- list(id = items$id[2], date = NA, name = "Banana-update", quantity = 10, total = 0.1, isvalid = TRUE) |> prepare_values(dm) |> attribute_values(dm)
+#new_item <- list(name = "Raspberry", quantity = 34, total = 86.4, isvalid = TRUE) |> prepare_values(dm) |> attribute_values(dm)
+#update_item <- list(id = items$id[1], name = "Apple-update", quantity = 100, total = 0.1, isvalid = FALSE) |> prepare_values(dm) |> attribute_values(dm)
+#update_item_2 <- list(id = items$id[2], date = NA, name = "Banana-update", quantity = 10, total = 0.1, isvalid = TRUE) |> prepare_values(dm) |> attribute_values(dm)
 
 
 # --------------------------------------------------------------------------
@@ -135,28 +125,8 @@ values_multiple <-  list("id" = c(170539948621, 170539948622),
                          "total" = c(78.9, 80.6),
                          "isvalid" = c(FALSE, TRUE))
 
-# -- values to create multiple items (different lengths)
-values_multiple_lengths <-  list("id" = c(170539948621, 170539948622),
-                                 "date" = Sys.Date(),
-                                 "name" = c("name_1", NA),
-                                 "quantity" = c(4, 5),
-                                 "total" = c(78.9, 12),
-                                 "isvalid" = FALSE)
-
-# -- values with extra column
-values_extra_col <- list("id" = items[1, 'id'],
-                         "name" = c("update"),
-                         "quantity" = 400,
-                         "dummy" = NA)
-
-
 # -- simulate inputs from form
 item_input_values <- list(name = "myname", quantity = 12, total = 34.8)
-
-
-# -- item id (to delete)
-item_id <- items$id[1]
-
 
 # -- date selection
 date_slider_value <- c(as.POSIXct(as.Date("2024-01-15")), as.POSIXct(as.Date("2024-01-17")))
@@ -169,17 +139,11 @@ date_slider_value <- c(as.POSIXct(as.Date("2024-01-15")), as.POSIXct(as.Date("20
 # -- helper: create test data
 create_testdata <- function(){
 
-  # -- create folder
-  create_folder()
+  # -- config
+  config_write(config)
 
-  # -- save data model
-  saveRDS(dm, file = test_dm_url)
-
-  # -- YAML
-  config_write(c_create(project = "test"))
-
-  # -- save items
-  item_save(items,  connector = list(file = test_items_url))
+  # -- items
+  item_save(items,  connector = list(file = items_url))
 
 }
 
@@ -187,26 +151,17 @@ create_testdata <- function(){
 # -- helper: create empty items data
 create_empty_items <- function(){
 
-  # -- create folder
-  create_folder()
-
-  # -- save data model
-  saveRDS(data_model(colClasses = c(id = "numeric", date = "POSIXct")), file = test_dm_url)
-
   # -- YAML
   config_write(c_create(project = "test"))
 
   # -- save items
-  item_save(items_no_row2,  connector = list(file = test_items_url))
+  item_save(items_no_row2,  connector = list(file = items_url))
 
 }
 
 
 # -- helper: create integrity test data
 create_integrity_testdata <- function(){
-
-  # -- create folder
-  create_folder()
 
   # -- alter data model
   dm <- dm[-3, ]
@@ -215,38 +170,7 @@ create_integrity_testdata <- function(){
   saveRDS(dm, file = test_dm_url)
 
   # -- save items
-  item_save(items,  connector = list(file = test_items_url))
-
-}
-
-
-# -- helper: create import data without id
-create_noid_data_to_import <- function(){
-
-  # -- create folder
-  create_folder()
-
-  # -- drop id column & save items
-  items$id <- NULL
-  item_save(items,  connector = list(file = import_url))
-
-  # -- YAML
-  config_write(c_create(project = "test"))
-
-}
-
-
-# -- helper: create data to import
-create_data_to_import <- function(){
-
-  # -- create folder
-  create_folder()
-
-  # -- save items
-  item_save(items,  connector = list(file = import_url))
-
-  # -- YAML
-  config_write(c_create(project = "test"))
+  item_save(items,  connector = list(file = items_url))
 
 }
 
@@ -254,8 +178,7 @@ create_data_to_import <- function(){
 # -- helper: cleanup function
 clean_all <- function(){
 
-  unlink(testdata_base_path, recursive = TRUE)
-  options("k.debug" = NULL)
+  unlink(testdata_path_base, recursive = TRUE)
 
 }
 
