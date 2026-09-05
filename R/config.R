@@ -617,7 +617,7 @@ ca_update <- function(config, item, attribute){
 #' @param config the config list
 #' @param item the name (id) of the item group
 #' @param behavior which behavior to manipulate ("skip", "refresh" or "hide")
-#' @param ... the name of the attribute(s) to skip
+#' @param ... the name of the attribute(s)
 #' @param set a logical (default = TRUE) if the behavior should be set or unset
 #'
 #' @returns a character vector
