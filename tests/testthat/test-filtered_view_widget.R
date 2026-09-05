@@ -7,5 +7,6 @@ test_that("filtered_view_widget works", {
 
   # -- test class
   expect_type(x, "list")
+  expect_true(attributes(x)$class[[1]] == "shiny.tag.list")
 
 })
