@@ -1,7 +1,4 @@
 
-# -- setup
-create_folder()
-
 # -- YAML
 config_write(c_create(project = "test"))
 

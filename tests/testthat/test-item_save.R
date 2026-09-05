@@ -1,6 +1,4 @@
 
-# -- init
-create_folder()
 
 test_that("item_save works", {
 
