@@ -46,7 +46,7 @@ ui <- bslib::page_navbar(title = "Admin Console",
                                                 bslib::layout_column_wrap(
                                                   id = "home-project-items",
                                                   bslib::card(id = "home-items-create",
-                                                              p(actionLink(inputId = "item_create", label = "Add"), "an item to the project.")))))),
+                                                              p(actionLink(inputId = "item_create", label = "Add"), "an item group to the project.")))))),
 
                          # -- space
                          # To ensure dark mode switch is on right
@@ -389,10 +389,10 @@ server <- function(input, output, session) {
       modalDialog(
         p(class = "text-danger", "This action cannot be undone!", br(),
           "Data model & items will be lost."),
-        p("Are you sure you want to delete", id, "item?", br(),
+        p("Are you sure you want to delete", id, "item group?", br(),
           "Type:", paste0("delete-", id), "to confirm."),
         textInput(inputId = "item_delete_string", label = ""),
-        title = "Delete item!",
+        title = "Delete item group!",
         size = "l",
         footer = tagList(
           modalButton(label = "Cancel"),

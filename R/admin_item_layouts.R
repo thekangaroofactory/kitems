@@ -71,7 +71,7 @@ admin_item_layout <- function(x){
                                              label = "Add",
                                              target = "attribute_action",
                                              pattern = paste0(x$id, "-attribute_create")),
-                         "an attribute to the item.")),
+                         "an attribute to the item group.")),
 
                      h2("Sorting"),
                      p(ktools::action_link(id = "x",
@@ -143,7 +143,7 @@ admin_item_card <- function(name, description = NULL){
 admin_item_dz <- function(name){
 
   ktools::action_link(id = "x",
-                      label = "Delete item",
+                      label = "Delete item group",
                       icon = icon("circle-arrow-right"),
                       target = "item_delete",
                       pattern = paste0(name, "-delete"))
