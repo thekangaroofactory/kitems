@@ -482,6 +482,7 @@ ci_row_order <- function(config, item){
 #'
 #' @param name the name of the attribute
 #' @param type the type of the attribute
+#' @param description an optional description for the attribute
 #' @param class.arg optional argument to sent to the as.* conversion function
 #' @param values a character string to set the rules for values
 #' @param default a character string to define the defaults
@@ -494,7 +495,7 @@ ci_row_order <- function(config, item){
 #' ca_create(name = "att_1", type = "integer")
 #' }
 
-ca_create <- function(name, type, class.arg = NULL, values = NULL, default = NULL){
+ca_create <- function(name, type, description = NULL, class.arg = NULL, values = NULL, default = NULL){
 
   # -- secure
   if(!type %in% OBJECT_CLASS){
@@ -507,6 +508,10 @@ ca_create <- function(name, type, class.arg = NULL, values = NULL, default = NUL
   # -- init
   config <- list(name = name,
                  type = type)
+
+  # -- description
+  if(!is.null(description))
+    config <- append(config, list(description = description), after = 1)
 
   # -- class.arg
   if(!is.null(class.arg))
