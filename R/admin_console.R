@@ -490,18 +490,30 @@ server <- function(input, output, session) {
       # -- listen to callback
       observeEvent(callback(), {
 
-        yaml <- ca_append(
-          yaml,
-          item = event['namespace'],
-          attribute = ca_create(
-            name = callback()$name,
-            type = callback()$type,
-            class.arg = if(callback()$class.arg == "") NULL else callback()$class.arg,
-            values = if(callback()$values == "") NULL else callback()$values,
-            default = if(callback()$default == "") NULL else callback()$default),
-          hide = callback()$hide,
-          skip = callback()$skip,
-          refresh = if(callback()$skip) callback()$refresh else FALSE)
+        # -- update config
+        yaml <- yaml |>
+          ca_append(item = event['namespace'],
+                    attribute = ca_create(
+                      name = callback()$name,
+                      type = callback()$type,
+                      class.arg = if(callback()$class.arg == "") NULL else callback()$class.arg,
+                      values = if(callback()$values == "") NULL else callback()$values,
+                      default = if(callback()$default == "") NULL else callback()$default))
+
+        if(callback()$skip)
+          yaml <- yaml |>
+            ca_behavior(item = event['namespace'],
+                        behavior = "skip", callback()$name)
+
+        if(callback()$refresh && callback()$skip)
+          yaml <- yaml |>
+            ca_behavior(item = event['namespace'],
+                        behavior = "refresh", callback()$name)
+
+        if(callback()$hide)
+          yaml <- yaml |>
+            ca_behavior(item = event['namespace'],
+                        behavior = "hide", callback()$name)
 
         # -- store the new config
         config(yaml)
@@ -550,19 +562,22 @@ server <- function(input, output, session) {
       # -- listen to callback
       observeEvent(callback(), {
 
-        yaml <- ca_update(
-          yaml,
-          item = event['namespace'],
-          attribute = ca_create(name = callback()$name,
-                                type = callback()$type,
-                                class.arg = if(callback()$class.arg == "") NULL else callback()$class.arg,
-                                values = if(callback()$values == "") NULL else callback()$values,
-                                default = if(callback()$default == "") NULL else callback()$default),
-          hide = callback()$hide,
-          skip = callback()$skip,
-          refresh = if(callback()$skip) callback()$refresh else FALSE)
+        # -- update attribute
+        yaml <- yaml |>
+          ca_update(item = event['namespace'],
+                    attribute = ca_create(name = callback()$name,
+                                          type = callback()$type,
+                                          class.arg = if(callback()$class.arg == "") NULL else callback()$class.arg,
+                                          values = if(callback()$values == "") NULL else callback()$values,
+                                          default = if(callback()$default == "") NULL else callback()$default))
 
-        # -- store the new config
+        # -- update behaviors
+        yaml <- yaml |>
+          ca_behavior(item = event['namespace'], behavior = "skip", callback()$name, set = callback()$skip) |>
+          ca_behavior(item = event['namespace'], behavior = "refresh", callback()$name, set = callback()$refresh && callback()$skip) |>
+          ca_behavior(item = event['namespace'], behavior = "hide", callback()$name, set = callback()$hide)
+
+        # -- store config
         config(yaml)
 
         # -- update UI
