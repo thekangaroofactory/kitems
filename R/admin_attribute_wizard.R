@@ -39,7 +39,7 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, callback, ses
       hide = attribute %in% dm$hide, skip = attribute %in% dm$skip,
       refresh = attribute %in% dm$refresh)
   } else
-    list(name = "", type = NULL, hide = FALSE, skip = FALSE, refresh = FALSE)
+    list(name = "", description = "", type = NULL, hide = FALSE, skip = FALSE, refresh = FALSE)
 
   # -- compute reserved names
   # existing attributes (except itself for update)
@@ -58,7 +58,8 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, callback, ses
     insertUI(selector = "#input-container",
              where = "afterBegin",
              ui = div(id = "input-content",
-                      textInput(inputId = "attribute_name", label = "Name", value = values$name)))
+                      textInput(inputId = "attribute_name", label = "Name", value = values$name),
+                      textInput(inputId = "attribute_desc", label = "Description", value = values$description)))
 
     # -- validate
     obs <- observeEvent(input$attribute_name, {
@@ -389,6 +390,7 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, callback, ses
     # -- pass inputs to callback
     callback(
       list(name = if(update && attribute == "id") attribute else input$attribute_name,
+           description = input$attribute_desc,
            type = input$attribute_type,
            class.arg = input$attribute_class_arg,
            values = paste0(input$attribute_values_verb, "(", input$attribute_values, ")"),

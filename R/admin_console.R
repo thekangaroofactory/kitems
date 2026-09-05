@@ -495,6 +495,7 @@ server <- function(input, output, session) {
           ca_append(item = event['namespace'],
                     attribute = ca_create(
                       name = callback()$name,
+                      description = callback()$description,
                       type = callback()$type,
                       class.arg = if(callback()$class.arg == "") NULL else callback()$class.arg,
                       values = if(callback()$values == "") NULL else callback()$values,
@@ -566,6 +567,7 @@ server <- function(input, output, session) {
         yaml <- yaml |>
           ca_replace(item = event['namespace'],
                      attribute = ca_create(name = callback()$name,
+                                           description = callback()$description,
                                            type = callback()$type,
                                            class.arg = if(callback()$class.arg == "") NULL else callback()$class.arg,
                                            values = if(callback()$values == "") NULL else callback()$values,
