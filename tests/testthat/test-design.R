@@ -1,5 +1,4 @@
 
-create_folder()
 
 # -- test
 test_that("Verb design works", {

@@ -1,13 +1,8 @@
 
-create_folder()
+
+setup_baseline()
 
 test_that("Verb amend works", {
-
-  # -- build baseline
-  config <- design(project = "test",
-                    item = "foo") |>
-     extend(item = "foo",
-            attribute = c(name = "total", type = "integer"))
 
   # -- single instruction
   x <- config |>

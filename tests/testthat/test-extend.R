@@ -1,5 +1,4 @@
 
-create_folder()
 
 test_that("Verb extend works", {
 
