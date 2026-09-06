@@ -13,6 +13,7 @@
 #'
 #' @examples
 #' dm_values(x = "suggest(1, 2)")
+#' dm_values(x = "suggest(min(value))", data = data.frame(value = c(12, 10)))
 
 dm_values <- function(x, data = NULL){
 
