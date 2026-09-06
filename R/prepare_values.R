@@ -74,9 +74,10 @@ prepare_values <- function(values, config, update = FALSE, item = get_context())
   # add names to values so they will be computed again
   if(update){
     att_refresh <- ci_behavior(config, item, behavior = "refresh")
-    att_refresh <- att_refresh[!att_refresh %in% names(values)]
-    if(!identical(att_refresh, character(0)))
-      values <- c(values, as.list(rlang::set_names(NA, att_refresh)))}
+    if(!is.null(att_refresh)){
+      att_refresh <- att_refresh[!att_refresh %in% names(values)]
+      if(!identical(att_refresh, character(0)))
+        values <- c(values, as.list(rlang::set_names(NA, att_refresh)))}}
 
   # -- return
   values
