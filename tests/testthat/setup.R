@@ -85,7 +85,7 @@ values <- list(date = c(NA, "2024-01-14", "2024-01-16", "2024-01-17"),
 
 # -- build base items
 items <- values |>
-  prepare_values(config) |>
+  prepare_values(config, item = "foo") |>
   attribute_values(dm) |>
   rows_insert(data.frame())
 
