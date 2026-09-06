@@ -1,5 +1,4 @@
 
-
 test_that("config_read works", {
 
   # -- no config file
