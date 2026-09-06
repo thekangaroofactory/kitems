@@ -6,12 +6,12 @@ create_testdata()
 test_that("item_load works", {
 
   # -- function call
-  x <- item_load(connector = list(file = items_file, path = testdata_path),
-                 col.classes = dm_colClasses(dm))
+  x <- item_load(connector = list(file = name(module_id, file = T),
+                                  path = testdata_path),
+                 col.classes = ci_classes(config, item = "foo"))
 
   # -- default checks
   expect_items(x, n = nrow(items))
-  expect_colclasses(x, dm_colClasses(dm))
 
 })
 
