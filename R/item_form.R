@@ -35,9 +35,9 @@ item_form <- function(attributes, items = NULL, ns){
   # note: faster than apply over data.frame + as.list the output
   lapply(1:nrow(attributes), function(x) {
 
-    attribute_input(name = attributes[x, 'name'],
-                    type = attributes[x, 'type'],
-                    value = attributes[x, 'default'],
+    attribute_input(name = attributes[[x, 'name']],
+                    type = attributes[[x, 'type']],
+                    value = attributes[[x, 'default']],
                     choices = if(is_truthy(attributes[[x, 'values']])) dm_values(attributes[[x, 'values']], data = items) else NULL,
                     create = rlang::is_call(rlang::parse_expr(attributes[[x, 'values']]), name = "suggest"),
                     ns)
