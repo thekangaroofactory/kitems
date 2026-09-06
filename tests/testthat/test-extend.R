@@ -31,5 +31,3 @@ test_that("Verb extend works", {
   expect_identical(c_attributes(x, "foo"), c("id", "date", "comment"))
 
 })
-
-clean_all()

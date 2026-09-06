@@ -17,5 +17,3 @@ test_that("Verb refresh works", {
   expect_identical(x |> frozen(item = "foo"), c("id", "total"))
 
 })
-
-clean_all()

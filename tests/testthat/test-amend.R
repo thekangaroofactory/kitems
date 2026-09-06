@@ -1,7 +1,5 @@
 
 
-setup_baseline()
-
 test_that("Verb amend works", {
 
   # -- single instruction
@@ -17,5 +15,3 @@ test_that("Verb amend works", {
   expect_identical(names(c_extract(x, item = "foo", attribute = "total")), c("name", "type", "values", "default"))
 
 })
-
-clean_all()

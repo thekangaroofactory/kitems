@@ -53,5 +53,3 @@ test_that("Verb design works", {
   expect_identical(length(config$items[[2]]$data.model$attributes), 3L)
 
 })
-
-clean_all()

@@ -41,5 +41,3 @@ test_that("Verb shrink works", {
   expect_identical(x, config)
 
 })
-
-clean_all()
