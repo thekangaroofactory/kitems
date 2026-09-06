@@ -77,7 +77,10 @@ attribute_input <- function(name, type, value = NULL, choices = NULL, create = F
       width = NULL)
 
   # -- date, POSIXct
-  if(type %in% c("Date", "POSIXct"))
+  if(type %in% c("Date", "POSIXct")){
+    # check: NA would raise a warning
+    if(is.na(value))
+      value <- NULL
     input <- dateInput(
       inputId = input_id,
       label = label,
@@ -91,7 +94,7 @@ attribute_input <- function(name, type, value = NULL, choices = NULL, create = F
       width = NULL,
       autoclose = TRUE,
       datesdisabled = NULL,
-      daysofweekdisabled = NULL)
+      daysofweekdisabled = NULL)}
 
   # -- POSIXct (add time & timezone inputs)
   if(type == "POSIXct"){
