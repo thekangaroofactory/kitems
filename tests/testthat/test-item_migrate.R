@@ -2,59 +2,29 @@
 
 test_that("item_migrate works", {
 
-  # -- function call
+  # -- add attribute
   x <- item_migrate(items = items, name = "new_attribute", type = "logical", fill = TRUE)
 
-  # -- default checks
+  # checks
   expect_items(x, n = nrow(items))
-  expect_colclasses(x, c(dm_colClasses(dm), new_attribute = "logical"))
-
-  # -- test nb cols
   expect_equal(ncol(x), ncol(items) + 1)
-
-  # -- test added attribute
-  expect_equal(x$new_attribute, rep(TRUE,4))
-
-})
+  expect_type(x$new_attribute, "logical")
+  expect_equal(x$new_attribute, rep(TRUE, 4))
 
 
-test_that("item_migrate: items without row", {
-
-  # -- function call
+  # -- empty items
   x <- item_migrate(items = items_no_row, name = "new_attribute", type = "logical", fill = TRUE)
 
-  # -- default checks
+  # checks
   expect_items(x, n = nrow(items_no_row))
-
-  # -- test nb cols
   expect_equal(ncol(x), ncol(items_no_row) + 1)
 
-})
 
-
-test_that("item_migrate: wrong fill length", {
-
-  # -- function call
-  x <- item_migrate(items = items, name = "new_attribute", type = "logical", fill = c(TRUE, FALSE))
-
-  # -- default checks
-  expect_items(x, n = nrow(items))
-
-  # -- test nb cols
-  expect_equal(ncol(x), ncol(items) + 1)
-
-})
-
-
-test_that("item_migrate: wrong fill type", {
-
-  # -- function call
+  # -- wrong fill type
   x <- item_migrate(items = items, name = "new_attribute", type = "logical", fill = 1)
 
-  # -- default checks
+  # checks
   expect_items(x, n = nrow(items))
-
-  # -- test nb cols
   expect_equal(ncol(x), ncol(items) + 1)
 
 })

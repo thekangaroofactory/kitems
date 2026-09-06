@@ -2,16 +2,9 @@
 
 test_that("item_reveal works", {
 
-  # -- function call
-  x <- mask(item_reveal(items, dm))
-
-  # -- default checks
-  expect_items(x, n = nrow(items))
-
-  # -- test dim
-  expect_equal(dim(x), c(dim(items)[1], sum(dm$display)))
-
-  # -- test names (id is displayed)
-  expect_equal(names(x), stringr::str_to_title(dm$name[dm$display]))
+  # -- baseline
+  x <- item_reveal(items, config, item = "foo")
+  expect_s3_class(x, "data.frame")
+  expect_identical(names(x), displayed(config, item = "foo"))
 
 })
