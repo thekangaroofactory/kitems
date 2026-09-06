@@ -7,7 +7,7 @@ test_that("rows_update works", {
 
   # -- update single item
   x <- list(id = items$id[1], name = "update", total = 200) |>
-    prepare_values(data.model = dm, update = TRUE) |>
+    prepare_values(config, item = "foo", update = TRUE) |>
     attribute_values(data.model = dm, update = TRUE) |>
     rows_update(items)
 
@@ -17,7 +17,7 @@ test_that("rows_update works", {
 
   # -- update multiple items
   x <- list(id = items$id[1:2], name = "update", total = 200) |>
-    prepare_values(data.model = dm, update = TRUE) |>
+    prepare_values(config, item = "foo", update = TRUE) |>
     attribute_values(data.model = dm, update = TRUE) |>
     rows_update(items)
 
@@ -29,10 +29,11 @@ test_that("rows_update works", {
 
   # -- force update skipped attribute
   # send the id only (will just refresh the skipped attribute)
-  dm <- attribute_update(dm, name = "date", skip = TRUE, refresh = TRUE)
+  config_2 <- config |> skip(item = "foo", "date") |> refresh(item = "foo", "date")
+  dm <- yaml_to_dm(config_2, item = "foo", "name", "type", "default", "class.arg")
   ref_date <- as.numeric(items$date[1])
   x <- list(id = items$id[1]) |>
-    prepare_values(data.model = dm, update = TRUE) |>
+    prepare_values(config, item = "foo", update = TRUE) |>
     attribute_values(data.model = dm, update = TRUE) |>
     rows_update(items)
 
@@ -42,7 +43,7 @@ test_that("rows_update works", {
   # -- same with other attribute to update
   ref_date <- as.numeric(items$date[1])
   x <- list(id = items$id[2], total = 99) |>
-    prepare_values(data.model = dm, update = TRUE) |>
+    prepare_values(config, item = "foo", update = TRUE) |>
     attribute_values(data.model = dm, update = TRUE) |>
     rows_update(items)
 
@@ -55,8 +56,8 @@ test_that("rows_update works", {
   # Specific cases coverage
 
   # -- drop unmatched columns
-  x <- values_extra_col |>
-    prepare_values(data.model = dm, update = TRUE) |>
+  x <- list(id = items$id[1], name = "update", dummy_col = "xxx") |>
+    prepare_values(config, item = "foo", update = TRUE) |>
     attribute_values(data.model = dm, update = TRUE) |>
     rows_update(items)
 
@@ -64,7 +65,7 @@ test_that("rows_update works", {
 
   # -- make rectangular
   x <- list(id = items$id, quantity = 100, total = c(1:4)) |>
-    prepare_values(data.model = dm, update = TRUE) |>
+    prepare_values(config, item = "foo", update = TRUE) |>
     attribute_values(data.model = dm, update = TRUE) |>
     rows_update(items)
 
@@ -72,7 +73,7 @@ test_that("rows_update works", {
 
   # -- drop unmatched rows
   x <- list(id = 123, quantity = 100) |>
-    prepare_values(data.model = dm, update = TRUE) |>
+    prepare_values(config, item = "foo", update = TRUE) |>
     attribute_values(data.model = dm, update = TRUE) |>
     rows_update(items)
 
