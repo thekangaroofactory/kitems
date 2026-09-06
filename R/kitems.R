@@ -437,6 +437,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       # -- show update dialog
       s_item |>
+        dplyr::select(included(config, item)) |>
         as_default(data.model = yaml_to_dm(config, "name", "type", "default", "values")) |>
         item_form(ns = ns) |>
         item_dialog(workflow = "update", ns = ns)
@@ -458,6 +459,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
         # -- show update dialog
         s_item |>
+          dplyr::select(included(config, item)) |>
           as_default(data.model = yaml_to_dm(config, "name", "type", "default", "values")) |>
           item_form(ns = ns) |>
           item_dialog(workflow = "update", ns = ns)
