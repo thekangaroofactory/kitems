@@ -1,5 +1,7 @@
 
 
+create_test_folder(testdata_path)
+
 test_that("config_write works", {
 
   config_write(config)

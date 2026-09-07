@@ -4,15 +4,15 @@ test_that("name works", {
 
   # -- dm
   expect_type(x <- name(module_id, what = "dm"), "character")
-  expect_identical(x, "myitem_data_model")
+  expect_identical(x, "foo_data_model")
 
   # -- item
   expect_type(x <- name(module_id), "character")
-  expect_identical(x, "myitem_items")
+  expect_identical(x, "foo_items")
   expect_type(x <- name(module_id, file = T), "character")
-  expect_identical(x, "myitem_items.csv")
+  expect_identical(x, "foo_items.csv")
   expect_type(x <- name(module_id, url = T), "character")
-  expect_identical(basename(x), "myitem_items.csv")
+  expect_identical(basename(x), "foo_items.csv")
   expect_identical(dirname(x), testdata_path)
 
   # -- config

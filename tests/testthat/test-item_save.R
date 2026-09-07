@@ -1,5 +1,7 @@
 
 
+create_test_folder(testdata_path)
+
 test_that("item_save works", {
 
   # -- function call
