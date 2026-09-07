@@ -34,6 +34,11 @@
 
 get_context <- function(){
 
-  parent.frame(n =2)$item
+  x <- get0("item", envir = parent.frame(n = 2))
+  if(is.null(x))
+    warning("Can't guess the item name (id) from the environment!")
+
+  # return
+  x
 
 }
