@@ -19,11 +19,8 @@ config_read <- function(path = Sys.getenv("R_KITEMS_PATH")){
   config_file <- list.files(path, pattern = "_kitems.yml", full.names = T)
 
   # -- return
-  if(length(config_file)){
-
-    catl("Reading YAML file", config_file, level = 1)
+  if(length(config_file))
     yaml::read_yaml(file = config_file)
-
-  } else NULL
+  else NULL
 
 }
