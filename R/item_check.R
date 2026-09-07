@@ -28,34 +28,36 @@ item_check <- function(items, config, id){
   # -- columns
   if(!identical(names(items), c_attributes(config, id))){
 
-    # columns in data.model
+    # extra columns
     if(!all(x <- names(items) %in% c_attributes(config, id)))
       rc <- c(rc, list(code = 1, type = "error",
-                       message = paste("Column(s)", paste(names(items)[x], collapse = ", "), "not in the data.model"),
+                       message = paste("Column(s)", paste(names(items)[!x], collapse = ", "), "not in the data.model"),
                        missing = names(items)[x]))
 
     # missing columns
     if(any(x <- !c_attributes(config, id) %in% names(items)))
       rc <- c(rc, list(code = 2, type = "error",
                        message = paste("Attribute(s)", paste(c_attributes(config, id)[x], collapse = ", "), "not in the items"),
-                       missing = c_attributes(config, id)[x]))
+                       missing = c_attributes(config, id)[x]))}
 
-  }
 
-  # -- types
-
-  # items classes
+  # -- classes
   # when POSIXct, two classes will be found
+  # (so output is list instead of vector)
   if(is.list(items_classes <- sapply(items, class)))
-    items_classes <- sapply(items_classes, "[[", 1)
+    items_classes <- unlist(lapply(items_classes, "[[", 1))
 
-  if(!identical(items_classes, ci_classes(config, id))){
-    x <- names(items_classes[which(items_classes != ci_classes(config, id))])
+  # exclude extra / missing columns
+  ref_classes <- ci_classes(config, id)
+  items_classes <- items_classes[names(items_classes) %in% names(ref_classes)]
+  ref_classes <- ref_classes[names(ref_classes) %in% names(items_classes)]
+
+  # do check
+  if(!identical(items_classes, ref_classes)){
+    x <- names(items_classes[which(items_classes != ref_classes)])
     if(length(x))
       rc <- c(rc, list(code = 3, type = "error",
-                       message = paste("Column(s)", paste(x, collapse = ", "), "type not matching with the data.model")))
-
-  }
+                       message = paste("Column(s)", paste(x, collapse = ", "), "type not matching with the data.model")))}
 
   # -- return
   rc
