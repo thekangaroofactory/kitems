@@ -62,79 +62,78 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     # //////////////////////////////////////////////////////////////////////////
     # -- Warm up ----
 
-    ## -- Set trace level
+    # trace level
     if(Sys.getenv("R_KITEMS_DEBUG") != "")
       ktools::trace_level(as.numeric(Sys.getenv("R_KITEMS_DEBUG")))
 
-    # -- Build log pattern
+    # log pattern
     MODULE <- paste0("[", id, "]")
     catl(MODULE, "Starting kitems module server...", debug = 1)
 
-    # -- Get namespace
+    # namespace
     ns <- session$ns
 
 
     # //////////////////////////////////////////////////////////////////////////
     # -- Check path ----
 
-    # -- check path
     check_path(path)
 
 
     # //////////////////////////////////////////////////////////////////////////
-    # -- Check other parameters ----
+    # -- Check parameters ----
 
-    # -- check trigger
+    # trigger
     if(!is.null(trigger))
       stopifnot("trigger must be a reactive object" = is.reactive(trigger))
 
-    # -- check filter
+    # filter
     if(!is.null(filter))
       stopifnot("filter must be a reactive object" = is.reactive(filter))
 
-    # -- check options
+    # options
     stopifnot("options argument must be a list" = is.list(options))
 
-    # -- check elements in option list
+    # elements in options
     options <- ktools::match.option(fun = kitems, arg = "options", value = options)
     stopifnot("autosave option must be a logical" = is.logical(options$autosave))
 
 
     # //////////////////////////////////////////////////////////////////////////
-    # -- Declare reactive objects ----
+    # -- Init reactives ----
 
-    # -- Internal workflow triggers
-    #if(!is.null(trigger)){
-    trigger_create_dialog <- reactiveVal(NULL)
-    trigger_create_values <- reactiveVal(NULL)
-    trigger_update_dialog <- reactiveVal(NULL)
-    trigger_update_values <- reactiveVal(NULL)
-    trigger_delete_dialog <- reactiveVal(NULL)
-    trigger_delete_values <- reactiveVal(NULL)
-    #}
+    # internal workflow triggers
+    if(!is.null(trigger)){
+      trigger_create_dialog <- reactiveVal(NULL)
+      trigger_create_values <- reactiveVal(NULL)
+      trigger_update_dialog <- reactiveVal(NULL)
+      trigger_update_values <- reactiveVal(NULL)
+      trigger_delete_dialog <- reactiveVal(NULL)
+      trigger_delete_values <- reactiveVal(NULL)}
 
-    # -- Internal filter triggers
-    #if(!is.null(filter)){
-    trigger_filter_pre <- reactiveVal(NULL)
-    trigger_filter_main <- reactiveVal(NULL)
-    #}
+    # internal filter triggers
+    if(!is.null(filter)){
+      trigger_filter_pre <- reactiveVal(NULL)
+      trigger_filter_main <- reactiveVal(NULL)}
 
 
     # //////////////////////////////////////////////////////////////////////////
-    # -- Initialize data model and items ----
+    # -- Init config & items ----
 
-    ## -- Init item name / id
-    # to allow attribute skip in grammar level function calls
+    # -- item name / id
+    # to allow arg skip in grammar function calls
     item <- id
 
+    # show progress
     withProgress(message = MODULE, value = 0, {
 
-      # -- init progress
+      # init progress
       incProgress(0/4, detail = "Init")
 
       ## -- Load & check config ------------------------------------------------
 
-      # -- read file
+      # read file
+      catl(MODULE, "Reading YAML config", level = 1)
       config <- config_read(path)
       if(is.null(config))
         stop("No _kitems.yml configuration file found.\nCheck provided path.")
@@ -143,7 +142,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       # config version must be same as package
       if(config$version != utils::packageVersion("kitems")){
 
-        # -- display message
+        # modal
         showModal(
           modalDialog(
             title = "Kitems Version",
@@ -151,36 +150,39 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
             p("Run kitems::admin() to fix it."),
             footer = actionButton(inputId = ns("dm_version_warning"), label = "Close app")))
 
-        # -- listen to modal close button
+        # listen to modal
         observeEvent(input$dm_version_warning, stopApp(), once = TRUE)}
 
-      # -- Increment progress
+      # Increment progress
       incProgress(1/4, detail = "Read items")
 
 
       ## -- Read the data (items) ----------------------------------------------
 
-      # -- url from module id
+      # url
       k_items_url <- name(id, url = T)
 
-      # -- Init (non persistent object)
+      # init (non persistent object)
       init_items <- NULL
 
       # path = NULL as temporary workaround (it's contained in k_items_url)
+      catl(MODULE, "Reading items", level = 1)
       init_items <- item_load(connector = list(file = k_items_url,
                                                path = NULL),
                               col.classes = ci_classes(config, item))
 
-      # -- Increment progress
+      # increment progress
       incProgress(2/4, detail = "Check items")
 
 
-      # -- Check items integrity -----------------------------------------------
+      ## -- Check items integrity ----------------------------------------------
 
       if(!is.null(init_items)){
-        catl(MODULE, "Checking items integrity")
+        catl(MODULE, "Checking items")
 
         rc <- init_items |> check(config, item)
+        catl("- report has length", length(rc), level = 2)
+
         if(length(rc))
             # -- when interactive
             if(isRunning()){
@@ -196,17 +198,17 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       incProgress(3/4, detail = "Wrap everything")
 
 
-      # -- Store into reactive values ------------------------------------------
+      # -- Store into reactives ------------------------------------------------
 
-      # -- data model
+      # data model
       # item config up to the data.model level
       k_data_model <- c_extract(config, item = item)$data.model
 
-      # -- items
+      # items
       k_items <- reactiveVal(init_items)
       rm(init_items)
 
-      # Increment progress
+      # increment progress
       incProgress(4/4, detail = "Load items done")
 
     }) #end withProgress
@@ -320,7 +322,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     # //////////////////////////////////////////////////////////////////////////
     ## -- Create item workflow ----
 
-    # -- Declare: actionButton output
+    # -- actionButton
     output$item_create_btn <- renderUI(
 
       # -- Check data model #290
@@ -329,7 +331,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
                      label = "Create"))
 
 
-    # -- Observe: fire create dialog
+    # -- dialog
     observe({
 
       catl(MODULE, "[Event] Show create item dialog")
@@ -345,7 +347,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     }) |> bindEvent(input$item_create, if(!is.null(trigger)) trigger_create_dialog(), ignoreInit = TRUE)
 
 
-    # -- Observe: create item from dialog values
+    # -- create from dialog
     observeEvent(input$item_create_confirm, {
 
       catl(MODULE, "[Event] Confirm create dialog item")
@@ -379,7 +381,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     })
 
 
-    # -- Observe: create item from trigger values
+    # -- create from trigger
     if(!is.null(trigger))
       observe({
 
@@ -416,7 +418,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     # //////////////////////////////////////////////////////////////////////////
     ## -- Update item workflow ----
 
-    # -- Declare: actionButton output
+    # -- actionButton
     output$item_update_btn <- renderUI(
 
       # -- check item selection + single row
@@ -427,12 +429,12 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
                      label = "Update"))
 
 
-    # -- Observe: fire update dialog from UI
+    # -- dialog
     observeEvent(input$item_update, {
 
       catl(MODULE, "[Event] Update item button")
 
-      # -- Get selected item
+      # -- selected item
       s_item <- k_items()[k_items()$id == selected_items(), ]
 
       # -- show update dialog
@@ -445,7 +447,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       })
 
 
-    # -- Observe: fire update dialog from trigger
+    # -- dialog from trigger
     if(!is.null(trigger))
       observe({
 
@@ -468,7 +470,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
                       ignoreInit = TRUE)
 
 
-    # -- Observe: update item from dialog
+    # -- update from dialog
     observeEvent(input$item_update_confirm, {
 
       # -- close modal
@@ -518,7 +520,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     })
 
 
-    # -- Observe: update item from trigger values
+    # -- update from trigger
     if(!is.null(trigger))
       observe({
 
@@ -551,7 +553,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     # //////////////////////////////////////////////////////////////////////////
     ## -- Delete item workflow ----
 
-    # -- Declare: actionButton output
+    # -- actionButton
     output$item_delete_btn <- renderUI(
 
       # -- check item selection
@@ -562,14 +564,14 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
                      label = "Delete"))
 
 
-    # -- Observe: fire dialog from actionButton
+    # -- dialog
     observeEvent(input$item_delete, {
 
       catl(MODULE, "[Event] Delete item button")
       showModal(item_dialog(workflow = "delete", ns = ns))})
 
 
-    # -- Observe: fire dialog from trigger
+    # -- dialog from trigger
     if(!is.null(trigger))
       observe({
 
@@ -580,7 +582,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
                       ignoreInit = TRUE)
 
 
-    # -- Observe: delete item from actionButton
+    # -- delete from dialog
     observeEvent(input$item_delete_confirm, {
 
       catl(MODULE, "[Event] Confirm delete item(s) button")
@@ -622,7 +624,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     })
 
 
-    # -- Observe: delete item from trigger
+    # -- delete from trigger
     if(!is.null(trigger))
       observe({
 
@@ -718,23 +720,24 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     prefiltered_items <- reactive(
 
       # -- check custom filter
-      if(!is.null(trigger_filter_pre())){
+      if(!is.null(filter))
+        if(!is.null(trigger_filter_pre())){
 
-        # -- apply filter
-        catl(MODULE, "Apply custom pre-filtering on items")
+          # -- apply filter
+          catl(MODULE, "Apply custom pre-filtering on items")
 
-        # -- test must be done out of the filter() function #593
-        # otherwise multiple confitions does not work
-        items <- if(is.list(trigger_filter_pre()))
-          k_items() |> dplyr::filter(!!!trigger_filter_pre())
-        else
-          k_items() |> dplyr::filter(!!trigger_filter_pre())
-        catl("- ouput dim =", dim(items), level = 2)
+          # -- test must be done out of the filter() function #593
+          # otherwise multiple confitions does not work
+          items <- if(is.list(trigger_filter_pre()))
+            k_items() |> dplyr::filter(!!!trigger_filter_pre())
+          else
+            k_items() |> dplyr::filter(!!trigger_filter_pre())
+          catl("- ouput dim =", dim(items), level = 2)
 
-        # -- return
-        items
+          # -- return
+          items
 
-      } else k_items()) |> bindEvent(k_items(), trigger_filter_pre())
+        } else k_items()) |> bindEvent(k_items(), if(!is.null(filter)) trigger_filter_pre())
 
 
     ## -- Main-filtering layer ----
@@ -748,17 +751,18 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       # -- check date slider
       # note: force everything to be a Date #615
-      date_expr <- if(has_date_attribute(config) && !is.null(input$date_slider)){
+      filter_exprs <- if(has_date_attribute(config) && !is.null(input$date_slider)){
         catl("- Date slider =", input$date_slider, level = 2)
         dplyr::expr(as.Date(date) >= as.Date(input$date_slider[1]) & as.Date(date) <= as.Date(input$date_slider[2]))}
 
       # -- check custom filter
-      if(!is.null(trigger_filter_main()))
-        catl("- Custom filter =", as.character(trigger_filter_main()), level = 2)
+      if(!is.null(filter))
+        if(!is.null(trigger_filter_main())){
+          catl("- Custom filter =", as.character(trigger_filter_main()), level = 2)
 
-      # -- merge expression(s)
-      # NULLs will be supported, output is NULL, one expr or several exprs
-      filter_exprs <- c(trigger_filter_main(), date_expr)
+          # -- merge expression(s)
+          # NULLs will be supported, output is NULL, one expr or several exprs
+          filter_exprs <- c(trigger_filter_main(), date_expr)}
 
       # -- init
       items <- prefiltered_items()
@@ -780,13 +784,12 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       # -- Return
       items
 
-    }) |> bindEvent(prefiltered_items(), trigger_filter_main(), input$date_slider)
+    }) |> bindEvent(prefiltered_items(), if(!is.null(filter)) trigger_filter_main(), input$date_slider)
 
 
     # //////////////////////////////////////////////////////////////////////////
     # -- Filtered view ----
 
-    ## -- Declare view ----
     output$filtered_view <- DT::renderDT(mask(item_reveal(filtered_items(), config)),
                                         rownames = FALSE,
                                         selection = list(mode = 'multiple', target = "row", selected = NULL))
@@ -795,12 +798,12 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     # //////////////////////////////////////////////////////////////////////////
     # -- In table selection ----
 
-    ## -- Declare selected items ----
+    ## -- selected items ----
     selected_items <- reactive(
       filtered_items()[input$filtered_view_rows_selected, ]$id)
 
 
-    ## -- Declare clicked column ----
+    ## -- clicked column ----
     clicked_column <- reactive({
 
       # -- Get table col names
@@ -829,10 +832,9 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
          clicked_column = clicked_column,
          filters = reactive(
            list(
-             pre = trigger_filter_pre(),
-             main = trigger_filter_main(),
+             pre = if(!is.null(filter)) trigger_filter_pre(),
+             main = if(!is.null(filter)) trigger_filter_main(),
              date = input$date_slider)))
 
   })
 }
-
