@@ -720,24 +720,24 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     prefiltered_items <- reactive(
 
       # -- check custom filter
-      if(!is.null(filter))
-        if(!is.null(trigger_filter_pre())){
+      # only when filter active
+      if(!is.null(filter) && !is.null(trigger_filter_pre())){
 
-          # -- apply filter
-          catl(MODULE, "Apply custom pre-filtering on items")
+        # -- apply filter
+        catl(MODULE, "Apply custom pre-filtering on items")
 
-          # -- test must be done out of the filter() function #593
-          # otherwise multiple confitions does not work
-          items <- if(is.list(trigger_filter_pre()))
-            k_items() |> dplyr::filter(!!!trigger_filter_pre())
-          else
-            k_items() |> dplyr::filter(!!trigger_filter_pre())
-          catl("- ouput dim =", dim(items), level = 2)
+        # -- test must be done out of the filter() function #593
+        # otherwise multiple confitions does not work
+        items <- if(is.list(trigger_filter_pre()))
+          k_items() |> dplyr::filter(!!!trigger_filter_pre())
+        else
+          k_items() |> dplyr::filter(!!trigger_filter_pre())
+        catl("- ouput dim =", dim(items), level = 2)
 
-          # -- return
-          items
+        # -- return
+        items
 
-        } else k_items()) |> bindEvent(k_items(), if(!is.null(filter)) trigger_filter_pre())
+      } else k_items()) |> bindEvent(k_items(), if(!is.null(filter)) trigger_filter_pre())
 
 
     ## -- Main-filtering layer ----
@@ -746,7 +746,6 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       # -- check for empty items (NULL or 0 obs.)
       req(prefiltered_items(), nrow(prefiltered_items()) > 0)
-
       catl(MODULE, "Apply custom filter(s) on items")
 
       # -- check date slider
@@ -756,13 +755,12 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         dplyr::expr(as.Date(date) >= as.Date(input$date_slider[1]) & as.Date(date) <= as.Date(input$date_slider[2]))}
 
       # -- check custom filter
-      if(!is.null(filter))
-        if(!is.null(trigger_filter_main())){
-          catl("- Custom filter =", as.character(trigger_filter_main()), level = 2)
+      if(!is.null(filter) && !is.null(trigger_filter_main())){
+        catl("- Custom filter =", as.character(trigger_filter_main()), level = 2)
 
-          # -- merge expression(s)
-          # NULLs will be supported, output is NULL, one expr or several exprs
-          filter_exprs <- c(trigger_filter_main(), date_expr)}
+        # -- merge expression(s)
+        # NULLs will be supported, output is NULL, one expr or several exprs
+        filter_exprs <- c(trigger_filter_main(), date_expr)}
 
       # -- init
       items <- prefiltered_items()
