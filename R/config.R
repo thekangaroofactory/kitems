@@ -300,7 +300,7 @@ ci_create <- function(id, description = NULL, path = Sys.getenv("R_KITEMS_PATH")
   config <- list(id = id,
                  source = list(type = "file",
                                path = dirname(name(id, url = T)),
-                               filename = name(id)),
+                               filename = name(id, file = T)),
                  data.model = list(attributes = list(list(name = "id",
                                                           type = "numeric",
                                                           default = "ktools::uuid()")),
