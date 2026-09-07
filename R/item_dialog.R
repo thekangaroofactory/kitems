@@ -30,7 +30,7 @@ item_dialog <- function(..., workflow = c("create", "update", "delete"), ns){
 
   # -- prepare
   title <- paste0(ktools::toupperfirst(workflow), " item", ifelse(workflow == "delete", "(s)", ""))
-  content <- ifelse(workflow == "delete", "Danger: deleting item(s) can't be undone! Do you confirm?", ...)
+  content <- ifelse(workflow == "delete", "Danger: deleting item(s) can't be undone! Do you confirm?", list(...))
   btn_id <- ns(paste("item", workflow, "confirm", sep = "_"))
   btn_label <- ktools::toupperfirst(workflow)
 
