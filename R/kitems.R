@@ -331,10 +331,10 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
                      label = "Create"))
 
 
-    # -- dialog
+    # -- dialog from button
     observe({
 
-      catl(MODULE, "[Event] Show create item dialog")
+      catl(MODULE, "[Event] Show create item dialog (button)")
 
       # -- show create dialog
       config |>
@@ -342,9 +342,28 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         dplyr::filter(name %in% included(config, item)) |>
         dm_default() |>
         item_form(ns = ns) |>
-        item_dialog(workflow = "create", ns = ns)
+        item_dialog(workflow = "create", ns = ns) |>
+        showModal()
 
-    }) |> bindEvent(input$item_create, if(!is.null(trigger)) trigger_create_dialog(), ignoreInit = TRUE)
+    }) |> bindEvent(input$item_create, ignoreInit = TRUE)
+
+
+    # -- dialog from trigger
+    if(!is.null(trigger))
+      observe({
+
+        catl(MODULE, "[Event] Show create item dialog (trigger)")
+
+        # -- show create dialog
+        config |>
+          yaml_to_dm("name", "type", "default", "values") |>
+          dplyr::filter(name %in% included(config, item)) |>
+          dm_default() |>
+          item_form(ns = ns) |>
+          item_dialog(workflow = "create", ns = ns) |>
+          showModal()
+
+      }) |> bindEvent(trigger_create_dialog(), ignoreInit = TRUE)
 
 
     # -- create from dialog
