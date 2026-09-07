@@ -28,7 +28,11 @@
 items <- function(datamart, config, item){
 
   # -- secure param
-  stopifnot("datamart must be a reactiveValues object" = "reactiveValues" %in% class(datamart))
+  # also make it testable
+  if(isRunning())
+    stopifnot("datamart must be a reactiveValues object" = is.reactivevalues(datamart))
+  else
+    stopifnot("datamart must be a list object" = is.list(datamart))
 
   # -- check
   if(!item %in% names(datamart)){
