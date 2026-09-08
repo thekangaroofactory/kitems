@@ -32,6 +32,7 @@ as_default <- function(item, data.model){
     item[data.model$name[data.model$type == "POSIXct"]] <- format(item[data.model$name[data.model$type == "POSIXct"]], "%FT%H:%M:%S%z")
 
   # -- turn item value(s) into default(s)
+  # make sure item cols come in same order as data.model
   data.model |>
     dplyr::mutate(default = as.character(item[data.model$name])) |>
     dplyr::select(dplyr::any_of(c("name", "type", "default", "values")))
