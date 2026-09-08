@@ -4,10 +4,12 @@
 \alias{items}
 \title{Get Items}
 \usage{
-items(datamart, item)
+items(datamart, config, item)
 }
 \arguments{
 \item{datamart}{a reactiveValues object holding the items}
+
+\item{config}{the config list}
 
 \item{item}{the name (id) of the item group}
 }

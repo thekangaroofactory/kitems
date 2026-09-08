@@ -19,4 +19,5 @@ Compute attribute values with data-masking support
 }
 \examples{
 dm_values(x = "suggest(1, 2)")
+dm_values(x = "suggest(min(value))", data = data.frame(value = c(12, 10)))
 }

@@ -20,7 +20,7 @@ A list of HTML tags.
 Builds the create or update item form.
 }
 \details{
-\code{attributes} is expected to be the output of the \code{dm_default()} function.
+\code{attributes} is expected to be the output of the \code{dm_default()} or \code{as_default} function.
 The data.frame should have the following columns:
 "name", "type", "default", "values".
 
