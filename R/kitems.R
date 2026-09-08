@@ -783,7 +783,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
         # -- merge expression(s)
         # NULLs will be supported, output is NULL, one expr or several exprs
-        filter_exprs <- c(trigger_filter_main(), date_expr)}
+        filter_exprs <- c(trigger_filter_main(), filter_exprs)}
 
       # -- init
       items <- prefiltered_items()
