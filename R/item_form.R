@@ -10,7 +10,7 @@
 #' @param ns the namespace function, output of `shiny::NS()`.
 #'
 #' @details
-#' `attributes` is expected to be the output of the `dm_default()` function.
+#' `attributes` is expected to be the output of the `dm_default()` or `as_default` function.
 #' The data.frame should have the following columns:
 #' "name", "type", "default", "values".
 #'
