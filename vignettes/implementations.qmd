@@ -64,7 +64,7 @@ ui <- page_navbar(
             
             # -- view
             p("Here is the items table:"),
-            kitems::filtered_view_widget("mydata")))
+            kitems::item_widget("mydata")))
 ```
 
 Create / update / delete operations will be fully managed by the module server. A dialog will popup for the user to provide required inputs and confirmation.

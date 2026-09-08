@@ -96,10 +96,10 @@ body <- dashboardBody(
 
                      fluidRow(column(width = 12,
                                      wellPanel(
-                                       kitems::filtered_view_widget("data_2")))),
+                                       kitems::item_widget("data_2")))),
 
 
-                     tags$pre("# -- Filtered view: \nfiltered_view_widget(id)"),
+                     tags$pre("# -- Filtered view: \nitem_widget(id)"),
 
                      h2("Server side"),
                      p("The server function of this demo app contains a single expression!"),

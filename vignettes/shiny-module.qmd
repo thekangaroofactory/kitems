@@ -155,7 +155,7 @@ To go along and communicate with the module server, a set of UI components is de
 
 A filtered view, based on the `filtered_items` object content is delivered with data model masks applied. Attributes with `display = FALSE` will be hidden, and *items* will be ordered as defined in the data model. It is based on the `DT::renderDT()` / `DT::DTOutput()` functions.
 
-See `filtered_view_widget()` function.
+See `item_widget()` function.
 
 #### Selected Item(s)
 
@@ -206,7 +206,7 @@ By default, the UI / widget functions are called with the `id` that was defined 
 mydata <- kitems::kitems(id = "mydata")
 
 # -- call item view
-filtered_view_widget(id = "mydata")
+item_widget(id = "mydata")
 ```
 
 But when the module server is implemented as a sub-module (nested module pattern), it is necessary to follow the namespace tree.
@@ -218,7 +218,7 @@ If you don't want to wrap the widget function output into another UI function at
 mydata <- kitems::kitems(id = "mydata")
 
 # -- call item view
-filtered_view_widget(id = shiny::NS(namespace = "module", id = "mydata"))
+item_widget(id = shiny::NS(namespace = "module", id = "mydata"))
 ```
 
 This works with any depth – see `shiny::NS()` for details about the `namespace` argument.

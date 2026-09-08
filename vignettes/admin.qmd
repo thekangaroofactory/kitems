@@ -61,7 +61,7 @@ It's possible to reorder the attributes (the items columns) from here.
 
 #### View
 
-The view section displays the item table as it will be available from the `filtered_view_widget()` function:
+The view section displays the item table as it will be available from the `item_widget()` function:
 
 ![](images/admin_view.png)
 

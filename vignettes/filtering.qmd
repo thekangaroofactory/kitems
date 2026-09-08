@@ -61,7 +61,7 @@ This way, filters applied at the pre-filtering layer won’t need to be computed
 The *item* table widget is by default a filtered view of the *items*.\
 It displays the content of the `filtered_items` element of the module server function return value (with mask applied).
 
-It is delivered through the `filtered_view_widget()` function.
+It is delivered through the `item_widget()` function.
 
 ::: callout-note
 The reason for not having a non filtered *item* table is that if the goal is to display the whole list of *items* without any filtering, then there would be no added value compared to using the `DT::renderDT()` / `DT::DTOutput()` functions directly in the main Shiny application.

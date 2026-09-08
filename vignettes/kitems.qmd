@@ -64,10 +64,10 @@ Sys.setenv("R_KITEMS_PATH" = "./")
 :::
 
 Components to interact with the module server can be integrated inside the UI of your app.\
-For example, the `filtered_view_widget()` function will output the item table:
+For example, the `item_widget()` function will output the item table:
 
 ```{r, eval=FALSE}
-kitems::filtered_view_widget(id = "mydata")
+kitems::item_widget(id = "mydata")
 ```
 
 See the [shiny-module](./shiny-module.html) article to get more information about the module.

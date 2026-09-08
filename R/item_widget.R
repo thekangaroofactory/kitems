@@ -1,9 +1,9 @@
 
 
-#' Filtered View Widget
+#' Item Widget
 #'
 #' @description
-#' Creates an HTML container for the filtered item table.
+#' Creates an HTML container for the item table.
 #'
 #' @param id the id of the module server instance.
 #'
@@ -12,10 +12,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' filtered_view_widget(id = "mydata")
+#' item_widget(id = "mydata")
 #' }
 
-filtered_view_widget <- function(id){
+item_widget <- function(id){
 
   # -- namespace
   ns <- NS(id)
