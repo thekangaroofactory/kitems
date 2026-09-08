@@ -506,7 +506,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       # -- force id to update
       # as it's missing in the dialog input, it should be NULL in values
-      values$id <- if(!is.null(trigger_update_dialog()))
+      values$id <- if(!is.null(trigger) && !is.null(trigger_update_dialog()))
         trigger_update_dialog()
       else
         selected_items()
@@ -537,7 +537,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       # -- reset trigger
       # otherwise same object cannot be updated twice
       # it can't be reset before otherwise id will be lost
-      if(!is.null(trigger_update_dialog()))
+      if(!is.null(trigger) && !is.null(trigger_update_dialog()))
         trigger_update_dialog(NULL)
 
     })
