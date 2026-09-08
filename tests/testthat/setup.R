@@ -46,7 +46,7 @@ config <- design(project = "test",
          attribute = c(name = "quantity", type = "integer"),
          attribute = c(name = "total", type = "numeric"),
          attribute = c(name = "name", type = "character"),
-         attribute = c(name = "date", type = "Date"),
+         attribute = c(name = "date", type = "Date", default = "Sys.Date()"),
          attribute = c(name = "isvalid", type = "logical"),
          attribute = c(name = "created", type = "POSIXct"))
 
