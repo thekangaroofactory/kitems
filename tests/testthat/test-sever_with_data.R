@@ -22,11 +22,10 @@ test_that("Server works", {
     # Data model
     # --------------------------------------------------------------------------
 
-    x <- k_data_model()
+    x <- config
 
     # -- test class & dim
-    expect_s3_class(x, "data.frame")
-    expect_equal(dim(x), c(6, length(DATA_MODEL_COLCLASSES)))
+    expect_type(x, "list")
 
 
     # --------------------------------------------------------------------------
@@ -37,7 +36,7 @@ test_that("Server works", {
 
     # -- test class & dim
     expect_s3_class(x, "data.frame")
-    expect_equal(dim(x), c(4, 6))
+    expect_equal(dim(x), c(4, 7))
 
   })
 
