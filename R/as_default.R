@@ -31,6 +31,11 @@ as_default <- function(item, data.model){
   if("POSIXct" %in% data.model$type)
     item[data.model$name[data.model$type == "POSIXct"]] <- format(item[data.model$name[data.model$type == "POSIXct"]], "%FT%H:%M:%S%z")
 
+  # -- ensure date is kept
+  # otherwise as.character conversion will produce "19758"
+  if("Date" %in% data.model$type)
+    item[data.model$name[data.model$type == "Date"]] <- format(item[data.model$name[data.model$type == "Date"]], "%Y-%m-%d")
+
   # -- turn item value(s) into default(s)
   # make sure item cols come in same order as data.model
   data.model |>
