@@ -614,7 +614,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       removeModal()
 
       # -- get selected items (ids)
-      ids <- if(!is.null(trigger_delete_dialog()))
+      ids <- if(!is.null(trigger) && !is.null(trigger_delete_dialog()))
         trigger_delete_dialog()
       else
         selected_items()
@@ -641,7 +641,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       # -- reset trigger
       # can't be performed before otherwise ids are lost
-      if(!is.null(trigger_delete_dialog()))
+      if(!is.null(trigger) && !is.null(trigger_delete_dialog()))
         trigger_delete_dialog(NULL)
 
     })
