@@ -17,17 +17,15 @@
 
 item_load <- function(connector, col.classes){
 
-  # -- Init
-  items <- NULL
-
   # -- read data
-  items <- as.data.frame(iker::load_data(path = connector$path,
-                                         file = connector$file,
-                                         delim = ",",
-                                         col_types = col.classes))
+  items <- iker::load_data(path = connector$path,
+                           file = connector$file,
+                           delim = ",",
+                           col_types = col.classes,
+                           data.frame = TRUE)
 
   # -- check output size
-  # will trigger showing the create data btn
+  # will trigger showing the create button
   if(all(dim(items) == c(0,0)))
     items <- NULL
 
