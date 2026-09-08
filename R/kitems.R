@@ -226,14 +226,16 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         req(is.data.frame(k_items()) || is.null(k_items()))
 
         # -- case when items has been deleted
-        if(is.null(k_items()))
+        if(is.null(k_items())){
           if(file.exists(k_items_url)){
             success <- unlink(k_items_url)
-            if(success == 1) warning("Item file could not be deleted. Delete it manually.")}
-        else
+            if(success == 1)
+              warning("Item file could not be deleted. Delete it manually.")
+            else
+              catl(MODULE, "Item file has been deleted.")}
+        } else {
           item_save(data = k_items(), connector = list(file = k_items_url))
-
-        catl(MODULE, "[EVENT] Item list has been (auto) saved")
+          catl(MODULE, "[EVENT] Item list has been (auto) saved")}
 
       }, ignoreNULL = FALSE, ignoreInit = TRUE)
 
