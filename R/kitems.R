@@ -720,9 +720,10 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         # -- Set value
         # implement this_year strategy by default #211
         # keep this year after item is added #223 & #242
-        value <- if(is.null(input$date_slider_strategy) || input$date_slider_strategy == "this-year")
-          ktools::date_range(min, max, type = "this_year")
-        else
+        value <- if(is.null(input$date_slider_strategy) || input$date_slider_strategy == "this-year"){
+          x <- ktools::filter_date(prefiltered_items(), unit = "year")$date
+          c(min(x), max(x))
+        } else
           value <- input$date_slider
 
         # -- date slider
