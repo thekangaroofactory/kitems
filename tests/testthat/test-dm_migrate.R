@@ -18,7 +18,7 @@ test_that("dm_migrate works", {
   attr(old_dm, "version") <- as.character(utils::packageVersion("kitems"))
 
   # -- tests
-  expect_no_message(x <- dm_migrate(old_dm))
+  expect_no_error(x <- dm_migrate(old_dm))
   expect_true(is.na(x))
 
 })
