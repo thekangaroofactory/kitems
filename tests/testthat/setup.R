@@ -83,7 +83,7 @@ items <- values |>
 # --------------------------------------------------------------------------
 
 # -- helper: create test data
-create_testdata <- function(){
+create_testdata <- function(empty_items = FALSE){
 
   # folder
   create_test_folder(testdata_path)
@@ -92,7 +92,8 @@ create_testdata <- function(){
   config_write(config)
 
   # items
-  item_save(items,  connector = list(file = items_url))
+  x <- if(empty_items) items[0, ] else items
+  item_save(x,  connector = list(file = items_url))
 
 }
 
