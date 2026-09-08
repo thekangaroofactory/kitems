@@ -455,15 +455,16 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       catl(MODULE, "[Event] Update item button")
 
-      # -- selected item
+      # selected item
       s_item <- k_items()[k_items()$id == selected_items(), ]
 
-      # -- show update dialog
+      # update dialog
       s_item |>
-        dplyr::select(included(config, item)) |>
         as_default(data.model = yaml_to_dm(config, "name", "type", "default", "values")) |>
+        dplyr::filter(name %in% included(config, item)) |>
         item_form(ns = ns) |>
-        item_dialog(workflow = "update", ns = ns)
+        item_dialog(workflow = "update", ns = ns) |>
+        showModal()
 
       })
 
@@ -482,10 +483,11 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
         # -- show update dialog
         s_item |>
-          dplyr::select(included(config, item)) |>
           as_default(data.model = yaml_to_dm(config, "name", "type", "default", "values")) |>
+          dplyr::filter(name %in% included(config, item)) |>
           item_form(ns = ns) |>
-          item_dialog(workflow = "update", ns = ns)
+          item_dialog(workflow = "update", ns = ns) |>
+          showModal()
 
       }) |> bindEvent(trigger_update_dialog(),
                       ignoreInit = TRUE)
