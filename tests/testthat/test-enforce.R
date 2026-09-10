@@ -1,9 +1,9 @@
 
 
-test_that("item_migrate works", {
+test_that("enforce works", {
 
   # -- add attribute
-  x <- item_migrate(items = items, name = "new_attribute", type = "logical", fill = TRUE)
+  x <- enforce(items = items, name = "new_attribute", type = "logical", fill = TRUE)
 
   # checks
   expect_items(x, n = nrow(items))
@@ -13,7 +13,7 @@ test_that("item_migrate works", {
 
 
   # -- empty items
-  x <- item_migrate(items[0, ], name = "new_attribute", type = "logical", fill = TRUE)
+  x <- enforce(items[0, ], name = "new_attribute", type = "logical", fill = TRUE)
 
   # checks
   expect_items(x, n = 0)
@@ -21,7 +21,7 @@ test_that("item_migrate works", {
 
 
   # -- wrong fill type
-  x <- item_migrate(items = items, name = "new_attribute", type = "logical", fill = 1)
+  x <- enforce(items = items, name = "new_attribute", type = "logical", fill = 1)
 
   # checks
   expect_items(x, n = nrow(items))

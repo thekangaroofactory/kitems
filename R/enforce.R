@@ -20,10 +20,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' item_migrate(items = myitems, name = "comment", type = "character", fill = "none")
+#' enforce(items = myitems, name = "comment", type = "character", fill = "none")
 #' }
 
-item_migrate <- function(items, name, type, fill = NA){
+enforce <- function(items, name, type, fill = NA){
 
   # -- Check dim
   if(nrow(items) == 0){
