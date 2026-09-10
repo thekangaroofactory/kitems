@@ -19,10 +19,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' items |> item_sort(config, item = "foo")
+#' items |> adjust(config, item = "foo")
 #' }
 
-item_sort <- function(items, config, item = get_context()){
+adjust <- function(items, config, item = get_context()){
 
   # -- get & parse sort instruction
   raw <- config |> organized(item)

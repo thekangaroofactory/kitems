@@ -791,7 +791,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       # -- Apply ordering
       if(!is.null(organized(config)))
-        items <- item_sort(items, config)
+        items <- adjust(items, config)
 
       # -- Return
       items
