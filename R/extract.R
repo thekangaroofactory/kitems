@@ -17,10 +17,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' values <- item_input_values(input, colClasses = c("date" = "Date", "text" = "character"))
+#' values <- extract(input, colClasses = c("date" = "Date", "text" = "character"))
 #' }
 
-item_input_values <- function(input, colClasses){
+extract <- function(input, colClasses){
 
   # -- get values from input object
   # input is a reactive object, can't use input[names(colClasses)]

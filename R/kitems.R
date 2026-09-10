@@ -369,7 +369,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
         # -- insert & store
         k_items(input |>
-                  item_input_values(colClasses = ci_classes(config, item)) |>
+                  extract(colClasses = ci_classes(config, item)) |>
                   attribute_values(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg")) |>
                   rows_insert(items = k_items()))
 
@@ -492,7 +492,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       # -- get named list of input values
       catl("- Get list of input values")
-      values <- item_input_values(input, ci_classes(config, item))
+      values <- extract(input, ci_classes(config, item))
 
       # -- force id to update
       # as it's missing in the dialog input, it should be NULL in values

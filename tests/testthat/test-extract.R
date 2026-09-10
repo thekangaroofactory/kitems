@@ -1,6 +1,6 @@
 
 
-test_that("item_input_values works", {
+test_that("extract works", {
 
   # -- simulate input object
   input_values_x <- list("id" = 170539948621,
@@ -14,7 +14,7 @@ test_that("item_input_values works", {
                          "created_tz" = "CET")
 
   # -- function call
-  x <- item_input_values(input = input_values_x,
+  x <- extract(input = input_values_x,
                          colClasses = ci_classes(config, item = "foo"))
 
   # -- test output class
@@ -43,7 +43,7 @@ test_that("item_input_values works", {
                          "isvalid" = FALSE)
 
   # -- function call
-  x <- item_input_values(input = input_values_x,
+  x <- extract(input = input_values_x,
                          colClasses = ci_classes(config, item = "foo"))
 
   # -- test output class
