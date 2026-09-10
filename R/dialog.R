@@ -20,10 +20,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' item_dialog(workflow = "delete", ns)
+#' dialog(workflow = "delete", ns)
 #' }
 
-item_dialog <- function(..., workflow = c("create", "update", "delete"), ns){
+dialog <- function(..., workflow = c("create", "update", "delete"), ns){
 
   # -- check argument
   workflow <- match.arg(workflow)

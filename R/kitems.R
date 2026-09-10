@@ -334,7 +334,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         dplyr::filter(name %in% included(config, item)) |>
         default() |>
         form(ns = ns) |>
-        item_dialog(workflow = "create", ns = ns) |>
+        dialog(workflow = "create", ns = ns) |>
         showModal()
 
     }) |> bindEvent(input$item_create, ignoreInit = TRUE)
@@ -352,7 +352,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
           dplyr::filter(name %in% included(config, item)) |>
           default() |>
           form(ns = ns) |>
-          item_dialog(workflow = "create", ns = ns) |>
+          dialog(workflow = "create", ns = ns) |>
           showModal()
 
       }) |> bindEvent(trigger_create_dialog(), ignoreInit = TRUE)
@@ -453,7 +453,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         as_default(data.model = yaml_to_dm(config, "name", "type", "default", "values")) |>
         dplyr::filter(name %in% included(config, item)) |>
         form(ns = ns) |>
-        item_dialog(workflow = "update", ns = ns) |>
+        dialog(workflow = "update", ns = ns) |>
         showModal()
 
       })
@@ -476,7 +476,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
           as_default(data.model = yaml_to_dm(config, "name", "type", "default", "values")) |>
           dplyr::filter(name %in% included(config, item)) |>
           form(ns = ns) |>
-          item_dialog(workflow = "update", ns = ns) |>
+          dialog(workflow = "update", ns = ns) |>
           showModal()
 
       }) |> bindEvent(trigger_update_dialog(),
@@ -581,7 +581,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     observeEvent(input$item_delete, {
 
       catl(MODULE, "[Event] Delete item button")
-      showModal(item_dialog(workflow = "delete", ns = ns))})
+      showModal(dialog(workflow = "delete", ns = ns))})
 
 
     # -- dialog from trigger
@@ -589,7 +589,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       observe({
 
         catl(MODULE, "[Event] Delete item dialog trigger")
-        showModal(item_dialog(workflow = "delete", ns = ns))
+        showModal(dialog(workflow = "delete", ns = ns))
 
       }) |> bindEvent(trigger_delete_dialog(),
                       ignoreInit = TRUE)
