@@ -2,7 +2,7 @@
 
 create_testdata()
 
-test_that("multiplication works", {
+test_that("items works", {
 
   # -- secure
   expect_error(items(datamart = NULL, config, item = "foo"))

@@ -10,7 +10,9 @@
 #' @returns a list or NULL if no file is found.
 #'
 #' @examples
+#' \dontrun{
 #' config_read()
+#' }
 
 config_read <- function(path = Sys.getenv("R_KITEMS_PATH")){
 
