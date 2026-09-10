@@ -19,5 +19,7 @@ Read YAML config file
 By default, \code{path} uses the R_KITEMS_PATH environment variable.
 }
 \examples{
+\dontrun{
 config_read()
+}
 }
