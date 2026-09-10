@@ -10,9 +10,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' rows_update(values, items)}
+#' update(values, items)}
 
-rows_update <- function(values, items){
+update <- function(values, items){
 
   # ////////////////////////////////////////////////////////////////////////////
   # -- cleanup & prepare values

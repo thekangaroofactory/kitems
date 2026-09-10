@@ -508,7 +508,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         k_items(
           values |>
             validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg"), update = TRUE) |>
-            rows_update(items = k_items()))
+            update(items = k_items()))
 
         # -- notify
         if(options$notify)
@@ -545,7 +545,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
             trigger_update_values() |>
               prepare(config = config, update = TRUE) |>
               validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg"), update = TRUE) |>
-              rows_update(items = k_items()))
+              update(items = k_items()))
 
           # -- notify
           catl(MODULE, "Item(s) updated")},

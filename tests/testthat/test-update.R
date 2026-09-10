@@ -1,6 +1,6 @@
 
 
-test_that("rows_update works", {
+test_that("update works", {
 
   # ////////////////////////////////////////////////////////////////////////////
   # Main cases
@@ -9,7 +9,7 @@ test_that("rows_update works", {
   x <- list(id = items$id[1], name = "update", total = 200) |>
     prepare(config, item = "foo", update = TRUE) |>
     validate(data.model = dm, update = TRUE) |>
-    rows_update(items)
+    update(items)
 
   expect_equal(dim(x), dim(items))
   expect_equal(x$name[1], "update")
@@ -19,7 +19,7 @@ test_that("rows_update works", {
   x <- list(id = items$id[1:2], name = "update", total = 200) |>
     prepare(config, item = "foo", update = TRUE) |>
     validate(data.model = dm, update = TRUE) |>
-    rows_update(items)
+    update(items)
 
   expect_equal(dim(x), dim(items))
   expect_equal(x$name[1], "update")
@@ -35,7 +35,7 @@ test_that("rows_update works", {
   x <- list(id = items$id[1]) |>
     prepare(config, item = "foo", update = TRUE) |>
     validate(data.model = dm, update = TRUE) |>
-    rows_update(items)
+    update(items)
 
   expect_equal(dim(x), dim(items))
   expect_true(!identical(items$date[1], ref_date))
@@ -45,7 +45,7 @@ test_that("rows_update works", {
   x <- list(id = items$id[2], total = 99) |>
     prepare(config, item = "foo", update = TRUE) |>
     validate(data.model = dm, update = TRUE) |>
-    rows_update(items)
+    update(items)
 
   expect_equal(dim(x), dim(items))
   expect_true(!identical(items$date[2], ref_date))
@@ -59,7 +59,7 @@ test_that("rows_update works", {
   x <- list(id = items$id[1], name = "update", dummy_col = "xxx") |>
     prepare(config, item = "foo", update = TRUE) |>
     validate(data.model = dm, update = TRUE) |>
-    rows_update(items)
+    update(items)
 
   expect_equal(dim(x), dim(items))
 
@@ -67,7 +67,7 @@ test_that("rows_update works", {
   x <- list(id = items$id, quantity = 100, total = c(1:4)) |>
     prepare(config, item = "foo", update = TRUE) |>
     validate(data.model = dm, update = TRUE) |>
-    rows_update(items)
+    update(items)
 
   expect_equal(dim(x), dim(items))
 
@@ -75,7 +75,7 @@ test_that("rows_update works", {
   x <- list(id = 123, quantity = 100) |>
     prepare(config, item = "foo", update = TRUE) |>
     validate(data.model = dm, update = TRUE) |>
-    rows_update(items)
+    update(items)
 
   expect_equal(dim(x), dim(items))
 
