@@ -24,10 +24,10 @@
 #' @examples
 #' \dontrun{
 #' item <- "foo"
-#' items |> item_reveal(config)
+#' items |> reveal(config)
 #' }
 
-item_reveal <- function(items, config, item = get_context()){
+reveal <- function(items, config, item = get_context()){
 
   items[displayed(config, item)]
 
