@@ -8,7 +8,7 @@
 # The main layout will be used to dynamically insert / remove content from
 # the server side.
 
-ui <- bslib::page_navbar(title = "Admin Console",
+admin_ui <- bslib::page_navbar(title = "Admin Console",
                          window_title = "Kitems Admin Console",
                          id = "nav",
                          fillable = FALSE,
@@ -64,7 +64,7 @@ ui <- bslib::page_navbar(title = "Admin Console",
 
 
 # -- Server
-server <- function(input, output, session) {
+admin_server <- function(input, output, session) {
 
   # ////////////////////////////////////////////////////////////////////////////
   # -- check path & config file
@@ -778,4 +778,4 @@ server <- function(input, output, session) {
 
 
 # -- Run the application
-shinyApp(ui = ui, server = server)
+shinyApp(ui = admin_ui, server = admin_server)
