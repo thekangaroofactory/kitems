@@ -7,7 +7,7 @@ test_that("item_delete works", {
 
   # -- function call
   item_to_drop <- items$id[[1]]
-  x <- rows_delete(items, id = item_to_drop)
+  x <- delete(items, id = item_to_drop)
 
   # -- default checks
   expect_items(x, n = nrow(items) - 1)
@@ -21,7 +21,7 @@ test_that("item_delete works", {
   # multiple items
 
   # -- function call
-  x <- rows_delete(items, id = items$id[2:3])
+  x <- delete(items, id = items$id[2:3])
 
   # -- default checks
   expect_items(x, n = nrow(items) - 2)
@@ -36,6 +36,6 @@ test_that("item_delete works", {
 
   # -- function call
   # id does not exist, so should fail
-  expect_error(rows_delete(x, id = 1234))
+  expect_error(delete(x, id = 1234))
 
 })

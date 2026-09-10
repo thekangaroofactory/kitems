@@ -614,7 +614,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
         # -- store new items table
         k_items(
-          rows_delete(items = k_items(),
+          delete(items = k_items(),
                       id = ids))
 
         if(options$notify)
@@ -653,7 +653,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
           # -- store new items table
           k_items(
-            rows_delete(items = k_items(),
+            delete(items = k_items(),
                         id = ids))
 
           if(options$notify)

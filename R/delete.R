@@ -10,10 +10,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' rows_delete(items = myitems, id = 123456789)
+#' delete(items = myitems, id = 123456789)
 #' }
 
-rows_delete <- function(items, id){
+delete <- function(items, id){
 
   # -- drop unmatched id(s)
   if(any(!id %in% items$id))
