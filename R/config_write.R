@@ -8,8 +8,6 @@
 #' @details
 #' By default, `path` uses the R_KITEMS_PATH environment variable.
 #'
-#' @export
-#'
 #' @examples
 #' \dontrun{
 #' config_write(list(foo = 1, bar = "two"))

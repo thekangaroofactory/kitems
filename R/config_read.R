@@ -8,7 +8,6 @@
 #' By default, `path` uses the R_KITEMS_PATH environment variable.
 #'
 #' @returns a list or NULL if no file is found.
-#' @export
 #'
 #' @examples
 #' config_read()
