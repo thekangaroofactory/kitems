@@ -22,10 +22,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' item_form(attributes = default(data_model()), ns) << check this!
+#' form(attributes = default(data_model()), ns) << check this!
 #' }
 
-item_form <- function(attributes, items = NULL, ns){
+form <- function(attributes, items = NULL, ns){
 
   # -- check argument
   if(nrow(attributes) == 0)

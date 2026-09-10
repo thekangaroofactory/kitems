@@ -15,7 +15,7 @@
 #' @details
 #' Possible values for workflow are "create" (default), "update" or "delete".
 #'
-#' `...` is typically the output of the item_form() function
+#' `...` is typically the output of the form() function
 #' When `workflow = "delete"`, it will be ignored and replaced by a standard message.
 #'
 #' @examples

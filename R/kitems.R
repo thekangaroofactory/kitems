@@ -333,7 +333,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         yaml_to_dm("name", "type", "default", "values") |>
         dplyr::filter(name %in% included(config, item)) |>
         default() |>
-        item_form(ns = ns) |>
+        form(ns = ns) |>
         item_dialog(workflow = "create", ns = ns) |>
         showModal()
 
@@ -351,7 +351,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
           yaml_to_dm("name", "type", "default", "values") |>
           dplyr::filter(name %in% included(config, item)) |>
           default() |>
-          item_form(ns = ns) |>
+          form(ns = ns) |>
           item_dialog(workflow = "create", ns = ns) |>
           showModal()
 
@@ -452,7 +452,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       s_item |>
         as_default(data.model = yaml_to_dm(config, "name", "type", "default", "values")) |>
         dplyr::filter(name %in% included(config, item)) |>
-        item_form(ns = ns) |>
+        form(ns = ns) |>
         item_dialog(workflow = "update", ns = ns) |>
         showModal()
 
@@ -475,7 +475,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         s_item |>
           as_default(data.model = yaml_to_dm(config, "name", "type", "default", "values")) |>
           dplyr::filter(name %in% included(config, item)) |>
-          item_form(ns = ns) |>
+          form(ns = ns) |>
           item_dialog(workflow = "update", ns = ns) |>
           showModal()
 

@@ -88,7 +88,7 @@ An *item* is defined as – *something that is part of a list or group of things
 
 That is basically the purpose of the package / framework. An item is by definition anything that belongs to a group of things **defined** by their data model. This means all the item related functions inside this package **dynamically** work on the items in the context of their data model.
 
-As an example, the `item_form()` function dynamically generates an input form based on the attribute list contained in the data model (the type of input, the default value of the input or if no input should be created for the attribute).
+As an example, the `form()` function dynamically generates an input form based on the attribute list contained in the data model (the type of input, the default value of the input or if no input should be created for the attribute).
 
 *Items* are stored (as a data.frame) in a reactive object that fits with the data model rules.\
 This means any authoring operation on the items should be performed **within** the module server.

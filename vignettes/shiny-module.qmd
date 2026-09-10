@@ -195,7 +195,7 @@ See `create_widget()`, `update_widget()` and `delete_widget()` functions.
 The create & update workflows rely on a form to capture user inputs.\
 This form is generated dynamically based on the data model specifications (attribute type, default values, skip option) so that it saves a lot of time & code.
 
-See `item_form()` function.
+See `form()` function.
 
 ## Nested module considerations
 

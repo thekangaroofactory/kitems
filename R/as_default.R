@@ -16,7 +16,7 @@
 #' of the attributes in the data model are expected to match with the names
 #' of the columns in item.
 #'
-#' @returns a data.frame to pass to item_form() function.
+#' @returns a data.frame to pass to form() function.
 #' @export
 #'
 #' @examples
