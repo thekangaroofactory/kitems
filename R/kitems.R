@@ -159,16 +159,15 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       ## -- Read the data (items) ----------------------------------------------
 
-      # url
-      k_items_url <- name(id, url = T)
+      # connector
+      connector <- config |> ci_connector(item = id)
 
       # init (non persistent object)
       init_items <- NULL
 
-      # path = NULL as temporary workaround (it's contained in k_items_url)
+      # get the data
       catl(MODULE, "Reading items", level = 1)
-      init_items <- item_load(connector = list(file = k_items_url,
-                                               path = NULL),
+      init_items <- item_load(connector = connector,
                               col.classes = ci_classes(config, item))
 
       # increment progress
@@ -225,17 +224,8 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         # -- secure #596
         req(is.data.frame(k_items()) || is.null(k_items()))
 
-        # -- case when items has been deleted
-        if(is.null(k_items())){
-          if(file.exists(k_items_url)){
-            success <- unlink(k_items_url)
-            if(success == 1)
-              warning("Item file could not be deleted. Delete it manually.")
-            else
-              catl(MODULE, "Item file has been deleted.")}
-        } else {
-          item_save(data = k_items(), connector = list(file = k_items_url))
-          catl(MODULE, "[EVENT] Item list has been (auto) saved")}
+        item_save(data = k_items(), connector = connector)
+        catl(MODULE, "[EVENT] Item list has been (auto) saved")
 
       }, ignoreNULL = FALSE, ignoreInit = TRUE)
 

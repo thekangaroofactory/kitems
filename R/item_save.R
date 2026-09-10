@@ -18,6 +18,15 @@
 
 item_save <- function(data, connector){
 
-  iker::save_data(data, path = NULL, file = connector$file)
+  # -- case when all items have been deleted
+  if(is.null(data)){
+    if(file.exists(file.path(connector$path, connector$file))){
+        success <- unlink(k_items_url)
+        if(success == 1)
+          warning("Item file could not be deleted. Delete it manually.")
+        else
+          catl(MODULE, "Item file has been deleted.")}
+    } else
+      iker::save_data(data, path = connector$path, file = connector$file)
 
 }
