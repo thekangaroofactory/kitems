@@ -440,7 +440,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
                      label = "Update"))
 
 
-    # -- dialog
+    # -- dialog from button
     observeEvent(input$item_update, {
 
       catl(MODULE, "[Event] Update item button")
