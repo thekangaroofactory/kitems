@@ -332,7 +332,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       config |>
         yaml_to_dm("name", "type", "default", "values") |>
         dplyr::filter(name %in% included(config, item)) |>
-        dm_default() |>
+        default() |>
         item_form(ns = ns) |>
         item_dialog(workflow = "create", ns = ns) |>
         showModal()
@@ -350,7 +350,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         config |>
           yaml_to_dm("name", "type", "default", "values") |>
           dplyr::filter(name %in% included(config, item)) |>
-          dm_default() |>
+          default() |>
           item_form(ns = ns) |>
           item_dialog(workflow = "create", ns = ns) |>
           showModal()

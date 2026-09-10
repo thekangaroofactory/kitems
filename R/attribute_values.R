@@ -47,7 +47,7 @@ attribute_values <- function(values, data.model, update = FALSE){
 
       if(!is_truthy(value)){
         catl("> invalid input / set default", level = 2)
-        value <- dm_default(att_dm)$default}
+        value <- default(att_dm)$default}
 
     } else {
 
@@ -57,7 +57,7 @@ attribute_values <- function(values, data.model, update = FALSE){
       # -- replace invalid ones by default
       if(any(!is_valid)){
         catl("> invalid input(s) / set default where needed", level = 2)
-        value[!is_valid] <- replicate(dm_default(att_dm)$default, n = length(value[!is_valid]))}
+        value[!is_valid] <- replicate(default(att_dm)$default, n = length(value[!is_valid]))}
 
     }
 

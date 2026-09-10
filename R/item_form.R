@@ -10,7 +10,7 @@
 #' @param ns the namespace function, output of `shiny::NS()`.
 #'
 #' @details
-#' `attributes` is expected to be the output of the `dm_default()` or `as_default` function.
+#' `attributes` is expected to be the output of the `default()` or `as_default` function.
 #' The data.frame should have the following columns:
 #' "name", "type", "default", "values".
 #'
@@ -22,7 +22,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' item_form(attributes = dm_default(data_model()), ns) << check this!
+#' item_form(attributes = default(data_model()), ns) << check this!
 #' }
 
 item_form <- function(attributes, items = NULL, ns){

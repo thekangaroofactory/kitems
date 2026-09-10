@@ -1,9 +1,9 @@
 
 
-test_that("dm_default works", {
+test_that("default works", {
 
   # -- baseline
-  x <- dm_default(data.model = yaml_to_dm(config, item = "foo", "name", "type", "default", "values"))
+  x <- default(data.model = yaml_to_dm(config, item = "foo", "name", "type", "default", "values"))
   expect_s3_class(x, "data.frame")
   expect_identical(x$name, c_attributes(config, item = "foo"))
 
@@ -17,7 +17,7 @@ test_that("dm_default works", {
                               attribute = c(name = "created", default = "Sys.time()"))
 
   # -- check
-  expect_no_condition(x <- dm_default(data.model = yaml_to_dm(config_2, item = "foo", "name", "type", "default", "values")))
+  expect_no_condition(x <- default(data.model = yaml_to_dm(config_2, item = "foo", "name", "type", "default", "values")))
   expect_s3_class(x, "data.frame")
   expect_identical(x$name, c_attributes(config_2, item = "foo"))
   expect_identical(x$type, unname(ci_classes(config_2, item = "foo")))

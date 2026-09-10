@@ -19,10 +19,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' dm_default(yaml_to_dm(config...)) # << check this!
+#' default(yaml_to_dm(config...)) # << check this!
 #' }
 
-dm_default <- function(data.model){
+default <- function(data.model){
 
   # -- check default(s)
   if(any(!is.na(data.model$default))){
