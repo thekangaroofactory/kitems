@@ -12,7 +12,7 @@ as_default(item, data.model)
 \item{data.model}{the data.frame of the data.model (see details).}
 }
 \value{
-a data.frame to pass to item_form() function.
+a data.frame to pass to form() function.
 }
 \description{
 Turn Item Into Default Value(s)
