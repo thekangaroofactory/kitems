@@ -1,15 +1,15 @@
 
 
-test_that("prepare_values works", {
+test_that("prepare works", {
 
   # -- baseline
-  x <- prepare_values(values = list(quantity = 12), config, item = "foo")
+  x <- prepare(values = list(quantity = 12), config, item = "foo")
   expect_s3_class(x, "data.frame")
   expect_identical(nrow(x), 1L)
   expect_identical(names(x), c_attributes(config, item = "foo"))
 
   # -- make rectangular
-  x <- prepare_values(values = list(quantity = c(1, 2), name = "xxx"), config, item = "foo")
+  x <- prepare(values = list(quantity = c(1, 2), name = "xxx"), config, item = "foo")
   expect_s3_class(x, "data.frame")
   expect_identical(nrow(x), 2L)
   expect_identical(names(x), c_attributes(config, item = "foo"))
@@ -25,7 +25,7 @@ test_that("prepare_values works", {
     ca_behavior(item = "foo", behavior = "refresh", "created")
   # call
   # don't need no value, 'created' should be added
-  x <- prepare_values(values = list(), config_2, item = "foo", update = TRUE)
+  x <- prepare(values = list(), config_2, item = "foo", update = TRUE)
   # tests
   expect_type(x, "list")
   expect_length(x, 1)

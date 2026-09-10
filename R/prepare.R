@@ -30,10 +30,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' prepare_values(values, config, item = "foo")
+#' prepare(values, config, item = "foo")
 #' }
 
-prepare_values <- function(values, config, update = FALSE, item = get_context()){
+prepare <- function(values, config, update = FALSE, item = get_context()){
 
   # get attribute names
   att_names <- c_attributes(config, item)

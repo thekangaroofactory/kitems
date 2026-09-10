@@ -7,7 +7,7 @@ test_that("rows_update works", {
 
   # -- update single item
   x <- list(id = items$id[1], name = "update", total = 200) |>
-    prepare_values(config, item = "foo", update = TRUE) |>
+    prepare(config, item = "foo", update = TRUE) |>
     validate(data.model = dm, update = TRUE) |>
     rows_update(items)
 
@@ -17,7 +17,7 @@ test_that("rows_update works", {
 
   # -- update multiple items
   x <- list(id = items$id[1:2], name = "update", total = 200) |>
-    prepare_values(config, item = "foo", update = TRUE) |>
+    prepare(config, item = "foo", update = TRUE) |>
     validate(data.model = dm, update = TRUE) |>
     rows_update(items)
 
@@ -33,7 +33,7 @@ test_that("rows_update works", {
   dm <- yaml_to_dm(config_2, item = "foo", "name", "type", "default", "class.arg")
   ref_date <- as.numeric(items$date[1])
   x <- list(id = items$id[1]) |>
-    prepare_values(config, item = "foo", update = TRUE) |>
+    prepare(config, item = "foo", update = TRUE) |>
     validate(data.model = dm, update = TRUE) |>
     rows_update(items)
 
@@ -43,7 +43,7 @@ test_that("rows_update works", {
   # -- same with other attribute to update
   ref_date <- as.numeric(items$date[1])
   x <- list(id = items$id[2], total = 99) |>
-    prepare_values(config, item = "foo", update = TRUE) |>
+    prepare(config, item = "foo", update = TRUE) |>
     validate(data.model = dm, update = TRUE) |>
     rows_update(items)
 
@@ -57,7 +57,7 @@ test_that("rows_update works", {
 
   # -- drop unmatched columns
   x <- list(id = items$id[1], name = "update", dummy_col = "xxx") |>
-    prepare_values(config, item = "foo", update = TRUE) |>
+    prepare(config, item = "foo", update = TRUE) |>
     validate(data.model = dm, update = TRUE) |>
     rows_update(items)
 
@@ -65,7 +65,7 @@ test_that("rows_update works", {
 
   # -- make rectangular
   x <- list(id = items$id, quantity = 100, total = c(1:4)) |>
-    prepare_values(config, item = "foo", update = TRUE) |>
+    prepare(config, item = "foo", update = TRUE) |>
     validate(data.model = dm, update = TRUE) |>
     rows_update(items)
 
@@ -73,7 +73,7 @@ test_that("rows_update works", {
 
   # -- drop unmatched rows
   x <- list(id = 123, quantity = 100) |>
-    prepare_values(config, item = "foo", update = TRUE) |>
+    prepare(config, item = "foo", update = TRUE) |>
     validate(data.model = dm, update = TRUE) |>
     rows_update(items)
 

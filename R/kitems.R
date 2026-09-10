@@ -403,7 +403,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
           # -- store new item table
           k_items(trigger_create_values() |>
-                    prepare_values(config = config) |>
+                    prepare(config = config) |>
                     validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg")) |>
                     rows_insert(items = k_items()))
 
@@ -543,7 +543,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
           # -- store updated item list
           k_items(
             trigger_update_values() |>
-              prepare_values(config = config, update = TRUE) |>
+              prepare(config = config, update = TRUE) |>
               validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg"), update = TRUE) |>
               rows_update(items = k_items()))
 
