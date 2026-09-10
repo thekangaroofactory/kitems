@@ -802,7 +802,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     # //////////////////////////////////////////////////////////////////////////
     # -- Filtered view ----
 
-    output$filtered_view <- DT::renderDT(mask(reveal(filtered_items(), config)),
+    output$filtered_view <- DT::renderDT(decorate(reveal(filtered_items(), config)),
                                         rownames = FALSE,
                                         selection = list(mode = 'multiple', target = "row", selected = NULL))
 
@@ -820,7 +820,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
 
       # -- Get table col names
       # need to apply masks to get correct columns, hence sending only first row
-      cols <- colnames(mask(reveal(utils::head(filtered_items(), n = 1), config)))
+      cols <- colnames(decorate(reveal(utils::head(filtered_items(), n = 1), config)))
 
       # -- Get name of the clicked column
       col_clicked <- cols[input$filtered_view_cell_clicked$col + 1]

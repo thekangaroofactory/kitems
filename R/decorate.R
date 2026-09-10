@@ -1,9 +1,9 @@
 
 
-#' Apply Mask
+#' Decorate Item Columns
 #'
 #' @description
-#' Apply mask on names.
+#' Apply mask on attribute names.
 #'
 #' @param x a data.frame or named object
 #'
@@ -12,10 +12,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' mask(x = dm)
+#' decorate(x = dm)
 #' }
 
-mask <- function(x){
+decorate <- function(x){
 
   # -- check input
   if(is.null(names(x)))
