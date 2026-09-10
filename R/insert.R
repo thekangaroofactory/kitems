@@ -10,9 +10,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' rows_insert(values, items)}
+#' insert(values, items)}
 
-rows_insert <- function(values, items){
+insert <- function(values, items){
 
   # ////////////////////////////////////////////////////////////////////////////
   # -- secure against duplicated ids

@@ -75,7 +75,7 @@ values <- list(date = c(NA, "2024-01-14", "2024-01-16", "2024-01-17"),
 items <- values |>
   prepare(config, item = "foo") |>
   validate(dm) |>
-  rows_insert(data.frame())
+  insert(data.frame())
 
 
 # --------------------------------------------------------------------------

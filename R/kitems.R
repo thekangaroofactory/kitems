@@ -371,7 +371,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         k_items(input |>
                   extract(colClasses = ci_classes(config, item)) |>
                   validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg")) |>
-                  rows_insert(items = k_items()))
+                  insert(items = k_items()))
 
         # -- notify
         if(options$notify)
@@ -405,7 +405,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
           k_items(trigger_create_values() |>
                     prepare(config = config) |>
                     validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg")) |>
-                    rows_insert(items = k_items()))
+                    insert(items = k_items()))
 
           # -- notify
           catl(MODULE, "Item(s) created")},

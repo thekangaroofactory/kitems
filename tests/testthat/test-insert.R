@@ -1,6 +1,6 @@
 
 
-test_that("rows_insert works", {
+test_that("insert works", {
 
   # ////////////////////////////////////////////////////////////////////////////
   # Main cases
@@ -8,7 +8,7 @@ test_that("rows_insert works", {
   # -- insert single item
   x <- list(name = "create", total = 200) |>
     prepare(config, item = "foo") |>
-    rows_insert(items)
+    insert(items)
 
   expect_s3_class(x, "data.frame")
   expect_equal(nrow(x), nrow(items) + 1)
@@ -19,7 +19,7 @@ test_that("rows_insert works", {
   x <- list(name = c("new_1", "new_2"), total = c(100, 200)) |>
     prepare(config, item = "foo") |>
     validate(data.model = dm) |>
-    rows_insert(items)
+    insert(items)
 
   expect_s3_class(x, "data.frame")
   expect_false(any(duplicated(x$id)))
@@ -33,7 +33,7 @@ test_that("rows_insert works", {
   x <- list(name = "create", total = 200) |>
     prepare(config, item = "foo") |>
     validate(data.model = dm) |>
-    rows_insert(items = data.frame())
+    insert(items = data.frame())
 
   expect_s3_class(x, "data.frame")
   expect_equal(nrow(x), 1)
@@ -43,7 +43,7 @@ test_that("rows_insert works", {
   x <- list(total = 1:10) |>
     prepare(config, item = "foo") |>
     validate(data.model = dm) |>
-    rows_insert(items = data.frame())
+    insert(items = data.frame())
 
   expect_s3_class(x, "data.frame")
   expect_equal(nrow(x), 10)
@@ -56,7 +56,7 @@ test_that("rows_insert works", {
   x <- list(quantity = 100, dummy = "foo") |>
     prepare(config, item = "foo") |>
     validate(data.model = dm) |>
-    rows_insert(items = items)
+    insert(items = items)
 
   expect_s3_class(x, "data.frame")
   expect_equal(dim(x), dim(items) + c(1, 0))
@@ -65,7 +65,7 @@ test_that("rows_insert works", {
   x <- list(quantity = 100, total = c(1:4)) |>
     prepare(config, item = "foo") |>
     validate(data.model = dm) |>
-    rows_insert(items = items)
+    insert(items = items)
 
   expect_s3_class(x, "data.frame")
   expect_equal(dim(x), dim(items) + c(4, 0))
@@ -74,7 +74,7 @@ test_that("rows_insert works", {
   x <- list(id = NULL, quantity = 100) |>
     prepare(config, item = "foo") |>
     validate(data.model = dm) |>
-    rows_insert(items = items)
+    insert(items = items)
   expect_equal(dim(x), dim(items) + c(1, 0))
 
 })
