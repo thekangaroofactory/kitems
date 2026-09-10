@@ -15,7 +15,6 @@
 #' Notes are here for information but should not affect the behavior.
 #'
 #' @returns a list
-#' @export
 #'
 #' @examples
 #' \dontrun{
