@@ -1,11 +1,11 @@
 
 
-test_that("attribute_values works", {
+test_that("validate works", {
 
   # -- unit test
   helper <- function(values){
 
-    expect_no_error(x <- attribute_values(values = values, data.model = dm))
+    expect_no_error(x <- validate(values = values, data.model = dm))
     expect_s3_class(x, "data.frame")
 
     # -- check output class vs dm

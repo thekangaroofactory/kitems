@@ -8,7 +8,7 @@ test_that("rows_update works", {
   # -- update single item
   x <- list(id = items$id[1], name = "update", total = 200) |>
     prepare_values(config, item = "foo", update = TRUE) |>
-    attribute_values(data.model = dm, update = TRUE) |>
+    validate(data.model = dm, update = TRUE) |>
     rows_update(items)
 
   expect_equal(dim(x), dim(items))
@@ -18,7 +18,7 @@ test_that("rows_update works", {
   # -- update multiple items
   x <- list(id = items$id[1:2], name = "update", total = 200) |>
     prepare_values(config, item = "foo", update = TRUE) |>
-    attribute_values(data.model = dm, update = TRUE) |>
+    validate(data.model = dm, update = TRUE) |>
     rows_update(items)
 
   expect_equal(dim(x), dim(items))
@@ -34,7 +34,7 @@ test_that("rows_update works", {
   ref_date <- as.numeric(items$date[1])
   x <- list(id = items$id[1]) |>
     prepare_values(config, item = "foo", update = TRUE) |>
-    attribute_values(data.model = dm, update = TRUE) |>
+    validate(data.model = dm, update = TRUE) |>
     rows_update(items)
 
   expect_equal(dim(x), dim(items))
@@ -44,7 +44,7 @@ test_that("rows_update works", {
   ref_date <- as.numeric(items$date[1])
   x <- list(id = items$id[2], total = 99) |>
     prepare_values(config, item = "foo", update = TRUE) |>
-    attribute_values(data.model = dm, update = TRUE) |>
+    validate(data.model = dm, update = TRUE) |>
     rows_update(items)
 
   expect_equal(dim(x), dim(items))
@@ -58,7 +58,7 @@ test_that("rows_update works", {
   # -- drop unmatched columns
   x <- list(id = items$id[1], name = "update", dummy_col = "xxx") |>
     prepare_values(config, item = "foo", update = TRUE) |>
-    attribute_values(data.model = dm, update = TRUE) |>
+    validate(data.model = dm, update = TRUE) |>
     rows_update(items)
 
   expect_equal(dim(x), dim(items))
@@ -66,7 +66,7 @@ test_that("rows_update works", {
   # -- make rectangular
   x <- list(id = items$id, quantity = 100, total = c(1:4)) |>
     prepare_values(config, item = "foo", update = TRUE) |>
-    attribute_values(data.model = dm, update = TRUE) |>
+    validate(data.model = dm, update = TRUE) |>
     rows_update(items)
 
   expect_equal(dim(x), dim(items))
@@ -74,7 +74,7 @@ test_that("rows_update works", {
   # -- drop unmatched rows
   x <- list(id = 123, quantity = 100) |>
     prepare_values(config, item = "foo", update = TRUE) |>
-    attribute_values(data.model = dm, update = TRUE) |>
+    validate(data.model = dm, update = TRUE) |>
     rows_update(items)
 
   expect_equal(dim(x), dim(items))

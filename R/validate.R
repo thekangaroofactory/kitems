@@ -21,9 +21,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' attribute_values(values, data.model)}
+#' validate(values, data.model)}
 
-attribute_values <- function(values, data.model, update = FALSE){
+validate <- function(values, data.model, update = FALSE){
 
   # the input for this function will be the named values instead of key/value
   # - extract from the input

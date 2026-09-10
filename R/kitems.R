@@ -370,7 +370,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         # -- insert & store
         k_items(input |>
                   extract(colClasses = ci_classes(config, item)) |>
-                  attribute_values(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg")) |>
+                  validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg")) |>
                   rows_insert(items = k_items()))
 
         # -- notify
@@ -404,7 +404,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
           # -- store new item table
           k_items(trigger_create_values() |>
                     prepare_values(config = config) |>
-                    attribute_values(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg")) |>
+                    validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg")) |>
                     rows_insert(items = k_items()))
 
           # -- notify
@@ -507,7 +507,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         # -- store updated item list
         k_items(
           values |>
-            attribute_values(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg"), update = TRUE) |>
+            validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg"), update = TRUE) |>
             rows_update(items = k_items()))
 
         # -- notify
@@ -544,7 +544,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
           k_items(
             trigger_update_values() |>
               prepare_values(config = config, update = TRUE) |>
-              attribute_values(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg"), update = TRUE) |>
+              validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg"), update = TRUE) |>
               rows_update(items = k_items()))
 
           # -- notify
