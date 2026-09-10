@@ -11,7 +11,6 @@
 #' @param item the name (id) of the item group
 #'
 #' @returns a data.frame of the items or NULL
-#' @export
 #'
 #' @examples
 #' \dontrun{
