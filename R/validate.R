@@ -70,9 +70,10 @@ validate <- function(values, data.model, items = NULL, update = FALSE){
                att_dm$values)){
 
         constraint <- compute(att_dm$values, data = items)
-        if(any(!value %in% constraint)){
-          catl("> value(s) not matching constraint / set constraint where needed", level = 2)
-          value[!value %in% constraint] <- constraint[[1]]}}
+        if(!is.null(constraint))
+          if(any(!value %in% constraint)){
+            catl("> value(s) not matching constraint / set constraint where needed", level = 2)
+            value[!value %in% constraint] <- constraint[[1]]}}
 
 
     # //////////////////////////////////////////////////////////////////////////
