@@ -695,7 +695,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       observe({
 
         # -- check data model
-        req(has_date_attribute(config))
+        req(has_date_attribute(config) && !is.null(prefiltered_items()))
 
         catl(MODULE, "Update date sliderInput")
         catl("- strategy =", input$date_slider_strategy, level = 2)
