@@ -22,7 +22,7 @@ insert <- function(values, items){
 
   # -- insert item(s)
   # Need to check for empty items, otherwise an error will be raised by dplyr
-  items <- if(nrow(items) == 0) as.data.frame(values) else dplyr::bind_rows(items, values)
+  items <- if(is.null(items) || nrow(items) == 0) as.data.frame(values) else dplyr::bind_rows(items, values)
   catl("- Rows inserted, output dim =", dim(items), level = 2)
 
   # -- return
