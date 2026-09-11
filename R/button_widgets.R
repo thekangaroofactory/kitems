@@ -76,3 +76,26 @@ delete_widget <- function(id){
   uiOutput(ns("item_delete_btn"), inline = TRUE)
 
 }
+
+
+#' Buttons
+#'
+#' @description
+#' Buttons to fire the create / update / delete dialog.
+#'
+#' @param id the server module id.
+#'
+#' @returns a list of HTML tags.
+#' @export
+#'
+#' @examples
+#' actions_widget("foo")
+
+actions_widget <- function(id){
+
+  tagList(
+    create_widget(id),
+    update_widget(id),
+    delete_widget(id))
+
+}
