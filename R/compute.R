@@ -25,10 +25,17 @@ compute <- function(x, data = NULL){
   expr <- rlang::call_args(expr)
 
   # -- check if evaluation is required & return
-  if(!rlang::is_atomic(unlist(expr))){
+  if(!rlang::is_atomic(unlist(expr)))
 
-    unlist(lapply(expr, function(x) if(!rlang::is_atomic(x)) rlang::eval_tidy(x, data = data) else x))
+    unlist(lapply(expr, function(x)
+      if(!rlang::is_atomic(x))
+        tryCatch(
+          rlang::eval_tidy(x, data = data),
+          error = function(e) {
+            warning("Attribute constraint could not be evaluated: ", e$message, call. = F)
+            return(NULL)})
+      else x))
 
-  } else unlist(expr)
+  else unlist(expr)
 
 }
