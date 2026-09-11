@@ -56,7 +56,7 @@ item <- "foo"
 
 # -- data.model
 # to pass to some workflow functions
-dm <- yaml_to_dm(config, "name", "type", "default", "class.arg")
+dm <- yaml_to_dm(config, "name", "type", "default", "class.arg", "values")
 
 
 # ------------------------------------------------------------------------------
