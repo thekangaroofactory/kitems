@@ -57,28 +57,28 @@ attribute_input <- function(name, type, value = NULL, choices = NULL, create = F
 
   # -- character
   if(type == "character")
-    input <- textInput(inputId = input_id,
-                       label = label,
-                       value = value,
-                       width = NULL,
-                       placeholder = NULL)
+    return(textInput(inputId = input_id,
+                     label = label,
+                     value = value,
+                     width = NULL,
+                     placeholder = NULL))
 
   # -- numeric, integer
   # removed double #218
   if(type %in% c("numeric", "integer"))
-    input <- numericInput(
+    return(numericInput(
       inputId = input_id,
       label = label,
       value = value,
       min = NA,
       max = NA,
       step = NA,
-      width = NULL)
+      width = NULL))
 
   # -- date, POSIXct
   if(type %in% c("Date", "POSIXct")){
     # check: NA would raise a warning
-    if(is.na(value))
+    if(!is.null(value) && is.na(value))
       value <- NULL
     input <- dateInput(
       inputId = input_id,
@@ -93,34 +93,36 @@ attribute_input <- function(name, type, value = NULL, choices = NULL, create = F
       width = NULL,
       autoclose = TRUE,
       datesdisabled = NULL,
-      daysofweekdisabled = NULL)}
+      daysofweekdisabled = NULL)
 
-  # -- POSIXct (add time & timezone inputs)
-  if(type == "POSIXct"){
+    # -- POSIXct (add time & timezone inputs)
+    if(type == "POSIXct"){
 
-    # -- get timezone from value
-    # Note: pick values matching with OlsonNames list
-    # set default to Sys.timezone otherwise it will pick first choice
-    tz_value <- attr(as.POSIXlt(value),"tzone")
-    tz_value <- tz_value[tz_value %in% OlsonNames()]
-    if(length(tz_value > 1))
-      tz_value <- utils::head(tz_value, 1)
-    if(length(tz_value == 0))
-      tz_value <- Sys.timezone()
+      # -- get timezone from value
+      # Note: pick values matching with OlsonNames list
+      # set default to Sys.timezone otherwise it will pick first choice
+      tz_value <- attr(as.POSIXlt(value),"tzone")
+      tz_value <- tz_value[tz_value %in% OlsonNames()]
+      if(length(tz_value > 1))
+        tz_value <- utils::head(tz_value, 1)
+      if(length(tz_value == 0))
+        tz_value <- Sys.timezone()
 
-    # -- concatenate with date input
-    input <- wellPanel(input,
+      # -- concatenate with date input
+      input <- wellPanel(input,
 
-                       # -- time (need to extract time from value)
-                       shinyWidgets::timeInput(inputId = ns(paste0(name, "_time")),
-                                 label = paste(label, "time"),
-                                 value = strftime(value, format="%H:%M:%S")),
+                         # -- time (need to extract time from value)
+                         shinyWidgets::timeInput(inputId = ns(paste0(name, "_time")),
+                                                 label = paste(label, "time"),
+                                                 value = strftime(value, format="%H:%M:%S")),
 
-                       # -- timezone (need to extract tz from value)
-                       selectizeInput(inputId = ns(paste0(name, "_tz")),
-                                      label = paste(label, "timezone"),
-                                      choices = OlsonNames(),
-                                      selected = tz_value))}
+                         # -- timezone (need to extract tz from value)
+                         selectizeInput(inputId = ns(paste0(name, "_tz")),
+                                        label = paste(label, "timezone"),
+                                        choices = OlsonNames(),
+                                        selected = tz_value))}
+
+    return(input)}
 
 
   # -- logical
@@ -135,13 +137,10 @@ attribute_input <- function(name, type, value = NULL, choices = NULL, create = F
       value <- FALSE
 
     # -- input
-    input <- checkboxInput(inputId = input_id,
-                           label = label,
-                           value = value,
-                           width = NULL)
+    return(checkboxInput(inputId = input_id,
+                         label = label,
+                         value = value,
+                         width = NULL))
   }
-
-  # -- return
-  input
 
 }
