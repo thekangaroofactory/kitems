@@ -46,15 +46,14 @@ attribute_input <- function(name, type, value = NULL, choices = NULL, create = F
   input_id <- ns(name)
   label <- stringr::str_to_title(name)
 
-
   # -- attribute values
-  # when choices are provided, type driven input it replaced by a selectInput
+  # when choices are provided, type driven input is replaced by a selectInput
   if(!is.null(choices))
-    input <- selectizeInput(inputId = input_id,
-                            label = label,
-                            choices = choices,
-                            selected = value,
-                            options = list(create = create))
+    return(selectizeInput(inputId = input_id,
+                          label = label,
+                          choices = choices,
+                          selected = value,
+                          options = list(create = create)))
 
   # -- character
   if(type == "character")
