@@ -333,7 +333,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         yaml_to_dm("name", "type", "default", "values") |>
         dplyr::filter(name %in% included(config, item)) |>
         default() |>
-        form(ns = ns) |>
+        form(items = k_items(), ns = ns) |>
         dialog(workflow = "create", ns = ns) |>
         showModal()
 
@@ -351,7 +351,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
           yaml_to_dm("name", "type", "default", "values") |>
           dplyr::filter(name %in% included(config, item)) |>
           default() |>
-          form(ns = ns) |>
+          form(items = k_items(), ns = ns) |>
           dialog(workflow = "create", ns = ns) |>
           showModal()
 
@@ -370,7 +370,8 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         # -- insert & store
         k_items(input |>
                   extract(colClasses = ci_classes(config, item)) |>
-                  validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg")) |>
+                  validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg", "values"),
+                           items = k_items()) |>
                   insert(items = k_items()))
 
         # -- notify
@@ -404,7 +405,8 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
           # -- store new item table
           k_items(trigger_create_values() |>
                     prepare(config = config) |>
-                    validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg")) |>
+                    validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg", "values"),
+                             items = k_items()) |>
                     insert(items = k_items()))
 
           # -- notify
@@ -452,7 +454,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       s_item |>
         as_default(data.model = yaml_to_dm(config, "name", "type", "default", "values")) |>
         dplyr::filter(name %in% included(config, item)) |>
-        form(ns = ns) |>
+        form(items = k_items(), ns = ns) |>
         dialog(workflow = "update", ns = ns) |>
         showModal()
 
@@ -475,7 +477,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         s_item |>
           as_default(data.model = yaml_to_dm(config, "name", "type", "default", "values")) |>
           dplyr::filter(name %in% included(config, item)) |>
-          form(ns = ns) |>
+          form(items = k_items(), ns = ns) |>
           dialog(workflow = "update", ns = ns) |>
           showModal()
 
@@ -507,7 +509,9 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         # -- store updated item list
         k_items(
           values |>
-            validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg"), update = TRUE) |>
+            validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg", "values"),
+                     items = k_items(),
+                     update = TRUE) |>
             update(items = k_items()))
 
         # -- notify
@@ -544,7 +548,9 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
           k_items(
             trigger_update_values() |>
               prepare(config = config, update = TRUE) |>
-              validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg"), update = TRUE) |>
+              validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg", "values"),
+                       items = k_items(),
+                       update = TRUE) |>
               update(items = k_items()))
 
           # -- notify

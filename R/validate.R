@@ -14,7 +14,7 @@
 #' It should be turned into a data.frame first, using [yaml_to_dm()].
 #'
 #' `data.model` should contain the following columns:
-#' "name", "type", "default", "class.arg".
+#' "name", "type", "default", "class.arg", "values".
 #'
 #' @returns A data.frame of item(s) checked against the data model.
 #' @export
@@ -23,10 +23,10 @@
 #' \dontrun{
 #' validate(values, data.model)}
 
-validate <- function(values, data.model, update = FALSE){
+validate <- function(values, data.model, items = NULL, update = FALSE){
 
   # the input for this function will be the named values instead of key/value
-  # - extract from the input
+  # - extracted from the input
   # - prepared from the trigger (squared)
 
   # ////////////////////////////////////////////////////////////////////////////
@@ -42,7 +42,8 @@ validate <- function(values, data.model, update = FALSE){
     # //////////////////////////////////////////////////////////////////////////
     # -- Validate or replace value(s)
 
-    # -- depends on single / multiple values
+    # -- check if value can be trusted
+    # depends on single / multiple values
     if(length(value) <= 1){
 
       if(!is_truthy(value)){
@@ -60,6 +61,19 @@ validate <- function(values, data.model, update = FALSE){
         value[!is_valid] <- replicate(default(att_dm)$default, n = length(value[!is_valid]))}
 
     }
+
+    # -- check against attribute values
+    if(!is.null(att_dm$values))
+
+      # suggest doesn't require any action
+      if(grepl(paste(c("limit", "lifecycle"), collapse = "|"),
+               att_dm$values)){
+
+        constraint <- compute(att_dm$values, data = items)
+        if(any(!value %in% constraint)){
+          catl("> value(s) not matching constraint / set constraint where needed", level = 2)
+          value[!value %in% constraint] <- constraint[[1]]}}
+
 
     # //////////////////////////////////////////////////////////////////////////
     # -- check vs target class
