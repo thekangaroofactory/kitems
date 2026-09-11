@@ -703,8 +703,8 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         # -- Get min/max
         if(nrow(prefiltered_items()) > 0){
 
-          min <- min(prefiltered_items()$date)
-          max <- max(prefiltered_items()$date)
+          min <- min(prefiltered_items()$date, na.rm = T)
+          max <- max(prefiltered_items()$date, na.rm = T)
 
         } else {
 
@@ -788,7 +788,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       # -- apply filter(s)
       if(!is.null(filter_exprs)){
         # -- test must be done out of the filter() function #601
-        # otherwise multiple confitions does not work
+        # otherwise multiple conditions does not work
         items <- if(is.list(filter_exprs))
           k_items() |> dplyr::filter(!!!filter_exprs)
         else
