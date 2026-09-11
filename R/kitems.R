@@ -333,8 +333,8 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         yaml_to_dm("name", "type", "default", "values") |>
         dplyr::filter(name %in% included(config, item)) |>
         default() |>
-        form(items = k_items(), ns = ns) |>
-        dialog(workflow = "create", ns = ns) |>
+        form(items = k_items()) |>
+        dialog(workflow = "create") |>
         showModal()
 
     }) |> bindEvent(input$item_create, ignoreInit = TRUE)
@@ -351,8 +351,8 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
           yaml_to_dm("name", "type", "default", "values") |>
           dplyr::filter(name %in% included(config, item)) |>
           default() |>
-          form(items = k_items(), ns = ns) |>
-          dialog(workflow = "create", ns = ns) |>
+          form(items = k_items()) |>
+          dialog(workflow = "create") |>
           showModal()
 
       }) |> bindEvent(trigger_create_dialog(), ignoreInit = TRUE)
@@ -454,8 +454,8 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       s_item |>
         as_default(data.model = yaml_to_dm(config, "name", "type", "default", "values")) |>
         dplyr::filter(name %in% included(config, item)) |>
-        form(items = k_items(), ns = ns) |>
-        dialog(workflow = "update", ns = ns) |>
+        form(items = k_items()) |>
+        dialog(workflow = "update") |>
         showModal()
 
       })
@@ -477,8 +477,8 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         s_item |>
           as_default(data.model = yaml_to_dm(config, "name", "type", "default", "values")) |>
           dplyr::filter(name %in% included(config, item)) |>
-          form(items = k_items(), ns = ns) |>
-          dialog(workflow = "update", ns = ns) |>
+          form(items = k_items()) |>
+          dialog(workflow = "update") |>
           showModal()
 
       }) |> bindEvent(trigger_update_dialog(),
@@ -587,7 +587,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
     observeEvent(input$item_delete, {
 
       catl(MODULE, "[Event] Delete item button")
-      showModal(dialog(workflow = "delete", ns = ns))})
+      showModal(dialog(workflow = "delete"))})
 
 
     # -- dialog from trigger
@@ -595,7 +595,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       observe({
 
         catl(MODULE, "[Event] Delete item dialog trigger")
-        showModal(dialog(workflow = "delete", ns = ns))
+        showModal(dialog(workflow = "delete"))
 
       }) |> bindEvent(trigger_delete_dialog(),
                       ignoreInit = TRUE)

@@ -7,7 +7,7 @@
 #'
 #' @param ... the content to be displayed in the modal dialog.
 #' @param workflow a character string to indicate workflow (see details).
-#' @param ns the namespace function to use in the dialog.
+#' @param session optional, the shiny session object.
 #'
 #' @returns a modal dialog.
 #' @export
@@ -23,10 +23,13 @@
 #' dialog(workflow = "delete", ns)
 #' }
 
-dialog <- function(..., workflow = c("create", "update", "delete"), ns){
+dialog <- function(..., workflow = c("create", "update", "delete"), session = getDefaultReactiveDomain()){
 
   # -- check argument
   workflow <- match.arg(workflow)
+
+  # namespace
+  ns <- if(!is.null(session)) session$ns else function(x) x
 
   # -- prepare
   title <- paste0(ktools::toupperfirst(workflow), " item", ifelse(workflow == "delete", "(s)", ""))

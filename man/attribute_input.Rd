@@ -4,7 +4,14 @@
 \alias{attribute_input}
 \title{Attribute Input}
 \usage{
-attribute_input(name, type, value = NULL, choices = NULL, create = FALSE, ns)
+attribute_input(
+  name,
+  type,
+  value = NULL,
+  choices = NULL,
+  create = FALSE,
+  session = getDefaultReactiveDomain()
+)
 }
 \arguments{
 \item{name}{the name of the attribute.}
@@ -15,9 +22,9 @@ attribute_input(name, type, value = NULL, choices = NULL, create = FALSE, ns)
 
 \item{choices}{a list of values to select from (see details).}
 
-\item{create}{a logical (default = FALSE) if user is allowed to create values (see details)}
+\item{create}{a logical (default = FALSE) if user is allowed to create values (see details).}
 
-\item{ns}{the namespace function reference.}
+\item{session}{optional, the shiny session object.}
 }
 \value{
 An input that can be added to the UI definition.
@@ -33,10 +40,7 @@ will be allowed to create additional values depending on \code{create} (otherwis
 }
 \examples{
 \dontrun{
-# -- namespace
-ns <- shiny::NS("my_data")
-
 # -- create inputs
-attribute_input(name = "total", type = "numeric", value = 10, ns)
+attribute_input(name = "total", type = "numeric", value = 10)
 }
 }

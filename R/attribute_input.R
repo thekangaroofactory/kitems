@@ -9,8 +9,8 @@
 #' @param type the type of the attribute.
 #' @param value the value to be used to initialize the input.
 #' @param choices a list of values to select from (see details).
-#' @param create a logical (default = FALSE) if user is allowed to create values (see details)
-#' @param ns the namespace function reference.
+#' @param create a logical (default = FALSE) if user is allowed to create values (see details).
+#' @param session optional, the shiny session object.
 #'
 #' @details
 #' By default (`choices = NULL`), the function will return an input driven by the
@@ -24,14 +24,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' # -- namespace
-#' ns <- shiny::NS("my_data")
-#'
 #' # -- create inputs
-#' attribute_input(name = "total", type = "numeric", value = 10, ns)
+#' attribute_input(name = "total", type = "numeric", value = 10)
 #' }
 
-attribute_input <- function(name, type, value = NULL, choices = NULL, create = FALSE, ns){
+attribute_input <- function(name, type, value = NULL, choices = NULL, create = FALSE, session = getDefaultReactiveDomain()){
 
   # -- check arguments
   if(is.null(name))
@@ -43,6 +40,7 @@ attribute_input <- function(name, type, value = NULL, choices = NULL, create = F
   catl("- [attribute_input] name =", name, "/ type =", type, "/ value =", value)
 
   # -- compute inputId & label
+  ns <- if(!is.null(session)) session$ns else function(x) x
   input_id <- ns(name)
   label <- stringr::str_to_title(name)
 

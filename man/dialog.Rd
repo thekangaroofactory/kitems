@@ -4,14 +4,18 @@
 \alias{dialog}
 \title{Item Modal Dialog(s)}
 \usage{
-dialog(..., workflow = c("create", "update", "delete"), ns)
+dialog(
+  ...,
+  workflow = c("create", "update", "delete"),
+  session = getDefaultReactiveDomain()
+)
 }
 \arguments{
 \item{...}{the content to be displayed in the modal dialog.}
 
 \item{workflow}{a character string to indicate workflow (see details).}
 
-\item{ns}{the namespace function to use in the dialog.}
+\item{session}{optional, the shiny session object.}
 }
 \value{
 a modal dialog.

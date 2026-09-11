@@ -7,7 +7,6 @@
 #'
 #' @param attributes a data.frame of the attributes (see details).
 #' @param items a data.frame of the items (see details).
-#' @param ns the namespace function, output of `shiny::NS()`.
 #'
 #' @details
 #' `attributes` is expected to be the output of the `default()` or `as_default` function.
@@ -22,10 +21,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' form(attributes = default(data_model()), ns) << check this!
+#' form(attributes = default(data_model())) << check this!
 #' }
 
-form <- function(attributes, items = NULL, ns){
+form <- function(attributes, items = NULL){
 
   # -- check argument
   if(nrow(attributes) == 0)
@@ -39,9 +38,6 @@ form <- function(attributes, items = NULL, ns){
                     type = attributes[[x, 'type']],
                     value = attributes[[x, 'default']],
                     choices = if(is_truthy(attributes[[x, 'values']])) compute(attributes[[x, 'values']], data = items) else NULL,
-                    create = rlang::is_call(rlang::parse_expr(attributes[[x, 'values']]), name = "suggest"),
-                    ns)
-
-    })
+                    create = rlang::is_call(rlang::parse_expr(attributes[[x, 'values']]), name = "suggest"))})
 
 }

@@ -4,14 +4,12 @@
 \alias{form}
 \title{Item Form}
 \usage{
-form(attributes, items = NULL, ns)
+form(attributes, items = NULL)
 }
 \arguments{
 \item{attributes}{a data.frame of the attributes (see details).}
 
 \item{items}{a data.frame of the items (see details).}
-
-\item{ns}{the namespace function, output of \code{shiny::NS()}.}
 }
 \value{
 A list of HTML tags.
@@ -29,6 +27,6 @@ should be evaluated with data masking support.
 }
 \examples{
 \dontrun{
-form(attributes = default(data_model()), ns) << check this!
+form(attributes = default(data_model())) << check this!
 }
 }

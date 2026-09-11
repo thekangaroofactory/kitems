@@ -6,7 +6,7 @@ test_that("form works", {
   x <- config |>
     yaml_to_dm(item = "foo", "name", "type", "default", "values") |>
     default() |>
-    form(ns = shiny::NS("id"))
+    form()
 
   expect_type(x, "list")
 
