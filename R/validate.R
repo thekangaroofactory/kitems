@@ -7,6 +7,7 @@
 #'
 #' @param values a list of named values.
 #' @param data.model the data.frame of the data model (see details).
+#' @param items an optional data.frame of the items (see details).
 #' @param update whether the id attribute should be checked or not (default FALSE).
 #'
 #' @details
@@ -15,6 +16,9 @@
 #'
 #' `data.model` should contain the following columns:
 #' "name", "type", "default", "class.arg", "values".
+#'
+#' In case the data.model values column contains instruction that require
+#' data-masking, `items` will be used as a context to evaluate those instructions.
 #'
 #' @returns A data.frame of item(s) checked against the data model.
 #' @export
@@ -63,7 +67,7 @@ validate <- function(values, data.model, items = NULL, update = FALSE){
     }
 
     # -- check against attribute values
-    if(!is.null(att_dm$values))
+    if("values" %in% names(att_dm))
 
       # suggest doesn't require any action
       if(grepl(paste(c("limit", "lifecycle"), collapse = "|"),

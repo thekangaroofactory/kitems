@@ -4,12 +4,14 @@
 \alias{validate}
 \title{Validate Value(s)}
 \usage{
-validate(values, data.model, update = FALSE)
+validate(values, data.model, items = NULL, update = FALSE)
 }
 \arguments{
 \item{values}{a list of named values.}
 
 \item{data.model}{the data.frame of the data model (see details).}
+
+\item{items}{an optional data.frame of the items (see details).}
 
 \item{update}{whether the id attribute should be checked or not (default FALSE).}
 }
@@ -24,7 +26,10 @@ This function does not accept the data.model element of the config list as an in
 It should be turned into a data.frame first, using \code{\link[=yaml_to_dm]{yaml_to_dm()}}.
 
 \code{data.model} should contain the following columns:
-"name", "type", "default", "class.arg".
+"name", "type", "default", "class.arg", "values".
+
+In case the data.model values column contains instruction that require
+data-masking, \code{items} will be used as a context to evaluate those instructions.
 }
 \examples{
 \dontrun{
