@@ -26,7 +26,8 @@ Imports:
     shinyjs,
     bslib,
     shinyWidgets,
-    crayon
+    crayon,
+    lifecycle
 Suggests: 
     knitr,
     rmarkdown,

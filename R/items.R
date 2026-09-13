@@ -3,6 +3,8 @@
 #' Get Items
 #'
 #' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' This function is part of the selective loading mechanism to ensure
 #' items are loaded only when required.
 #'

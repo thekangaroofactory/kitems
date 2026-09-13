@@ -17,6 +17,8 @@ items(datamart, config, item)
 a data.frame of the items or NULL
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 This function is part of the selective loading mechanism to ensure
 items are loaded only when required.
 }

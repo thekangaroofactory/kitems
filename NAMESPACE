@@ -59,6 +59,7 @@ export(validate)
 export(yaml_to_dm)
 import(shiny)
 importFrom(ktools,catl)
+importFrom(lifecycle,deprecated)
 importFrom(rlang,.data)
 importFrom(shinyWidgets,timeInput)
 importFrom(utils,
