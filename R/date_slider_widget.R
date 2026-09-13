@@ -6,6 +6,7 @@
 #' The date slider UI component to drive the date filter.
 #'
 #' @param id the server module id.
+#' @param width the width of the input (passed to `shiny::sliderInput()`).
 #' @param bootstrap optional, a character string for the Bootstrap major version (see details).
 #'
 #' @details
@@ -24,7 +25,7 @@
 #' date_slider_widget(id = "mydata")
 #' }
 
-date_slider_widget <- function(id, bootstrap = bslib::version_default()){
+date_slider_widget <- function(id, width = "300px", bootstrap = bslib::version_default()){
 
   # namespace
   ns <- NS(id)
@@ -36,7 +37,7 @@ date_slider_widget <- function(id, bootstrap = bslib::version_default()){
       style = "display: inline-block; vertical-align:middle; margin-right:40px;",
       sliderInput(inputId = ns("date_slider"),
                   label = "Date",
-                  width = "300px",
+                  width = width,
                   min = Sys.Date(),
                   max = Sys.Date(),
                   value = c(Sys.Date(), Sys.Date()))),
