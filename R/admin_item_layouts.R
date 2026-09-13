@@ -8,6 +8,7 @@
 #' @param x the item config
 #'
 #' @returns a bslib::nav_panel() object
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{
@@ -94,6 +95,7 @@ admin_item_layout <- function(x){
 #' @param description an optional description
 #'
 #' @returns a div() HTML object
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{
@@ -134,6 +136,7 @@ admin_item_card <- function(name, description = NULL){
 #' @param name the name of the item
 #'
 #' @returns an HTML tag
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{

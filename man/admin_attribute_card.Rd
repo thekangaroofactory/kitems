@@ -28,3 +28,4 @@ This is a UI layout function to display attributes.
 admin_attribute_card(attribute, item)
 }
 }
+\keyword{internal}

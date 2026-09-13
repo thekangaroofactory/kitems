@@ -27,6 +27,6 @@ should be evaluated with data masking support.
 }
 \examples{
 \dontrun{
-form(attributes = default(data_model())) << check this!
+form(attributes = data.frame(name = "total", type = "numeric"))
 }
 }

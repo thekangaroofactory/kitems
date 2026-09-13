@@ -10,6 +10,7 @@
 #' It is expected that config is checked first using [config_check()].
 #'
 #' @returns a list
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{

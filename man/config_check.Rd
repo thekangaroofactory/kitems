@@ -27,3 +27,4 @@ Notes are here for information but should not affect the behavior.
 config_check(config)
 }
 }
+\keyword{internal}

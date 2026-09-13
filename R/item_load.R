@@ -12,7 +12,7 @@
 #' \dontrun{
 #' # -- File connector:
 #' item_load(col.classes = c(id = "numeric", date = "Date", comment = "character"),
-#' connector = list(type = "file", path = "path/to/my/data", filename = "mydata.csv")
+#' connector = list(type = "file", path = "path/to/my/data", filename = "mydata.csv"))
 #' }
 
 item_load <- function(connector, col.classes){

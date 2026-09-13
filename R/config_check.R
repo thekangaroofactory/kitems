@@ -15,6 +15,7 @@
 #' Notes are here for information but should not affect the behavior.
 #'
 #' @returns a list
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{

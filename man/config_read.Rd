@@ -23,3 +23,4 @@ By default, \code{path} uses the R_KITEMS_PATH environment variable.
 config_read()
 }
 }
+\keyword{internal}

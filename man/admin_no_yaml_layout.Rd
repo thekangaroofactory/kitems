@@ -17,3 +17,4 @@ This is a UI / Layout function for the Admin Console
 admin_no_yaml_layout()
 }
 }
+\keyword{internal}

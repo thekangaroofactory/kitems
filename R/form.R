@@ -21,7 +21,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' form(attributes = default(data_model())) << check this!
+#' form(attributes = data.frame(name = "total", type = "numeric"))
 #' }
 
 form <- function(attributes, items = NULL){

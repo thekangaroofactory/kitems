@@ -24,3 +24,4 @@ dynamically.
 admin_attribute_modal()
 }
 }
+\keyword{internal}

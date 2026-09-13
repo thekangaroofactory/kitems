@@ -32,3 +32,4 @@ attribute wizard.
 admin_attribute_wizard(config, item = "foo")
 }
 }
+\keyword{internal}

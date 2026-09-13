@@ -12,6 +12,8 @@
 #' @param callback a reactiveVal to send the output of the wizard
 #' @param session optional, the Shiny session object
 #'
+#' @keywords internal
+#'
 #' @examples
 #' \dontrun{
 #' admin_attribute_wizard(config, item = "foo")

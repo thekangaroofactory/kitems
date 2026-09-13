@@ -17,6 +17,6 @@ Saves the items data.frame.
 \examples{
 \dontrun{
 # -- File connector:
-item_save(data = mydata, connector = list(type = "file", file = "path/to/my/data/mydata.csv")
+item_save(data = mydata, connector = list(type = "file", file = "path/to/my/data/mydata.csv"))
 }
 }

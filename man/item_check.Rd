@@ -27,3 +27,4 @@ It is expected that config is checked first using \code{\link[=config_check]{con
 item_check(items, config, "foo")
 }
 }
+\keyword{internal}

@@ -22,3 +22,4 @@ By default, \code{path} uses the R_KITEMS_PATH environment variable.
 config_write(list(foo = 1, bar = "two"))
 }
 }
+\keyword{internal}

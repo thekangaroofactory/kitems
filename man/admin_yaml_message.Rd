@@ -20,3 +20,4 @@ This is a helper function to return messages about the YAML config.
 admin_yaml_message(config)
 }
 }
+\keyword{internal}

@@ -12,6 +12,7 @@
 #' @param refresh the list of attributes to refresh
 #'
 #' @returns A htmltools::div() tag.
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{
@@ -96,6 +97,7 @@ admin_attribute_card <- function(attribute, item, hide = NULL, skip = NULL, refr
 #' dynamically.
 #'
 #' @returns a modal dialog
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{

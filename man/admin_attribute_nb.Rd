@@ -20,3 +20,4 @@ Attribute Number
 admin_attribute_nb(config)
 }
 }
+\keyword{internal}

@@ -15,3 +15,4 @@ NULL if all checks are ok
 \description{
 Check Path Argument
 }
+\keyword{internal}

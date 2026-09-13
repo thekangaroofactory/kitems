@@ -37,3 +37,4 @@ config |> extend(item = "foo", attribute = c(name = "total", type = "integer"))
 item <- "foo"
 config |> extend(attribute = c(name = "total", type = "integer"))
 }
+\keyword{internal}

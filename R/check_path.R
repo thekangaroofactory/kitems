@@ -5,6 +5,7 @@
 #' @param path the value to check
 #'
 #' @returns NULL if all checks are ok
+#' @keywords internal
 
 check_path <- function(path){
 

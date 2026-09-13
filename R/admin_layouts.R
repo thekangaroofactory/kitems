@@ -6,6 +6,7 @@
 #' This is a UI / Layout function for the Admin Console
 #'
 #' @returns an HTML tag (div)
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{
@@ -35,6 +36,7 @@ admin_no_yaml_layout <- function(){
 #' @param config a YAML config
 #'
 #' @returns an HTML tag
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{
@@ -60,6 +62,7 @@ admin_yaml_message <- function(config){
 #' @param config an item config
 #'
 #' @returns a character string
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{

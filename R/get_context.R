@@ -20,6 +20,7 @@
 #' environment in which the function was called.
 #'
 #' @returns a character value or NULL
+#' @keywords internal
 #'
 #' @examples
 #' # baseline

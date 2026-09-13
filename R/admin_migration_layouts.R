@@ -6,6 +6,7 @@
 #' @param files a list of data.model files to migrate
 #'
 #' @returns a layout
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{
@@ -50,6 +51,7 @@ admin_migration_required_layout <- function(files){
 #' @param path the path of the project
 #'
 #' @returns an HTML layout
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{
