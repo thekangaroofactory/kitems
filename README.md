@@ -5,51 +5,31 @@
 
 <!-- badges: start / keep here because it's not displayed the same way in GitHub & pkgdown -->
 
+[![Lifecycle:stable](https://img.shields.io/badge/lifecycle-stable-34cf58.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![R-CMD-check](https://github.com/thekangaroofactory/kitems/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/thekangaroofactory/kitems/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/thekangaroofactory/kitems/graph/badge.svg?token=7P74NK51JJ)](https://codecov.io/gh/thekangaroofactory/kitems)
 <!-- badges: end -->
 
-The goal of kitems is to provide a framework to manage data frame
-*items* and a set of tools to implement it within R Shiny applications.
+The goal of kitems is to provide a framework to manage tabular *items*
+and a set of tools to implement it within R Shiny web applications.
 
-It is delivered as a Shiny module.
-
-## Lifecycle
-
-<!-- badge: start -->
-
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-<!-- badge: end -->
-
-> Note that the package is under development convergence (lifecycle =
-> experimental).  
-> Core features may still be modified at this stage, and there is no
-> guaranty that exported functions signature will not change before it
-> is converged.
-
-See
-[roadmap](https://thekangaroofactory.github.io/kitems/articles/roadmap.html)
-article to get more information about the package convergence.
+It’s main component is delivered as a Shiny module.
 
 ## Installation
 
-The development (*beta*) version of kitems can be installed from
+The latest version of kitems can be installed from
 [GitHub](https://github.com/thekangaroofactory/kitems) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("thekangaroofactory/kitems")
+
+# or
+pak::pak("thekangaroofactory/kitems")
 ```
 
-## Demo
+## Lifecycle
 
-Demo apps are delivered along with the package and can be accessed with:
-
-``` r
-# -- get demo names
-kitems::runExample()
-
-# -- run 'demo' app
-kitems::runExample("demo")
-```
+See this
+[article](https://thekangaroofactory.github.io/kitems/articles/roadmap.html)
+to get more information about the package roadmap.
