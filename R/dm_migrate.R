@@ -17,6 +17,20 @@
 
 dm_migrate <- function(data.model){
 
+  # -- default values
+  # moved from data.R in v0.8.0 since not used elsewhere
+  DATA_MODEL_DEFAULTS <- list(name = NA,
+                              type = NA,
+                              class.arg = NA,
+                              values = NA,
+                              default = NA,
+                              display = FALSE,
+                              skip = FALSE,
+                              refresh = FALSE,
+                              sort.rank = NA,
+                              sort.desc = NA)
+
+
   # -- data model version
   version <- attributes(data.model)$version
   message("Data model migration start...")
@@ -103,7 +117,8 @@ dm_migrate <- function(data.model){
   # attribute version must be kept
   if(dirty){
     v <- attributes(data.model)$version
-    data.model <- data.model[names(DATA_MODEL_COLCLASSES)]
+    data.model <- data.model[c("name", "type", "class.arg", "values", "default",
+                               "display", "skip", "refresh", "sort.rank", "sort.desc")]
     attr(data.model, "version") <- v}
 
   if(dirty){
