@@ -78,12 +78,16 @@ delete_widget <- function(id){
 }
 
 
-#' Buttons
+#' Item Buttons
 #'
 #' @description
 #' Buttons to fire the create / update / delete dialog.
 #'
 #' @param id the server module id.
+#'
+#' @details
+#' The function is a wrapper around the create, update and delete
+#' widgets to get them all in one call.
 #'
 #' @returns a list of HTML tags.
 #' @export

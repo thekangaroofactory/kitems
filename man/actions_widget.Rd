@@ -2,7 +2,7 @@
 % Please edit documentation in R/button_widgets.R
 \name{actions_widget}
 \alias{actions_widget}
-\title{Buttons}
+\title{Item Buttons}
 \usage{
 actions_widget(id)
 }
@@ -14,6 +14,10 @@ a list of HTML tags.
 }
 \description{
 Buttons to fire the create / update / delete dialog.
+}
+\details{
+The function is a wrapper around the create, update and delete
+widgets to get them all in one call.
 }
 \examples{
 actions_widget("foo")
