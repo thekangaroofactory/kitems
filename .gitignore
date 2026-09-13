@@ -3,3 +3,6 @@ inst/doc
 .Rhistory
 docs
 .positai
+
+/.quarto/
+**/*.quarto_ipynb
