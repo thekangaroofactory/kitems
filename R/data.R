@@ -27,11 +27,3 @@ CLASS_FUNCTIONS <- list("numeric" = "as.numeric",
                         "character" = "as.character",
                         "Date" = "as.Date",
                         "POSIXct" = "as.POSIXct")
-
-
-# --------------------------------------------------------------------------
-# Declare templates:
-# --------------------------------------------------------------------------
-
-# -- Data model template
-# Declaration is now in ./data-raw/template_data_model.R
