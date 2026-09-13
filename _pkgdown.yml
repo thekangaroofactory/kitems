@@ -51,18 +51,12 @@ reference:
 - subtitle: Shiny Module UI Components
   desc: The UI functions to include into your app.
   contents:
-  - create_widget
-  - update_widget
-  - delete_widget
-  - date_slider_widget
-  - filtered_view_widget
+  - ends_with("widget")
 
 - subtitle: Admin
   desc: The functions to perform admin tasks.
   contents:
   - admin
-  - backup
-  - restore
 
 - subtitle: Demos
   desc: Function to list and launch the demo apps.
@@ -78,59 +72,65 @@ reference:
 - title: Behind the scene
   desc: These functions are made available (exported) for advanced users who would like to go beyond the usage of the module server.
 
-- subtitle: Admin
-  desc: The server/UI functions behind the admin console app.
+- subtitle: Data Governance
+  desc: The functions related to data model and config management.
   contents:
-  - kitems_admin
-  - admin_widget
+  - design
+  - extend
+  - amend
+  - shrink
 
-- subtitle: Data model
-  desc: The functions related to data model management.
+- subtitle: Behaviors
+  desc: The functions related to attribute behavior management.
   contents:
-  - data_model
-  - dm_colClasses
-  - dm_default
-  - dm_display
-  - dm_integrity
-  - dm_mask
-  - dm_migrate
-  - dm_name
-  - dm_version
+  - starts_with("skip")
+  - starts_with("include")
+  - starts_with("refresh")
+  - freeze
+  - frozen
+  - starts_with("display")
+  - starts_with("hid")
+  - starts_with("organize")
 
-- subtitle: Attribute
-  desc: The functions related to attribute management.
+- subtitle: Workflows
+  desc: The functions related to (manual) item's workflows.
   contents:
-  - attribute_create
-  - attribute_input
-  - attribute_shortcut
-  - attribute_suggestion
-  - attribute_update
-  - attribute_value
-
-- subtitle: Item
-  desc: The functions related to item management.
-  contents:
-  - item_dialog
-  - item_form
-  - item_input_values
-  - item_integrity
+  - default
+  - as_default
+  - form
+  - dialog
+  - extract
+  - prepare
+  - validate
+  - compute
+  - insert
+  - update
+  - delete
+  - reveal
+  - decorate
+  - adjust
+  - yaml_to_dm
   - item_load
-  - item_mask
-  - item_migrate
   - item_save
-  - item_search
-  - item_sort
-  - items_name
-  - rows_delete
-  - rows_insert
-  - rows_update
+
+- subtitle: Admin
+  desc: The functions related to advanced admin tasks.
+  contents:
+  - backup
+  - restore
+  - check
+  - enforce
+  - dm_to_yaml
+  - items
 
 - subtitle: Helpers
-  desc: These functions are internal helpers used by the module server.
+  desc: These functions are helpers used by the module server.
   contents:
-  - hasDate
+  - name
+  - attribute_input
+  - has_date_attribute
   - is_truthy
 
-- subtitle: Deprecated function
+- subtitle: (Not yet) Deprecated function
   contents:
-  - dynamic_sidebar
+  - dm_migrate
