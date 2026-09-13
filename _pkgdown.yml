@@ -40,15 +40,15 @@ articles:
   - roadmap
 
 reference:
-- title: Basic Use Case (Full delegation)
+- title: Baseline scenario
   desc: These functions are the core features you need to start using the framework.
 
-- subtitle: Shiny Module Server
+- subtitle: Shiny module server
   desc: The main component of the package.
   contents:
   - kitems
 
-- subtitle: Shiny Module UI Components
+- subtitle: Shiny module UI widgets
   desc: The UI functions to include into your app.
   contents:
   - ends_with("widget")
@@ -58,12 +58,12 @@ reference:
   contents:
   - admin
 
-- subtitle: Demos
+- subtitle: Demo
   desc: Function to list and launch the demo apps.
   contents:
   - runExample
 
-- title: Advanced Scenarios (Mixed or Full control)
+- title: Advanced scenarios
   desc: These helper functions can be used to create events to pass to the module server reactive arguments.
   contents:
   - filter_event
@@ -72,7 +72,7 @@ reference:
 - title: Behind the scene
   desc: These functions are made available (exported) for advanced users who would like to go beyond the usage of the module server.
 
-- subtitle: Data Governance
+- subtitle: Data governance
   desc: The functions related to data model and config management.
   contents:
   - design
@@ -93,7 +93,7 @@ reference:
   - starts_with("organize")
 
 - subtitle: Workflows
-  desc: The functions related to (manual) item's workflows.
+  desc: The functions related to item workflows.
   contents:
   - default
   - as_default
@@ -121,6 +121,7 @@ reference:
   - check
   - enforce
   - dm_to_yaml
+  - dm_migrate
   - items
 
 - subtitle: Helpers
@@ -130,7 +131,3 @@ reference:
   - attribute_input
   - has_date_attribute
   - is_truthy
-
-- subtitle: (Not yet) Deprecated function
-  contents:
-  - dm_migrate
