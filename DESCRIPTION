@@ -19,7 +19,7 @@ Imports:
     DT,
     dplyr,
     rlang,
-    iker,
+    iker (>= 0.9.5),
     ktools (>= 0.9.9),
     stringr,
     yaml,
