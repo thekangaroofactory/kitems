@@ -9,28 +9,36 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-As the package is still under convergence at the time of this version (lifecycle = experimental), the roadmap here shows the progress that were made as well as the next step.
+This article shows the progress that were made as well as the next steps on the roadmap.
 
 ## History
 
-The motivations behind this package and the whole framework approach came in 2020, but code exploration really started early 2022.
+The motivations behind this package and the whole framework approach came in 2020, but code exploration really started early 2022 after I faced additional examples where such a tool would make the use cases either achievable or less expensive.
 
-![](images/roadmap_slide_1.jpg)
+![](images/clipboard-599012545.png)
 
 Once the proof of concept phase was closed, many development were delivered throughout 2024 as more time could be spent on the project.
 
-![](images/roadmap_slide_2.jpg)
+![](images/clipboard-3126463143.png)
 
-![](images/roadmap_slide_3.jpg)
+![](images/clipboard-2545673992.png)
+
+## Previous version
+
+Version [0.7.0](../news/index.html#kitems-v070-beta) has introduced many improvements around communication, workflow & filters.
+
+![](images/clipboard-2009700904.png)
 
 ## Where we are
 
-Since mid-2025, focus has been put on deep work to improve the architecture, communication, workflows & performances. Also long time expected features (like filtering) are delivered.
+The latest version [0.8.0](../news/index.html#kitems-v080) found its motivation from limitations that came with early stage options (data.frame storage for the data model), features that were not compatible with the current state without deep rework as well as use cases that were bring by deploying the previous version across apps.
 
-![](images/roadmap_slide_4.jpg)
+In particular, the need for a package grammar to split core functions from say use cases driven functions has open brand new horizons for the package.
+
+![](images/clipboard-2781416824.png)
 
 ## What's next
 
-As the package gets more strength and has been widely tested in real life use cases, it is now time to deliver all the necessary features to reach next step.
+As the package gets more strength and has been widely tested, it is now time to deliver continuous improvement on top of version [0.8.0](../news/index.html#kitems-v080) to take benefits from the core review that has been done.
 
-![](images/roadmap_slide_5.jpg)
+![](images/clipboard-1133754606.png)
