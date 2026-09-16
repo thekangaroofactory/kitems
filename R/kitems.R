@@ -162,13 +162,14 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       # connector
       connector <- config |> ci_connector(item = id)
 
-      # init (non persistent object)
-      init_items <- NULL
+      if(is.null(connector)){
+        showModal(modalDialog(title = "kitems", "Item", id, "does not exist!"))
+        stop("There is no definition for item ", crayon::blue(id), " in the YAML config!", call. = FALSE)}
 
       # get the data
       catl(MODULE, "Reading items", level = 1)
-      init_items <- item_load(connector = connector,
-                              col.classes = ci_classes(config, item))
+      init_items <-item_load(connector = connector,
+                             col.classes = ci_classes(config, item))
 
       # increment progress
       incProgress(2/4, detail = "Check items")
