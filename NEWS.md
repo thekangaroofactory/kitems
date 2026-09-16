@@ -1,3 +1,23 @@
+# kitems v0.7.3-beta
+
+## Bug Fix
+
+-   [item] Create item workflow fails with no default for Date attribute #588
+-   [filter] filtered_items are still initialized with all items #589
+-   [filter] Launching kitems module with initialized filter is ignored #590
+-   [filter] Date filter is applied even when the dateSliderInput is not implemented #591
+-   [filter] Only first expression is applied #593
+-   [admin] Admin console crashes when no column is selected for display #595
+-   [admin] Data model file is scrached when no column is selected for the table view #596
+-   [misc] Warnings are displayed in the console at module server startup #597
+-   [filter] Only first expression is applied at main level #601
+
+## Documentation
+
+-   [misc] Update package version #600
+-   [doc] Update roadmap article #602
+-   [misc] Roadmap link is broken #603
+
 # kitems v0.7.2-beta
 
 The milestone focuses on the package documentation & website.\
