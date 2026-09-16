@@ -11,7 +11,8 @@ vignette: >
 
 Ordering capabilities are available in the package module server.
 
-From version [0.8.0](../news/index.html#kitems-v080), how to sort the items is now defined in the YAML config file with a single `sort` entry.\
+From version [0.8.0](../news/index.html#kitems-v080), how to sort the items is now defined in the YAML config file with a single `sort` entry.
+
 It takes an instruction that will be analyzed to get the attribute ranking as well as the direction:
 
 `sort: date, desc(total)`
