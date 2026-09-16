@@ -1,5 +1,5 @@
 ---
-title: "Filtering Items"
+title: "Filtering"
 format: html
 editor: visual
 
