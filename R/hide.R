@@ -6,7 +6,7 @@
 #' A set of verbs to manipulate the display of an attribute.
 #'
 #' @param config the config list.
-#' @param item optional (see details), the name (id) of the item group.
+#' @param item the name (id) of the item group.
 #' @param ... the name of the attribute(s) to manipulate.
 #'
 #' @details
@@ -17,12 +17,13 @@
 #' When `item` is set in the parent frame, then the attribute can be skipped
 #' in the function call.
 #'
-#' @seealso [parent.frame()]
+#' @seealso [amend()], [parent.frame()]
 #'
-#' @returns a config list (setters) or a character vector (getters)
+#' @returns a list (setters) or a character vector (getters).
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # hide attribute
 #' config <- design(project = "test",
 #' item = "foo") |>
@@ -40,6 +41,7 @@
 #'
 #' # displayed attributes
 #' config |> displayed()
+#' }
 
 hide <- function(config, item = get_context(), ...){
   ca_behavior(config, item, behavior = "hide", ...)}
