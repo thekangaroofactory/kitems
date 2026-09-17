@@ -9,15 +9,15 @@ amend(config, item = get_context(), ...)
 \arguments{
 \item{config}{the config list.}
 
-\item{item}{optional (see details), the name (id) of the item group.}
+\item{item}{the name (id) of the item group.}
 
 \item{...}{one or several attribute instructions.}
 }
 \value{
-a config list
+a list
 }
 \description{
-Update specific parameter(s) of specific attribute(s)).
+Update specific parameter(s) of specific attribute(s).
 }
 \details{
 The function only understands \code{attribute} instruction.
@@ -33,6 +33,7 @@ When \code{item} is set in the parent frame, then the attribute can be skipped
 in the function call.
 }
 \examples{
+\dontrun{
 # create baseline
 config <- design(project = "test",
                  item = "foo") |>
@@ -53,6 +54,7 @@ config |>
   amend(attribute = c(name = "total", values = "suggest(12)"),
         attribute = c(name = "total", default = "0"))
 }
+}
 \seealso{
-\code{\link[=parent.frame]{parent.frame()}}
+\code{\link[=design]{design()}}, \code{\link[=parent.frame]{parent.frame()}}
 }

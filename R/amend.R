@@ -3,10 +3,10 @@
 #' Amend Attribute
 #'
 #' @description
-#' Update specific parameter(s) of specific attribute(s)).
+#' Update specific parameter(s) of specific attribute(s).
 #'
 #' @param config the config list.
-#' @param item optional (see details), the name (id) of the item group.
+#' @param item the name (id) of the item group.
 #' @param ... one or several attribute instructions.
 #'
 #' @details
@@ -20,12 +20,13 @@
 #' When `item` is set in the parent frame, then the attribute can be skipped
 #' in the function call.
 #'
-#' @seealso [parent.frame()]
+#' @seealso [design()], [parent.frame()]
 #'
-#' @returns a config list
+#' @returns a list
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # create baseline
 #' config <- design(project = "test",
 #'                  item = "foo") |>
@@ -45,6 +46,7 @@
 #' config |>
 #'   amend(attribute = c(name = "total", values = "suggest(12)"),
 #'         attribute = c(name = "total", default = "0"))
+#' }
 
 amend <- function(config, item = get_context(), ...){
 
