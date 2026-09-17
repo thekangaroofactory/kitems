@@ -12,15 +12,15 @@ extract(input, colClasses)
 \item{colClasses}{a named vector of classes, defining the data model.}
 }
 \value{
-a named list of values.
+a named list.
 }
 \description{
 Extract the list of values from the input.
 }
 \details{
-the output list will contain as many entries as the \code{colClasses} named vector.
-In case some names have no corresponding item in the input parameter, they will get \code{NULL} as value
-in the output list.
+The output list will contain as many entries as the \code{colClasses} named vector.
+In case some names have no corresponding item in the input parameter, they
+will get \code{NULL} as value in the output list.
 }
 \examples{
 \dontrun{
