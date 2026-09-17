@@ -16,20 +16,21 @@ skipped(config, item = get_context())
 included(config, item = get_context())
 }
 \arguments{
-\item{config}{the config list}
+\item{config}{the config list.}
 
-\item{item}{optional (see details), the name (id) of the item group}
+\item{item}{the name (id) of the item group.}
 
-\item{...}{the name of the attribute(s) to manipulate}
+\item{...}{the name of the attribute(s) to manipulate.}
 }
 \value{
-a config list (setters) or a character vector (getters)
+a list (setters) or a character vector (getters).
 }
 \description{
 A set of verbs to manipulate the skipped attribute(s) of an item.
 }
 \details{
-\code{skip()} and \code{include()} are setter functions that allow to add or remove attributes from the skipped ones.
+\code{skip()} and \code{include()} are setter functions that allow to add or remove
+attributes from the skipped ones.
 \code{skipped()} and \code{included()} are getter functions to quickly access the attributes
 that are skipped or included in the item form.
 
@@ -40,6 +41,7 @@ When \code{item} is set in the parent frame, then the attribute can be skipped
 in the function call.
 }
 \examples{
+\dontrun{
 # skip attribute
 config <- design(project = "test",
 item = "foo") |>
@@ -55,6 +57,7 @@ config |> include(item = "foo", "date")
 # get included attributes
 config |> included(item = "foo")
 }
+}
 \seealso{
-\code{\link[=parent.frame]{parent.frame()}}
+\code{\link[=amend]{amend()}}, \code{\link[=parent.frame]{parent.frame()}}
 }

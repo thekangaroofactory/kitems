@@ -5,12 +5,13 @@
 #' @description
 #' A set of verbs to manipulate the skipped attribute(s) of an item.
 #'
-#' @param config the config list
-#' @param item optional (see details), the name (id) of the item group
-#' @param ... the name of the attribute(s) to manipulate
+#' @param config the config list.
+#' @param item the name (id) of the item group.
+#' @param ... the name of the attribute(s) to manipulate.
 #'
 #' @details
-#' `skip()` and `include()` are setter functions that allow to add or remove attributes from the skipped ones.
+#' `skip()` and `include()` are setter functions that allow to add or remove
+#' attributes from the skipped ones.
 #' `skipped()` and `included()` are getter functions to quickly access the attributes
 #' that are skipped or included in the item form.
 #'
@@ -20,12 +21,13 @@
 #' When `item` is set in the parent frame, then the attribute can be skipped
 #' in the function call.
 #'
-#' @seealso [parent.frame()]
+#' @seealso [amend()], [parent.frame()]
 #'
-#' @returns a config list (setters) or a character vector (getters)
+#' @returns a list (setters) or a character vector (getters).
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # skip attribute
 #' config <- design(project = "test",
 #' item = "foo") |>
@@ -40,6 +42,7 @@
 #'
 #' # get included attributes
 #' config |> included(item = "foo")
+#' }
 
 skip <- function(config, item = get_context(), ...){
   ca_behavior(config, item, behavior = "skip", ...)}
