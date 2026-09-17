@@ -3,7 +3,7 @@
 #' Date Slider Widget
 #'
 #' @description
-#' The date slider UI component to drive the date filter.
+#' The UI component to drive the date filter.
 #'
 #' @param id the server module id.
 #' @param width the width of the input (passed to `shiny::sliderInput()`).
@@ -17,12 +17,16 @@
 #' In case you are using shiny's layout (ex: `shiny::fluidPage()`), you should set the parameter
 #' to `bootstrap = "3"`.
 #'
-#' @return An HTML component to include on UI side.
+#' @return An HTML tag.
 #' @export
 #'
 #' @examples
 #' \dontrun{
+#' # with bslib or Bootstrap 5 in general
 #' date_slider_widget(id = "mydata")
+#'
+#' # with Bootstrap 3
+#' date_slider_widget(id = "mydata", bootstrap = "3")
 #' }
 
 date_slider_widget <- function(id, width = "300px", bootstrap = bslib::version_default()){

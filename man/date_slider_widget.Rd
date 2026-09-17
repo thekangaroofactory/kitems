@@ -14,10 +14,10 @@ date_slider_widget(id, width = "300px", bootstrap = bslib::version_default())
 \item{bootstrap}{optional, a character string for the Bootstrap major version (see details).}
 }
 \value{
-An HTML component to include on UI side.
+An HTML tag.
 }
 \description{
-The date slider UI component to drive the date filter.
+The UI component to drive the date filter.
 }
 \details{
 \code{bootstrap} has been added in version 0.8.0 to determine if \code{bslib::popover()} can be used
@@ -29,6 +29,10 @@ to \code{bootstrap = "3"}.
 }
 \examples{
 \dontrun{
+# with bslib or Bootstrap 5 in general
 date_slider_widget(id = "mydata")
+
+# with Bootstrap 3
+date_slider_widget(id = "mydata", bootstrap = "3")
 }
 }
