@@ -21,10 +21,10 @@ backup(
 \item{path}{optional, the path to the data.}
 }
 \description{
-Backup config, data model or items files
+Backup config, data model or items files.
 }
 \details{
-Type of files:
+\code{type} accepts the following values:
 \itemize{
 \item "config" (the default)
 \item "items"
@@ -35,7 +35,7 @@ Type of files:
 
 \code{id} will be ignored if \code{type = "config"}
 
-The recommended way to define the \code{path} argument is to set the R_KITEMS_PATH
+The recommended way to define the \code{path} argument is to set the \code{R_KITEMS_PATH}
 environment variable.
 
 Backup file will be named as \emph{_kitems_YYYY-MM-DD.yml},

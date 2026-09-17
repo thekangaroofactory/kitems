@@ -10,14 +10,18 @@
 #' @param path optional, the path to the data.
 #'
 #' @details
-#' The recommended way to define the `path` argument is to set the R_KITEMS_PATH
+#' `type` accepts the following values:
+#' - "config" (the default)
+#' - "items"
+#' - "dm"
+#'
+#' When "config" is used, `id` is ignored.
+#' "dm" is kept for compatibility purpose.
+#'
+#' The recommended way to define the `path` argument is to set the `R_KITEMS_PATH`
 #' environment variable.
 #'
 #' In case several backup files exist, the newest one will be restored.
-#'
-#' Values for `type` are "config" (the default), "items" or "dm".
-#' When "config" is used, `id` is ignored.
-#' "dm" is kept for compatibility purpose.
 #'
 #' @return a logical (see [file.copy()])
 #'

@@ -24,14 +24,20 @@ a logical (see \code{\link[=file.copy]{file.copy()}})
 Restore config, data model or items files.
 }
 \details{
-The recommended way to define the \code{path} argument is to set the R_KITEMS_PATH
+\code{type} accepts the following values:
+\itemize{
+\item "config" (the default)
+\item "items"
+\item "dm"
+}
+
+When "config" is used, \code{id} is ignored.
+"dm" is kept for compatibility purpose.
+
+The recommended way to define the \code{path} argument is to set the \code{R_KITEMS_PATH}
 environment variable.
 
 In case several backup files exist, the newest one will be restored.
-
-Values for \code{type} are "config" (the default), "items" or "dm".
-When "config" is used, \code{id} is ignored.
-"dm" is kept for compatibility purpose.
 }
 \examples{
 \dontrun{

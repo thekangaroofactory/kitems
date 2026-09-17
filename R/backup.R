@@ -3,7 +3,7 @@
 #' Backup Files
 #'
 #' @description
-#' Backup config, data model or items files
+#' Backup config, data model or items files.
 #'
 #' @param type the type of file to backup (see details).
 #' @param id the id of the item or data model.
@@ -11,7 +11,7 @@
 #' @param path optional, the path to the data.
 #'
 #' @details
-#' Type of files:
+#' `type` accepts the following values:
 #' - "config" (the default)
 #' - "items"
 #' - "dm"
@@ -24,7 +24,7 @@
 #' @importFrom utils head
 #'
 #' @details
-#' The recommended way to define the `path` argument is to set the R_KITEMS_PATH
+#' The recommended way to define the `path` argument is to set the `R_KITEMS_PATH`
 #' environment variable.
 #'
 #' Backup file will be named as \emph{_kitems_YYYY-MM-DD.yml},
