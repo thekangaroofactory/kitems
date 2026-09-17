@@ -11,7 +11,7 @@ adjust(items, config, item = get_context())
 
 \item{config}{the config list.}
 
-\item{item}{optional (see details), the name (id) of the item group.}
+\item{item}{the name (id) of the item group.}
 }
 \value{
 a data.frame.

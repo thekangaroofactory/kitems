@@ -7,6 +7,9 @@
 #'
 #' @param x a data.frame or named object
 #'
+#' @details
+#' The function makes the column names pretty.
+#'
 #' @return A renamed data.frame or object.
 #' @export
 #'

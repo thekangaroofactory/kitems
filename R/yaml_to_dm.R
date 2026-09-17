@@ -3,11 +3,11 @@
 #' Config List To Table
 #'
 #' @description
-#' Turn a config list into a data.frame
+#' Turn a config list into a data.frame.
 #'
 #' @param config the config list (see details).
 #' @param ... the columns to include in the output.
-#' @param item optional (see details), the name (id) of the item group.
+#' @param item the name (id) of the item group.
 #'
 #' @details
 #' The function is used as a bridge between the config list structure and

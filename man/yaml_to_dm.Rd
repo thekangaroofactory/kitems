@@ -11,13 +11,13 @@ yaml_to_dm(config, ..., item = get_context())
 
 \item{...}{the columns to include in the output.}
 
-\item{item}{optional (see details), the name (id) of the item group.}
+\item{item}{the name (id) of the item group.}
 }
 \value{
 a data.frame
 }
 \description{
-Turn a config list into a data.frame
+Turn a config list into a data.frame.
 }
 \details{
 The function is used as a bridge between the config list structure and

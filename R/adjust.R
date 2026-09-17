@@ -4,7 +4,7 @@
 #'
 #' @param items a data.frame of the items.
 #' @param config the config list.
-#' @param item optional (see details), the name (id) of the item group.
+#' @param item the name (id) of the item group.
 #'
 #' @details
 #' The sorting order is given by the sort entry in the config list.

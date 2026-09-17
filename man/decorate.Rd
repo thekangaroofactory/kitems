@@ -15,6 +15,9 @@ A renamed data.frame or object.
 \description{
 Apply mask on attribute names.
 }
+\details{
+The function makes the column names pretty.
+}
 \examples{
 \dontrun{
 decorate(x = dm)

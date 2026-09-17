@@ -7,7 +7,7 @@
 #'
 #' @param items the data.frame of the items.
 #' @param config the config list.
-#' @param item optional (see details), the name (id) of the item group.
+#' @param item the name (id) of the item group.
 #'
 #' @details
 #' The data model display mask is defined at the data.model level.
@@ -23,6 +23,8 @@
 #'
 #' @examples
 #' \dontrun{
+#' # assuming config has been declared and
+#' # items is the data.frame of the items
 #' item <- "foo"
 #' items |> reveal(config)
 #' }

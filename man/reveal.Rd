@@ -11,7 +11,7 @@ reveal(items, config, item = get_context())
 
 \item{config}{the config list.}
 
-\item{item}{optional (see details), the name (id) of the item group.}
+\item{item}{the name (id) of the item group.}
 }
 \value{
 A data.frame.
@@ -28,6 +28,8 @@ in the function call.
 }
 \examples{
 \dontrun{
+# assuming config has been declared and
+# items is the data.frame of the items
 item <- "foo"
 items |> reveal(config)
 }
