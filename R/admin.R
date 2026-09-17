@@ -3,7 +3,14 @@
 #' Admin Console
 #'
 #' @description
-#' Launches the administration console (Shiny App)
+#' Launches the administration console.
+#'
+#' @details
+#' The Admin Console is a standalone Shiny web app delivered along with
+#' the package to administrate the items of the project.
+#'
+#' It will check the `R_KITEMS_PATH` environment variable and look
+#' for the YAML config file in the procided path.
 #'
 #' @export
 #'
