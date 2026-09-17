@@ -9,7 +9,7 @@ form(attributes, items = NULL)
 \arguments{
 \item{attributes}{a data.frame of the attributes (see details).}
 
-\item{items}{a data.frame of the items (see details).}
+\item{items}{an optional data.frame of the items (see details).}
 }
 \value{
 A list of HTML tags.
@@ -18,7 +18,7 @@ A list of HTML tags.
 Builds the create or update item form.
 }
 \details{
-\code{attributes} is expected to be the output of the \code{default()} or \code{as_default} function.
+\code{attributes} is expected to be the output of the \code{default()} or \code{as_default()} function.
 The data.frame should have the following columns:
 "name", "type", "default", "values".
 

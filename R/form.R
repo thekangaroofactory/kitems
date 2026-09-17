@@ -6,10 +6,10 @@
 #' Builds the create or update item form.
 #'
 #' @param attributes a data.frame of the attributes (see details).
-#' @param items a data.frame of the items (see details).
+#' @param items an optional data.frame of the items (see details).
 #'
 #' @details
-#' `attributes` is expected to be the output of the `default()` or `as_default` function.
+#' `attributes` is expected to be the output of the `default()` or `as_default()` function.
 #' The data.frame should have the following columns:
 #' "name", "type", "default", "values".
 #'
