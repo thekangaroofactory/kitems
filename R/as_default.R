@@ -21,7 +21,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' as_default(item, data.model)
+#' # create a config
+#' config <- design(project = "foo", item = "bar") | >
+#' extend(item = "bar", attribute = c(name = "date", type = "Date", default = "Sys.Date()")
+#'
+#' # get the default
+#' as_default(item, data.model = yaml_to_dm(config, "name", "type", "default", "values"))
 #' }
 
 as_default <- function(item, data.model){
