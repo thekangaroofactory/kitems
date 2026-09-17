@@ -7,14 +7,14 @@
 items(datamart, config, item)
 }
 \arguments{
-\item{datamart}{a reactiveValues object holding the items}
+\item{datamart}{a reactiveValues object holding the items.}
 
-\item{config}{the config list}
+\item{config}{the config list.}
 
-\item{item}{the name (id) of the item group}
+\item{item}{the name (id) of the item group.}
 }
 \value{
-a data.frame of the items or NULL
+a data.frame of the items or NULL.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

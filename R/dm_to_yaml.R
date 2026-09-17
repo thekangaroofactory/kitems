@@ -11,7 +11,7 @@
 #' The input data model should have its version = "0.8.0" otherwise an error
 #' will be raised. Use `dm_migrate()` first if needed.
 #'
-#' @returns a config list
+#' @returns a list.
 #' @export
 #'
 #' @examples

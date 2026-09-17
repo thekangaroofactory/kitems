@@ -8,11 +8,11 @@
 #' This function is part of the selective loading mechanism to ensure
 #' items are loaded only when required.
 #'
-#' @param datamart a reactiveValues object holding the items
-#' @param config the config list
-#' @param item the name (id) of the item group
+#' @param datamart a reactiveValues object holding the items.
+#' @param config the config list.
+#' @param item the name (id) of the item group.
 #'
-#' @returns a data.frame of the items or NULL
+#' @returns a data.frame of the items or NULL.
 #' @export
 #'
 #' @examples

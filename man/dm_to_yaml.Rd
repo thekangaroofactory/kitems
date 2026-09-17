@@ -10,7 +10,7 @@ dm_to_yaml(dm)
 \item{dm}{a data.frame of the data model}
 }
 \value{
-a config list
+a list.
 }
 \description{
 Convert data model to YAML configuration file.
