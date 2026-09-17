@@ -2,7 +2,7 @@
 
 #' Load Items
 #'
-#' @param connector a list parameters that will passed to iker::load_data() call.
+#' @param connector a list that will be passed to [iker::load_data()] function.
 #' @param col.classes a named vector containing the expected column types.
 #'
 #' @return The data.frame of the items.

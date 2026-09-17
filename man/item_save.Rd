@@ -9,7 +9,7 @@ item_save(data, connector)
 \arguments{
 \item{data}{a data.frame containing the data to be saved.}
 
-\item{connector}{a list parameters that will passed to iker::save_data() call.}
+\item{connector}{a list that will be passed to \code{\link[iker:save_data]{iker::save_data()}} function.}
 }
 \description{
 Saves the items data.frame.

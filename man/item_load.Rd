@@ -7,7 +7,7 @@
 item_load(connector, col.classes)
 }
 \arguments{
-\item{connector}{a list parameters that will passed to iker::load_data() call.}
+\item{connector}{a list that will be passed to \code{\link[iker:load_data]{iker::load_data()}} function.}
 
 \item{col.classes}{a named vector containing the expected column types.}
 }

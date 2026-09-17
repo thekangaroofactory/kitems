@@ -6,7 +6,7 @@
 #' Saves the items data.frame.
 #'
 #' @param data a data.frame containing the data to be saved.
-#' @param connector a list parameters that will passed to iker::save_data() call.
+#' @param connector a list that will be passed to [iker::save_data()] function.
 #'
 #' @export
 #'
