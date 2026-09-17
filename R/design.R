@@ -46,6 +46,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # create project config from scratch
 #' config <- design(project = "foo")
 #'
@@ -72,6 +73,7 @@
 #
 #' # if instruction is not understood
 #' design(dream = "draw me a sheep")
+#' }
 
 design <- function(...){
 

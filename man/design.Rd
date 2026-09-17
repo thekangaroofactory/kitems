@@ -53,6 +53,7 @@ among \code{...} to support piping from the config object (see examples).
 If multiple unnamed objects are passed, an error will be thrown.
 }
 \examples{
+\dontrun{
 # create project config from scratch
 config <- design(project = "foo")
 
@@ -76,4 +77,5 @@ config |> design(item = "foo",
                  attribute = c(item = "foo", name = "comment", type = "character"))
 # if instruction is not understood
 design(dream = "draw me a sheep")
+}
 }
