@@ -3,13 +3,13 @@
 #' Attribute Input
 #'
 #' @description
-#' Build input for an attribute
+#' Build input for an attribute.
 #'
 #' @param name the name of the attribute.
 #' @param type the type of the attribute.
 #' @param value the value to be used to initialize the input.
 #' @param choices a list of values to select from (see details).
-#' @param create a logical (default = FALSE) if user is allowed to create values (see details).
+#' @param create a logical (default = `FALSE`) if user is allowed to create values (see details).
 #' @param session optional, the shiny session object.
 #'
 #' @details

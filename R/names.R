@@ -12,7 +12,7 @@
 #' @param backup a logical if a timestamp should be added.
 #'
 #' @details
-#' "dm" is kept for backward compatibility reasons (backup & restore old
+#' `what` accepts "dm" for backward compatibility reasons (backup & restore old
 #' data.model files before migration to YAML config).
 #'
 #' When `url` is `TRUE`, then `file` is considered `TRUE` as well.
@@ -22,7 +22,7 @@
 #' `R_KITEMS_PATH` environment variable and url for the item groups
 #' is contained in the YAML config.
 #'
-#' @returns a character string
+#' @returns a character string.
 #' @export
 #'
 #' @examples

@@ -24,13 +24,13 @@ name(
 \item{backup}{a logical if a timestamp should be added.}
 }
 \value{
-a character string
+a character string.
 }
 \description{
 Helper function to homogenize names across the package.
 }
 \details{
-"dm" is kept for backward compatibility reasons (backup & restore old
+\code{what} accepts "dm" for backward compatibility reasons (backup & restore old
 data.model files before migration to YAML config).
 
 When \code{url} is \code{TRUE}, then \code{file} is considered \code{TRUE} as well.

@@ -9,7 +9,7 @@ has_date_attribute(config, item = get_context())
 \arguments{
 \item{config}{the config list}
 
-\item{item}{optional (see details), the name (id) of the item group}
+\item{item}{the name (id) of the item group}
 }
 \value{
 a logical

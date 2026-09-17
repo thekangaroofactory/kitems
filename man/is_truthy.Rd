@@ -13,7 +13,7 @@ is_truthy(x)
 A logical.
 }
 \description{
-Inspired by \code{Shiny::isTruthy()}, the purpose here is to determine if a value
+Inspired by \code{\link[Shiny:isTruthy]{Shiny::isTruthy()}}, the purpose here is to determine if a value
 is considered as valid to be an attribute value.
 (or if it will need to be replaced by the attribute defaults).
 }

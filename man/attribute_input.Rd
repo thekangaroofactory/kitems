@@ -22,7 +22,7 @@ attribute_input(
 
 \item{choices}{a list of values to select from (see details).}
 
-\item{create}{a logical (default = FALSE) if user is allowed to create values (see details).}
+\item{create}{a logical (default = \code{FALSE}) if user is allowed to create values (see details).}
 
 \item{session}{optional, the shiny session object.}
 }
@@ -30,7 +30,7 @@ attribute_input(
 An input that can be added to the UI definition.
 }
 \description{
-Build input for an attribute
+Build input for an attribute.
 }
 \details{
 By default (\code{choices = NULL}), the function will return an input driven by the
