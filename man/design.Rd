@@ -10,40 +10,41 @@ design(...)
 \item{...}{one or several instruction(s) to execute (see details).}
 }
 \value{
-a (config) list
+a list.
 }
 \description{
 Design the project configuration.
 }
 \details{
 \code{design} is the core function / verb when it comes to building configuration.
+
 The function understands the following instructions passed to \code{...}:
 \itemize{
-\item project: to create a config from scratch
-\item item: to add an item group to the project config
-\item attribute: to add an attribute to a given item group
+\item \code{project} to create a config from scratch
+\item \code{item} to add an item group to the project config
+\item \code{attribute} to add an attribute to a given item group.
 }
 
-An instruction is always formed of a key (project, item or attribute) and
+An instruction is always formed of a key (\code{project}, \code{item} or \code{attribute}) and
 a value. The value can either be a length-one character string or a named
 character vector.
-\code{project = "test"} instruction is used in almost all function documentation
+The \code{project = "test"} instruction is used in almost all function documentation
 examples to init a project config.
 \code{item = "foo"} or \code{item = c(id = "foo", description = "not bar")} are used
 to add an item group to the project.
 
 \code{attribute = c(item = "foo", name = "value", type = "integer")} creates an
-attribute named "value" that will accept integers inside the item group "foo".
+attribute named 'value' that will accept integers inside the item group 'foo'.
 
 Multiple instructions are supported as recursion is implemented (the function
 can call itself to execute each instruction and merge the outputs).
 
-As the package grammar is designed for a layered approach, design only covers
+As the package grammar is designed for a layered approach, \code{design} only covers
 attribute creation without fine tuning.
 This means it creates attribute(s) with name & type only.
 \itemize{
-\item use extend() to create an attribute with fine tuning.
-\item use hide(), display(), skip(), include() & refresh() to set specific
+\item use \code{extend} to create an attribute with fine tuning.
+\item use \code{hide}, \code{display}, \code{skip}, \code{include} & \code{refresh} to set specific
 attribute behaviors.
 }
 
