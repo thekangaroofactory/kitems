@@ -12,10 +12,13 @@ update(values, items)
 \item{items}{a data.frame of the items.}
 }
 \value{
-a data.frame of the items
+a data.frame.
 }
 \description{
 Update Item(s)
+}
+\details{
+The function will drop unmatched id(s) in \code{values}.
 }
 \examples{
 \dontrun{

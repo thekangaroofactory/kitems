@@ -5,7 +5,10 @@
 #' @param items the data.frame of the items.
 #' @param id a vector of id(s) for the item(s) to delete.
 #'
-#' @return The updated data.frame of the items.
+#' @details
+#' The function will drop unmatched id(s).
+#'
+#' @return a data.frame.
 #' @export
 #'
 #' @examples

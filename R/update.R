@@ -5,7 +5,10 @@
 #' @param values a data.frame used to update the items.
 #' @param items a data.frame of the items.
 #'
-#' @returns a data.frame of the items
+#' @details
+#' The function will drop unmatched id(s) in `values`.
+#'
+#' @returns a data.frame.
 #' @export
 #'
 #' @examples

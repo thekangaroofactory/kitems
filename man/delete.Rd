@@ -12,10 +12,13 @@ delete(items, id)
 \item{id}{a vector of id(s) for the item(s) to delete.}
 }
 \value{
-The updated data.frame of the items.
+a data.frame.
 }
 \description{
 Delete Item(s)
+}
+\details{
+The function will drop unmatched id(s).
 }
 \examples{
 \dontrun{
