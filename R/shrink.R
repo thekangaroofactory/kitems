@@ -10,17 +10,19 @@
 #'
 #' @details
 #' The function understands the following instructions:
-#' - item = foo
-#' - attribute = c(item = "foo", name = "total")
+#' - `item = foo`
+#' - `attribute = c(item = "foo", name = "total")`
+#' See the examples for more details.
 #'
 #' It supports multiple instructions.
 #'
 #' Note that it is forbidden to delete the 'id' attribute of an item.
 #'
-#' @returns a config list.
+#' @returns a list.
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # build baseline
 #' config <- design(project = "test",
 #' item = "foo") |>
@@ -39,8 +41,7 @@
 #' config |>
 #'   shrink(attribute = c(item = "foo", name = "total"),
 #'          item = "foo")
-#'
-#'
+#' }
 
 shrink <- function(config, ...){
 

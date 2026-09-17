@@ -12,7 +12,7 @@ shrink(config, ...)
 \item{...}{one or several item or attribute instruction.}
 }
 \value{
-a config list.
+a list.
 }
 \description{
 Shrink Config
@@ -22,8 +22,9 @@ Drop an item or an attribute from the config.
 
 The function understands the following instructions:
 \itemize{
-\item item = foo
-\item attribute = c(item = "foo", name = "total")
+\item \code{item = foo}
+\item \code{attribute = c(item = "foo", name = "total")}
+See the examples for more details.
 }
 
 It supports multiple instructions.
@@ -31,6 +32,7 @@ It supports multiple instructions.
 Note that it is forbidden to delete the 'id' attribute of an item.
 }
 \examples{
+\dontrun{
 # build baseline
 config <- design(project = "test",
 item = "foo") |>
@@ -49,6 +51,5 @@ config |>
 config |>
   shrink(attribute = c(item = "foo", name = "total"),
          item = "foo")
-
-
+}
 }
