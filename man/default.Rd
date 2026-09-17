@@ -10,7 +10,7 @@ default(data.model)
 \item{data.model}{the data.frame of the data model.}
 }
 \value{
-A data.frame
+A data.frame.
 }
 \description{
 Compute default value(s).
@@ -20,10 +20,15 @@ This function does not accept the data.model element of the config list as an in
 It should be turned into a data.frame first, using \code{\link[=yaml_to_dm]{yaml_to_dm()}}.
 
 \code{data.model} should contain the following columns:
-"name", "type", "default" & "values".
+"name", "type", "default" and "values".
 }
 \examples{
 \dontrun{
-default(yaml_to_dm(config...)) # << check this!
+# create a config
+config <- design(project = "foo", item = "bar") | >
+extend(item = "bar", attribute = c(name = "date", type = "Date", default = "Sys.Date()")
+
+# get the default
+default(yaml_to_dm(config, "name", "type", "default", "values"))
 }
 }

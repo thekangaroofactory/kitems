@@ -12,14 +12,19 @@
 #' It should be turned into a data.frame first, using [yaml_to_dm()].
 #'
 #' `data.model` should contain the following columns:
-#' "name", "type", "default" & "values".
+#' "name", "type", "default" and "values".
 #'
-#' @return A data.frame
+#' @return A data.frame.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' default(yaml_to_dm(config...)) # << check this!
+#' # create a config
+#' config <- design(project = "foo", item = "bar") | >
+#' extend(item = "bar", attribute = c(name = "date", type = "Date", default = "Sys.Date()")
+#'
+#' # get the default
+#' default(yaml_to_dm(config, "name", "type", "default", "values"))
 #' }
 
 default <- function(data.model){
