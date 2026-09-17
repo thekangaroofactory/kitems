@@ -3,17 +3,22 @@
 #' Attribute Values
 #'
 #' @description
-#' Compute attribute values with data-masking support
+#' Compute attribute values with data-masking support.
 #'
-#' @param x a character string of the expression to evaluate
-#' @param data a data.frame to use for tidy evaluation of `x`
+#' @param x a character string of the expression to evaluate.
+#' @param data an optional data.frame to use for tidy evaluation of `x`.
 #'
-#' @returns a vector of values
+#' @returns a vector of values.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' # baseline
 #' compute(x = "suggest(1, 2)")
+#'
+#' # with data masking
 #' compute(x = "suggest(min(value))", data = data.frame(value = c(12, 10)))
+#' }
 
 compute <- function(x, data = NULL){
 

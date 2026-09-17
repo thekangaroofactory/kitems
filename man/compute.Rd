@@ -7,17 +7,22 @@
 compute(x, data = NULL)
 }
 \arguments{
-\item{x}{a character string of the expression to evaluate}
+\item{x}{a character string of the expression to evaluate.}
 
-\item{data}{a data.frame to use for tidy evaluation of \code{x}}
+\item{data}{an optional data.frame to use for tidy evaluation of \code{x}.}
 }
 \value{
-a vector of values
+a vector of values.
 }
 \description{
-Compute attribute values with data-masking support
+Compute attribute values with data-masking support.
 }
 \examples{
+\dontrun{
+# baseline
 compute(x = "suggest(1, 2)")
+
+# with data masking
 compute(x = "suggest(min(value))", data = data.frame(value = c(12, 10)))
+}
 }
