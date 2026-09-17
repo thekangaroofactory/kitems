@@ -18,12 +18,12 @@ displayed(config, item = get_context())
 \arguments{
 \item{config}{the config list.}
 
-\item{item}{optional (see details), the name (id) of the item group.}
+\item{item}{the name (id) of the item group.}
 
 \item{...}{the name of the attribute(s) to manipulate.}
 }
 \value{
-a config list (setters) or a character vector (getters)
+a list (setters) or a character vector (getters).
 }
 \description{
 A set of verbs to manipulate the display of an attribute.
@@ -37,6 +37,7 @@ When \code{item} is set in the parent frame, then the attribute can be skipped
 in the function call.
 }
 \examples{
+\dontrun{
 # hide attribute
 config <- design(project = "test",
 item = "foo") |>
@@ -55,6 +56,7 @@ config |> display("date")
 # displayed attributes
 config |> displayed()
 }
+}
 \seealso{
-\code{\link[=parent.frame]{parent.frame()}}
+\code{\link[=amend]{amend()}}, \code{\link[=parent.frame]{parent.frame()}}
 }
