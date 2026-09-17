@@ -18,27 +18,30 @@ frozen(config, item = get_context())
 \arguments{
 \item{config}{the config list.}
 
-\item{item}{optional (see details), the name (id) of the item group.}
+\item{item}{the name (id) of the item group.}
 
 \item{...}{the name of the attribute(s) to manipulate.}
 }
 \value{
-a config list (setters) or a character vector (getters)
+a list (setters) or a character vector (getters).
 }
 \description{
 A set of verbs to manipulate the refreshed attribute(s) of an item.
 }
 \details{
-\code{refresh()} and \code{freeze()} are setter functions that allow to add or remove attributes from the refreshed ones.
-\code{refreshed()} and \code{frozen()} are getter functions to quickly access the skipped attributes
-that are refreshed or not during an item update.
+\code{refresh()} and \code{freeze()} are setter functions that allow to add or remove
+attributes from the refreshed ones.
+\code{refreshed()} and \code{frozen()} are getter functions to quickly access the skipped
+attributes that are refreshed or not during an item update.
 
-Trying to refresh an attribute that is not skipped will be ignored without warning.
+Trying to refresh an attribute that is not skipped will be ignored
+\emph{without} a warning.
 
 When \code{item} is set in the parent frame, then the attribute can be skipped
 in the function call.
 }
 \examples{
+\dontrun{
 # refresh attribute
 config <- design(project = "test",
 item = "foo") |>
@@ -55,6 +58,7 @@ config |> freeze(item = "foo", "date")
 # frozen attributes
 config |> frozen(item = "foo")
 }
+}
 \seealso{
-\code{\link[=parent.frame]{parent.frame()}}
+\code{\link[=amend]{amend()}}, \code{\link[=parent.frame]{parent.frame()}}
 }
