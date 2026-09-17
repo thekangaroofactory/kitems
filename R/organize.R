@@ -5,9 +5,9 @@
 #' @description
 #' Set or get sorting order.
 #'
-#' @param config the config list
-#' @param item optional (see details), the name (id) of the item group
-#' @param sort a character string to set the order (see details)
+#' @param config the config list.
+#' @param item the name (id) of the item group.
+#' @param sort a character string to set the order (see details).
 #'
 #' @details
 #' The `organize` function accepts a character string for `sort` because it is
@@ -24,7 +24,7 @@
 #'
 #' @seealso [parent.frame()]
 #'
-#' @returns `organize` returns a config list and
+#' @returns `organize` returns a list and
 #' `organized` returns a character string
 #' @export
 #'

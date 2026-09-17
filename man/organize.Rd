@@ -10,14 +10,14 @@ organize(config, item = get_context(), sort)
 organized(config, item = get_context())
 }
 \arguments{
-\item{config}{the config list}
+\item{config}{the config list.}
 
-\item{item}{optional (see details), the name (id) of the item group}
+\item{item}{the name (id) of the item group.}
 
-\item{sort}{a character string to set the order (see details)}
+\item{sort}{a character string to set the order (see details).}
 }
 \value{
-\code{organize} returns a config list and
+\code{organize} returns a list and
 \code{organized} returns a character string
 }
 \description{
