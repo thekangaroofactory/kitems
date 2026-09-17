@@ -5,7 +5,14 @@
 #' @param values a data.frame of item(s) to insert.
 #' @param items a data.frame of items where to insert.
 #'
-#' @returns a data.frame of the items
+#' @details
+#' The function is mostly a wrapper around [dplyr::bind_rows()] function.
+#'
+#' It does check for potential duplicates among the 'id' column.
+#' If so, the opeartion will be aborted as there is no way to know how to
+#' fix the duplicated id(s).
+#'
+#' @returns a data.frame.
 #' @export
 #'
 #' @examples

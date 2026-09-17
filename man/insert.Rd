@@ -12,10 +12,17 @@ insert(values, items)
 \item{items}{a data.frame of items where to insert.}
 }
 \value{
-a data.frame of the items
+a data.frame.
 }
 \description{
 Insert Item(s)
+}
+\details{
+The function is mostly a wrapper around \code{\link[dplyr:bind_rows]{dplyr::bind_rows()}} function.
+
+It does check for potential duplicates among the 'id' column.
+If so, the opeartion will be aborted as there is no way to know how to
+fix the duplicated id(s).
 }
 \examples{
 \dontrun{
