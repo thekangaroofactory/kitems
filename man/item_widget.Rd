@@ -10,10 +10,10 @@ item_widget(id)
 \item{id}{the id of the module server instance.}
 }
 \value{
-An HTML object (tagList) to include in the UI.
+An HTML tag.
 }
 \description{
-Creates an HTML container for the item table.
+The UI component for the item table.
 }
 \examples{
 \dontrun{

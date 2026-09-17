@@ -3,11 +3,11 @@
 #' Item Widget
 #'
 #' @description
-#' Creates an HTML container for the item table.
+#' The UI component for the item table.
 #'
 #' @param id the id of the module server instance.
 #'
-#' @return An HTML object (tagList) to include in the UI.
+#' @return An HTML tag.
 #' @export
 #'
 #' @examples
