@@ -18,6 +18,9 @@
 #' See the module server function to know how to pass the event to the module
 #' server.
 #'
+#' For more details see this vignette:
+#' \code{vignette("filtering", package = "kitems")}
+#'
 #' @seealso [kitems()]
 #'
 #' @examples
