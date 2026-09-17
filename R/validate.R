@@ -3,12 +3,12 @@
 #' Validate Value(s)
 #'
 #' @description
-#' Validate values and turn them into item(s)
+#' Validate values and turn them into item(s).
 #'
 #' @param values a list of named values.
 #' @param data.model the data.frame of the data model (see details).
 #' @param items an optional data.frame of the items (see details).
-#' @param update whether the id attribute should be checked or not (default FALSE).
+#' @param update whether the id attribute should be checked or not (default `FALSE`).
 #'
 #' @details
 #' This function does not accept the data.model element of the config list as an input.
@@ -20,12 +20,23 @@
 #' In case the data.model values column contains instruction that require
 #' data-masking, `items` will be used as a context to evaluate those instructions.
 #'
-#' @returns A data.frame of item(s) checked against the data model.
+#' @returns A data.frame.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' validate(values, data.model)}
+#' # create config
+#' config <- design(project = "test", item = "foo") |>
+#' extend(item = "foo",
+#' attribute = list(name = "name", type = "character"),
+#' attribute = list(name = "quantity", type = "numeric"))
+#'
+#' # values
+#' values <- list(name = c("Banana", "Mango"), quantity = c(1, 12))
+#'
+#' # call function
+#' validate(values, data.model = yaml_to_dm(config, "name", "type", "default", "class.arg", "values"))
+#' }
 
 validate <- function(values, data.model, items = NULL, update = FALSE){
 

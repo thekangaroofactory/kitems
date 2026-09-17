@@ -13,13 +13,13 @@ validate(values, data.model, items = NULL, update = FALSE)
 
 \item{items}{an optional data.frame of the items (see details).}
 
-\item{update}{whether the id attribute should be checked or not (default FALSE).}
+\item{update}{whether the id attribute should be checked or not (default \code{FALSE}).}
 }
 \value{
-A data.frame of item(s) checked against the data model.
+A data.frame.
 }
 \description{
-Validate values and turn them into item(s)
+Validate values and turn them into item(s).
 }
 \details{
 This function does not accept the data.model element of the config list as an input.
@@ -33,5 +33,16 @@ data-masking, \code{items} will be used as a context to evaluate those instructi
 }
 \examples{
 \dontrun{
-validate(values, data.model)}
+# create config
+config <- design(project = "test", item = "foo") |>
+extend(item = "foo",
+attribute = list(name = "name", type = "character"),
+attribute = list(name = "quantity", type = "numeric"))
+
+# values
+values <- list(name = c("Banana", "Mango"), quantity = c(1, 12))
+
+# call function
+validate(values, data.model = yaml_to_dm(config, "name", "type", "default", "class.arg", "values"))
+}
 }
