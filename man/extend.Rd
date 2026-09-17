@@ -9,28 +9,29 @@ extend(config, item = get_context(), ...)
 \arguments{
 \item{config}{the config object.}
 
-\item{item}{optional (see details), the name (id) of the item group.}
+\item{item}{the name (id) of the item group.}
 
 \item{...}{one or several attribute instructions.}
 }
 \value{
-a config list()
+a list.
 }
 \description{
 Add specific attribute(s) with fine tuning.
 }
 \details{
-This function is a wrapper around design() to provide a comprehensive
+This function is a wrapper around \code{design()} to provide a comprehensive
 layered syntax.
 
 It only understands the \code{attribute} instruction inside \code{...}:
-attribute = c(name = "note", type = "character")
+\code{attribute = c(name = "note", type = "character")}
 Anything else will be filtered.
 
-When \code{item} is set in the parent frame, then the attribute can be skipped
+When \code{item} is set in the parent frame, then the parameter can be skipped
 in the function call.
 }
 \examples{
+\dontrun{
 # create config
 config <- design(project = "test",
         item = "foo")
@@ -47,6 +48,7 @@ config <- design(project = "test",
         item = "foo",
         attribute = c(name = "date", type = "Date", default = "Sys.Date()"))
 }
+}
 \seealso{
-\code{\link[=parent.frame]{parent.frame()}}
+\code{\link[=design]{design()}}, \code{\link[=parent.frame]{parent.frame()}}
 }
