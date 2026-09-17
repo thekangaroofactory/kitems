@@ -9,11 +9,16 @@
 #' @param layer the filter layer ("pre" or "main").
 #' @param ... the expression(s) to pass to the filter.
 #'
-#' @returns An event `list()`.
+#' @returns A list.
 #' @export
 #'
 #' @details
 #' When no expression is passed to `...` then the filter layer will be reset.
+#'
+#' See the module server function to know how to pass the event to the module
+#' server.
+#'
+#' @seealso [kitems()]
 #'
 #' @examples
 #' \dontrun{

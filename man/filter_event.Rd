@@ -12,7 +12,7 @@ filter_event(layer = c("pre", "main"), ...)
 \item{...}{the expression(s) to pass to the filter.}
 }
 \value{
-An event \code{list()}.
+A list.
 }
 \description{
 Helper function to create filter events to be passed to kitems module server
@@ -20,6 +20,9 @@ with the filter argument.
 }
 \details{
 When no expression is passed to \code{...} then the filter layer will be reset.
+
+See the module server function to know how to pass the event to the module
+server.
 }
 \examples{
 \dontrun{
@@ -29,4 +32,7 @@ filter_event(layer = "pre", expr = name == Banana)
 # reset main filter
 filter_event(layer = "main")
 }
+}
+\seealso{
+\code{\link[=kitems]{kitems()}}
 }
