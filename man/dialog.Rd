@@ -26,11 +26,11 @@ Produces a create / update / delete modal dialog.
 \details{
 Possible values for workflow are "create" (default), "update" or "delete".
 
-\code{...} is typically the output of the form() function
+\code{...} is typically the output of the \code{form()} function.
 When \code{workflow = "delete"}, it will be ignored and replaced by a standard message.
 }
 \examples{
 \dontrun{
-dialog(workflow = "delete", ns)
+dialog(workflow = "delete")
 }
 }

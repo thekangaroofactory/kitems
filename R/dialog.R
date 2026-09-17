@@ -15,12 +15,12 @@
 #' @details
 #' Possible values for workflow are "create" (default), "update" or "delete".
 #'
-#' `...` is typically the output of the form() function
+#' `...` is typically the output of the `form()` function.
 #' When `workflow = "delete"`, it will be ignored and replaced by a standard message.
 #'
 #' @examples
 #' \dontrun{
-#' dialog(workflow = "delete", ns)
+#' dialog(workflow = "delete")
 #' }
 
 dialog <- function(..., workflow = c("create", "update", "delete"), session = getDefaultReactiveDomain()){
