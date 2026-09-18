@@ -1,22 +1,22 @@
 
 # //////////////////////////////////////////////////////////////////////////////
 # Use case:
-# Create / update / delete attribute.
+# Update attribute.
 
 create_testdata()
 
 # -- test
-test_that("admin_server attribute_create works", {
+test_that("admin_server attribute_update works", {
 
   # -- module server call
   testServer(admin_server, {
 
     # -- click
     expect_no_error(
-      session$setInputs(attribute_action = "foo-attribute_create_x"))
+      session$setInputs(attribute_action = "foo-attribute_update_total"))
 
     # -- fill inputs
-    session$setInputs(attribute_name = "bar")
+    session$setInputs(attribute_name = "total")
     session$setInputs(attribute_desc = "test")
     session$setInputs(attribute_type = "numeric")
     session$setInputs(attribute_class_arg = "")
