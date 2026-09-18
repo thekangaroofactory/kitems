@@ -71,7 +71,7 @@ admin_layout <- function(){
                      bslib::nav_item(
                        bslib::input_dark_mode(id = "dark", mode = NULL)),
 
-                     footer = paste0("kitems v", as.character(packageVersion("kitems"))))
+                     footer = paste0("kitems v", as.character(utils::packageVersion("kitems"))))
 
 }
 
