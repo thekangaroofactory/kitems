@@ -1,4 +1,5 @@
 
+create_testdata()
 
 # -- baseline: just launch the server
 test_that("admin_server works", {
@@ -9,3 +10,4 @@ test_that("admin_server works", {
 
 })
 
+clean_all()
