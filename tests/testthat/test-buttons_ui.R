@@ -34,3 +34,14 @@ test_that("delete_widget works", {
   expect_equal(unlist(x), c(name = "span", attribs.id = paste0(module_id, "-item_delete_btn"), attribs.class = "shiny-html-output"))
 
 })
+
+
+test_that("delete_widget works", {
+
+  # -- function call
+  x <- actions_widget(module_id)
+
+  # -- tests
+  expect_type(x, "list")
+
+})
