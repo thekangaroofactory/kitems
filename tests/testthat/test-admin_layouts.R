@@ -2,6 +2,10 @@
 
 test_that("admin layouts works", {
 
+  x <- admin_layout()
+  expect_type(x, "list")
+  expect_identical(attributes(x)$class, c("bslib_page", "shiny.tag.list", "list"))
+
   x <- admin_attribute_card(attribute = list(name = "id"), item = "foo")
   expect_type(x, "list")
   expect_identical(attributes(x)$class, "shiny.tag")
