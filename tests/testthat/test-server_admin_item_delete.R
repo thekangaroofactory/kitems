@@ -26,4 +26,4 @@ test_that("admin_server item delete works", {
 
 })
 
-# clean_all()
+clean_all()
