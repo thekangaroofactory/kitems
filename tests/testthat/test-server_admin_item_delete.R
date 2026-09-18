@@ -15,6 +15,9 @@ test_that("admin_server item delete works", {
     expect_no_error(
       session$setInputs(item_delete = "foo-item_delete_btn"))
 
+    # -- fill input
+    session$setInputs(item_delete_string = "delete-foo")
+
     # -- click
     expect_no_error(
       session$setInputs(item_delete_confirm = 1))
