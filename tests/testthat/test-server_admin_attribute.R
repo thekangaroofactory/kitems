@@ -35,4 +35,4 @@ test_that("admin_server attribute_create works", {
 
 })
 
-# clean_all()
+clean_all()
