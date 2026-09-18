@@ -13,7 +13,7 @@ test_that("admin_server item delete works", {
 
     # -- click
     expect_no_error(
-      session$setInputs(item_delete = "foo-item_delete_btn"))
+      session$setInputs(item_delete = "foo-delete_x"))
 
     # -- fill input
     session$setInputs(item_delete_string = "delete-foo")
@@ -26,4 +26,4 @@ test_that("admin_server item delete works", {
 
 })
 
-clean_all()
+# clean_all()
