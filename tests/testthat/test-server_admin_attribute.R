@@ -13,16 +13,16 @@ test_that("admin_server attribute_create works", {
 
     # -- click
     expect_no_error(
-      session$setInputs(attribute_action = "foo-attribute_create"))
+      session$setInputs(attribute_action = "foo-attribute_create_x"))
 
     # -- fill inputs
     session$setInputs(attribute_name = "bar")
     session$setInputs(attribute_desc = "test")
     session$setInputs(attribute_type = "numeric")
-    session$setInputs(attribute_class_arg = NULL)
-    session$setInputs(attribute_values_verb = NULL)
-    session$setInputs(attribute_values = NULL)
-    session$setInputs(attribute_default = NULL)
+    session$setInputs(attribute_class_arg = "")
+    session$setInputs(attribute_values_verb = "any")
+    session$setInputs(attribute_values = "")
+    session$setInputs(attribute_default = "")
     session$setInputs(attribute_hide = TRUE)
     session$setInputs(attribute_skip = TRUE)
     session$setInputs(attribute_refresh = TRUE)
@@ -35,4 +35,4 @@ test_that("admin_server attribute_create works", {
 
 })
 
-clean_all()
+# clean_all()
