@@ -356,7 +356,8 @@ admin_server <- function(input, output, session) {
   observeEvent(input$item_delete_confirm, {
 
     # -- extract target item & check
-    id <- unlist(strsplit(input$item_delete, split = "_"))[[1]]
+    event <- ktools::input_decode(input$item_delete)
+    id <- event[['namespace']]
     req(input$item_delete_string == paste0("delete-", id))
 
     removeModal()
