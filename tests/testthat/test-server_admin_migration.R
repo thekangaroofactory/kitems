@@ -1,6 +1,11 @@
 
+# //////////////////////////////////////////////////////////////////////////////
+# Use case:
+# When admin console is started with a legacy data.model to migrate.
+
 create_testdata()
 
+# prepare legacy data.model file
 legacy_dm <- data.frame(
   name = c("id", "date", "name", "quantity", "total", "isvalid"),
   type = c("numeric", "POSIXct", "character", "integer", "numeric", "logical"),
@@ -11,19 +16,16 @@ legacy_dm <- data.frame(
   skip = c(T, F, F, F, F, F),
   sort.rank = c(NA, 1, NA, NA, NA, NA),
   sort.desc = c(NA, F, NA, NA, NA, NA))
-
 attr(legacy_dm, "version") <- "0.7.3"
-
-
 saveRDS(legacy_dm, file = file.path(testdata_path, "test_data_model.rds"))
 
-# -- baseline: just launch the server
+# -- test
 test_that("admin_server migration works", {
 
   # -- module server call
   testServer(admin_server, {
 
-    # -- click
+    # -- click to launch migration
     expect_no_error(
       session$setInputs(migrate = 1))
 
