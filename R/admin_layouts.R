@@ -1,5 +1,81 @@
 
 
+#' Admin Console Layout
+#'
+#' @description
+#' This is a UI / Layout function for the Admin Console.
+#'
+#' @details
+#' The main layout will be used to dynamically insert / remove content
+#' from the server side.
+#'
+#' @returns an HTML tag.
+#' @keywords internal
+#'
+#' @examples
+#' \dontrun{
+#' admin_layout()
+#' }
+
+admin_layout <- function(){
+
+  bslib::page_navbar(title = "Admin Console",
+                     window_title = "Kitems Admin Console",
+                     id = "nav",
+                     fillable = FALSE,
+
+                     # -- allow shinyjs
+                     header = shinyjs::useShinyjs(),
+
+                     # -- home tab (persistent)
+                     bslib::nav_panel(title = "Home",
+                                      value = "home",
+                                      icon = icon(name = "home"),
+
+                                      # -- layout
+                                      bslib::layout_sidebar(
+                                        border = FALSE,
+
+                                        # -- sidebar
+                                        sidebar = bslib::sidebar(
+                                          id = "home-sidebar",
+                                          position = "right",
+                                          width = 300,
+                                          open = FALSE,
+
+                                          # -- yaml
+                                          h3("YAML", icon("gears")),
+                                          textOutput("yaml_file"),
+                                          uiOutput("yaml_message")),
+
+                                        # -- main
+                                        # container where to insert elements
+                                        h1(class = "mb-3", textOutput("project_name")),
+
+                                        # -- wrapper
+                                        div(id = "home-project-items-section",
+                                            bslib::layout_column_wrap(
+                                              id = "home-project-items",
+                                              bslib::card(id = "home-items-create",
+                                                          p(actionLink(inputId = "item_create", label = "Add"), "an item group to the project.")))))),
+
+                     # -- space
+                     # To ensure dark mode switch is on right
+                     bslib::nav_spacer(),
+
+                     # -- link to package documentation
+                     bslib::nav_item(
+                       a(href="https://thekangaroofactory.github.io/kitems/", "kitems", target = "_blank")),
+
+                     # -- dark mode switch
+                     bslib::nav_item(
+                       bslib::input_dark_mode(id = "dark", mode = NULL)),
+
+                     footer = paste0("kitems v", as.character(packageVersion("kitems"))))
+
+}
+
+
 #' Missing Config Layout
 #'
 #' @description

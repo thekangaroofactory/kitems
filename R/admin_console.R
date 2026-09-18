@@ -1,69 +1,19 @@
 
 
-# ------------------------------------------------------------------------------
-# This is the kitems Admin Console application
-# ------------------------------------------------------------------------------
+#' Admin Console Server
+#'
+#' @param input the shiny input object
+#' @param output the shiny output object
+#' @param session the shiny session object
+#'
+#' @returns nothing.
+#' @keywords internal
+#'
+#' @examples
+#' \dontrun{
+#' admin_server(input, output, session)
+#' }
 
-# -- UI
-# The main layout will be used to dynamically insert / remove content from
-# the server side.
-
-admin_ui <- bslib::page_navbar(title = "Admin Console",
-                         window_title = "Kitems Admin Console",
-                         id = "nav",
-                         fillable = FALSE,
-
-                         # -- allow shinyjs
-                         header = shinyjs::useShinyjs(),
-
-                         # -- home tab (persistent)
-                         bslib::nav_panel(title = "Home",
-                                          value = "home",
-                                          icon = icon(name = "home"),
-
-                                          # -- layout
-                                          bslib::layout_sidebar(
-                                            border = FALSE,
-
-                                            # -- sidebar
-                                            sidebar = bslib::sidebar(
-                                              id = "home-sidebar",
-                                              position = "right",
-                                              width = 300,
-                                              open = FALSE,
-
-                                              # -- yaml
-                                              h3("YAML", icon("gears")),
-                                              textOutput("yaml_file"),
-                                              uiOutput("yaml_message")),
-
-                                            # -- main
-                                            # container where to insert elements
-                                            h1(class = "mb-3", textOutput("project_name")),
-
-                                            # -- wrapper
-                                            div(id = "home-project-items-section",
-                                                bslib::layout_column_wrap(
-                                                  id = "home-project-items",
-                                                  bslib::card(id = "home-items-create",
-                                                              p(actionLink(inputId = "item_create", label = "Add"), "an item group to the project.")))))),
-
-                         # -- space
-                         # To ensure dark mode switch is on right
-                         bslib::nav_spacer(),
-
-                         # -- link to package documentation
-                         bslib::nav_item(
-                           a(href="https://thekangaroofactory.github.io/kitems/", "kitems", target = "_blank")),
-
-                         # -- dark mode switch
-                         bslib::nav_item(
-                           bslib::input_dark_mode(id = "dark", mode = NULL)),
-
-                         footer = paste0("kitems v", as.character(packageVersion("kitems"))))
-
-
-# -- Server
 admin_server <- function(input, output, session) {
 
   # ////////////////////////////////////////////////////////////////////////////
@@ -775,7 +725,3 @@ admin_server <- function(input, output, session) {
   })
 
 }
-
-
-# -- Run the application
-shinyApp(ui = admin_ui, server = admin_server)
