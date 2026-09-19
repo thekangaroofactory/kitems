@@ -44,17 +44,17 @@ admin_attribute_card <- function(attribute, item, hide = NULL, skip = NULL, refr
         bslib::card_body(
 
           # -- mandatory
-          p("type:", attribute$type),
+          "type:", attribute$type,
           if("class.arg" %in% names(attribute))
-            p("Class argument(s):", attribute$class.arg),
+            "Class argument(s):", attribute$class.arg, br(),
 
           # -- values
           if("values" %in% names(attribute))
-            p("Values:", attribute$values),
+            "Values:", attribute$values, br(),
 
           # -- optional
           if("default" %in% names(attribute))
-            p("default:", attribute$default)
+            "default:", attribute$default
 
         ),
 
