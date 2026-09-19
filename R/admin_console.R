@@ -468,12 +468,23 @@ admin_server <- function(input, output, session) {
                         behavior = "hide", callback()$name)
 
         # -- store the new config
+        # secure: extract the attribute from config to propagate changes
         config(yaml)
+        at <- c_extract(yaml, item = event['namespace'], attribute = callback()$name)
+
+
+        # -- propagate to the items
+        fill <- default(data.frame(name = at$name, type = at$type, default = if(is.null(at$default)) NA else at$default))$default
+        x <- items(datamart, config(), item = event['namespace'])
+        x <- enforce(items = x,
+                     name = at$name,
+                     type = at$type,
+                     fill = fill)
+        item_save(x, ci_connector(yaml, item = event['namespace']))
 
         # -- update UI
         # add attribute card
         item <- c_extract(yaml, item = event['namespace'])
-        at <- c_extract(yaml, item = event['namespace'], attribute = callback()$name)
         insertUI(selector = paste0("#", event['namespace'], "-attributes > div:last"),
                  where = "beforeBegin",
                  div(class="bslib-grid-item bslib-gap-spacing html-fill-container",
