@@ -525,15 +525,23 @@ admin_server <- function(input, output, session) {
       # -- listen to callback
       observeEvent(callback(), {
 
-        # -- update attribute
-        yaml <- yaml |>
-          ca_replace(item = event['namespace'],
-                     attribute = ca_create(name = callback()$name,
-                                           description = callback()$description,
-                                           type = callback()$type,
-                                           class.arg = if(callback()$class.arg == "") NULL else callback()$class.arg,
-                                           values = if(callback()$values == "") NULL else callback()$values,
-                                           default = if(callback()$default == "") NULL else callback()$default))
+        # -- compute new attribute
+        new_att <- ca_create(name = callback()$name,
+                             description = callback()$description,
+                             type = callback()$type,
+                             class.arg = if(callback()$class.arg == "") NULL else callback()$class.arg,
+                             values = if(callback()$values == "") NULL else callback()$values,
+                             default = if(callback()$default == "") NULL else callback()$default)
+
+        # when it is renamed, replace won't work
+        if(callback()$name == event['value'])
+          yaml <- yaml |>
+            ca_replace(item = event['namespace'],
+                       attribute = new_att)
+        else
+          yaml <- yaml |>
+            ca_drop(item = event['namespace'], attribute = event['value']) |>
+            ca_append(item = event['namespace'], attribute = new_att)
 
         # -- update behaviors
         yaml <- yaml |>
@@ -543,6 +551,12 @@ admin_server <- function(input, output, session) {
 
         # -- store config
         config(yaml)
+
+        # -- propagate to items (if needed)
+        if(callback()$name != event['value']){
+          x <- items(datamart, config(), item = event['namespace'])
+          names(x)[names(x) == event['value']] <- callback()$name
+          item_save(x, ci_connector(yaml, item = event['namespace']))}
 
         # -- update UI
         # replace attribute card
