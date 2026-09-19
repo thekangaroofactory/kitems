@@ -226,9 +226,49 @@ admin_attribute_wizard <- function(config, item, attribute = NULL, callback, ses
                           tags$li("compute the value when attribute is skipped."))),
                       p("It can be a symbol or a call with ().")))
 
-    # -- no validation is required
-    output$w_actions <- renderUI(
-      actionButton(inputId = "w_next", label = "Next", icon = icon("circle-chevron-right")))
+    # -- validate
+    obs <- observeEvent(input$attribute_default, {
+
+      # -- init
+      is_valid <- TRUE
+
+      # -- rules
+      if(input$attribute_default != ""){
+        is_valid <- tryCatch({
+          # workflow is same as in module server
+          # so that it can eval calls
+          x <- data.frame(name = input$attribute_name,
+                          type = input$attribute_type,
+                          default = input$attribute_default) |> default()
+          # try coerce to target class
+          x <- convert(x$default,
+                       class = input$attribute_type,
+                       class.arg = if(input$attribute_class_arg != "") input$attribute_class_arg else NULL)
+          TRUE},
+          # on error
+          error = function(e) {
+            warning(e$message, call. = F)
+            FALSE},
+          # on warning (strict check)
+          warning = function(w) {
+            warning(w$message, call. = F)
+            FALSE})}
+
+      # -- actions
+      if(is_valid){
+        if(input$attribute_default == "")
+          output$w_validation <- renderUI(NULL)
+        else
+          output$w_validation <- renderUI(p(class = "text-success", icon("circle-check"), "The expression is valid."))
+      } else
+        output$w_validation <- renderUI(p(class = "text-danger", icon("circle-xmark"), "There is a problem to compute the default value."))
+
+      if(is_valid)
+        output$w_actions <- renderUI(actionButton(inputId = "w_next", label = "Next", icon = icon("circle-chevron-right")))
+      else
+        output$w_actions <- renderUI(NULL)
+
+    })
 
     # -- store step
     session$userData$kitems$wizard$step <- list(id = 4)
