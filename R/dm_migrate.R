@@ -125,7 +125,7 @@ dm_migrate <- function(data.model){
 
   if(dirty){
     message("Data model migration done.")
-    message("- data model version =", attributes(data.model)$version)}
+    message("- data model version = ", attributes(data.model)$version)}
 
   # -- return
   if(dirty) data.model else NA
