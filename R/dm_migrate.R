@@ -94,6 +94,9 @@ dm_migrate <- function(data.model){
 
     # drop default.arg & merge into default.fun
     if("default.arg" %in% names(data.model)){
+      message("- replace default.fun getTimestamp by uuid")
+      data.model[!is.na(data.model$default.fun) & data.model$default.fun == "ktools::getTimestamp", ]$default.fun <- "ktools::uuid"
+      data.model[!is.na(data.model$default.fun) & data.model$default.fun == "ktools::uuid", ]$default.arg <- NA
       message("- drop column = default.arg")
       data.model <- data.model |>
         dplyr::mutate(default.fun = dplyr::case_when(!is.na(default.arg) ~ stringr::str_replace(default.arg, "list", default.fun),
