@@ -29,12 +29,7 @@ admin <- function() {
   if(Sys.getenv("R_KITEMS_PATH") == "")
     stop("Set R_KITEMS_PATH environment variable to where the _kitems.yml file is.", call. = F)
 
-  # -- app path
-  appDir <- system.file("R", package = "kitems")
-  if(appDir == "")
-    stop("Could not find R folder. Try re-installing `kitems`.", call. = FALSE)
-
-  # -- run app
-  shiny::runApp(file.path(appDir, "admin_console.R"), display.mode = "normal")
+  # -- Run the application
+  shinyApp(ui = admin_layout(), server = admin_server)
 
 }
