@@ -371,9 +371,6 @@ admin_server <- function(input, output, session) {
     config(config() |>
              ci_drop(item = id))
 
-    # -- delete item file
-    warning("Item file & folder should be deleted here!")
-
     # -- ui: drop item card & tab + notify
     removeUI(selector = paste0("#", id, "-item-card"), immediate = TRUE)
     bslib::nav_remove(id = "nav", target = id)
