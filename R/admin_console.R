@@ -443,6 +443,9 @@ admin_server <- function(input, output, session) {
       # -- listen to callback
       observeEvent(callback(), {
 
+        # -- keep old config to load items
+        old_yaml <- yaml
+
         # -- update config
         yaml <- yaml |>
           ca_append(item = event['namespace'],
@@ -477,7 +480,7 @@ admin_server <- function(input, output, session) {
 
         # -- propagate to the items
         fill <- default(data.frame(name = at$name, type = at$type, default = if(is.null(at$default)) NA else at$default))$default
-        x <- items(datamart, config(), item = event['namespace'])
+        x <- items(datamart, old_yaml, item = event['namespace'])
         x <- enforce(items = x,
                      name = at$name,
                      type = at$type,
