@@ -62,7 +62,7 @@ test_that("dm_migrate: migration @v0.8.0", {
 
   # -- alter data model
   old_dm[c("class.arg", "values", "refresh", "default")] <- NULL
-  old_dm[1, "default.fun"] <- "getTimestamp"
+  old_dm[1, "default.fun"] <- "ktools::getTimestamp"
   old_dm[1, "default.arg"] <- "list(k = 1000)"
   old_dm[1, "default.val"] <- NA
   attr(old_dm, "version") <- "0.7.1"
@@ -74,7 +74,7 @@ test_that("dm_migrate: migration @v0.8.0", {
   # -- checks
   expect_true("display" %in% names(x))
   expect_false("filter" %in% names(x))
-  expect_identical(x$default, c("getTimestamp(k = 1000)", NA, NA))
+  expect_identical(x$default, c("ktools::uuid()", NA, NA))
   expect_true(attributes(x)$version == utils::packageVersion("kitems"))
 
 })
