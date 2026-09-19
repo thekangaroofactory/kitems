@@ -4,7 +4,7 @@
 # Setup
 # --------------------------------------------------------------------------
 
-create_empty_items()
+create_testdata(empty_items = TRUE)
 
 
 # --------------------------------------------------------------------------
@@ -14,9 +14,7 @@ create_empty_items()
 test_that("Date sliderInput empty items works", {
 
   # -- declare arguments
-  params <- list(id = module_id,
-                 path = testdata_path,
-                 autosave = TRUE)
+  params <- list(id = module_id)
 
   # -- module server call
   testServer(kitems, args = params, {

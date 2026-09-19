@@ -17,16 +17,31 @@
 
 dm_migrate <- function(data.model){
 
+  # -- default values
+  # moved from data.R in v0.8.0 since not used elsewhere
+  DATA_MODEL_DEFAULTS <- list(name = NA,
+                              type = NA,
+                              class.arg = NA,
+                              values = NA,
+                              default = NA,
+                              display = FALSE,
+                              skip = FALSE,
+                              refresh = FALSE,
+                              sort.rank = NA,
+                              sort.desc = NA)
+
+
   # -- data model version
   version <- attributes(data.model)$version
-  catl("[dm_migrate] Data model input version =", version, debug = 1)
+  message("Data model migration start...")
+  message("- data model version = ", version)
   dirty <- FALSE
 
   # -- migration @v0.5.2
   # add default.arg, sort.rank, sort.desc
   if(version < "0.5.2"){
 
-    catl("[dm_migrate] Data model migration @v0.5.2", debug = 1)
+    message(">> Data model migration @v0.5.2")
 
     # -- check that new cols are not already in the data.model!
     new_cols <- c("default.arg", "sort.rank", "sort.desc")
@@ -34,7 +49,7 @@ dm_migrate <- function(data.model){
 
     # -- add missing columns
     if(length(new_cols) > 0){
-      message("[dm_migrate] Data model migration to v0.5.2, missing columns = ", new_cols)
+      message("- add missing columns = ", new_cols)
       data.model[new_cols] <- DATA_MODEL_DEFAULTS[new_cols]
       attr(data.model, "version") <- "0.5.2"
       dirty <- TRUE}
@@ -46,12 +61,12 @@ dm_migrate <- function(data.model){
   # rename filter into display
   if(version < "0.7.1"){
 
-    catl("[dm_migrate] Data model migration @v0.7.1", debug = 1)
+    message(">> Data model migration @v0.7.1")
 
     # -- rename column & update value
     # need to invert values otherwise wrong columns will be shown! #577
     if("filter" %in% names(data.model)){
-      message("[dm_migrate] Data model migration to v0.7.1, rename column filter into display")
+      message("- rename filter column into display")
       names(data.model)[names(data.model) == "filter"] <- "display"
       data.model$display <- !data.model$display
       attr(data.model, "version") <- "0.7.1"
@@ -60,13 +75,61 @@ dm_migrate <- function(data.model){
   }
 
 
+  # -- migration @v0.8.0
+  # add class.arg, values, refresh
+  # drop default.arg & merge into default.fun
+  if(version < "0.8.0"){
+
+    message(">> Data model migration @v0.8.0")
+
+    # -- check that new cols are not already in the data.model!
+    new_cols <- c("class.arg", "values", "refresh")
+    new_cols <- new_cols[!new_cols %in% names(data.model)]
+
+    # -- add missing columns
+    if(length(new_cols) > 0){
+      message("- add missing column(s) = ", paste(new_cols, collapse = " | "))
+      data.model[new_cols] <- DATA_MODEL_DEFAULTS[new_cols]
+      dirty <- TRUE}
+
+    # drop default.arg & merge into default.fun
+    if("default.arg" %in% names(data.model)){
+      if("ktools::getTimestamp" %in% data.model$default.fun){
+        message("- replace default.fun getTimestamp by uuid")
+        data.model[!is.na(data.model$default.fun) & data.model$default.fun == "ktools::getTimestamp", ]$default.fun <- "ktools::uuid"
+        data.model[!is.na(data.model$default.fun) & data.model$default.fun == "ktools::uuid", ]$default.arg <- NA}
+      message("- drop column = default.arg")
+      data.model <- data.model |>
+        dplyr::mutate(default.fun = dplyr::case_when(!is.na(default.arg) ~ stringr::str_replace(default.arg, "list", default.fun),
+                                                     is.na(default.arg) & !is.na(default.fun) ~ paste0(default.fun, "()"),
+                                                     .default = NA))
+      data.model$default.arg <- NULL
+      dirty <- TRUE}
+
+    # drop default.fun & default.val & merge into default
+    if(all(c("default.val", "default.fun") %in% names(data.model))){
+      message("- merge columns = default.fun | default.val")
+      data.model <- data.model |> dplyr::mutate(default = dplyr::case_when(!is.na(default.fun) ~  default.fun, !is.na(default.val) ~ default.val, .default = NA))
+      data.model$default.fun <- NULL
+      data.model$default.val <- NULL
+      dirty <- TRUE}
+
+    # update version
+    attr(data.model, "version") <- "0.8.0"
+
+  }
+
   # -- force columns order
   # attribute version must be kept
   if(dirty){
     v <- attributes(data.model)$version
-    data.model <- data.model[names(DATA_MODEL_COLCLASSES)]
+    data.model <- data.model[c("name", "type", "class.arg", "values", "default",
+                               "display", "skip", "refresh", "sort.rank", "sort.desc")]
     attr(data.model, "version") <- v}
 
+  if(dirty){
+    message("Data model migration done.")
+    message("- data model version = ", attributes(data.model)$version)}
 
   # -- return
   if(dirty) data.model else NA

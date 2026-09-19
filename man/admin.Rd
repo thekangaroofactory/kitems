@@ -4,22 +4,24 @@
 \alias{admin}
 \title{Admin Console}
 \usage{
-admin(path = getwd())
-}
-\arguments{
-\item{path}{the path where to find the item folder(s)}
+admin()
 }
 \description{
-Launches the administration console (Shiny App)
+Launches the administration console.
 }
 \details{
-The app will scan the \code{path} to detect sub folders that are expected to be
-item folders named after the id used to create them.
+The Admin Console is a standalone Shiny web app delivered along with
+the package to administrate the items of the project.
 
-It will build the ui tabs from this list.
+It will check the \code{R_KITEMS_PATH} environment variable and look
+for the YAML config file in the provided path.
 }
 \examples{
 \dontrun{
+# set environment (where to find the _kitems.yml)
+Sys.setenv("R_KITEMS_PATH" = "D:/data")
+
+# launch the Admin Console
 admin()
 }
 }

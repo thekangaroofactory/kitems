@@ -1,31 +1,33 @@
 Package: kitems
-Title: A Framework To Manage Data Frame Items
-Version: 0.7.3
+Title: A Framework To Manage Tabular Items
+Version: 0.8.0
 Authors@R: 
     person(given = "Philippe",
            family = "Peret",
            role = c("aut", "cre"),
            comment = c(ORCID = "0009-0003-9666-7490"),
            email = "philippe.peret@hotmail.com")
-Description: A framework to manage data frame items and a set of tools 
+Description: A framework to manage tabular items and a set of tools 
     to implement it within R Shiny applications.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Depends:
-    R (>= 3.5.0),
-    shiny,
-    shinydashboard,
-    shinyWidgets,
+    R (>= 4.1.0),
+    shiny
 Imports:
     DT,
     dplyr,
     rlang,
-    iker,
-    ktools,
+    iker (>= 0.9.5),
+    ktools (>= 0.9.9),
     stringr,
-    magrittr
+    yaml,
+    shinyjs,
+    bslib,
+    shinyWidgets,
+    crayon,
+    lifecycle
 Suggests: 
     knitr,
     rmarkdown,
@@ -38,3 +40,4 @@ Remotes:
     thekangaroofactory/iker,
     thekangaroofactory/ktools
 URL: https://thekangaroofactory.github.io/kitems/
+Config/roxygen2/version: 8.1.0

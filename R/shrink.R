@@ -1,0 +1,83 @@
+
+
+#' Shrink Config
+#'
+#' @details
+#' Drop an item or an attribute from the config.
+#'
+#' @param config the config list.
+#' @param ... one or several item or attribute instruction.
+#'
+#' @details
+#' The function understands the following instructions:
+#' - `item = foo`
+#' - `attribute = c(item = "foo", name = "total")`
+#' See the examples for more details.
+#'
+#' It supports multiple instructions.
+#'
+#' Note that it is forbidden to delete the 'id' attribute of an item.
+#'
+#' @returns a list.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' # build baseline
+#' config <- design(project = "test",
+#' item = "foo") |>
+#'   extend(item = "foo",
+#'          attribute = c(name = "total", type = "integer"))
+#'
+#' # drop item
+#' config |>
+#'   shrink(item = "foo")
+#'
+#' # drop attribute
+#' config |>
+#'   shrink(attribute = c(item = "foo", name = "total"))
+#'
+#' # multiple instructions
+#' config |>
+#'   shrink(attribute = c(item = "foo", name = "total"),
+#'          item = "foo")
+#' }
+
+shrink <- function(config, ...){
+
+  # -- get instruction(s)
+  # secure from funny ones
+  args <- list(...)[names(list(...)) %in% c("item", "attribute")]
+
+
+  # ////////////////////////////////////////////////////////////////////////////
+  # Check for multiple expressions
+
+  if(length(args) > 1){
+
+    # -- loop over instructions (recursive call)
+    for(i in 1:length(args))
+      config <- do.call(shrink,
+                        append(list(config), args[i]))
+
+    # -- make sure we don't go further
+    return(config)}
+
+
+  # ////////////////////////////////////////////////////////////////////////////
+  # Item
+
+  if(names(args) == "item")
+    return(ci_drop(config,
+                            item = args$item))
+
+
+  # ////////////////////////////////////////////////////////////////////////////
+  # Attribute
+
+  if(names(args) == "attribute")
+    ca_drop(config,
+                          item = args$attribute['item'],
+                          attribute = args$attribute['name'])
+
+}

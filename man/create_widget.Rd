@@ -2,21 +2,41 @@
 % Please edit documentation in R/button_widgets.R
 \name{create_widget}
 \alias{create_widget}
-\title{Create Item Button}
+\alias{update_widget}
+\alias{delete_widget}
+\alias{actions_widget}
+\title{Item Buttons}
 \usage{
 create_widget(id)
+
+update_widget(id)
+
+delete_widget(id)
+
+actions_widget(id)
 }
 \arguments{
 \item{id}{the server module id.}
 }
 \value{
-An HTML element that can be included in the UI.
+An HTML tag.
 }
 \description{
-Button to fire the create item dialog.
+Action button(s) to fire the item dialog.
+}
+\details{
+\code{id} is the namespace of the module server instance holding
+the target item.
+\itemize{
+\item create_widget() to fire create dialog
+\item update_widget() to fire update dialog
+\item delete_widget() to fire delete dialog
+\item actions_widget() is a wrapper that returns all there buttons.
+}
 }
 \examples{
 \dontrun{
+# assuming the module server has been launched with id = "mydata"
 create_widget(id = "mydata")
 }
 }

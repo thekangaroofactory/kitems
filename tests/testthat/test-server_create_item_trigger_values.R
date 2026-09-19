@@ -15,8 +15,6 @@ test_that("Create item [trigger]", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 path = testdata_path,
-                 autosave = TRUE,
                  trigger = reactiveVal(NULL))
 
   # -- module server call

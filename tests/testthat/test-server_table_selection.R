@@ -8,9 +8,7 @@ create_testdata()
 test_that("[testServer] In table selection works", {
 
   # -- declare arguments
-  params <- list(id = module_id,
-                 path = testdata_path,
-                 autosave = TRUE)
+  params <- list(id = module_id)
 
   # -- module server call
   testServer(kitems, args = params, {
@@ -28,7 +26,7 @@ test_that("[testServer] In table selection works", {
     session$setInputs(filtered_view_cell_clicked = list(col = 3))
 
     # -- check
-    expect_equal(clicked_column(), "Total")
+    expect_equal(clicked_column(), "Date")
 
   })
 
