@@ -34,7 +34,7 @@ dm_migrate <- function(data.model){
   # -- data model version
   version <- attributes(data.model)$version
   message("Data model migration start...")
-  message("- data model version =", version)
+  message("- data model version = ", version)
   dirty <- FALSE
 
   # -- migration @v0.5.2
@@ -95,8 +95,10 @@ dm_migrate <- function(data.model){
     # drop default.arg & merge into default.fun
     if("default.arg" %in% names(data.model)){
       message("- drop column = default.arg")
-      data.model <- data.model |> dplyr::mutate(default.fun = dplyr::case_when(!is.na(default.arg) ~ stringr::str_replace(default.arg, "list", default.fun),
-                                                         .default = NA))
+      data.model <- data.model |>
+        dplyr::mutate(default.fun = dplyr::case_when(!is.na(default.arg) ~ stringr::str_replace(default.arg, "list", default.fun),
+                                                     is.na(default.arg) & !is.na(default.fun) ~ paste0(default.fun, "()"),
+                                                     .default = NA))
       data.model$default.arg <- NULL
       dirty <- TRUE}
 
