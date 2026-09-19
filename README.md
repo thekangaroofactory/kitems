@@ -28,6 +28,15 @@ devtools::install_github("thekangaroofactory/kitems")
 pak::pak("thekangaroofactory/kitems")
 ```
 
+## Migration
+
+Version 0.8.x requires a data model migration from previous versions as
+well as some modification in your app.
+
+Check this
+[article](https://thekangaroofactory.github.io/kitems/articles/migration.html)
+to get the detailed procedure.
+
 ## Lifecycle
 
 See this
