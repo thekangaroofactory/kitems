@@ -661,6 +661,11 @@ admin_server <- function(input, output, session) {
                   item = event['namespace'],
                   attribute = event['value']))
 
+        # -- propagate to items
+        x <- items(datamart, config(), item = event['namespace'])
+        x[event['value']] <- NULL
+        item_save(x, ci_connector(yaml, item = event['namespace']))
+
         # -- update UI
         # remove attribute card
         removeUI(selector = paste0("div:has(> #",
