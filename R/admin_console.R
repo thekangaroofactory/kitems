@@ -279,6 +279,11 @@ admin_server <- function(input, output, session) {
                     description = input$item_description,
                     path = path)))
 
+    # -- create item file
+    connector <- ci_connector(config(), item = input$item_name)
+    dir.create(connector$path, showWarnings = FALSE)
+    item_save(data.frame(id = numeric()), connector = ci_connector(config(), item = input$item_name))
+
     # -- ui: add item card
     insertUI(selector = "#home-project-items > div:last",
              where = "beforeBegin",
