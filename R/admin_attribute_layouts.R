@@ -67,20 +67,20 @@ admin_attribute_card <- function(attribute, item, hide = NULL, skip = NULL, refr
                            else
                              tagList(
                                ktools::action_link(id = attribute$name,
-                                                   label = "",
+                                                   pattern = paste0(item, "-attribute_update"),
                                                    icon = icon("gear"),
                                                    target = "attribute_action",
-                                                   pattern = paste0(item, "-attribute_update")),
+                                                   value = list(action = "update", item = item)),
                                ktools::action_link(id = attribute$name,
-                                                   label = "",
+                                                   pattern = paste0(item, "-attribute_move"),
                                                    icon = icon("arrows-left-right"),
                                                    target = "attribute_action",
-                                                   pattern = paste0(item, "-attribute_move")),
+                                                   value = list(action = "move", item = item)),
                                ktools::action_link(id = attribute$name,
-                                                   label = "",
+                                                   pattern = paste0(item, "-attribute_delete"),
                                                    icon = icon("trash"),
                                                    target = "attribute_action",
-                                                   pattern = paste0(item, "-attribute_delete"))))))
+                                                   value = list(action = "delete", item = item))))))
 
 }
 

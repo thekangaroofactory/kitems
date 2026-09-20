@@ -75,11 +75,11 @@ admin_item_layout <- function(x){
                          "an attribute to the item group.")),
 
                      h2("Sorting"),
-                     p(ktools::action_link(id = "x",
-                                           label = "",
+                     p(ktools::action_link(id = x$id,
+                                           pattern = "sort",
                                            icon = icon("gear"),
                                            target = "sorting_action",
-                                           pattern = paste0(x$id, "-sorting_action")),
+                                           value = list()),
                        span(id = paste0(x$id, "-sorting"), class = "text-warning",
                             if(is.null(x$data.model$sort)) "No sorting is defined." else paste(x$data.model$sort, collapse = "|")))))
 
@@ -112,18 +112,20 @@ admin_item_card <- function(name, description = NULL){
         p(id = paste0(name, "-description"), "Description:", description),
 
         # -- update description
-        ktools::action_link(id = "x",
+        ktools::action_link(id = name,
+                            pattern = "update_description",
                             label = "Update description",
                             icon = icon("gear"),
                             target = "item_update_description",
-                            pattern = paste0(name, "-update_description")),
+                            value = list()),
 
         # -- switch to item tab
-        ktools::action_link(id = "x",
+        ktools::action_link(id = name,
+                            pattern = "select_tab",
                             label = "Switch to item tab",
                             icon = icon("circle-arrow-right"),
                             target = "select_tab",
-                            pattern = paste0(name, "-select_tab"))))
+                            value = list())))
 
 }
 
@@ -145,10 +147,11 @@ admin_item_card <- function(name, description = NULL){
 
 admin_item_dz <- function(name){
 
-  ktools::action_link(id = "x",
+  ktools::action_link(id = name,
+                      pattern = "delete",
                       label = "Delete item group",
                       icon = icon("circle-arrow-right"),
                       target = "item_delete",
-                      pattern = paste0(name, "-delete"))
+                      value = list())
 
 }

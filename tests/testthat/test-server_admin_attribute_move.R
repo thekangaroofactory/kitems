@@ -13,7 +13,7 @@ test_that("admin_server attribute_move works", {
 
     # -- click
     expect_no_error(
-      session$setInputs(attribute_action = "foo-attribute_move_total"))
+      session$setInputs(attribute_action = list(item = "foo", action = "move", id = "total")))
 
     # -- fill inputs
     session$setInputs(attribute_move_position = "before")

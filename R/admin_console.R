@@ -208,8 +208,7 @@ admin_server <- function(input, output, session) {
   observeEvent(input$select_tab, {
 
     # -- get id from input value
-    event <- ktools::input_decode(input$select_tab)
-    tab_id <- event[['namespace']]
+    tab_id <- input$select_tab$id
 
     # -- select
     bslib::nav_select(id = "nav", selected = tab_id)
@@ -337,8 +336,7 @@ admin_server <- function(input, output, session) {
   observeEvent(input$item_delete, {
 
     # -- decode input
-    event <- ktools::input_decode(input$item_delete)
-    id <- event[['namespace']]
+    id <- input$item_delete$id
 
     showModal(
       modalDialog(
@@ -361,8 +359,7 @@ admin_server <- function(input, output, session) {
   observeEvent(input$item_delete_confirm, {
 
     # -- extract target item & check
-    event <- ktools::input_decode(input$item_delete)
-    id <- event[['namespace']]
+    id <- input$item_delete$id
     req(input$item_delete_string == paste0("delete-", id))
 
     removeModal()
@@ -387,8 +384,7 @@ admin_server <- function(input, output, session) {
   observeEvent(input$item_update_description, {
 
     # -- get item
-    event <- ktools::input_decode(input$item_update_description)
-    item <- event['namespace']
+    item <- input$item_update_description$id
 
     # -- dialog
     showModal(
@@ -427,18 +423,18 @@ admin_server <- function(input, output, session) {
   observeEvent(input$attribute_action, {
 
     # -- extract event & get yaml
-    event <- ktools::input_decode(input$attribute_action)
+    event <- input$attribute_action
     ktools::catl("Attribute event received:", paste(names(event), event, sep = " = ", collapse = ", "))
     yaml <- config()
 
     # -- perform action
-    if(event['action'] == "attribute_create"){
+    if(event['action'] == "create"){
 
       # ------------------------------------------------------------------------
       # Create attribute
 
       callback <- reactiveVal()
-      admin_attribute_wizard(yaml, item = event['namespace'], callback = callback)
+      admin_attribute_wizard(yaml, item = event$item, callback = callback)
 
       # -- listen to callback
       observeEvent(callback(), {
@@ -448,7 +444,7 @@ admin_server <- function(input, output, session) {
 
         # -- update config
         yaml <- yaml |>
-          ca_append(item = event['namespace'],
+          ca_append(item = event$item,
                     attribute = ca_create(
                       name = callback()$name,
                       description = callback()$description,
@@ -459,55 +455,55 @@ admin_server <- function(input, output, session) {
 
         if(callback()$skip)
           yaml <- yaml |>
-            ca_behavior(item = event['namespace'],
+            ca_behavior(item = event$item,
                         behavior = "skip", callback()$name)
 
         if(callback()$refresh && callback()$skip)
           yaml <- yaml |>
-            ca_behavior(item = event['namespace'],
+            ca_behavior(item = event$item,
                         behavior = "refresh", callback()$name)
 
         if(callback()$hide)
           yaml <- yaml |>
-            ca_behavior(item = event['namespace'],
+            ca_behavior(item = event$item,
                         behavior = "hide", callback()$name)
 
         # -- store the new config
         # secure: extract the attribute from config to propagate changes
         config(yaml)
-        at <- c_extract(yaml, item = event['namespace'], attribute = callback()$name)
+        at <- c_extract(yaml, item = event$item, attribute = callback()$name)
 
 
         # -- propagate to the items
         fill <- default(data.frame(name = at$name, type = at$type, default = if(is.null(at$default)) NA else at$default))$default
-        x <- items(datamart, old_yaml, item = event['namespace'])
+        x <- items(datamart, old_yaml, item = event$item)
         x <- enforce(items = x,
                      name = at$name,
                      type = at$type,
                      fill = fill)
-        item_save(x, ci_connector(yaml, item = event['namespace']))
+        item_save(x, ci_connector(yaml, item = event$item))
 
         # -- update UI
         # add attribute card
-        item <- c_extract(yaml, item = event['namespace'])
-        insertUI(selector = paste0("#", event['namespace'], "-attributes > div:last"),
+        item <- c_extract(yaml, item = event$item)
+        insertUI(selector = paste0("#", event$item, "-attributes > div:last"),
                  where = "beforeBegin",
                  div(class="bslib-grid-item bslib-gap-spacing html-fill-container",
                      admin_attribute_card(attribute = at,
-                                          item = event['namespace'],
+                                          item = event$item,
                                           hide = item$data.model$hide,
                                           skip = item$data.model$skip,
                                           refresh = item$data.model$refresh)))
 
         # update attribute nb
-        shinyjs::html(id = paste0(event['namespace'], "-attribute-nb"),
+        shinyjs::html(id = paste0(event$item, "-attribute-nb"),
                       html = admin_attribute_nb(item))
         # update skipped, refreshed & hidden (sidebar)
-        shinyjs::html(id = paste0(event['namespace'], "-skipped-attributes"),
+        shinyjs::html(id = paste0(event$item, "-skipped-attributes"),
                       html = paste(item$data.model$skip, collapse = "|"))
-        shinyjs::html(id = paste0(event['namespace'], "-refreshed-attributes"),
+        shinyjs::html(id = paste0(event$item, "-refreshed-attributes"),
                       html = paste(item$data.model$refresh, collapse = "|"))
-        shinyjs::html(id = paste0(event['namespace'], "-hidden-attributes"),
+        shinyjs::html(id = paste0(event$item, "-hidden-attributes"),
                       html = paste(item$data.model$hide, collapse = "|"))
 
         # -- cleanup
@@ -516,15 +512,15 @@ admin_server <- function(input, output, session) {
       }, once = TRUE)
 
 
-    } else if(event['action'] == "attribute_update"){
+    } else if(event['action'] == "update"){
 
       # ------------------------------------------------------------------------
       # Update attribute
 
       callback <- reactiveVal()
       admin_attribute_wizard(yaml,
-                             item = event['namespace'],
-                             attribute = event['value'],
+                             item = event$item,
+                             attribute = event$id,
                              callback)
 
       # -- listen to callback
@@ -539,55 +535,55 @@ admin_server <- function(input, output, session) {
                              default = if(callback()$default == "") NULL else callback()$default)
 
         # when it is renamed, replace won't work
-        if(callback()$name == event['value'])
+        if(callback()$name == event$id)
           yaml <- yaml |>
-            ca_replace(item = event['namespace'],
+            ca_replace(item = event$item,
                        attribute = new_att)
         else
           yaml <- yaml |>
-            ca_drop(item = event['namespace'], attribute = event['value']) |>
-            ca_append(item = event['namespace'], attribute = new_att)
+            ca_drop(item = event$item, attribute = event$id) |>
+            ca_append(item = event$item, attribute = new_att)
 
         # -- update behaviors
         yaml <- yaml |>
-          ca_behavior(item = event['namespace'], behavior = "skip", callback()$name, set = callback()$skip) |>
-          ca_behavior(item = event['namespace'], behavior = "refresh", callback()$name, set = callback()$refresh && callback()$skip) |>
-          ca_behavior(item = event['namespace'], behavior = "hide", callback()$name, set = callback()$hide)
+          ca_behavior(item = event$item, behavior = "skip", callback()$name, set = callback()$skip) |>
+          ca_behavior(item = event$item, behavior = "refresh", callback()$name, set = callback()$refresh && callback()$skip) |>
+          ca_behavior(item = event$item, behavior = "hide", callback()$name, set = callback()$hide)
 
         # -- store config
         config(yaml)
 
         # -- propagate to items (if needed)
-        if(callback()$name != event['value']){
-          x <- items(datamart, config(), item = event['namespace'])
-          names(x)[names(x) == event['value']] <- callback()$name
-          item_save(x, ci_connector(yaml, item = event['namespace']))}
+        if(callback()$name != event$id){
+          x <- items(datamart, config(), item = event$item)
+          names(x)[names(x) == event$id] <- callback()$name
+          item_save(x, ci_connector(yaml, item = event$item))}
 
         # -- update UI
         # replace attribute card
-        dm <- c_extract(yaml, item = event['namespace'])$data.model
-        at <- c_extract(yaml, item = event['namespace'], attribute = callback()$name)
+        dm <- c_extract(yaml, item = event$item)$data.model
+        at <- c_extract(yaml, item = event$item, attribute = callback()$name)
         # remove old card
-        removeUI(selector = paste0("#", paste(event['namespace'], event['value'],
+        removeUI(selector = paste0("#", paste(event$item, event$id,
                                               "attribute-card", sep = "-")),
                  immediate = TRUE)
         # insert updated card
-        insertUI(selector = paste0("#", paste(event['namespace'], event['value'],
+        insertUI(selector = paste0("#", paste(event$item, event$id,
                                               "attribute-card-container", sep = "-")),
                  where = "afterBegin",
                  immediate = TRUE,
                  admin_attribute_card(attribute = at,
-                                      item = event['namespace'],
+                                      item = event$item,
                                       hide = dm$hide,
                                       skip = dm$skip,
                                       refresh = dm$refresh))
 
         # update skipped, refreshed & hidden (sidebar)
-        shinyjs::html(id = paste0(event['namespace'], "-skipped-attributes"),
+        shinyjs::html(id = paste0(event$item, "-skipped-attributes"),
                       html = paste(dm$skip, collapse = "|"))
-        shinyjs::html(id = paste0(event['namespace'], "-refreshed-attributes"),
+        shinyjs::html(id = paste0(event$item, "-refreshed-attributes"),
                       html = paste(dm$refresh, collapse = "|"))
-        shinyjs::html(id = paste0(event['namespace'], "-hidden-attributes"),
+        shinyjs::html(id = paste0(event$item, "-hidden-attributes"),
                       html = paste(dm$hide, collapse = "|"))
 
         # -- cleanup
@@ -597,19 +593,19 @@ admin_server <- function(input, output, session) {
 
 
 
-    } else if(event['action'] == "attribute_move"){
+    } else if(event['action'] == "move"){
 
       # ------------------------------------------------------------------------
       # Move attribute
 
-      choices <- c_attributes(yaml, item = event['namespace'])
-      choices <- choices[!choices %in% event['value']]
+      choices <- c_attributes(yaml, item = event$item)
+      choices <- choices[!choices %in% event$id]
 
       # -- dialog
       showModal(
         modalDialog(
           title = "Move Attribute",
-          p("Move attribute", event['value'], "column:"),
+          p("Move attribute", event$id, "column:"),
           radioButtons(inputId = "attribute_move_position", label = "Position", choices = list("before", "after")),
           selectInput(inputId = "attribute_move_target",
                       label = "Attribute",
@@ -625,32 +621,32 @@ admin_server <- function(input, output, session) {
         # -- update config
         config(
           ca_move(config(),
-                  item = event['namespace'],
-                  attribute = event['value'],
+                  item = event$item,
+                  attribute = event$id,
                   where = list(position = input$attribute_move_position,
                                attribute = input$attribute_move_target)))
 
         # -- update UI
         # remove attribute card
         removeUI(selector = paste0("div:has(> #",
-                                   paste(event['namespace'], event['value'], "attribute-card-container", sep = "-")),
+                                   paste(event$item, event$id, "attribute-card-container", sep = "-")),
                  immediate = TRUE)
         # insert attribute card
-        dm <- c_extract(yaml, item = event['namespace'])$data.model
-        at <- c_extract(yaml, item = event['namespace'], attribute = event['value'])
+        dm <- c_extract(yaml, item = event$item)$data.model
+        at <- c_extract(yaml, item = event$item, attribute = event$id)
         insertUI(selector = paste0("div:has(> #",
-                                   paste(event['namespace'], input$attribute_move_target, "attribute-card-container", sep = "-")),
+                                   paste(event$item, input$attribute_move_target, "attribute-card-container", sep = "-")),
                  where = ifelse(input$attribute_move_position == "before", "beforeBegin", "afterEnd"),
                  div(class="bslib-grid-item bslib-gap-spacing html-fill-container",
                      admin_attribute_card(attribute = at,
-                                          item = event['namespace'],
+                                          item = event$item,
                                           hide = dm$hide,
                                           skip = dm$skip,
                                           refresh = dm$refresh)))
 
       }, ignoreInit = TRUE, once = TRUE)
 
-    } else if(event['action'] == "attribute_delete"){
+    } else if(event['action'] == "delete"){
 
       # ------------------------------------------------------------------------
       # Delete attribute
@@ -662,8 +658,8 @@ admin_server <- function(input, output, session) {
           size = "l",
           p(class = "text-danger", "This action cannot be undone!", br(),
             "Attribute parameters & corresponding item column will be lost."),
-          p("Are you sure you want to delete", event['value'], "attribute?", br(),
-            "Type:", paste0("delete-", event['value']), "to confirm."),
+          p("Are you sure you want to delete", event$id, "attribute?", br(),
+            "Type:", paste0("delete-", event$id), "to confirm."),
           textInput(inputId = "attribute_delete_string", label = ""),
           footer = tagList(modalButton(label = "Cancel"),
                            actionButton(inputId = "attribute_delete_confirm", label = "Confirm delete"))))
@@ -671,36 +667,36 @@ admin_server <- function(input, output, session) {
       # -- action
       observeEvent(input$attribute_delete_confirm, {
 
-        req(input$attribute_delete_string == paste0("delete-", event['value']))
+        req(input$attribute_delete_string == paste0("delete-", event$id))
         removeModal()
 
         # -- drop attribute from config
         config(
           ca_drop(config(),
-                  item = event['namespace'],
-                  attribute = event['value']))
+                  item = event$item,
+                  attribute = event$id))
 
         # -- propagate to items
-        x <- items(datamart, config(), item = event['namespace'])
-        x[event['value']] <- NULL
-        item_save(x, ci_connector(yaml, item = event['namespace']))
+        x <- items(datamart, config(), item = event$item)
+        x[event$id] <- NULL
+        item_save(x, ci_connector(yaml, item = event$item))
 
         # -- update UI
         # remove attribute card
         removeUI(selector = paste0("div:has(> #",
-                                   paste(event['namespace'], event['value'],
+                                   paste(event$item, event$id,
                                          "attribute-card-container", sep = "-")),
                  immediate = TRUE)
         # update attribute nb
-        item <- c_extract(config(), item = event['namespace'])
-        shinyjs::html(id = paste0(event['namespace'], "-attribute-nb"),
+        item <- c_extract(config(), item = event$item)
+        shinyjs::html(id = paste0(event$item, "-attribute-nb"),
                       html = admin_attribute_nb(item))
         # update skipped, refreshed & hidden (sidebar)
-        shinyjs::html(id = paste0(event['namespace'], "-skipped-attributes"),
+        shinyjs::html(id = paste0(event$item, "-skipped-attributes"),
                       html = paste(item$data.model$skip, collapse = "|"))
-        shinyjs::html(id = paste0(event['namespace'], "-refreshed-attributes"),
+        shinyjs::html(id = paste0(event$item, "-refreshed-attributes"),
                       html = paste(item$data.model$refresh, collapse = "|"))
-        shinyjs::html(id = paste0(event['namespace'], "-hidden-attributes"),
+        shinyjs::html(id = paste0(event$item, "-hidden-attributes"),
                       html = paste(item$data.model$hide, collapse = "|"))
 
       }, ignoreInit = TRUE)
@@ -716,8 +712,8 @@ admin_server <- function(input, output, session) {
   observeEvent(input$sorting_action, {
 
     # -- get event & item data.model
-    event <- ktools::input_decode(input$sorting_action)
-    dm <- c_extract(config(), item = event['namespace'])$data.model
+    event <- input$sorting_action
+    dm <- c_extract(config(), item = event$id)$data.model
 
     # -- dialog
     showModal(
@@ -748,12 +744,12 @@ admin_server <- function(input, output, session) {
       # -- update & store
       config(
         ci_sort(config(),
-                item = event['namespace'],
+                item = event$id,
                 sort = input$item_ordering))
 
       # -- update UI
-      sort <- c_extract(config(), item = event['namespace'])$data.model$sort
-      shinyjs::html(id = paste0(event['namespace'], "-sorting"),
+      sort <- c_extract(config(), item = event$id)$data.model$sort
+      shinyjs::html(id = paste0(event$id, "-sorting"),
                     html = if(is.null(sort)) "No sorting is defined." else paste(sort, collapse = "|"))
 
     }, ignoreInit = TRUE, once = TRUE)

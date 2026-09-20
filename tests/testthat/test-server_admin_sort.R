@@ -13,7 +13,7 @@ test_that("admin_server sorting works", {
 
     # -- click
     expect_no_error(
-      session$setInputs(sorting_action = "foo-sorting_action_x"))
+      session$setInputs(sorting_action = list(id = "foo")))
 
     # -- fill inputs
     session$setInputs(item_ordering = "date")

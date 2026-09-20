@@ -13,7 +13,7 @@ test_that("admin_server attribute wizard works", {
 
     # -- click
     expect_no_error(
-      session$setInputs(attribute_action = "foo-attribute_create_x"))
+      session$setInputs(attribute_action = list(item = "foo", action = "create")))
 
     # -- invalid values
     session$setInputs(attribute_name = "")

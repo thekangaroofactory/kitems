@@ -13,7 +13,7 @@ test_that("admin_server item desc works", {
 
     # -- click
     expect_no_error(
-      session$setInputs(item_update_description = "foo-update_description"))
+      session$setInputs(item_update_description = list(id = "foo")))
 
     # -- fill input
     session$setInputs(item_update_description_value = "test")
