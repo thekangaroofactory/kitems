@@ -82,7 +82,7 @@ admin_server <- function(input, output, session) {
 
         # -- do migration & return yaml
         new_dm <- dm_migrate(dm)
-        x <- ci_create(id = unlist(strsplit(basename(x), split = "_"))[[1]], path = path)
+        x <- ci_create(id = unlist(strsplit(basename(x), split = "_data_model.rds"))[[1]], path = path)
         x$data.model <- dm_to_yaml(new_dm)
 
         # return
