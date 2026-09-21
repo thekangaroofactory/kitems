@@ -6,8 +6,9 @@ name: test-coverage
 
 jobs:
   test-coverage:
-    if: contains(github.event.comment.html_url, '/issue/')
-    if: contains(github.event.comment.body, '/run QA')
+    if: |
+      contains(github.event.comment.html_url, '/issue/') ||
+      contains(github.event.comment.body, '/run QA')
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
