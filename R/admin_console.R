@@ -194,7 +194,7 @@ admin_server <- function(input, output, session) {
   # Home tab
 
   # -- outputs (sidebar)
-  output$yaml_file <- renderText(if(!is.null(config())) name("_kitems.yml", url = T) else "")
+  output$yaml_file <- renderText(if(!is.null(config())) name(what = "config", url = T) else "")
   output$yaml_message <- renderUI(admin_yaml_message(config()))
 
   # -- outputs (main)
