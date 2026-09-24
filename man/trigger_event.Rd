@@ -15,18 +15,31 @@ trigger_event(
 
 \item{type}{the name of the action to be performed (dialog or task).}
 
-\item{values}{optional values to create, update or delete an item.}
+\item{values}{optional list of values to create, update or delete an item.}
 }
 \value{
-An event object (list).
+A list.
 }
 \description{
 Helper function to create events to be passed to kitems module server
 with the \code{trigger} argument.
 }
+\details{
+The function also adds an event id to make it unique (otherwise sending
+two times the same request would fail).
+
+For more details see this vignette:
+\code{vignette("workflows", package = "kitems")}
+}
 \examples{
 \dontrun{
-# fire create dialog event
+# create dialog event
 trigger_event()
+
+# delete item event (without dialog)
+trigger_event(workflow = "delete", type = "task", values = list(id = 1234))
 }
+}
+\seealso{
+\code{\link[=kitems]{kitems()}}
 }

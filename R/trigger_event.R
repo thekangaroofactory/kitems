@@ -8,15 +8,27 @@
 #'
 #' @param workflow the name of the workflow (create, update or delete).
 #' @param type the name of the action to be performed (dialog or task).
-#' @param values optional values to create, update or delete an item.
+#' @param values optional list of values to create, update or delete an item.
 #'
-#' @returns An event object (list).
+#' @details
+#' The function also adds an event id to make it unique (otherwise sending
+#' two times the same request would fail).
+#'
+#' For more details see this vignette:
+#' \code{vignette("workflows", package = "kitems")}
+#'
+#' @seealso [kitems()]
+#'
+#' @returns A list.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' # fire create dialog event
+#' # create dialog event
 #' trigger_event()
+#'
+#' # delete item event (without dialog)
+#' trigger_event(workflow = "delete", type = "task", values = list(id = 1234))
 #' }
 
 trigger_event <- function(workflow = c("create", "update", "delete"), type = c("dialog", "task"), values = NULL){
@@ -31,7 +43,9 @@ trigger_event <- function(workflow = c("create", "update", "delete"), type = c("
       stop("values should be passed for this type of event")
 
   # -- build default event
+  # adding event_id to make event unique (otherwise reactive won't update)
   event <- list(
+    event_id = ktools::uuid(),
     workflow = workflow,
     type = type)
 

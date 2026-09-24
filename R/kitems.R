@@ -5,341 +5,264 @@
 #' @description
 #' This is the main component of the package.
 #'
-#' @param id the id to be used for the module server instance.
-#' @param path a path where data model and items are stored.
-#' @param autosave a logical whether the item auto save should be activated or not (default = `TRUE`).
-#' @param admin a logical indicating if the admin module server should be launched (default = `FALSE`).
-#' @param options a list of options (see details).
-#' @param trigger a reactive object to pass workflow events to the module (see details).
-#' @param filter a reactive object to pass filters to the module (see details).
+#' @param id the unique id of the module server instance.
+#' @param path where the YALM config and items are stored (see details).
+#' @param trigger an optional reactive object to pass workflow events (see details).
+#' @param filter an optional reactive object to pass filter events (see details).
+#' @param options an optional list of options (see details).
 #'
-#' @import shiny shinydashboard shinyWidgets
+#' @import shiny
 #' @importFrom ktools catl
+#' @importFrom rlang .data
+#'
 #' @export
 #'
-#' @returns the module server function returns a list of the reactive references that are accessible outside the module.
-#' All elements except `id` & `url` are references to reactive values.
-#' - id = the `id` of the module (same as the input argument)
-#' - url = the url of the items
-#' - items = the reference of the items reactive
-#' - data_model = the reference of the data model reactive
-#' - filtered_items = the reference of the filtered items reactive
-#' - selected_items = the reference of the selected items (ids)
-#' - clicked_column = the reference of the clicked column reactive
+#' @returns a list
+#'
+#' Details about the elements of this list:
+#' - id = the `id` of the module (same as the input)
+#' - items = the reference of the items reactive object
+#' - data_model = a list, describing the item's data model
+#' - filtered_items = the reference of the filtered items reactive object
+#' - selected_items = the reference of the selected items (ids) reactive object
+#' - clicked_column = the reference of the clicked column reactive object
 #' - filters = the reference of the reactive list with filter expressions.
 #'
 #' @details
-#'
-#' If autosave is `FALSE`, the `item_save()` function should be used to make the data persistent.
-#' To make the data model persistent, use \link[base]{saveRDS} function. The file name should be
-#' consistent with the output of \link[kitems]{dm_name} function used with \code{id} plus .rds extension.
-#'
-#' When admin is `FALSE`, \link[kitems]{admin_widget} will return an 'empty' layout (tabs with no content)
-#' It is expected that this function will not be used when admin = `FALSE`.
+#' Since version 0.8.0, the recommended way to define the `path` argument is
+#' to set the `R_KITEMS_PATH` environment variable.
+#' If directly passed as an argument value, a warning will be raised at the console.
 #'
 #' Behavior of the module server can be tuned using a list of options:
-#' - `shortcut` option is a logical to activate shortcut mechanism within item forms.
+#' - `autosave` is a logical whether the item auto save should be activated or not (default = `TRUE`)
+#' - `notify` is a logical if Shiny notifications should be displayed (default = `TRUE`)
+#' Partial lists are supported, with missing elements getting the default value.
+#'
+#' If autosave option is `FALSE`, the `item_save()` function should be used
+#' to make the data persistent.
 #'
 #' Triggers are the way to send events for the module to execute dedicated actions.
-#' `trigger` must be a reactive (or `NULL`, the default). An event is defined as a named list of the form
-#' `list(workflow = "create", type = "dialog")` or `list(workflow = "create", type = "task", values = list(...))`
+#' `trigger` must be a reactive (or `NULL`, the default).
+#' An event is defined as a named list (see examples) and may be created
+#' using the [trigger_event()] function.
 #' If `NULL`, the trigger manager will not be initialized.
 #'
 #' `filter` is a reactive object reference to pass filter expression(s) to the module server
-#' A filter is defined as a named list: `list(layer = c("pre", "main"), expr = ...)`.
+#' A filter is defined as a named list (see examples).
+#' It may be created using the [filter_event()] helper function.
 #' If `NULL`, the filter manager will not be initialized.
+#'
+#' @seealso [trigger_event()], [filter_event()]
 #'
 #' @examples
 #' \dontrun{
-#' kitems(id = "mydata", path = "path/to/my/data", autosave = TRUE)
+#' # baseline:
+#' # launch module server to handle item group named "foo"
+#' kitems(id = "foo")
+#'
+#' # read only:
+#' kitems(id = "foo", options = list(autosave = FALSE))
+#'
+#' # trigger:
+#' # pass workflow events to the module server
+#' trigger <- reactiveVal()
+#' kitems(id = "foo", trigger = trigger)
+#'
+#' # fire the create item dialog:
+#' trigger(list(workflow = "create", type = "dialog"))
+#'
+#' # fire an item creation (no dialog):
+#' # assuming 'foo' item has a 'name' character attribute
+#' trigger(list(workflow = "create", type = "task", values = list(name = "test")))
+#'
+#' # filter:
+#' # pass filter events to the module server
+#' filter <- reactiveVal()
+#' kitems(id = "foo", filter = filter)
+#'
+#' # apply filter at the pre-filtering layer
+#' # assuming item 'foo' has a 'total' numeric attribute
+#' filter(list(layer = "pre", expr = total > 10))
 #' }
 
 # -- Shiny module server logic -------------------------------------------------
-kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, filter = NULL, options = list(shortcut = FALSE)) {
+kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
+                   trigger = NULL, filter = NULL,
+                   options = list(autosave = TRUE,
+                                  notify = TRUE)) {
 
   moduleServer(id, function(input, output, session) {
 
     # //////////////////////////////////////////////////////////////////////////
-    # -- Check parameters ----
+    # -- Warm up ----
 
-    # -- check autosave & admin
-    stopifnot("autosave argument must be a logical" = is.logical(autosave))
-    stopifnot("admin argument must be a logical" = is.logical(admin))
+    # trace level
+    if(Sys.getenv("R_KITEMS_DEBUG") != "")
+      ktools::trace_level(as.numeric(Sys.getenv("R_KITEMS_DEBUG")))
 
-
-    # -- check trigger
-    if(!is.null(trigger))
-      stopifnot("trigger must be a reactive object" = is.reactive(trigger))
-
-
-    # -- check filter
-    if(!is.null(filter))
-      stopifnot("filter must be a reactive object" = is.reactive(filter))
-
-
-    # -- check options
-    stopifnot("options argument must be a list" = is.list(options))
-
-    # -- helper: most probably expected to go into {ktools}
-    helper <- function(fun, arg, value){
-      def_val <- eval(formals(fun)[[arg]])
-      missing <- def_val[!names(def_val) %in% names(value)]
-      value <- value[names(value) %in% names(def_val)]
-      c(value, missing)}
-
-    # -- check elements in option list
-    options <- helper(fun = kitems, arg = "options", value = options)
-    stopifnot("shortcut option must be a logical" = is.logical(options$shortcut))
-
-
-    # //////////////////////////////////////////////////////////////////////////
-    # -- Init environment ----
-
-    ## -- Declare config parameters ----
-
-    # -- Build log pattern
+    # log pattern
     MODULE <- paste0("[", id, "]")
     catl(MODULE, "Starting kitems module server...", debug = 1)
 
-    # -- Get namespace
+    # namespace
     ns <- session$ns
 
 
-    ## -- Declare reactive objects ----
+    # //////////////////////////////////////////////////////////////////////////
+    # -- Check path ----
 
-    # -- Internal create workflow triggers
-    trigger_create_dialog <- reactiveVal(NULL)
-    trigger_create_values <- reactiveVal(NULL)
-
-    # -- Internal update workflow triggers
-    trigger_update_dialog <- reactiveVal(NULL)
-    trigger_update_values <- reactiveVal(NULL)
-
-    # -- Internal delete workflow triggers
-    trigger_delete_dialog <- reactiveVal(NULL)
-    trigger_delete_values <- reactiveVal(NULL)
-
-    # -- Internal filter triggers
-    trigger_filter_pre <- reactiveVal(NULL)
-    trigger_filter_main <- reactiveVal(NULL)
+    check_path(path)
 
 
     # //////////////////////////////////////////////////////////////////////////
-    # -- Initialize data model and items ----
+    # -- Check parameters ----
 
-    # -- Notify progress
+    # trigger
+    if(!is.null(trigger))
+      stopifnot("trigger must be a reactive object" = is.reactive(trigger))
+
+    # filter
+    if(!is.null(filter))
+      stopifnot("filter must be a reactive object" = is.reactive(filter))
+
+    # options
+    stopifnot("options argument must be a list" = is.list(options))
+
+    # elements in options
+    options <- ktools::match.option(fun = kitems, arg = "options", value = options)
+    stopifnot("autosave option must be a logical" = is.logical(options$autosave))
+
+
+    # //////////////////////////////////////////////////////////////////////////
+    # -- Init reactives ----
+
+    # internal workflow triggers
+    if(!is.null(trigger)){
+      trigger_create_dialog <- reactiveVal(NULL)
+      trigger_create_values <- reactiveVal(NULL)
+      trigger_update_dialog <- reactiveVal(NULL)
+      trigger_update_values <- reactiveVal(NULL)
+      trigger_delete_dialog <- reactiveVal(NULL)
+      trigger_delete_values <- reactiveVal(NULL)}
+
+    # internal filter triggers
+    if(!is.null(filter)){
+      trigger_filter_pre <- reactiveVal(NULL)
+      trigger_filter_main <- reactiveVal(NULL)}
+
+
+    # //////////////////////////////////////////////////////////////////////////
+    # -- Init config & items ----
+
+    # -- item name / id
+    # to allow arg skip in grammar function calls
+    item <- id
+
+    # show progress
     withProgress(message = MODULE, value = 0, {
 
-      ## -- Check path ---------------------------------------------------------
+      # init progress
       incProgress(0/4, detail = "Init")
 
-      # -- Build url from module id
-      dm_url <- file.path(path, paste0(dm_name(id), ".rds"))
-      items_url <- file.path(path, paste0(items_name(id), ".csv"))
+      ## -- Load & check config ------------------------------------------------
 
-      # -- Check folder structure
-      # item files are stored in a dedicated folder #356
-      if(basename(path) != id){
+      # read file
+      catl(MODULE, "Reading YAML config", level = 1)
+      config <- config_read(path)
+      if(is.null(config))
+        stop("No _kitems.yml configuration file found.\nCheck provided path.")
 
-        # -- update path
-        path <- file.path(path, id)
-        catl(MODULE, "Update path =", path)
+      # -- check version
+      # config version must be same as package
+      if(config$version != utils::packageVersion("kitems")){
 
-        # -- check updated path
-        if(!dir.exists(path))
-          dir.create(path)
+        # modal
+        showModal(
+          modalDialog(
+            title = "Kitems Version",
+            p("Kitems config requires an update since package version is different."),
+            p("Run kitems::admin() to fix it."),
+            footer = actionButton(inputId = ns("dm_version_warning"), label = "Close app")))
 
-        # -- Build new url
-        new_dm_url <- file.path(path, paste0(dm_name(id), ".rds"))
-        new_items_url <- file.path(path, paste0(items_name(id), ".csv"))
+        # listen to modal
+        observeEvent(input$dm_version_warning, stopApp(), once = TRUE)}
 
-        # -- check for dm migration
-        if(file.exists(dm_url)){
-          catl(MODULE, "Moving data model file to updated path", debug = 1)
-          res <- file.copy(dm_url, new_dm_url, overwrite = FALSE, copy.date = TRUE)
-          if(res) unlink(dm_url) else warning("Copy failed, check folder")}
-
-        # -- check for items migration
-        if(file.exists(items_url)){
-          catl(MODULE, "Moving items file to updated path", debug = 1)
-          res <- file.copy(items_url, new_items_url, overwrite = FALSE, copy.date = TRUE)
-          if(res) unlink(items_url) else warning("Copy failed, check folder")}
-
-        # -- Update url & cleanup
-        dm_url <- new_dm_url
-        items_url <- new_items_url
-        rm(new_dm_url, new_items_url)
-
-      } else {
-
-        # -- Create path (to avoid connection problems if missing folder)
-        if(!dir.exists(path))
-          dir.create(path)}
+      # Increment progress
+      incProgress(1/4, detail = "Read items")
 
 
-      ## -- Read data model ----------------------------------------------------
+      ## -- Read the data (items) ----------------------------------------------
 
-      # -- Init (non persistent object)
-      init_dm <- NULL
+      # connector
+      connector <- config |> ci_connector(item = id)
 
-      catl(MODULE, "Checking if data model file exists")
-      catl("- path =", dirname(dm_url), level = 2)
-      catl("- file =", basename(dm_url), level = 2)
+      if(is.null(connector)){
+        showModal(modalDialog(title = "kitems", "Item", id, "does not exist!"))
+        stop("There is no definition for item ", crayon::blue(id), " in the YAML config!", call. = FALSE)}
 
-      # -- Check url
-      if(file.exists(dm_url)){
+      # get the data
+      catl(MODULE, "Reading items", level = 1)
+      init_items <-item_load(connector = connector,
+                             col.classes = ci_classes(config, item))
 
-        catl(MODULE, "Reading data model from file")
-        init_dm <- readRDS(dm_url)
-        catl("- output dim =", dim(init_dm))
-
-        # -- Data model version
-        # note: only when admin == FALSE, otherwise admin console
-        # would stop when migration is needed!
-        if(!admin){
-
-          # -- check
-          rv <- dm_version(init_dm)
-
-          # -- when migration is needed
-          if(rv['migration']){
-
-            # -- display message
-            showModal(
-              modalDialog(
-                title = "Data Model",
-                p("Data model requires a migration"),
-                p("Reason:", rv['comment']),
-                p("Run admin() to fix it."),
-                footer = actionButton(inputId = ns("dm_version_warning"), label = "Close app")))
-
-            # -- listen to modal close button
-            observeEvent(input$dm_version_warning, stopApp())}}
-
-      } else {
-
-        catl(">> No data model file found.")
-
-      }
-
-      # -- Increment the progress bar, and update the detail text.
-      incProgress(1/4, detail = "Read data model")
+      # increment progress
+      incProgress(2/4, detail = "Check items")
 
 
-      # -- Read the data (items) ----------------------------------------------
+      ## -- Check items integrity ----------------------------------------------
 
-      # -- Init (non persistent object)
-      init_items <- NULL
+      if(!is.null(init_items)){
+        catl(MODULE, "Checking items")
 
-      # -- Check for NULL data model (then no reason to try loading)
-      if(!is.null(init_dm))
+        rc <- init_items |> check(config, item)
+        catl("- report has length", length(rc), level = 2)
 
-        # path = NULL as temporary workaround (it's contained in items_url)
-        init_items <- item_load(col.classes = dm_colClasses(init_dm),
-                                file = items_url,
-                                path = NULL)
+        if(length(rc))
+            # -- when interactive
+            if(isRunning()){
+              showModal(
+                modalDialog(
+                  title = "Items Integrity",
+                  p("Items require", length(rc), "recovery action(s)."),
+                  p("Run admin() to fix it."),
+                  footer = actionButton(inputId = ns("close_app"), label = "Close app")))
+              observeEvent(input$close_app, stopApp(), once = TRUE)}}
 
-      # -- Increment the progress bar, and update the detail text.
-      incProgress(2/4, detail = "Read items")
-
-
-      # -- Check data model integrity -----------------------------------------
-
-      # -- Check for NULL data model + data.frame
-      if(!is.null(init_dm) & !is.null(init_items)){
-
-        catl(MODULE, "Checking data model integrity")
-        result <- dm_integrity(data.model = init_dm, items = init_items, template = TEMPLATE_DATA_MODEL)
-
-        # -- Check feedback (otherwise value is TRUE)
-        if(is.data.frame(result)){
-
-          # -- Update data model & save
-          init_dm <- result
-          if(autosave){
-            saveRDS(init_dm, file = dm_url)
-            catl(MODULE, "Data model saved")}
-
-          # -- Reload data with updated data model
-          # path = NULL as temporary workaround (it's contained in items_url)
-          catl(MODULE, "Reloading the item data with updated data model")
-          init_items <- item_load(col.classes = dm_colClasses(init_dm),
-                                  file = items_url,
-                                  path = NULL)
-
-        }}
+      # Increment progress
+      incProgress(3/4, detail = "Wrap everything")
 
 
-      # -- Check items integrity -----------------------------------------------
+      # -- Store into reactives ------------------------------------------------
 
-      # -- Check classes vs data.model
-      if(!is.null(init_dm) & !is.null(init_items)){
+      # data model
+      # item config up to the data.model level
+      k_data_model <- c_extract(config, item = item)$data.model
 
-        catl(MODULE, "Checking items classes integrity")
-        init_items <- item_integrity(items = init_items,
-                                     data.model = init_dm)}
-
-      # Increment the progress bar, and update the detail text.
-      incProgress(3/4, detail = "Integrity checked")
-
-
-      # -- Store into reactive values ------------------------------------------
-
-      # -- Store data model (either content of the RDS or the server function input)
-      k_data_model <- reactiveVal(init_dm)
-      rm(init_dm)
-
-      # -- Store items
+      # items
       k_items <- reactiveVal(init_items)
       rm(init_items)
 
-      # Increment the progress bar, and update the detail text.
-      incProgress(4/4, detail = "Load data done")
+      # increment progress
+      incProgress(4/4, detail = "Load items done")
 
     }) #end withProgress
 
 
     # //////////////////////////////////////////////////////////////////////////
     # -- Auto save ----
+    # only for the items (config is managed in Admin Console)
 
-    ## -- Data model ----
-
-    # -- Check parameter & observe data model
-    if(autosave)
-      observeEvent(k_data_model(), {
-
-        # -- secure #596
-        req(is.data.frame(k_data_model()))
-
-        # -- Write & notify
-        saveRDS(k_data_model(), file = dm_url)
-        catl(MODULE, "[EVENT] Data model has been (auto) saved")
-
-      }, ignoreInit = TRUE)
-
-
-    ## -- Items ----
-
-    # -- Check parameter & observe items
-    if(autosave)
+    # -- declare listener (conditional)
+    if(options$autosave)
       observeEvent(k_items(), {
 
-        # -- Write
-        item_save(data = k_items(), file = items_url)
+        # -- secure #596
+        req(is.data.frame(k_items()) || is.null(k_items()))
 
-        # -- Notify
+        item_save(data = k_items(), connector = connector)
         catl(MODULE, "[EVENT] Item list has been (auto) saved")
 
-      }, ignoreInit = TRUE)
-
-
-    # //////////////////////////////////////////////////////////////////////////
-    # -- Item workflows ----
-
-    ## -- declare shortcut observer ----
-    if(options$shortcut)
-      observeEvent(input$shortcut_trigger,
-                   attribute_input_update(k_data_model(), input$shortcut_trigger, MODULE))
+      }, ignoreNULL = FALSE, ignoreInit = TRUE)
 
 
     # //////////////////////////////////////////////////////////////////////////
@@ -426,65 +349,68 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
     # //////////////////////////////////////////////////////////////////////////
     ## -- Create item workflow ----
 
-    # -- Declare: actionButton output
+    # -- actionButton
     output$item_create_btn <- renderUI(
 
       # -- Check data model #290
-      if(!is.null(k_data_model()))
+      if(!is.null(k_data_model))
         actionButton(inputId = ns("item_create"),
                      label = "Create"))
 
 
-    # -- Observe: fire dialog from UI
-    observeEvent(input$item_create, {
+    # -- dialog from button
+    observe({
 
-      catl(MODULE, "[Event] Create item button")
+      catl(MODULE, "[Event] Show create item dialog (button)")
 
       # -- show create dialog
-      showModal(
-        item_dialog(data.model = k_data_model(),
-                    items = k_items(),
-                    shortcut = options$shortcut,
-                    ns = ns))})
+      config |>
+        yaml_to_dm("name", "type", "default", "values") |>
+        dplyr::filter(name %in% included(config, item)) |>
+        default() |>
+        form(items = k_items()) |>
+        dialog(workflow = "create") |>
+        showModal()
+
+    }) |> bindEvent(input$item_create, ignoreInit = TRUE)
 
 
-    # -- Observe: fire dialog from trigger
+    # -- dialog from trigger
     if(!is.null(trigger))
       observe({
 
-        catl(MODULE, "[Event] Create item dialog trigger")
+        catl(MODULE, "[Event] Show create item dialog (trigger)")
 
         # -- show create dialog
-        showModal(
-          item_dialog(data.model = k_data_model(),
-                      items = k_items(),
-                      shortcut = options$shortcut,
-                      ns = ns))
+        config |>
+          yaml_to_dm("name", "type", "default", "values") |>
+          dplyr::filter(name %in% included(config, item)) |>
+          default() |>
+          form(items = k_items()) |>
+          dialog(workflow = "create") |>
+          showModal()
 
-      }) |> bindEvent(trigger_create_dialog())
+      }) |> bindEvent(trigger_create_dialog(), ignoreInit = TRUE)
 
 
-    # -- Observe: create item from dialog values
+    # -- create from dialog
     observeEvent(input$item_create_confirm, {
 
       catl(MODULE, "[Event] Confirm create dialog item")
       removeModal()
 
-      # -- get named list of input values
-      catl("- Get list of input values")
-      values <- item_input_values(input, dm_colClasses(k_data_model()))
-
       # -- Secure workflow
       tryCatch({
 
-        # -- store new item table
-        k_items(
-          rows_insert(items = k_items(),
-                      values = values,
-                      data.model = k_data_model()))
+        # -- insert & store
+        k_items(input |>
+                  extract(colClasses = ci_classes(config, item)) |>
+                  validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg", "values"),
+                           items = k_items()) |>
+                  insert(items = k_items()))
 
         # -- notify
-        if(shiny::isRunning())
+        if(options$notify)
           showNotification(paste(MODULE, "Item created."), type = "message")
 
       },
@@ -494,7 +420,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
         # -- print & notify
         warning(paste("Item has not been created. \n error =", e$message))
-        if(shiny::isRunning())
+        if(options$notify)
           showNotification(paste(MODULE, "Item has not been created."), type = "error")
 
       })
@@ -502,7 +428,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
     })
 
 
-    # -- Observe: create item from trigger values
+    # -- create from trigger
     if(!is.null(trigger))
       observe({
 
@@ -512,10 +438,11 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
         tryCatch({
 
           # -- store new item table
-          k_items(
-            rows_insert(items = k_items(),
-                        values = trigger_create_values(),
-                        data.model = k_data_model()))
+          k_items(trigger_create_values() |>
+                    prepare(config = config) |>
+                    validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg", "values"),
+                             items = k_items()) |>
+                    insert(items = k_items()))
 
           # -- notify
           catl(MODULE, "Item(s) created")},
@@ -539,7 +466,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
     # //////////////////////////////////////////////////////////////////////////
     ## -- Update item workflow ----
 
-    # -- Declare: actionButton output
+    # -- actionButton
     output$item_update_btn <- renderUI(
 
       # -- check item selection + single row
@@ -550,25 +477,26 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
                      label = "Update"))
 
 
-    # -- Observe: fire update dialog from UI
+    # -- dialog from button
     observeEvent(input$item_update, {
 
       catl(MODULE, "[Event] Update item button")
 
-      # -- Get selected item
-      item <- k_items()[k_items()$id == selected_items(), ]
+      # selected item
+      s_item <- k_items()[k_items()$id == selected_items(), ]
 
-      # -- show update dialog
-      showModal(
-        item_dialog(data.model = k_data_model(),
-                    items = k_items(),
-                    workflow = "update",
-                    item = item,
-                    shortcut = options$shortcut,
-                    ns = ns))})
+      # update dialog
+      s_item |>
+        as_default(data.model = yaml_to_dm(config, "name", "type", "default", "values")) |>
+        dplyr::filter(name %in% included(config, item)) |>
+        form(items = k_items()) |>
+        dialog(workflow = "update") |>
+        showModal()
+
+      })
 
 
-    # -- Observe: fire update dialog from trigger
+    # -- dialog from trigger
     if(!is.null(trigger))
       observe({
 
@@ -578,22 +506,21 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
         req(length(trigger_update_dialog()) == 1)
 
         # -- Get selected item
-        item <- k_items()[k_items()$id == trigger_update_dialog(), ]
+        s_item <- k_items()[k_items()$id == trigger_update_dialog(), ]
 
         # -- show update dialog
-        showModal(
-          item_dialog(data.model = k_data_model(),
-                      items = k_items(),
-                      workflow = "update",
-                      item = item,
-                      shortcut = options$shortcut,
-                      ns = ns))
+        s_item |>
+          as_default(data.model = yaml_to_dm(config, "name", "type", "default", "values")) |>
+          dplyr::filter(name %in% included(config, item)) |>
+          form(items = k_items()) |>
+          dialog(workflow = "update") |>
+          showModal()
 
       }) |> bindEvent(trigger_update_dialog(),
                       ignoreInit = TRUE)
 
 
-    # -- Observe: update item from dialog
+    # -- update from dialog
     observeEvent(input$item_update_confirm, {
 
       # -- close modal
@@ -602,11 +529,11 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
       # -- get named list of input values
       catl("- Get list of input values")
-      values <- item_input_values(input, dm_colClasses(k_data_model()))
+      values <- extract(input, ci_classes(config, item))
 
       # -- force id to update
       # as it's missing in the dialog input, it should be NULL in values
-      values$id <- if(!is.null(trigger_update_dialog()))
+      values$id <- if(!is.null(trigger) && !is.null(trigger_update_dialog()))
         trigger_update_dialog()
       else
         selected_items()
@@ -616,12 +543,14 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
         # -- store updated item list
         k_items(
-          rows_update(items = k_items(),
-                      values = values,
-                      data.model = k_data_model()))
+          values |>
+            validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg", "values"),
+                     items = k_items(),
+                     update = TRUE) |>
+            update(items = k_items()))
 
         # -- notify
-        if(shiny::isRunning())
+        if(options$notify)
           showNotification(paste(MODULE, "Item updated."), type = "message")},
 
         # -- failed
@@ -629,7 +558,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
           # -- print & notify
           warning(paste("Item update has failed. \n error =", e$message))
-          if(shiny::isRunning())
+          if(options$notify)
             showNotification(paste(MODULE, "Item has not been updated."), type = "error")
 
         })
@@ -637,13 +566,13 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
       # -- reset trigger
       # otherwise same object cannot be updated twice
       # it can't be reset before otherwise id will be lost
-      if(!is.null(trigger_update_dialog()))
+      if(!is.null(trigger) && !is.null(trigger_update_dialog()))
         trigger_update_dialog(NULL)
 
     })
 
 
-    # -- Observe: update item from trigger values
+    # -- update from trigger
     if(!is.null(trigger))
       observe({
 
@@ -652,9 +581,12 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
           # -- store updated item list
           k_items(
-            rows_update(items = k_items(),
-                        values = trigger_update_values(),
-                        data.model = k_data_model()))
+            trigger_update_values() |>
+              prepare(config = config, update = TRUE) |>
+              validate(data.model = yaml_to_dm(config, "name", "type", "default", "class.arg", "values"),
+                       items = k_items(),
+                       update = TRUE) |>
+              update(items = k_items()))
 
           # -- notify
           catl(MODULE, "Item(s) updated")},
@@ -675,7 +607,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
     # //////////////////////////////////////////////////////////////////////////
     ## -- Delete item workflow ----
 
-    # -- Declare: actionButton output
+    # -- actionButton
     output$item_delete_btn <- renderUI(
 
       # -- check item selection
@@ -686,25 +618,25 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
                      label = "Delete"))
 
 
-    # -- Observe: fire dialog from actionButton
+    # -- dialog
     observeEvent(input$item_delete, {
 
       catl(MODULE, "[Event] Delete item button")
-      showModal(item_dialog(workflow = "delete", ns = ns))})
+      showModal(dialog(workflow = "delete"))})
 
 
-    # -- Observe: fire dialog from trigger
+    # -- dialog from trigger
     if(!is.null(trigger))
       observe({
 
         catl(MODULE, "[Event] Delete item dialog trigger")
-        showModal(item_dialog(workflow = "delete", ns = ns))
+        showModal(dialog(workflow = "delete"))
 
       }) |> bindEvent(trigger_delete_dialog(),
                       ignoreInit = TRUE)
 
 
-    # -- Observe: delete item from actionButton
+    # -- delete from dialog
     observeEvent(input$item_delete_confirm, {
 
       catl(MODULE, "[Event] Confirm delete item(s) button")
@@ -713,7 +645,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
       removeModal()
 
       # -- get selected items (ids)
-      ids <- if(!is.null(trigger_delete_dialog()))
+      ids <- if(!is.null(trigger) && !is.null(trigger_delete_dialog()))
         trigger_delete_dialog()
       else
         selected_items()
@@ -723,30 +655,30 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
         # -- store new items table
         k_items(
-          rows_delete(items = k_items(),
+          delete(items = k_items(),
                       id = ids))
 
-        if(shiny::isRunning())
+        if(options$notify)
           showNotification(paste(MODULE, "Item(s) deleted."), type = "message")},
 
         # -- failed
         error = function(e) {
 
           warning(paste("Item(s) has not been deleted. \n error =", e$message))
-          if(shiny::isRunning())
+          if(options$notify)
             showNotification(paste(MODULE, "Item(s) not deleted."), type = "error")
 
         })
 
       # -- reset trigger
       # can't be performed before otherwise ids are lost
-      if(!is.null(trigger_delete_dialog()))
+      if(!is.null(trigger) && !is.null(trigger_delete_dialog()))
         trigger_delete_dialog(NULL)
 
     })
 
 
-    # -- Observe: delete item from trigger
+    # -- delete from trigger
     if(!is.null(trigger))
       observe({
 
@@ -762,17 +694,17 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
           # -- store new items table
           k_items(
-            rows_delete(items = k_items(),
+            delete(items = k_items(),
                         id = ids))
 
-          if(shiny::isRunning())
+          if(options$notify)
             showNotification(paste(MODULE, "Item(s) deleted."), type = "message")},
 
           # -- failed
           error = function(e) {
 
             warning(paste("Item(s) has not been deleted. \n error =", e$message))
-            if(shiny::isRunning())
+            if(options$notify)
               showNotification(paste(MODULE, "Item(s) not deleted."), type = "error")
 
           })
@@ -798,7 +730,7 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
       observe({
 
         # -- check data model
-        req(hasDate(k_data_model()))
+        req(has_date_attribute(config) && !is.null(prefiltered_items()))
 
         catl(MODULE, "Update date sliderInput")
         catl("- strategy =", input$date_slider_strategy, level = 2)
@@ -806,8 +738,8 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
         # -- Get min/max
         if(nrow(prefiltered_items()) > 0){
 
-          min <- min(prefiltered_items()$date)
-          max <- max(prefiltered_items()$date)
+          min <- min(prefiltered_items()$date, na.rm = T)
+          max <- max(prefiltered_items()$date, na.rm = T)
 
         } else {
 
@@ -819,9 +751,10 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
         # -- Set value
         # implement this_year strategy by default #211
         # keep this year after item is added #223 & #242
-        value <- if(is.null(input$date_slider_strategy) || input$date_slider_strategy == "this-year")
-          ktools::date_range(min, max, type = "this_year")
-        else
+        value <- if(is.null(input$date_slider_strategy) || input$date_slider_strategy == "this-year"){
+          x <- ktools::filter_date(prefiltered_items(), unit = "year")$date
+          c(min(x), max(x))
+        } else
           value <- input$date_slider
 
         # -- date slider
@@ -842,7 +775,8 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
     prefiltered_items <- reactive(
 
       # -- check custom filter
-      if(!is.null(trigger_filter_pre())){
+      # only when filter active
+      if(!is.null(filter) && !is.null(trigger_filter_pre())){
 
         # -- apply filter
         catl(MODULE, "Apply custom pre-filtering on items")
@@ -850,15 +784,15 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
         # -- test must be done out of the filter() function #593
         # otherwise multiple confitions does not work
         items <- if(is.list(trigger_filter_pre()))
-          k_items() %>% dplyr::filter(!!!trigger_filter_pre())
+          k_items() |> dplyr::filter(!!!trigger_filter_pre())
         else
-          k_items() %>% dplyr::filter(!!trigger_filter_pre())
+          k_items() |> dplyr::filter(!!trigger_filter_pre())
         catl("- ouput dim =", dim(items), level = 2)
 
         # -- return
         items
 
-      } else k_items()) |> bindEvent(k_items(), trigger_filter_pre())
+      } else k_items()) |> bindEvent(k_items(), if(!is.null(filter)) trigger_filter_pre())
 
 
     ## -- Main-filtering layer ----
@@ -867,21 +801,21 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
       # -- check for empty items (NULL or 0 obs.)
       req(prefiltered_items(), nrow(prefiltered_items()) > 0)
-
       catl(MODULE, "Apply custom filter(s) on items")
 
       # -- check date slider
-      date_expr <- if(hasDate(k_data_model()) && !is.null(input$date_slider)){
+      # note: force everything to be a Date #615
+      filter_exprs <- if(has_date_attribute(config) && !is.null(input$date_slider)){
         catl("- Date slider =", input$date_slider, level = 2)
-        dplyr::expr(date >= input$date_slider[1] & date <= input$date_slider[2])}
+        dplyr::expr(as.Date(date) >= as.Date(input$date_slider[1]) & as.Date(date) <= as.Date(input$date_slider[2]))}
 
       # -- check custom filter
-      if(!is.null(trigger_filter_main()))
+      if(!is.null(filter) && !is.null(trigger_filter_main())){
         catl("- Custom filter =", as.character(trigger_filter_main()), level = 2)
 
-      # -- merge expression(s)
-      # NULLs will be supported, output is NULL, one expr or several exprs
-      filter_exprs <- c(trigger_filter_main(), date_expr)
+        # -- merge expression(s)
+        # NULLs will be supported, output is NULL, one expr or several exprs
+        filter_exprs <- c(trigger_filter_main(), filter_exprs)}
 
       # -- init
       items <- prefiltered_items()
@@ -889,29 +823,27 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
       # -- apply filter(s)
       if(!is.null(filter_exprs)){
         # -- test must be done out of the filter() function #601
-        # otherwise multiple confitions does not work
+        # otherwise multiple conditions does not work
         items <- if(is.list(filter_exprs))
-          k_items() %>% dplyr::filter(!!!filter_exprs)
+          k_items() |> dplyr::filter(!!!filter_exprs)
         else
-          k_items() %>% dplyr::filter(!!filter_exprs)
+          k_items() |> dplyr::filter(!!filter_exprs)
         catl("- ouput dim =", dim(items), level = 2)}
 
       # -- Apply ordering
-      dm <- k_data_model()
-      if(any(!is.na(dm$sort.rank)))
-        items <- item_sort(items, dm)
+      if(!is.null(organized(config)))
+        items <- adjust(items, config)
 
       # -- Return
       items
 
-    }) |> bindEvent(prefiltered_items(), trigger_filter_main(), input$date_slider, k_data_model())
+    }) |> bindEvent(prefiltered_items(), if(!is.null(filter)) trigger_filter_main(), input$date_slider)
 
 
     # //////////////////////////////////////////////////////////////////////////
     # -- Filtered view ----
 
-    ## -- Declare view ----
-    output$filtered_view <- DT::renderDT(item_mask(k_data_model(), filtered_items()),
+    output$filtered_view <- DT::renderDT(decorate(reveal(filtered_items(), config)),
                                         rownames = FALSE,
                                         selection = list(mode = 'multiple', target = "row", selected = NULL))
 
@@ -919,17 +851,17 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
     # //////////////////////////////////////////////////////////////////////////
     # -- In table selection ----
 
-    ## -- Declare selected items ----
+    ## -- selected items ----
     selected_items <- reactive(
       filtered_items()[input$filtered_view_rows_selected, ]$id)
 
 
-    ## -- Declare clicked column ----
+    ## -- clicked column ----
     clicked_column <- reactive({
 
       # -- Get table col names
       # need to apply masks to get correct columns, hence sending only first row
-      cols <- colnames(item_mask(k_data_model(), utils::head(filtered_items(), n = 1)))
+      cols <- colnames(decorate(reveal(utils::head(filtered_items(), n = 1), config)))
 
       # -- Get name of the clicked column
       col_clicked <- cols[input$filtered_view_cell_clicked$col + 1]
@@ -942,30 +874,20 @@ kitems <- function(id, path, autosave = TRUE, admin = FALSE, trigger = NULL, fil
 
 
     # //////////////////////////////////////////////////////////////////////////
-    # -- Admin ----
-
-    # -- Call module
-    if(admin)
-      kitems_admin(k_data_model, k_items, path, dm_url, items_url, autosave)
-
-
-    # //////////////////////////////////////////////////////////////////////////
     # -- Module server return value ----
 
     # -- the reference (not the value!)
     list(id = id,
-         url = items_url,
          items = reactive(k_items()),
-         data_model = reactive(k_data_model()),
+         data_model = k_data_model,
          filtered_items = filtered_items,
          selected_items = selected_items,
          clicked_column = clicked_column,
          filters = reactive(
            list(
-             pre = trigger_filter_pre(),
-             main = trigger_filter_main(),
+             pre = if(!is.null(filter)) trigger_filter_pre(),
+             main = if(!is.null(filter)) trigger_filter_main(),
              date = input$date_slider)))
 
   })
 }
-

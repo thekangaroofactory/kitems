@@ -1,72 +1,65 @@
 
-# -- setup
+# -- test data
+# need config & item files
 create_testdata()
 
-# -- test
+
 test_that("backup data.model works", {
+
+  # -- simulate dm file (dummy content)
+  saveRDS(TRUE, file = name(module_id, what = "dm", url = T))
 
   # -- function call
   # create first backup
-  backup(id = module_id, type = "dm", path = testdata_path, max = 1)
+  backup(id = module_id, type = "dm", max = 1)
 
   # -- check
-  url <- file.path(testdata_path, "backup", paste0(dm_name(module_id), "_", as.character(Sys.Date()), ".rds"))
-  expect_true(file.exists(url))
-
-  # -- simulate old files
-  # 3 files in backup folder
-  file.copy(url, file.path(testdata_path, "backup", paste0(dm_name(module_id), "_", as.character(Sys.Date() - 1), ".rds")))
-  file.copy(url, file.path(testdata_path, "backup", paste0(dm_name(module_id), "_", as.character(Sys.Date() - 2), ".rds")))
-
-  # -- function call
-  # first backup will be overwritten
-  backup(id = module_id, type = "dm", path = testdata_path, max = 3)
-
-  # -- check
-  n <- length(list.files(path = file.path(testdata_path, "backup"), pattern = dm_name(module_id)))
-  expect_equal(n, 3)
-
-  # -- function call
-  # 2 files should be deleted
-  backup(id = module_id, type = "dm", path = testdata_path, max = 1)
-
-  # -- check
-  n <- length(list.files(path = file.path(testdata_path, "backup"), pattern = dm_name(module_id)))
-  expect_equal(n, 1)
+  x <- list.files(path = file.path(testdata_path_base, "backup"), pattern = name(module_id, what = "dm"))
+  expect_length(x, 1)
 
 })
 
-# -- test
+
+test_that("backup config works", {
+
+  # -- backup
+  backup(id = module_id, type = "config", max = 1)
+
+  # -- check
+  x <- list.files(path = file.path(testdata_path_base, "backup"), pattern = name(what = "config"))
+  expect_length(x, 1)
+
+})
+
+
 test_that("backup items works", {
 
-  # -- function call
-  # create first backup
-  backup(id = module_id, type = "items", path = testdata_path, max = 1)
+  # -- create first backup
+  backup(id = module_id, type = "items", max = 1)
 
   # -- check
-  url <- file.path(testdata_path, "backup", paste0(items_name(module_id), "_", as.character(Sys.Date()), ".csv"))
-  expect_true(file.exists(url))
+  x <- list.files(path = file.path(testdata_path_base, "backup"), pattern = name(module_id))
+  expect_length(x, 1)
 
   # -- simulate old files
-  # 3 files in backup folder
-  file.copy(url, file.path(testdata_path, "backup", paste0(items_name(module_id), "_", as.character(Sys.Date() - 1), ".csv")))
-  file.copy(url, file.path(testdata_path, "backup", paste0(items_name(module_id), "_", as.character(Sys.Date() - 2), ".csv")))
-
-  # -- function call
-  # first backup will be overwritten
-  backup(id = module_id, type = "items", path = testdata_path, max = 3)
+  # 1 remaining from above test
+  backup(id = module_id, type = "items", max = 3)
+  Sys.sleep(1)
+  backup(id = module_id, type = "items", max = 3)
+  Sys.sleep(1)
+  backup(id = module_id, type = "items", max = 3)
 
   # -- check
-  n <- length(list.files(path = file.path(testdata_path, "backup"), pattern = items_name(module_id)))
-  expect_equal(n, 3)
+  x <- list.files(path = file.path(testdata_path_base, "backup"), pattern = name(module_id))
+  expect_length(x, 3)
 
-  # -- function call
+  # -- reduce max
   # 2 files should be deleted
-  backup(id = module_id, type = "items", path = testdata_path, max = 1)
+  backup(id = module_id, type = "items", max = 1)
 
   # -- check
-  n <- length(list.files(path = file.path(testdata_path, "backup"), pattern = items_name(module_id)))
-  expect_equal(n, 1)
+  x <- list.files(path = file.path(testdata_path_base, "backup"), pattern = name(module_id))
+  expect_length(x, 1)
 
 })
 

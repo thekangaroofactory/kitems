@@ -3,37 +3,33 @@
 #' Admin Console
 #'
 #' @description
-#' Launches the administration console (Shiny App)
-#'
-#' @param path the path where to find the item folder(s)
+#' Launches the administration console.
 #'
 #' @details
-#' The app will scan the `path` to detect sub folders that are expected to be
-#' item folders named after the id used to create them.
+#' The Admin Console is a standalone Shiny web app delivered along with
+#' the package to administrate the items of the project.
 #'
-#' It will build the ui tabs from this list.
+#' It will check the `R_KITEMS_PATH` environment variable and look
+#' for the YAML config file in the provided path.
 #'
 #' @export
 #'
 #' @examples
 #' \dontrun{
+#' # set environment (where to find the _kitems.yml)
+#' Sys.setenv("R_KITEMS_PATH" = "D:/data")
+#'
+#' # launch the Admin Console
 #' admin()
 #' }
 
-# -- function definition
-admin <- function(path = getwd()) {
+admin <- function() {
 
-  # -- get app path
-  appDir <- system.file("shiny", package = "kitems")
+  # -- check env
+  if(Sys.getenv("R_KITEMS_PATH") == "")
+    stop("Set R_KITEMS_PATH environment variable to where the _kitems.yml file is.", call. = F)
 
-  # -- check30
-  if(appDir == "")
-    stop("Could not find shiny directory. Try re-installing `kitems`.", call. = FALSE)
-
-  # -- set option (the app will get it)
-  shiny::shinyOptions(kitems_path = path)
-
-  # -- run app
-  shiny::runApp(file.path(appDir, "admin_console.R"), display.mode = "normal")
+  # -- Run the application
+  shinyApp(ui = admin_layout(), server = admin_server)
 
 }

@@ -6,3 +6,6 @@
 ^docs$
 ^pkgdown$
 ^LICENSE\.md$
+^data-raw$
+^\.positai$
+^\.claude$

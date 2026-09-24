@@ -3,59 +3,70 @@
 #' Restore Files
 #'
 #' @description
-#' Restores the data model & items files.
+#' Restore config, data model or items files.
 #'
-#' @param id the id used to create the data model.
-#' @param path the path to the data model.
-#' @param type the type of file to backup. \code{items} (default) or \code{dm}.
+#' @param type the type of file to restore (see details).
+#' @param id the id for data.model & items.
+#' @param path optional, the path to the data.
+#'
+#' @details
+#' `type` accepts the following values:
+#' - "config" (the default)
+#' - "items"
+#' - "dm"
+#'
+#' When "config" is used, `id` is ignored.
+#' "dm" is kept for compatibility purpose.
+#'
+#' The recommended way to define the `path` argument is to set the `R_KITEMS_PATH`
+#' environment variable.
+#'
+#' In case several backup files exist, the newest one will be restored.
+#'
+#' @return a logical (see [file.copy()])
 #'
 #' @export
+#' @importFrom utils tail
 #'
 #' @examples
 #' \dontrun{
-#' restore(id = "mydata", path = "path/to/mydata", type = "items")
-#' restore(id = "mydata", path = "path/to/mydata", type = "dm")
+#' restore()
+#' restore(type = "items", id = "foo")
 #' }
 
-restore <- function(id, path, type = "items"){
+restore <- function(type = c("config", "items", "dm"), id = NULL, path = Sys.getenv("R_KITEMS_PATH")){
 
-  # -- check path
-  if(!dir.exists(path))
-    stop(paste("Path does not exist! path =", path))
-
-  # -- check backup path
-  backup_path <- file.path(path, "backup")
-  if(!dir.exists(backup_path))
-    stop(paste("Backup path does not exist! path =", backup_path))
+  # -- check arguments
+  check_path(path)
+  type <- match.arg(type)
 
   # -- check backups
-  pattern <- ifelse(type == "dm", dm_name(id), items_name(id))
-  backups <- list.files(path = backup_path, pattern = pattern, full.names = TRUE)
-  if(length(backups) == 0)
+  pattern <- switch(type,
+                    config = "_kitems",
+                    items = name(id),
+                    dm = name(id, what = "dm"))
+  backup_path <- file.path(path, "backup")
+  backup_url <- tail(list.files(path = backup_path,
+                                pattern = pattern,
+                                full.names = TRUE), n = 1)
+  if(!length(backup_url))
     stop(paste("There is no backup available! pattern =", pattern))
 
-  # -- get backup_url
-  backup_url <- tail(backups, n = 1)
-
-  # -- get source_url
-  source_url <- if(type == "dm")
-    file.path(path, paste0(dm_name(id), ".rds"))
-  else
-    file.path(path, paste0(items_name(id), ".csv"))
+  # -- source_url
+  source_url <- switch(type,
+                       config = name(what = "config", url = T),
+                       items = name(id, url = T),,
+                       dm = name(id, what = "dm", url = T))
 
   # -- check source file
   if(file.exists(source_url)){
-    base <- ifelse(type == "dm", dm_name(id), items_name(id))
     suffix <- paste0("_obsolete_", strftime(Sys.time() , "%Y-%m-%dT%H-%M-%S"))
-    extension <- ifelse(type == "dm", ".rds", ".csv")
-    rename <- paste0(base, suffix, extension)
-    rename <- file.path(path, rename)
+    extension <- switch(type, config = ".yml", dm = ".rds", items = ".csv")
+    rename <- file.path(path, paste0(pattern, suffix, extension))
     file.rename(source_url, rename)
-    catl("Source file already exists, it has been renamed =", rename, debug = 1)}
+    message("Source file already exists, it has been renamed = ", rename)}
 
-  # -- create backup file
-  # setting overwrite by security
-  res <- file.copy(backup_url, source_url)
-  catl("File has been restored", source_url)
+  # -- restore file
+  file.copy(backup_url, source_url)
 
 }

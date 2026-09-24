@@ -11,9 +11,7 @@ create_testdata()
 test_that("Select data model attribute works", {
 
   # -- declare arguments
-  params <- list(id = module_id,
-                 path = testdata_path,
-                 autosave = TRUE)
+  params <- list(id = module_id)
 
   # -- module server call
   testServer(kitems, args = params, {

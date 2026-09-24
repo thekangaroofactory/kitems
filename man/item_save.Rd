@@ -4,22 +4,19 @@
 \alias{item_save}
 \title{Save Items}
 \usage{
-item_save(data, file = NULL)
+item_save(data, connector)
 }
 \arguments{
 \item{data}{a data.frame containing the data to be saved.}
 
-\item{file}{the url of the file (including path & .csv extension).}
+\item{connector}{a list that will be passed to \code{\link[iker:save_data]{iker::save_data()}} function.}
 }
 \description{
 Saves the items data.frame.
 }
-\details{
-File connector: if file is not \code{NULL}, then data is saved to .csv
-}
 \examples{
 \dontrun{
 # -- File connector:
-item_save(data = mydata, file = "path/to/my/data/mydata.csv")
+item_save(data = mydata, connector = list(type = "file", file = "path/to/my/data/mydata.csv"))
 }
 }

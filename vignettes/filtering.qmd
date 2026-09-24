@@ -1,5 +1,5 @@
 ---
-title: "Filtering Items"
+title: "Filtering"
 format: html
 editor: visual
 
@@ -13,23 +13,20 @@ Kitems provides features to enable automatic data filtering at the module server
 
 ## Introduction
 
-Filtering mechanism in the module server relies on `dplyr::filter()` function.
+The filtering mechanism in the module server uses `dplyr::filter()` function.
 
 ``` r
-data %>%
-  filter(name == "foo", 
-         value == 12)
+data |>
+  dplyr::filter(name == "foo", 
+                value == 12)
 ```
 
 It is based on the following principles:
 
--   Condition(s) are passed as expression(s) to the module server function using the `filter` reactive argument
-
--   Two filtering layers are implemented
-
--   Date slider widget is provided with several strategies
-
--   A helper function is available to build filtering events
+- Condition(s) are passed as expression(s) to the module server function using the `filter` reactive argument
+- Two filtering layers are implemented
+- A date slider widget is provided with several strategies
+- A helper function is available to build filtering events.
 
 ## Filtering layers
 
@@ -39,7 +36,7 @@ Data filtering in the module server relies on the notion of filtering *layers*.
 
 To work on a subset of the data across the app (ex. a given user).
 
-It has to be considered as a lower level of filtering in the sense of the reactive chain inside the module server. The pre-filtering layer is applied from the items' reactive object and produces an intermediate reactive object (it is not accessible from the outside of the module server).
+It has to be considered as a lower level of filtering in the sense of the reactive chain inside the module server. The pre-filtering layer is applied from the items' reactive object and produces an intermediate reactive object (which is not accessible from the outside of the module server).
 
 If the pre-filtering layer is not set, then it will carry same content as the items.
 
@@ -61,7 +58,7 @@ This way, filters applied at the pre-filtering layer won’t need to be computed
 The *item* table widget is by default a filtered view of the *items*.\
 It displays the content of the `filtered_items` element of the module server function return value (with mask applied).
 
-It is delivered through the `filtered_view_widget()` function.
+It is delivered through the `item_widget()` function.
 
 ::: callout-note
 The reason for not having a non filtered *item* table is that if the goal is to display the whole list of *items* without any filtering, then there would be no added value compared to using the `DT::renderDT()` / `DT::DTOutput()` functions directly in the main Shiny application.
@@ -71,13 +68,22 @@ The reason for not having a non filtered *item* table is that if the goal is to 
 
 The date slider widget is automatically enabled when the data model contains an attribute that is named '*date*' (strictly) and accessible through the `date_slider_widget()` function.
 
-![](images/widget_date_slider.png)
+The UI of the widget has been upgraded in version [0.8.0](../news/index.html#kitems-v080) to reduce the space used by the strategies:
 
-Its behavior is driven by two strategies:
+![Date slider with Bootstrap 5](images/date_slider_bs5.jpg){fig-align="left"}
 
--   '*this-year*' – automatically selects and extends the range of date belonging to current year upon *item* operations (this is the default).
+![Selecting strategies](images/date_slider_bs5_popover.jpg){fig-align="left"}
 
--   '*keep-range*' – keeps the selected range no matter if *items* are added or removed [^1]
+That is only possible when the version of Bootstrap used by your app is Bootstrap 5.\
+Bootstrap 5 comes by default with [bslib](https://rstudio.github.io/bslib/).\
+In case your app is (still) using Bootstrap 3 (shiny::fluidePage() for example), then you need to pass `bootstrap = 3` as argument to the `date_slider_widget()` function.
+
+![Date slider with Bootstrap 3](images/widget_date_slider.png){fig-align="left"}
+
+No matter what version you use, its behavior is driven by two strategies:
+
+- '*this-year*' – automatically selects and extends the range of date belonging to current year upon *item* operations (this is the default).
+- '*keep-range*' – keeps the selected range no matter if *items* are added or removed [^1]
 
 [^1]: One exception is if the item that is deleted has its date being equal to the minimum or maximum of the entire range. The reason is that the min and max of the dateSliderInput will be updated when the items data frame is modified, hence it is not possible to have the selected range going beyond its limit.
 
@@ -128,9 +134,8 @@ This means, if the content of `filtered_items` is reused within the main applica
 
 It can be done by implementing one of the following options in the *renderPlot* expression:
 
--   check if the filter input is "truthy" with `req(mydata$filter()$date)`
-
--   use `shiny::bindEvent()` function on the `filtered_items` with `ignoreInit = TRUE`
+- check if the filter input is "truthy" with `req(mydata$filter()$date)`
+- use `shiny::bindEvent()` function on the `filtered_items` with `ignoreInit = TRUE`
 
 ### Filtering or not filtering
 
@@ -141,18 +146,13 @@ Because the module server return value is made of reactive objects, any update w
 
 Do filter:
 
--   at the module level when the output data is meant to be used throughout the app
-
--   at the main app level when it is meant to be used at a local level (for example prepare data for a specific plot)
+- at the module level when the output data is meant to be used throughout the app
+- at the main app level when it is meant to be used at a local level (for example prepare data for a specific plot)
 
 ## Useful links
 
--   Module server arguments & return value(s) – [shiny-module](./shiny-module.html#server)
-
--   Read about communication principles – [communication](./communication.html){data-heading="Useful links"}
-
--   The module server function – `kitems()`
-
--   Helper function – `filter_event()`
-
--   Behind the scene – `dplyr::filter()`
+- Module server arguments & return value(s) – [shiny-module](./shiny-module.html#server)
+- Read about communication principles – [communication](./communication.html){data-heading="Useful links"}
+- The module server function – `kitems()`
+- Helper function – `filter_event()`
+- Behind the scene – `dplyr::filter()`

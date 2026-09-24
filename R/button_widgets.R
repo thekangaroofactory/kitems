@@ -1,17 +1,27 @@
 
 
-#' Create Item Button
+#' Item Buttons
 #'
 #' @description
-#' Button to fire the create item dialog.
+#' Action button(s) to fire the item dialog.
 #'
 #' @param id the server module id.
 #'
-#' @return An HTML element that can be included in the UI.
+#' @details
+#' `id` is the namespace of the module server instance holding
+#' the target item.
+#'
+#' - create_widget() to fire create dialog
+#' - update_widget() to fire update dialog
+#' - delete_widget() to fire delete dialog
+#' - actions_widget() is a wrapper that returns all there buttons.
+#'
+#' @return An HTML tag.
 #' @export
 #'
 #' @examples
 #' \dontrun{
+#' # assuming the module server has been launched with id = "mydata"
 #' create_widget(id = "mydata")
 #' }
 
@@ -26,20 +36,8 @@ create_widget <- function(id){
 }
 
 
-#' Update Item Button
-#'
-#' @description
-#' Button to fire the update item dialog.
-#'
-#' @param id the server module id.
-#'
-#' @return An HTML element that can be included in the UI.
+#' @rdname create_widget
 #' @export
-#'
-#' @examples
-#' \dontrun{
-#' update_widget(id = "mydata")
-#' }
 
 update_widget <- function(id){
 
@@ -52,20 +50,8 @@ update_widget <- function(id){
 }
 
 
-#' Delete Item Button
-#'
-#' @description
-#' Button to fire the delete item dialog.
-#'
-#' @param id the server module id.
-#'
-#' @return An HTML element that can be included in the UI.
+#' @rdname create_widget
 #' @export
-#'
-#' @examples
-#' \dontrun{
-#' delete_widget(id = "mydata")
-#' }
 
 delete_widget <- function(id){
 
@@ -74,5 +60,18 @@ delete_widget <- function(id){
 
   # UI
   uiOutput(ns("item_delete_btn"), inline = TRUE)
+
+}
+
+
+#' @rdname create_widget
+#' @export
+
+actions_widget <- function(id){
+
+  tagList(
+    create_widget(id),
+    update_widget(id),
+    delete_widget(id))
 
 }

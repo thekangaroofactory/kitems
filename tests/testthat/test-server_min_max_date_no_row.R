@@ -14,9 +14,7 @@ create_testdata()
 test_that("Min/max date works", {
 
   # -- declare arguments
-  params <- list(id = module_id,
-                 path = testdata_path,
-                 autosave = TRUE)
+  params <- list(id = module_id)
 
   # -- module server call
   testServer(kitems, args = params, {
@@ -25,7 +23,7 @@ test_that("Min/max date works", {
     session$flushReact()
 
     # -- delete all items
-    k_items(rows_delete(k_items(), k_items()$id))
+    k_items(delete(k_items(), k_items()$id))
 
     # -- flush reactive values
     session$flushReact()

@@ -49,9 +49,8 @@ list(workflow = "create", type = "task", values = list(...))
 
 The values are the ones to be used to create the new item.
 
--   The names in the list should fit with the names of the attributes (otherwise they will be dropped)
-
--   Partial value list is supported, meaning that the workflow will add missing attributes and take the values from the default defined in the data model
+- The names in the list should fit with the names of the attributes (otherwise they will be dropped)
+- Partial value list is supported, meaning that the workflow will add missing attributes and take the values from the default defined in the data model
 
 This back-end process also supports creating multiple items at once.
 
@@ -124,8 +123,6 @@ The module will use the provided values to update the corresponding items.
 
 Partial values are supported, meaning that if you provide an `id` with a single attribute, only this attribute will be updated for the corresponding item.
 
-It is possible to force the update of a computed value attribute by including the name in the list, and set the value to `NA`. In this case, the data model will be used to define the default value.
-
 Multiple items update is supported as well, with same rules as for the create workflow.
 
 ::: callout-note
@@ -170,7 +167,7 @@ Of course if some id(s) are not retrieved, they will be ignored.
 ::: callout-caution
 It is recommended that your application will secure delete with some confirmation process as the module server will **not** ask for any confirmation!
 
-This is particularly true when the `autosave` is set to `TRUE` as the item table will be saved as soon as it is modified.
+This is particularly critical when the `autosave` option is set to `TRUE` as the item table will be saved as soon as it is modified.
 :::
 
 ### Schema {#schema-delete}
@@ -204,12 +201,8 @@ The module server will take care of the events' orchestration.
 
 ## Useful links
 
--   Module server arguments – [shiny-module](./shiny-module.html#arguments)
-
--   Attribute default values – [core concepts](./core-concepts.html#defaults)
-
--   Scenarios & use cases – [implementations](./implementations.html)
-
--   Communicating with the module server – [communication](./communication.html){data-heading="Useful links"}
-
--   Module server function – `kitems()`
+- Module server arguments – [shiny-module](./shiny-module.html#arguments)
+- Attribute default values – [core concepts](./core-concepts.html#defaults)
+- Scenarios & use cases – [implementations](./implementations.html)
+- Communicating with the module server – [communication](./communication.html){data-heading="Useful links"}
+- Module server function – `kitems()`

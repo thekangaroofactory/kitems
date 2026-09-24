@@ -1,0 +1,35 @@
+
+
+#' Item Widget
+#'
+#' @description
+#' The UI component for the item table.
+#'
+#' @param id the id of the module server instance.
+#'
+#' @return An HTML tag.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' item_widget(id = "mydata")
+#' }
+
+item_widget <- function(id){
+
+  # -- namespace
+  ns <- NS(id)
+
+  # -- return
+  tagList(
+
+    # -- when all attributes are filtered #362
+    # or item table is empty #581
+    conditionalPanel(
+      condition = (paste0("document.getElementById(\"", ns("filtered_view"), "\").children.length==0")),
+      p("The item table is empty (all attributes are filtered or there is no item).")),
+
+    # -- the table
+    DT::DTOutput(ns("filtered_view")))
+
+}

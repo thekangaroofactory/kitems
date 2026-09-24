@@ -4,29 +4,43 @@
 \alias{attribute_input}
 \title{Attribute Input}
 \usage{
-attribute_input(colClass, value = NULL, ns)
+attribute_input(
+  name,
+  type,
+  value = NULL,
+  choices = NULL,
+  create = FALSE,
+  session = getDefaultReactiveDomain()
+)
 }
 \arguments{
-\item{colClass}{a length-one named vector. \code{names(colClass)} is the name of the attribute,
-and \code{colClass} is the type (class) of the attribute.}
+\item{name}{the name of the attribute.}
 
-\item{value}{the value used to initialize the input}
+\item{type}{the type of the attribute.}
 
-\item{ns}{the namespace function reference}
+\item{value}{the value to be used to initialize the input.}
+
+\item{choices}{a list of values to select from (see details).}
+
+\item{create}{a logical (default = \code{FALSE}) if user is allowed to create values (see details).}
+
+\item{session}{optional, the shiny session object.}
 }
 \value{
 An input that can be added to the UI definition.
 }
 \description{
-Build input for an attribute
+Build input for an attribute.
+}
+\details{
+By default (\code{choices = NULL}), the function will return an input driven by the
+type of the attribute.
+When \code{choices} are provided, it will be replaced by a selectizeInput. User
+will be allowed to create additional values depending on \code{create} (otherwise ignored).
 }
 \examples{
 \dontrun{
-# -- namespace
-ns <- shiny::NS("my_data")
-
 # -- create inputs
-attribute_input(colClass = c(name = "character"), ns)
-attribute_input(colClass = c(total = "numeric"), value = 10, ns)
+attribute_input(name = "total", type = "numeric", value = 10)
 }
 }

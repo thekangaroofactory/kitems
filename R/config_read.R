@@ -1,0 +1,28 @@
+
+
+#' Read YAML config file
+#'
+#' @param path where to find _kitems.yml
+#'
+#' @details
+#' By default, `path` uses the R_KITEMS_PATH environment variable.
+#'
+#' @returns a list or NULL if no file is found.
+#' @keywords internal
+#'
+#' @examples
+#' \dontrun{
+#' config_read()
+#' }
+
+config_read <- function(path = Sys.getenv("R_KITEMS_PATH")){
+
+  # -- search file
+  config_file <- list.files(path, pattern = "_kitems.yml", full.names = T)
+
+  # -- return
+  if(length(config_file))
+    yaml::read_yaml(file = config_file)
+  else NULL
+
+}

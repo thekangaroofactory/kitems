@@ -15,8 +15,6 @@ test_that("Delete works", {
 
   # -- declare arguments
   params <- list(id = module_id,
-                 path = testdata_path,
-                 autosave = TRUE,
                  trigger = reactiveVal())
 
   # -- module server call
