@@ -1,41 +1,63 @@
 # Attribute Input
 
-Build input for an attribute
+Build input for an attribute.
 
 ## Usage
 
 ``` r
-attribute_input(colClass, value = NULL, ns)
+attribute_input(
+  name,
+  type,
+  value = NULL,
+  choices = NULL,
+  create = FALSE,
+  session = getDefaultReactiveDomain()
+)
 ```
 
 ## Arguments
 
-- colClass:
+- name:
 
-  a length-one named vector. `names(colClass)` is the name of the
-  attribute, and `colClass` is the type (class) of the attribute.
+  the name of the attribute.
+
+- type:
+
+  the type of the attribute.
 
 - value:
 
-  the value used to initialize the input
+  the value to be used to initialize the input.
 
-- ns:
+- choices:
 
-  the namespace function reference
+  a list of values to select from (see details).
+
+- create:
+
+  a logical (default = `FALSE`) if user is allowed to create values (see
+  details).
+
+- session:
+
+  optional, the shiny session object.
 
 ## Value
 
 An input that can be added to the UI definition.
 
+## Details
+
+By default (`choices = NULL`), the function will return an input driven
+by the type of the attribute. When `choices` are provided, it will be
+replaced by a selectizeInput. User will be allowed to create additional
+values depending on `create` (otherwise ignored).
+
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
-# -- namespace
-ns <- shiny::NS("my_data")
-
 # -- create inputs
-attribute_input(colClass = c(name = "character"), ns)
-attribute_input(colClass = c(total = "numeric"), value = 10, ns)
+attribute_input(name = "total", type = "numeric", value = 10)
 } # }
 ```

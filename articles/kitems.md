@@ -1,9 +1,5 @@
 # Introduction to kitems
 
-The goal of *kitems* is to provide a framework to manage data frame
-*items* and a set of tools to implement it within R Shiny web
-applications.
-
 ## Motivations
 
 When working on a R Shiny project that performs operations based on
@@ -16,34 +12,26 @@ dashboard to follow its KPIs.
 Before being able to work on the dashboard itself, it will require to
 write code to implement the baseline of the project:
 
-- a data frame to manage the tasks attributes (date, description,
-  owner…)
-
+- a tabular data object (most probably a data.frame) to manage the
+  task’s attributes (date, description, owner…)
 - a table view to display the tasks to the users
-
 - inputs to allow data filtering (ex. current year)
-
 - buttons to perform standard operations like create a task, update or
   delete existing ones
-
-- forms to capture user inputs
-
+- forms and dialogs to capture user inputs
 - functions to manage those operations in the background
+- functions to ensure data persistence, quality and governance.
 
-- functions to ensure data persistence, quality and management /
-  governance
+Now say that another dashboard project is related to weather
+observations.  
+A data frame of these observations is needed, a table view, buttons &
+functions to perform standard operations and manage everything in the
+background…
 
-Now say that another project is to build a dashboard to follow fruit
-stocks.  
-A data frame of fruit objects is needed, a table view, buttons &
-functions to perform standard operations…
+In many cases, it involves to write code that handles the **same** set
+of operations but for different objects, which makes this code hard to
+reuse in another project.
 
-In many cases, it involves to write code that allows to handle the
-**same** set of operations but for different objects, which makes this
-code hard to reuse in another project.
-
-> **Note**
->
 > The purpose of *kitems* is to wrap those standard operations into a
 > package that is not dependent on the type of *item* – *something that
 > is part of a list or group of things* – to manage.
@@ -53,26 +41,40 @@ project.
 
 ## Shiny module
 
-The package is deeply correlated with the development of Shiny
-applications, so that it has been quite obvious that the best approach
-would be to deliver a module.
+The package motivation is deeply correlated with the development of
+Shiny applications, so that it has been quite obvious that the best
+approach would be to deliver a module.
 
 To start the module server, just call the
 [`kitems()`](https://thekangaroofactory.github.io/kitems/reference/kitems.md)
 function from the app server:
 
 ``` r
-mydata <- kitems::kitems(id = "mydata", path = "./")
+
+mydata <- kitems::kitems(id = "mydata")
 ```
+
+> **Note**
+>
+> The path to the data is defined with the `R_KITEMS_PATH` environment
+> variable.  
+> You should either declare it in the .Renviron file or set it before
+> calling the module:
+>
+> ``` r
+>
+> Sys.setenv("R_KITEMS_PATH" = "./")
+> ```
 
 Components to interact with the module server can be integrated inside
 the UI of your app.  
 For example, the
-[`filtered_view_widget()`](https://thekangaroofactory.github.io/kitems/reference/filtered_view_widget.md)
+[`item_widget()`](https://thekangaroofactory.github.io/kitems/reference/item_widget.md)
 function will output the item table:
 
 ``` r
-kitems::filtered_view_widget(id = "mydata")
+
+kitems::item_widget(id = "mydata")
 ```
 
 See the
@@ -81,7 +83,7 @@ article to get more information about the module.
 
 ## Learning path
 
-Because the package is not ‘just’ a set of functions, it has some
+Because the package is not *just* a set of functions, it has some
 concepts that have been defined either as starting points or after deep
 explorations & convergence.
 

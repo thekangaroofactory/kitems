@@ -1,0 +1,47 @@
+# Item Migration
+
+Add attribute to existing items.
+
+## Usage
+
+``` r
+enforce(items, name, type, fill = NA)
+```
+
+## Arguments
+
+- items:
+
+  a data.frame of the items.
+
+- name:
+
+  a character string of the attribute name.
+
+- type:
+
+  a character string of the attribute type.
+
+- fill:
+
+  the value (default = `NA`) to be used to fill the existing rows (see
+  details).
+
+## Value
+
+The updated items data.frame.
+
+## Details
+
+`fill` will be coerced to the class name provided in `type`. If a vector
+is given as input for `fill`, it will be used to feed the created
+column. Make sure the vector length is same as the number of rows,
+otherwise an error will be raised by R.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+enforce(items = myitems, name = "comment", type = "character", fill = "none")
+} # }
+```

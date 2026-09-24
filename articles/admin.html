@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Administration • kitems</title>
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="admin_files/libs/quarto-html/popper.min.js"></script><script src="admin_files/libs/quarto-html/tippy.umd.min.js"></script><link href="admin_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="admin_files/libs/quarto-html/light-border.css" rel="stylesheet">
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kitems</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,9 +44,9 @@
     <li><a class="dropdown-item" href="../articles/implementations.html">Implementations</a></li>
     <li><a class="dropdown-item" href="../articles/communication.html">Communication</a></li>
     <li><a class="dropdown-item" href="../articles/workflows.html">Item workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/filtering.html">Filtering Items</a></li>
+    <li><a class="dropdown-item" href="../articles/filtering.html">Filtering</a></li>
     <li><a class="dropdown-item" href="../articles/ordering.html">Ordering</a></li>
-    <li><a class="dropdown-item" href="../articles/shortcuts.html">Shortcuts</a></li>
+    <li><a class="dropdown-item" href="../articles/constraints.html">Constraints</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul>
@@ -88,89 +88,109 @@
 
 
 
-    <p>The framework provides administration capabilities that mostly (but not only) cover data model tasks.</p>
+    <p>The framework provides administration capabilities to cover data governance tasks.</p>
 <section class="level2"><h2 id="admin-console">Admin console<a class="anchor" aria-label="anchor" href="#admin-console"></a>
 </h2>
 <p>An administration console is delivered as a standalone Shiny app within the package.</p>
-<p>The main reason is that in most cases, it’s not recommended to have the data model(s) management accessible from within the application. Another reason is that administration tasks are not expected to be performed on regular basis. Therefore there is no need to have the main module server and the session overloaded with reactives &amp; observers that won’t be called in the daily scenarios.</p>
+<p>The main reason is that in most cases, it’s not recommended to have the data governance accessible from within the application. Another reason is that administration tasks are not expected to be performed on regular basis. Therefore there is no need to have the main module server and the session overloaded with reactives &amp; observers that won’t be called.</p>
 <p>To run the app, use the <code><a href="../reference/admin.html">admin()</a></code> function:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/admin.html">admin</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"path/to/data"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/admin.html">admin</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>The admin console gives access to all the data models belonging to the <code>path</code> argument in one place. One tab per data model will be displayed inside the UI.</p>
+<p>The admin console gives access to all the data models declared in the YAML config file.<br>
+It will look for this file in the path defined by the <code>R_KITEMS_PATH</code> environment variable.</p>
 <section class="level3"><h3 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
 </h3>
-<section class="level4"><h4 id="data-model">Data model<a class="anchor" aria-label="anchor" href="#data-model"></a>
+<section class="level4"><h4 id="home">Home<a class="anchor" aria-label="anchor" href="#home"></a>
 </h4>
-<p>The data model section displays a table of the attributes:</p>
-<p><img src="images/admin_data_model.png"></p>
-<p>From here, it’s possible to create or update (after row selection) an attribute thanks to the attribute wizard:</p>
-<p><img src="images/admin_att_wizard.png"></p>
-<p>It is meant to guide you through the attribute creation and perform checks (in particular at the default value step).</p>
-<p>The danger zone toggle allows access to actions that cannot be undone:</p>
-<p><img src="images/admin_danger.png"></p>
-<div>
-<blockquote>
-<p><strong>Caution</strong></p>
-<ul>
-<li><p>Deleting an argument will delete the corresponding column in the item table!</p></li>
-<li><p>Deleting a data model will delete the corresponding item table!</p></li>
-</ul>
-<p>These actions cannot be undone…</p>
-</blockquote>
+<p>The admin console has been completely redesigned in version <a href="../news/index.html#kitems-v080">0.8.0</a>.<br>
+It now offers a home tab where to see all item groups related to the project (the ones declared in the common YAML config file):</p>
+<div class="quarto-figure quarto-figure-center">
+<figure><p><img src="images/admin_home.jpg"></p>
+<figcaption>Home tab</figcaption></figure>
 </div>
-</section><section class="level4"><h4 id="raw-table">Raw table<a class="anchor" aria-label="anchor" href="#raw-table"></a>
+</section><section class="level4"><h4 id="data-governance">Data governance<a class="anchor" aria-label="anchor" href="#data-governance"></a>
 </h4>
-<p>The raw table section displays the item table as-is (hidden attributes are displayed).</p>
-<p><img src="images/admin_raw_table.png"></p>
-<p>It’s possible to reorder the attributes (the items columns) from here.</p>
-</section><section class="level4"><h4 id="view">View<a class="anchor" aria-label="anchor" href="#view"></a>
-</h4>
-<p>The view section displays the item table as it will be available from the <code><a href="../reference/filtered_view_widget.html">filtered_view_widget()</a></code> function:</p>
-<p><img src="images/admin_view.png"></p>
+<p>Each item group declared in the YAML file gets a specific tab:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure><p><img src="images/admin_item_tab.jpg"></p>
+<figcaption>Item specification</figcaption></figure>
+</div>
+<p>It contains all the specs defined for the item group:</p>
 <ul>
-<li><p>only attributes with <code>display = TRUE</code> are visible</p></li>
-<li><p>mask is applied on column names (replace . and _ with space, capitalize first letter)</p></li>
+<li>the attributes of the data model</li>
+<li>the sorting instruction</li>
+<li>where to find the data</li>
+<li>behaviors (ex. hidden attributes)</li>
+<li>a danger zone where to delete the item group.</li>
 </ul>
-<p>You can add or remove attributes to be hidden from this view (or update the attribute in the data model section).</p>
-</section></section><section class="level3"><h3 id="initialization">Initialization<a class="anchor" aria-label="anchor" href="#initialization"></a>
-</h3>
-<p>When the console detects an empty folder inside the provided path, it will allow you to create a new data model:</p>
-<p><img src="images/admin_scratch.png"></p>
-<p>You can create one from scratch or import existing data (see next section).</p>
-</section><section class="level3"><h3 id="data-import">Data import<a class="anchor" aria-label="anchor" href="#data-import"></a>
-</h3>
-<p>It is possible to import existing data (and create the corresponding data model) through a wizard.</p>
-<ul>
-<li>Select the file to import (.csv)</li>
-</ul>
-<p><img src="images/admin_import_1.png"></p>
-<ul>
-<li>Check the items preview</li>
-</ul>
-<p><img src="images/admin_import_2.png"></p>
-<ul>
-<li>Check the extracted data model</li>
-</ul>
-<p><img src="images/admin_import_3.png"></p>
-<ul>
-<li>Validate import</li>
-</ul>
+<section class="level5"><h5 id="attributes">Attributes<a class="anchor" aria-label="anchor" href="#attributes"></a>
+</h5>
+<p>One of the benefits of having the data model stored in a YAML file is that we don’t need to set a value for each parameter of an attribute.<br>
+So the admin console only displays what has been set. (for ex. in the above screenshot, <code>name</code> has no default but <code>internal</code> has one.)</p>
 <div>
 <blockquote>
 <p><strong>Important</strong></p>
-<p>At this stage, the import process is not very flexible as it does not allow to tune the extracted data model, or select specific columns of the data. This needs to be done manually in a second step.</p>
-<p>There is a known bug / problem after the select file step:<br>
-In case the data does not contain an <code>id</code> column, unique ids will be generated but performances are poor when data contains many rows.</p>
-<p>See issue <a href="https://github.com/thekangaroofactory/kitems/issues/552" target="_blank" class="external-link">Generate unique ids is slow during data import</a></p>
+<p>Each item group is created with a <strong>mandatory</strong> <code>id</code> attribute.<br>
+This attribute holds the unique key to identify a specific item in the group and can’t be updated<a class="footnote-ref" role="doc-noteref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;It may be possible to set a custom default function in the future, but this feature is not implemented yet.&lt;/p&gt;"><sup>1</sup></a>.</p>
 </blockquote>
+</div>
+<p>From there you can add attributes to the data model or update existing ones thanks to the attribute wizard:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure><p><img src="images/admim_attribute_wizard.jpg"></p>
+<figcaption>Attribute wizard</figcaption></figure>
+</div>
+<p>It is also possible to modify the order of the attributes to define the order of the columns in the item table view (use the double arrow icon in the footer of the attribute card).</p>
+</section><section class="level5"><h5 id="sorting">Sorting<a class="anchor" aria-label="anchor" href="#sorting"></a>
+</h5>
+<p>The tab also displays the sorting instruction(s) and allows to configure it:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure><p><img src="images/admin_item_sort.jpg"></p>
+<figcaption>Sorting items UI</figcaption></figure>
+</div>
+<p>This will affect the order of the items displayed in the item (table) view.</p>
+<ul>
+<li>multiple rules are allowed</li>
+<li>both ascending/descending order are supported</li>
+</ul>
+<div>
+<blockquote>
+<p><strong>Note</strong></p>
+<p>There is no limit set to the number of rules you can define, but sorting affects the performance (more rules &amp; more items leads to more computation time) so it’s recommended to stick with one or two rules.</p>
+</blockquote>
+</div>
+</section><section class="level5"><h5 id="danger-zone">Danger zone<a class="anchor" aria-label="anchor" href="#danger-zone"></a>
+</h5>
+<p>The danger zone toggle (at the bottom of the sidebar) allows access to actions that cannot be undone.<br>
+At this time, it will only display the delete item group button.</p>
+<div>
+<blockquote>
+<p><strong>Caution</strong></p>
+<p>Deleting an item group will delete the corresponding data model in the YAML file as well as the item file! It is recommended to perform a backup before.</p>
+</blockquote>
+</div>
+</section></section></section><section class="level3"><h3 id="initialization">Initialization<a class="anchor" aria-label="anchor" href="#initialization"></a>
+</h3>
+<p>When the console detects no YAML config file in the given path, you will be asked if you want to create a one:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure><p><img src="images/admin_no_yaml.jpg"></p>
+<figcaption>No YAML detected</figcaption></figure>
 </div>
 </section><section class="level3"><h3 id="migration">Migration<a class="anchor" aria-label="anchor" href="#migration"></a>
 </h3>
-<p>As of version <a href="../news/index.html#kitems-v071-beta">v0.7.1</a>, data models now carry a version number that corresponds to the latest data model structure upgrade.</p>
-<p>Whenever the module server detects either a data model without any version or with an obsolete version number, it will raise a warning dialog and ask for the app to be closed.</p>
-<p>Data model migration is performed through the admin console. It will detect when a migration is required and display a button to run the migration procedure.</p>
+<p>From version <a href="../news/index.html#kitems-v080">0.8.0</a>, data governance is carried by a unique YAML config file for the project.</p>
+<p>If the admin console detects older data model files in the path, it will perform the migration to the YAML format:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure><p><img src="images/admin_migration_required.jpg"></p>
+<figcaption>Migration required UI</figcaption></figure>
+</div>
+<p>Once the migration is done, a report will be displayed:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure><p><img src="images/admin_migration_done.jpg"></p>
+<figcaption>Migration done UI</figcaption></figure>
+</div>
+<p>Old data models are archived in a backup directory corresponding to their version (ex. backup_0_7_2).</p>
 <div>
 <blockquote>
 <p><strong>Tip</strong></p>
@@ -178,26 +198,9 @@ In case the data does not contain an <code>id</code> column, unique ids will be 
 <p>It is also recommended to check the <a href="../news/index.html">changelog</a> page.</p>
 </blockquote>
 </div>
-</section></section><section class="level2"><h2 id="behind-the-scene">Behind the scene<a class="anchor" aria-label="anchor" href="#behind-the-scene"></a>
-</h2>
-<p>Because the package is meant to be as flexible as possible, it is possible to access the admin components from exported functions.</p>
-<div>
-<blockquote>
-<p><strong>Caution</strong></p>
-<p>That being said, it is not recommended to wrap the admin console inside your app as it should be kept away from the users.</p>
-</blockquote>
-</div>
-<section class="level3"><h3 id="admin-module-server">Admin module server<a class="anchor" aria-label="anchor" href="#admin-module-server"></a>
-</h3>
-<p>The module server function is delivered as <code><a href="../reference/kitems_admin.html">kitems_admin()</a></code> .</p>
-</section><section class="level3"><h3 id="admin-ui">Admin UI<a class="anchor" aria-label="anchor" href="#admin-ui"></a>
-</h3>
-<p>The module UI component is wrapped in the <code><a href="../reference/admin_widget.html">admin_widget()</a></code> function.</p>
 </section></section><section class="level2"><h2 id="useful-links">Useful Links<a class="anchor" aria-label="anchor" href="#useful-links"></a>
 </h2>
 <ul>
-<li>Admin argument – <a href="./shiny-module.html#admin">shiny module</a>
-</li>
 <li>Data model – <a href="./core-concepts.html#data-model">core concepts</a>
 </li>
 </ul></section><script id="quarto-html-after-body" type="application/javascript">
@@ -293,7 +296,7 @@ In case the data does not contain an <code>id</code> column, unique ids will be 
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Filtering Items • kitems</title>
+<title>Filtering • kitems</title>
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="filtering_files/libs/quarto-html/popper.min.js"></script><script src="filtering_files/libs/quarto-html/tippy.umd.min.js"></script><link href="filtering_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="filtering_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Filtering Items">
+<!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Filtering">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kitems</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,9 +44,9 @@
     <li><a class="dropdown-item" href="../articles/implementations.html">Implementations</a></li>
     <li><a class="dropdown-item" href="../articles/communication.html">Communication</a></li>
     <li><a class="dropdown-item" href="../articles/workflows.html">Item workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/filtering.html">Filtering Items</a></li>
+    <li><a class="dropdown-item" href="../articles/filtering.html">Filtering</a></li>
     <li><a class="dropdown-item" href="../articles/ordering.html">Ordering</a></li>
-    <li><a class="dropdown-item" href="../articles/shortcuts.html">Shortcuts</a></li>
+    <li><a class="dropdown-item" href="../articles/constraints.html">Constraints</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul>
@@ -74,7 +74,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Filtering Items</h1>
+      <h1>Filtering</h1>
 
 
 
@@ -91,24 +91,24 @@
     <p>Kitems provides features to enable automatic data filtering at the module server level.</p>
 <section class="level2"><h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>Filtering mechanism in the module server relies on <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter()</a></code> function.</p>
+<p>The filtering mechanism in the module server uses <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter()</a></code> function.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">==</span> <span class="st">"foo"</span>, </span>
-<span>         <span class="va">value</span> <span class="op">==</span> <span class="fl">12</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">==</span> <span class="st">"foo"</span>, </span>
+<span>                <span class="va">value</span> <span class="op">==</span> <span class="fl">12</span><span class="op">)</span></span></code></pre></div>
 <p>It is based on the following principles:</p>
 <ul>
-<li><p>Condition(s) are passed as expression(s) to the module server function using the <code>filter</code> reactive argument</p></li>
-<li><p>Two filtering layers are implemented</p></li>
-<li><p>Date slider widget is provided with several strategies</p></li>
-<li><p>A helper function is available to build filtering events</p></li>
+<li>Condition(s) are passed as expression(s) to the module server function using the <code>filter</code> reactive argument</li>
+<li>Two filtering layers are implemented</li>
+<li>A date slider widget is provided with several strategies</li>
+<li>A helper function is available to build filtering events.</li>
 </ul></section><section class="level2"><h2 id="filtering-layers">Filtering layers<a class="anchor" aria-label="anchor" href="#filtering-layers"></a>
 </h2>
 <p>Data filtering in the module server relies on the notion of filtering <em>layers</em>.</p>
 <section class="level3"><h3 id="pre-filtering-layer">Pre-filtering layer<a class="anchor" aria-label="anchor" href="#pre-filtering-layer"></a>
 </h3>
 <p>To work on a subset of the data across the app (ex. a given user).</p>
-<p>It has to be considered as a lower level of filtering in the sense of the reactive chain inside the module server. The pre-filtering layer is applied from the items’ reactive object and produces an intermediate reactive object (it is not accessible from the outside of the module server).</p>
+<p>It has to be considered as a lower level of filtering in the sense of the reactive chain inside the module server. The pre-filtering layer is applied from the items’ reactive object and produces an intermediate reactive object (which is not accessible from the outside of the module server).</p>
 <p>If the pre-filtering layer is not set, then it will carry same content as the items.</p>
 </section><section class="level3"><h3 id="main-filtering-layer">Main-filtering layer<a class="anchor" aria-label="anchor" href="#main-filtering-layer"></a>
 </h3>
@@ -122,7 +122,7 @@ If the widget is implemented in the UI, it will be automatically added to the ma
 </h2>
 <p>The <em>item</em> table widget is by default a filtered view of the <em>items</em>.<br>
 It displays the content of the <code>filtered_items</code> element of the module server function return value (with mask applied).</p>
-<p>It is delivered through the <code><a href="../reference/filtered_view_widget.html">filtered_view_widget()</a></code> function.</p>
+<p>It is delivered through the <code><a href="../reference/item_widget.html">item_widget()</a></code> function.</p>
 <div>
 <blockquote>
 <p><strong>Note</strong></p>
@@ -132,11 +132,27 @@ It displays the content of the <code>filtered_items</code> element of the module
 </section><section class="level2"><h2 id="date-slider">Date slider<a class="anchor" aria-label="anchor" href="#date-slider"></a>
 </h2>
 <p>The date slider widget is automatically enabled when the data model contains an attribute that is named ‘<em>date</em>’ (strictly) and accessible through the <code><a href="../reference/date_slider_widget.html">date_slider_widget()</a></code> function.</p>
-<p><img src="images/widget_date_slider.png"></p>
-<p>Its behavior is driven by two strategies:</p>
+<p>The UI of the widget has been upgraded in version <a href="../news/index.html#kitems-v080">0.8.0</a> to reduce the space used by the strategies:</p>
+<div class="quarto-figure quarto-figure-left">
+<figure><p><img src="images/date_slider_bs5.jpg"></p>
+<figcaption>Date slider with Bootstrap 5</figcaption></figure>
+</div>
+<div class="quarto-figure quarto-figure-left">
+<figure><p><img src="images/date_slider_bs5_popover.jpg"></p>
+<figcaption>Selecting strategies</figcaption></figure>
+</div>
+<p>That is only possible when the version of Bootstrap used by your app is Bootstrap 5.<br>
+Bootstrap 5 comes by default with <a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a>.<br>
+In case your app is (still) using Bootstrap 3 (shiny::fluidePage() for example), then you need to pass <code>bootstrap = 3</code> as argument to the <code><a href="../reference/date_slider_widget.html">date_slider_widget()</a></code> function.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure><p><img src="images/widget_date_slider.png"></p>
+<figcaption>Date slider with Bootstrap 3</figcaption></figure>
+</div>
+<p>No matter what version you use, its behavior is driven by two strategies:</p>
 <ul>
-<li><p>‘<em>this-year</em>’ – automatically selects and extends the range of date belonging to current year upon <em>item</em> operations (this is the default).</p></li>
-<li><p>‘<em>keep-range</em>’ – keeps the selected range no matter if <em>items</em> are added or removed <a class="footnote-ref" role="doc-noteref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;One exception is if the item that is deleted has its date being equal to the minimum or maximum of the entire range. The reason is that the min and max of the dateSliderInput will be updated when the items data frame is modified, hence it is not possible to have the selected range going beyond its limit.&lt;/p&gt;"><sup>1</sup></a></p></li>
+<li>‘<em>this-year</em>’ – automatically selects and extends the range of date belonging to current year upon <em>item</em> operations (this is the default).</li>
+<li>‘<em>keep-range</em>’ – keeps the selected range no matter if <em>items</em> are added or removed <a class="footnote-ref" role="doc-noteref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;One exception is if the item that is deleted has its date being equal to the minimum or maximum of the entire range. The reason is that the min and max of the dateSliderInput will be updated when the items data frame is modified, hence it is not possible to have the selected range going beyond its limit.&lt;/p&gt;"><sup>1</sup></a>
+</li>
 </ul>
 <p>When the server is initialized, it will scan the <em>items</em> to setup the range to the minimum and maximum of the date column, and the selected range to the values fitting with current year. <a class="footnote-ref" role="doc-noteref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;current year standing for the output of &lt;code&gt;format(Sys.Date(), "%Y")&lt;/code&gt;&lt;/p&gt;'><sup>2</sup></a></p>
 <div>
@@ -172,8 +188,10 @@ It displays the content of the <code>filtered_items</code> element of the module
 <p>This means, if the content of <code>filtered_items</code> is reused within the main application – for example to build a plot – it is strongly advised to check if <code>filters()$date</code> is <code>NULL</code> or not to avoid computing the plot twice.</p>
 <p>It can be done by implementing one of the following options in the <em>renderPlot</em> expression:</p>
 <ul>
-<li><p>check if the filter input is “truthy” with <code>req(mydata$filter()$date)</code></p></li>
-<li><p>use <code><a href="https://rdrr.io/pkg/shiny/man/bindEvent.html" class="external-link">shiny::bindEvent()</a></code> function on the <code>filtered_items</code> with <code>ignoreInit = TRUE</code></p></li>
+<li>check if the filter input is “truthy” with <code>req(mydata$filter()$date)</code>
+</li>
+<li>use <code><a href="https://rdrr.io/pkg/shiny/man/bindEvent.html" class="external-link">shiny::bindEvent()</a></code> function on the <code>filtered_items</code> with <code>ignoreInit = TRUE</code>
+</li>
 </ul></section><section class="level3"><h3 id="filtering-or-not-filtering">Filtering or not filtering<a class="anchor" aria-label="anchor" href="#filtering-or-not-filtering"></a>
 </h3>
 <p>The filtering capabilities are delivered to provide more flexibility to manage the items and serve them throughout the app.</p>
@@ -181,16 +199,21 @@ It displays the content of the <code>filtered_items</code> element of the module
 Because the module server return value is made of reactive objects, any update will affect the whole app wherever the return value is passed and code is taking dependency on its elements.</p>
 <p>Do filter:</p>
 <ul>
-<li><p>at the module level when the output data is meant to be used throughout the app</p></li>
-<li><p>at the main app level when it is meant to be used at a local level (for example prepare data for a specific plot)</p></li>
+<li>at the module level when the output data is meant to be used throughout the app</li>
+<li>at the main app level when it is meant to be used at a local level (for example prepare data for a specific plot)</li>
 </ul></section></section><section class="level2"><h2 id="useful-links">Useful links<a class="anchor" aria-label="anchor" href="#useful-links"></a>
 </h2>
 <ul>
-<li><p>Module server arguments &amp; return value(s) – <a href="./shiny-module.html#server">shiny-module</a></p></li>
-<li><p>Read about communication principles – <a href="./communication.html" data-heading="Useful links">communication</a></p></li>
-<li><p>The module server function – <code><a href="../reference/kitems.html">kitems()</a></code></p></li>
-<li><p>Helper function – <code><a href="../reference/filter_event.html">filter_event()</a></code></p></li>
-<li><p>Behind the scene – <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter()</a></code></p></li>
+<li>Module server arguments &amp; return value(s) – <a href="./shiny-module.html#server">shiny-module</a>
+</li>
+<li>Read about communication principles – <a href="./communication.html" data-heading="Useful links">communication</a>
+</li>
+<li>The module server function – <code><a href="../reference/kitems.html">kitems()</a></code>
+</li>
+<li>Helper function – <code><a href="../reference/filter_event.html">filter_event()</a></code>
+</li>
+<li>Behind the scene – <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter()</a></code>
+</li>
 </ul></section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
@@ -284,7 +307,7 @@ Because the module server return value is made of reactive objects, any update w
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

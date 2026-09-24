@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Implementations • kitems</title>
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="implementations_files/libs/quarto-html/popper.min.js"></script><script src="implementations_files/libs/quarto-html/tippy.umd.min.js"></script><link href="implementations_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="implementations_files/libs/quarto-html/light-border.css" rel="stylesheet">
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kitems</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,9 +44,9 @@
     <li><a class="dropdown-item" href="../articles/implementations.html">Implementations</a></li>
     <li><a class="dropdown-item" href="../articles/communication.html">Communication</a></li>
     <li><a class="dropdown-item" href="../articles/workflows.html">Item workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/filtering.html">Filtering Items</a></li>
+    <li><a class="dropdown-item" href="../articles/filtering.html">Filtering</a></li>
     <li><a class="dropdown-item" href="../articles/ordering.html">Ordering</a></li>
-    <li><a class="dropdown-item" href="../articles/shortcuts.html">Shortcuts</a></li>
+    <li><a class="dropdown-item" href="../articles/constraints.html">Constraints</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul>
@@ -88,7 +88,13 @@
 
 
 
-    <p>The framework is meant to be flexible, which means that several implementations (in other words levels of delegation / control) have been defined.</p>
+    <p>The framework is meant to be flexible, with several implementations available.<br>
+In other words, three levels of delegation / control have been defined:</p>
+<ul>
+<li>full delegation (the baseline)</li>
+<li>mixed implementation</li>
+<li>full control</li>
+</ul>
 <div>
 <blockquote>
 <p><strong>Tip</strong></p>
@@ -97,11 +103,14 @@
 </div>
 <section class="level2"><h2 id="full-delegation">Full delegation<a class="anchor" aria-label="anchor" href="#full-delegation"></a>
 </h2>
-<p>In this scenario / implementation, the <em>item</em> management is only performed through the module internal server-UI interactions. This is the default and most intuitive mode.</p>
+<p>In this scenario / implementation, the management of the <em>items</em> is only performed within the module.<br>
+This is the default and most intuitive mode.</p>
 <ul>
-<li><p>Module server is launched without setting the <code>trigger</code> argument</p></li>
-<li><p>Actions are performed using the UI components</p></li>
+<li>Module server is launched from the main server</li>
+<li>Actions are performed using the module UI widgets implemented on client side.</li>
 </ul>
+<p>This is why it is called “full delegation”.<br>
+You don’t need to worry about how to manage those items.</p>
 <p>Server example:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
@@ -109,8 +118,8 @@
 <span><span class="fu">shinyServer</span><span class="op">(</span></span>
 <span>  <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span><span class="op">{</span></span>
 <span>    </span>
-<span>    <span class="co"># -- Launch module servers</span></span>
-<span>    <span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span>, path <span class="op">=</span> <span class="st">"./data"</span><span class="op">)</span></span>
+<span>    <span class="co"># -- Launch the module server</span></span>
+<span>    <span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span><span class="op">)</span></span>
 <span>    </span>
 <span>  <span class="op">}</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -130,25 +139,32 @@
 <span>            <span class="co"># -- action buttons</span></span>
 <span>            <span class="fu">p</span><span class="op">(</span><span class="st">"Here are the action buttons:"</span><span class="op">)</span>,</span>
 <span>            <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/create_widget.html">create_widget</a></span><span class="op">(</span><span class="st">"mydata"</span><span class="op">)</span>,</span>
-<span>            <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/update_widget.html">update_widget</a></span><span class="op">(</span><span class="st">"mydata"</span><span class="op">)</span>,</span>
-<span>            <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/delete_widget.html">delete_widget</a></span><span class="op">(</span><span class="st">"mydata"</span><span class="op">)</span>,</span>
+<span>            <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/create_widget.html">update_widget</a></span><span class="op">(</span><span class="st">"mydata"</span><span class="op">)</span>,</span>
+<span>            <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/create_widget.html">delete_widget</a></span><span class="op">(</span><span class="st">"mydata"</span><span class="op">)</span>,</span>
 <span>            </span>
 <span>            <span class="co"># -- filter</span></span>
 <span>            <span class="fu">p</span><span class="op">(</span><span class="st">"Here is a date filter:"</span><span class="op">)</span>,</span>
 <span>            <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/date_slider_widget.html">date_slider_widget</a></span><span class="op">(</span><span class="st">"mydata"</span><span class="op">)</span>,</span>
 <span>            </span>
 <span>            <span class="co"># -- view</span></span>
-<span>            <span class="fu">p</span><span class="op">(</span><span class="st">"Here is the items table:"</span><span class="op">)</span>,</span>
-<span>            <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/filtered_view_widget.html">filtered_view_widget</a></span><span class="op">(</span><span class="st">"mydata"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>            <span class="fu">p</span><span class="op">(</span><span class="st">"Here is the item table:"</span><span class="op">)</span>,</span>
+<span>            <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/item_widget.html">item_widget</a></span><span class="op">(</span><span class="st">"mydata"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>Create / update / delete operations will be fully managed by the module server. A dialog will popup for the user to provide required inputs and confirmation.</p>
-<p>The date slider can be used to filter the data / <em>items</em> displayed in the filtered view.</p>
-<p>From there, you will use the <code>mydata</code> object (containing the module server function return value) to perform your own tasks (build a plot on the data for example).</p>
+<p>The module server will take care off everything:</p>
+<ul>
+<li>perform create / update / delete operations</li>
+<li>ask the required information / input to the user with dialog</li>
+<li>filter the data when the user selects a date range</li>
+<li>update the item table view</li>
+</ul>
+<p>The behavior of the server will only depend on what’s defined in the data model / YAML config.<br>
+(which attribute to ask, what format to expect, what validation to perform…).</p>
+<p>From there, you can use the return value (<code>mydata</code> in the above example) object to perform your own tasks (transform the data or build a plot for example).</p>
 <p>See <a href="./shiny-module.html#return-values">shiny-module</a> to read about the module server return value(s).</p>
 </section><section class="level2"><h2 id="mixed-implementation">Mixed implementation<a class="anchor" aria-label="anchor" href="#mixed-implementation"></a>
 </h2>
-<p>In this scenario, you may not want to implement the action buttons provided in the package but still use the dialog capabilities of the module. An example is when <em>item</em> creation will be launched as a side effect of an observer in your app.</p>
-<p>The module server will be launched using the <code>trigger</code> reactive argument so that an event can be passed to fire the expected dialogs.</p>
+<p>In this scenario, you may not want to implement the action buttons provided in the package but still use the dialog capabilities of the module. An example is when <em>item</em> creation will be launched as a side effect of an observer in your app instead of a click from the user.</p>
+<p>The module server will be launched as before, but with the <code>trigger</code> reactive argument so that an event can be passed to fire the expected dialog.</p>
 <p>Server example:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="downlit sourceCode r">
@@ -160,7 +176,7 @@
 <span>    <span class="va">events</span> <span class="op">&lt;-</span> <span class="fu">reactiveVal</span><span class="op">(</span><span class="op">)</span></span>
 <span>    </span>
 <span>    <span class="co"># -- Launch module servers</span></span>
-<span>    <span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span>, path <span class="op">=</span> <span class="st">"./data"</span>, trigger <span class="op">=</span> <span class="va">events</span><span class="op">)</span></span>
+<span>    <span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span>, trigger <span class="op">=</span> <span class="va">events</span><span class="op">)</span></span>
 <span>    </span>
 <span>  <span class="op">}</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -176,6 +192,8 @@
 <span>  </span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 </div>
+<p>When the event is received by the module server, it will display the same dialog to the user, based on the data model’s attributes.<br>
+The same workflows are applied, but the way to trigger them is different since it’s a server-server interaction.</p>
 <div>
 <blockquote>
 <p><strong>Note</strong></p>
@@ -185,10 +203,10 @@
 </section><section class="level2"><h2 id="full-control">Full control<a class="anchor" aria-label="anchor" href="#full-control"></a>
 </h2>
 <p>This scenario is say the opposite of the full delegation implementation.<br>
-It is meant to be mostly used when the <em>item</em> operations do not rely on user interactions, hence it will be managed as pure back-end tasks.</p>
-<p>A very good example for this use case is a GitHub client app that would call the GitHub API to get issues related to a repository and store them into a cache to avoid performance issues when multiple calls are performed.</p>
-<p>Another – maybe easier – example is a dashboard that would display a map and user would create markers just by clicking on it.</p>
-<p>The code implementation itself is not very different from the mixed implementation as you will use the <code>trigger</code> to communicate to the module server from the main / parent server.</p>
+It is meant to be used when the <em>item</em> operations do not rely on user interactions, hence it will be managed as pure back-end tasks.</p>
+<p>A very good example for this use case is an app that would call an API and store the incoming data into a cache to avoid multiple duplicated API calls. Then the app would pass the data to the module server trigger to feed the cache without any user interaction.</p>
+<p>Another – maybe easier – example is a dashboard that would display a map and the user create markers just by clicking on it. The app server that listen to the map click could send an event to the module server to create a new marker <em>item</em>.</p>
+<p>The code implementation itself is not very different from the mixed implementation as you will use the <code>trigger</code> to communicate to the module server from the main server.</p>
 <p>Server example:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
@@ -200,11 +218,11 @@ It is meant to be mostly used when the <em>item</em> operations do not rely on u
 <span>    <span class="va">events</span> <span class="op">&lt;-</span> <span class="fu">reactiveVal</span><span class="op">(</span><span class="op">)</span></span>
 <span>    </span>
 <span>    <span class="co"># -- Launch module servers</span></span>
-<span>    <span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span>, path <span class="op">=</span> <span class="st">"./data"</span>, trigger <span class="op">=</span> <span class="va">events</span><span class="op">)</span></span>
+<span>    <span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span>, trigger <span class="op">=</span> <span class="va">events</span><span class="op">)</span></span>
 <span>    </span>
 <span>  <span class="op">}</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>But the <em>item</em> operations will no longer rely on the dialogs, so you need to pass all required information for the module server to perform the task in the background.</p>
+<p>But the <em>item</em> operations will no longer rely on the dialog, so you need to pass all required information for the module server to perform the task in the background.</p>
 <p>Create item example:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
@@ -223,6 +241,7 @@ It is meant to be mostly used when the <em>item</em> operations do not rely on u
 <span>    </span>
 <span>    <span class="op">}</span><span class="op">)</span></span></code></pre></div>
 </div>
+<p>The module server will perform the creation without asking for any input or confirmation.</p>
 <div>
 <blockquote>
 <p><strong>Important</strong></p>
@@ -233,9 +252,12 @@ It is meant to be mostly used when the <em>item</em> operations do not rely on u
 </section><section class="level2"><h2 id="useful-links">Useful links<a class="anchor" aria-label="anchor" href="#useful-links"></a>
 </h2>
 <ul>
-<li><p>Create / update / delete items – <a href="./workflows.html">workflows</a></p></li>
-<li><p>Arguments &amp; return value(s) – <a href="./shiny-module.html">shiny-module</a></p></li>
-<li><p>Communication principles – <a href="./communication.html" data-heading="Useful links">communication</a></p></li>
+<li>Create / update / delete items – <a href="./workflows.html">workflows</a>
+</li>
+<li>Arguments &amp; return value(s) – <a href="./shiny-module.html">shiny-module</a>
+</li>
+<li>Communication principles – <a href="./communication.html" data-heading="Useful links">communication</a>
+</li>
 </ul></section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
@@ -329,7 +351,7 @@ It is meant to be mostly used when the <em>item</em> operations do not rely on u
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

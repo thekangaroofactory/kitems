@@ -5,31 +5,24 @@ Load Items
 ## Usage
 
 ``` r
-item_load(col.classes, file = NULL, path = NULL)
+item_load(connector, col.classes)
 ```
 
 ## Arguments
+
+- connector:
+
+  a list that will be passed to
+  [`iker::load_data()`](https://rdrr.io/pkg/iker/man/load_data.html)
+  function.
 
 - col.classes:
 
   a named vector containing the expected column types.
 
-- file:
-
-  an optional file name (including .csv extension).
-
-- path:
-
-  an optional path to the file.
-
 ## Value
 
 The data.frame of the items.
-
-## Details
-
-File connector: if file is not `NULL`, then data are loaded from the
-given .csv file.
 
 ## Examples
 
@@ -37,6 +30,6 @@ given .csv file.
 if (FALSE) { # \dontrun{
 # -- File connector:
 item_load(col.classes = c(id = "numeric", date = "Date", comment = "character"),
-file = "mydata.csv", path = "path/to/my/data")
+connector = list(type = "file", path = "path/to/my/data", filename = "mydata.csv"))
 } # }
 ```

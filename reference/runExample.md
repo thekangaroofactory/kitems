@@ -22,6 +22,7 @@ apps.
 ## Examples
 
 ``` r
+
 if (FALSE) { # \dontrun{
 runExample()
 } # }

@@ -1,30 +1,29 @@
 # Admin Console
 
-Launches the administration console (Shiny App)
+Launches the administration console.
 
 ## Usage
 
 ``` r
-admin(path = getwd())
+admin()
 ```
-
-## Arguments
-
-- path:
-
-  the path where to find the item folder(s)
 
 ## Details
 
-The app will scan the `path` to detect sub folders that are expected to
-be item folders named after the id used to create them.
+The Admin Console is a standalone Shiny web app delivered along with the
+package to administrate the items of the project.
 
-It will build the ui tabs from this list.
+It will check the `R_KITEMS_PATH` environment variable and look for the
+YAML config file in the provided path.
 
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
+# set environment (where to find the _kitems.yml)
+Sys.setenv("R_KITEMS_PATH" = "D:/data")
+
+# launch the Admin Console
 admin()
 } # }
 ```

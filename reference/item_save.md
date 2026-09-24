@@ -5,7 +5,7 @@ Saves the items data.frame.
 ## Usage
 
 ``` r
-item_save(data, file = NULL)
+item_save(data, connector)
 ```
 
 ## Arguments
@@ -14,19 +14,17 @@ item_save(data, file = NULL)
 
   a data.frame containing the data to be saved.
 
-- file:
+- connector:
 
-  the url of the file (including path & .csv extension).
-
-## Details
-
-File connector: if file is not `NULL`, then data is saved to .csv
+  a list that will be passed to
+  [`iker::save_data()`](https://rdrr.io/pkg/iker/man/save_data.html)
+  function.
 
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
 # -- File connector:
-item_save(data = mydata, file = "path/to/my/data/mydata.csv")
+item_save(data = mydata, connector = list(type = "file", file = "path/to/my/data/mydata.csv"))
 } # }
 ```

@@ -1,30 +1,28 @@
-# Filtering Items
+# Filtering
 
 Kitems provides features to enable automatic data filtering at the
 module server level.
 
 ## Introduction
 
-Filtering mechanism in the module server relies on
+The filtering mechanism in the module server uses
 [`dplyr::filter()`](https://dplyr.tidyverse.org/reference/filter.html)
 function.
 
 ``` r
-data %>%
-  filter(name == "foo", 
-         value == 12)
+
+data |>
+  dplyr::filter(name == "foo", 
+                value == 12)
 ```
 
 It is based on the following principles:
 
 - Condition(s) are passed as expression(s) to the module server function
   using the `filter` reactive argument
-
 - Two filtering layers are implemented
-
-- Date slider widget is provided with several strategies
-
-- A helper function is available to build filtering events
+- A date slider widget is provided with several strategies
+- A helper function is available to build filtering events.
 
 ## Filtering layers
 
@@ -38,7 +36,7 @@ To work on a subset of the data across the app (ex. a given user).
 It has to be considered as a lower level of filtering in the sense of
 the reactive chain inside the module server. The pre-filtering layer is
 applied from the items’ reactive object and produces an intermediate
-reactive object (it is not accessible from the outside of the module
+reactive object (which is not accessible from the outside of the module
 server).
 
 If the pre-filtering layer is not set, then it will carry same content
@@ -72,7 +70,7 @@ It displays the content of the `filtered_items` element of the module
 server function return value (with mask applied).
 
 It is delivered through the
-[`filtered_view_widget()`](https://thekangaroofactory.github.io/kitems/reference/filtered_view_widget.md)
+[`item_widget()`](https://thekangaroofactory.github.io/kitems/reference/item_widget.md)
 function.
 
 > **Note**
@@ -92,20 +90,43 @@ through the
 [`date_slider_widget()`](https://thekangaroofactory.github.io/kitems/reference/date_slider_widget.md)
 function.
 
+The UI of the widget has been upgraded in version
+[0.8.0](https://thekangaroofactory.github.io/kitems/news/index.html#kitems-v080)
+to reduce the space used by the strategies:
+
+![](images/date_slider_bs5.jpg)
+
+Date slider with Bootstrap 5
+
+![](images/date_slider_bs5_popover.jpg)
+
+Selecting strategies
+
+That is only possible when the version of Bootstrap used by your app is
+Bootstrap 5.  
+Bootstrap 5 comes by default with
+[bslib](https://rstudio.github.io/bslib/).  
+In case your app is (still) using Bootstrap 3 (shiny::fluidePage() for
+example), then you need to pass `bootstrap = 3` as argument to the
+[`date_slider_widget()`](https://thekangaroofactory.github.io/kitems/reference/date_slider_widget.md)
+function.
+
 ![](images/widget_date_slider.png)
 
-Its behavior is driven by two strategies:
+Date slider with Bootstrap 3
+
+No matter what version you use, its behavior is driven by two
+strategies:
 
 - ‘*this-year*’ – automatically selects and extends the range of date
   belonging to current year upon *item* operations (this is the
   default).
-
 - ‘*keep-range*’ – keeps the selected range no matter if *items* are
-  added or removed [¹](#fn1)
+  added or removed [^1]
 
 When the server is initialized, it will scan the *items* to setup the
 range to the minimum and maximum of the date column, and the selected
-range to the values fitting with current year. [²](#fn2)
+range to the values fitting with current year. [^2]
 
 > **Note**
 >
@@ -122,6 +143,7 @@ return value list.
 The value of this element is itself a list of the form:
 
 ``` r
+
 list(
   pre = {'expression(s) passed at the pre-filtering layer'},
   main = {'expression(s) passed at the main-filtering layer'},
@@ -173,7 +195,6 @@ It can be done by implementing one of the following options in the
 *renderPlot* expression:
 
 - check if the filter input is “truthy” with `req(mydata$filter()$date)`
-
 - use
   [`shiny::bindEvent()`](https://rdrr.io/pkg/shiny/man/bindEvent.html)
   function on the `filtered_items` with `ignoreInit = TRUE`
@@ -193,7 +214,6 @@ Do filter:
 
 - at the module level when the output data is meant to be used
   throughout the app
-
 - at the main app level when it is meant to be used at a local level
   (for example prepare data for a specific plot)
 
@@ -201,25 +221,19 @@ Do filter:
 
 - Module server arguments & return value(s) –
   [shiny-module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.html#server)
-
 - Read about communication principles –
   [communication](https://thekangaroofactory.github.io/kitems/articles/communication.md)
-
 - The module server function –
   [`kitems()`](https://thekangaroofactory.github.io/kitems/reference/kitems.md)
-
 - Helper function –
   [`filter_event()`](https://thekangaroofactory.github.io/kitems/reference/filter_event.md)
-
 - Behind the scene –
   [`dplyr::filter()`](https://dplyr.tidyverse.org/reference/filter.html)
 
-------------------------------------------------------------------------
-
-1.  One exception is if the item that is deleted has its date being
+[^1]: One exception is if the item that is deleted has its date being
     equal to the minimum or maximum of the entire range. The reason is
     that the min and max of the dateSliderInput will be updated when the
     items data frame is modified, hence it is not possible to have the
     selected range going beyond its limit.
 
-2.  current year standing for the output of `format(Sys.Date(), "%Y")`
+[^2]: current year standing for the output of `format(Sys.Date(), "%Y")`

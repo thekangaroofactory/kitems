@@ -29,6 +29,7 @@ create button in the application UI).
 An event can be sent to the module `trigger` reactive argument:
 
 ``` r
+
 list(workflow = "create", type = "dialog")
 ```
 
@@ -46,6 +47,7 @@ input, or when you want to implement your own input form.
 A specific event is used to trigger this back-end creation process:
 
 ``` r
+
 list(workflow = "create", type = "task", values = list(...))
 ```
 
@@ -53,7 +55,6 @@ The values are the ones to be used to create the new item.
 
 - The names in the list should fit with the names of the attributes
   (otherwise they will be dropped)
-
 - Partial value list is supported, meaning that the workflow will add
   missing attributes and take the values from the default defined in the
   data model
@@ -68,6 +69,7 @@ This back-end process also supports creating multiple items at once.
 > guess whats the intention behind such a list.
 >
 > ``` r
+>
 > list(workflow = "create", 
 >      type = "task", 
 >      values = list(name = c("Apple", "Banana"),
@@ -77,6 +79,7 @@ This back-end process also supports creating multiple items at once.
 > Will create two items with different names and same date value.
 >
 > ``` r
+>
 > list(workflow = "create", 
 >      type = "task", 
 >      values = list(name = c("Apple", "Banana", "Mango"),
@@ -122,6 +125,7 @@ In this case, it’s possible to use the server function `trigger`
 argument to fire the update dialog for a specific item:
 
 ``` r
+
 list(workflow = "update", type = "dialog", values = list(id = 123))
 ```
 
@@ -140,6 +144,7 @@ The event is similar to the one used to create items, only the workflow
 is different:
 
 ``` r
+
 list(workflow = "update", 
      type = "task", 
      values = list(id = c(123, 456), 
@@ -152,10 +157,6 @@ items.
 Partial values are supported, meaning that if you provide an `id` with a
 single attribute, only this attribute will be updated for the
 corresponding item.
-
-It is possible to force the update of a computed value attribute by
-including the name in the list, and set the value to `NA`. In this case,
-the data model will be used to define the default value.
 
 Multiple items update is supported as well, with same rules as for the
 create workflow.
@@ -190,6 +191,7 @@ to a specific item (for example a marker’s popup on a map), the
 `trigger` argument can be used to fire the delete confirmation dialog.
 
 ``` r
+
 list(workflow = "delete", type = "dialog", values = list(id = c(123, 456)))
 ```
 
@@ -204,6 +206,7 @@ a server side process that is not directly linked to the UI, the
 several items:
 
 ``` r
+
 list(workflow = "delete", type = "task", values = list(id = c(123, 456)))
 ```
 
@@ -216,8 +219,8 @@ Of course if some id(s) are not retrieved, they will be ignored.
 > confirmation process as the module server will **not** ask for any
 > confirmation!
 >
-> This is particularly true when the `autosave` is set to `TRUE` as the
-> item table will be saved as soon as it is modified.
+> This is particularly critical when the `autosave` option is set to
+> `TRUE` as the item table will be saved as soon as it is modified.
 
 ### Schema
 
@@ -237,6 +240,7 @@ events (instead of a single event).
 Single event:
 
 ``` r
+
 list(workflow = "create", type = "task", values = list(name = "foo"))
 list(workflow = "update", type = "task", values = list(id = 1234, name = "bar"))
 ```
@@ -244,6 +248,7 @@ list(workflow = "update", type = "task", values = list(id = 1234, name = "bar"))
 Multiple events:
 
 ``` r
+
 list(
   list(workflow = "create", type = "task", values = list(name = "foo")),
   list(workflow = "update", type = "task", values = list(id = 1234, name = "bar")))
@@ -255,15 +260,11 @@ The module server will take care of the events’ orchestration.
 
 - Module server arguments –
   [shiny-module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.html#arguments)
-
 - Attribute default values – [core
   concepts](https://thekangaroofactory.github.io/kitems/articles/core-concepts.html#defaults)
-
 - Scenarios & use cases –
   [implementations](https://thekangaroofactory.github.io/kitems/articles/implementations.md)
-
 - Communicating with the module server –
   [communication](https://thekangaroofactory.github.io/kitems/articles/communication.md)
-
 - Module server function –
   [`kitems()`](https://thekangaroofactory.github.io/kitems/reference/kitems.md)

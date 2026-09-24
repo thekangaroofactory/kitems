@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Ordering • kitems</title>
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="ordering_files/libs/quarto-html/popper.min.js"></script><script src="ordering_files/libs/quarto-html/tippy.umd.min.js"></script><link href="ordering_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="ordering_files/libs/quarto-html/light-border.css" rel="stylesheet">
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kitems</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,9 +44,9 @@
     <li><a class="dropdown-item" href="../articles/implementations.html">Implementations</a></li>
     <li><a class="dropdown-item" href="../articles/communication.html">Communication</a></li>
     <li><a class="dropdown-item" href="../articles/workflows.html">Item workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/filtering.html">Filtering Items</a></li>
+    <li><a class="dropdown-item" href="../articles/filtering.html">Filtering</a></li>
     <li><a class="dropdown-item" href="../articles/ordering.html">Ordering</a></li>
-    <li><a class="dropdown-item" href="../articles/shortcuts.html">Shortcuts</a></li>
+    <li><a class="dropdown-item" href="../articles/constraints.html">Constraints</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul>
@@ -88,19 +88,13 @@
 
 
 
-    <p>Basic ordering capabilities are available in the package module server.</p>
-<p>They rely on the data model attributes:</p>
-<ul>
-<li><p><code>sort_rank</code></p></li>
-<li><p><code>sort_desc</code></p></li>
-</ul>
-<p>Defining the ordering of the items is done from the admin console (in the data model section):</p>
-<p><img src="images/admin_ordering.png"></p>
-<p>It is done with the attribute wizard (when creating or updating an attribute).</p>
-<ul>
-<li><p><code>sort_rank</code> defines in which order the attributes are used to sort the items</p></li>
-<li><p><code>sort_desc</code> is whether an attribute should be used in descending order</p></li>
-</ul>
+    <p>Ordering capabilities are available in the package module server.</p>
+<p>From version <a href="../news/index.html#kitems-v080">0.8.0</a>, how to sort the items is now defined in the YAML config file with a single <code>sort</code> entry.</p>
+<p>It takes an instruction that will be analyzed to get the attribute ranking as well as the direction:</p>
+<p><code>sort: date, desc(total)</code></p>
+<p>This instruction will first order items by (ascending) <code>date</code>, then descending <code>total</code>.</p>
+<p>Allowing multiple rules is there to help sorting items that it would not be possible to order given the first rule. No limit is set, but two or three rules should be enough. If not, you may want to consider adding a specific attribute (most probably a skipped &amp; hidden one) with a computed value to help with ranking. Then you can set the rule on this attribute.</p>
+<p>You can set / update the ordering instruction in the Admin Console.</p>
 <div>
 <blockquote>
 <p><strong>Note</strong></p>
@@ -110,8 +104,10 @@
 <section class="level2"><h2 id="useful-links">Useful links<a class="anchor" aria-label="anchor" href="#useful-links"></a>
 </h2>
 <ul>
-<li><p>Data model structure – <a href="./core-concepts.html#structure">core concepts</a></p></li>
-<li><p>Admin console – <a href="./admin.html#data-model">admin</a></p></li>
+<li>Data model structure – <a href="./core-concepts.html#structure">core concepts</a>
+</li>
+<li>Admin console – <a href="./admin.html#data-model">admin</a>
+</li>
 </ul></section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
@@ -204,7 +200,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

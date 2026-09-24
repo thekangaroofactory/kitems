@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Core concepts • kitems</title>
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="core-concepts_files/libs/quarto-html/popper.min.js"></script><script src="core-concepts_files/libs/quarto-html/tippy.umd.min.js"></script><link href="core-concepts_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="core-concepts_files/libs/quarto-html/light-border.css" rel="stylesheet">
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kitems</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,9 +44,9 @@
     <li><a class="dropdown-item" href="../articles/implementations.html">Implementations</a></li>
     <li><a class="dropdown-item" href="../articles/communication.html">Communication</a></li>
     <li><a class="dropdown-item" href="../articles/workflows.html">Item workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/filtering.html">Filtering Items</a></li>
+    <li><a class="dropdown-item" href="../articles/filtering.html">Filtering</a></li>
     <li><a class="dropdown-item" href="../articles/ordering.html">Ordering</a></li>
-    <li><a class="dropdown-item" href="../articles/shortcuts.html">Shortcuts</a></li>
+    <li><a class="dropdown-item" href="../articles/constraints.html">Constraints</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul>
@@ -92,7 +92,7 @@
 <section class="level2"><h2 id="data-model">Data Model<a class="anchor" aria-label="anchor" href="#data-model"></a>
 </h2>
 <p>The data model contains the specifications of the <a href="#items">Items</a> to manage.</p>
-<p>For each attribute of the item, the data model carries information like its name and type, but also a method to determine its default value as well as logical values to indicate if it should be skipped in forms, displayed in the table view or used to sort the data.</p>
+<p>For each attribute (column) of the item, the data model carries obvious information like its name and type, but also a method to determine its default value as well as constraints and behaviors information to indicate if it should be skipped in forms, displayed in the table view or used to sort the data.</p>
 <p>Supported types are numeric, integer, logical, character, Date and POSIXct.</p>
 <blockquote>
 <p>Note: class POSIXlt is not supported as it stores datetime values into a list<br>
@@ -100,37 +100,40 @@ POSIXct should be used to store datetime attributes.</p>
 </blockquote>
 <section class="level3"><h3 id="structure">Structure<a class="anchor" aria-label="anchor" href="#structure"></a>
 </h3>
-<p>Data models have the following structure:</p>
+<p>Since version 0.8.0, data models are stored in a (unique) YAML config file that carries core information for each attribute:</p>
 <ul>
-<li><p>Name – the name of the attribute</p></li>
-<li><p>Type – the type of the attribute</p></li>
-<li><p>Default value – a default value for the attribute (optional)</p></li>
-<li><p>Default function – a function name (optional, <strong>without ()</strong>)</p></li>
-<li><p>Default arg – a list of arguments to pass to the default function (optional)</p></li>
-<li><p>Display – whether or not the attribute should be displayed in the item table</p></li>
-<li><p>Skip – whether or not the attribute should be skipped in the item form</p></li>
-<li><p>Sort rank – a number to indicate that the attribute is used to sort the data</p></li>
-<li><p>Sort desc – a logical if the attribute should be used in descending order</p></li>
-</ul></section><section class="level3"><h3 id="mandatory-attribute">Mandatory attribute<a class="anchor" aria-label="anchor" href="#mandatory-attribute"></a>
+<li>Name – the name of the attribute</li>
+<li>Type – the type of the attribute</li>
+<li>Class arg. – optional argument passed to the class function</li>
+<li>Default – an optional method to define the default value for the attribute</li>
+<li>Values – optional constraints on the attribute value</li>
+</ul>
+<p>It also defines behaviors:</p>
+<ul>
+<li>Hide – attributes to be hidden from the table view</li>
+<li>Skip – attributes that will be skipped in the item form</li>
+<li>Refresh – skipped attributes that will be refreshed when the item is updated</li>
+<li>Sort – sorting instructions to organize the items</li>
+</ul>
+<p>The YAML config can be created / managed using the Admin Console.</p>
+</section><section class="level3"><h3 id="mandatory-attribute">Mandatory attribute<a class="anchor" aria-label="anchor" href="#mandatory-attribute"></a>
 </h3>
 <p>Data models have a mandatory <em>id</em> attribute.<br>
 This <em>id</em> is the primary key of the item table, here to ensure the uniqueness of the items.</p>
-<p>By default, the attribute gets a value that is generated by the <code><a href="https://rdrr.io/pkg/ktools/man/getTimestamp.html" class="external-link">ktools::getTimestamp()</a></code> function.<br>
-You can pass another function as long as it generates unique ids (otherwise item creation will fail).</p>
 </section><section class="level3"><h3 id="defaults">Defaults<a class="anchor" aria-label="anchor" href="#defaults"></a>
 </h3>
 <p>In many cases, an item may have attributes that do not require an input from the user:</p>
 <ul>
-<li><p>to generate a primary key</p></li>
-<li><p>to set a default state or date</p></li>
-<li><p>because the attribute is internal / hidden</p></li>
+<li>to generate a primary key</li>
+<li>to set a default state or date</li>
+<li>because the attribute is internal / hidden</li>
 </ul>
 <p>Two mechanisms are available to tune the default behavior:</p>
 <ul>
-<li><p>default value – a value that fits with the attribute type</p></li>
-<li><p>default function – a function to generate the default value (optional arguments can be passed to the function)</p></li>
+<li>default value – a value that fits with the attribute type</li>
+<li>default function – a function to generate the default value (arguments can be passed to the function)</li>
 </ul>
-<p>Those defaults will be used to initialize the item input form and set the attribute value in case the user lets the input empty or if the attribute is skipped.</p>
+<p>The default will be used to initialize the item input form and set the attribute value in case the user lets the input empty or if the attribute is skipped.</p>
 <div>
 <blockquote>
 <p><strong>Important</strong></p>
@@ -138,26 +141,37 @@ You can pass another function as long as it generates unique ids (otherwise item
 <p>Make sure the default can be converted to the expected type or an error will be generated.</p>
 </blockquote>
 </div>
-</section><section class="level3"><h3 id="integrity">Integrity<a class="anchor" aria-label="anchor" href="#integrity"></a>
+</section><section class="level3"><h3 id="refresh">Refresh<a class="anchor" aria-label="anchor" href="#refresh"></a>
 </h3>
-<p>When the module server is launched, it will perform an integrity check to ensure that the <em>items</em> and the data model are synchronized.</p>
-<p>If not, the data model will be updated to match with any missing attribute for example (it is used during the import process to extract the data model from the loaded data).</p>
-</section></section><section class="level2"><h2 id="items">Items<a class="anchor" aria-label="anchor" href="#items"></a>
+<p>For attributes that are skipped, it is possible to force them being re-evaluated upon update.<br>
+The motivation behind this feature is that you may want to have say an “updated_at” attribute that will be skipped and set to the current date using the <code><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date()</a></code> function.<br>
+In this case you want the attribute value to be updated if the user modifies the item.</p>
+</section><section class="level3"><h3 id="values">Values<a class="anchor" aria-label="anchor" href="#values"></a>
+</h3>
+<p>It may be interesting to either suggest values to a user for an attribute or prevent it from getting values that are not allowed.</p>
+<p>The mechanism allows three behaviors:</p>
+<ul>
+<li>suggest – values will be suggested to the user in the item form</li>
+<li>limit – user will only be allowed to chose between specific values</li>
+<li>lifecycle – same as limit, with links between the values</li>
+</ul></section></section><section class="level2"><h2 id="items">Items<a class="anchor" aria-label="anchor" href="#items"></a>
 </h2>
 <p>An <em>item</em> is defined as – <em>something that is part of a list or group of things.</em></p>
 <p>That is basically the purpose of the package / framework. An item is by definition anything that belongs to a group of things <strong>defined</strong> by their data model. This means all the item related functions inside this package <strong>dynamically</strong> work on the items in the context of their data model.</p>
-<p>As an example, the <code><a href="../reference/item_form.html">item_form()</a></code> function dynamically generates an input form based on the attribute list contained in the data model (the type of input, the default value of the input or if no input should be created for the attribute).</p>
-<p><em>Items</em> are stored (as a data.frame) in a reactive object that fits with the data model rules.<br>
-This means any authoring operation on the items should be performed <strong>within</strong> the module server.</p>
-<p>When the module server is started, items will be checked to make sure attribute types fit with the data model.</p>
+<p>As an example, the <code><a href="../reference/form.html">form()</a></code> function dynamically generates an input form based on the attribute list contained in the data model (the type of input, the default value of the input or if no input should be created for the attribute).</p>
+<p><em>Items</em> are stored in a reactive object that fits with the data model rules.<br>
+This means any authoring operation on the items should be performed <strong>within</strong> the module server except if you decide to run advanced scenarios directly using the advanced functions of the package.</p>
 </section><section class="level2"><h2 id="useful-links">Useful Links<a class="anchor" aria-label="anchor" href="#useful-links"></a>
 </h2>
 <ul>
-<li><p>Initialization – see <a href="./admin.html#initialization">admin</a></p></li>
-<li><p>Data model migration – see <a href="./admin.html#migration">admin</a></p></li>
-<li><p>Data import – see <a href="./admin.html#data-import">admin</a></p></li>
-<li><p>Item workflows – see <a href="./workflows.html">workflows</a></p></li>
-<li><p>Access the data model &amp; items – see <a href="./shiny-module.html#return-values">shiny-module</a></p></li>
+<li>Initialization – see <a href="./admin.html#initialization">admin</a>
+</li>
+<li>Data model migration – see <a href="./admin.html#migration">admin</a>
+</li>
+<li>Item workflows – see <a href="./workflows.html">workflows</a>
+</li>
+<li>Access the data model &amp; items – see <a href="./shiny-module.html#return-values">shiny-module</a>
+</li>
 </ul></section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
@@ -251,7 +265,7 @@ This means any authoring operation on the items should be performed <strong>with
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

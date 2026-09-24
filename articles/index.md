@@ -18,18 +18,17 @@ Detailed articles about advanced concepts & features.
 - [Communication](https://thekangaroofactory.github.io/kitems/articles/communication.md):
 - [Item
   workflows](https://thekangaroofactory.github.io/kitems/articles/workflows.md):
-- [Filtering
-  Items](https://thekangaroofactory.github.io/kitems/articles/filtering.md):
+- [Filtering](https://thekangaroofactory.github.io/kitems/articles/filtering.md):
 - [Ordering](https://thekangaroofactory.github.io/kitems/articles/ordering.md):
-- [Shortcuts](https://thekangaroofactory.github.io/kitems/articles/shortcuts.md):
+- [Constraints](https://thekangaroofactory.github.io/kitems/articles/constraints.md):
 
 ### Other
 
 Miscellaneous topics
 
 - [Environment](https://thekangaroofactory.github.io/kitems/articles/environment.md):
-- [Known
-  Limitations](https://thekangaroofactory.github.io/kitems/articles/limitations.md):
+- [Migration](https://thekangaroofactory.github.io/kitems/articles/migration.md):
+- [Limitations](https://thekangaroofactory.github.io/kitems/articles/limitations.md):
 
 ### Specifications
 

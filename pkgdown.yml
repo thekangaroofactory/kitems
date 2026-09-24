@@ -1,21 +1,22 @@
-pandoc: 3.1.11
-pkgdown: 2.2.0
+pandoc: 3.8.3
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   admin: admin.html
   communication: communication.html
+  constraints: constraints.html
   core-concepts: core-concepts.html
   environment: environment.html
   filtering: filtering.html
   implementations: implementations.html
   kitems: kitems.html
   limitations: limitations.html
+  migration: migration.html
   ordering: ordering.html
   roadmap: roadmap.html
   shiny-module: shiny-module.html
-  shortcuts: shortcuts.html
   workflows: workflows.html
-last_built: 2026-03-03T16:25Z
+last_built: 2026-09-24T07:50Z
 urls:
   reference: https://thekangaroofactory.github.io/kitems/reference
   article: https://thekangaroofactory.github.io/kitems/articles

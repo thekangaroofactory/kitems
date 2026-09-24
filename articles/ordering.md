@@ -1,25 +1,28 @@
 # Ordering
 
-Basic ordering capabilities are available in the package module server.
+Ordering capabilities are available in the package module server.
 
-They rely on the data model attributes:
+From version
+[0.8.0](https://thekangaroofactory.github.io/kitems/news/index.html#kitems-v080),
+how to sort the items is now defined in the YAML config file with a
+single `sort` entry.
 
-- `sort_rank`
+It takes an instruction that will be analyzed to get the attribute
+ranking as well as the direction:
 
-- `sort_desc`
+`sort: date, desc(total)`
 
-Defining the ordering of the items is done from the admin console (in
-the data model section):
+This instruction will first order items by (ascending) `date`, then
+descending `total`.
 
-![](images/admin_ordering.png)
+Allowing multiple rules is there to help sorting items that it would not
+be possible to order given the first rule. No limit is set, but two or
+three rules should be enough. If not, you may want to consider adding a
+specific attribute (most probably a skipped & hidden one) with a
+computed value to help with ranking. Then you can set the rule on this
+attribute.
 
-It is done with the attribute wizard (when creating or updating an
-attribute).
-
-- `sort_rank` defines in which order the attributes are used to sort the
-  items
-
-- `sort_desc` is whether an attribute should be used in descending order
+You can set / update the ordering instruction in the Admin Console.
 
 > **Note**
 >
@@ -29,6 +32,5 @@ attribute).
 
 - Data model structure – [core
   concepts](https://thekangaroofactory.github.io/kitems/articles/core-concepts.html#structure)
-
 - Admin console –
   [admin](https://thekangaroofactory.github.io/kitems/articles/admin.html#data-model)

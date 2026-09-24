@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Environment • kitems</title>
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="environment_files/libs/quarto-html/popper.min.js"></script><script src="environment_files/libs/quarto-html/tippy.umd.min.js"></script><link href="environment_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="environment_files/libs/quarto-html/light-border.css" rel="stylesheet">
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kitems</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,9 +44,9 @@
     <li><a class="dropdown-item" href="../articles/implementations.html">Implementations</a></li>
     <li><a class="dropdown-item" href="../articles/communication.html">Communication</a></li>
     <li><a class="dropdown-item" href="../articles/workflows.html">Item workflows</a></li>
-    <li><a class="dropdown-item" href="../articles/filtering.html">Filtering Items</a></li>
+    <li><a class="dropdown-item" href="../articles/filtering.html">Filtering</a></li>
     <li><a class="dropdown-item" href="../articles/ordering.html">Ordering</a></li>
-    <li><a class="dropdown-item" href="../articles/shortcuts.html">Shortcuts</a></li>
+    <li><a class="dropdown-item" href="../articles/constraints.html">Constraints</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul>
@@ -91,32 +91,52 @@
     <p>This article is here to keep all environment considerations in a single place.</p>
 <section class="level2"><h2 id="path">Path<a class="anchor" aria-label="anchor" href="#path"></a>
 </h2>
-<p>Both data model &amp; item files are stored in a specific folder dedicated to a given instance of the module server.</p>
+<p>The YAML project config file as well as the item files are stored in specific folders linked to the project.</p>
 <ul>
-<li><p>The folder is named after the <code>id</code> of the module</p></li>
-<li><p>It is located under the path given to the <code>path</code> argument</p></li>
+<li>at the path level for the YAML config file</li>
+<li>in dedicated folders for the items files</li>
 </ul>
+<p>The item folders are named after the item <code>id</code> that is also used to start the corresponding module server instance.</p>
+<p>The path is defined in the <code>R_KITEMS_PATH</code> environment variable:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"mydata"</span>, path <span class="op">=</span> <span class="st">"./data"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>R_KITEMS_PATH <span class="op">=</span> <span class="st">"path/to/the/project/data"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>For this reason, unless there is a single instance of the module, it is not recommended to name any of the <code>id</code> with same name as the last folder of the provided path. It may result in files being stored at different levels.</p>
-<p>Examples:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"data"</span>, path <span class="op">=</span> <span class="st">"./path/to/data"</span><span class="op">)</span></span></code></pre></div>
+<p>From version <a href="../news/index.html#kitems-v080">0.8.0</a>, this is the standard way to set the location where the data should be found or created.<br>
+When this environment variable is not set, it will be detected and messages will be displayed accordingly.</p>
+<div>
+<blockquote>
+<p><strong>Important</strong></p>
+<p>For backward compatibility purpose, the <code>path</code> argument of the module server function has been kept, with default value pointing to the <code>R_KITEMS_PATH</code> environment variable.<br>
+When the argument gets an explicit value, a message will be displayed to indicate this should now be done through the environment variable.</p>
+</blockquote>
 </div>
-<p>Files will be stored in “./path/to/data”</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="../reference/kitems.html">kitems</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"data_1"</span>, path <span class="op">=</span> <span class="st">"./path/to/data"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<p>Files will be stored in “./path/to/data/data_1”</p>
 </section><section class="level2"><h2 id="debug">Debug<a class="anchor" aria-label="anchor" href="#debug"></a>
 </h2>
 <p>For debugging purpose, the package implements traces through outputs to the console.</p>
 <p>But because printing to the console has serious impact on the overall app performance, it has been decided to wrap the trace mechanism into a function that only outputs the log when it is activated.</p>
-<p>To set the trace level, you need to use the <code><a href="https://rdrr.io/pkg/ktools/man/trace_level.html" class="external-link">ktools::trace_level()</a></code> function.</p>
+<p>To set the trace level, you may export the <code>R_KITEMS_DEBUG</code> environment variable</p>
+<ul>
+<li>0 = no traces (except specific messages, warnings or errors)</li>
+<li>1 = verbose (standard traces, usually the main steps)</li>
+<li>2 = more verbose (detailed traces)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>R_KITEMS_DEBUG <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+</div>
+<p>Another way to activate it is to use the <code><a href="https://thekangaroofactory.github.io/ktools/reference/trace_level.html" class="external-link">ktools::trace_level()</a></code> function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># set the traces</span></span>
+<span><span class="fu">ktools</span><span class="fu">::</span><span class="fu"><a href="https://thekangaroofactory.github.io/ktools/reference/trace_level.html" class="external-link">trace_level</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># unset the traces</span></span>
+<span><span class="fu">ktools</span><span class="fu">::</span><span class="fu"><a href="https://thekangaroofactory.github.io/ktools/reference/trace_level.html" class="external-link">trace_level</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># check</span></span>
+<span><span class="fu">ktools</span><span class="fu">::</span><span class="fu"><a href="https://thekangaroofactory.github.io/ktools/reference/trace_level.html" class="external-link">trace_level</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
 </section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
@@ -210,7 +230,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

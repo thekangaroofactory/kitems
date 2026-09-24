@@ -1,0 +1,102 @@
+# Migration
+
+## Introduction
+
+Version
+[0.8.0](https://thekangaroofactory.github.io/kitems/news/index.html#kitems-v080)
+has introduced new core concepts that are not compatible with previous
+version:
+
+- the YAML config
+- some module server parameters.
+
+A migration is required for the data model itself, but also for the app
+implementing kitems.  
+This article will guide you through the migration procedure.
+
+## Backup
+
+The first things to do (as for any migration) is to perform a backup of
+the data.  
+You can use the backup() function or just make a copy the data folder.
+
+## Migrate data model(s)
+
+All the data models belonging to the project need to be migrated.  
+They will be merged into a single YAML config file for the project.
+
+Launch the [Admin
+Console](https://thekangaroofactory.github.io/kitems/articles/admin.html#migration)
+using the admin() function to do so.  
+Once the migration is done, refresh the page and go through the item
+tabs to check that nothing is missing.
+
+It may be a good time to update some attributes to take advantage of the
+new features introduced in version
+[0.8.0](https://thekangaroofactory.github.io/kitems/news/index.html#kitems-v080).
+In particular attribute values can be set as a replacement of shortcuts.
+
+## App upgrade
+
+### Environment
+
+Declare the `R_KITEMS_PATH` in your project (see
+[environment](https://thekangaroofactory.github.io/kitems/articles/environment.html#path)).
+
+Because it is now managed automatically from this environment variable,
+you should drop the `path` argument from the module server function
+calls[^1].
+
+### Parameters
+
+Apart from the `path` argument, some parameters and options have also
+been removed or modified:
+
+- `autosave` is now an option, it should be moved into the `options`
+  argument as an element of the list.
+- `admin` has been dropped, it should be removed.
+- `shortcut` is not an option anymore (it has been replaced by attribute
+  values).
+
+Example:
+
+``` r
+
+# -- before migration
+kitems::kitems(id = "foo", path = "./data", admin = TRUE, autosave = TRUE, options = list(shortcut = TRUE))
+
+# -- after migration
+kitems::kitems(id = "foo", options = list(autosave = TRUE))
+```
+
+### UI
+
+The item table widget function has been renamed into
+[`item_widget()`](https://thekangaroofactory.github.io/kitems/reference/item_widget.md)
+so it should be replaced in your UI code otherwise there will be an
+error about non exported function.
+
+Example:
+
+``` r
+
+# -- before migration
+kitems::filtered_view_widget("foo")  
+
+# -- after migration 
+kitems::item_widget("foo")
+```
+
+You may also decide to use the new
+[`actions_widget()`](https://thekangaroofactory.github.io/kitems/reference/create_widget.md)
+function to get all three action buttons (create / update / delete) in a
+single call.
+
+## Useful Links
+
+- Administration –
+  [admin](https://thekangaroofactory.github.io/kitems/articles/admin.md)
+- Module server –
+  [kitems](https://thekangaroofactory.github.io/kitems/articles/kitems.md)
+
+[^1]: Otherwise a warning will be raised.

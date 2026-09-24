@@ -13,26 +13,34 @@ return value(s).
 > research & exploration work captured in this eBook: [Communication
 > between shiny
 > modules](https://thekangaroofactory.github.io/communication-between-shiny-modules/).
->
-> It is expected that the package will be used in this context.
+
+## UI-Server
+
+When you implement the package widgets into your app UI, the
+communication from and to the widgets will be automatically handled by
+the module server.
+
+- capture user actions (click on the buttons, in table selection)
+- detect whether date filter is implemented and if so listen to strategy
+  or date range modification
+- update the item table when necessary.
 
 ## Arguments
 
-Among the arguments that can be passed to the server function to tune
-its internal behaviors are the reactive parameters named `trigger` &
-`filter` that behave like event managers.
+Among the arguments that can be passed to the module server function to
+tune its internal behaviors are the reactive parameters named `trigger`
+& `filter` that behave like event managers.
 
 Whenever they receive a reactive object **reference** as input value,
-the module will take a dependency on it and declare a listener to react
+the module will take a dependency on it and declare an observer to react
 to specific events for the module to execute dedicated actions on the
 items.
 
 - `trigger` is used to pass create / update / delete actions
-
 - `filter` is used to set / unset filters
 
-Reactive arguments are a key feature for the module to be used within
-more advanced
+Reactive arguments are key features for the module to be used within
+advanced
 [implementations](https://thekangaroofactory.github.io/kitems/articles/implementations.md).
 
 ## Return value(s)
@@ -48,8 +56,9 @@ A typical example is a plot that will be updated as soon as the items
 are modified.
 
 ``` r
+
 # -- call the module server
-mydata <- kitems::kitems(id = "my_data", path = "./data")
+mydata <- kitems::kitems(id = "my_data")
 
 # -- plot
 output$plot <- renderPlot({
@@ -61,8 +70,8 @@ output$plot <- renderPlot({
 
 ## Considerations
 
-The magic with passing references is that the value itself is not copied
-or duplicated.[¹](#fn1)
+The magic with passing **references** is that the value itself is not
+copied or duplicated.[^1]
 
 All the reactive objects of the return value are created with the
 [`shiny::reactive()`](https://rdrr.io/pkg/shiny/man/reactive.html)
@@ -80,17 +89,12 @@ options.
 
 - Scenarios & use cases –
   [implementations](https://thekangaroofactory.github.io/kitems/articles/implementations.md)
-
 - Module server function –
   [`kitems()`](https://thekangaroofactory.github.io/kitems/reference/kitems.md)
-
 - Arguments & return value(s) –
   [shiny-module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.md)
-
 - Item workflows –
   [workflows](https://thekangaroofactory.github.io/kitems/articles/workflows.md)
 
-------------------------------------------------------------------------
-
-1.  See *Advanced R*
+[^1]: See *Advanced R*
     <https://adv-r.hadley.nz/names-values.html#names-values>

@@ -25,17 +25,32 @@ trigger_event(
 
 - values:
 
-  optional values to create, update or delete an item.
+  optional list of values to create, update or delete an item.
 
 ## Value
 
-An event object (list).
+A list.
+
+## Details
+
+The function also adds an event id to make it unique (otherwise sending
+two times the same request would fail).
+
+For more details see this vignette:
+[`vignette("workflows", package = "kitems")`](https://thekangaroofactory.github.io/kitems/articles/workflows.md)
+
+## See also
+
+[`kitems()`](https://thekangaroofactory.github.io/kitems/reference/kitems.md)
 
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
-# fire create dialog event
+# create dialog event
 trigger_event()
+
+# delete item event (without dialog)
+trigger_event(workflow = "delete", type = "task", values = list(id = 1234))
 } # }
 ```

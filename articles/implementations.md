@@ -1,8 +1,12 @@
 # Implementations
 
-The framework is meant to be flexible, which means that several
-implementations (in other words levels of delegation / control) have
-been defined.
+The framework is meant to be flexible, with several implementations
+available.  
+In other words, three levels of delegation / control have been defined:
+
+- full delegation (the baseline)
+- mixed implementation
+- full control
 
 > **Tip**
 >
@@ -12,23 +16,27 @@ been defined.
 
 ## Full delegation
 
-In this scenario / implementation, the *item* management is only
-performed through the module internal server-UI interactions. This is
-the default and most intuitive mode.
+In this scenario / implementation, the management of the *items* is only
+performed within the module.  
+This is the default and most intuitive mode.
 
-- Module server is launched without setting the `trigger` argument
+- Module server is launched from the main server
+- Actions are performed using the module UI widgets implemented on
+  client side.
 
-- Actions are performed using the UI components
+This is why it is called “full delegation”.  
+You don’t need to worry about how to manage those items.
 
 Server example:
 
 ``` r
+
 # -- Define server logic
 shinyServer(
   function(input, output, session){
     
-    # -- Launch module servers
-    mydata <- kitems::kitems(id = "mydata", path = "./data")
+    # -- Launch the module server
+    mydata <- kitems::kitems(id = "mydata")
     
   })
 ```
@@ -36,6 +44,7 @@ shinyServer(
 UI example:
 
 ``` r
+
 # -- Define app UI
 ui <- page_navbar(
   
@@ -57,20 +66,25 @@ ui <- page_navbar(
             kitems::date_slider_widget("mydata"),
             
             # -- view
-            p("Here is the items table:"),
-            kitems::filtered_view_widget("mydata")))
+            p("Here is the item table:"),
+            kitems::item_widget("mydata")))
 ```
 
-Create / update / delete operations will be fully managed by the module
-server. A dialog will popup for the user to provide required inputs and
-confirmation.
+The module server will take care off everything:
 
-The date slider can be used to filter the data / *items* displayed in
-the filtered view.
+- perform create / update / delete operations
+- ask the required information / input to the user with dialog
+- filter the data when the user selects a date range
+- update the item table view
 
-From there, you will use the `mydata` object (containing the module
-server function return value) to perform your own tasks (build a plot on
-the data for example).
+The behavior of the server will only depend on what’s defined in the
+data model / YAML config.  
+(which attribute to ask, what format to expect, what validation to
+perform…).
+
+From there, you can use the return value (`mydata` in the above example)
+object to perform your own tasks (transform the data or build a plot for
+example).
 
 See
 [shiny-module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.html#return-values)
@@ -81,14 +95,16 @@ to read about the module server return value(s).
 In this scenario, you may not want to implement the action buttons
 provided in the package but still use the dialog capabilities of the
 module. An example is when *item* creation will be launched as a side
-effect of an observer in your app.
+effect of an observer in your app instead of a click from the user.
 
-The module server will be launched using the `trigger` reactive argument
-so that an event can be passed to fire the expected dialogs.
+The module server will be launched as before, but with the `trigger`
+reactive argument so that an event can be passed to fire the expected
+dialog.
 
 Server example:
 
 ``` r
+
 # -- Define server logic
 shinyServer(
   function(input, output, session){
@@ -97,7 +113,7 @@ shinyServer(
     events <- reactiveVal()
     
     # -- Launch module servers
-    mydata <- kitems::kitems(id = "mydata", path = "./data", trigger = events)
+    mydata <- kitems::kitems(id = "mydata", trigger = events)
     
   })
 ```
@@ -105,6 +121,7 @@ shinyServer(
 Create item example:
 
 ``` r
+
 # -- Observe some event
 observeEvent(input$foo, {
   
@@ -114,6 +131,11 @@ observeEvent(input$foo, {
   
 })
 ```
+
+When the event is received by the module server, it will display the
+same dialog to the user, based on the data model’s attributes.  
+The same workflows are applied, but the way to trigger them is different
+since it’s a server-server interaction.
 
 > **Note**
 >
@@ -125,24 +147,27 @@ observeEvent(input$foo, {
 
 This scenario is say the opposite of the full delegation
 implementation.  
-It is meant to be mostly used when the *item* operations do not rely on
-user interactions, hence it will be managed as pure back-end tasks.
+It is meant to be used when the *item* operations do not rely on user
+interactions, hence it will be managed as pure back-end tasks.
 
-A very good example for this use case is a GitHub client app that would
-call the GitHub API to get issues related to a repository and store them
-into a cache to avoid performance issues when multiple calls are
-performed.
+A very good example for this use case is an app that would call an API
+and store the incoming data into a cache to avoid multiple duplicated
+API calls. Then the app would pass the data to the module server trigger
+to feed the cache without any user interaction.
 
 Another – maybe easier – example is a dashboard that would display a map
-and user would create markers just by clicking on it.
+and the user create markers just by clicking on it. The app server that
+listen to the map click could send an event to the module server to
+create a new marker *item*.
 
 The code implementation itself is not very different from the mixed
 implementation as you will use the `trigger` to communicate to the
-module server from the main / parent server.
+module server from the main server.
 
 Server example:
 
 ``` r
+
 # -- Define server logic
 shinyServer(
   function(input, output, session){
@@ -151,18 +176,19 @@ shinyServer(
     events <- reactiveVal()
     
     # -- Launch module servers
-    mydata <- kitems::kitems(id = "mydata", path = "./data", trigger = events)
+    mydata <- kitems::kitems(id = "mydata", trigger = events)
     
   })
 ```
 
-But the *item* operations will no longer rely on the dialogs, so you
-need to pass all required information for the module server to perform
-the task in the background.
+But the *item* operations will no longer rely on the dialog, so you need
+to pass all required information for the module server to perform the
+task in the background.
 
 Create item example:
 
 ``` r
+
 # -- Observe some event
 observeEvent(input$foo, {
   
@@ -178,6 +204,9 @@ observeEvent(input$foo, {
     
     })
 ```
+
+The module server will perform the creation without asking for any input
+or confirmation.
 
 > **Important**
 >
@@ -196,9 +225,7 @@ observeEvent(input$foo, {
 
 - Create / update / delete items –
   [workflows](https://thekangaroofactory.github.io/kitems/articles/workflows.md)
-
 - Arguments & return value(s) –
   [shiny-module](https://thekangaroofactory.github.io/kitems/articles/shiny-module.md)
-
 - Communication principles –
   [communication](https://thekangaroofactory.github.io/kitems/articles/communication.md)

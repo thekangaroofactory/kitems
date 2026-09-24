@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>A Framework To Manage Data Frame Items • kitems</title>
+<title>A Framework To Manage Tabular Items • kitems</title>
 <script src="lightswitch.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="A Framework To Manage Data Frame Items">
-<meta name="description" content="A framework to manage data frame items and a set of tools to implement it within R Shiny applications.">
-<meta property="og:description" content="A framework to manage data frame items and a set of tools to implement it within R Shiny applications.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="A Framework To Manage Tabular Items">
+<meta name="description" content="A framework to manage tabular items and a set of tools to implement it within R Shiny applications.">
+<meta property="og:description" content="A framework to manage tabular items and a set of tools to implement it within R Shiny applications.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">kitems</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,9 +44,9 @@
     <li><a class="dropdown-item" href="articles/implementations.html">Implementations</a></li>
     <li><a class="dropdown-item" href="articles/communication.html">Communication</a></li>
     <li><a class="dropdown-item" href="articles/workflows.html">Item workflows</a></li>
-    <li><a class="dropdown-item" href="articles/filtering.html">Filtering Items</a></li>
+    <li><a class="dropdown-item" href="articles/filtering.html">Filtering</a></li>
     <li><a class="dropdown-item" href="articles/ordering.html">Ordering</a></li>
-    <li><a class="dropdown-item" href="articles/shortcuts.html">Shortcuts</a></li>
+    <li><a class="dropdown-item" href="articles/constraints.html">Constraints</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="articles/index.html">More articles...</a></li>
   </ul>
@@ -77,37 +77,29 @@
 </h1></div>
 <!-- badges: start / keep here because it's not displayed the same way in GitHub & pkgdown -->
 
-<p>The goal of kitems is to provide a framework to manage data frame <em>items</em> and a set of tools to implement it within R Shiny applications.</p>
-<p>It is delivered as a Shiny module.</p>
-<div class="section level2">
-<h2 id="lifecycle">Lifecycle<a class="anchor" aria-label="anchor" href="#lifecycle"></a>
-</h2>
-<!-- badge: start -->
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a> <!-- badge: end --></p>
-<blockquote>
-<p>Note that the package is under development convergence (lifecycle = experimental).<br>
-Core features may still be modified at this stage, and there is no guaranty that exported functions signature will not change before it is converged.</p>
-</blockquote>
-<p>See <a href="https://thekangaroofactory.github.io/kitems/articles/roadmap.html">roadmap</a> article to get more information about the package convergence.</p>
-</div>
+<p>The goal of kitems is to provide a framework to manage tabular <em>items</em> and a set of tools to implement it within R Shiny web applications.</p>
+<p>It’s main component is delivered as a Shiny module.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>The development (<em>beta</em>) version of kitems can be installed from <a href="https://github.com/thekangaroofactory/kitems" class="external-link">GitHub</a> with:</p>
+<p>The latest version of kitems can be installed from <a href="https://github.com/thekangaroofactory/kitems" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"thekangaroofactory/kitems"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"thekangaroofactory/kitems"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># or</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"thekangaroofactory/kitems"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="demo">Demo<a class="anchor" aria-label="anchor" href="#demo"></a>
+<h2 id="migration">Migration<a class="anchor" aria-label="anchor" href="#migration"></a>
 </h2>
-<p>Demo apps are delivered along with the package and can be accessed with:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># -- get demo names</span></span>
-<span><span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="reference/runExample.html">runExample</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># -- run 'demo' app</span></span>
-<span><span class="fu">kitems</span><span class="fu">::</span><span class="fu"><a href="reference/runExample.html">runExample</a></span><span class="op">(</span><span class="st">"demo"</span><span class="op">)</span></span></code></pre></div>
+<p>Version 0.8.x requires a data model migration from previous versions as well as some modification in your app.</p>
+<p>Check this <a href="https://thekangaroofactory.github.io/kitems/articles/migration.html">article</a> to get the detailed procedure.</p>
+</div>
+<div class="section level2">
+<h2 id="lifecycle">Lifecycle<a class="anchor" aria-label="anchor" href="#lifecycle"></a>
+</h2>
+<p>See this <a href="https://thekangaroofactory.github.io/kitems/articles/roadmap.html">article</a> to get more information about the package roadmap.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
@@ -137,6 +129,7 @@ Core features may still be modified at this stage, and there is no guaranty that
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-34cf58.svg" alt="Lifecycle:stable"></a></li>
 <li><a href="https://github.com/thekangaroofactory/kitems/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/thekangaroofactory/kitems/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://codecov.io/gh/thekangaroofactory/kitems" class="external-link"><img src="https://codecov.io/gh/thekangaroofactory/kitems/graph/badge.svg?token=7P74NK51JJ" alt="codecov"></a></li>
 </ul>
@@ -151,7 +144,7 @@ Core features may still be modified at this stage, and there is no guaranty that
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

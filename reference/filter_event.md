@@ -21,12 +21,22 @@ filter_event(layer = c("pre", "main"), ...)
 
 ## Value
 
-An event [`list()`](https://rdrr.io/r/base/list.html).
+A list.
 
 ## Details
 
 When no expression is passed to `...` then the filter layer will be
 reset.
+
+See the module server function to know how to pass the event to the
+module server.
+
+For more details see this vignette:
+[`vignette("filtering", package = "kitems")`](https://thekangaroofactory.github.io/kitems/articles/filtering.md)
+
+## See also
+
+[`kitems()`](https://thekangaroofactory.github.io/kitems/reference/kitems.md)
 
 ## Examples
 
