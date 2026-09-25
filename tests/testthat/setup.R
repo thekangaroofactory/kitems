@@ -19,12 +19,13 @@ module_id <- "foo"
 ktools::trace_level(0)
 
 # -- data folder
-testdata_path_base <- file.path(system.file("tests", "testthat", package = "kitems"), "testdata")
+testdata_path_base <- file.path(test_path(), "testdata")
 testdata_path <- file.path(testdata_path_base, module_id)
 
 # -- helper
-create_test_folder <- function(x)
+create_test_folder <- function(x){
   dir.create(x, recursive = TRUE, showWarnings = FALSE)
+  if(!dir.exists(x)) cat("Create test data folder failed!", x)}
 
 # -- create & set env
 create_test_folder(testdata_path)
