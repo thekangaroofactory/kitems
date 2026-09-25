@@ -4,7 +4,7 @@ Version: 0.8.0
 Authors@R: 
     person(given = "Philippe",
            family = "Peret",
-           role = c("aut", "cre"),
+           role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0009-0003-9666-7490"),
            email = "philippe.peret@hotmail.com")
 Description: A framework to manage tabular items and a set of tools 
