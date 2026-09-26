@@ -76,7 +76,7 @@ config_check <- function(config){
       else
         # file
         if(item$source$type == "file")
-          if(!file.exists(file.path(item$source$path, item$source$filename)))
+          if(!file.exists(file.path(Sys.getenv("R_KITEMS_PATH"), item$source$path, item$source$filename)))
             rv[[length(rv)+1]] <- list(code = 8, type = "error", message = paste("Item", n, "has no item file"), item = n)}
 
     # data.model
