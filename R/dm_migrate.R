@@ -115,7 +115,7 @@ dm_migrate <- function(data.model){
       dirty <- TRUE}
 
     # update version
-    attr(data.model, "version") <- "0.8.0"
+    attr(data.model, "version") <- utils::packageVersion("kitems")
 
   }
 
