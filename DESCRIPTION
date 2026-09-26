@@ -1,6 +1,6 @@
 Package: kitems
 Title: A Framework To Manage Tabular Items
-Version: 0.8.0
+Version: 0.8.0.9000
 Authors@R: 
     person(given = "Philippe",
            family = "Peret",
