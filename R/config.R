@@ -231,9 +231,14 @@ c_extract <- function(config, item = NULL, attribute = NULL){
 ci_connector <- function(config, item){
 
   # -- secure against missing item
-  if(!is.null(x <- config$items[[ci_position(config, item)]]$source)){
+  # Also item config path is relative to R_KITEMS_PATH
+  # so need to concatenate to return the full path to the file
+  x <- config$items[[ci_position(config, item)]]$source
+  if(!is.null(x)){
     x$path <- dirname(name(item, url = T))
-    x$filename = name(item, file = T)}
+    x$filename = name(item, file = T)
+  } else
+    x$path <- file.path(Sys.getenv("R_KITEMS_PATH"), x$path)
 
   # -- return
   x
@@ -299,7 +304,7 @@ ci_create <- function(id, description = NULL, path = Sys.getenv("R_KITEMS_PATH")
   # -- init
   config <- list(id = id,
                  source = list(type = "file",
-                               path = dirname(name(id, url = T)),
+                               path = id,
                                filename = name(id, file = T)),
                  data.model = list(attributes = list(list(name = "id",
                                                           type = "numeric",
