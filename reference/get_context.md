@@ -38,7 +38,7 @@ config <- design(project = "test", item = "foo")
 # instead of
 config |> extend(item = "foo", attribute = c(name = "total", type = "integer"))
 #> $version
-#> [1] "0.8.0"
+#> [1] "0.8.0.9000"
 #> 
 #> $project
 #> [1] "test"
@@ -95,7 +95,7 @@ config |> extend(item = "foo", attribute = c(name = "total", type = "integer"))
 item <- "foo"
 config |> extend(attribute = c(name = "total", type = "integer"))
 #> $version
-#> [1] "0.8.0"
+#> [1] "0.8.0.9000"
 #> 
 #> $project
 #> [1] "test"

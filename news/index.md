@@ -1,5 +1,16 @@
 # Changelog
 
+## kitems 0.8.0.9000
+
+The update is a patch on top of v0.8.0 to cover the following critical
+issues:
+
+- Tests fail on MacOS (#905)
+- Module server won’t start right after data model migration to YAML
+  config (#909)
+- The path to the items should be relative to the R_KITEMS_PATH
+  environment variable (#911)
+
 ## kitems v0.8.0
 
 The revision is an extensive review of the package functions & core
