@@ -217,16 +217,21 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
         rc <- init_items |> check(config, item)
         catl("- report has length", length(rc), level = 2)
 
-        if(length(rc))
-            # -- when interactive
-            if(isRunning()){
-              showModal(
-                modalDialog(
-                  title = "Items Integrity",
-                  p("Items require", length(rc), "recovery action(s)."),
-                  p("Run admin() to fix it."),
-                  footer = actionButton(inputId = ns("close_app"), label = "Close app")))
-              observeEvent(input$close_app, stopApp(), once = TRUE)}}
+        if(length(rc)){
+
+          # -- output to the console for debugging purpose
+          warning(MODULE, "Items require recovery action(s).")
+          print(rc)
+
+          # -- when interactive
+          if(isRunning()){
+            showModal(
+              modalDialog(
+                title = "Items Integrity",
+                p("Items require", length(rc), "recovery action(s)."),
+                p("Run admin() to fix it."),
+                footer = actionButton(inputId = ns("close_app"), label = "Close app")))
+            observeEvent(input$close_app, stopApp(), once = TRUE)}}}
 
       # Increment progress
       incProgress(3/4, detail = "Wrap everything")

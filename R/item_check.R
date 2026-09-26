@@ -53,7 +53,7 @@ item_check <- function(items, config, id){
   ref_classes <- ref_classes[names(ref_classes) %in% names(items_classes)]
 
   # do check
-  if(!identical(items_classes, ref_classes)){
+  if(!identical(items_classes[names(ref_classes)], ref_classes)){
     x <- names(items_classes[which(items_classes != ref_classes)])
     if(length(x))
       rc <- c(rc, list(code = 3, type = "error",
