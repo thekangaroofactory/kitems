@@ -53,7 +53,7 @@ config |> extend(item = "foo", attribute = c(name = "total", type = "integer"))
 #> [1] "file"
 #> 
 #> $items[[1]]$source$path
-#> [1] "/foo"
+#> [1] "foo"
 #> 
 #> $items[[1]]$source$filename
 #> [1] "foo_items.csv"
@@ -110,7 +110,7 @@ config |> extend(attribute = c(name = "total", type = "integer"))
 #> [1] "file"
 #> 
 #> $items[[1]]$source$path
-#> [1] "/foo"
+#> [1] "foo"
 #> 
 #> $items[[1]]$source$filename
 #> [1] "foo_items.csv"

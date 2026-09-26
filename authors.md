@@ -3,7 +3,8 @@
 ## Authors
 
 - **[Philippe Peret](https://www.linkedin.com/in/philippeperet/)**.
-  Author, maintainer. [](https://orcid.org/0009-0003-9666-7490)
+  Author, maintainer, copyright holder.
+  [](https://orcid.org/0009-0003-9666-7490)
 
 ## Citation
 
