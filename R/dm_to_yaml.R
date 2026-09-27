@@ -23,7 +23,7 @@ dm_to_yaml <- function(dm){
 
   # -- checks
   stopifnot("dm should be a data.frame object" = is.data.frame(dm))
-  stopifnot("data model version must be 0.8.0, use dm_migrate first" = identical(attr(dm, "version"), "0.8.0"))
+  stopifnot("data model version must be same as package version, use dm_migrate first" = identical(attr(dm, "version"), utils::packageVersion("kitems")))
 
   # -- init
   yaml <- list()

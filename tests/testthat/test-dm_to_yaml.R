@@ -11,7 +11,7 @@ test_that("dm_to_yaml works", {
                    refresh = c(FALSE, FALSE, FALSE),
                    sort.rank = c(NA, NA, 1),
                    sort.desc = c(NA, NA, FALSE))
-  attributes(dm)$version <- "0.8.0"
+  attributes(dm)$version <- utils::packageVersion("kitems")
 
   # -- check
   x <- dm_to_yaml(dm)
