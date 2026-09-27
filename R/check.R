@@ -33,7 +33,7 @@ check <- function(...){
 
   # -- detect config
   if(length(idx_c <- which(sapply(arg, class) == "list")))
-    rc <- config_check(arg[[idx_c]])
+    rc <- config_check(config = arg[[idx_c]], path = if(!is.null(arg$path)) arg$path else Sys.getenv("R_KITEMS_PATH"))
 
   # -- detect items
   if(!exists("rc") || !length(rc)){

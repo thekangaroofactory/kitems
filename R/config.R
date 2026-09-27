@@ -218,6 +218,10 @@ c_extract <- function(config, item = NULL, attribute = NULL){
 #'
 #' @param config the YAML config
 #' @param item the name (id) of the item group
+#' @param path an optional path to the data
+#'
+#' @details
+#' By default, path is initialized from the environment variable `R_KITEMS_PATH`.
 #'
 #' @returns a list or NULL if the item is not found.
 #' @noRd
@@ -228,17 +232,17 @@ c_extract <- function(config, item = NULL, attribute = NULL){
 #'
 #' ci_connector(yaml, "foo")
 
-ci_connector <- function(config, item){
+ci_connector <- function(config, item, path = Sys.getenv("R_KITEMS_PATH")){
 
   # -- secure against missing item
   # Also item config path is relative to R_KITEMS_PATH
   # so need to concatenate to return the full path to the file
   x <- config$items[[ci_position(config, item)]]$source
   if(!is.null(x)){
-    x$path <- dirname(name(item, url = T))
+    x$path <- dirname(name(item, url = T, path = path))
     x$filename = name(item, file = T)
   } else
-    x$path <- file.path(Sys.getenv("R_KITEMS_PATH"), x$path)
+    x$path <- file.path(path, x$path)
 
   # -- return
   x

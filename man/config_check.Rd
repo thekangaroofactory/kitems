@@ -4,10 +4,12 @@
 \alias{config_check}
 \title{Check Config}
 \usage{
-config_check(config)
+config_check(config, path = Sys.getenv("R_KITEMS_PATH"))
 }
 \arguments{
 \item{config}{a config list}
+
+\item{path}{an option path}
 }
 \value{
 a list
@@ -21,6 +23,9 @@ Each problem has a type (note, warning or error) and a message.
 Errors are most likely to prevent the package from working properly.
 Warnings may affect the behavior.
 Notes are here for information but should not affect the behavior.
+
+By default, path is initialized with the \code{R_KITEMS_PATH} environment
+variable.
 }
 \examples{
 \dontrun{
