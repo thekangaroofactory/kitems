@@ -10,7 +10,7 @@ A framework to manage tabular items and a set of tools to implement it within R 
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://thekangaroofactory.github.io/kitems/}
+  \item \url{https://thekangaroofactory.r-universe.dev/kitems} \url{https://thekangaroofactory.github.io/kitems/}
 }
 
 }

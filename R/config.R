@@ -35,8 +35,8 @@ c_create <- function(project){
 #' @noRd
 #'
 #' @examples
-#' c_items(list(items = list(ci_create(id = "foo", path = "./"),
-#'                                ci_create(id = "bar", path = "./"))))
+#' c_items(list(items = list(ci_create(id = "foo"),
+#'                                ci_create(id = "bar"))))
 
 c_items <- function(config){
 
@@ -228,7 +228,7 @@ c_extract <- function(config, item = NULL, attribute = NULL){
 #'
 #' @examples
 #' yaml <- c_create("test") |>
-#'   ci_append(ci_create(id = "foo", path = "/temp"))
+#'   ci_append(ci_create(id = "foo"))
 #'
 #' ci_connector(yaml, "foo")
 
@@ -261,7 +261,7 @@ ci_connector <- function(config, item, path = Sys.getenv("R_KITEMS_PATH")){
 #' @examples
 #' # create a config
 #' yaml <- c_create("test") |>
-#'   ci_append(ci_create(id = "foo", path = "/temp")) |>
+#'   ci_append(ci_create(id = "foo")) |>
 #'   ca_append(item = "foo",
 #'                           attribute = ca_create(name = "id",
 #'                                                               type = "numeric"))
@@ -284,23 +284,16 @@ ci_classes <- function(config, item){
 #'
 #' @param id a character string to set the name of the item group
 #' @param description an optional description for the item
-#' @param path an optional character string where to find the data
-#'
-#' @details
-#' When `path` is not provided, the R_KITEMS_PATH environment variable
-#' will be used.
 #'
 #' @returns a list
 #' @noRd
 #'
 #' @examples
-#' ci_create(id = "foo", path = "./")
+#' ci_create(id = "foo")
 
-ci_create <- function(id, description = NULL, path = Sys.getenv("R_KITEMS_PATH")){
+ci_create <- function(id, description = NULL){
 
   # -- secure
-  # path is not checked as it is tested before
-  # otherwise examples will fail.
   if(!is.character(id)){
     warning("Argument id must be a character string.")
     return(NULL)}
@@ -336,7 +329,7 @@ ci_create <- function(id, description = NULL, path = Sys.getenv("R_KITEMS_PATH")
 #'
 #' @examples
 #' ci_append(c_create("prj"),
-#'                    ci_create(id = "a", path = "."))
+#'                    ci_create(id = "a"))
 
 ci_append <- function(config, ...){
 
