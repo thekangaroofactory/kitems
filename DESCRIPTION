@@ -1,5 +1,7 @@
 Package: kitems
 Title: A Framework To Manage Tabular Items
+Description: A framework to manage tabular items and a set of tools 
+    to implement it within R Shiny applications.
 Version: 0.8.0.9000
 Authors@R: 
     person(given = "Philippe",
@@ -7,8 +9,6 @@ Authors@R:
            role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0009-0003-9666-7490"),
            email = "philippe.peret@hotmail.com")
-Description: A framework to manage tabular items and a set of tools 
-    to implement it within R Shiny applications.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -39,5 +39,6 @@ Config/testthat/edition: 3
 Remotes: 
     thekangaroofactory/iker,
     thekangaroofactory/ktools
-URL: https://thekangaroofactory.github.io/kitems/
+URL: https://thekangaroofactory.r-universe.dev/kitems
+    https://thekangaroofactory.github.io/kitems/
 Config/roxygen2/version: 8.1.0
