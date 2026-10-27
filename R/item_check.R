@@ -30,15 +30,15 @@ item_check <- function(items, config, id){
 
     # extra columns
     if(!all(x <- names(items) %in% c_attributes(config, id)))
-      rc <- c(rc, list(code = 1, type = "error",
-                       message = paste("Column(s)", paste(names(items)[!x], collapse = ", "), "not in the data.model"),
-                       missing = names(items)[x]))
+      rc <- append(rc, list(code = 1, type = "error",
+                            message = paste("Column(s)", paste(names(items)[!x], collapse = ", "), "not in the data.model"),
+                            missing = names(items)[x]))
 
     # missing columns
     if(any(x <- !c_attributes(config, id) %in% names(items)))
-      rc <- c(rc, list(code = 2, type = "error",
-                       message = paste("Attribute(s)", paste(c_attributes(config, id)[x], collapse = ", "), "not in the items"),
-                       missing = c_attributes(config, id)[x]))}
+      rc <- append(rc, list(code = 2, type = "error",
+                            message = paste("Attribute(s)", paste(c_attributes(config, id)[x], collapse = ", "), "not in the items"),
+                            missing = c_attributes(config, id)[x]))}
 
 
   # -- classes
@@ -56,8 +56,8 @@ item_check <- function(items, config, id){
   if(!identical(items_classes[names(ref_classes)], ref_classes)){
     x <- names(items_classes[which(items_classes != ref_classes)])
     if(length(x))
-      rc <- c(rc, list(code = 3, type = "error",
-                       message = paste("Column(s)", paste(x, collapse = ", "), "type not matching with the data.model")))}
+      rc <- append(rc, list(code = 3, type = "error",
+                            message = paste("Column(s)", paste(x, collapse = ", "), "type not matching with the data.model")))}
 
   # -- return
   rc
