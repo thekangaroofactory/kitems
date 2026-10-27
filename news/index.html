@@ -55,6 +55,35 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.8.1" id="kitems-v081">kitems v0.8.1<a class="anchor" aria-label="anchor" href="#kitems-v081"></a></h2>
+<p>Mostly convergence on top of v0.8.0 revision.</p>
+<div class="section level3">
+<h3 id="enhancements-0-8-1">Enhancements:<a class="anchor" aria-label="anchor" href="#enhancements-0-8-1"></a></h3>
+<ul><li>Item check should return a list of length 1 when there is a single problem #910</li>
+<li>The path to the items should be relative to the R_KITEMS_PATH environment variable #911</li>
+<li>Drop path argument from ci_create #912</li>
+<li>Load &amp; save items should pass trace level to iker #917</li>
+<li>Allow access to external data #918</li>
+<li>Check connector paramater in item_load and item_save #925</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bugfixes-0-8-1">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-8-1"></a></h3>
+<ul><li>Tests fail on MacOS #905</li>
+<li>Module server won’t start right after data model migration to YAML config #909</li>
+<li>Improve patch 911 #914</li>
+<li>Error data model version must be 0.8.0 is raised during migration #916</li>
+<li>Admin console crashes when trying to add an attribute #922</li>
+</ul></div>
+<div class="section level3">
+<h3 id="internal-0-8-1">Internal<a class="anchor" aria-label="anchor" href="#internal-0-8-1"></a></h3>
+<ul><li>Update package description #921</li>
+<li>Add R-universe badge &amp; install #907</li>
+<li>Add R-Universe URL to DESCRIPTION #923</li>
+<li>Add package citation #906</li>
+<li>Check how to avoid Shiny re-export #859</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.8.0.9000" id="kitems-0809000">kitems 0.8.0.9000<a class="anchor" aria-label="anchor" href="#kitems-0809000"></a></h2>
 <p>The update is a patch on top of v0.8.0 to cover the following critical issues:</p>
 <ul><li>Tests fail on MacOS (#905)</li>

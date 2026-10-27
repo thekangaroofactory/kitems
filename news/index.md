@@ -1,5 +1,38 @@
 # Changelog
 
+## kitems v0.8.1
+
+Mostly convergence on top of v0.8.0 revision.
+
+### Enhancements:
+
+- Item check should return a list of length 1 when there is a single
+  problem \#910
+- The path to the items should be relative to the R_KITEMS_PATH
+  environment variable \#911
+- Drop path argument from ci_create \#912
+- Load & save items should pass trace level to iker \#917
+- Allow access to external data \#918
+- Check connector paramater in item_load and item_save \#925
+
+### Bugfixes
+
+- Tests fail on MacOS \#905
+- Module server won’t start right after data model migration to YAML
+  config \#909
+- Improve patch 911 \#914
+- Error data model version must be 0.8.0 is raised during migration
+  \#916
+- Admin console crashes when trying to add an attribute \#922
+
+### Internal
+
+- Update package description \#921
+- Add R-universe badge & install \#907
+- Add R-Universe URL to DESCRIPTION \#923
+- Add package citation \#906
+- Check how to avoid Shiny re-export \#859
+
 ## kitems 0.8.0.9000
 
 The update is a patch on top of v0.8.0 to cover the following critical

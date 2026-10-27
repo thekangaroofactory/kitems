@@ -61,7 +61,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">config_check</span><span class="op">(</span><span class="va">config</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">config_check</span><span class="op">(</span><span class="va">config</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"R_KITEMS_PATH"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -70,6 +70,10 @@
 
 <dl><dt id="arg-config">config<a class="anchor" aria-label="anchor" href="#arg-config"></a></dt>
 <dd><p>a config list</p></dd>
+
+
+<dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
+<dd><p>an option path</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -83,6 +87,8 @@ Each problem has a type (note, warning or error) and a message.
 Errors are most likely to prevent the package from working properly.
 Warnings may affect the behavior.
 Notes are here for information but should not affect the behavior.</p>
+<p>By default, path is initialized with the <code>R_KITEMS_PATH</code> environment
+variable.</p>
     </div>
 
     <div class="section level2">

@@ -13,7 +13,7 @@ item_load(connector, col.classes)
 - connector:
 
   a list that will be passed to
-  [`iker::load_data()`](https://rdrr.io/pkg/iker/man/load_data.html)
+  [`iker::load_data()`](https://thekangaroofactory.github.io/iker/reference/load_data.html)
   function.
 
 - col.classes:

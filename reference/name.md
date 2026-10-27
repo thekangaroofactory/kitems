@@ -10,6 +10,7 @@ name(
   what = c("item", "dm", "config"),
   file = FALSE,
   url = FALSE,
+  path = Sys.getenv("R_KITEMS_PATH"),
   backup = FALSE
 )
 ```
@@ -31,6 +32,10 @@ name(
 - url:
 
   a logical if the url should be returned.
+
+- path:
+
+  an optional path.
 
 - backup:
 

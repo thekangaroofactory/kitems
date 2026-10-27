@@ -17,7 +17,7 @@ item_save(data, connector)
 - connector:
 
   a list that will be passed to
-  [`iker::save_data()`](https://rdrr.io/pkg/iker/man/save_data.html)
+  [`iker::save_data()`](https://thekangaroofactory.github.io/iker/reference/save_data.html)
   function.
 
 ## Examples

@@ -5,7 +5,7 @@ Check YAML config structure & content
 ## Usage
 
 ``` r
-config_check(config)
+config_check(config, path = Sys.getenv("R_KITEMS_PATH"))
 ```
 
 ## Arguments
@@ -13,6 +13,10 @@ config_check(config)
 - config:
 
   a config list
+
+- path:
+
+  an option path
 
 ## Value
 
@@ -25,6 +29,9 @@ problem has a type (note, warning or error) and a message. Errors are
 most likely to prevent the package from working properly. Warnings may
 affect the behavior. Notes are here for information but should not
 affect the behavior.
+
+By default, path is initialized with the `R_KITEMS_PATH` environment
+variable.
 
 ## Examples
 

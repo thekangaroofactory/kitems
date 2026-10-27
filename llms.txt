@@ -7,16 +7,12 @@ It’s main component is delivered as a Shiny module.
 
 ## Installation
 
-The latest version of kitems can be installed from
-[GitHub](https://github.com/thekangaroofactory/kitems) with:
+The package can be installed from R-universe:
 
 ``` r
 
-# install.packages("devtools")
-devtools::install_github("thekangaroofactory/kitems")
-
-# or
-pak::pak("thekangaroofactory/kitems")
+# Install 'kitems' in R:
+install.packages('kitems', repos = c('https://thekangaroofactory.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 ## Migration
