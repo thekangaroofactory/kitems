@@ -17,6 +17,9 @@
 
 item_load <- function(connector, col.classes){
 
+  # check
+  stopifnot("connector can't be NULL" = !is.null(connector))
+
   # -- read data
   items <- iker::load_data(path = connector$path,
                            file = connector$file,

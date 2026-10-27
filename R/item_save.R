@@ -18,6 +18,9 @@
 
 item_save <- function(data, connector){
 
+  # check
+  stopifnot("connector can't be NULL" = !is.null(connector))
+
   # -- case when all items have been deleted
   if(is.null(data)){
     if(file.exists(file.path(connector$path, connector$file))){
