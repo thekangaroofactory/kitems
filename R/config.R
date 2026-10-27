@@ -240,9 +240,7 @@ ci_connector <- function(config, item, path = Sys.getenv("R_KITEMS_PATH")){
   x <- config$items[[ci_position(config, item)]]$source
   if(!is.null(x)){
     x$path <- dirname(name(item, url = T, path = path))
-    x$filename = name(item, file = T)
-  } else
-    x$path <- file.path(path, x$path)
+    x$filename = name(item, file = T)}
 
   # -- return
   x
