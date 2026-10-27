@@ -71,7 +71,8 @@ admin_item_layout <- function(x){
                        p(ktools::action_link(id = "x",
                                              label = "Add",
                                              target = "attribute_action",
-                                             pattern = paste0(x$id, "-attribute_create")),
+                                             pattern = paste0(x$id, "-attribute_create"),
+                                             value = list(action = "create", item = x$id)),
                          "an attribute to the item group.")),
 
                      h2("Sorting"),

@@ -9,6 +9,7 @@
 #' @param what the targeted object (item, dm or config).
 #' @param file a logical if file extension should be added.
 #' @param url a logical if the url should be returned.
+#' @param path an optional path.
 #' @param backup a logical if a timestamp should be added.
 #'
 #' @details
@@ -29,7 +30,8 @@
 #' # item name
 #' name("foo")
 
-name <- function(id = NULL, what = c("item", "dm", "config"), file = FALSE, url = FALSE, backup = FALSE){
+name <- function(id = NULL, what = c("item", "dm", "config"), file = FALSE, url = FALSE,
+                 path = Sys.getenv("R_KITEMS_PATH"), backup = FALSE){
 
   # -- check
   what <- match.arg(what)
@@ -53,7 +55,7 @@ name <- function(id = NULL, what = c("item", "dm", "config"), file = FALSE, url 
 
   # -- url
   if(url)
-    nm <- file.path(ifelse(what != "config", file.path(Sys.getenv("R_KITEMS_PATH"), id), Sys.getenv("R_KITEMS_PATH")), nm)
+    nm <- file.path(ifelse(what != "config", file.path(path, id), path), nm)
 
   # -- return
   nm

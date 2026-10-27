@@ -35,8 +35,8 @@ c_create <- function(project){
 #' @noRd
 #'
 #' @examples
-#' c_items(list(items = list(ci_create(id = "foo", path = "./"),
-#'                                ci_create(id = "bar", path = "./"))))
+#' c_items(list(items = list(ci_create(id = "foo"),
+#'                                ci_create(id = "bar"))))
 
 c_items <- function(config){
 
@@ -218,27 +218,29 @@ c_extract <- function(config, item = NULL, attribute = NULL){
 #'
 #' @param config the YAML config
 #' @param item the name (id) of the item group
+#' @param path an optional path to the data
+#'
+#' @details
+#' By default, path is initialized from the environment variable `R_KITEMS_PATH`.
 #'
 #' @returns a list or NULL if the item is not found.
 #' @noRd
 #'
 #' @examples
 #' yaml <- c_create("test") |>
-#'   ci_append(ci_create(id = "foo", path = "/temp"))
+#'   ci_append(ci_create(id = "foo"))
 #'
 #' ci_connector(yaml, "foo")
 
-ci_connector <- function(config, item){
+ci_connector <- function(config, item, path = Sys.getenv("R_KITEMS_PATH")){
 
   # -- secure against missing item
   # Also item config path is relative to R_KITEMS_PATH
   # so need to concatenate to return the full path to the file
   x <- config$items[[ci_position(config, item)]]$source
   if(!is.null(x)){
-    x$path <- dirname(name(item, url = T))
-    x$filename = name(item, file = T)
-  } else
-    x$path <- file.path(Sys.getenv("R_KITEMS_PATH"), x$path)
+    x$path <- dirname(name(item, url = T, path = path))
+    x$filename = name(item, file = T)}
 
   # -- return
   x
@@ -257,7 +259,7 @@ ci_connector <- function(config, item){
 #' @examples
 #' # create a config
 #' yaml <- c_create("test") |>
-#'   ci_append(ci_create(id = "foo", path = "/temp")) |>
+#'   ci_append(ci_create(id = "foo")) |>
 #'   ca_append(item = "foo",
 #'                           attribute = ca_create(name = "id",
 #'                                                               type = "numeric"))
@@ -280,23 +282,16 @@ ci_classes <- function(config, item){
 #'
 #' @param id a character string to set the name of the item group
 #' @param description an optional description for the item
-#' @param path an optional character string where to find the data
-#'
-#' @details
-#' When `path` is not provided, the R_KITEMS_PATH environment variable
-#' will be used.
 #'
 #' @returns a list
 #' @noRd
 #'
 #' @examples
-#' ci_create(id = "foo", path = "./")
+#' ci_create(id = "foo")
 
-ci_create <- function(id, description = NULL, path = Sys.getenv("R_KITEMS_PATH")){
+ci_create <- function(id, description = NULL){
 
   # -- secure
-  # path is not checked as it is tested before
-  # otherwise examples will fail.
   if(!is.character(id)){
     warning("Argument id must be a character string.")
     return(NULL)}
@@ -332,7 +327,7 @@ ci_create <- function(id, description = NULL, path = Sys.getenv("R_KITEMS_PATH")
 #'
 #' @examples
 #' ci_append(c_create("prj"),
-#'                    ci_create(id = "a", path = "."))
+#'                    ci_create(id = "a"))
 
 ci_append <- function(config, ...){
 

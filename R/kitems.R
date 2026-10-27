@@ -194,7 +194,8 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       ## -- Read the data (items) ----------------------------------------------
 
       # connector
-      connector <- config |> ci_connector(item = id)
+      # force path in case it was passed to the module server call
+      connector <- config |> ci_connector(item = id, path = path)
 
       if(is.null(connector)){
         showModal(modalDialog(title = "kitems", "Item", id, "does not exist!"))
@@ -214,7 +215,7 @@ kitems <- function(id, path = Sys.getenv("R_KITEMS_PATH"),
       if(!is.null(init_items)){
         catl(MODULE, "Checking items")
 
-        rc <- init_items |> check(config, item)
+        rc <- init_items |> check(config, item, path = path)
         catl("- report has length", length(rc), level = 2)
 
         if(length(rc)){

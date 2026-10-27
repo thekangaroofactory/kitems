@@ -17,12 +17,16 @@
 
 item_load <- function(connector, col.classes){
 
+  # check
+  stopifnot("connector can't be NULL" = !is.null(connector))
+
   # -- read data
   items <- iker::load_data(path = connector$path,
                            file = connector$file,
                            delim = ",",
                            col_types = col.classes,
-                           data.frame = TRUE)
+                           data.frame = TRUE,
+                           verbose = !is.na(ktools::trace_level()) && ktools::trace_level() >= 2)
 
   # -- check output size
   # will trigger showing the create button

@@ -82,7 +82,7 @@ admin_server <- function(input, output, session) {
 
         # -- do migration & return yaml
         new_dm <- dm_migrate(dm)
-        x <- ci_create(id = unlist(strsplit(basename(x), split = "_data_model.rds"))[[1]], path = path)
+        x <- ci_create(id = unlist(strsplit(basename(x), split = "_data_model.rds"))[[1]])
         x$data.model <- dm_to_yaml(new_dm)
 
         # return
@@ -275,8 +275,7 @@ admin_server <- function(input, output, session) {
       config() |>
         ci_append(
           ci_create(id = input$item_name,
-                    description = input$item_description,
-                    path = path)))
+                    description = input$item_description)))
 
     # -- create item file
     connector <- ci_connector(config(), item = input$item_name)

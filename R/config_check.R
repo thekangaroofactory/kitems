@@ -6,6 +6,7 @@
 #' Check YAML config structure & content
 #'
 #' @param config a config list
+#' @param path an option path
 #'
 #' @details
 #' The function will return a list of problems or an empty list.
@@ -13,6 +14,9 @@
 #' Errors are most likely to prevent the package from working properly.
 #' Warnings may affect the behavior.
 #' Notes are here for information but should not affect the behavior.
+#'
+#' By default, path is initialized with the `R_KITEMS_PATH` environment
+#' variable.
 #'
 #' @returns a list
 #' @keywords internal
@@ -22,7 +26,7 @@
 #' config_check(config)
 #' }
 
-config_check <- function(config){
+config_check <- function(config, path = Sys.getenv("R_KITEMS_PATH")){
 
   # -- init
   rc <- list()
@@ -76,7 +80,7 @@ config_check <- function(config){
       else
         # file
         if(item$source$type == "file")
-          if(!file.exists(file.path(Sys.getenv("R_KITEMS_PATH"), item$source$path, item$source$filename)))
+          if(!file.exists(file.path(path, item$source$path, item$source$filename)))
             rv[[length(rv)+1]] <- list(code = 8, type = "error", message = paste("Item", n, "has no item file"), item = n)}
 
     # data.model

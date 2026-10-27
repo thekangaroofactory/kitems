@@ -23,7 +23,7 @@ config_write <- function(x, path = Sys.getenv("R_KITEMS_PATH")){
 
   # -- write YAML
   yaml::write_yaml(x,
-                   file = name(what = "config", url = T),
+                   file = name(what = "config", url = T, path = path),
                    indent = 4,
                    handlers = list(logical = yaml::verbatim_logical))
 

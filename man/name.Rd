@@ -9,6 +9,7 @@ name(
   what = c("item", "dm", "config"),
   file = FALSE,
   url = FALSE,
+  path = Sys.getenv("R_KITEMS_PATH"),
   backup = FALSE
 )
 }
@@ -20,6 +21,8 @@ name(
 \item{file}{a logical if file extension should be added.}
 
 \item{url}{a logical if the url should be returned.}
+
+\item{path}{an optional path.}
 
 \item{backup}{a logical if a timestamp should be added.}
 }
