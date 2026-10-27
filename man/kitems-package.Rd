@@ -5,7 +5,7 @@
 \alias{kitems-package}
 \title{kitems: A Framework To Manage Tabular Items}
 \description{
-A framework to manage tabular items and a set of tools to implement it within R Shiny applications.
+Provides a comprehensive framework to manage, govern, and manipulate tabular data items. The package delivers an automated data governance system using a human-readable YAML configuration to define data schemas, attribute constraints and behaviors. It features a pre-built Shiny module, an integrated administration interface, and a structured set of core and grammar functions to streamline data management, allowing developers to focus on user driven features.
 }
 \seealso{
 Useful links:
