@@ -25,7 +25,8 @@ item_load <- function(connector, col.classes){
                            file = connector$file,
                            delim = ",",
                            col_types = col.classes,
-                           data.frame = TRUE)
+                           data.frame = TRUE,
+                           verbose = !is.na(ktools::trace_level()) && ktools::trace_level() >= 2)
 
   # -- check output size
   # will trigger showing the create button

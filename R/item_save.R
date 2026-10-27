@@ -30,6 +30,9 @@ item_save <- function(data, connector){
         else
           catl("Item file has been deleted.")}
     } else
-      iker::save_data(data, path = connector$path, file = connector$file)
+      iker::save_data(data,
+                      path = connector$path,
+                      file = connector$file,
+                      verbose = !is.na(ktools::trace_level()) && ktools::trace_level() >= 2)
 
 }
