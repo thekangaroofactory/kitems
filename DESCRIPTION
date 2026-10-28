@@ -8,7 +8,7 @@ Description: Provides a comprehensive framework to manage, govern, and
     interface, and a structured set of core and grammar functions to 
     streamline data management, allowing developers to focus on user
     driven features.
-Version: 0.8.0.9000
+Version: 0.8.1
 Authors@R: 
     person(given = "Philippe",
            family = "Peret",
