@@ -9,12 +9,12 @@
 ## Citation
 
 Peret P (2026). *kitems: A Framework To Manage Tabular Items*. R package
-version 0.8.0.9000, <https://thekangaroofactory.r-universe.dev/kitems>.
+version 0.8.1, <https://thekangaroofactory.r-universe.dev/kitems>.
 
     @Manual{,
       title = {kitems: A Framework To Manage Tabular Items},
       author = {Philippe Peret},
       year = {2026},
-      note = {R package version 0.8.0.9000},
+      note = {R package version 0.8.1},
       url = {https://thekangaroofactory.r-universe.dev/kitems},
     }
